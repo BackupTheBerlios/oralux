@@ -28,6 +28,14 @@ In the following lines, + means evolution, - bug.
 
 1.1 Priority 1 (Urgent)
 
++ In 0.6 alpha, Emacs tries ispell and the US dictionnary. English
+has to be supplied:
+;; add for 0.6 alpha
+(setq ispell-dictionary "english")
+(setq-default ispell-program-name "aspell")
+
+
+
 + New patch from Igor B. Poretsky (emacs-w3m)
 + timidity, freepats
 + From Doug: cdrecord-prodvd
@@ -133,7 +141,15 @@ one name per mailbox ?
 + New messages without translation.
 + dialog: --extra-label --extra-button (return 3) --cancel-label (1) --ok-label (0)  --help-button --help-label (2)
 
-+ After this message, DECtalk hangs: "MML Voice Abrev Fill Charac auto-saving done" (From Nath).
++ After this message, DECtalk hangs: "MML Voice Abrev Fill Charac
+auto-saving done" (From Nath).
++ Au rebout il semblerait que brltty se charge
+plusieurs fois, tout du moins au moins deux, je suis obligée pour que
+ça fonctionne bien de faire un killall brltty suivi d'une relance
+manuelle de brltty pour que ça fonctionne correctement ensuite. 
+- et pour le kill de brltty à l'arrêt ça se trouve où au fait ? Je n'ai
+pas su voir non plus. (Nath)
+
 
 
 Notices from Doug

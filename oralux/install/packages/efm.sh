@@ -1,13 +1,13 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # efm.sh
-# $Id: efm.sh,v 1.1 2004/09/27 20:29:59 gcasse Exp $
+# $Id: efm.sh,v 1.2 2005/01/30 21:43:51 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing EFM (Emacspeak Festival MBROLA) from Pierre Lorenzon.
 # Be aware that this script requires a fast internet connection and may take several hours to build the runtime. 
-# $Date: 2004/09/27 20:29:59 $ |
-# $Revision: 1.1 $ |
-# Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
+# $Date: 2005/01/30 21:43:51 $ |
+# $Revision: 1.2 $ |
+# Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License

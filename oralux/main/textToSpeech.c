@@ -1,11 +1,11 @@
 // ----------------------------------------------------------------------------
 // textToSpeech.c
-// $Id: textToSpeech.c,v 1.2 2004/11/07 21:19:14 gcasse Exp $
+// $Id: textToSpeech.c,v 1.3 2005/01/30 21:43:51 gcasse Exp $
 // $Author: gcasse $
 // Description: Ask about the whished TTS and install it. 
-// $Date: 2004/11/07 21:19:14 $ |
-// $Revision: 1.2 $ |
-// Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
+// $Date: 2005/01/30 21:43:51 $ |
+// $Revision: 1.3 $ |
+// Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License

@@ -5,12 +5,12 @@
 
 // ----------------------------------------------------------------------------
 // mailMenu.php
-// $Id: mailMenu.php,v 1.6 2004/12/03 22:59:28 gcasse Exp $
+// $Id: mailMenu.php,v 1.7 2005/01/30 21:43:51 gcasse Exp $
 // $Author: gcasse $
 // Description: Menu for mail settings (php5)
-// $Date: 2004/12/03 22:59:28 $ |
-// $Revision: 1.6 $ |
-// Copyright (C) 2004 Gilles Casse (gcasse@oralux.org)
+// $Date: 2005/01/30 21:43:51 $ |
+// $Revision: 1.7 $ |
+// Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License

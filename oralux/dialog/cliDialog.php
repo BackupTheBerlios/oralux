@@ -1,12 +1,12 @@
 <?php
 // ----------------------------------------------------------------------------
 // cliDialog.php
-// $Id: cliDialog.php,v 1.3 2004/12/12 23:28:48 gcasse Exp $
+// $Id: cliDialog.php,v 1.4 2005/01/30 21:43:50 gcasse Exp $
 // $Author: gcasse $
 // Description: command line based dialog (menu, yes/no question, dialog box,...)
-// $Date: 2004/12/12 23:28:48 $ |
-// $Revision: 1.3 $ |
-// Copyright (C) 2004 Gilles Casse (gcasse@oralux.org)
+// $Date: 2005/01/30 21:43:50 $ |
+// $Revision: 1.4 $ |
+// Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License

@@ -1,6 +1,7 @@
 #ifndef TERMBUFFER_H
 #define TERMBUFFER_H
 
+#include <wchar.h>
 #include "escape2terminfo.h"
 
 /* Current supported terminals */
@@ -16,6 +17,7 @@ struct t_cursor
   int myLine;
   int myCol;
   struct t_style myStyle;
+  mbstate_t myEncodingState; /* Useful for stateful encoding */
 };
 
 #define copyCursor( theDestination, theSource) memcpy( theDestination, theSource, sizeof(struct t_cursor))
@@ -38,18 +40,22 @@ struct t_linePortion
 enum {MAX_LINE_PORTION=2}; /* 2 line portions are expected to distinguish the selected item */
 /* > */
 /* < t_termbuffer */
+typedef char chartype; /* TBD: add future support for multi-bytes characters */
+
 struct t_termbuffer
 {
-  char* myDataBuffer;
-  struct t_style* myStyleBuffer;
+  chartype **myDataBuffer; /* data of the screen, one data buffer per row */
+  struct t_style** myStyleBuffer; /* style of the screen, one style buffer per row */
   struct t_style myDefaultStyle; /* used if car are deleted */
   struct t_cursor myCursor;
   struct t_cursor mySavedCursor;
   int myNumberOfLine;
   int myNumberOfCol;
-  struct t_linePortion myLinePortion[ MAX_LINE_PORTION];
+  struct t_linePortion myLinePortion[ MAX_LINE_PORTION]; /* the data of a line from the received escape sequence */
   int myLinePortionIndex;
   int myErasedCharAreReturned; /* if 1, theOutput will include any erased char. Useful for retreiving the single erased char when the backspace is pressed */
+  int myCarry; /* greater than 0 if the current line is greater than a screen line. */
+  int *myTab; /* one bool per column. true means: this is a tab position */
 };
 /* > */
 /* < createTermBuffer */
@@ -61,7 +67,7 @@ struct t_termbuffer* createTermbuffer( enum termbufferName theName, int theNumbe
 /* Interprets the escape sequence, update the internal data and style buffers.
    theOutput gives the chars to be rendered 
 */
-void interpretEscapeSequence( struct t_termbuffer* this, FILE* theStream, char** theOutput);
+void interpretEscapeSequence( struct t_termbuffer* this, FILE* theStream, chartype** theOutput);
 
 /* > */
 /* < returnTheErasedChar */
@@ -74,5 +80,11 @@ void returnTheErasedChar( struct t_termbuffer* this, int theChoice);
 void deleteTermbuffer( struct t_termbuffer* this);
 
 /* > */
+
+/* 
+Local variables:
+folded-file: t
+folding-internal-margins: nil
+*/
 
 #endif

@@ -1,12 +1,12 @@
 /* 
 ----------------------------------------------------------------------------
 debug.c
-$Id: debug.c,v 1.1 2005/01/01 11:39:47 gcasse Exp $
+$Id: debug.c,v 1.2 2005/01/30 21:43:51 gcasse Exp $
 $Author: gcasse $
 Description: for applicative trace.
-$Date: 2005/01/01 11:39:47 $ |
-$Revision: 1.1 $ |
-Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
+$Date: 2005/01/30 21:43:51 $ |
+$Revision: 1.2 $ |
+Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -24,7 +24,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ----------------------------------------------------------------------------
 */
 #include <stdio.h>
-/* #include <stdint.h> */
 #include <string.h>
 #include <stdlib.h>
 #include "escape2terminfo.h"
@@ -537,6 +536,16 @@ void displayCapacity( enum StringCapacity theCapacity)
 
 /* > */
 /* < displayColor */
+
+
+
+
+
+
+
+
+
+
 void displayColor( char* theLabel, int theColor)
 {
   static char* aColorArray[]=
@@ -557,6 +566,16 @@ void displayColor( char* theLabel, int theColor)
       printf("|%s: %s|\n",theLabel,aColorArray[theColor]);
     }
 }
+
+
+
+
+
+
+
+
+
+
 /* > */
 /* < displayModes */
 void displayStyle(struct t_style* theStyle)
@@ -607,4 +626,9 @@ void displayStyle(struct t_style* theStyle)
 
 /* > */
 
+/* 
+Local variables:
+folded-file: t
+folding-internal-margins: nil
+*/
 

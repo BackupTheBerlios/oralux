@@ -1,11 +1,11 @@
 // ----------------------------------------------------------------------------
 // eterpret.c
-// $Id: eterpret.c,v 1.1 2004/09/27 20:29:58 gcasse Exp $
+// $Id: eterpret.c,v 1.2 2005/01/30 21:43:51 gcasse Exp $
 // $Author: gcasse $
 // Description: Interprets the Emacspeak commands and calls a generic voice synthesizer API.
-// $Date: 2004/09/27 20:29:58 $ |
-// $Revision: 1.1 $ |
-// Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
+// $Date: 2005/01/30 21:43:51 $ |
+// $Revision: 1.2 $ |
+// Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License

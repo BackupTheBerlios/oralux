@@ -1,12 +1,12 @@
 <?php
 // ----------------------------------------------------------------------------
 // config.php
-// $Id: config.php,v 1.1 2004/11/28 21:21:00 gcasse Exp $
+// $Id: config.php,v 1.2 2005/01/30 21:43:51 gcasse Exp $
 // $Author: gcasse $
 // Description: minimenu configuration: manages the XML configuration file. 
-// $Date: 2004/11/28 21:21:00 $ |
-// $Revision: 1.1 $ |
-// Copyright (C) 2004 Gilles Casse (gcasse@oralux.org)
+// $Date: 2005/01/30 21:43:51 $ |
+// $Revision: 1.2 $ |
+// Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -61,14 +61,14 @@ class config extends DomDocument
 	  if (copy( $aSourceFilename, $this->myFilename) == false)
 	    {
 	      $aError=sprintf("Error: can't copy file: %s to %s\n", $aSourceFilename, $this->myFilename);
-	      ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.1 $');
+	      ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.2 $');
 	      return;
 	    }
 	}
       if (!is_readable( $this->myFilename))
 	{
 	      $aError=sprintf("Error: file unreadable: %s\n", $this->myFilename);
-	      ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.1 $');
+	      ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.2 $');
 	      return;
 	}
 
@@ -147,7 +147,7 @@ class config extends DomDocument
 	  break;
 	default:
 	  $aError=sprintf("Error: unknown element: %s\n", $aNode->nodeName);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.1 $');
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.2 $');
 	  break;
 	}
     }
@@ -264,19 +264,19 @@ class config extends DomDocument
 //       if (unlink($this->myFilename)==FALSE)
 // 	{
 // 	  $aError=sprintf("Error concerning file: %s\n", $this->myFilename);
-// 	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.1 $');
+// 	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.2 $');
 // 	  return;
 // 	}
 //       if (touch($this->myFilename)==FALSE)
 // 	{
 // 	  $aError=sprintf("Error concerning file: %s\n", $this->myFilename);
-// 	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.1 $');
+// 	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.2 $');
 // 	  return;
 // 	}
 //       if (chmod ( $this->myFilename, 0600)==FALSE)
 // 	{
 // 	  $aError=sprintf("Error concerning file: %s\n", $this->myFilename);
-// 	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.1 $');
+// 	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.2 $');
 // 	  return;
 // 	}
 

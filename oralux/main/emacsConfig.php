@@ -1,12 +1,12 @@
 <?php
 // ----------------------------------------------------------------------------
 // emacsConfig.php
-// $Id: emacsConfig.php,v 1.4 2004/11/12 21:46:13 gcasse Exp $
+// $Id: emacsConfig.php,v 1.5 2005/01/30 21:43:51 gcasse Exp $
 // $Author: gcasse $
 // Description: Emacs settings (php5)
-// $Date: 2004/11/12 21:46:13 $ |
-// $Revision: 1.4 $ |
-// Copyright (C) 2004 Gilles Casse (gcasse@oralux.org)
+// $Date: 2005/01/30 21:43:51 $ |
+// $Revision: 1.5 $ |
+// Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -46,7 +46,7 @@ class emacsConfig
       if ($aSource==NULL)
 	{
 	  $aError=sprintf("Error: can't open file: %s\n", $this->_myFilename);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.4 $');
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.5 $');
 	  return FALSE;
 	}
 
@@ -54,7 +54,7 @@ class emacsConfig
       if ($aDestination==NULL)
 	{
 	  $aError=sprintf("Error: can't open file: %s\n", $this->_myTempFilename);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.4 $');
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.5 $');
 	  return FALSE;
 	}
       
@@ -79,7 +79,7 @@ class emacsConfig
       if ($aSource==NULL)
 	{
 	  $aError=sprintf("Error: can't open file: %s\n", $this->_myFilename);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.4 $');
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.5 $');
 	  return FALSE;
 	}
 
@@ -95,7 +95,7 @@ class emacsConfig
 	  || (chgrp ( $this->_myFilename, $this->_myMailConfig->getUser())==FALSE))
 	{
 	  $aError=sprintf("Error concerning file: %s\n", $this->_myTempFilename);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.4 $');
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.5 $');
 	  return FALSE;
 	}
       return TRUE;

@@ -1,11 +1,11 @@
 // ----------------------------------------------------------------------------
 // audioUserInterfaceFoo.c
-// $Id: audioUserInterfaceFoo.c,v 1.2 2004/11/14 20:32:56 gcasse Exp $
+// $Id: audioUserInterfaceFoo.c,v 1.3 2005/01/30 21:43:51 gcasse Exp $
 // $Author: gcasse $
 // Description: just for compilation
-// $Date: 2004/11/14 20:32:56 $ |
-// $Revision: 1.2 $ |
-// Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
+// $Date: 2005/01/30 21:43:51 $ |
+// $Revision: 1.3 $ |
+// Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License

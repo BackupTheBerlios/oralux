@@ -83,3 +83,8 @@ void getStyle( struct t_style* theStyle, struct t_style* theDefaultStyle)
 
 /* > */
 
+/* 
+Local variables:
+folded-file: t
+folding-internal-margins: nil
+*/

@@ -1,12 +1,12 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # misc.sh
-# $Id: misc.sh,v 1.7 2004/11/15 23:29:32 gcasse Exp $
+# $Id: misc.sh,v 1.8 2005/01/30 21:43:51 gcasse Exp $
 # $Author: gcasse $
 # Description: Miscellaneous packages
-# $Date: 2004/11/15 23:29:32 $ |
-# $Revision: 1.7 $ |
-# Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
+# $Date: 2005/01/30 21:43:51 $ |
+# $Revision: 1.8 $ |
+# Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License

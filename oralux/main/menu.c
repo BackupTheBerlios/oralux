@@ -1,11 +1,11 @@
 // ----------------------------------------------------------------------------
 // menu.c
-// $Id: menu.c,v 1.5 2004/11/14 20:32:56 gcasse Exp $
+// $Id: menu.c,v 1.6 2005/01/30 21:43:51 gcasse Exp $
 // $Author: gcasse $
 // Description: introductory menu. 
-// $Date: 2004/11/14 20:32:56 $ |
-// $Revision: 1.5 $ |
-// Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
+// $Date: 2005/01/30 21:43:51 $ |
+// $Revision: 1.6 $ |
+// Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License

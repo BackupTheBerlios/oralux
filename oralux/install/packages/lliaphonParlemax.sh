@@ -1,12 +1,12 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # lliaphonParlemax.sh
-# $Id: lliaphonParlemax.sh,v 1.1 2004/09/27 20:30:00 gcasse Exp $
+# $Id: lliaphonParlemax.sh,v 1.2 2005/01/30 21:43:51 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing LLiaPhon and ParleMax
-# $Date: 2004/09/27 20:30:00 $ |
-# $Revision: 1.1 $ |
-# Copyright (C) 2004 Nath (nath.ml at free.fr)
+# $Date: 2005/01/30 21:43:51 $ |
+# $Revision: 1.2 $ |
+# Copyright (C) 2004, 2005 Nath (nath.ml at free.fr)
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License

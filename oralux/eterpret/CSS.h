@@ -2,16 +2,16 @@
 #define CSS_H 1
 // ----------------------------------------------------------------------------
 // CSS.h
-// $Id: CSS.h,v 1.1 2004/09/27 20:29:58 gcasse Exp $
+// $Id: CSS.h,v 1.2 2005/01/30 21:43:51 gcasse Exp $
 // $Author: gcasse $
 // Description: CSS3 types 
 // This header refers to the CSS3 Speech Module
 // W3C Working Draft 27 July 2004
 // http://www.w3.org/TR/2004/WD-css3-speech-20040727/
 //
-// $Date: 2004/09/27 20:29:58 $ |
-// $Revision: 1.1 $ |
-// Copyright (C) 2004 Gilles Casse (gcasse@oralux.org)
+// $Date: 2005/01/30 21:43:51 $ |
+// $Revision: 1.2 $ |
+// Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
