@@ -28,6 +28,7 @@ In the following lines, + means evolution, - bug.
 
 1.1 Priority 1 (Urgent)
 
++ Fix: At boot time the saved configuration was not correctly restored if the choices were audio menu in English and Multispeech.
 + Ukrainian keyboard (ua?)
 + Add mew
 + emacs-wget.el

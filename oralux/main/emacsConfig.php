@@ -1,11 +1,11 @@
 <?php
 // ----------------------------------------------------------------------------
 // emacsConfig.php
-// $Id: emacsConfig.php,v 1.2 2004/11/07 21:19:14 gcasse Exp $
+// $Id: emacsConfig.php,v 1.3 2004/11/07 21:52:35 gcasse Exp $
 // $Author: gcasse $
 // Description: Emacs settings (php5)
-// $Date: 2004/11/07 21:19:14 $ |
-// $Revision: 1.2 $ |
+// $Date: 2004/11/07 21:52:35 $ |
+// $Revision: 1.3 $ |
 // Copyright (C) 2004 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -46,16 +46,16 @@ class emacsConfig
       if ($aSource==NULL)
 	{
 	  $aError=sprintf("Error: can't open file: %s\n", $this->_myFilename);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.2 $');
-	  return;
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.3 $');
+	  return FALSE;
 	}
 
       $aDestination=fopen($this->_myTempFilename,"w");
       if ($aDestination==NULL)
 	{
 	  $aError=sprintf("Error: can't open file: %s\n", $this->_myTempFilename);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.2 $');
-	  return;
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.3 $');
+	  return FALSE;
 	}
       
       while ($aLine=fgets($aSource))
@@ -76,54 +76,19 @@ class emacsConfig
       fclose($aDestination);
       fclose($aSource);
       
-      if (chown ( $this->_myTempFilename, $this->_myMailConfig->getUser())==FALSE)
+      if ((chown ( $this->_myTempFilename, $this->_myMailConfig->getUser())==FALSE)
+	  || (chgrp ( $this->_myTempFilename, $this->_myMailConfig->getUser())==FALSE)
+	  || (chmod ( $this->_myTempFilename, 0600)==FALSE)
+	  || (rename($this->_myTempFilename, $this->_myFilename)==FALSE)
+	  || (chmod ( $this->_myFilename, 0600)==FALSE)
+	  || (chown ( $this->_myFilename, $this->_myMailConfig->getUser())==FALSE)
+	  || (chgrp ( $this->_myFilename, $this->_myMailConfig->getUser())==FALSE))
 	{
 	  $aError=sprintf("Error concerning file: %s\n", $this->_myTempFilename);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.2 $');
-	  return;
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.3 $');
+	  return FALSE;
 	}
-
-      if (chgrp ( $this->_myTempFilename, $this->_myMailConfig->getUser())==FALSE)
-	{
-	  $aError=sprintf("Error concerning file: %s\n", $this->_myTempFilename);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.2 $');
-	  return;
-	}
-	
-      if (chmod ( $this->_myTempFilename, 0600)==FALSE)
-	{
-	  $aError=sprintf("Error concerning file: %s\n", $this->_myTempFilename);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.2 $');
-	  return;
-	}
-
-      if (rename($this->_myTempFilename, $this->_myFilename)==FALSE)
-	{
-	  $aError=sprintf("Error concerning file: %s\n", $this->_myTempFilename);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.2 $');
-	  return;
-	}
-
-      if (chmod ( $this->_myFilename, 0600)==FALSE)
-	{
-	  $aError=sprintf("Error concerning file: %s\n", $this->_myFilename);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.2 $');
-	  return;
-	}
-
-      if (chown ( $this->_myFilename, $this->_myMailConfig->getUser())==FALSE)
-	{
-	  $aError=sprintf("Error concerning file: %s\n", $this->_myFilename);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.2 $');
-	  return;
-	}
-
-      if (chgrp ( $this->_myFilename, $this->_myMailConfig->getUser())==FALSE)
-	{
-	  $aError=sprintf("Error concerning file: %s\n", $this->_myFilename);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.2 $');
-	  return;
-	}
+      return TRUE;
     }
 }
 
