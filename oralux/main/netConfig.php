@@ -5,11 +5,11 @@
 
 // ----------------------------------------------------------------------------
 // netConfig.php
-// $Id: netConfig.php,v 1.1 2004/09/27 20:30:30 gcasse Exp $
+// $Id: netConfig.php,v 1.2 2004/10/25 22:12:02 gcasse Exp $
 // $Author: gcasse $
 // Description: Menu for internet settings (php5)
-// $Date: 2004/09/27 20:30:30 $ |
-// $Revision: 1.1 $ |
+// $Date: 2004/10/25 22:12:02 $ |
+// $Revision: 1.2 $ |
 // Copyright (C) 2004 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -44,21 +44,34 @@ class netConfig
   
   protected function _adslMenu()
     {
-      //   GString* aCommand=g_string_new(NULL);
-//   g_string_sprintf(aCommand, "--clear --title \"%s\" --menu \" \" 20 50 4 \"EAGLE\" \"Eagle USB\" \"ECI\" \"Eci Adsl\"", 
-// 		    gettext("Select the driver"));
+      $aDialog=new cliDialog($this->_myTerminal);
 
-//   dialogGetString(aCommand);
-
-//   if (strcmp(aResult, "EAGLE")==0) 
-//     {
-//       starteagleusb();
-//     }
-//   else if (strcmp(aResult, "ECI")==0)
-//     {
-//       startECI();
-//     }
-//   g_string_free (aCommand, true);
+      $aKeyPressed=$aDialog->menu(gettext("Which is your USB ADSL Modem?"), 
+				  array(
+					"1" => gettext("Sagem"),
+					"2" => gettext("SpeedTouch"),
+					"3" => gettext("E C I")
+					),
+				  $aResult);
+      unset($aDialog);
+      
+      if ($aKeyPressed != OkPressedValue)
+	{
+	  return;
+	  //	  return $aKeyPressed;
+	}
+      switch( (string)$aResult)
+	{
+	case "1":
+	  system("./eagleConfig.sh");
+	  break;
+	case "2":
+	  break;
+	case "3":
+	  break;
+	default:
+	  break;
+	}
 }
 
   function netConfig()

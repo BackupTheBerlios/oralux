@@ -1113,7 +1113,12 @@ CONFIGMD5=$(md5sum $MYCONFDIR/configs.tbz | awk '{printf $1}' )
 echo "CONFIGMD5=\"$CONFIGMD5\"" >> /etc/sysconfig/knoppix
 fi
 
-[ -n $MYCONFDEVICE ] || umount "$MYCONFMOUNTPOINT" 2>/dev/null
+#RAF
+echo "pwd:"
+pwd
+echo "umount $MYCONFMOUNTPOINT"
+[ -n $MYCONFDEVICE ] || umount "$MYCONFMOUNTPOINT" 
+# RAF2>/dev/null
 
 fi
 fi
@@ -1156,7 +1161,7 @@ addOraluxConf()
 isInOraluxConf()
 {
     KEYWORD=$1
-    IS_IN_CONF=`grep -e "^$KEYWORD" /etc/oralux.conf`
+    IS_IN_CONF=`grep -e "^$KEYWORD" /etc/oralux.conf 2>/dev/null`
 }
 
 # Restoring brltty.conf

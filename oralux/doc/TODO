@@ -149,7 +149,7 @@ J'avais modifié le fichier .emacs soigneusement comme tu l'as indiqué dans un me
 
 Feedback from Nigel
 --------------------------------------
-/ C-a doesn't speak the line: the rather an emacspeak feature.
+/ C-a doesn't speak the line: rather an emacspeak feature.
 - Dired mode: no audio feedback
 - kill buffer: the next current buffer is not announced. 
 * Pb using the uk keyboard
