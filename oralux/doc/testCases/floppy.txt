@@ -1,0 +1,38 @@
+* title: Config on floppy
+creation: 2004 10 23
+checked by:
+required: Bios set to boot up first the CD. 
+** status: not passed
+description:
+1. Using saveconfig, save the configuration files on the floppy disk.
+2. Reboot the system.
+3. Check that the configuration is restored
+
+* title: Boot floppy
+creation: 2004 10 23
+checked by:
+required: Floppy drive + 1.4Mb floppy. Bios set to boot up first the floppy. 
+** status: not passed
+description:
+1. Create a boot floppy using the informations present in the FAQ (/KNOPPIX/faq.htm).
+2. Reboot the system.
+3. Checks that the floppy boots up the CD. 
+
+* title: Config on the boot floppy
+creation: 2004 10 23
+checked by:
+required: Floppy drive + 1.4Mb floppy. Bios set to boot up first the floppy. 
+** status: not passed
+description:
+1. Using saveconfig, save the configuration files on the boot floppy. As the available memory on the floppy is small, the configution files are supposed to be the basic ones: those modified by the menu. 
+2. Reboot the system.
+3. Checks that the floppy boots up the CD and that the configuration files are restored. 
+
+* title: PC without floppy drive
+creation: 2004 10 23
+checked by:
+required: 
+** status: not passed
+description:
+Boots up the CD and checks that there is no abnormal delay (unexpected floppy detection).  
+
