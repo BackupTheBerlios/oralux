@@ -1,8 +1,14 @@
-
+#ifndef ESCAPE2TERMINALINFO_H
+#define ESCAPE2TERMINALINFO_H
 #define MAXPARAM 20
 extern int myParameters[MAXPARAM];
 extern int myNumberOfParameters;
 
+/* < flex declarations */
+extern int yylex (void);
+extern char *yytext;
+extern int yyleng;
+/* > */
 /* < terminalColor */
 enum terminalColor 
   {
@@ -16,7 +22,6 @@ enum terminalColor
     TERM_COLOR_WHITE=7
   };
 /* > */
-
 /* < style */
 struct t_style 
 {
@@ -37,7 +42,6 @@ struct t_style
 #define compareStyle( theStyle1, theStyle2) memcmp( theStyle1, theStyle2, sizeof(struct t_style))
 
 /* > */
-
 /* < enum StringCapacity */
 
 /* From Man page terminfo(5) 
@@ -445,3 +449,4 @@ enum StringCapacity
 };
 
 /* > */
+#endif

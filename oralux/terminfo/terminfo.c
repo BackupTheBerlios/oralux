@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 terminfo.c
-$Id: terminfo.c,v 1.4 2004/12/26 21:40:05 gcasse Exp $
+$Id: terminfo.c,v 1.5 2004/12/27 22:19:59 gcasse Exp $
 $Author: gcasse $
 Description: store the layout using the supplied terminfo commands. 
-$Date: 2004/12/26 21:40:05 $ |
-$Revision: 1.4 $ |
+$Date: 2004/12/27 22:19:59 $ |
+$Revision: 1.5 $ |
 Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -23,60 +23,24 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ----------------------------------------------------------------------------
 */
-
 /* < include */
+
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
 #include <stdlib.h>
 #include "escape2terminfo.h"
-/* > */
-/* < debug */
-
-#ifdef DEBUG
-int TheDebugIsOn=1;
-
-static char* TheENTERFilename="  ";
-
-#define ENTER(a) \
-if (strcmp(TheENTERFilename,__FILE__)!=0) \
-{\
-  TheENTERFilename=__FILE__;\
-  printf("\nFILE %s\n",__FILE__);\
-}\
-printf("== ENTER %s (%d)\n",a,__LINE__)
-
-#define SHOW(a) printf("%s\n",a)
-#define SHOW1(a) printf("%s\n",a)
-#define SHOW2(a,b) printf(a,b)
-#define SHOW3(a,b,c) printf(a,b,c)
-#define LEAVE(a) printf("LEAVE %s\n",a)
-#define LEAVE2(a,b) printf("LEAVE %s (%d)\n",a,b)
-#else
-int TheDebugIsOn=0;
-
-#define ENTER(a)
-#define SHOW(a)
-#define SHOW1(a)
-#define SHOW2(a,b)
-#define SHOW3(a,b,c)
-#define LEAVE(a)
-#define LEAVE2(a,b)
-#endif
+#include "debug.h"
 
 /* > */
-/* < flex declarations or definitions */
-
-extern int yylex (void);
-extern char *yytext;
-extern int yyleng;
-
+/* < flex definitions */
 int yywrap ()
 {  
    return 1; 
 }
 /* > */
 /* < cursor */
+
 struct t_cursor
 {
   int myLine;
@@ -85,8 +49,10 @@ struct t_cursor
 };
 
 #define copyCursor( theDestination, theSource) memcpy( theDestination, theSource, sizeof(struct t_cursor))
+
 /* > */
 /* < linePortion */
+
 /* 
 A line portion describes an horizontal area in the screen.
 When a menu is browsed, the selected item and the previously ones are displayed with distinct styles (for example distinct backgrounds).
@@ -102,408 +68,6 @@ struct t_linePortion
 };
 
 enum {MAX_LINE_PORTION=2}; /* 2 line portions are expected to distinguish the selected item */
-
-/* > */
-/* < array myStringCapacity */
-
-char* myStringCapacity[]={
-  "",
-  "ACSC",
-  "CBT",
-  "BEL",
-  "CR",
-  "CPI",
-  "LPI",
-  "CHR",
-  "CVR",
-  "CSR",
-  "RMP",
-  "TBC",
-  "MGC",
-  "CLEAR",
-  "EL1",
-  "EL",
-  "ED",
-  "HPA",
-  "CMDCH",
-  "CWIN",
-  "CUP",
-  "CUD1",
-  "HOME",
-  "CIVIS",
-  "CUB1",
-  "MRCUP",
-  "CNORM",
-  "CUF1",
-  "LL",
-  "CUU1",
-  "CVVIS",
-  "DEFC",
-  "DCH1",
-  "DL1",
-  "DIAL",
-  "DSL",
-  "DCLK",
-  "HD",
-  "ENACS",
-  "SMACS",
-  "SMAM",
-  "BLINK",
-  "BOLD",
-  "SMCUP",
-  "SMDC",
-  "DIM",
-  "SWIDM",
-  "SDRFQ",
-  "SMIR",
-  "SITM",
-  "SLM",
-  "SMICM",
-  "SNLQ",
-  "SNRMQ",
-  "PROT",
-  "REV",
-  "INVIS",
-  "SSHM",
-  "SMSO",
-  "SSUBM",
-  "SSUPM",
-  "SMUL",
-  "SUM",
-  "SMXON",
-  "ECH",
-  "RMACS",
-  "RMAM",
-  "SGR0",
-  "RMCUP",
-  "RMDC",
-  "RWIDM",
-  "RMIR",
-  "RITM",
-  "RLM",
-  "RMICM",
-  "RSHM",
-  "RMSO",
-  "RSUBM",
-  "RSUPM",
-  "RMUL",
-  "RUM",
-  "RMXON",
-  "PAUSE",
-  "HOOK",
-  "FLASH",
-  "FF",
-  "FSL",
-  "WINGO",
-  "HUP",
-  "IS1",
-  "IS2",
-  "IS3",
-  "IF",
-  "IPROG",
-  "INITC",
-  "INITP",
-  "ICH1",
-  "IL1",
-  "IP",
-  "KA1",
-  "KA3",
-  "KB2",
-  "KBS",
-  "KBEG",
-  "KCBT",
-  "KC1",
-  "KC3",
-  "KCAN",
-  "KTBC",
-  "KCLR",
-  "KCLO",
-  "KCMD",
-  "KCPY",
-  "KCRT",
-  "KCTAB",
-  "KDCH1",
-  "KDL1",
-  "KCUD1",
-  "KRMIR",
-  "KEND",
-  "KENT",
-  "KEL",
-  "KED",
-  "KEXT",
-  "KF0",
-  "KF1",
-  "KF10",
-  "KF11",
-  "KF12",
-  "KF13",
-  "KF14",
-  "KF15",
-  "KF16",
-  "KF17",
-  "KF18",
-  "KF19",
-  "KF2",
-  "KF20",
-  "KF21",
-  "KF22",
-  "KF23",
-  "KF24",
-  "KF25",
-  "KF26",
-  "KF27",
-  "KF28",
-  "KF29",
-  "KF3",
-  "KF30",
-  "KF31",
-  "KF32",
-  "KF33",
-  "KF34",
-  "KF35",
-  "KF36",
-  "KF37",
-  "KF38",
-  "KF39",
-  "KF4",
-  "KF40",
-  "KF41",
-  "KF42",
-  "KF43",
-  "KF44",
-  "KF45",
-  "KF46",
-  "KF47",
-  "KF48",
-  "KF49",
-  "KF5",
-  "KF50",
-  "KF51",
-  "KF52",
-  "KF53",
-  "KF54",
-  "KF55",
-  "KF56",
-  "KF57",
-  "KF58",
-  "KF59",
-  "KF6",
-  "KF60",
-  "KF61",
-  "KF62",
-  "KF63",
-  "KF7",
-  "KF8",
-  "KF9",
-  "KFND",
-  "KHLP",
-  "KHOME",
-  "KICH1",
-  "KIL1",
-  "KCUB1",
-  "KLL",
-  "KMRK",
-  "KMSG",
-  "KMOV",
-  "KNXT",
-  "KNP",
-  "KOPN",
-  "KOPT",
-  "KPP",
-  "KPRV",
-  "KPRT",
-  "KRDO",
-  "KREF",
-  "KRFR",
-  "KRPL",
-  "KRST",
-  "KRES",
-  "KCUF1",
-  "KSAV",
-  "SHIFTKBEG",
-  "SHIFTKCAN",
-  "SHIFTKCMD",
-  "SHIFTKCPY",
-  "SHIFTKCRT",
-  "SHIFTKDC",
-  "SHIFTKDL",
-  "KSLT",
-  "SHIFTKEND",
-  "SHIFTKEOL",
-  "SHIFTKEXT",
-  "KIND",
-  "SHIFTKFND",
-  "SHIFTKHLP",
-  "SHIFTKHOM",
-  "SHIFTKIC",
-  "SHIFTKLFT",
-  "SHIFTKMSG",
-  "SHIFTKMOV",
-  "SHIFTKNXT",
-  "SHIFTKOPT",
-  "SHIFTKPRV",
-  "SHIFTKPRT",
-  "KRI",
-  "SHIFTKRDO",
-  "SHIFTKRPL",
-  "SHIFTKRIT",
-  "SHIFTKRES",
-  "SHIFTKSAV",
-  "SHIFTKSPD",
-  "KHTS",
-  "SHIFTKUND",
-  "KSPD",
-  "KUND",
-  "KCUU1",
-  "RMKX",
-  "SMKX",
-  "LF0",
-  "LF1",
-  "LF10",
-  "LF2",
-  "LF3",
-  "LF4",
-  "LF5",
-  "LF6",
-  "LF7",
-  "LF8",
-  "LF9",
-  "FLN",
-  "RMLN",
-  "SMLN",
-  "RMM",
-  "SMM",
-  "MHPA",
-  "MCUD1",
-  "MCUB1",
-  "MCUF1",
-  "MVPA",
-  "MCUU1",
-  "NEL",
-  "PORDER",
-  "OC",
-  "OP",
-  "PAD",
-  "DCH",
-  "DL",
-  "CUD",
-  "MCUD",
-  "ICH",
-  "INDN",
-  "IL",
-  "CUB",
-  "MCUB",
-  "CUF",
-  "MCUF",
-  "RIN",
-  "CUU",
-  "MCUU",
-  "PFKEY",
-  "PFLOC",
-  "PFX",
-  "PLN",
-  "MC0",
-  "MC5P",
-  "MC4",
-  "MC5",
-  "PULSE",
-  "QDIAL",
-  "RMCLK",
-  "REP",
-  "RFI",
-  "RS1",
-  "RS2",
-  "RS3",
-  "RF",
-  "RC",
-  "VPA",
-  "SC",
-  "IND",
-  "RI",
-  "SCS",
-  "SGR",
-  "SETB",
-  "SMGB",
-  "SMGBP",
-  "SCLK",
-  "SCP",
-  "SETF",
-  "SMGL",
-  "SMGLP",
-  "SMGR",
-  "SMGRP",
-  "HTS",
-  "SMGT",
-  "SMGTP",
-  "WIND",
-  "SBIM",
-  "SCSD",
-  "RBIM",
-  "RCSD",
-  "SUBCS",
-  "SUPCS",
-  "HT",
-  "DOCR",
-  "TSL",
-  "TONE",
-  "UC",
-  "HU",
-  "U0",
-  "U1",
-  "U2",
-  "U3",
-  "U4",
-  "U5",
-  "U6",
-  "U7",
-  "U8",
-  "U9",
-  "WAIT",
-  "XOFFC",
-  "XONC",
-  "ZEROM",
-  "SCESA",
-  "BICR",
-  "BINEL",
-  "BIREP",
-  "CSNM",
-  "CSIN",
-  "COLORNM",
-  "DEFBI",
-  "DEVT",
-  "DISPC",
-  "ENDBI",
-  "SMPCH",
-  "SMSC",
-  "RMPCH",
-  "RMSC",
-  "GETM",
-  "KMOUS",
-  "MINFO",
-  "PCTRM",
-  "PFXL",
-  "REQMP",
-  "SCESC",
-  "S0DS",
-  "S1DS",
-  "S2DS",
-  "S3DS",
-  "SETAB",
-  "SETAF",
-  "SETCOLOR",
-  "SMGLR",
-  "SLINES",
-  "SMGTB",
-  "EHHLM",
-  "ELHLM",
-  "ELOHLM",
-  "ERHLM",
-  "ETHLM",
-  "EVHLM",
-  "SGR1",
-  "SLENGTH",
-  "TEXT...",
-};
 
 /* > */
 /* < createBuffer */
@@ -526,109 +90,8 @@ void clearBuffer( char* theDataBuffer, struct t_style* theStyleBuffer, int theNu
 }
 
 /* > */
-/* < displayBuffer */
-
-void displayBuffer( char *theBuffer, int theMaxLine, int theMaxCol)
-{
-  /* Init */
-  int i=0;
-  ENTER("displayBuffer");
-  for (i=0;i<theMaxLine;i++)
-    {
-      char* aLine=theBuffer + theMaxCol*i;
-      char c=aLine[theMaxCol-1];
-      aLine[theMaxCol-1]=0;
-      printf("%2d#%s%c\n", i, aLine, c);
-      aLine[theMaxCol-1]=c;
-    }
-}
-
-/* > */
-/* < displayCapacity */
-void displayCapacity( enum StringCapacity theCapacity)
-{ /* debug: display pattern */
-  char* aLine=strdup( yytext);
-  char* aString=aLine;
-  ENTER("displayCapacity");
-
-  while((aString=strchr (aString, '')))
-    {
-      *aString='E';
-    }
-  printf("|%s = %s|\n", myStringCapacity[ theCapacity], aLine);
-  free(aLine);
-}
-
-/* > */
-/* < displayModes */
-void displayModes(struct t_style* theModes)
-{
-  ENTER("displayModes");
-  printf("|");
-  if (theModes->isStandout)
-    {
-      printf("STANDOUT ");
-    }
-  if (theModes->isUnderline)
-    {
-      printf("UNDERLINE ");
-    }
-  if (theModes->isReverse)
-    {
-      printf("REVERSE ");
-    }
-  if (theModes->isBlink)
-    {
-      printf("BLINK ");
-    }
-  if (theModes->isDim)
-    {
-      printf("DIM ");
-    }
-  if (theModes->isBold)
-    {
-      printf("BOLD ");
-    }
-  if (theModes->isBlank)
-    {
-      printf("BLANK ");
-    }
-  if (theModes->isProtect)
-    {
-      printf("PROTECT ");
-    }
-
-  if (theModes->isAlternate)
-    {
-      printf("ALTERNATE_CHARSET ");
-    }
-  printf(" |\n");
-}
-
-/* > */
-/* < displayColor */
-void displayColor( int theColor)
-{
-  static char* aColorArray[]=
-    {
-      "BLACK",
-      "RED",
-      "GREEN",
-      "YELLOW",
-      "BLUE",
-      "MAGENTA",
-      "CYAN",
-      "WHITE"
-    };
-  ENTER("displayColor");
-
-  if (theColor<sizeof(aColorArray)/sizeof(aColorArray[0]))
-    {
-      printf("|Color: %s|\n",aColorArray[theColor]);
-    }
-}
-/* > */
 /* < initCursor */
+
 /*
 theFirstCell indicates the value of the first line and the first column.
 This can be 0 or 1 according to the terminal.
@@ -642,6 +105,7 @@ void initCursor(struct t_cursor* theCursor, int theFirstCell)
   theCursor->myStyle.myBackgroundColor=TERM_COLOR_BLACK;
   theCursor->myStyle.myForegroundColor=TERM_COLOR_WHITE;
 }
+
 /* > */
 /* < getCell*/
 #define getCell( theLine, theCol, theNumberOfCol) (theLine * theNumberOfCol + theCol)
@@ -649,7 +113,7 @@ void initCursor(struct t_cursor* theCursor, int theFirstCell)
 /* < compareAndSetStyle */
 /* 
 search if the style of the cell equals one of the two supplied styles (in the ListOfStyle).
-If yes, this stykle is copied in theFoundStyle and 1 is returned. 
+If yes, this style is copied in theFoundStyle and 1 is returned. 
 Otherwise 0 is returned
 */
 int compareAndSetStyle( struct t_style* theListOfStyle, struct t_style* theStyleBuffer, int theLine, int theCol, int theNumberOfCol, struct t_style* theFoundStyle)
@@ -660,6 +124,7 @@ int compareAndSetStyle( struct t_style* theListOfStyle, struct t_style* theStyle
       || (compareStyle (theListOfStyle+1, theStyleBuffer+aCell) == 0))
     {
       copyStyle( theFoundStyle, theStyleBuffer+aCell);
+      DISPLAY_STYLE(theFoundStyle);
       aStatus=1;
     }
   return aStatus;
@@ -679,7 +144,7 @@ Three cases are expected:
 - other cases: not processed.
 */ 
 
-int getBackgroundStyle( char* theDataBuffer, int theLine, int theCol, struct t_style* theStyleBuffer, int theLength, int theNumberOfLine, int theNumberOfCol, struct t_style* theStyle)
+int getBackgroundStyle( int theLine, int theCol, struct t_style* theStyleBuffer, int theLength, int theNumberOfLine, int theNumberOfCol, struct t_style* theStyle)
 {
   enum {MAX_DISTINCT_STYLE=3};
   struct t_style aStyle[MAX_DISTINCT_STYLE];
@@ -690,8 +155,6 @@ int getBackgroundStyle( char* theDataBuffer, int theLine, int theCol, struct t_s
 
   ENTER("getBackgroundStyle");
 
-  theStyle=NULL;
-
   copyStyle( aStyle+aIndex, theStyleBuffer+aCell+i);
   aStyleWeight[ aIndex]=1;
 
@@ -700,6 +163,21 @@ int getBackgroundStyle( char* theDataBuffer, int theLine, int theCol, struct t_s
       if (compareStyle (aStyle+aIndex, theStyleBuffer+aCell+i) == 0)
 	{
 	  ++aStyleWeight[ aIndex];
+	}
+      else if (aStyleWeight[ aIndex - 1]==1)
+	{ /* the previous style concerns just one char */ 
+	  --aIndex; /* it is not taken in account (it can be a shortcut). */
+	  if ((aIndex>0) 
+	      && (compareStyle (aStyle+aIndex-1, theStyleBuffer+aCell+i) == 0))
+	    { /* the current style is the same than the previous one */
+	      --aIndex;
+	      ++aStyleWeight[ aIndex];
+	    }
+	  else
+	    { /* the current style is distinct */
+	      copyStyle( aStyle+aIndex, theStyleBuffer+aCell+i);
+	      aStyleWeight[ aIndex]=1;	      
+	    }
 	}
       else if (++aIndex < MAX_DISTINCT_STYLE)
 	{
@@ -715,7 +193,8 @@ int getBackgroundStyle( char* theDataBuffer, int theLine, int theCol, struct t_s
 #ifdef DEBUG
   for (i=0; i<=aIndex; i++)
     {
-      SHOW3("style %d: %d samples", i, aStyleWeight[i]);
+      SHOW3("* style #%d used by %d chars\n", i, aStyleWeight[i]);
+      DISPLAY_STYLE(aStyle+i);
     }
 #endif
 
@@ -732,12 +211,12 @@ int getBackgroundStyle( char* theDataBuffer, int theLine, int theCol, struct t_s
 	{ 
 	  if (theCol > 0)
 	    {
-	      SHOW("Top Left Cell");
+	      SHOW("Test Top Left Cell");
 	      aIndex=compareAndSetStyle( aStyle, theStyleBuffer, theLine-1, theCol-1, theNumberOfCol, theStyle);
 	    }
 	  if((theCol+theLength < theNumberOfCol) && (aIndex != 1))
 	    {
-	      SHOW("Top Right Cell");
+	      SHOW("Test Top Right Cell");
 	      aIndex=compareAndSetStyle( aStyle, theStyleBuffer, theLine-1, theCol+theLength, theNumberOfCol, theStyle);
 	    }
 	}
@@ -746,12 +225,12 @@ int getBackgroundStyle( char* theDataBuffer, int theLine, int theCol, struct t_s
 	{
 	  if (theCol > 0)
 	    {
-	      SHOW("Bottom Left Cell");
+	      SHOW("Test Bottom Left Cell");
 	      aIndex=compareAndSetStyle( aStyle, theStyleBuffer, theLine+1, theCol-1, theNumberOfCol, theStyle);
 	    }
 	  if((theCol+theLength < theNumberOfCol) && (aIndex != 1))
 	    {
-	      SHOW("Bottom Right Cell");
+	      SHOW("Test Bottom Right Cell");
 	      aIndex=compareAndSetStyle( aStyle, theStyleBuffer, theLine+1, theCol+theLength, theNumberOfCol, theStyle);
 	    }
 	}
@@ -786,6 +265,7 @@ int getBackgroundStyle( char* theDataBuffer, int theLine, int theCol, struct t_s
     }
   return aIndex + 1;
 }
+
 /* > */
 /* < eraseCharWithThisStyle */
 void eraseCharWithThisStyle( char* theDataBuffer, struct t_style* theStyleBuffer, int theLength, struct t_style* theStyle)
@@ -803,6 +283,7 @@ void eraseCharWithThisStyle( char* theDataBuffer, struct t_style* theStyleBuffer
 }
 /* > */
 /* < flushText */
+
 void flushText( char* theDataBuffer, struct t_style* theStyleBuffer, int theLength)
 {
   char c=theDataBuffer[ theLength];
@@ -816,20 +297,118 @@ void flushText( char* theDataBuffer, struct t_style* theStyleBuffer, int theLeng
 #endif
 
 }
+
 /* > */
-/* < testIfPortionsAreItems */
-int testIfPortionsAreItems( struct t_linePortion* theLinePortion1, struct t_linePortion* theLinePortion2)
+/* < testIfPortionsAreMenuItems */
+int testIfPortionsAreMenuItems( struct t_linePortion* theLinePortion1, struct t_linePortion* theLinePortion2)
 {
-  ENTER("testIfPortionsAreItems");
+  ENTER("testIfPortionsAreMenuItems");
+  SHOW3("* theLinePortion1: myFirstCol=%d, myLastCol=%d\n",theLinePortion1->myFirstCol, theLinePortion1->myLastCol);
+  SHOW3(" Content modified=%d, style modified=%d\n",theLinePortion1->myContentIsModified, theLinePortion1->myStyleIsModified);
+  SHOW3("* theLinePortion2: myFirstCol=%d, myLastCol=%d\n",theLinePortion2->myFirstCol, theLinePortion2->myLastCol);
+  SHOW3(" Content modified=%d, style modified=%d\n",theLinePortion2->myContentIsModified, theLinePortion2->myStyleIsModified);
   return !theLinePortion1->myContentIsModified 
     && !theLinePortion2->myContentIsModified
     && theLinePortion1->myStyleIsModified
-    && theLinePortion2->myStyleIsModified;
+    && theLinePortion2->myStyleIsModified
+    && ((theLinePortion1->myLastCol >= theLinePortion2->myFirstCol)
+	|| (theLinePortion2->myLastCol >= theLinePortion1->myFirstCol));
 }
 /* > */
+/* < lookForHighlightedMenuItem */
+/* Among theLinePortion - array of two menu items - retreives the index of the highlighted one.
+It guessed the background style and comapres it to the menu item style.
 
+The returned value is:
+* 0: theLinePortion[0] is the highlighted style.
+* 1: theLinePortion[1] is the highlighted style.
+* -1: no highlighted item found.
+*/
+int lookForHighlightedMenuItem( struct t_linePortion* theLinePortion, struct t_style* theStyleBuffer, int theNumberOfLine, int theNumberOfCol)
+{
+  /* Distinguish the top and bottom portions */
+  struct t_linePortion* aTopPortion=theLinePortion;
+  struct t_linePortion* aBottomPortion=theLinePortion;
+  int aStatus=0;
+  struct t_style aSurroundingBackgroundStyle;
+  struct t_style aTopPortionBackgroundStyle;
+  struct t_style aBottomPortionBackgroundStyle;
+  int aLength=theLinePortion->myLastCol + 1 - theLinePortion->myFirstCol;
+
+  ENTER("lookForHighlightedMenuItem");
+
+  if (theLinePortion[0].myLine < theLinePortion[1].myLine)
+    {
+      aBottomPortion++; /* points to theLinePortion+1 */
+    }
+  else
+    {
+      aTopPortion++;  /* points to theLinePortion+1 */
+    }
+
+  /* Look for the background style of the top and bottom line portions */
+  if(!getBackgroundStyle( aTopPortion->myLine, aTopPortion->myFirstCol, theStyleBuffer, aLength, theNumberOfLine, theNumberOfCol, &aTopPortionBackgroundStyle))
+    {
+      SHOW("Top portion: no background found");
+      return -1;
+    }
+
+  if(!getBackgroundStyle( aBottomPortion->myLine, aBottomPortion->myFirstCol, theStyleBuffer, aLength, theNumberOfLine, theNumberOfCol, &aBottomPortionBackgroundStyle))
+    {
+      SHOW("Bottom portion: no background found");
+      return -1;
+    }
+
+  /* Look for the background style of the surrounding line portions
+     Two possible cases:
+     - Contiguous line portions: we check if possible the line upper than aTopPortion or the line lower than aBottomPortion
+     - Not contiguous: check the line lower than aTopPortion
+  */
+  /* Check if the lines are contiguous */
+  if ( abs( aTopPortion->myLine - aTopPortion->myLine)==1)
+    { /* yes, contiguous */
+      if (aTopPortion->myLine > 0)
+	{ /* Check the upper line */
+	  aStatus=getBackgroundStyle( aTopPortion->myLine - 1, aTopPortion->myFirstCol, theStyleBuffer, aLength, theNumberOfLine, theNumberOfCol, &aSurroundingBackgroundStyle);
+	}
+      if (!aStatus && (aBottomPortion->myLine + 1 < theNumberOfLine))
+	{ /* Check the lower line */
+	  aStatus=getBackgroundStyle( aBottomPortion->myLine - 1, aBottomPortion->myFirstCol, theStyleBuffer, aLength, theNumberOfLine, theNumberOfCol, &aSurroundingBackgroundStyle);
+	}
+    }
+  else
+    { /* Not contiguous: check the line lower than aTopPortion */
+      aStatus=getBackgroundStyle( aTopPortion->myLine + 1, aTopPortion->myFirstCol, theStyleBuffer, aLength, theNumberOfLine, theNumberOfCol, &aSurroundingBackgroundStyle);
+    }
+
+  /* If the surrounding background has been found, compare it to the style of the bottom and top line portion */
+  if (aStatus)
+    {
+      aStatus=-1;
+      if (0==compareStyle( &aTopPortionBackgroundStyle, &aSurroundingBackgroundStyle))
+	{
+	  if (0!=compareStyle( &aBottomPortionBackgroundStyle, &aSurroundingBackgroundStyle))
+	    { /* Return the index of the bottom portion */
+	      aStatus=(aBottomPortion==theLinePortion) ? 0 : 1;
+	      SHOW("Bottom portion is highlighted");
+	    }
+	}
+      else if (0==compareStyle( &aBottomPortionBackgroundStyle, &aSurroundingBackgroundStyle))
+	{ /* return the index of the top portion */
+	  aStatus=(aTopPortion==theLinePortion) ? 0 : 1;
+	  SHOW("Top portion is highlighted");
+	}
+    }
+  else
+    {
+      aStatus=-1;
+      SHOW("No highlighted portion found");
+    }
+  return aStatus;
+}
+
+/* > */
 /* < initPortion */
-
 void initPortion( struct t_linePortion* thePortion, struct t_cursor* theCursor)
 {
   ENTER("initPortion");
@@ -844,7 +423,7 @@ void initPortion( struct t_linePortion* thePortion, struct t_cursor* theCursor)
 /* > */
 /* < flushPortion */
 
-/* process and display the stored line portions according to the style.
+/* Process and display the stored line portions according to the style.
 This function can:
 - determine the possible selected item in a menu and displays it.
 - take in account the style (single letter as shortcut, distinct voices)
@@ -858,11 +437,28 @@ void flushPortion( struct t_linePortion* theLinePortion, int* theLinePortionInde
 {
   ENTER("flushPortion");
 
-  /* Look for two lines without any content modification but style change */ 
+  /* Firstly, look for menu items: 2 lines without any content modification but style change */ 
   if ((*theLinePortionIndex==1)
-      && testIfPortionsAreItems(theLinePortion, theLinePortion+1))
+      && testIfPortionsAreMenuItems(theLinePortion, theLinePortion+1))
     {
-      
+      int i;
+      int aCell;
+      switch( i=lookForHighlightedMenuItem( theLinePortion, theStyleBuffer, theNumberOfLine, theNumberOfCol))
+	{
+	case 0:
+	case 1:
+	  aCell=getCell( theLinePortion[i].myLine, theLinePortion[i].myFirstCol, theNumberOfCol);	    
+	  flushText( theDataBuffer + aCell, NULL, theLinePortion[i].myLastCol - theLinePortion[i].myFirstCol);
+	  break;
+	case -1:
+	default:
+	  for (i=0; i<2; i++)
+	    {
+	      aCell=getCell( theLinePortion[i].myLine, theLinePortion[i].myFirstCol, theNumberOfCol);	    
+	      flushText( theDataBuffer + aCell, NULL, theLinePortion[i].myLastCol - theLinePortion[i].myFirstCol);
+	    }
+	  break;
+	}
     }
   else
     { /* process each line portion */
@@ -887,7 +483,7 @@ void flushPortion( struct t_linePortion* theLinePortion, int* theLinePortionInde
 	    }
 	  else if (aPortion->myStyleIsModified)
 	    {
-	      int aStatus=getBackgroundStyle( theDataBuffer, aPortion->myLine, aPortion->myFirstCol, theStyleBuffer, aLength, theNumberOfLine, theNumberOfCol, &aStyle);
+	      int aStatus=getBackgroundStyle( aPortion->myLine, aPortion->myFirstCol, theStyleBuffer, aLength, theNumberOfLine, theNumberOfCol, &aStyle);
 
 	      /* The characters associated with the background style are not displayed */
 	      if (aStatus)
@@ -898,8 +494,6 @@ void flushPortion( struct t_linePortion* theLinePortion, int* theLinePortionInde
 	    }
 	}
     }
-
-
 
 /*   for (i=0; i<=*theLinePortionIndex; i++) */
 /*     { */
@@ -917,10 +511,8 @@ void flushPortion( struct t_linePortion* theLinePortion, int* theLinePortionInde
 /*     } */
   *theLinePortionIndex=-1;
 }
-
 /* > */
 /* < setPortion */
-
 /* 
 Check if a new line portion is supplied.
 If yes, try to store its features.
@@ -1019,7 +611,6 @@ void copyModes( struct t_style* theDestination, struct t_style* theSource)
 
 /* > */
 /* < eraseLine */
-
 void eraseLine( char* theLine, int theLength)
 {
   int i=0;
@@ -1029,17 +620,14 @@ void eraseLine( char* theLine, int theLength)
       theLine[i]=0x20;
     }
 }
-
 /* > */
 /* < deleteCharacter */
-
 void deleteCharacter(char* theLine, int theErasedLength, int theTotalLength)
 {
   ENTER("deleteCharacter");
   memmove(theLine, theLine+theErasedLength, theErasedLength);
   eraseLine(&(theLine[theTotalLength-theErasedLength]), theErasedLength);
 }
-
 /* > */
 /* < main */
 
@@ -1057,7 +645,7 @@ int main()
   int aLinePortionIndex=-1;
 
 #ifdef DEBUG
-  /* RAF GC: debug */
+  /* TBD GC: debug */
   extern FILE *yyin;
   yyin=fopen("test/1e.txt","r");
 #endif
@@ -1072,10 +660,7 @@ int main()
 
   while((aCapacity=yylex()))
     {
-      if (TheDebugIsOn)
-	{
-	  displayCapacity( aCapacity);
-	}
+      DISPLAY_CAPACITY( aCapacity);
 
       switch(aCapacity)
 	{
@@ -1160,24 +745,15 @@ int main()
 	  break;
 	case SETB:
 	  aCursor.myStyle.myBackgroundColor=myParameters[0];
-	  if (TheDebugIsOn)
-	    {
-	      displayColor( myParameters[0]);
-	    }
+	  DISPLAY_COLOR( "Background", myParameters[0]);
 	  break;
 	case SETF:
 	  aCursor.myStyle.myForegroundColor=myParameters[0];
-	  if (TheDebugIsOn)
-	    {
-	      displayColor( myParameters[0]);
-	    }
+	  DISPLAY_COLOR( "Foreground", myParameters[0]);
 	  break;
 	case SGR:
 	  copyModes(& aCursor.myStyle, (struct t_style*)myParameters);
-	  if (TheDebugIsOn)
-	    {
-	      displayModes((struct t_style*)myParameters);
-	    }
+	  DISPLAY_STYLE((struct t_style*)myParameters);
 	  break;
 	case VPA:
 	  aCursor.myLine=myParameters[0];
@@ -1211,10 +787,7 @@ int main()
 
   flushPortion( aLinePortion, &aLinePortionIndex, aDataBuffer, aNumberOfLine, aNumberOfCol, aStyleBuffer);
 
-  if (TheDebugIsOn)
-    {
-      displayBuffer(aDataBuffer, aNumberOfLine, aNumberOfCol);
-    }
+  DISPLAY_BUFFER(aDataBuffer, aNumberOfLine, aNumberOfCol);
 
   free(aDataBuffer);
   free(aStyleBuffer);

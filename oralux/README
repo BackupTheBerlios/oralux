@@ -1,10 +1,10 @@
 # ----------------------------------------------------------------------------
 # README
-# $Id: README,v 1.2 2004/09/27 20:34:58 gcasse Exp $
+# $Id: README,v 1.3 2004/12/27 22:19:59 gcasse Exp $
 # $Author: gcasse $
 # Description: This file describes how to build Oralux from Knoppix.
-# $Date: 2004/09/27 20:34:58 $ |
-# $Revision: 1.2 $ |
+# $Date: 2004/12/27 22:19:59 $ |
+# $Revision: 1.3 $ |
 # Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -52,7 +52,7 @@ http://switch.dl.sourceforge.net/sourceforge/emacspeak/emacspeak-20.tar.bz2
 http://fr.rpmfind.net/linux/blinux/emacspeak/blinux/emacspeak-ss-1.9.1.tar.gz
 http://www.pollock-nageoire.net/patches/efm-install-util.tgz
 
-multispeech (for future use)
+multispeech
 ftp://ftp.rakurs.spb.ru/pub/Goga 
 under projects/speech-interface/multispeech-1.2.2.tar.bz2
 and slackware-packages/8.1/speach-interface/multispeech-1.2-i586-1.tgz 
