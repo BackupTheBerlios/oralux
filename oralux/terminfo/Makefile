@@ -1,10 +1,11 @@
 # Basic Makefile -- relies on implicit rules
-# Creates terminfo from "escape2terminfo.l" and "terminfo.c"
+# Creates termBuffer for test purposes
 #
 LEX=flex
 CFLAGS=-g -DDEBUG -O3 -fpic -pedantic -Wall
 #CFLAGS=-O3 -fpic -pedantic -Wall
-terminfo: escape2terminfo.o terminfo.o debug.o
+termBuffer: escape2terminfo.o termBuffer.o debug.o test.o
 escape2terminfo.o: escape2terminfo.l escape2terminfo.h debug.h
-terminfo.o:  escape2terminfo.h debug.h Makefile
+termBuffer.o:  escape2terminfo.h debug.h termBuffer.h Makefile
 debug.o: debug.h
+test.o: termBuffer.h

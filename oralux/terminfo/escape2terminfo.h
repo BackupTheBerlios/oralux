@@ -8,6 +8,7 @@ extern int myNumberOfParameters;
 extern int yylex (void);
 extern char *yytext;
 extern int yyleng;
+extern FILE *yyin;
 /* > */
 /* < terminalColor */
 enum terminalColor 

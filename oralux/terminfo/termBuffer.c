@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
-terminfo.c
-$Id: terminfo.c,v 1.5 2004/12/27 22:19:59 gcasse Exp $
+termBuffer.c
+$Id: termBuffer.c,v 1.1 2004/12/28 22:24:49 gcasse Exp $
 $Author: gcasse $
-Description: store the layout using the supplied terminfo commands. 
-$Date: 2004/12/27 22:19:59 $ |
-$Revision: 1.5 $ |
+Description: manage the terminal layout in a buffer.
+$Date: 2004/12/28 22:24:49 $ |
+$Revision: 1.1 $ |
 Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -30,6 +30,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <string.h>
 #include <stdlib.h>
 #include "escape2terminfo.h"
+#include "termBuffer.h"
 #include "debug.h"
 
 /* > */
@@ -38,18 +39,6 @@ int yywrap ()
 {  
    return 1; 
 }
-/* > */
-/* < cursor */
-
-struct t_cursor
-{
-  int myLine;
-  int myCol;
-  struct t_style myStyle;
-};
-
-#define copyCursor( theDestination, theSource) memcpy( theDestination, theSource, sizeof(struct t_cursor))
-
 /* > */
 /* < linePortion */
 
@@ -94,7 +83,7 @@ void clearBuffer( char* theDataBuffer, struct t_style* theStyleBuffer, int theNu
 
 /*
 theFirstCell indicates the value of the first line and the first column.
-This can be 0 or 1 according to the terminal.
+This can be 0 or 1 according to the termBuffer.
 */
 void initCursor(struct t_cursor* theCursor, int theFirstCell)
 {
@@ -282,22 +271,33 @@ void eraseCharWithThisStyle( char* theDataBuffer, struct t_style* theStyleBuffer
     }
 }
 /* > */
-/* < flushText */
-
-void flushText( char* theDataBuffer, struct t_style* theStyleBuffer, int theLength)
+/* < addString */
+/* 
+Concatenate the two supplied string, a new pointer is returned in *theDestination.
+theLength is the maximum number of bytes copied from theSource. 
+Warning: theDestination is either NULL or expected to come from malloc.
+ */ 
+int addString( char** theDestination, char* theSource, int theLength)
 {
-  char c=theDataBuffer[ theLength];
-  
-  ENTER("flushText");
+  char* aNewString=NULL;
+  int aOldLength = (*theDestination) ? strlen(*theDestination): 0; 
+  aNewString=realloc(*theDestination, aOldLength + theLength + 1);
 
-#ifdef DEBUG
-  theDataBuffer[ theLength]=0;
-  SHOW2("Text=>>>%s<<<\n",theDataBuffer);
-  theDataBuffer[ theLength]=c;
-#endif
-
+  if (aNewString)
+    {
+      *theDestination=aNewString;
+      strncpy(aNewString+aOldLength, theSource, theLength);
+      aNewString[ aOldLength+theLength]=0;
+    }
+  return (aNewString != NULL);
 }
-
+/* > */
+/* < flushText */
+void flushText( char* theDataBuffer, struct t_style* theStyleBuffer, int theLength, char** theOutputBuffer)
+{
+  ENTER("flushText");
+  addString(theOutputBuffer, theDataBuffer, theLength);
+}
 /* > */
 /* < testIfPortionsAreMenuItems */
 int testIfPortionsAreMenuItems( struct t_linePortion* theLinePortion1, struct t_linePortion* theLinePortion2)
@@ -433,9 +433,10 @@ If there are 1 or 2 line portions without any content modification but with styl
 The current background style around the line portion is determined.
 
 */
-void flushPortion( struct t_linePortion* theLinePortion, int* theLinePortionIndex, char* theDataBuffer, int theNumberOfLine, int theNumberOfCol, struct t_style* theStyleBuffer)
+void flushPortion( struct t_linePortion* theLinePortion, int* theLinePortionIndex, char* theDataBuffer, int theNumberOfLine, int theNumberOfCol, struct t_style* theStyleBuffer, char** theOutputBuffer)
 {
   ENTER("flushPortion");
+
 
   /* Firstly, look for menu items: 2 lines without any content modification but style change */ 
   if ((*theLinePortionIndex==1)
@@ -448,14 +449,14 @@ void flushPortion( struct t_linePortion* theLinePortion, int* theLinePortionInde
 	case 0:
 	case 1:
 	  aCell=getCell( theLinePortion[i].myLine, theLinePortion[i].myFirstCol, theNumberOfCol);	    
-	  flushText( theDataBuffer + aCell, NULL, theLinePortion[i].myLastCol - theLinePortion[i].myFirstCol);
+	  flushText( theDataBuffer + aCell, NULL, theLinePortion[i].myLastCol - theLinePortion[i].myFirstCol, theOutputBuffer);
 	  break;
 	case -1:
 	default:
 	  for (i=0; i<2; i++)
 	    {
 	      aCell=getCell( theLinePortion[i].myLine, theLinePortion[i].myFirstCol, theNumberOfCol);	    
-	      flushText( theDataBuffer + aCell, NULL, theLinePortion[i].myLastCol - theLinePortion[i].myFirstCol);
+	      flushText( theDataBuffer + aCell, NULL, theLinePortion[i].myLastCol - theLinePortion[i].myFirstCol, theOutputBuffer);
 	    }
 	  break;
 	}
@@ -479,7 +480,8 @@ void flushPortion( struct t_linePortion* theLinePortion, int* theLinePortionInde
 
 	  if (aPortion->myContentIsModified)
 	    {
-	      flushText( theDataBuffer + aFirstCell, NULL, aLength);
+	      struct t_style* x=NULL;
+	      flushText( (char*)(theDataBuffer + aFirstCell), x, aLength, (char**)theOutputBuffer);
 	    }
 	  else if (aPortion->myStyleIsModified)
 	    {
@@ -490,7 +492,7 @@ void flushPortion( struct t_linePortion* theLinePortion, int* theLinePortionInde
 		{
 		  eraseCharWithThisStyle( theDataBuffer + aFirstCell, theStyleBuffer + aFirstCell, aLength, &aStyle);
 		}
-	      flushText( theDataBuffer + aFirstCell, NULL, aLength);
+	      flushText( theDataBuffer + aFirstCell, NULL, aLength, theOutputBuffer);
 	    }
 	}
     }
@@ -629,34 +631,47 @@ void deleteCharacter(char* theLine, int theErasedLength, int theTotalLength)
   eraseLine(&(theLine[theTotalLength-theErasedLength]), theErasedLength);
 }
 /* > */
-/* < main */
+/* < createTermBuffer, deleteTermBuffer */
+/* Create a termBuffer and returns */
+struct t_termBuffer* createTermBuffer( enum termBufferName theName, int theNumberOfLine, int theNumberOfCol)
+{
+  struct t_termBuffer* aTermBuffer = (struct t_termBuffer *) malloc(sizeof(struct t_termBuffer));
+  int aNumberOfCell = theNumberOfLine * theNumberOfCol;
+  createBuffer( &(aTermBuffer->myDataBuffer), &(aTermBuffer->myStyleBuffer), aNumberOfCell);
+  clearBuffer( aTermBuffer->myDataBuffer, aTermBuffer->myStyleBuffer, aNumberOfCell);
 
-int main()
+  aTermBuffer->myNumberOfLine=theNumberOfLine;
+  aTermBuffer->myNumberOfCol=theNumberOfCol;
+
+  initCursor( &(aTermBuffer->myCursor), 0);
+  initCursor( &(aTermBuffer->mySavedCursor), 0);
+
+  return aTermBuffer;
+}
+
+void deleteTermBuffer( struct t_termBuffer* theTermBuffer)
+{
+  free(theTermBuffer->myDataBuffer);
+  free(theTermBuffer->myStyleBuffer);
+  free(theTermBuffer);
+}
+
+/* > */
+/* < interpretEscapeSequence */
+
+char* interpretEscapeSequence( struct t_termBuffer* theTermBuffer, FILE* theStream, char** theOutput)
 {
   enum StringCapacity aCapacity;
-  struct t_cursor aCursor;
-  struct t_cursor aSavedCursor;
-  char* aDataBuffer=NULL;
-  struct t_style* aStyleBuffer=NULL;
-  int aNumberOfLine=30;
-  int aNumberOfCol=30;
-  int aNumberOfCell = aNumberOfLine * aNumberOfCol;
   struct t_linePortion aLinePortion[ MAX_LINE_PORTION];
   int aLinePortionIndex=-1;
+  struct t_cursor* aCursor=&(theTermBuffer->myCursor);
+  int aNumberOfCell=theTermBuffer->myNumberOfLine * theTermBuffer->myNumberOfCol;
 
-#ifdef DEBUG
-  /* TBD GC: debug */
-  extern FILE *yyin;
-  yyin=fopen("test/1e.txt","r");
-#endif
+  ENTER("interpretEscapeSequence");
 
-  ENTER("main");
+  theTermBuffer=(struct t_termBuffer*)theTermBuffer;
 
-  initCursor( &aCursor, 0);
-  copyCursor( &aSavedCursor, &aCursor);
-
-  createBuffer( &aDataBuffer, &aStyleBuffer, aNumberOfCell);
-  clearBuffer( aDataBuffer, aStyleBuffer, aNumberOfCell);
+  yyin=theStream;
 
   while((aCapacity=yylex()))
     {
@@ -665,46 +680,46 @@ int main()
       switch(aCapacity)
 	{
 	case CLEAR:
-	  aCursor.myCol=0;
-	  aCursor.myLine=0;
-	  clearBuffer( aDataBuffer, aStyleBuffer, aNumberOfCell);
+	  aCursor->myCol=0;
+	  aCursor->myLine=0;
+	  clearBuffer( theTermBuffer->myDataBuffer, theTermBuffer->myStyleBuffer, aNumberOfCell);
 	  break;
 	case CUB1:
-	  if (aCursor.myCol!=0)
+	  if (aCursor->myCol!=0)
 	    {
-	      aCursor.myCol--;
+	      aCursor->myCol--;
 	    }
 	  break;
 	case CUD1:
-	  aCursor.myLine++;
-	  aCursor.myCol=0;
+	  aCursor->myLine++;
+	  aCursor->myCol=0;
 	  break;
 	case NEL:
-	  aCursor.myLine++;
-	  aCursor.myCol=0;
+	  aCursor->myLine++;
+	  aCursor->myCol=0;
 	  break;
 	case CUF1:
-	  aCursor.myCol++;
+	  aCursor->myCol++;
 	  break;
 	case CUP:
-	  aCursor.myCol=myParameters[0];
-	  aCursor.myLine=myParameters[1];
+	  aCursor->myCol=myParameters[0];
+	  aCursor->myLine=myParameters[1];
 	  break;
 	case CUU:
-	  aCursor.myLine-=myParameters[0];
+	  aCursor->myLine-=myParameters[0];
 	  break;
 	case DCH: /* delete characters */
 	  {
 	    int aShift=myParameters[0]; /* number of characters to delete, the following chars shift to the left */
-	    int aCell=getCell(aCursor.myLine, aCursor.myCol, aNumberOfCol);
-	    deleteCharacter(&(aDataBuffer[ aCell]), aShift, aNumberOfCol-aShift);
+	    int aCell=getCell(aCursor->myLine, aCursor->myCol, theTermBuffer->myNumberOfCol);
+	    deleteCharacter(&(theTermBuffer->myDataBuffer[ aCell]), aShift, theTermBuffer->myNumberOfCol-aShift);
 	  }
 	  break;
 	case DCH1:
 	  {
 	    int aShift=1;
-	    int aCell=getCell(aCursor.myLine, aCursor.myCol, aNumberOfCol);
-	    deleteCharacter(&(aDataBuffer[ aCell]), aShift, aNumberOfCol-aShift);
+	    int aCell=getCell(aCursor->myLine, aCursor->myCol, theTermBuffer->myNumberOfCol);
+	    deleteCharacter(&(theTermBuffer->myDataBuffer[ aCell]), aShift, theTermBuffer->myNumberOfCol-aShift);
 	  }
 	  break;
 	case DL: /* delete lines */
@@ -714,8 +729,8 @@ int main()
 	case ECH: /* Erase characters */
 	  {
 	    int aErasedLength=myParameters[0];
-	    int aCell=getCell(aCursor.myLine, aCursor.myCol, aNumberOfCol);
-	    eraseLine(&(aDataBuffer[ aCell]), aErasedLength);
+	    int aCell=getCell(aCursor->myLine, aCursor->myCol, theTermBuffer->myNumberOfCol);
+	    eraseLine(&(theTermBuffer->myDataBuffer[ aCell]), aErasedLength);
 	  }
 	  break;
 	case ED: /* Clear the display after the cursor */
@@ -723,74 +738,72 @@ int main()
 	case EL1:
 	  break;
 	case HOME:
-	  aCursor.myCol=0;
-	  aCursor.myLine=0;
+	  aCursor->myCol=0;
+	  aCursor->myLine=0;
 	  break;
 	case HPA:
-	  aCursor.myCol=myParameters[0];
+	  aCursor->myCol=myParameters[0];
 	  break;
 	case IL: /* several lines are added (the content is shifted to the bottom of the screen) */
 	  break;
 	case IL1:
 	  break;
 	case RC:
-	  aCursor.myCol=aSavedCursor.myCol;
-	  aCursor.myLine=aSavedCursor.myLine;
+	  aCursor->myCol=theTermBuffer->mySavedCursor.myCol;
+	  aCursor->myLine=theTermBuffer->mySavedCursor.myLine;
 	  break;
 	case SC:
-	  aSavedCursor.myCol=aCursor.myCol;
-	  aSavedCursor.myLine=aCursor.myLine;
+	  theTermBuffer->mySavedCursor.myCol=aCursor->myCol;
+	  theTermBuffer->mySavedCursor.myLine=aCursor->myLine;
 	  break;
 	case OP:
 	  break;
 	case SETB:
-	  aCursor.myStyle.myBackgroundColor=myParameters[0];
+	  aCursor->myStyle.myBackgroundColor=myParameters[0];
 	  DISPLAY_COLOR( "Background", myParameters[0]);
 	  break;
 	case SETF:
-	  aCursor.myStyle.myForegroundColor=myParameters[0];
+	  aCursor->myStyle.myForegroundColor=myParameters[0];
 	  DISPLAY_COLOR( "Foreground", myParameters[0]);
 	  break;
 	case SGR:
-	  copyModes(& aCursor.myStyle, (struct t_style*)myParameters);
+	  copyModes(& aCursor->myStyle, (struct t_style*)myParameters);
 	  DISPLAY_STYLE((struct t_style*)myParameters);
 	  break;
 	case VPA:
-	  aCursor.myLine=myParameters[0];
+	  aCursor->myLine=myParameters[0];
 	  break;
 	case TEXTFIELD:
 	  {
-	    int aCell=getCell(aCursor.myLine, aCursor.myCol, aNumberOfCol);
-	    if (storeChar( aCell, *yytext, aDataBuffer, aNumberOfCol))
+	    int aCell=getCell(aCursor->myLine, aCursor->myCol, theTermBuffer->myNumberOfCol);
+	    if (storeChar( aCell, *yytext, theTermBuffer->myDataBuffer, theTermBuffer->myNumberOfCol))
 	      { /* the content has been modified */
 		aLinePortion[ aLinePortionIndex].myContentIsModified=1;
 	      }
-	    if (storeStyle( aCell, &(aCursor.myStyle), aStyleBuffer))
+	    if (storeStyle( aCell, &(aCursor->myStyle), theTermBuffer->myStyleBuffer))
 	      { /* the style has been modified */
 		aLinePortion[ aLinePortionIndex].myStyleIsModified=1;
 	      }  
-	    aCursor.myCol++;
+	    aCursor->myCol++;
 	  }
 	  break;
 	default:
 	  break;
 	}
 
-      if( setPortion( &aCursor, aLinePortion, &aLinePortionIndex) == MAX_PORTION_REACHED)
+      if( setPortion( &(theTermBuffer->myCursor), aLinePortion, &aLinePortionIndex) == MAX_PORTION_REACHED)
 	{
-	  flushPortion( aLinePortion, &aLinePortionIndex, aDataBuffer, aNumberOfLine, aNumberOfCol, aStyleBuffer);
+	  flushPortion( aLinePortion, &aLinePortionIndex, theTermBuffer->myDataBuffer, theTermBuffer->myNumberOfLine, theTermBuffer->myNumberOfCol, theTermBuffer->myStyleBuffer, theOutput);
 
 	  /* and build the new portion */ 
-	  setPortion( &aCursor, aLinePortion, &aLinePortionIndex);	  
+	  setPortion( &theTermBuffer->myCursor, aLinePortion, &aLinePortionIndex);	  
 	}
     }
 
-  flushPortion( aLinePortion, &aLinePortionIndex, aDataBuffer, aNumberOfLine, aNumberOfCol, aStyleBuffer);
+  flushPortion( aLinePortion, &aLinePortionIndex, theTermBuffer->myDataBuffer, theTermBuffer->myNumberOfLine, theTermBuffer->myNumberOfCol, theTermBuffer->myStyleBuffer, theOutput);
 
-  DISPLAY_BUFFER(aDataBuffer, aNumberOfLine, aNumberOfCol);
+  DISPLAY_BUFFER(theTermBuffer->myDataBuffer, theTermBuffer->myNumberOfLine, theTermBuffer->myNumberOfCol);
 
-  free(aDataBuffer);
-  free(aStyleBuffer);
   return 0;
 }
 
