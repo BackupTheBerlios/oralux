@@ -3,12 +3,35 @@
 extern int myParameters[MAXPARAM];
 extern int myNumberOfParameters;
 /* < terminalMode */
+
 enum terminalMode
   {
-    STANDOUT, UNDERLINE,  REVERSE,
-    BLINK2,  DIM2,  BOLD2,  BLANK,  
-    PROTECT, ALTERNATE_CHARSET,
+    MODE_STANDOUT=1,
+    MODE_UNDERLINE=2,
+    MODE_REVERSE=4,
+    MODE_BLINK=8,
+    MODE_DIM=16,
+    MODE_BOLD=32,
+    MODE_BLANK=64,
+    MODE_PROTECT=128,
+    MODE_ALTERNATE_CHARSET=256
   };
+
+/* > */
+/* < terminalColor */
+
+enum terminalColor 
+  {
+    TERM_COLOR_BLACK=0,
+    TERM_COLOR_RED=1,
+    TERM_COLOR_GREEN=2,
+    TERM_COLOR_YELLOW=3,
+    TERM_COLOR_BLUE=4,
+    TERM_COLOR_MAGENTA=5,
+    TERM_COLOR_CYAN=6,
+    TERM_COLOR_WHITE=7
+  };
+
 /* > */
 /* < enum StringCapacity */
 
@@ -413,7 +436,7 @@ enum StringCapacity
     SGR1,        /* Define second set of video attributes #1-#6 */
     SLENGTH,     /* YI Set page length to #1 hundredth of an inch */
     LASTENUM,
-    TEXTFIELD=LASTENUM, /* Used to identify text, this is not a capacity */
+    TEXTFIELD=LASTENUM /* Used to identify text, this is not a capacity */
 };
 
 /* > */

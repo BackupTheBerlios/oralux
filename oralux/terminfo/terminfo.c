@@ -1,5 +1,42 @@
+/* 
+----------------------------------------------------------------------------
+terminfo.c
+$Id: terminfo.c,v 1.2 2004/12/18 22:29:05 gcasse Exp $
+$Author: gcasse $
+Description: stores the layout using the supplied terminfo commands. 
+$Date: 2004/12/18 22:29:05 $ |
+$Revision: 1.2 $ |
+Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+----------------------------------------------------------------------------
+*/
+
 #include <stdio.h>
+#include <stdint.h>
+#include <string.h>
+#include <stdlib.h>
 #include "escape2terminfo.h"
+
+#ifdef DEBUG
+int TheDebugIsOn=1;
+#else
+int TheDebugIsOn=0;
+#endif
+
+/* < flex declarations or definitions */
 
 extern int yylex (void);
 extern char *yytext;
@@ -10,6 +47,19 @@ int yywrap ()
    return 1; 
 }
 
+/* > */
+/* < cursor */
+
+struct t_cursor
+{
+  int myLine;
+  int myCol;
+  enum terminalColor myBackgroundColor;
+  enum terminalColor myForegroundColor;
+  uint_least16_t myModes; /* Each bit is described in escape2terminfo.h (enum terminalMode) */
+};
+
+/* > */
 /* < array myStringCapacity */
 
 char* myStringCapacity[]={
@@ -412,11 +462,11 @@ char* myStringCapacity[]={
 };
 
 /* > */
-
+/* < clearBuffer */
 
 void clearBuffer( char *theBuffer, int theMaxLine, int theMaxCol)
 {
-  // Init
+  /* Init */
   int i=0;
   for (i=0;i<theMaxLine;i++)
     {
@@ -428,19 +478,126 @@ void clearBuffer( char *theBuffer, int theMaxLine, int theMaxCol)
     }
 }
 
+/* > */
+/* < displayBuffer */
+
 void displayBuffer( char *theBuffer, int theMaxLine, int theMaxCol)
 {
-  // Init
+  /* Init */
   int i=0;
   for (i=0;i<theMaxLine;i++)
     {
       char* aLine=theBuffer + theMaxCol*i;
       char c=aLine[theMaxCol-1];
       aLine[theMaxCol-1]=0;
-      printf("%s%c\n", aLine, c);
+      printf("%2d#%s%c\n", i, aLine, c);
       aLine[theMaxCol-1]=c;
     }
 }
+
+/* > */
+/* < displayCapacity */
+void displayCapacity( enum StringCapacity theCapacity)
+{ /* debug: display pattern */
+  char* aLine=strdup( yytext);
+  char* aString=aLine;
+  while((aString=strchr (aString, '')))
+    {
+      *aString='E';
+    }
+  printf("|%s = %s|\n", myStringCapacity[ theCapacity], aLine);
+  free(aLine);
+}
+
+/* > */
+/* < displayModes */
+void displayModes(int theModes)
+{
+  printf("|");
+  if (theModes & MODE_STANDOUT)
+    {
+      printf("STANDOUT ");
+    }
+  if (theModes & MODE_UNDERLINE)
+    {
+      printf("UNDERLINE ");
+    }
+  if (theModes & MODE_REVERSE)
+    {
+      printf("REVERSE ");
+    }
+  if (theModes & MODE_BLINK)
+    {
+      printf("BLINK ");
+    }
+  if (theModes & MODE_DIM)
+    {
+      printf("DIM ");
+    }
+  if (theModes & MODE_BOLD)
+    {
+      printf("BOLD ");
+    }
+  if (theModes & MODE_BLANK)
+    {
+      printf("BLANK ");
+    }
+  if (theModes & MODE_PROTECT)
+    {
+      printf("PROTECT ");
+    }
+
+  if (theModes & MODE_ALTERNATE_CHARSET)
+    {
+      printf("ALTERNATE_CHARSET ");
+    }
+  printf(" |\n");
+}
+
+/* > */
+/* <*/
+void displayColor( int theColor)
+{
+  static char* aColorArray[]=
+    {
+      "BLACK",
+      "RED",
+      "GREEN",
+      "YELLOW",
+      "BLUE",
+      "MAGENTA",
+      "CYAN",
+      "WHITE"
+    };
+  if (theColor<sizeof(aColorArray)/sizeof(aColorArray[0]))
+    {
+      printf("|Color: %s|\n",aColorArray[theColor]);
+    }
+}
+/* > */
+
+/* < initCursor */
+/*
+theFirstCell indicate the value of the first line and the first column.
+This can be 0 or 1 according to the terminal.
+*/
+void initCursor(struct t_cursor* theCursor, int theFirstCell)
+{
+  theCursor->myLine=theFirstCell;
+  theCursor->myCol=theFirstCell;
+  theCursor->myBackgroundColor=TERM_COLOR_BLACK;
+  theCursor->myForegroundColor=TERM_COLOR_WHITE;
+  theCursor->myModes=0;
+}
+/* > */
+/* < copyCursor */
+void copyCursor( struct t_cursor* theDestination, struct t_cursor* theSource)
+{
+  memcpy( theDestination, theSource, sizeof(struct t_cursor));
+}
+
+/* > */
+/* < eraseLine */
 
 void eraseLine( char* theLine, int theLength)
 {
@@ -451,120 +608,162 @@ void eraseLine( char* theLine, int theLength)
     }
 }
 
+/* > */
+/* < deleteCharacter */
+
 void deleteCharacter(char* theLine, int theErasedLength, int theTotalLength)
 {
   memmove(theLine, theLine+theErasedLength, theErasedLength);
   eraseLine(&(theLine[theTotalLength-theErasedLength]), theErasedLength);
 }
 
+/* > */
+/* < main */
+
 int main()
 {
   enum StringCapacity aCapacity;
-  int aCol=0; //RAF 0 or 1
-  int aLine=0; //RAF 0 or 1
-  int aSavedCol=aCol;
-  int aSavedLine=aLine;
+  struct t_cursor aCursor;
+  struct t_cursor aSavedCursor;
+  enum terminalColor aBackgroundColor=TERM_COLOR_BLUE; /* RAF determine the main area background */
   char* aBuffer=NULL;
   int aMaxLine=30;
   int aMaxCol=30;
 
+#ifdef DEBUG
+  /* RAF GC: debug */
+  extern FILE *yyin;
+  yyin=fopen("test/1e.txt","r");
+#endif
+
+  initCursor( &aCursor, 0);
+  copyCursor( &aSavedCursor, &aCursor);
   aBuffer=(char*)malloc(aMaxLine * aMaxCol * sizeof(char*));
   clearBuffer(aBuffer, aMaxLine, aMaxCol);
 
-
-  while(aCapacity=yylex())
+  while((aCapacity=yylex()))
     {
-      printf("|%s = %s|\n", myStringCapacity[ aCapacity], yytext);
+      if (TheDebugIsOn)
+	{
+	  displayCapacity( aCapacity);
+	}
 
       switch(aCapacity)
 	{
 	case CLEAR:
-	  aCol=0;
-	  aLine=0;
+	  aCursor.myCol=0;
+	  aCursor.myLine=0;
 	  clearBuffer(aBuffer, aMaxLine, aMaxCol);
 	  break;
 	case CUB1:
-	  if (aCol!=0)
+	  if (aCursor.myCol!=0)
 	    {
-	      aCol--;
+	      aCursor.myCol--;
 	    }
 	  break;
 	case CUD1:
-	  aLine++;
-	  aCol=0;
+	  aCursor.myLine++;
+	  aCursor.myCol=0;
+	  break;
+	case NEL:
+	  aCursor.myLine++;
+	  aCursor.myCol=0;
 	  break;
 	case CUF1:
-	  aCol++;
+	  aCursor.myCol++;
 	  break;
 	case CUP:
-	  aCol=myParameters[0];
-	  aLine=myParameters[1];
+	  aCursor.myCol=myParameters[0];
+	  aCursor.myLine=myParameters[1];
 	  break;
 	case CUU:
-	  aLine-=myParameters[0];
+	  aCursor.myLine-=myParameters[0];
 	  break;
-	case DCH: // delete characters
+	case DCH: /* delete characters */
 	  {
-	    int aShift=myParameters[0]; // number of characters to delete, the following chars shift to the left
-	    deleteCharacter(&(aBuffer[aLine*aMaxCol+aCol]), aShift, aMaxCol-aShift);
+	    int aShift=myParameters[0]; /* number of characters to delete, the following chars shift to the left */
+	    deleteCharacter(&(aBuffer[aCursor.myLine*aMaxCol+aCursor.myCol]), aShift, aMaxCol-aShift);
 	  }
 	  break;
 	case DCH1:
 	  {
 	    int aShift=1;
-	    deleteCharacter(&(aBuffer[aLine*aMaxCol+aCol]), aShift, aMaxCol-aShift);
+	    deleteCharacter(&(aBuffer[aCursor.myLine*aMaxCol+aCursor.myCol]), aShift, aMaxCol-aShift);
 	  }
 	  break;
-	case DL: // delete lines
+	case DL: /* delete lines */
 	  break;
 	case DL1:
 	  break;
-	case ECH: // Erase characters
+	case ECH: /* Erase characters */
 	  {
 	    int aErasedLength=myParameters[0];
-	    eraseLine(&(aBuffer[aLine*aMaxCol+aCol]), aErasedLength);
+	    eraseLine(&(aBuffer[aCursor.myLine*aMaxCol+aCursor.myCol]), aErasedLength);
 	  }
 	  break;
-	case ED: // Clear the display after the cursor
+	case ED: /* Clear the display after the cursor */
 	  break;
 	case EL1:
 	  break;
 	case HOME:
-	  aCol=0;
-	  aLine=0;
+	  aCursor.myCol=0;
+	  aCursor.myLine=0;
 	  break;
 	case HPA:
-	  aCol=myParameters[0];
+	  aCursor.myCol=myParameters[0];
 	  break;
-	case IL: // several lines are added (the content is shifted to the bottom of the screen)
+	case IL: /* several lines are added (the content is shifted to the bottom of the screen) */
 	  break;
 	case IL1:
 	  break;
 	case RC:
-	  aCol=aSavedCol;
-	  aLine=aSavedLine;
+	  aCursor.myCol=aSavedCursor.myCol;
+	  aCursor.myLine=aSavedCursor.myLine;
 	  break;
 	case SC:
-	  aSavedCol=aCol;
-	  aSavedLine=aLine;
+	  aSavedCursor.myCol=aCursor.myCol;
+	  aSavedCursor.myLine=aCursor.myLine;
+	  break;
+	case OP:
 	  break;
 	case SETB:
+	  aCursor.myBackgroundColor=myParameters[0];
+	  if (TheDebugIsOn)
+	    {
+	      displayColor( myParameters[0]);
+	    }
 	  break;
 	case SETF:
+	  aCursor.myForegroundColor=myParameters[0];
+	  if (TheDebugIsOn)
+	    {
+	      displayColor( myParameters[0]);
+	    }
 	  break;
 	case SGR:
+	  aCursor.myModes=myParameters[0];
+	  if (TheDebugIsOn)
+	    {
+	      displayModes(aCursor.myModes);
+	    }
 	  break;
 	case VPA:
-	  aLine=myParameters[0];
+	  aCursor.myLine=myParameters[0];
 	  break;
 	default:
-	  aBuffer[aLine*aMaxCol+aCol]=*yytext;
-	  aCol++;
+	  aBuffer[aCursor.myLine*aMaxCol+aCursor.myCol]=*yytext;
+	  aCursor.myCol++;
 	}
     }
 
-  displayBuffer(aBuffer, aMaxLine, aMaxCol);
+  if (TheDebugIsOn)
+    {
+      displayBuffer(aBuffer, aMaxLine, aMaxCol);
+    }
 
   free(aBuffer);
+  return 0;
 }
+
+/* > */
 
