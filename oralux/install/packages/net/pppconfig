@@ -124,7 +124,7 @@ if ($noname == 1) {
 
 SWITCH: {
   if (`which $ui`)      {last SWITCH; }
-#  if (`gdialog --version 2>&1` =~ /^gdialog.*debian/)  {$ui = "gdialog"; last SWITCH; }
+#  if (`gdialog. --version 2>&1` =~ /^gdialog.*debian/)  {$ui = "gdialog"; last SWITCH; }
   if (`which whiptail`) {$ui = "whiptail"; last SWITCH; }
   if (`which dialog`)   {$ui = "dialog"; last SWITCH; }
   die gettext("No UI");

@@ -294,7 +294,7 @@ cd_burn() {
 #
 echo "Return skips a task. To execute the task type 'y' and return."
 
-umount $BUILD 2>/dev/null
+umount $BUILD || true 
 
 # Check that the expected directory are present 
 [ -d $ARCH ] || mkdir $ARCH
@@ -319,7 +319,7 @@ mkdir -p $BUILD/proc 2>/dev/null
 mount -t proc /proc $BUILD/proc
 next_step remove_unused_packages "Remove unused packages?"
 next_step add_soft "Add softwares?"
-umount $BUILD/proc
+umount $BUILD/proc || true
 
 next_step rm_tmp "Remove $BUILD/var/tmp/"
 

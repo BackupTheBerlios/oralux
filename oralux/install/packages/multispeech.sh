@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # multispeech.sh
-# $Id: multispeech.sh,v 1.2 2005/01/30 21:43:51 gcasse Exp $
+# $Id: multispeech.sh,v 1.3 2005/03/10 18:37:59 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing Multispeech.
-# $Date: 2005/01/30 21:43:51 $ |
-# $Revision: 1.2 $ |
+# $Date: 2005/03/10 18:37:59 $ |
+# $Revision: 1.3 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -25,9 +25,11 @@
 ####
 source ../oralux.conf
 
-ARCH_RULEX=$ARCH/rulex-0.9.12.tar.gz 
+$RULEX_RELEASE=0.9.21
+$MULTISPEECH_RELEASE=1.2.2
+ARCH_RULEX=$ARCH/rulex-$RULEX_RELEASE.tar.gz 
 ARCH_MULTISPEECH_BIN=$ARCH/multispeech-1.2-i586-1.tgz
-ARCH_MULTISPEECH_SRC=$ARCH/multispeech-1.2.2.tar.bz2
+ARCH_MULTISPEECH_SRC=$ARCH/multispeech-$MULTISPEECH_RELEASE.tar.bz2
 ARCH_RU_TTS=$ARCH/ru_tts-0.4-i586-1.tgz
 ARCH_MBROLA_ENGLISH_RPM="$ARCH/mbrola-tts-English-a9m_d-3.i386.rpm"
 
@@ -208,9 +210,9 @@ InstallPackage()
     cp $TMP/binaries/tones .
 
 # Clear temporary files
-    rm -rf $TMP/multispeech-1.2.2
+    rm -rf $TMP/multispeech-$MULTISPEECH_RELEASE
     rm -rf $TMP/mbrola-tts-English-*
-    rm -rf $TMP/rulex-0.9.12
+    rm -rf $TMP/rulex-$RULEX_RELEASE
 }
 
 ####
@@ -387,9 +389,9 @@ Copy2Oralux()
     cp $TMP/binaries/tones .
 
 # Clear temporary files
-    rm -rf $TMP/multispeech-1.2.2
+    rm -rf $TMP/multispeech-$MULTISPEECH_RELEASE
     rm -rf $TMP/mbrola-tts-English-*
-    rm -rf $TMP/rulex-0.9.12
+    rm -rf $TMP/rulex-$RULEX_RELEASE
 }
 
 case $1 in
