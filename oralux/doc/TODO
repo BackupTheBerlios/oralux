@@ -28,229 +28,10 @@ In the following lines, + means evolution, - bug.
 
 1.1 Priority 1 (Urgent)
 
-+ config mc
-+ In 0.6 alpha, Emacs tries ispell and the US dictionnary. English
-has to be supplied:
-;; add for 0.6 alpha
-(setq ispell-dictionary "english")
-(setq-default ispell-program-name "aspell")
+*** Priority 1.1
 
-
-
+* Emacspeak in Russian
 + New patch from Igor B. Poretsky (emacs-w3m)
-+ timidity, freepats
-+ From Doug: cdrecord-prodvd
-
-aptitude, zgv, fbi
-
-+ Feedback from Aldo faq: obsolete points
-Archives ML, mailto address, de.tbl instead of text.german.tbl
-
-+ dialog + apt
-+ dialog: doc
-+ dialog: backtitle word 1 word2
-+ Fix: At boot time the saved configuration was not correctly restored if the choices were audio menu in English and Multispeech.
-+ Fix: if the /etc files are not selected in saveconfig, at boot time we can't retreive the main user preferences.
-+ Ukrainian keyboard (ua?)
-
-+ saveconfig: Do not include the absolute path to the home directory 
-+ emacs-wget.el
-
-+ Download new patches from IBP
- 
-+ doc update: http://fsfeurope.org/projects/education/tgs/tagatschool7.fr.html
-+ upgrade
-+ check if persistenthome still works
-
-+ see fix http://www.knoppix.net/forum/viewtopic.php?t=12960&highlight=
-+ update main.c DESKTOP = shell, the oralux.sh proposes then to start zsh.
-main.c must indicate that CTRL-D will be rquired to come back to the menu (ther e must be a more direct way in the future).
-
-+ oralux.sh c can start zsh (DESKTOP)
-+ HardDiskInstall: do not ask any more to take the CD
-
-+ edbrowse (0.6 beta or 0.6)
-
-+ A persistent /var 
-/ mail about RealPlayer and Helix to the Helix forum. 
-+ Helix forum: asks about the SDK, see test suite.
-+ http://www.linux-speakup.org/trplayer.html
-wget ftp://linux-speakup.org/pub/linux/goodies/trplayer/trplayer-1.2.0.tar.gz
-
-+ Mails from Doug
----------------------
-gobjc package.  
-Debian Ada packages (-gtk +cryptography support as well
-as many of the libraries including the text one).  
----------------------
-+ ".mailcap and .mime.types.  These files were in the user's
-home directory, and assisted with the connection between such browsers
-as w3 and w3m and the trplayer program and any other "viewers" for
-file types that the user might want.  Their contents were rather
-cryptic so I never messed mutch with them, but you could add to them
-to make other programs work.  This little package, which, at the time
-I had it, came in a tarball, made it possible to just click on
-something and it would play.  You will need to track this down as well
-before adding trplayer/realplayer to the system. "
-
----------------------
-+ codec RealPlayer 9 + 10
----------------------
-+ see e.g. w3m and pdf
-
-+ saveconfig in the menu
-+ menu and new brltty usb drivers
-+ gettext and the menu.
-+ menu: see which fields are mandatory, and which one must propose a default value
-+ XML Conf file: managing an erroneous file
-+ Check how the Conf file access rights modification is secure  
-
-
-+ Notice from Teresa: contraction table
----------------------
-Subject: [Oralux] Saving Braille Preferences
-Date: Thu, 29 Jul 2004 06:31:12 -0700
-
-Or rather, not succeeding at saving them.  [smile]  I found the TTY
-preferences menu and set the Braille contraction table to US Grade 2.  I
-wasn't sure if the "save on exit" menu item was relevant, but I specified
-"yes"
-
-I ran the saveconfig script and said "yes' to all.  Everything is being
-saved on a zip disk, and I've successfully saved my other preferences.  Am I
-missing something?
-
-Just for the record, I have to say that I very much appreciate the Braille
-options in the startup menu.  That has helped quite a lot.
-
----------------------
-
-
-+ VM configuration (name, mail address, host parameters)
-Note:
-(setq vm-folder-directory "~/mail/")
-(setq vm-primary-inbox "free")
-one name per mailbox ?
-
-+ see gnus configuration
-
-/ Internet: Eagle driver (Sagem fast 800)
-/ Internet: 56K External modem
-
-+ At the end of the menu, asks if the preferences must be saved (except for hdinstal...).
-+ When a new release is available, ask if the .emacs, .vm,... files must be removed.
-+ New messages without translation.
-+ dialog: --extra-label --extra-button (return 3) --cancel-label (1) --ok-label (0)  --help-button --help-label (2)
-
-+ After this message, DECtalk hangs: "MML Voice Abrev Fill Charac
-auto-saving done" (From Nath).
-+ Au rebout il semblerait que brltty se charge
-plusieurs fois, tout du moins au moins deux, je suis obligée pour que
-ça fonctionne bien de faire un killall brltty suivi d'une relance
-manuelle de brltty pour que ça fonctionne correctement ensuite. 
-- et pour le kill de brltty à l'arrêt ça se trouve où au fait ? Je n'ai
-pas su voir non plus. (Nath)
-
-
-
-Notices from Doug
---------------------------------------
- > 
- > It appears as though it does. I haven't gotten yasr to work to a level
- > where I am satisfied with it. I hope this can be corrected in the next
- > version. It speaks too slowly for me. It won't drive flite faster than
- > 250 words per minute. I use the speech in emacspeak on level either
- > eight or nine. It also doesn't tell me what I'm entering as I key data
- > in. 
---------------------------------------
-
-
-Message from Edmond.
---------------------------------------
-+ minimenu: Tableur
-+ minimenu: Graveur CD
-+ dot emacs saved in the persistent home, unfortunately saveconfig was not called again. 
-Then the old one .emacs is retreived at the next boot.
-
-"Une petite remarque qui m'a coûté bien du temps et que peut-être tu pourras répercuté sur lal liste mieux que moi.
-J'avais modifié le fichier .emacs soigneusement comme tu l'as indiqué dans un message mais quelle ne fut pas ma surprise de voir que malgré la modification, rien ne partait. Je te rappelle ma config : démarrage sur le cd, une partition créée avec mkpersistenthome et une disquette sur laquelle je sauvegardais les paramètres. "
-+ Add bbdb (see .emacs + .vm)
-+ mutt avec yasr: reception de messages (Exim4, fetchmail).
-+ .muttrc avec l'option set pager =nano 
---------------------------------------
-+ Voir les encodages MIME, l'enregistrement des pj.
-
-- certains titres de message (peut-être trop long) affichent des choses 
-du genre : iso8859.1  etc... Désagréable. Là aussi, y a-t-il une 
-solution ? 
---------------------------------------
-.vm 
---------------------------------------
-(add-hook 'message-mode-hook
-(lambda ()
-(setq fill-column 72)
-(turn-on-auto-fill)))
-
-;; Nettoie les courriels à détruire en sortant
-(add-hook 'vm-quit-hook 'vm-expunge-folder)
-
-;; signature automatique
-(setq mail-signature t mail-signature-file "~/.signature")
-
-;; décodage du type mime automatique
-(setq vm-auto-decode-mime-messages t)
-(setq vm-auto-displayed-mime-content-types t)
-(setq vm-display-using-mime t)
-(setq vm-auto-displayed-mime-content-types '("text" "multipart" "message/rfc822" ))
-
-;; archivage automatique dans les vm-folder-alist
-;; destruction après archivage
-(setq vm-auto-archive-message t)
-(setq vm-delete-after-archiving t)
-
-(setq vm-reply-subject-prefix "Re: ")
-;; francisation
-(setq vm-forwarding-subject-format "Message retransmis de %F à %h le %w %d %m %y")
-(setq vm-included-text-attribution-format "%F a écrit :\n")
-
-(setq vm-url-browser 'w3m-browse-url)
-
-(setq vm-folder-directory "~/mail/")
-
-(setq vm-primary-inbox "laposte")
-
-;; recherche automatique des messages, en secondes  
-(setq vm-auto-get-new-mail 500)
-
-(setq vm-spool-files
-      '(
-	("laposte" "pop:pop.laposte.net:110:pass:myUsername:myPassword" "inbox.crash")
-	))
-
-(setq vm-pop-auto-expunge-alist
-      '(
-	("pop.laposte.net:110:pass:myUsername:*" . t)
- 	))
-;; ci-dessus mettre nil si l'on veut conserver les messages sur le serveur
-
-;; archivage des messages sortant 
-(setq mail-archive-file-name "~/mail/outbox")
-
-;; envoyer les headers des messages forwardes
-;;(setq vm-forwarded-headers '(".") )
-
-;;(setq vm-mime-internal-content-types t)
---------------------------------------
-
-
-
-Feedback from Nigel
---------------------------------------
-/ C-a doesn't speak the line: rather an emacspeak feature.
-- Dired mode: no audio feedback
-- kill buffer: the next current buffer is not announced. 
-* Pb using the uk keyboard
-* End of file missing at DECtalk installation ?
 
 Feedback from IBP
 --------------------------------------
@@ -273,7 +54,6 @@ Feedback from IBP
    had appeared in new versions of Emacspeak. In the old versions (up
    to 17 anyway) the files, symlinks and directories were spoken by
    different voices.
-
 
 Feedback from Sergei
 --------------------------------------
@@ -304,75 +84,297 @@ Another issue i have noticed is a behaviour of the English voice. It
 speaks with strange accent. I suspect, that somewhere perhaps by
 mistake a French pronounciation dictionry is loaded for mbrola?
 
---------------------------------------
 + package console-cyrillic
+
+
+* Ispell
++ In 0.6 alpha, Emacs tries ispell and the US dictionnary. English
+has to be supplied:
+;; add for 0.6 alpha
+(setq ispell-dictionary "english")
+(setq-default ispell-program-name "aspell")
+
+* Translations
+
+
++ New messages without translation.
++ Knoblind: translations
++ buildi18n: see locale.
+
+Message from Edmond > + minimenu: Tableur
+Message from Edmond > + minimenu: Graveur CD (bashburn?)
+
+Internationalisation mini de vm (+ emacs ?)
+Message from Edmond > ;; francisation
+Message from Edmond > (setq vm-forwarding-subject-format "Message retransmis de %F à %h le %w %d %m %y")
+
+
+--------------------------------------
 + Yasr: bsdgames includes a very good "adventure" game wich can be played from the command line.
 
+
++ les droits d'acces des fichiers sous /home/knoppix correspondent a root !
+
+
+*** Priority 1.2 
+* Internet
+/ Internet: Eagle driver (Sagem fast 800)
+/ Internet: 56K External modem
++ Internet: eciadsl-usermode-0.7
++ Internet: SpeedTouch
++ Internet: Ethernet modems.
+
+Barak > 3. Missing ADSL (ALE070) support.
+Barak > This is a "chicken and egg" problem, must first have the tar gz package
+Barak > on a partition that is readable by Oralux before booting Oralux.
+Barak > Extracted eciadsl-usermode-0.8 (latest is 0.9 on eciadsl.flashtux.org) to 
+Barak > a persistent home directory. 
+Barak > configured and installed using:
+Barak > 
+Barak > (as root)
+Barak > $ ./configure --prefix=/home/knoppix/eciadsl_install --conf-prefix=/home/knoppix/eciadsl_install --conf-dir=/etc --etc-prefix=/home/knoppix/eciadsl_install
+Barak > $ make
+Barak > $ make install
+Barak > and later running ~knoppix/eciadsl_install/bin/eciconftxt.sh 
+Barak > accepting default suggestion for all questions without going too much into
+Barak > what these mean (just chose yes when unsure, seems quite far from knoppix 
+Barak > autodetect).
+Barak > Expected pitfalls:
+Barak > VPI/VCI are 8,48 as I remember from windows connection.
+Barak > User is username@IBezint and not just username.
+Barak > 
+Barak > startmodem can be launched after copying additional files (required by pppd)
+Barak > cp -rf ~knoppix/eciadsl_install/etc/* /etc
+Barak > ~knoppix/eciadsl_install/bin/startmodem
+Barak > (sometimes fails synchronizations, most of the time successful connect).
+Barak > 
+
+------------------------
+* VM
+------------------------
++ VM configuration (name, mail address, host parameters)
+Note:
+(setq vm-folder-directory "~/mail/")
+(setq vm-primary-inbox "free")
+one name per mailbox ?
+
+
+Message from Edmond > - certains titres de message (peut-être trop long) affichent des choses 
+Message from Edmond > du genre : iso8859.1  etc... Désagréable. Là aussi, y a-t-il une 
+Message from Edmond > solution ? 
+
+Message from Edmond > --------------------------------------
+Message from Edmond > .vm 
+Message from Edmond > --------------------------------------
+Message from Edmond > (add-hook 'message-mode-hook
+Message from Edmond > (lambda ()
+Message from Edmond > (setq fill-column 72)
+Message from Edmond > (turn-on-auto-fill)))
+Message from Edmond > 
+Message from Edmond > ;; Nettoie les courriels à détruire en sortant
+Message from Edmond > (add-hook 'vm-quit-hook 'vm-expunge-folder)
+Message from Edmond > 
+Message from Edmond > ;; signature automatique
+Message from Edmond > (setq mail-signature t mail-signature-file "~/.signature")
+Message from Edmond > 
+Message from Edmond > ;; décodage du type mime automatique
+Message from Edmond > (setq vm-auto-decode-mime-messages t)
+Message from Edmond > (setq vm-auto-displayed-mime-content-types t)
+Message from Edmond > (setq vm-display-using-mime t)
+Message from Edmond > (setq vm-auto-displayed-mime-content-types '("text" "multipart" "message/rfc822" ))
+Message from Edmond > 
+Message from Edmond > ;; archivage automatique dans les vm-folder-alist
+Message from Edmond > ;; destruction après archivage
+Message from Edmond > (setq vm-auto-archive-message t)
+Message from Edmond > (setq vm-delete-after-archiving t)
+Message from Edmond > 
+Message from Edmond > (setq vm-reply-subject-prefix "Re: ")
+Message from Edmond > ;; francisation
+Message from Edmond > (setq vm-forwarding-subject-format "Message retransmis de %F à %h le %w %d %m %y")
+Message from Edmond > (setq vm-included-text-attribution-format "%F a écrit :\n")
+Message from Edmond > 
+Message from Edmond > (setq vm-url-browser 'w3m-browse-url)
+Message from Edmond > 
+Message from Edmond > (setq vm-folder-directory "~/mail/")
+Message from Edmond > 
+Message from Edmond > (setq vm-primary-inbox "laposte")
+Message from Edmond > 
+Message from Edmond > ;; recherche automatique des messages, en secondes  
+Message from Edmond > (setq vm-auto-get-new-mail 500)
+Message from Edmond > 
+Message from Edmond > (setq vm-spool-files
+Message from Edmond >       '(
+Message from Edmond > 	("laposte" "pop:pop.laposte.net:110:pass:myUsername:myPassword" "inbox.crash")
+Message from Edmond > 	))
+Message from Edmond > 
+Message from Edmond > (setq vm-pop-auto-expunge-alist
+Message from Edmond >       '(
+Message from Edmond > 	("pop.laposte.net:110:pass:myUsername:*" . t)
+Message from Edmond >  	))
+Message from Edmond > ;; ci-dessus mettre nil si l'on veut conserver les messages sur le serveur
+Message from Edmond > 
+Message from Edmond > ;; archivage des messages sortant 
+Message from Edmond > (setq mail-archive-file-name "~/mail/outbox")
+Message from Edmond > 
+Message from Edmond > ;; envoyer les headers des messages forwardes
+Message from Edmond > ;;(setq vm-forwarded-headers '(".") )
+Message from Edmond > 
+Message from Edmond > ;;(setq vm-mime-internal-content-types t)
+Message from Edmond > --------------------------------------
+
+
+------------------------
++ see gnus configuration
+------------------------
+Barak > 5. Sending and Receiving Mail
+Barak > Once connected, M-x mail works fine, but trying to receive mail fails.
+Barak > fetchmail appears to be too much work to configure.
+Barak > 
+Barak > So I utilized my fresh .gnus file (gathered from the *info* pages).
+Barak > Normally M-x gnus causes .gnus to be evaluated, but with emacspeak it
+Barak > should be evaluated explicitly (or better add it to .emacs file)
+Barak > 
+Barak > (setq gnus-secondary-select-methods
+Barak >       '((nnml "private")))
+Barak > 
+Barak > (setq mail-sources
+Barak >       '(
+Barak > ;;(file :path "/var/spool/mail/username")
+Barak > 	(pop :server "mail.server"
+Barak > 	     :user "username"
+Barak > 	     :port "pop3"
+Barak > 	     :password "secret"
+Barak > )))
+
+
+
+---------------
+* w3m: the url under cursor must not be said.
+M-x customize-group
+w3m RETURN
+
+The concerned field is 'W3m After Cursor Move Hook'.
+This indicates the functions which are called once the cursor is moved.
+In deleting the second line (w3m-print-this-url), the url will no more
+be displayed at the bottom line when we tab from link to link.
+---------------
++ config mc
++ emacs -q: no possible customization
+
+------------------------
+* saveconfig
+------------------------
++ Storing if possible the user cheat code: ALSA, braille features,...
++ If there is no persistent home, the configuration files might be saved.
+
+Barak > 4. the dot emacs file is overwritten by the original dot emacs file 
+Barak > after next oralux reboot (I needed to remodify user-mail-address 
+Barak > and user-full name again).
+Barak > 
++ saveconfig in the menu
++ At the end of the menu, asks if the preferences must be saved (except for hdinstal...).
++ Fix: At boot time the saved configuration was not correctly restored if the choices were audio menu in English and Multispeech.
++ Fix: if the /etc files are not selected in saveconfig, at boot time we can't retreive the main user preferences.
++ saveconfig: Do not include the absolute path to the home directory 
+Message from Edmond > + dot emacs saved in the persistent home, unfortunately saveconfig was not called again. 
+Message from Edmond > Then the old one .emacs is retreived at the next boot.
+Message from Edmond > 
+Message from Edmond > "Une petite remarque qui m'a coûté bien du temps et que peut-être tu pourras répercuté sur lal liste mieux que moi.
+Message from Edmond > J'avais modifié le fichier .emacs soigneusement comme tu l'as indiqué dans un message mais quelle ne fut pas ma surprise de voir que malgré la modification, rien ne partait. Je te rappelle ma config : démarrage sur le cd, une partition créée avec mkpersistenthome et une disquette sur laquelle je sauvegardais les paramètres. "
+
++ Compatibility home/config : config saved but not really considered as saved...
+
+
+------------------------
+* Mime types
+------------------------
+Message from Edmond > + Voir les encodages MIME, l'enregistrement des pj.
++ see e.g. w3m and pdf
+ Mails from Doug
++ ".mailcap and .mime.types.  These files were in the user's
+home directory, and assisted with the connection between such browsers
+as w3 and w3m and the trplayer program and any other "viewers" for
+file types that the user might want.  Their contents were rather
+cryptic so I never messed mutch with them, but you could add to them
+to make other programs work.  This little package, which, at the time
+I had it, came in a tarball, made it possible to just click on
+something and it would play.  You will need to track this down as well
+before adding trplayer/realplayer to the system. "
+
++ check if persistenthome still works
+
++ see fix http://www.knoppix.net/forum/viewtopic.php?t=12960&highlight=
+
+------------------------
+* Shell mode
+------------------------
++ update main.c DESKTOP = shell, the oralux.sh proposes then to start zsh.
+main.c must indicate that CTRL-D will be rquired to come back to the menu (ther e must be a more direct way in the future).
++ oralux.sh c can start zsh (DESKTOP)
+
+------------------------
++ HardDiskInstall: do not ask any more to take the CD
+------------------------
++ Oralux-installer: remove in the .sh the copy of the knoppix-install file. Was only useful for 0.6 alpha. 
++ increase APT::Cache-Limit (24Mb?).
+
++ When a new release is available, ask if the .emacs, .vm,... files must be removed.
++ Au rebout il semblerait que brltty se charge
+plusieurs fois, tout du moins au moins deux, je suis obligée pour que
+ça fonctionne bien de faire un killall brltty suivi d'une relance
+manuelle de brltty pour que ça fonctionne correctement ensuite. 
+- et pour le kill de brltty à l'arrêt ça se trouve où au fait ? Je n'ai
+pas su voir non plus. (Nath)
+
+
+*** Priority 1.3
+------------------------
+* Install
+------------------------
++ Brltty
++ edbrowse (0.6 beta or 0.6)
++ emacs-wget.el
++ timidity, freepats
++ From Doug: cdrecord-prodvd
++ Gnutypist
+
++ undelete (recover)
+
+aptitude, zgv, fbi
++ Add for xls: xlhtml (most recent one)
+http://nebuchadnezzar.zion.cz/download/xlhtml-0.5.1-vd2.tgz
+
+Message from Edmond > + mutt avec yasr: reception de messages (Exim4, fetchmail).
+Message from Edmond > + .muttrc avec l'option set pager =nano 
+
+Message from Edmond > + Add bbdb (see .emacs + .vm)
+
+/ mail about RealPlayer and Helix to the Helix forum. 
++ Helix forum: asks about the SDK, see test suite.
++ http://www.linux-speakup.org/trplayer.html
+wget ftp://linux-speakup.org/pub/linux/goodies/trplayer/trplayer-1.2.0.tar.gz
+
+
++ Mails from Doug
+---------------------
+gobjc package.  
+Debian Ada packages (-gtk +cryptography support as well
+as many of the libraries including the text one).  
+---------------------
+
++ codec RealPlayer 9 + 10
+
+
+* Emacs
+
+------------------------
+Feedback from Nigel
 --------------------------------------
-
-Feedback from Barak
---------------------------------------
-1. First time no sound - solved by cheatcode 
-knoppix alsa
-Cheatcode not needed after preferences are saved.
-
-/ 2. Long wait time caused by Oralux searching for config file on non-existing 
-floppy - no longer happens after saveconfig to hard-drive.
-
-3. Missing ADSL (ALE070) support.
-This is a "chicken and egg" problem, must first have the tar gz package
-on a partition that is readable by Oralux before booting Oralux.
-Extracted eciadsl-usermode-0.8 (latest is 0.9 on eciadsl.flashtux.org) to 
-a persistent home directory. 
-configured and installed using:
-
-(as root)
-$ ./configure --prefix=/home/knoppix/eciadsl_install --conf-prefix=/home/knoppix/eciadsl_install --conf-dir=/etc --etc-prefix=/home/knoppix/eciadsl_install
-$ make
-$ make install
-and later running ~knoppix/eciadsl_install/bin/eciconftxt.sh 
-accepting default suggestion for all questions without going too much into
-what these mean (just chose yes when unsure, seems quite far from knoppix 
-autodetect).
-Expected pitfalls:
-VPI/VCI are 8,48 as I remember from windows connection.
-User is username@IBezint and not just username.
-
-startmodem can be launched after copying additional files (required by pppd)
-cp -rf ~knoppix/eciadsl_install/etc/* /etc
-~knoppix/eciadsl_install/bin/startmodem
-(sometimes fails synchronizations, most of the time successful connect).
-
-4. the dot emacs file is overwritten by the original dot emacs file 
-after next oralux reboot (I needed to remodify user-mail-address 
-and user-full name again).
-
-5. Sending and Receiving Mail
-Once connected, M-x mail works fine, but trying to receive mail fails.
-fetchmail appears to be too much work to configure.
-
-So I utilized my fresh .gnus file (gathered from the *info* pages).
-Normally M-x gnus causes .gnus to be evaluated, but with emacspeak it
-should be evaluated explicitly (or better add it to .emacs file)
-
-(setq gnus-secondary-select-methods
-      '((nnml "private")))
-
-(setq mail-sources
-      '(
-;;(file :path "/var/spool/mail/username")
-	(pop :server "mail.server"
-	     :user "username"
-	     :port "pop3"
-	     :password "secret"
-)))
---------------------------------------
-Games:
-Since Yasr have become a part of the Oralux distribution, i would
-suggest to include "bsd-games" package, which contains, among other
-tools a very good "adventure" game wich can be played from the command
-line.
---------------------------------------
+/ C-a doesn't speak the line: rather an emacspeak feature.
+- Dired mode: no audio feedback
+- kill buffer: the next current buffer is not announced. 
+* Pb using the uk keyboard
+* End of file missing at DECtalk installation ?
 
 Feedback from Nigel
 --------------------------------------
@@ -393,69 +395,6 @@ the cd has ejected shut down the machine fine.
 + speak the C-x,... pressed keys
 --------------------------------------
 
-
-+ Clarify: Parlemax + english menu: gives US locale (FR expected ?). The braill driver depends on the type of keyboard. 
-+ les droits d'acces des fichiers sous /home/knoppix correspondent a root !
-
-+ Adding a sentence in intro-xx.txt to explain how to reach the doc.
-
-+ A general way to increase the speech rate 
-+ set speech rate in the menu (wsola, soundtouch)
-+ A programmable speech rate ?
-+ speech rate: how to easily store it (.emacs dtk-set-rate + saveconfig).
-
-+ Test Michel: 
-++ menu: la signification chagenante des touches return/espace induise en erreur.
-++ l'appui sur alt + fleche fait changer de console sans aucune indication sonore (déjà indiqué par Georges).
-
-+ Sur les autres consoles les var d'env ne sont pas a jour
-
-+ Gnutypist
-
-+ Compatibility home/config : config saved but not really considered as saved...
-
-+ Starts alsa if the default OSS driver fails.
-+ misc.sh: apt-get install sndconfig
-+ minimenu: configuration file
-+ undelete (recover)
-+ Ease the access to the included tutorials.
-
-+ Menu: braille, usb port (voyager)
-+ Writing the CD to the hard disk
-+ CD optimization (Festival)
-+ The menu might propose the possible TTS, according e.g. to the available hardware (memory size,...).
-+ Menu: explicitly explain the role of the arrow keys (better feedback).
-+ Avoiding the question 'do you want to update your configuration'.
-
-+ Storing if possible the user cheat code: ALSA, braille features,...
-+ If there is no persistent home, the configuration files might be saved.
-+ Keyboard rate
-+ buildi18n: see locale.
-+ TimeZone (i18n.c,+ menu)
-+ Alsa as default choice ?
-+ Adding a beep at boot time (CTRL G)
-
-
-+ Internet: eciadsl-usermode-0.7
-+ Internet: SpeedTouch
-+ Internet: Ethernet modems.
-
-+ lliaphon: suppression no comprendo et softspeech.log
-
-+ minimenu: double list (http://www.greatsnakes.com/savannah/list.asp) + gettext
-+ yasr: how to restart the speechserver ? does alt-i actually work ?
-+ yasr: auditory icons for the web browser.
-+ yasr: translations in german, spanish, french (see also the dictionnary in yasr.conf).
-+ ne: disabling Undo ? (DoUndo)
-+ ne: AutoIndent
-+ ne: wordwrap
-
-* 0.05: No sound with Asus P4PE-X. Mail from Jackie:
-"...Carte mère Asus P4PE-X  chipset i845, et  audio controller AC'97 Audio, ainsi que mes deux cartes Ethernet et mon pentium céleron 2,4 Ghz, 512 mo de RAM..."
-
-* 0.05 No sound Audigy + P4S8X Mail from Bat:
-"...My motherboard is an Asus P4S8X and my sound card is a creative Labs SB Audigy."
-
 + Is it really useful in the .emacs: (require 'w3-auto)
 + Emacspeak: 'Process Speaker not running': Say it! :-)
 + How to introduce browsing the tree directories, coping and yanking regions.
@@ -466,6 +405,7 @@ the cd has ejected shut down the machine fine.
 
 + EFM: Stopping the voice: today, C-e C-s. It concerns emacspeak.scm.
 + Festival: keybinding for language switching (From French to English: twice M-x fst-set-language)
++ lliaphon: suppression no comprendo et softspeech.log
 
 + Today, in French, punctuation is said in English.
 
@@ -477,8 +417,9 @@ example: add an option to use caps-lock as the control key by running:
 loadkeys /usr/share/keymaps/i386/qwerty/emacs2.kmap.gz 
 Note that running this command from an emacs shell fails, but running it from the other terminals (type Alt F2 to get there, type Alt F1 to get back here) works.
 
-
+------------------------
 * w3m
+------------------------
 During login at gna.org, this kind of message is briefly displayed: cookie rejected for security (RFC 2109 4.3.2).
 http://www.cis.ohio-state.edu/cgi-bin/rfc/rfc2109.html#sec-4.3.2
 
@@ -487,17 +428,162 @@ http://www.cis.ohio-state.edu/cgi-bin/rfc/rfc2109.html#sec-4.3.2
 + w3m: From CVS (check the path used by emacs)
 + w3m-js: http://abe.nwr.jp/w3m/w3m-js-en.html
 
-+ Add for xls: xlhtml (most recent one)
-http://nebuchadnezzar.zion.cz/download/xlhtml-0.5.1-vd2.tgz
 
-+ Oralux-installer: remove in the .sh the copy of the knoppix-install file. Was only useful for 0.6 alpha. 
-+ Knoblind: translations
+------------------------
+* Doc
+------------------------
++ Ease the access to the included tutorials.
++ Feedback from Aldo faq: obsolete points
+Archives ML, mailto address, de.tbl instead of text.german.tbl
++ doc update: http://fsfeurope.org/projects/education/tgs/tagatschool7.fr.html
++ Adding a sentence in intro-xx.txt to explain how to reach the doc.
+
+------------------------
+* Dialog
+------------------------
++ dialog: --extra-label --extra-button (return 3) --cancel-label (1) --ok-label (0)  --help-button --help-label (2)
+
++ dialog + apt
++ dialog: doc
++ dialog: backtitle word 1 word2
+
+
++ upgrade
+
++ Ukrainian keyboard (ua?)
+
+------------------------
+* New features
+------------------------
++ A persistent /var 
++ A general way to increase the speech rate 
++ set speech rate in the menu (wsola, soundtouch)
++ A programmable speech rate ?
++ speech rate: how to easily store it (.emacs dtk-set-rate + saveconfig).
+
++ Starts alsa if the default OSS driver fails.
++ misc.sh: apt-get install sndconfig
++ Writing the CD to the hard disk
++ CD optimization (Festival)
++ The menu might propose the possible TTS, according e.g. to the available hardware (memory size,...).
+
++ Keyboard rate
++ TimeZone (i18n.c,+ menu)
++ Alsa as default choice ?
++ Adding a beep at boot time (CTRL G)
+
+
+------------------------
+* Menu
+------------------------
++ menu and new brltty usb drivers
++ Menu: braille, usb port (voyager)
++ gettext and the menu.
++ menu: see which fields are mandatory, and which one must propose a default value
++ XML Conf file: managing an erroneous file
++ Check how the Conf file access rights modification is secure  
++ Test Michel: 
+++ menu: la signification chagenante des touches return/espace induise en erreur.
+++ l'appui sur alt + fleche fait changer de console sans aucune indication sonore (déjà indiqué par Georges).
+
++ Menu: explicitly explain the role of the arrow keys (better feedback).
++ Avoiding the question 'do you want to update your configuration'.
+
+
++ Notice from Teresa: contraction table
+---------------------
+Subject: [Oralux] Saving Braille Preferences
+Date: Thu, 29 Jul 2004 06:31:12 -0700
+
+Or rather, not succeeding at saving them.  [smile]  I found the TTY
+preferences menu and set the Braille contraction table to US Grade 2.  I
+wasn't sure if the "save on exit" menu item was relevant, but I specified
+"yes"
+
+I ran the saveconfig script and said "yes' to all.  Everything is being
+saved on a zip disk, and I've successfully saved my other preferences.  Am I
+missing something?
+
+Just for the record, I have to say that I very much appreciate the Braille
+options in the startup menu.  That has helped quite a lot.
+
+---------------------
+
+
++ After this message, DECtalk hangs: "MML Voice Abrev Fill Charac
+auto-saving done" (From Nath).
+
+------------------------
+* Yasr
+------------------------
+Message from Edmond > + minimenu: Tableur
+Message from Edmond > + minimenu: Graveur CD (bashburn?)
+
++ minimenu: configuration file
++ minimenu: double list (http://www.greatsnakes.com/savannah/list.asp) + gettext
++ yasr: how to restart the speechserver ? does alt-i actually work ?
++ yasr: auditory icons for the web browser.
++ yasr: translations in german, spanish, french (see also the dictionnary in yasr.conf).
++ ne: disabling Undo ? (DoUndo)
++ ne: AutoIndent
++ ne: wordwrap
+
 + Yasr: issues with the menus: the previous and the new items are said.
 + Yasr/ne: the shortcuts must be said explicitly (instead of caret x, say Control x)
-+ increase APT::Cache-Limit (24Mb?).
+
+Notices from Doug
+--------------------------------------
+ > 
+ > It appears as though it does. I haven't gotten yasr to work to a level
+ > where I am satisfied with it. I hope this can be corrected in the next
+ > version. It speaks too slowly for me. It won't drive flite faster than
+ > 250 words per minute. I use the speech in emacspeak on level either
+ > eight or nine. It also doesn't tell me what I'm entering as I key data
+ > in. 
+--------------------------------------
+
+
+------------------------
+* check no regression
+------------------------
++ Emacspeak 21.0 starts dtk-soft without any issues.
+
+Barak > 1. First time no sound - solved by cheatcode 
+Barak > knoppix alsa
+Barak > Cheatcode not needed after preferences are saved.
+Barak > 
+Barak > / 2. Long wait time caused by Oralux searching for config file on non-existing 
+Barak > floppy - no longer happens after saveconfig to hard-drive.
+Barak > 
+--------------------------------------
+Games:
+Since Yasr have become a part of the Oralux distribution, i would
+suggest to include "bsd-games" package, which contains, among other
+tools a very good "adventure" game wich can be played from the command
+line.
+--------------------------------------
+
++ Clarify: Parlemax + english menu: gives US locale (FR expected ?). The braill driver depends on the type of keyboard. 
+
+
+
++ Sur les autres consoles les var d'env ne sont pas a jour
+
+------------------------
+* Hardware
+------------------------
+* 0.05: No sound with Asus P4PE-X. Mail from Jackie:
+"...Carte mère Asus P4PE-X  chipset i845, et  audio controller AC'97 Audio, ainsi que mes deux cartes Ethernet et mon pentium céleron 2,4 Ghz, 512 mo de RAM..."
+
+* 0.05 No sound Audigy + P4S8X Mail from Bat:
+"...My motherboard is an Asus P4S8X and my sound card is a creative Labs SB Audigy."
+
+
+
 
 1.2 Priority 2
 
++ swftools
 + dialog-oralux once stable will possibly replace dialog 
 + Easying the spell checker use.
 + Automatic summary.
