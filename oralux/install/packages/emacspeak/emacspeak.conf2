@@ -16,7 +16,7 @@ Flite )
   unset DTK_PORT;;
 
 Multispeech )
-  export DTK_PROGRAM=/usr/local/lib/multispeech/speech_server
+  export DTK_PROGRAM=multispeech
   unset DTK_PORT;;
 
 ParleMax )

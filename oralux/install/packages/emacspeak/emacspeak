@@ -1,48 +1,51 @@
 #!/bin/sh
 # emacspeak - execute emacs with speech enhancements
-#$Id: emacspeak,v 1.1 2004/09/27 20:30:06 gcasse Exp $
+# Id: emacspeak.sh.def,v 20.0 2004/05/01 01:16:25 raman
 # WARNING:
 # This file is not the original one: modified for Oralux
 #
-
-    if [ -f /etc/emacspeak.conf ]
+# G.Casse 2003/09/29 : visit the introductory document.
+# Igor B. Poretsky 2004/10/10 : Multispeech, Emacs-client, 
+#  visit Russian document. No emacs -q $INIT_CL.
+#
+if [ -f /etc/emacspeak.conf ]
     then
     . /etc/emacspeak.conf
 fi
 
-if [ -f $HOME/.emacs ]
-then
-	INITSTR="-l $HOME/.emacs"
-fi
-
 CL_ALL=""
 for CL in $* ; do
-	if [ "$CL" = "-o" ]; then
-		DTK_PROGRAM=stereo-outloud
-		export DTK_PROGRAM
-                elif [ "$CL" = "-d" ]; then
-		DTK_PROGRAM=dtk-soft
-		export DTK_PROGRAM
-	elif [ "$CL" = "-q" ]; then
-		INITSTR=""
-	else
-		CL_ALL="$CL_ALL $CL"
-	fi
+    if [ "$CL" = "-o" ]; then
+	DTK_PROGRAM=stereo-outloud
+	export DTK_PROGRAM
+    elif [ "$CL" = "-m" ]; then
+	DTK_PROGRAM=multispeech
+	export DTK_PROGRAM
+    elif [ "$CL" = "-d" ]; then
+    elif [ "$CL" = "-d" ]; then
+	DTK_PROGRAM=dtk-soft
+	export DTK_PROGRAM
+    elif [ "$CL" = "-q" ]; then
+	INITSTR=""
+    else
+	CL_ALL="$CL_ALL $CL"
+    fi
 done
 
+# Once we use Emacs as an all-purpose shell:
+EDITOR="emacsclient --alternate-editor vi"
+VISUAL=$EDITOR
+export EDITOR
+export VISUAL
 
-EMACS_UNIBYTE=1
-export EMACS_UNIBYTE
-
-# G.Casse 2003/09/29 Modified for Oralux
 case $LANGUAGE in
     fr)
-    TheLanguage=fr;;
+	TheLanguage=fr;;
     ru)
-    TheLanguage=ru;;
+	TheLanguage=ru;;
     *)
-    TheLanguage=us;;
+	TheLanguage=us;;
 esac
 
-exec emacs -q -l /usr/share/emacs/site-lisp/emacspeak/lisp/emacspeak-setup.el $INITSTR $CL_ALL --visit=/usr/share/oralux/doc/intro-$TheLanguage.txt
+exec emacs -l /usr/share/emacs/site-lisp/emacspeak/lisp/emacspeak-setup.el $CL_ALL --visit=/usr/share/oralux/doc/intro-$TheLanguage.txt
 

@@ -1,5 +1,5 @@
 ;;; emacspeak-setup.el --- Setup Emacspeak environment --loaded to start Emacspeak
-;;; $Id: emacspeak-setup.el,v 1.1 2004/09/27 20:30:06 gcasse Exp $
+;;; $Id: emacspeak-setup.el,v 1.2 2005/03/10 18:35:04 gcasse Exp $
 ;;; $Author: gcasse $ 
 ;;; Description:  File for setting up and starting Emacspeak
 ;;; Keywords: Emacspeak, Setup, Spoken Output
@@ -7,8 +7,8 @@
 ;;; LCD Archive Entry:
 ;;; emacspeak| T. V. Raman |raman@cs.cornell.edu 
 ;;; A speech interface to Emacs |
-;;; $Date: 2004/09/27 20:30:06 $ |
-;;;  $Revision: 1.1 $ | 
+;;; $Date: 2005/03/10 18:35:04 $ |
+;;;  $Revision: 1.2 $ | 
 ;;; Location undetermined
 ;;;
 
@@ -41,11 +41,11 @@
 (require 'custom)
 (eval-when (compile)
   (require 'emacspeak-speak))
-(defvar emacspeak-unibyte t
+(defvar emacspeak-unibyte nil
   "Emacspeak will force emacs to unibyte unless this
 variable is set to nil.
-To use emacspeak with emacs running in multibyte mode, this
-variable should be set to nil *before* 
+To use emacspeak with emacs running in unibyte mode, this
+variable should be set to t *before* 
 emacspeak is compiled or started.")
 ;;;###autoload
 (defvar emacspeak-directory
@@ -80,6 +80,11 @@ pronunciation dictionaries are stored. ")
 
 (defcustom outloud-default-speech-rate 50
   "Default speech rate for outloud."
+  :group 'tts
+  :type 'integer)
+
+(defcustom multispeech-default-speech-rate 225
+  "Default speech rate for multispeech."
   :group 'tts
   :type 'integer)
 
