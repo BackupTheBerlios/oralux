@@ -1,11 +1,11 @@
 <?php
 // ----------------------------------------------------------------------------
 // cliDialog.php
-// $Id: cliDialog.php,v 1.4 2004/10/30 19:40:46 gcasse Exp $
+// $Id: cliDialog.php,v 1.5 2004/10/30 21:11:17 gcasse Exp $
 // $Author: gcasse $
 // Description: command line based dialog (menu, yes/no question, dialog box,...)
-// $Date: 2004/10/30 19:40:46 $ |
-// $Revision: 1.4 $ |
+// $Date: 2004/10/30 21:11:17 $ |
+// $Revision: 1.5 $ |
 // Copyright (C) 2004 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -72,8 +72,8 @@ define ("notVerbose", 1);
 
 abstract class cliArea 
 {
-  protected $_myAnnounce; // what is announced when the area has the focus
-  protected $_myVerbosity=verbose; // concerns how messages will be verbose
+  protected $myAnnounce; // what is announced when the area has the focus
+  protected $myVerbosity=verbose; // concerns how messages will be verbose
 
   abstract public function getType(); // list, button
 
@@ -82,7 +82,7 @@ abstract class cliArea
   public function announceTypeOfArea()
   {
     ENTER("cliArea::announceTypeOfArea",__LINE__);
-    foreach ($this->_myAnnounce[ $this->_myVerbosity ] as $aMessage)
+    foreach ($this->myAnnounce[ $this->myVerbosity ] as $aMessage)
       {
 	echo $aMessage;
       }
@@ -93,7 +93,7 @@ abstract class cliArea
   function setVerbosity( $theVerbosity)
     {
       ENTER("cliArea::setVerbosity",__LINE__);
-      $this->_myVerbosity=$theVerbosity;
+      $this->myVerbosity=$theVerbosity;
     }
   // }}}
   // {{{ sub-item: jumpToFirstItem, jumpToLastItem, gotoNextItem, gotoPreviousItem
@@ -207,21 +207,29 @@ abstract class cliArea
 
 class cliAreaManager 
 {
-  protected $_myArea=NULL; // array of objects: e.g. a list and a few buttons
-  protected $_myInput;
+  protected $myArea=NULL; // array of objects: e.g. a list and a few buttons
+  protected $myInput;
+  protected $myWrapIsEnabled=true; // If wrap is enabled, then once the last area is reached, we can jump to the first area
 
   // {{{ addArea
   function addArea( $theArea)
     {
       ENTER("cliAreaManager::addArea",__LINE__);
-      $this->_myArea[]=$theArea;
+      $this->myArea[]=$theArea;
     }
   // }}}
+  // {{{ setWrap
+  function setWrap( $isEnabled)
+    {
+      $this->myWrapIsEnabled = $isEnabled;
+    }
+  // }}}
+
   // {{{ getCurrentArea
   function getCurrentArea()
     {
       ENTER("cliAreaManager::getCurrentArea",__LINE__);
-      return current($this->_myArea);
+      return current($this->myArea);
     }
   // }}}
   // {{{ gotoNextArea
@@ -229,34 +237,48 @@ class cliAreaManager
   function gotoNextArea()
     {
       ENTER("cliAreaManager::gotoNextArea",__LINE__);
-      $aCurrentArea=next($this->_myArea);
+      $aCurrentArea=next($this->myArea);
       if ($aCurrentArea==false)
 	{
-	  reset($this->_myArea);
-	  $aCurrentArea=current($this->_myArea);
+	  if ($this->myWrapIsEnabled)
+	    {
+	      reset($this->myArea);
+	      $aCurrentArea=current($this->myArea);
+	    }
 	}
-      $aCurrentArea->announceTypeOfArea();
+      
+      if ($aCurrentArea!=false)
+	{
+	  $aCurrentArea->announceTypeOfArea();
+	}
+      return ($aCurrentArea != false);
     }
-
   // }}}
   // {{{ gotoPreviousArea
   function gotoPreviousArea()
     {
       ENTER("cliAreaManager::gotoPreviousArea",__LINE__);
-      $aCurrentArea=prev($this->_myArea);
+      $aCurrentArea=prev($this->myArea);
       if ($aCurrentArea==false)
 	{
-	  $aCurrentArea=end($this->_myArea);
+	  if ($this->myWrapIsEnabled)
+	    {
+	      $aCurrentArea=end($this->myArea);
+	    }
 	}
-      $aCurrentArea->announceTypeOfArea();
+      if ($aCurrentArea!=false)
+	{
+	  $aCurrentArea->announceTypeOfArea();
+	}
+      return ($aCurrentArea != false);
     }
   // }}}
   // {{{ jumpToFirstArea
   function jumpToFirstArea()
     {
       ENTER("cliAreaManager::jumpToFirstArea",__LINE__);
-      reset($this->_myArea);
-      return current($this->_myArea);
+      reset($this->myArea);
+      return current($this->myArea);
     }
   // }}}
   // {{{ gotoNextItemInArea, gotoPreviousItemInArea
@@ -264,31 +286,31 @@ class cliAreaManager
   function gotoNextItemInArea()
     {
       ENTER("cliAreaManager::gotoNextItemInArea",__LINE__);
-      $aCurrentArea=current($this->_myArea);
+      $aCurrentArea=current($this->myArea);
       return $aCurrentArea->gotoNextItem();
     }
   function gotoPreviousItemInArea()
     {
       ENTER("cliAreaManager::gotoPreviousItemInArea",__LINE__);
-      $aCurrentArea=current($this->_myArea);
+      $aCurrentArea=current($this->myArea);
       return $aCurrentArea->gotoPreviousItem();
     }
   function jumpToFirstItemInArea()
     {
       ENTER("cliAreaManager::jumpToFirstItemInArea",__LINE__);
-      $aCurrentArea=current($this->_myArea);
+      $aCurrentArea=current($this->myArea);
       return $aCurrentArea->jumpToFirstItem();
     }
   function jumpToLastItemInArea()
     {
       ENTER("cliAreaManager::jumpToLastItemInArea",__LINE__);
-      $aCurrentArea=current($this->_myArea);
+      $aCurrentArea=current($this->myArea);
       return $aCurrentArea->jumpToLastItem();
     }
   function announceItemInArea()
     {
       ENTER("cliAreaManager::announceItemInArea",__LINE__);
-      $aCurrentArea=current($this->_myArea);
+      $aCurrentArea=current($this->myArea);
       return $aCurrentArea->announceItem();
     }
   // }}}
@@ -300,7 +322,7 @@ class cliAreaManager
       $aCurrentArea->announceTypeOfArea();
       $this->jumpToFirstItemInArea();
       $aKeyPressedValue=EscapePressedValue;
-      $this->_myInput="";
+      $this->myInput="";
 
       $anInputIsExpected=true;
       while( $anInputIsExpected)
@@ -308,17 +330,21 @@ class cliAreaManager
 	  $this->announceItemInArea();
 	  $anArea=$this->getCurrentArea();
 
-	  $theResult=$anArea->getInput( $theTerminal, $anInput, $this->_myInput );
-	  $this->_myInput=$anInput;
+	  $theResult=$anArea->getInput( $theTerminal, $anInput, $this->myInput );
+	  $this->myInput=$anInput;
 	  $theResult=$anArea->processInput( $theResult, $anInput, $theTerminal);
 
 	  switch($theResult)
 	    {
 	    case getCharDownArrowKey:
-	      if ($this->gotoNextItemInArea() == false)
+	    if ($this->gotoNextItemInArea() == false)
 		{
 		  $this->jumpToFirstItemInArea();
-		  $this->gotoNextArea();
+		  if ($this->gotoNextArea()==false)
+		    {
+		      $aKeyPressedValue=EscapePressedValue;
+		      $anInputIsExpected=false;
+		    }
 		}
 	      break;
 
@@ -326,16 +352,28 @@ class cliAreaManager
 	      if ($this->gotoPreviousItemInArea() == false)
 		{ 
 		  $this->jumpToLastItemInArea();
-		  $this->gotoPreviousArea();
+		  if ($this->gotoPreviousArea()==false)
+		    {
+		      $aKeyPressedValue=EscapePressedValue;
+		      $anInputIsExpected=false;
+		    }
 		}
 	      break;
 
 	    case getCharNextArea:
-	      $this->gotoNextArea();
+	      if ($this->gotoNextArea()==false)
+		{
+		  $aKeyPressedValue=EscapePressedValue;
+		  $anInputIsExpected=false;
+		}
 	      break;
 
 	    case getCharPreviousArea:
-	      $this->gotoPreviousArea();
+	      if ($this->gotoPreviousArea()==false)
+		{
+		  $aKeyPressedValue=EscapePressedValue;
+		  $anInputIsExpected=false;
+		}
 	      break;
 
 	    case getCharApply:
@@ -362,17 +400,17 @@ class cliAreaManager
 // {{{ cliList
 class cliList extends cliArea
 {
-  protected $_myOption;
-  protected $_myKeyIsDisplayed=true;
+  protected $myOption;
+  protected $myKeyIsDisplayed=true;
   
   // {{{ constructor
 
   function __construct( $theOption, $theAnnounce)
     {
       ENTER("cliList::__construct",__LINE__);
-      $this->_myOption=$theOption;
-      $this->_myAnnounce=$theAnnounce;
-      reset($this->_myOption);
+      $this->myOption=$theOption;
+      $this->myAnnounce=$theAnnounce;
+      reset($this->myOption);
     }
 
   // }}}
@@ -380,7 +418,7 @@ class cliList extends cliArea
   function setKeyIsDisplayed($theKeyIsDisplayed)
     {
       ENTER("cliList::setKeyIsDisplayed",__LINE__);
-      $this->_myKeyIsDisplayed=$theKeyIsDisplayed;
+      $this->myKeyIsDisplayed=$theKeyIsDisplayed;
     }
   // }}}
   // {{{ getType
@@ -395,11 +433,11 @@ class cliList extends cliArea
   function announceItem()
     {
       ENTER("cliList::announceItem",__LINE__);
-      if ($this->_myKeyIsDisplayed)
+      if ($this->myKeyIsDisplayed)
 	{
-	  echo key($this->_myOption)." ";
+	  echo key($this->myOption)." ";
 	}      
-      echo current($this->_myOption)."\n";
+      echo current($this->myOption)."\n";
     }
 
   // }}}
@@ -407,7 +445,7 @@ class cliList extends cliArea
   function jumpToFirstItem()
     {
       ENTER("cliList::jumpToFirstItem",__LINE__);
-      reset($this->_myOption);
+      reset($this->myOption);
       return true;
     }
   // }}}
@@ -416,7 +454,7 @@ class cliList extends cliArea
   function jumpToLastItem()
     {
       ENTER("cliList::jumpToLastItem",__LINE__);
-      end($this->_myOption);
+      end($this->myOption);
       return true;
     }
 
@@ -425,7 +463,7 @@ class cliList extends cliArea
   function gotoNextItem()
     {
       ENTER("cliList::gotoNextItem",__LINE__);
-      $aStatus=next($this->_myOption);
+      $aStatus=next($this->myOption);
       if ($aStatus!==false)
 	{
 	  $aStatus=true;
@@ -438,7 +476,7 @@ class cliList extends cliArea
   function gotoPreviousItem()
     {
       ENTER("cliList::gotoPreviousItem",__LINE__);
-      $aStatus=prev($this->_myOption);
+      $aStatus=prev($this->myOption);
       if ($aStatus!==false)
 	{
 	  $aStatus=true;
@@ -450,7 +488,7 @@ class cliList extends cliArea
   function apply( & $theKey)
     {
       ENTER("cliList::apply",__LINE__);
-      $theKey=key($this->_myOption);
+      $theKey=key($this->myOption);
       return ListProcessedValue;
     }
   // }}}
@@ -461,24 +499,24 @@ class cliList extends cliArea
 
 class cliRadio extends cliList
 {
-  protected $_myDefaultKey;
-  protected $_mySelectedKey;
+  protected $myDefaultKey;
+  protected $mySelectedKey;
 
   // {{{ constructor
   function __construct( $theOption, $theAnnounce, $theDefaultKey)
     {
       ENTER("cliRadio::__construct",__LINE__);
       parent::__construct($theOption, $theAnnounce);
-      $this->_mySelectedKey=$theDefaultKey;
-      $this->_myDefaultKey=$theDefaultKey;
+      $this->mySelectedKey=$theDefaultKey;
+      $this->myDefaultKey=$theDefaultKey;
     }
   // }}}
   // {{{ apply
   function apply( & $theKey)
     {
       ENTER("cliRadio::apply",__LINE__);
-      $this->_mySelectedKey=key($this->_myOption);
-      $theKey=$this->_mySelectedKey;
+      $this->mySelectedKey=key($this->myOption);
+      $theKey=$this->mySelectedKey;
       return ListProcessedValue;
     }
   // }}}
@@ -486,18 +524,18 @@ class cliRadio extends cliList
   function announceItem()
     {
       ENTER("cliRadio::announceItem",__LINE__);
-      $aKey=key($this->_myOption);
-      if ($this->_mySelectedKey==$aKey)
+      $aKey=key($this->myOption);
+      if ($this->mySelectedKey==$aKey)
 	{
 	  echo gettext(" Selected.");
 	}
       
-      if ($this->_myKeyIsDisplayed)
+      if ($this->myKeyIsDisplayed)
 	{
 	  echo " $aKey";
 	}
       
-      echo " ".current($this->_myOption)."\n";
+      echo " ".current($this->myOption)."\n";
     }
   // }}}
 }
@@ -507,17 +545,17 @@ class cliRadio extends cliList
 
 class cliInputBox extends cliArea
 {
-  protected $_myDefaultValue;
-  protected $_myCurrentValue;
+  protected $myDefaultValue;
+  protected $myCurrentValue;
 
   // {{{ constructor
   function __construct( $theAnnounce, $theDefaultValue)
     {
       ENTER("cliInputBox::__construct",__LINE__);
 
-      $this->_myDefaultValue=$theDefaultValue;
-      $this->_myCurrentValue=$theDefaultValue;
-      $this->_myAnnounce=$theAnnounce;
+      $this->myDefaultValue=$theDefaultValue;
+      $this->myCurrentValue=$theDefaultValue;
+      $this->myAnnounce=$theAnnounce;
     }
   // }}}
 
@@ -562,7 +600,7 @@ class cliInputBox extends cliArea
 	      break;
 
 	    default:
-	      $this->_myCurrentValue=$theInput;
+	      $this->myCurrentValue=$theInput;
 	      if ($theTerminalIsDumb)
 		{
 		  $aResult=getCharDownArrowKey;
@@ -582,7 +620,7 @@ class cliInputBox extends cliArea
   function apply( & $theInput)
     {
       ENTER("cliInputBox::apply",__LINE__);
-      $theInput = $this->_myCurrentValue;
+      $theInput = $this->myCurrentValue;
       return InputProcessedValue;
     }
 
@@ -593,16 +631,16 @@ class cliInputBox extends cliArea
 
 class cliCheckbox extends cliList
 {
-  protected $_myDefaultKey;
-  protected $_mySelectedKey;
+  protected $myDefaultKey;
+  protected $mySelectedKey;
 
   // {{{ constructor
   function __construct( $theOption, $theAnnounce, $theDefaultKeys)
     {
       ENTER("cliCheckbox::__construct",__LINE__);
       parent::__construct($theOption, $theAnnounce);
-      $this->_myDefaultKey=$theDefaultKeys;
-      $this->_mySelectedKey=$theDefaultKeys;
+      $this->myDefaultKey=$theDefaultKeys;
+      $this->mySelectedKey=$theDefaultKeys;
     }
   // }}}
   // {{{ apply
@@ -611,7 +649,7 @@ class cliCheckbox extends cliList
       ENTER("cliCheckbox::apply",__LINE__);    
       $begin = true;
       $theKey="";
-      foreach ($this->_mySelectedKey as $aLabel=>$aBoolean)
+      foreach ($this->mySelectedKey as $aLabel=>$aBoolean)
 	{
 	  if ($begin)
 	    {
@@ -630,14 +668,14 @@ class cliCheckbox extends cliList
   function toggleItem()
     {
       ENTER("cliCheckbox::toggleItem",__LINE__);
-      $aKey=key($this->_myOption);
-      if (isset($this->_mySelectedKey[ $aKey]))
+      $aKey=key($this->myOption);
+      if (isset($this->mySelectedKey[ $aKey]))
 	{
-	  unset($this->_mySelectedKey[ $aKey]);
+	  unset($this->mySelectedKey[ $aKey]);
 	}
       else
 	{
-	  $this->_mySelectedKey[ $aKey]=true;
+	  $this->mySelectedKey[ $aKey]=true;
 	}
     }
   // }}}
@@ -645,34 +683,34 @@ class cliCheckbox extends cliList
   function selectItem()
     {
       ENTER("cliCheckbox::selectItem",__LINE__);
-      $aKey=key($this->_myOption);
-      $this->_mySelectedKey[ $aKey]=true;
+      $aKey=key($this->myOption);
+      $this->mySelectedKey[ $aKey]=true;
     }
   // }}}
   // {{{ unselectItem
   function unselectItem()
     {
       ENTER("cliCheckbox::unselectItem",__LINE__);
-      $aKey=key($this->_myOption);
-      unset($this->_mySelectedKey[ $aKey]);
+      $aKey=key($this->myOption);
+      unset($this->mySelectedKey[ $aKey]);
     }
   // }}}
   // {{{ announceItem
   function announceItem()
     {
       ENTER("cliCheckbox::announceItem",__LINE__);
-      $aKey=key($this->_myOption);
-      if (isset($this->_mySelectedKey[$aKey]))
+      $aKey=key($this->myOption);
+      if (isset($this->mySelectedKey[$aKey]))
 	{
 	  echo gettext(" Selected.");
 	}
 
-      if ($this->_myKeyIsDisplayed)
+      if ($this->myKeyIsDisplayed)
 	{
 	  echo " $aKey";
 	}
 
-      echo " ".current($this->_myOption)."\n";
+      echo " ".current($this->myOption)."\n";
     }
   // }}}
   // {{{ processInput
@@ -730,16 +768,16 @@ class cliCheckbox extends cliList
 // {{{ cliButton
 class cliButton extends cliArea
 {
-  protected $_myKey; // An integer. For example myKey=0 for myLabel="OK", 1 for "Cancel",...
-  protected $_myLabel;
+  protected $myKey; // An integer. For example myKey=0 for myLabel="OK", 1 for "Cancel",...
+  protected $myLabel;
 
   // {{{ constructor
   function __construct( $theKey, $theValue, $theAnnounce)
     {
       ENTER("cliButton::__construct",__LINE__);
-      $this->_myKey=$theKey;
-      $this->_myValue=$theValue;
-      $this->_myAnnounce=$theAnnounce;
+      $this->myKey=$theKey;
+      $this->myValue=$theValue;
+      $this->myAnnounce=$theAnnounce;
     }
   // }}}
   // {{{ getType
@@ -753,7 +791,10 @@ class cliButton extends cliArea
   function announceItem()
     {
       ENTER("cliButton::announceItem",__LINE__);
-      echo $this->_myValue."\n";
+      if ($this->myValue!="")
+	{
+	  echo  $this->myValue."\n";
+	}
     }
   // }}}
   // {{{ apply
@@ -761,7 +802,7 @@ class cliButton extends cliArea
     {
       ENTER("cliButton::apply",__LINE__);
       $theLabel=NULL;
-      return $this->_myKey;
+      return $this->myKey;
     }
   // }}}
 }
@@ -773,7 +814,7 @@ class cliMessage extends cliArea
   function __construct( $theAnnounce)
     {
       ENTER("cliMessage::__construct",__LINE__);
-      $this->_myAnnounce=$theAnnounce;
+      $this->myAnnounce=$theAnnounce;
     }
   // }}}
   // {{{ getType
@@ -809,8 +850,8 @@ class cliDialog
   protected $myCheckbox=NULL;
   protected $myInputBox=NULL;
   protected $myButton=NULL;
-  protected $myDefaultButton=NULL;
-  protected $myDialogWithDefaultButton=true;
+  protected $myDefaultValueAcceptationButton=NULL;
+  protected $myDialogWithDefaultButton=true; // If true the default buttons (OK and Cancel) are present.
 
   protected $myAreaManager=NULL; 
 
@@ -850,7 +891,7 @@ class cliDialog
   // $theSelectedOption (input) is useful for a radio box. Its value is a label. 
   // $theResult: (string) selected fields
   // Return value: 0 (OK), 1 (Cancel), 255 (Escape), or the value of the pressed button.
-  function menu($theTitle, $theOptions, & $theResult, $theText=NULL, $theSelectedOption=NULL, $withButton=true)
+  function menu($theTitle, $theOptions, & $theResult, $theText=NULL, $theSelectedOption=NULL)
     {
       ENTER("cliDialog::menu",__LINE__);
       echo "$theTitle\n";
@@ -879,16 +920,22 @@ class cliDialog
 	{ // list
 	  $this->myTerminal->getMessage( MessageNavigationRadio, $aMessage);
 	  $this->myList=new cliRadio( $theOptions, $aMessage, $theSelectedOption);
-
-	  $this->myButton[]=new cliButton( OkPressedValue, gettext("OK"), $aMessage2);
-	  $this->myButton[]=new cliButton( CancelPressedValue, gettext("Cancel"), $aMessage2);
+	  
+	  if ($this->myDialogWithDefaultButton)
+	    {
+	      $this->myButton[]=new cliButton( OkPressedValue, gettext("OK"), $aMessage2);
+	      $this->myButton[]=new cliButton( CancelPressedValue, gettext("Cancel"), $aMessage2);
+	    }
 	}
       else
 	{
 	  $this->myTerminal->getMessage( MessageNavigationMenu, $aMessage);
 	  $this->myList=new cliList( $theOptions, $aMessage);
-	  // only the cancel button
-	  $this->myButton[]=new cliButton( CancelPressedValue, gettext("Cancel"), $aMessage2);
+	  if ($this->myDialogWithDefaultButton)
+	    {
+	      // only the cancel button
+	      $this->myButton[]=new cliButton( CancelPressedValue, gettext("Cancel"), $aMessage2);
+	    }
 	}
 
       // Area: list (first entry) + buttons
@@ -987,7 +1034,7 @@ class cliDialog
   // }}}
   // {{{ yesno: Return 0 if yes, or 1 otherwise.
   // theIndex is a prefix to display
-  function yesNo($theQuestion, $theTitle=NULL, $withButton=true)
+  function yesNo($theQuestion, $theTitle=NULL)
     {
       ENTER("cliDialog::yesNo",__LINE__);
       if ($theTitle)
@@ -1022,7 +1069,7 @@ class cliDialog
   // }}}
   // {{{ messageBox
 
-  function messageBox($theQuestion, $theTitle=NULL, $withButton=true)
+  function messageBox($theQuestion, $theTitle=NULL)
     {
       ENTER("cliDialog::messageBox",__LINE__);
       if ($theTitle)
@@ -1035,12 +1082,20 @@ class cliDialog
       $aMessage[notVerbose][]=$theQuestion."\n";
       $this->myMessage=new cliMessage( $aMessage);
 
+      //      if ($this->myDialogWithDefaultButton)
+      //	{
       // Buttons
       unset($aMessage);
-      $aMessage[verbose][]=gettext("This is a button.\n");
-      $aMessage[notVerbose][]=gettext("Button.\n");
+//       $aMessage[verbose][]=gettext("This is a button.\n");
+//       $aMessage[notVerbose][]=gettext("Button.\n");
+//      $this->myButton[]=new cliButton( OkPressedValue, gettext("Ok"), $aMessage);
+      $aMessage[verbose][]=gettext("Press any key to continue.\n");
+      $aMessage[notVerbose][]=gettext("Press any key to continue.\n");
+      
+      $this->myButton[]=new cliButton( OkPressedValue, "", $aMessage);
+	  //	}
 
-      $this->myButton[]=new cliButton( OkPressedValue, gettext("Ok"), $aMessage);
+      $this->myAreaManager->SetWrap( false);
 
       // Area: list (first entry) + buttons
       $this->myAreaManager->addArea( $this->myMessage);
@@ -1078,7 +1133,7 @@ class cliDialog
   // {{{ inputBox
 
   // theIndex is a prefix to display
-  function inputBox($theQuestion, $theDefault=NULL, & $theResult, $theTitle=NULL, $withButton=true)
+  function inputBox($theQuestion, $theDefaultValue=NULL, & $theResult, $theTitle=NULL)
     {
       ENTER("cliDialog::inputBox",__LINE__);
       echo "$theTitle\n";
@@ -1087,38 +1142,42 @@ class cliDialog
 	  echo "$theText\n";
 	}
 
-      // Main buttons (OK/Cancel)
-      $aMessage[verbose][]=gettext("This is a button.\n");
-      $aMessage[notVerbose][]=gettext("Button.\n");
-      $this->myButton[]=new cliButton( OkPressedValue, gettext("OK"), $aMessage);
-      $this->myButton[]=new cliButton( CancelPressedValue, gettext("Cancel"), $aMessage);
+      if ($this->myDialogWithDefaultButton)
+	{
+	  // Main buttons (OK/Cancel)
+	  $aMessage[verbose][]=gettext("This is a button.\n");
+	  $aMessage[notVerbose][]=gettext("Button.\n");
 
-      // Default button: useful to accept the default value
-      if ($theDefault != NULL)
+	  $this->myButton[]=new cliButton( OkPressedValue, gettext("OK"), $aMessage);
+	  $this->myButton[]=new cliButton( CancelPressedValue, gettext("Cancel"), $aMessage);
+	}
+
+      // Default Value Acceptation button: useful to accept the default value of the input field
+      if ($theDefaultValue != NULL)
 	{
 	  unset($aMessage);
 	  $aMessage[verbose][]="$theQuestion\n";
 	  $aMessage[notVerbose][]="$theQuestion\n";
 
-	  $this->myTerminal->getMessage( MessageNavigationInputBoxDefaultButton, $aMessage, $theDefault);
-	  $this->myDefaultButton=new cliButton( OkPressedValue, " ", $aMessage);
+	  $this->myTerminal->getMessage( MessageNavigationInputBoxDefaultButton, $aMessage, $theDefaultValue);
+	  $this->myDefaultValueAcceptationButton=new cliButton( OkPressedValue, " ", $aMessage);
 	}
 
       // Input box
       unset($aMessage);
-      if ($theDefault == NULL)
+      if ($theDefaultValue == NULL)
 	{
 	  $aMessage[verbose][]="$theQuestion\n";
 	  $aMessage[notVerbose][]="$theQuestion\n";
 	}
 
       $this->myTerminal->getMessage( MessageNavigationInputBox, $aMessage);
-      $this->myInputBox=new cliInputBox( $aMessage, $theDefault);
+      $this->myInputBox=new cliInputBox( $aMessage, $theDefaultValue);
 
       // Building the areas
-      if ($this->myDefaultButton != NULL)
+      if ($this->myDefaultValueAcceptationButton != NULL)
 	{
-	  $this->myAreaManager->addArea( $this->myDefaultButton);
+	  $this->myAreaManager->addArea( $this->myDefaultValueAcceptationButton);
 	}
       $this->myAreaManager->addArea( $this->myInputBox);
 
