@@ -1,13 +1,26 @@
 ;; dot emacs
 ;; 2003, 2004, Oralux Team (contact@oralux.org)
 
+; Just for convenience
+(require 'dired-x)
+(require 'saveplace)
+(auto-compression-mode t)
+(setq-default transient-mark-mode t)
+(setq-default save-place t)
+(setq make-backup-files nil)
+
+; Compilation process
+(setq compilation-ask-about-save nil)
+(setq compile-command "make -ks ")
+
+
 (setq load-path (cons "/usr/share/oralux/lisp" load-path)) 
 
 ;; w3 
 (require 'w3-auto) 
 
 ;; w3m
-(load-library emacs-w3m-prepare)
+(load-library "emacs-w3m-prepare")
 
 ;; Babel 
 (autoload 'babel "babel" 
@@ -25,18 +38,19 @@
 
 ;; emacspeak
 (when (featurep 'emacspeak)
-
-;; The punctuation is not said (except for Multispeech)
+  
+  ;; Auditory icons are used in Multispeech
+  ;; and the punctuation is not said with other speech servers
   (cond (
-	 (string-match "/usr/local/lib/multispeech/speech_server" (getenv "DTK_PROGRAM"))
-	 (dtk-set-punctuations "all"))
+	 (string-match "multispeech" (getenv "DTK_PROGRAM"))
+	 (setq-default emacspeak-use-auditory-icons t))
 	(
 	 t 
 	 (dtk-set-punctuations "none"))
 	)
-
+  
   ;; The default speech rate is lowered
-  (dtk-set-rate 135 t)
+  ;;(dtk-set-rate 135 t)
   
   ;; Selecting the default language (temporary name) for EFM
   (fst-set-language 
@@ -72,6 +86,32 @@
 
 (define-key menu-bar-tools-menu [rmail] '("Read Mail" . vm))
 (define-key-after menu-bar-tools-menu [smail] '("Send Mail" . vm-mail) 'rmail)
+
+;;; Key customizations.
+(global-set-key "\C-xg" 'goto-line)
+(global-set-key "\C-xy" 'insert-register)
+(global-set-key [home] 'beginning-of-line)
+(global-set-key [end] 'end-of-line)
+(global-set-key [?\e home] 'beginning-of-buffer)
+(global-set-key [?\e end] 'end-of-buffer)
+(global-set-key [f1] 'help-for-help)
+(global-set-key [f2] 'save-buffer)
+(global-set-key [f3] 'find-file)
+(global-set-key [f4] 'switch-to-buffer)
+(global-set-key [f5] 'delete-other-windows)
+(global-set-key [f6] 'delete-window)
+(global-set-key [f7] 'grep)
+(global-set-key [f8] 'kill-buffer)
+(global-set-key [f9] 'compile)
+(global-set-key [f11] 'bbdb)
+(global-set-key [f12] 'other-window)
+(global-set-key [f15] 'gnus)
+(global-set-key [f16] 'shell)
+(global-set-key [f17] 'find-name-dired)
+(global-set-key [f18] 'w3m)
+(global-set-key [f19] 'find-grep-dired)
+(global-set-key [f20] 'server-start)
+
 
 (setq load-path (cons "~/.emacs.d" load-path)) 
 ;;(require 'php-mode)
@@ -130,6 +170,8 @@
 ;; SES
 (add-to-list 'load-path "/usr/share/emacs/site-lisp/ses")
 (autoload 'ses-mode "ses.el" "Spreadsheet mode" t)
+
+(server-start)
 
 (setq-default ispell-program-name "aspell")
 (autoload 'flyspell-mode "flyspell" "On-the-fly spelling checker." t)
