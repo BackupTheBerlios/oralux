@@ -5,11 +5,11 @@
 
 // ----------------------------------------------------------------------------
 // mailMenu.php
-// $Id: mailMenu.php,v 1.7 2005/01/30 21:43:51 gcasse Exp $
+// $Id: mailMenu.php,v 1.8 2005/04/03 00:36:28 gcasse Exp $
 // $Author: gcasse $
 // Description: Menu for mail settings (php5)
-// $Date: 2005/01/30 21:43:51 $ |
-// $Revision: 1.7 $ |
+// $Date: 2005/04/03 00:36:28 $ |
+// $Revision: 1.8 $ |
 // Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -130,7 +130,7 @@ class mailMenu
 	  $a=new emacsConfig( $this->_myConf);
 	  if ($a->save() == TRUE)
 	    {
-	      echo gettext("Your changes have been saved\n");
+	      echo gettext("\nYour changes have been saved");
 	    }
 	}
     }
@@ -162,7 +162,7 @@ class mailMenu
 	}
       else
 	{
-	  $aKeyPressed=$this->_selectMailbox( gettext("Which mailbox do you want to modify?\n"), $aMailbox, $aMailboxIdentifier);
+	  $aKeyPressed=$this->_selectMailbox( gettext("\nWhich mailbox do you want to modify?"), $aMailbox, $aMailboxIdentifier);
 	}
       
       if (($aKeyPressed==OkPressedValue)
@@ -187,7 +187,7 @@ class mailMenu
 	}
       else
 	{
-	  $aKeyPressed=$this->_selectMailbox( gettext("Which mailbox do you want to delete?\n"), $aMailbox, $aMailboxIdentifier);
+	  $aKeyPressed=$this->_selectMailbox( gettext("\nWhich mailbox do you want to delete?"), $aMailbox, $aMailboxIdentifier);
 	}
       
       if ($aKeyPressed==OkPressedValue)
@@ -273,7 +273,7 @@ class mailMenu
 	    {
 	    case "name":
 	      $aDialog= new cliDialog($this->_myTerminal, false);
-	      $aKeyPressed=$aDialog->inputBox(gettext("Enter your full name, for example: Victor Hugo"), 
+	      $aKeyPressed=$aDialog->inputBox(gettext("Enter your full name, for example: Paul Smith"), 
 						 $this->_myConf->getValue($aState),
 						 $aValue);
 	      unset($aDialog);
@@ -282,7 +282,7 @@ class mailMenu
 
 	    case "email":
 	      $aDialog= new cliDialog($this->_myTerminal, false);
-	      $aKeyPressed=$aDialog->inputBox(gettext("Enter your full mailing address, for example: vhugo@pantheon.org"), 
+	      $aKeyPressed=$aDialog->inputBox(gettext("Enter your full mailing address, for example: paul@smith.com"), 
 						      $this->_myConf->getValue($aState),
 						      $aValue);
 	      unset($aDialog);
@@ -360,7 +360,7 @@ class mailMenu
 	      
 	    case "host":
 	      $aDialog= new cliDialog($this->_myTerminal, false);
-	      $aKeyPressed=$aDialog->inputBox(gettext("Enter the hostname of your ISP, for example: pop.pantheon.org"),
+	      $aKeyPressed=$aDialog->inputBox(gettext("Enter the name of the POP server, for example: pop.smith.com"),
 						      $theArray[$aState], $aValue);
 	      unset($aDialog);
 	      break;
@@ -396,6 +396,13 @@ class mailMenu
 		{
 		  $theArray[ $aState]=$aValue;
 		}
+	      break;
+
+	    case "smtp":
+	      $aDialog= new cliDialog($this->_myTerminal, false);
+	      $aKeyPressed=$aDialog->inputBox(gettext("Enter the name of the S M T P server, for example: smtp.smith.com"),
+					      $theArray[$aState], $aValue);
+	      unset($aDialog);
 	      break;
 
 	    default:

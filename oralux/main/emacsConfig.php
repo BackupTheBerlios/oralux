@@ -1,11 +1,11 @@
 <?php
 // ----------------------------------------------------------------------------
 // emacsConfig.php
-// $Id: emacsConfig.php,v 1.5 2005/01/30 21:43:51 gcasse Exp $
+// $Id: emacsConfig.php,v 1.6 2005/04/03 00:36:28 gcasse Exp $
 // $Author: gcasse $
 // Description: Emacs settings (php5)
-// $Date: 2005/01/30 21:43:51 $ |
-// $Revision: 1.5 $ |
+// $Date: 2005/04/03 00:36:28 $ |
+// $Revision: 1.6 $ |
 // Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -46,7 +46,7 @@ class emacsConfig
       if ($aSource==NULL)
 	{
 	  $aError=sprintf("Error: can't open file: %s\n", $this->_myFilename);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.5 $');
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.6 $');
 	  return FALSE;
 	}
 
@@ -54,7 +54,7 @@ class emacsConfig
       if ($aDestination==NULL)
 	{
 	  $aError=sprintf("Error: can't open file: %s\n", $this->_myTempFilename);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.5 $');
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.6 $');
 	  return FALSE;
 	}
       
@@ -70,6 +70,9 @@ class emacsConfig
 	  
 	  $aPattern[1]=sprintf($aTemplatePattern, "user-full-name");
 	  $aReplacement[1]=sprintf($aTemplateReplacement,  "user-full-name", $this->_myMailConfig->getValue( "name"));
+
+	  $aPattern[2]=sprintf($aTemplatePattern, "smtpmail-default-smtp-server");
+	  $aReplacement[2]=sprintf($aTemplateReplacement, "smtpmail-default-smtp-server", $this->_myMailConfig->getValue( "smtp"));
 	  
 	  $aResult=preg_replace($aPattern, $aReplacement, $aLine);
 
@@ -79,7 +82,7 @@ class emacsConfig
       if ($aSource==NULL)
 	{
 	  $aError=sprintf("Error: can't open file: %s\n", $this->_myFilename);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.5 $');
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.6 $');
 	  return FALSE;
 	}
 
@@ -95,7 +98,7 @@ class emacsConfig
 	  || (chgrp ( $this->_myFilename, $this->_myMailConfig->getUser())==FALSE))
 	{
 	  $aError=sprintf("Error concerning file: %s\n", $this->_myTempFilename);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.5 $');
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.6 $');
 	  return FALSE;
 	}
       return TRUE;

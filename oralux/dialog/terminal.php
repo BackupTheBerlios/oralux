@@ -1,11 +1,11 @@
 <?php
 // ----------------------------------------------------------------------------
 // terminal.php
-// $Id: terminal.php,v 1.5 2005/03/31 09:16:53 gcasse Exp $
+// $Id: terminal.php,v 1.6 2005/04/03 00:36:28 gcasse Exp $
 // $Author: gcasse $
 // Description: managing the dumb terminals (emacs) or the others (so called enhanced)  
-// $Date: 2005/03/31 09:16:53 $ |
-// $Revision: 1.5 $ |
+// $Date: 2005/04/03 00:36:28 $ |
+// $Revision: 1.6 $ |
 // Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -192,19 +192,19 @@ class enhancedTerminal
        switch( $theMessageType)
 	 {
 	 case MessageNavigationMenu:
-	   $theMessage[verbose][] = gettext("Press the up or down arrow key to read another item.\n");
-	   $theMessage[verbose][] = gettext("And type return to select your preferred item.\n");
+	   $theMessage[verbose][] = gettext("\nPress the up or down arrow key to read another item. ");
+	   $theMessage[verbose][] = gettext("\nAnd type return to select your preferred item. ");
 	   break;
 
 	 case MessageNavigationRadio:
-	   $theMessage[verbose][] = gettext("Press the up or down arrow key to read another option.\n");
-	   $theMessage[verbose][] = gettext("And type return to select your preferred option.\n");
+	   $theMessage[verbose][] = gettext("\nPress the up or down arrow key to read another option. ");
+	   $theMessage[verbose][] = gettext("\nAnd type return to select your preferred option.");
 	   break;
 
 	 case MessageNavigationCheckbox:
-	   $theMessage[verbose][] = gettext("Press the up or down arrow key to read another option.\n");
-	   $theMessage[verbose][] = gettext("And type yes to select an option, or type no to unselect it.\n");
-	   $theMessage[verbose][] = gettext("Note that you can select several options.\n");
+	   $theMessage[verbose][] = gettext("\nPress the up or down arrow key to read another option. ");
+	   $theMessage[verbose][] = gettext("\nAnd type yes to select an option, or type no to unselect it. ");
+	   $theMessage[verbose][] = gettext("\nNote that you can select several options. ");
 	   break;
 
 	 case MessageNavigationInputBox:
@@ -213,12 +213,12 @@ class enhancedTerminal
 	   break;
 
 	 case MessageNavigationInputBoxDefaultButton:
-	   $theMessage[verbose][] = sprintf(gettext("Just press return if you accept this proposal: %s\n"), $theValue);
-	   $theMessage[notVerbose][] = sprintf(gettext("Proposal: %s\n"), $theValue);
+	   $theMessage[verbose][] = sprintf(gettext("\nJust press return if you accept this proposal: %s. "), $theValue);
+	   $theMessage[notVerbose][] = sprintf(gettext("\nProposal: %s. "), $theValue);
 	   break;
 
 	 default:
-	   echo "display: unknown message $theMessage\n";
+	   echo "\ndisplay: unknown message $theMessage.";
 	   break;
 	 }
      }
@@ -314,33 +314,33 @@ class dumbTerminal
        switch( $theMessageType)
 	 {
 	 case MessageNavigationMenu:
-	   $theMessage[verbose][] = gettext("Press return to read the next item.\n");
-	   $theMessage[verbose][] = gettext("And type yes to select your preferred item.\n");
+	   $theMessage[verbose][] = gettext("\nPress return to read the next item. ");
+	   $theMessage[verbose][] = gettext("\nAnd type yes to select your preferred item. ");
 	   break;
 
 	 case MessageNavigationRadio:
-	   $theMessage[verbose][] = gettext("Press return to read the next option.\n");
-	   $theMessage[verbose][] = gettext("And type yes to select your preferred option.\n");
+	   $theMessage[verbose][] = gettext("\nPress return to read the next option. ");
+	   $theMessage[verbose][] = gettext("\nAnd type yes to select your preferred option. ");
 	   break;
 
 	 case MessageNavigationCheckbox:
-	   $theMessage[verbose][] = gettext("Press return to read the next option.\n");
-	   $theMessage[verbose][] = gettext("And type yes to select an option, or type no to unselect it.\n");
-	   $theMessage[verbose][] = gettext("Note that you can select several options.\n");
+	   $theMessage[verbose][] = gettext("\nPress return to read the next option. ");
+	   $theMessage[verbose][] = gettext("\nAnd type yes to select an option, or type no to unselect it. ");
+	   $theMessage[verbose][] = gettext("\nNote that you can select several options. ");
 	   break;
 	   
 	 case MessageNavigationInputBox:
-	   $theMessage[verbose][] = gettext("Type your answer in this input field\n");
-	   $theMessage[notVerbose][] = gettext("Input\n");
+	   $theMessage[verbose][] = gettext("\nType your answer in this input field. ");
+	   $theMessage[notVerbose][] = gettext("\nInput. ");
 	   break;
 
 	 case MessageNavigationInputBoxDefaultButton:
-	   $theMessage[verbose][] = sprintf(gettext("Just type yes if you accept this proposal: %s\n"), $theValue);
-	   $theMessage[notVerbose][] = sprintf(gettext("Proposal: %s\n"), $theValue);
+	   $theMessage[verbose][] = sprintf(gettext("\nJust type yes if you accept this proposal: %s. "), $theValue);
+	   $theMessage[notVerbose][] = sprintf(gettext("\nProposal: %s. "), $theValue);
 	   break;
 
 	 default:
-	   echo "display: unknown message $theMessage\n";
+	   echo "\ndisplay: unknown message $theMessage. ";
 	   break;
 	 }
      }

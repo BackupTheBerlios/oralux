@@ -58,7 +58,7 @@ chmod +w $lg.def.po $lg.new.po oralux.pot
 echo "Building the new $lg.new.po..."   
 
 #xgettext -C -s `ls *.php` fic.c -o oralux.pot
-xgettext --no-location -s `ls ../dialog/*.php` -o oralux.pot
+xgettext --no-location -s `ls ../dialog/*.php ../main/*.php` -o oralux.pot
 #xgettext -s `ls *.php` fic.c -o oralux.pot
 msgmerge $lg.def.po oralux.pot -o $lg.new.po
 

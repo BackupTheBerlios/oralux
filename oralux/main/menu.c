@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // menu.c
-// $Id: menu.c,v 1.7 2005/03/31 09:16:54 gcasse Exp $
+// $Id: menu.c,v 1.8 2005/04/03 00:36:28 gcasse Exp $
 // $Author: gcasse $
 // Description: introductory menu. 
-// $Date: 2005/03/31 09:16:54 $ |
-// $Revision: 1.7 $ |
+// $Date: 2005/04/03 00:36:28 $ |
+// $Revision: 1.8 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -331,7 +331,6 @@ static enum language setMenuLanguage(enum language theDefaultLanguage)
 /* < setInternet */
 void setInternet( struct menuInfo* theSelectedInfo)
 {
-
   say( setUpInternet);
   say( PleasePressKey);
 
@@ -367,7 +366,9 @@ void setInternet( struct menuInfo* theSelectedInfo)
 	{
 	  printf("%d\n",i+1); 
 	}
-      runYasr( theSelectedInfo->myTextToSpeech.myIdentifier, theSelectedInfo->myMenuLanguage, aCommand);
+      runYasr( & (theSelectedInfo->myTextToSpeech), 
+	       theSelectedInfo->myMenuLanguage, 
+	       aCommand);
     }
 
   restartAUI();
@@ -673,7 +674,9 @@ void saveconfig( struct menuInfo* theSelectedInfo)
 	{
 	  printf("%d\n",i+1); 
 	}
-      runYasr( theSelectedInfo->myTextToSpeech.myIdentifier, theSelectedInfo->myMenuLanguage, aCommand);
+      runYasr( &(theSelectedInfo->myTextToSpeech), 
+	       theSelectedInfo->myMenuLanguage, 
+	       aCommand);
     }
 
   restartAUI();

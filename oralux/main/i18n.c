@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // i18n.c
-// $Id: i18n.c,v 1.3 2005/03/31 09:16:54 gcasse Exp $
+// $Id: i18n.c,v 1.4 2005/04/03 00:36:28 gcasse Exp $
 // $Author: gcasse $
 // Description: Internationalization. 
-// $Date: 2005/03/31 09:16:54 $ |
-// $Revision: 1.3 $ |
+// $Date: 2005/04/03 00:36:28 $ |
+// $Revision: 1.4 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -24,6 +24,7 @@
 
 #include <stdio.h>
 #include "i18n.h"
+#include "constants.h"
 
 static char TheLine[BUFSIZE];
 
@@ -238,45 +239,9 @@ void buildI18n( enum language theMenuLanguage,
   ORALUXTTSLANG=getStringLanguage(theMenuLanguage);
   DESKTOP=desktopGetString(theDesktop);
 
-  switch(theTextToSpeech.myLanguage)
-    {
-    case French:
-      CHARSET="iso8859-15";
-      COUNTRY="fr";
-      LANG="fr_FR@euro";
-      LANGUAGE="fr";
-      break;
-
-    case German:
-      CHARSET="iso8859-15";
-      COUNTRY="de";
-      LANG="de_DE@euro";
-      LANGUAGE="de";
-      break;
-
-    case Russian:
-      CHARSET="koi8-r";
-      COUNTRY="ru";
-      LANG="ru_RU.KOI8-R";
-      LANGUAGE="ru";
-      //TZ="Europe/Moscow"
-      break;
-
-    case Spanish:
-      CHARSET="iso8859-15";
-      COUNTRY="es";
-      LANG="es_ES@euro";
-      LANGUAGE="es";
-      break;
-
-    case English:
-    default:
-      CHARSET="iso8859-1";
-      COUNTRY="us";
-      LANG="C";
-      LANGUAGE="en"; // TBD (en/aspell)
-      break;
-    }
+  getLanguageVariable( theTextToSpeech.myLanguage,
+		       &CHARSET, &COUNTRY,
+		       &LANG, &LANGUAGE);
 
   getStringKeyboard(theKeyboard, &KEYTABLE, &XKEYBOARD);
 
@@ -334,4 +299,57 @@ void buildI18n( enum language theMenuLanguage,
   fprintf(fd,"EMACSPEAKTTSPORT=\"%s\"\n",serialPortGetString( theTextToSpeech.myPort));
 
   fclose(fd);
+}
+
+void getLanguageVariable( enum language theWishedLanguage,
+			  char** theCharset, char** theCountry,
+			  char** theLang, char** theLanguage)
+{
+  ENTER("getLanguageVariable");
+  enum language aPossibleLanguage=English;
+
+  SHOW2("theWishedLanguage=%d\n", theWishedLanguage);
+
+  switch(theWishedLanguage)
+    {
+    case French:
+      *theCharset="iso8859-15";
+      *theCountry="fr";
+      *theLang="fr_FR@euro";
+      *theLanguage="fr";
+      break;
+
+    case German:
+      *theCharset="iso8859-15";
+      *theCountry="de";
+      *theLang="de_DE@euro";
+      *theLanguage="de";
+      break;
+
+    case Russian:
+      *theCharset="koi8-r";
+      *theCountry="ru";
+      *theLang="ru_RU.KOI8-R";
+      *theLanguage="ru";
+      //TZ="Europe/Moscow"
+      break;
+
+    case Spanish:
+      *theCharset="iso8859-15";
+      *theCountry="es";
+      *theLang="es_ES@euro";
+      *theLanguage="es";
+      break;
+
+    case English:
+    default:
+      *theCharset="iso8859-1";
+      *theCountry="us";
+      *theLang="C";
+      *theLanguage="en"; // TBD (en/aspell)
+      break;
+    }
+
+  SHOW2("LANG=%s\n",*theLang);
+  SHOW2("LANGUAGE=%s\n", *theLanguage);
 }

@@ -123,6 +123,8 @@ if [ -e "\$symlinksfile" ]; then
 bash "\$symlinksfile" 
 fi
 
+chown knoppix:knoppix /home/knoppix/.*
+
 EOT
 
 SCRIPTS=""

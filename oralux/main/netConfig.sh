@@ -3,11 +3,11 @@
 
 # ----------------------------------------------------------------------------
 # netConfig.sh
-# $Id: netConfig.sh,v 1.8 2005/03/31 09:16:54 gcasse Exp $
+# $Id: netConfig.sh,v 1.9 2005/04/03 00:36:28 gcasse Exp $
 # $Author: gcasse $
 # Description: Menu for internet settings
-# $Date: 2005/03/31 09:16:54 $ |
-# $Revision: 1.8 $ |
+# $Date: 2005/04/03 00:36:28 $ |
+# $Revision: 1.9 $ |
 # Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -30,20 +30,38 @@ export MINIMENU=/tmp/minimenu.tmp
 tempfile=`tempfile 2>/dev/null` || tempfile=/tmp/test$$
 trap "rm -f $tempfile" 0 1 2 5 15
 
+
+case "$LANGUAGE" in
+fr)
+TextCancelPressed="Opération annulée."
+TextEscPressed="Touche échappement appuyée."
+;;
+*)
 TextCancelPressed="Cancel pressed."
 TextEscPressed="ESC pressed."
+;;
+esac
+
 
 rm -f $MINIMENU 2>/dev/null
 
 adslMenu()
 {
-    TextWhichUsbADSL="Which is your USB ADSL Modem?"
+case "$LANGUAGE" in
+fr)
+TextWhichUsbADSL="Quel est votre modem U S B,  A D S L?"
+;;
+*)
+TextWhichUsbADSL="Which is your U S B, A D S L Modem?"
+;;
+esac
+
     $DIALOG --nobutton --menu "$TextWhichUsbADSL" 20 51 4 \
-	"0" "Sagem"\
-	"1" "E C I"\
+	"1" "Sagem"\
+	"2" "E C I"\
     2> $tempfile
 
-#	"2" "SpeedTouch"\
+#	"3" "SpeedTouch"\
     
     retval=$?
     
@@ -52,9 +70,9 @@ adslMenu()
     case $retval in
 	0)
 case $choice in
-    0)
-    ./eagleConfig.sh;;
     1)
+    ./eagleConfig.sh;;
+    2)
     eciadsl-config-text;;
 esac
 ;;
@@ -66,17 +84,29 @@ echo "$TextEscPressed";;
 esac
 }
 
+case "$LANGUAGE" in
+fr)
+TextSettingUp="Configuration de la connexion internet"
+TextSerialModem="Modem série"
+TextAdslUsb="Modem U S B, A D S L"
+TextMail="Courriel"
+TextQuit="Quitter"
+;;
+*)
 TextSettingUp="Setting up the internet connection"
 TextSerialModem="Serial Modem"
 TextAdslUsb="Adsl USB Modem"
-TextMail=Mail
-TextQuit=Quit
+TextMail="Mail"
+TextQuit="Quit"
+;;
+esac
+
 
 $DIALOG --nobutton --menu "$TextSettingUp" 20 51 4 \
-    "0" "$TextSerialModem" \
-    "1" "$TextAdslUsb" \
-    "2" "$TextMail" \
-    "3" "$TextQuit" \
+    "1" "$TextSerialModem" \
+    "2" "$TextAdslUsb" \
+    "3" "$TextMail" \
+    "4" "$TextQuit" \
     2> $tempfile
 
 #"IM" => "ICQ"
@@ -88,13 +118,13 @@ choice=`cat $tempfile`
 case $retval in
     0)
     case $choice in
-	0)
-	pppconfig --dialog-oralux;;
 	1)
-	adslMenu;;
+	pppconfig --dialog;;
 	2)
-	php mailMenu.php;;
+	adslMenu;;
 	3)
+	php mailMenu.php;;
+	4)
 	touch $MINIMENU;;
     esac
     ;;

@@ -20,4 +20,8 @@ void buildI18n( enum language theMenuLanguage,
 		struct keyboardStruct theKeyboardFeatures,
 		enum desktopIdentifier theDesktop);
 
+void getLanguageVariable( enum language theWishedLanguage,
+			  char** theCharset, char** theCountry,
+			  char** theLang, char** theLanguage);
+
 #endif

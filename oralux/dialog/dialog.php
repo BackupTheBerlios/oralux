@@ -1,12 +1,15 @@
 #!/usr/bin/php
-<?php
+<?PHP 
+
+// #!/usr/bin/php -q
+// <?php
 // ----------------------------------------------------------------------------
 // dialog.php
-// $Id: dialog.php,v 1.3 2005/03/31 09:16:53 gcasse Exp $
+// $Id: dialog.php,v 1.4 2005/04/03 00:36:28 gcasse Exp $
 // $Author: gcasse $
 // Description: command line based dialog (menu, yes/no question, dialog box,...)
-// $Date: 2005/03/31 09:16:53 $ |
-// $Revision: 1.3 $ |
+// $Date: 2005/04/03 00:36:28 $ |
+// $Revision: 1.4 $ |
 // Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -298,8 +301,11 @@ class dialog
 	      break;
 
 	    case MENU_TEXT:
-	      $this->mySelectList=new menu($arg);
-	      $aState=MENU_NUM1;
+	      if (trim($arg)!="--")
+		{
+		  $this->mySelectList=new menu($arg);
+		  $aState=MENU_NUM1;
+		}
 	      break;
 
 	    case MENU_NUM1:
@@ -319,8 +325,11 @@ class dialog
 	      break;
 
 	    case INPUT_BOX_TEXT:
-	      $this->myTextDialog=new inputBox($arg);
-	      $aState=INPUT_BOX_NUM1;
+	      if (trim($arg)!="--")
+		{
+		  $this->myTextDialog=new inputBox($arg);
+		  $aState=INPUT_BOX_NUM1;
+		}
 	      break;
 
 	    case INPUT_BOX_NUM1:
@@ -334,8 +343,11 @@ class dialog
 	      break;
 
 	    case RADIO_TEXT:
-	      $this->mySelectList=new radio( $arg);
-	      $aState=RADIO_NUM1;
+	      if (trim($arg)!="--")
+		{
+		  $this->mySelectList=new radio( $arg);
+		  $aState=RADIO_NUM1;
+		}
 	      break;
 
 	    case RADIO_NUM1:
@@ -363,8 +375,11 @@ class dialog
 	      break;
 
 	    case YESNO_TEXT:
-	      $this->myTextDialog=new yesNo($arg);
-	      $aState=YESNO_NUM1;
+	      if (trim($arg)!="--")
+		{
+		  $this->myTextDialog=new yesNo($arg);
+		  $aState=YESNO_NUM1;
+		}
 	      break;
 
 	    case YESNO_NUM1:
@@ -376,8 +391,11 @@ class dialog
 	      break;
 
 	    case MSGBOX_TEXT:
-	      $this->myTextDialog=new messageBox($arg);
-	      $aState=MSGBOX_NUM1;
+	      if (trim($arg)!="--")
+		{
+		  $this->myTextDialog=new messageBox($arg);
+		  $aState=MSGBOX_NUM1;
+		}
 	      break;
 
 	    case MSGBOX_NUM1:
@@ -389,8 +407,11 @@ class dialog
 	      break;
 
 	    case CHECK_TEXT:
-	      $this->mySelectList=new checkbox($arg);
-	      $aState=CHECK_NUM1;
+	      if (trim($arg)!="--")
+		{
+		  $this->mySelectList=new checkbox($arg);
+		  $aState=CHECK_NUM1;
+		}
 	      break;
 
 	    case CHECK_NUM1:
@@ -418,8 +439,11 @@ class dialog
 	      break;
 
 	    case GAUGE_TEXT:
-	      $this->myTextDialog=new gauge($arg);
-	      $aState=GAUGE_NUM1;
+	      if (trim($arg)!="--")
+		{
+		  $this->myTextDialog=new gauge($arg);
+		  $aState=GAUGE_NUM1;
+		}
 	      break;
 
 	    case GAUGE_NUM1:
@@ -496,6 +520,15 @@ class dialog
   // }}}
 }
 // }}}
+
+// echo "------------------------------\n";
+// echo "argc=$argc\n";
+// for ($i=0;$i<$argc;$i++)
+// {
+//   echo "==".$argv[$i]."==\n";
+//   system("echo '".$argv[$i]."'|od -t x1");
+// }
+// echo "------------------------------\n";
 
 $a=new dialog( $argc, $argv);
 exit ($a->myStatus);

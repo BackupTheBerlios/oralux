@@ -1,11 +1,11 @@
 <?php
 // ----------------------------------------------------------------------------
 // cliDialog.php
-// $Id: cliDialog.php,v 1.6 2005/03/31 09:16:53 gcasse Exp $
+// $Id: cliDialog.php,v 1.7 2005/04/03 00:36:27 gcasse Exp $
 // $Author: gcasse $
 // Description: command line based dialog (menu, yes/no question, dialog box,...)
-// $Date: 2005/03/31 09:16:53 $ |
-// $Revision: 1.6 $ |
+// $Date: 2005/04/03 00:36:27 $ |
+// $Revision: 1.7 $ |
 // Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -415,6 +415,7 @@ class cliAreaManager
 
 // }}}
 // {{{ cliList
+
 class cliList extends cliArea
 {
   protected $myOption;
@@ -520,6 +521,7 @@ class cliList extends cliArea
   // }}}
 
 }
+
 // }}}
 // {{{ cliRadio
 
@@ -832,10 +834,10 @@ class cliButton extends cliArea
   function announceItem()
     {
       ENTER("cliButton::announceItem",__LINE__);
-      echo "\n";
+      //      echo "\n";
       if ($this->myValue!="")
 	{
-	  echo  $this->myValue;
+	  echo  "\n".$this->myValue;
 	}
     }
   // }}}

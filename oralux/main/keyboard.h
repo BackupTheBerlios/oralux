@@ -9,8 +9,8 @@ enum keyboard {
   belgianKeyboard,
   britishKeyboard,
   bulgarianKeyboard,
-/*   chineseKeyboardSimplified, */
-/*   chineseKeyboardTraditionnal, */
+/*   chineseKeyboardSimplified,  */
+/*   chineseKeyboardTraditionnal,  */
   czechKeyboard,
   danskKeyboard,
   finnishKeyboard,

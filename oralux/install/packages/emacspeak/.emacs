@@ -231,4 +231,22 @@
 (add-hook 'newsticker-mode-hook 'imenu-add-menubar-index)
 (setq browse-url-browser-function 'w3m-browse-url)
 
+(setq smtpmail-default-smtp-server "mySMTPserver")
+(setq smtpmail-local-domain nil)
+(setq send-mail-function 'smtpmail-send-it)    
+(load-library "smtpmail")
+
+
+;; same window for help buffer,...
+(setq same-window-buffer-names
+      (append '("*Help*" "*grep*" "*compilation*" "*Occur*")
+              same-window-buffer-names))
+
+
+;;(setq smtpmail-debug-info nil)
+
+;; Gnus
+;; (load-library "message")
+;; (setq message-send-mail-function 'smtpmail-send-it)
+
 ;;(server-start)

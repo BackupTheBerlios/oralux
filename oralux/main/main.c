@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // main.c
-// $Id: main.c,v 1.6 2005/03/31 09:16:54 gcasse Exp $
+// $Id: main.c,v 1.7 2005/04/03 00:36:28 gcasse Exp $
 // $Author: gcasse $
 // Description: entry point. 
-// $Date: 2005/03/31 09:16:54 $ |
-// $Revision: 1.6 $ |
+// $Date: 2005/04/03 00:36:28 $ |
+// $Revision: 1.7 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -359,7 +359,7 @@ int main(int argc, char *argv[])
       if (aState == ORALUX_Start)
 	{
 	  // Welcome to Oralux + release
-
+	  printf("\n");
 #ifdef ORALUXGOLD
 	  sayForce(WelcomeToOraluxGold);
 #else

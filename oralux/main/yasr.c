@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // yasr.c
-// $Id: yasr.c,v 1.4 2005/03/31 09:16:54 gcasse Exp $
+// $Id: yasr.c,v 1.5 2005/04/03 00:36:28 gcasse Exp $
 // $Author: gcasse $
 // Description: Yasr configuration file. 
-// $Date: 2005/03/31 09:16:54 $ |
-// $Revision: 1.4 $ |
+// $Date: 2005/04/03 00:36:28 $ |
+// $Revision: 1.5 $ |
 // Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -190,11 +190,14 @@ void buildConfigurationYasr(struct textToSpeechStruct* theTextToSpeech)
 
 /* > */
 /* < runYasr */
-void runYasr( enum textToSpeech theTextToSpeech, enum language theMenuLanguage, char* theCommand)
+void runYasr( struct textToSpeechStruct* theTextToSpeech, 
+	      enum language theMenuLanguage,
+	      char* theCommand)
 {
   // Select a software synthesizer possibly compliant with the user preferences.
   enum textToSpeech aYasrSynthesizer=TTS_Flite;
-  switch (theTextToSpeech)
+  enum language aPossibleLanguage=theMenuLanguage;
+  switch (theTextToSpeech->myIdentifier)
     {
     case TTS_Flite:
     case TTS_DECtalk:
@@ -203,7 +206,8 @@ void runYasr( enum textToSpeech theTextToSpeech, enum language theMenuLanguage, 
 #ifdef ORALUXGOLD
     case TTS_ViaVoice:
 #endif
-      aYasrSynthesizer=theTextToSpeech;
+      aYasrSynthesizer=theTextToSpeech->myIdentifier;
+      aPossibleLanguage=theTextToSpeech->myLanguage;
       break;
 
     default:
@@ -222,6 +226,15 @@ void runYasr( enum textToSpeech theTextToSpeech, enum language theMenuLanguage, 
 	}
       break;
     }
+
+  // the LANG and LANGUAGE variables must match the available voice synthesis.
+  // RAF (To be updated when Braille only solution will be available).
+  char* aLang="en_US";
+  char* aLanguage="en";
+  char* aBid=NULL;
+  getLanguageVariable( aPossibleLanguage,
+		       &aBid, &aBid,
+		       &aLang, &aLanguage);
 
   // synthesizer port parameter
   char* aParam=NULL;
@@ -249,7 +262,10 @@ void runYasr( enum textToSpeech theTextToSpeech, enum language theMenuLanguage, 
 
     char* aLine=(char *)malloc(BUFSIZE);
     //static char aLine[BUFSIZE];
-  snprintf(aLine, BUFSIZE, "yasr -s \"emacspeak server\" -p \"%s\" %s", aParam, theCommand);
+  snprintf(aLine, BUFSIZE, "export LANG=%s; export LANGUAGE=%s; yasr -s \"emacspeak server\" -p \"%s\" %s",
+	   aLang, aLanguage,
+	   aParam, 
+	   theCommand);
   system(aLine);
     free( aLine);
 }
