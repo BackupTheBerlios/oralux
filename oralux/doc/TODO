@@ -28,6 +28,7 @@ In the following lines, + means evolution, - bug.
 
 1.1 Priority 1 (Urgent)
 
++ doc update: http://fsfeurope.org/projects/education/tgs/tagatschool7.fr.html
 + check if persistenthome still works
 
 + see fix http://www.knoppix.net/forum/viewtopic.php?t=12960&highlight=
@@ -142,6 +143,7 @@ Then the old one .emacs is retreived at the next boot.
 
 "Une petite remarque qui m'a coûté bien du temps et que peut-être tu pourras répercuté sur lal liste mieux que moi.
 J'avais modifié le fichier .emacs soigneusement comme tu l'as indiqué dans un message mais quelle ne fut pas ma surprise de voir que malgré la modification, rien ne partait. Je te rappelle ma config : démarrage sur le cd, une partition créée avec mkpersistenthome et une disquette sur laquelle je sauvegardais les paramètres. "
++ Add bbdb (see .emacs + .vm)
 --------------------------------------
 
 Feedback from Nigel
@@ -492,6 +494,35 @@ started. The shell must be usable.
 + See how a root term may be used with Emacspeak without supplying any password 
 + HOWTO English/French (reachable from Emacspeak).
 
+
++ Suggestions from Mario Fux and Alireza Darvishy
+
+1. The arrow keys left and right should work to read a word.
+2. Shift+arrow keys should read the letters.
+3. When you finish and restart Emacspeak there should be an acoustic signal
+(btw: What about the a possible login with password. Did you find a solution
+?)
+4. It should be easier to stop the sound server, for example with double CTRL
+?
+5. The sound server shouldn't read the deleted letters.
+/ 6. The menu thing (F10 and so on) is bad. When you press F10 it reads
+something like "f equal equal greater than File" etc. and when you chose File
+it reads again "o equal equal greater than Open File ( C dash x f )". It
+would be easier when it only read (after pressing F10): "File   Edit  
+Options" and in the menu File: "Open File   Open Directory".
+
++ Suggestions from Nigel for Emacs and YASR.
+
+Pressing the Home key will move to the beginning of a line.
+Pressing control Home will move to the beginning of the buffer.
+
+Pressing the End key will move to the end of the line.
+Pressing control End will move to the end of the buffer.
+
+Pressing Page Up will move up a paragraph.
+Pressing Page Down will move down a paragraph.
+
+
 1.3 Priority 3
 + Oralux 1.x: clearer messages. E.g. the Emacs question once C-x k is pressed: "Kill buffer" is a question but can be understood as a confirmation. "Which buffer must be killed" would be better.
 + Check that installed binaries are i386 compliant
@@ -521,28 +552,6 @@ started. The shell must be usable.
 http://knoppixfr.tuxfamily.org/index.php?page=hardware
 
 3.2 Priority 2
-+ The mailing list management must be enhanced
 + Adding an entry 'Forum'
-
-4. Info
-+ Info required about Emacspeak and browsing the web (javascript).
-
-5. Suggestions from Mario Fux and Alireza Darvishy
-
-1. The arrow keys left and right should work to read a word.
-2. Shift+arrow keys should read the letters.
-3. When you finish and restart Emacspeak there should be an acoustic signal
-(btw: What about the a possible login with password. Did you find a solution
-?)
-4. It should be easier to stop the sound server, for example with double CTRL
-?
-5. The sound server shouldn't read the deleted letters.
-/ 6. The menu thing (F10 and so on) is bad. When you press F10 it reads
-something like "f equal equal greater than File" etc. and when you chose File
-it reads again "o equal equal greater than Open File ( C dash x f )". It
-would be easier when it only read (after pressing F10): "File   Edit  
-Options" and in the menu File: "Open File   Open Directory".
-
-
 
 
