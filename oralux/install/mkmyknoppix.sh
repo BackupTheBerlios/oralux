@@ -48,6 +48,7 @@ add_soft() {
     next_script links.sh "links"
     next_script net.sh "net"
     next_script menu.sh "menu"
+    next_script yasr.sh "yasr"
     next_script doc.sh "doc"
 
 # The following script must be the last one
