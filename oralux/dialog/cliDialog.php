@@ -1,11 +1,11 @@
 <?php
 // ----------------------------------------------------------------------------
 // cliDialog.php
-// $Id: cliDialog.php,v 1.2 2004/12/03 22:59:28 gcasse Exp $
+// $Id: cliDialog.php,v 1.3 2004/12/12 23:28:48 gcasse Exp $
 // $Author: gcasse $
 // Description: command line based dialog (menu, yes/no question, dialog box,...)
-// $Date: 2004/12/03 22:59:28 $ |
-// $Revision: 1.2 $ |
+// $Date: 2004/12/12 23:28:48 $ |
+// $Revision: 1.3 $ |
 // Copyright (C) 2004 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -462,7 +462,6 @@ class cliList extends cliArea
 	  $this->displayKey();
 	}      
       echo current($this->myOption);
-      //      echo current($this->myOption)."\n";
     }
 
   // }}}
@@ -562,7 +561,6 @@ class cliRadio extends cliList
 	  $this->displayKey();
 	}
       
-      //      echo " ".current($this->myOption)."\n";
       echo " ".current($this->myOption);
     }
 
@@ -748,7 +746,6 @@ class cliCheckbox extends cliList
 	}
 
       echo " ".current($this->myOption);
-      //      echo " ".current($this->myOption)."\n";
     }
 
   // }}}
@@ -837,7 +834,6 @@ class cliButton extends cliArea
       if ($this->myValue!="")
 	{
 	  echo  $this->myValue;
-	  //	  echo  $this->myValue."\n";
 	}
     }
   // }}}
@@ -940,12 +936,10 @@ class cliDialog
     {
       ENTER("cliDialog::menu",__LINE__);
 
-      //      echo "$theTitle\n";
       echo "\n$theTitle";
       if ($theText)
 	{
 	  echo "\n$theText";
-	  //	  echo "$theText\n";
 	}
 
       // Setting messages for the list or the menu
@@ -953,23 +947,16 @@ class cliDialog
 	{
 	  $aMessage[verbose][]=gettext("\nThis is a long list.");
 	  $aMessage[notVerbose][]=gettext("\nLong list.");
-
-// 	  $aMessage[verbose][]=gettext("This is a long list.\n");
-// 	  $aMessage[notVerbose][]=gettext("Long list.\n");
 	}
       else
 	{
 	  $aMessage[verbose][]=gettext("\nThis is a short list.");
 	  $aMessage[notVerbose][]=gettext("\nShort list.");
-// 	  $aMessage[verbose][]=gettext("This is a short list.\n");
-// 	  $aMessage[notVerbose][]=gettext("Short list.\n");
 	}
 
       // Messages for the buttons
       $aMessage2[verbose][]=gettext("\nThis is a button.");
       $aMessage2[notVerbose][]=gettext("\nButton.");
-//       $aMessage2[verbose][]=gettext("This is a button.\n");
-//       $aMessage2[notVerbose][]=gettext("Button.\n");
 
       if ($theSelectedOption)
 	{ // list
@@ -1029,13 +1016,9 @@ class cliDialog
     {
       ENTER("cliDialog::checkbox",__LINE__);
       echo "\n$theTitle";
-      //      echo "$theTitle\n";
       if ($theText)
 	{
 	  echo "\n$theText";
-	  //	  echo "$theText\n";
-
-	  // }}}
 	}
 
       // Setting messages for the checkbox
@@ -1043,22 +1026,16 @@ class cliDialog
 	{
 	  $aMessage[verbose][]=gettext("\nThere are several checkboxes.");
 	  $aMessage[notVerbose][]=gettext("\nSeveral checkboxes.");
-// 	  $aMessage[verbose][]=gettext("There are several checkboxes.\n");
-// 	  $aMessage[notVerbose][]=gettext("Several checkboxes.\n");
 	}
       else
 	{
 	  $aMessage[verbose][]=gettext("\nThere are just a few checkboxes.");
 	  $aMessage[notVerbose][]=gettext("\nA few checkboxes.");
-// 	  $aMessage[verbose][]=gettext("There are just a few checkboxes.\n");
-// 	  $aMessage[notVerbose][]=gettext("A few checkboxes.\n");
 	}
 
       // Messages for the buttons
       $aMessage2[verbose][]=gettext("\nThis is a button.");
       $aMessage2[notVerbose][]=gettext("\nButton.");
-//       $aMessage2[verbose][]=gettext("This is a button.\n");
-//       $aMessage2[notVerbose][]=gettext("Button.\n");
 
       $this->myTerminal->getMessage( MessageNavigationCheckbox, $aMessage);
       $this->myCheckbox=new cliCheckbox( $theOptions, $aMessage, $theSelectedOption);
@@ -1102,7 +1079,6 @@ class cliDialog
       if ($theTitle)
 	{
 	  echo "\n$theTitle";
-	  //	  echo "$theTitle\n";
 	}
 
       // Message
@@ -1111,11 +1087,6 @@ class cliDialog
 
       $aMessage[verbose][]="\n".gettext("Yes or No?")." ";
       $aMessage[notVerbose][]="\n".gettext("Yes or No?")." ";
-//       $aMessage[verbose][]=$theQuestion."\n";
-//       $aMessage[notVerbose][]=$theQuestion."\n";
-
-//       $aMessage[verbose][]=gettext("Yes or No?\n");
-//       $aMessage[notVerbose][]=gettext("Yes or No?\n");
 
       $this->myYesNo=new cliYesNo( $aMessage);
 
@@ -1134,22 +1105,17 @@ class cliDialog
       if ($theTitle)
 	{
 	  echo "\n$theTitle";
-	  //	  echo "$theTitle\n";
 	}
 
       // Message
       $aMessage[verbose][]="\n".$theQuestion;
       $aMessage[notVerbose][]="\n".$theQuestion;
-//       $aMessage[verbose][]=$theQuestion."\n";
-//       $aMessage[notVerbose][]=$theQuestion."\n";
       $this->myMessage=new cliMessage( $aMessage);
 
       // Buttons
       unset($aMessage);
       $aMessage[verbose][]="\n".gettext("Press any key to continue.");
       $aMessage[notVerbose][]="\n".gettext("Press any key to continue.");      
-//       $aMessage[verbose][]=gettext("Press any key to continue.\n");
-//       $aMessage[notVerbose][]=gettext("Press any key to continue.\n");      
       $this->myButton[]=new cliButton( OkPressedValue, "", $aMessage);
 
       $this->myAreaManager->SetWrap( false);
@@ -1179,7 +1145,6 @@ class cliDialog
 	    {
 	      break;
 	    }
-	  //	  else if ($anInput!="XXX\n")
 	  else if ($anInput!="\nXXX")
 	    {
 	      echo $anInput;
@@ -1197,7 +1162,6 @@ class cliDialog
       if ($theTitle)
 	{
 	  echo "\n$theTitle";
-	  //	  echo "$theTitle\n";
 	}
 
       if ($this->myDialogWithDefaultButton)
@@ -1205,8 +1169,6 @@ class cliDialog
 	  // Main buttons (OK/Cancel)
 	  $aMessage[verbose][]="\n".gettext("This is a button.");
 	  $aMessage[notVerbose][]="\n".gettext("Button.");
-// 	  $aMessage[verbose][]=gettext("This is a button.\n");
-// 	  $aMessage[notVerbose][]=gettext("Button.\n");
 
 	  $this->myButton[]=new cliButton( OkPressedValue, gettext("OK"), $aMessage);
 	  $this->myButton[]=new cliButton( CancelPressedValue, gettext("Cancel"), $aMessage);
@@ -1220,8 +1182,6 @@ class cliDialog
 	{
 	  $aMessage[verbose][]="\n$theQuestion";
 	  $aMessage[notVerbose][]="\n$theQuestion";
-// 	  $aMessage[verbose][]="$theQuestion\n";
-// 	  $aMessage[notVerbose][]="$theQuestion\n";
 
 	  $this->myTerminal->getMessage( MessageNavigationInputBoxDefaultButton, $aMessage, $theDefaultValue);
 	  $this->myDefaultValueAcceptationButton=new cliButton( OkPressedValue, " ", $aMessage);
@@ -1231,8 +1191,6 @@ class cliDialog
 	{
 	  $aMessage[verbose][]="\n$theQuestion";
 	  $aMessage[notVerbose][]="\n$theQuestion";
-// 	  $aMessage[verbose][]="$theQuestion\n";
-// 	  $aMessage[notVerbose][]="$theQuestion\n";
 	}
       
       $this->myTerminal->getMessage( MessageNavigationInputBox, $aMessage);
@@ -1279,14 +1237,12 @@ class cliDialog
       if ($theTitle)
 	{
 	  echo "\n".$theTitle;
-	  //	  echo sprintf(gettext("%s\n"), $theTitle);
 	}
       if ($theIndex)
 	{
 	  if ($theSentence)
 	    {
 	      echo sprintf("\n".gettext("%d. %s"), $theIndex, $theSentence);
-	      //	      echo sprintf(gettext("%d. %s\n"), $theIndex, $theSentence);
 	    }
 	}
       else if ($theSentence)

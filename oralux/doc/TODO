@@ -28,6 +28,8 @@ In the following lines, + means evolution, - bug.
 
 1.1 Priority 1 (Urgent)
 
+aptitude, zgv, fbi
+
 + Feedback from Aldo faq: obsolete points
 Archives ML, mailto address, de.tbl instead of text.german.tbl
 
@@ -614,7 +616,9 @@ Control left and right would move by word.
 Control up arrow would read the current line and Control down arrow
 would read from the current line to the end of the buffer.
 
-
+A key to repeat a last spoken object.  So if the 
+last thing read was the sentence then pressing a key would read it again.
+This would also work in the case of ispell.
 
 
 1.3 Priority 3
