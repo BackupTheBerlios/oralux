@@ -49,12 +49,30 @@ struct t_termbuffer
   int myNumberOfCol;
   struct t_linePortion myLinePortion[ MAX_LINE_PORTION];
   int myLinePortionIndex;
+  int myErasedCharAreReturned; /* if 1, theOutput will include any erased char. Useful for retreiving the single erased char when the backspace is pressed */
 };
 /* > */
-
+/* < createTermBuffer */
+/* To be called before any other function, return a pointer on the 'object' (this) */
 struct t_termbuffer* createTermbuffer( enum termbufferName theName, int theNumberOfLine, int theNumberOfCol);
-char* interpretEscapeSequence( struct t_termbuffer* this, FILE* theStream, char** theOutput);
+
+/* > */
+/* < interpretEscapeSequence */
+/* Interprets the escape sequence, update the internal data and style buffers.
+   theOutput gives the chars to be rendered 
+*/
+void interpretEscapeSequence( struct t_termbuffer* this, FILE* theStream, char** theOutput);
+
+/* > */
+/* < returnTheErasedChar */
+/* theChoice must be equal to 1 if the erased chars must be also returned in theOutput of interpretEscapeSequence */
+void returnTheErasedChar( struct t_termbuffer* this, int theChoice);
+
+/* > */
+/* < deleteTermbuffer */
+/* To be called after any other function */
 void deleteTermbuffer( struct t_termbuffer* this);
 
-#endif
+/* > */
 
+#endif

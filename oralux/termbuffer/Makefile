@@ -46,7 +46,7 @@ install: libtermbuffer.so.$(TBVER)
 	chmod 755 $(LIBPATH)/libtermbuffer.so.$(TBVER)
 	-@/bin/rm -f $(LIBPATH)/libtermbuffer.so.$(TBMAJ) $(LIBPATH)/libtermbuffer.so
 	(cd $(LIBPATH); ln -sf libtermbuffer.so.$(TBVER) libtermbuffer.so.$(TBMAJ); \
-	ln -sf libtermbuffer.so.$(TBMAJ) libtermbuffer.so)
+	ln -sf libtermbuffer.so.$(TBMAJ) libtermbuffer.so; ldconfig -n .)
 
 clean:
 	/bin/rm -f *.o libtermbuffer.so libtermbuffer.so.$(TBMAJ)* test-tb

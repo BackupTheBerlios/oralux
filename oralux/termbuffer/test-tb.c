@@ -7,7 +7,7 @@
 int main(int argc, char *argv[])
 {
   FILE* fd=NULL;
-  struct t_termbuffer* aTermbuffer=createTermbuffer( LINUX, 30, 30);
+  struct t_termbuffer* aTermbuffer=createTermbuffer( LINUX, 48, 128);
   char* aOutput=NULL;
   enum {MAX_LINE=400};
   char* aTest=(char*)malloc(MAX_LINE);

@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 termbuffer.c
-$Id: termbuffer.c,v 1.2 2005/01/01 23:39:25 gcasse Exp $
+$Id: termbuffer.c,v 1.3 2005/01/05 23:10:55 gcasse Exp $
 $Author: gcasse $
 Description: manage the terminal layout in a buffer.
-$Date: 2005/01/01 23:39:25 $ |
-$Revision: 1.2 $ |
+$Date: 2005/01/05 23:10:55 $ |
+$Revision: 1.3 $ |
 Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -35,7 +35,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "debug.h"
 
 /* Misc */
-#define SUP(a,b) (a > b) ? a : b;
+#define MAX_VALUE(a,b) (a > b) ? a : b;
+#define MIN_VALUE(a,b) (a < b) ? a : b;
 
 /* > */
 /* < flex definitions */
@@ -80,7 +81,7 @@ void initCursor(struct t_cursor* theCursor, int theFirstCell, struct t_style* th
   copyStyle (& (theCursor->myStyle), theStyle);
 }
 /* > */
-/* < getCell*/
+/* < getCell, getCursor*/
 #ifdef DEBUG
 int getCell( int theLine, int theCol, int theNumberOfCol) 
 {
@@ -90,9 +91,14 @@ int getCell( int theLine, int theCol, int theNumberOfCol)
 #else
 #define getCell( theLine, theCol, theNumberOfCol) (theLine * theNumberOfCol + theCol)
 #endif
+void getCursor( int theCell, int theNumberOfCol, struct t_cursor* theCursor) 
+{
+  ENTER("getCursor");
+  theCursor->myLine = theCell / theNumberOfCol;
+  theCursor->myCol = theCell % theNumberOfCol;
+}
 /* > */
 /* < compareAndSetStyle */
-
 /* 
 search if the style of the cell equals one of the two supplied styles (in the ListOfStyle).
 If yes, this style is copied in theFoundStyle and 1 is returned. 
@@ -624,11 +630,15 @@ void eraseCharacter( struct t_termbuffer* this, int theNumberOfCharToErase, char
 
   for (i=0; i<aNumberOfCharToErase; i++)
     {
+      if (this->myErasedCharAreReturned)
+	{
+	  addString( theOutput, aChar+i, 1);
+	}
       if (storeChar( aChar+i, 0x20))
 	{ 
 	  aContentIsModified=1;
 	}
-      if (storeStyle( aStyle+i, &(this->myDefaultStyle)))
+      if (storeStyle( aStyle+i, &(this->myCursor.myStyle)))
 	{
 	  aStyleIsModified=1;
 	}  
@@ -679,6 +689,61 @@ void eraseCell( struct t_termbuffer* this, struct t_cursor* theFirstCursor, stru
      pros : useful to say e.g. a single erased char; cons = slower */
 }
 /* > */
+/* < eraseCell */
+/*
+Insert n char from the current col to the supplied one using the default style.
+*/
+void insertCol( struct t_termbuffer* this, int theLastCol, struct t_style* theDefaultStyle, char** theOutput)
+{
+  int aFirstCell = 0;
+  int aFirstCol = this->myCursor.myCol;
+  int aLastCol = theLastCol;
+  int aFinalCol = this->myNumberOfCol - 1;
+  struct t_style* aStyle = NULL;
+  int aNumberOfCellToInsert = 0;
+  int aNumberOfCellToMove = 0;
+  int i=0;
+
+  ENTER("insertCell");
+
+  /* check */
+  if (aFirstCol > aLastCol)
+    {
+      int aCol=aFirstCol;
+      aFirstCol=aLastCol;
+      aLastCol=aCol;
+    }
+
+  if (aLastCol > aFinalCol)
+    {
+      aLastCol = aFinalCol;
+    }
+
+  if (aFirstCol > aFinalCol)
+    {
+      aFirstCol = aFinalCol;
+    }
+
+  aNumberOfCellToInsert = aLastCol - aFirstCol + 1;
+  aNumberOfCellToMove = aFinalCol - aLastCol;
+
+  aFirstCell = getCell( this->myCursor.myLine, aFirstCol, this->myNumberOfCol);
+
+  memmove( this->myDataBuffer + aFirstCell + aNumberOfCellToInsert, this->myDataBuffer + aFirstCell, aNumberOfCellToMove);
+  memmove( this->myStyleBuffer + aFirstCell + aNumberOfCellToInsert, this->myStyleBuffer + aFirstCell, aNumberOfCellToMove*sizeof( struct t_style));
+  clearBuffer( this->myDataBuffer + aFirstCell, aNumberOfCellToInsert);
+
+  /* and fill the empty area using the default style */
+  aStyle = this->myStyleBuffer + aFirstCell;
+  for (i=0; i<aNumberOfCellToInsert; i++)
+    {
+      copyStyle(aStyle+i, theDefaultStyle);      
+    }
+
+  /* TBD: the line portion could be updated since the content/style are probably modified. 
+     pros : useful to say e.g. a single erased char; cons = slower */
+}
+/* > */
 /* < deleteCharacter */
 void deleteCharacter( struct t_termbuffer* this, int theNumberOfCharToDelete, char** theOutput)
 {
@@ -719,11 +784,11 @@ void deleteCharacter( struct t_termbuffer* this, int theNumberOfCharToDelete, ch
   
   if (aLinePortion[ aLinePortionIndex].myLastCol > this->myCursor.myCol)
     {
-      aLinePortion[ aLinePortionIndex].myLastCol= SUP(this->myCursor.myCol, aLinePortion[ aLinePortionIndex].myLastCol - aNumberOfCharToDelete);
+      aLinePortion[ aLinePortionIndex].myLastCol= MAX_VALUE(this->myCursor.myCol, aLinePortion[ aLinePortionIndex].myLastCol - aNumberOfCharToDelete);
     }
   if (aLinePortion[ aLinePortionIndex].myFirstCol > this->myCursor.myCol)
     {
-      aLinePortion[ aLinePortionIndex].myFirstCol= SUP(this->myCursor.myCol, aLinePortion[ aLinePortionIndex].myFirstCol - aNumberOfCharToDelete);
+      aLinePortion[ aLinePortionIndex].myFirstCol= MAX_VALUE(this->myCursor.myCol, aLinePortion[ aLinePortionIndex].myFirstCol - aNumberOfCharToDelete);
     }
 }
 /* > */
@@ -824,6 +889,8 @@ struct t_termbuffer* createTermbuffer( enum termbufferName theName, int theNumbe
   initCursor( &(this->myCursor), 0, &(this->myDefaultStyle));
   initCursor( &(this->mySavedCursor), 0, &(this->myDefaultStyle));
 
+  this->myErasedCharAreReturned = 0;
+
   return this;
 }
 
@@ -835,9 +902,57 @@ void deleteTermbuffer( struct t_termbuffer* this)
 }
 
 /* > */
+/* < checkString */
+void checkString( char** theOutput)
+{
+  int aLength=0;
+  int aEscapeSequence=0;
+  int i=0;
+  char* aString;
+  
+  if ((theOutput==NULL)||(*theOutput==NULL))
+    {
+      return;
+    }
+
+  aString=*theOutput;
+  aLength=strlen( aString);
+
+  /* TBD: to be removed.
+     Any escape sequence is filtered.
+     In the future, no escape sequence must be found.
+  */
+  for (i=0; i<aLength;i++)
+    {
+      if (!aEscapeSequence)
+	{
+	  if (aString[i]==0x1b)
+	    {
+	      aEscapeSequence=1;
+	      aString[i]=0x20;
+	    }
+	}
+      else 
+	{
+	  switch(aString[i])
+	    {
+	    case '\n':
+	    case '\r':
+	    case ' ':
+	    case '\t':
+	      aEscapeSequence=0;
+	      break;
+	    default:
+	      aString[i]=0x20;
+	      break;
+	    }
+	}
+    }
+}
+/* > */
 /* < interpretEscapeSequence */
 
-char* interpretEscapeSequence( struct t_termbuffer* this, FILE* theStream, char** theOutput)
+void interpretEscapeSequence( struct t_termbuffer* this, FILE* theStream, char** theOutput)
 {
   enum StringCapacity aCapacity;
   struct t_cursor* aCursor=&(this->myCursor);
@@ -889,20 +1004,16 @@ char* interpretEscapeSequence( struct t_termbuffer* this, FILE* theStream, char*
 	  aCursor->myLine-=TheParameter[0];
 	  break;
 	case DCH: /* delete characters (shorter line) */
-	case DCH1:
 	    /* TheParameter[0] gives the number of characters to delete */
 	    deleteCharacter( this, TheParameter[0], theOutput);
 	  break;
 	case DL: /* delete lines */
-	case DL1:
 	    /* TheParameter[0] gives the number of lines to delete */
 	    deleteLine( this, TheParameter[0], theOutput);
 	  break;
 	case ECH: /* Erase characters (same line length) */
-	  {
 	    /* TheParameter[0] gives the number of characters to erase */
 	    eraseCharacter( this, TheParameter[0], theOutput);
-	  }
 	  break;
 	case ED: /* Clear the display after the cursor */
 	  {
@@ -965,11 +1076,12 @@ char* interpretEscapeSequence( struct t_termbuffer* this, FILE* theStream, char*
 	  aCursor->myLine=0;
 	  break;
 	case HPA:
-	  aCursor->myCol=(TheParameter[0] > 0) ? TheParameter[0] - 1 : TheParameter[0];
+	  aCursor->myCol=TheParameter[0] - 1;
+	  break;
+	case ICH: /* insert n characters */
+	    insertCol( this, this->myCursor.myCol + TheParameter[0] - 1, &(this->myCursor.myStyle), theOutput);
 	  break;
 	case IL: /* several lines are added (the content is shifted to the bottom of the screen) */
-	  break;
-	case IL1:
 	  break;
 	case RC:
 	  aCursor->myCol=this->mySavedCursor.myCol;
@@ -991,6 +1103,7 @@ char* interpretEscapeSequence( struct t_termbuffer* this, FILE* theStream, char*
 	  break;
 	default:
 	case RMACS:
+	case BEL:
 	  break;
 	}
     }
@@ -999,7 +1112,14 @@ char* interpretEscapeSequence( struct t_termbuffer* this, FILE* theStream, char*
 
   DISPLAY_BUFFER(this->myDataBuffer, this->myStyleBuffer, this->myNumberOfLine, this->myNumberOfCol);
 
-  return 0;
+  checkString( theOutput);
 }
-
 /* > */
+/* < returnTheErasedChar */
+void returnTheErasedChar( struct t_termbuffer* this, int theChoice)
+{
+  this->myErasedCharAreReturned=theChoice;
+}
+/* > */
+
+

@@ -33,8 +33,12 @@ void getStyle( struct t_style* theStyle, struct t_style* theDefaultStyle)
       switch( aValue=atoi(aToken))
 	{
 	case 0:
-	  copyStyle(theStyle, theDefaultStyle);
-	  break;	   
+	  {
+	    int aAlternateStyle=theStyle->isAlternate;
+	    copyStyle(theStyle, theDefaultStyle);
+	    theStyle->isAlternate=aAlternateStyle;
+	  }
+	  break;   
 	case 1:
 	  theStyle->isBold=1;
 	  break;
@@ -52,6 +56,9 @@ void getStyle( struct t_style* theStyle, struct t_style* theDefaultStyle)
 	  break;
 	case 8:
 	  theStyle->isBlank=1;
+	  break;
+	case 10:
+	  theStyle->isAlternate=0;
 	  break;
 	case 11:
 	  theStyle->isAlternate=1;
