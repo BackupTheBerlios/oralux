@@ -8,10 +8,10 @@ extern int yyleng;
 extern FILE *yyin;
 
 enum {MAXPARAM=20};
-extern int myParameters[MAXPARAM];
-extern int myNumberOfParameters;
-extern int myDefaultForegroundColor;
-extern int myDefaultBackgroundColor;
+extern int TheParameter[MAXPARAM];
+extern int TheNumberOfParameter;
+extern struct t_style TheDefaultStyle;
+extern struct t_style TheCurrentStyle;
 
 /* > */
 /* < terminalColor */

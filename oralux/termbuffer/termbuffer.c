@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 termbuffer.c
-$Id: termbuffer.c,v 1.1 2005/01/01 11:39:47 gcasse Exp $
+$Id: termbuffer.c,v 1.2 2005/01/01 23:39:25 gcasse Exp $
 $Author: gcasse $
 Description: manage the terminal layout in a buffer.
-$Date: 2005/01/01 11:39:47 $ |
-$Revision: 1.1 $ |
+$Date: 2005/01/01 23:39:25 $ |
+$Revision: 1.2 $ |
 Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -644,52 +644,39 @@ void eraseCharacter( struct t_termbuffer* this, int theNumberOfCharToErase, char
     }
 }
 /* > */
-/* < eraseLine */
+/* < eraseCell */
 /*
-Erase n cells from one position (theFirstCursor) to the final one (theLastCursor).
-The style of the first cursor is used to erase the cells.
+Erase n cells from one position (theFirstCursor) to the final one (theLastCursor) using the default style.
 */
-void eraseLine( struct t_termbuffer* this, struct t_cursor* theFirstCursor, struct t_cursor* theLastCursor, char** theOutput)
+void eraseCell( struct t_termbuffer* this, struct t_cursor* theFirstCursor, struct t_cursor* theLastCursor, struct t_style* theDefaultStyle, char** theOutput)
 {
+  int aFirstCell = getCell( theFirstCursor->myLine, theFirstCursor->myCol, this->myNumberOfCol);
+  int aLastCell = getCell( theLastCursor->myLine, theLastCursor->myCol, this->myNumberOfCol);
+  struct t_style* aStyle = NULL;
+  int aNumberOfCellToErase = 0;
   int i=0;
-  int aContentIsModified=0;
-  int aStyleIsModified=0;
-  char* aChar=this->myDataBuffer + aCell;
-  struct t_style* aStyle=this->myStyleBuffer+aCell;
-  int aLinePortionIndex=getLinePortion( this, theOutput);
-  struct t_linePortion* aLinePortion = this->myLinePortion;
-  int aNumberOfCellToErase = this->myNumberOfCol * (this->myNumberOfLine - this->myCursor.myLine - 1) 
-    + (this->myNumberOfCol - this->myCursor.myCol);
 
-  int aFirstCell = getCell( this->myFirstCursor.myLine, this->myFirstCursor.myCol, this->myNumberOfCol);
-  int aLastCell = getCell( this->myLastCursor.myLine, this->myLastCursor.myCol, this->myNumberOfCol);
-  struct t_style* aStyle = &(this->myFirstCursor.myStyle);
+  ENTER("eraseCell");
 
-  ENTER("eraseLine");
+  if (aFirstCell > aLastCell)
+    {
+      int aCell=aFirstCell;
+      aFirstCell=aLastCell;
+      aLastCell=aCell;
+    }
 
-  if (theFirstCursor->myLine >= 
+  aNumberOfCellToErase = aLastCell - aFirstCell + 1;
 
+  clearBuffer( this->myDataBuffer + aFirstCell, aNumberOfCellToErase);
 
+  aStyle = this->myStyleBuffer + aFirstCell;
   for (i=0; i<aNumberOfCellToErase; i++)
     {
-      if (storeChar( aChar+i, 0x20))
-	{ 
-	  aContentIsModified=1;
-	}
-      if (storeStyle( aStyle+i, & (this->myCursor.myStyle)))
-	{
-	  aStyleIsModified=1;
-	}  
+      copyStyle(aStyle+i, theDefaultStyle);      
     }
 
-  if (aContentIsModified)
-    {
-      aLinePortion[ aLinePortionIndex].myContentIsModified = 1;
-    }
-  if (aStyleIsModified)
-    {
-      aLinePortion[ aLinePortionIndex].myStyleIsModified = 1;
-    }
+  /* TBD: the line portion could be updated since the content/style are probably modified. 
+     pros : useful to say e.g. a single erased char; cons = slower */
 }
 /* > */
 /* < deleteCharacter */
@@ -823,8 +810,8 @@ struct t_termbuffer* createTermbuffer( enum termbufferName theName, int theNumbe
   this->myDefaultStyle.myBackgroundColor=TERM_COLOR_BLACK;
   this->myDefaultStyle.myForegroundColor=TERM_COLOR_WHITE;
 
-  myDefaultBackgroundColor=TERM_COLOR_BLACK;
-  myDefaultForegroundColor=TERM_COLOR_WHITE;
+  copyStyle (&TheDefaultStyle, &(this->myDefaultStyle));
+  copyStyle (&TheCurrentStyle, &(this->myDefaultStyle));
 
   /* init style buffer */
   for (i=0;i<aNumberOfCell;i++)
@@ -895,36 +882,82 @@ char* interpretEscapeSequence( struct t_termbuffer* this, FILE* theStream, char*
 	  aCursor->myCol++;
 	  break;
 	case CUP:
-	  aCursor->myLine = (myParameters[0] > 0) ? myParameters[0] - 1 : myParameters[0];
-	  aCursor->myCol = (myParameters[1] > 0) ? myParameters[1] - 1 : myParameters[1];
+	  aCursor->myLine = (TheParameter[0] > 0) ? TheParameter[0] - 1 : TheParameter[0];
+	  aCursor->myCol = (TheParameter[1] > 0) ? TheParameter[1] - 1 : TheParameter[1];
 	  break;
 	case CUU:
-	  aCursor->myLine-=myParameters[0];
+	  aCursor->myLine-=TheParameter[0];
 	  break;
 	case DCH: /* delete characters (shorter line) */
 	case DCH1:
-	    /* myParameters[0] gives the number of characters to delete */
-	    deleteCharacter( this, myParameters[0], theOutput);
+	    /* TheParameter[0] gives the number of characters to delete */
+	    deleteCharacter( this, TheParameter[0], theOutput);
 	  break;
 	case DL: /* delete lines */
 	case DL1:
-	    /* myParameters[0] gives the number of lines to delete */
-	    deleteLine( this, myParameters[0], theOutput);
+	    /* TheParameter[0] gives the number of lines to delete */
+	    deleteLine( this, TheParameter[0], theOutput);
 	  break;
 	case ECH: /* Erase characters (same line length) */
 	  {
-	    /* myParameters[0] gives the number of characters to erase */
-	    eraseCharacter( this, myParameters[0], theOutput);
+	    /* TheParameter[0] gives the number of characters to erase */
+	    eraseCharacter( this, TheParameter[0], theOutput);
 	  }
 	  break;
 	case ED: /* Clear the display after the cursor */
 	  {
-	  eraseLine( this, theOutput);
+	    struct t_cursor aFirstCursor;
+	    struct t_cursor aLastCursor;
+
+	    switch( TheParameter[0])
+	      {
+	      case 1: /* erase from start to cursor */
+		aFirstCursor.myLine=0;
+		aFirstCursor.myCol=0;
+		aLastCursor.myLine = this->myCursor.myLine;
+		aLastCursor.myCol = this->myCursor.myCol;
+		break;
+	      case 2: /* whole display */
+		aFirstCursor.myLine=0;
+		aFirstCursor.myCol=0;
+		aLastCursor.myLine=this->myNumberOfLine - 1;
+		aLastCursor.myCol=this->myNumberOfCol - 1;
+		break;
+	      case 0: /* from cursor to end of display */
+	      default:
+		aFirstCursor.myLine = this->myCursor.myLine;
+		aFirstCursor.myCol = this->myCursor.myCol;
+		aLastCursor.myLine=this->myNumberOfLine - 1;
+		aLastCursor.myCol=this->myNumberOfCol - 1;
+		break;
+	      }
+	    eraseCell( this, &aFirstCursor, &aLastCursor, &(this->myCursor.myStyle), theOutput);
 	  }
 	  break;
 	case EL:
 	  {
-	  eraseLine( this, theOutput);
+	    struct t_cursor aFirstCursor;
+	    struct t_cursor aLastCursor;
+
+	    aFirstCursor.myLine = this->myCursor.myLine;
+	    aFirstCursor.myCol = this->myCursor.myCol;
+	    aLastCursor.myLine = aFirstCursor.myLine;
+
+	    switch( TheParameter[0])
+	      {
+	      case 1: /* erase from start of line to cursor */
+		aLastCursor.myCol=0;
+		break;
+	      case 2: /* whole line */
+		aFirstCursor.myCol=0;
+		aLastCursor.myCol=this->myNumberOfCol - 1;
+		break;
+	      case 0: /* from cursor to end of line */
+	      default:
+		aLastCursor.myCol=this->myNumberOfCol - 1;
+		break;
+	      }
+	    eraseCell( this, &aFirstCursor, &aLastCursor, &(this->myCursor.myStyle), theOutput);
 	  }
 	  break;
 	case HOME:
@@ -932,7 +965,7 @@ char* interpretEscapeSequence( struct t_termbuffer* this, FILE* theStream, char*
 	  aCursor->myLine=0;
 	  break;
 	case HPA:
-	  aCursor->myCol=(myParameters[0] > 0) ? myParameters[0] - 1 : myParameters[0];
+	  aCursor->myCol=(TheParameter[0] > 0) ? TheParameter[0] - 1 : TheParameter[0];
 	  break;
 	case IL: /* several lines are added (the content is shifted to the bottom of the screen) */
 	  break;
@@ -947,11 +980,11 @@ char* interpretEscapeSequence( struct t_termbuffer* this, FILE* theStream, char*
 	  this->mySavedCursor.myLine=aCursor->myLine;
 	  break;
 	case SGR:
-	  copyStyle(& aCursor->myStyle, (struct t_style*)myParameters);
-	  DISPLAY_STYLE((struct t_style*)myParameters);
+	  copyStyle(& aCursor->myStyle, &TheCurrentStyle);
+	  DISPLAY_STYLE( &TheCurrentStyle);
 	  break;
 	case VPA:
-	  aCursor->myLine=(myParameters[0] > 0) ? myParameters[0] - 1 : myParameters[0];
+	  aCursor->myLine=(TheParameter[0] > 0) ? TheParameter[0] - 1 : TheParameter[0];
 	  break;
 	case TEXTFIELD:
 	    setChar( this, (char)*yytext, theOutput);

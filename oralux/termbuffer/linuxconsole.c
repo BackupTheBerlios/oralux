@@ -3,12 +3,23 @@
 #include <string.h>
 #include "linuxconsole.h"
 
-/* < getDigit */int getDigit(char* theBuffer, int theLength){  int aValue=0;  int i;  for (i=0; i<theLength; i++)    {      aValue = aValue*10 + theBuffer[i]-'0';    }  return aValue;}/* > */
+/* < getDigit */
+int getDigit(char* theBuffer, int theLength)
+{
+  int aValue=0;
+  int i;
+  for (i=0; i<theLength; i++)
+    {
+      aValue = aValue*10 + theBuffer[i] - '0';    
+    }
+  return aValue;
+}
+/* > */
 
 /* < getStyle */
 
 /* Each integer is extracted from the SGR string and converted in the related bit */
-void getStyle( struct t_style* theStyle)
+void getStyle( struct t_style* theStyle, struct t_style* theDefaultStyle)
 {
   char* aString = NULL;
   char* aToken = NULL;
@@ -22,9 +33,7 @@ void getStyle( struct t_style* theStyle)
       switch( aValue=atoi(aToken))
 	{
 	case 0:
-	  clearStyle(theStyle);
-	  theStyle->myBackgroundColor=myDefaultBackgroundColor;
-	  theStyle->myForegroundColor=myDefaultForegroundColor;
+	  copyStyle(theStyle, theDefaultStyle);
 	  break;	   
 	case 1:
 	  theStyle->isBold=1;
