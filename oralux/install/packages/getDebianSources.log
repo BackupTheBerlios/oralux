@@ -1,0 +1,2240 @@
+# garder
+# État=Non/Installé/fichier-Config/dépaqUeté/échec-conFig/H=semi-installé
+# Err?=(aucune)/H=à
+# Nom
+# 
+# 3270-common
+http://snapshot.debian.net/archive/2003/07/22/debian/pool/non-free/3/3270/3270_3.2.20.orig.tar.gz
+http://snapshot.debian.net/archive/2003/07/22/debian/pool/non-free/3/3270/3270_3.2.20-2.diff.gz
+# a2ps
+http://snapshot.debian.net/archive/2004/01/05/debian/pool/main/a/a2ps/a2ps_4.13b+cvs.2003.09.20.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/05/debian/pool/main/a/a2ps/a2ps_4.13b+cvs.2003.09.20-1.1.diff.gz
+# aalib-bin
+http://snapshot.debian.net/archive/2003/12/05/debian/pool/main/a/aalib/aalib_1.4p5.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/05/debian/pool/main/a/aalib/aalib_1.4p5-19.diff.gz
+# aalib1
+http://snapshot.debian.net/archive/2003/12/05/debian/pool/main/a/aalib/aalib_1.4p5.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/05/debian/pool/main/a/aalib/aalib_1.4p5-19.diff.gz
+# adduser
+http://snapshot.debian.net/archive/2003/08/30/debian/pool/main/a/adduser/adduser_3.51.tar.gz
+# afio
+http://snapshot.debian.net/archive/2003/12/22/debian/pool/main/a/afio/afio_2.5.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/22/debian/pool/main/a/afio/afio_2.5-1.diff.gz
+# alien
+http://snapshot.debian.net/archive/2004/01/21/debian/pool/main/a/alien/alien_8.43.tar.gz
+# alsa-headers
+http://snapshot.debian.net/archive/2004/01/19/debian/pool/main/a/alsa-driver/alsa-driver_1.0.1.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/19/debian/pool/main/a/alsa-driver/alsa-driver_1.0.1-1.diff.gz
+# anacron
+http://snapshot.debian.net/archive/2002/06/12/debian/pool/main/a/anacron/anacron_2.3.orig.tar.gz
+http://snapshot.debian.net/archive/2002/06/12/debian/pool/main/a/anacron/anacron_2.3-7.diff.gz
+# apache
+http://snapshot.debian.net/archive/2004/01/29/debian/pool/main/a/apache/apache_1.3.29.0.1.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/29/debian/pool/main/a/apache/apache_1.3.29.0.1-5.diff.gz
+# apache-common
+http://snapshot.debian.net/archive/2004/01/29/debian/pool/main/a/apache/apache_1.3.29.0.1.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/29/debian/pool/main/a/apache/apache_1.3.29.0.1-5.diff.gz
+# apache-utils
+http://snapshot.debian.net/archive/2004/01/29/debian/pool/main/a/apache/apache_1.3.29.0.1.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/29/debian/pool/main/a/apache/apache_1.3.29.0.1-5.diff.gz
+# apmd
+http://snapshot.debian.net/archive/2004/02/04/debian/pool/main/a/apmd/apmd_3.2.1.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/04/debian/pool/main/a/apmd/apmd_3.2.1-2.diff.gz
+# apt
+http://snapshot.debian.net/archive/2004/02/11/debian/pool/main/a/apt/apt_0.5.22.tar.gz
+# apt-show-versions
+http://snapshot.debian.net/archive/2003/11/11/debian/pool/main/a/apt-show-versions/apt-show-versions_0.05.tar.gz
+# apt-utils
+http://snapshot.debian.net/archive/2004/02/11/debian/pool/main/a/apt/apt_0.5.22.tar.gz
+# arpwatch
+http://snapshot.debian.net/archive/2002/08/14/debian/pool/main/a/arpwatch/arpwatch_2.1a11-6.1.tar.gz
+# ash-knoppix
+# aspell
+http://snapshot.debian.net/archive/2004/02/13/debian/pool/main/a/aspell/aspell_0.50.5.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/13/debian/pool/main/a/aspell/aspell_0.50.5-1.diff.gz
+# aspell-bin
+http://snapshot.debian.net/archive/2004/02/13/debian/pool/main/a/aspell/aspell_0.50.5.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/13/debian/pool/main/a/aspell/aspell_0.50.5-1.diff.gz
+# aspell-de
+http://snapshot.debian.net/archive/2003/02/12/debian/pool/main/a/aspell-de/aspell-de_0.50-2.orig.tar.gz
+http://snapshot.debian.net/archive/2003/02/12/debian/pool/main/a/aspell-de/aspell-de_0.50-2-1.diff.gz
+# aspell-en
+http://snapshot.debian.net/archive/2004/03/13/debian/pool/main/a/aspell-en/aspell-en_0.51-1.orig.tar.gz
+http://snapshot.debian.net/archive/2004/03/13/debian/pool/main/a/aspell-en/aspell-en_0.51-1-1.diff.gz
+# aspell-es
+# aspell-fr
+http://snapshot.debian.net/archive/2003/01/24/debian/pool/main/a/aspell-fr/aspell-fr_0.50-3.orig.tar.gz
+http://snapshot.debian.net/archive/2003/01/24/debian/pool/main/a/aspell-fr/aspell-fr_0.50-3-2.diff.gz
+# at
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/a/at/at_3.1.8-11.tar.gz
+# atitvout
+# atmelwlandriver
+# atmelwlandriver-tools
+http://snapshot.debian.net/archive/2003/09/09/debian/pool/main/a/atmelwlandriver/atmelwlandriver_2.1.1.orig.tar.gz
+http://snapshot.debian.net/archive/2003/09/09/debian/pool/main/a/atmelwlandriver/atmelwlandriver_2.1.1-3.3.diff.gz
+# attr
+http://snapshot.debian.net/archive/2004/02/04/debian/pool/main/a/attr/attr_2.4.15-1.tar.gz
+# auctex
+http://snapshot.debian.net/archive/2003/08/21/debian/pool/main/a/auctex/auctex_11.13.orig.tar.gz
+http://snapshot.debian.net/archive/2003/08/21/debian/pool/main/a/auctex/auctex_11.13-2.diff.gz
+# audacity
+http://snapshot.debian.net/archive/2004/04/12/debian/pool/main/a/audacity/audacity_1.2.0.orig.tar.gz
+http://snapshot.debian.net/archive/2004/04/12/debian/pool/main/a/audacity/audacity_1.2.0-3.diff.gz
+# aumix
+http://snapshot.debian.net/archive/2004/01/01/debian/pool/main/a/aumix/aumix_2.8.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/01/debian/pool/main/a/aumix/aumix_2.8-6.diff.gz
+# autoconf
+http://snapshot.debian.net/archive/2004/01/24/debian/pool/main/a/autoconf/autoconf_2.59.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/24/debian/pool/main/a/autoconf/autoconf_2.59-2.diff.gz
+# autofs
+http://snapshot.debian.net/archive/2003/11/03/debian/pool/main/a/autofs/autofs_3.9.99-4.0.0pre10.orig.tar.gz
+http://snapshot.debian.net/archive/2003/11/03/debian/pool/main/a/autofs/autofs_3.9.99-4.0.0pre10-16.diff.gz
+# automake1.7
+http://snapshot.debian.net/archive/2003/12/17/debian/pool/main/a/automake1.7/automake1.7_1.7.9.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/17/debian/pool/main/a/automake1.7/automake1.7_1.7.9-3.diff.gz
+# automount-knoppix
+# autotools-dev
+http://snapshot.debian.net/archive/2004/01/10/debian/pool/main/a/autotools-dev/autotools-dev_20040105.1.tar.gz
+# base-files
+http://snapshot.debian.net/archive/2003/10/28/debian/pool/main/b/base-files/base-files_3.0.12.tar.gz
+# base-passwd
+http://snapshot.debian.net/archive/2004/01/25/debian/pool/main/b/base-passwd/base-passwd_3.5.7.tar.gz
+# bash
+# bbdb
+http://snapshot.debian.net/archive/2003/05/04/debian/pool/main/b/bbdb/bbdb_2.34.cvs20030503.orig.tar.gz
+http://snapshot.debian.net/archive/2003/05/04/debian/pool/main/b/bbdb/bbdb_2.34.cvs20030503-1.diff.gz
+# bc
+http://snapshot.debian.net/archive/2003/10/16/debian/pool/main/b/bc/bc_1.06.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/16/debian/pool/main/b/bc/bc_1.06-12.diff.gz
+# bin86
+http://snapshot.debian.net/archive/2003/12/15/debian/pool/main/l/linux86/linux86_0.16.14.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/15/debian/pool/main/l/linux86/linux86_0.16.14-1.diff.gz
+# bind9
+# bing
+http://snapshot.debian.net/archive/2003/01/15/debian/pool/main/b/bing/bing_1.1.3.orig.tar.gz
+http://snapshot.debian.net/archive/2003/01/15/debian/pool/main/b/bing/bing_1.1.3-1.diff.gz
+# binutils
+http://snapshot.debian.net/archive/2004/01/27/debian/pool/main/b/binutils/binutils_2.14.90.0.7.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/27/debian/pool/main/b/binutils/binutils_2.14.90.0.7-5.diff.gz
+# binutils-dev
+http://snapshot.debian.net/archive/2004/01/27/debian/pool/main/b/binutils/binutils_2.14.90.0.7.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/27/debian/pool/main/b/binutils/binutils_2.14.90.0.7-5.diff.gz
+# bison
+# bittorrent
+http://snapshot.debian.net/archive/2003/10/17/debian/pool/main/b/bittorrent/bittorrent_3.3.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/17/debian/pool/main/b/bittorrent/bittorrent_3.3-3.diff.gz
+# blt
+http://snapshot.debian.net/archive/2003/06/07/debian/pool/main/b/blt/blt_2.4z.orig.tar.gz
+http://snapshot.debian.net/archive/2003/06/07/debian/pool/main/b/blt/blt_2.4z-2.diff.gz
+# blt-common
+http://snapshot.debian.net/archive/2003/06/07/debian/pool/main/b/blt/blt_2.4z.orig.tar.gz
+http://snapshot.debian.net/archive/2003/06/07/debian/pool/main/b/blt/blt_2.4z-2.diff.gz
+# bonnie++
+# bridge-utils
+http://snapshot.debian.net/archive/2003/08/18/debian/pool/main/b/bridge-utils/bridge-utils_0.9.6.orig.tar.gz
+http://snapshot.debian.net/archive/2003/08/18/debian/pool/main/b/bridge-utils/bridge-utils_0.9.6-5.diff.gz
+# brltty
+http://snapshot.debian.net/archive/2004/03/13/debian/pool/main/b/brltty/brltty_3.4.1.orig.tar.gz
+http://snapshot.debian.net/archive/2004/03/13/debian/pool/main/b/brltty/brltty_3.4.1-2.diff.gz
+# bsdmainutils
+http://snapshot.debian.net/archive/2004/02/05/debian/pool/main/b/bsdmainutils/bsdmainutils_6.0.11.tar.gz
+# bsdutils
+http://snapshot.debian.net/archive/2003/12/08/debian/pool/main/u/util-linux/util-linux_2.12.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/08/debian/pool/main/u/util-linux/util-linux_2.12-6.diff.gz
+# buffer
+http://snapshot.debian.net/archive/2004/01/13/debian/pool/main/b/buffer/buffer_1.19.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/13/debian/pool/main/b/buffer/buffer_1.19-4.diff.gz
+# bximage
+http://snapshot.debian.net/archive/2004/02/08/debian/pool/main/b/bochs/bochs_2.1rel.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/08/debian/pool/main/b/bochs/bochs_2.1rel-4.diff.gz
+# bzip2
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/b/bzip2/bzip2_1.0.2.orig.tar.gz
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/b/bzip2/bzip2_1.0.2-1.diff.gz
+# cabextract
+http://snapshot.debian.net/archive/2003/08/11/debian/pool/main/c/cabextract/cabextract_0.6.orig.tar.gz
+http://snapshot.debian.net/archive/2003/08/11/debian/pool/main/c/cabextract/cabextract_0.6-1.diff.gz
+# cdbackup
+http://snapshot.debian.net/archive/2004/02/15/debian/pool/main/c/cdbackup/cdbackup_0.6.3.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/15/debian/pool/main/c/cdbackup/cdbackup_0.6.3-3.diff.gz
+# cdda2wav
+# cddb
+http://snapshot.debian.net/archive/2003/06/02/debian/pool/main/x/xmcd/xmcd_2.6.orig.tar.gz
+http://snapshot.debian.net/archive/2003/06/02/debian/pool/main/x/xmcd/xmcd_2.6-17.diff.gz
+# cdparanoia
+http://snapshot.debian.net/archive/2003/08/01/debian/pool/main/c/cdparanoia/cdparanoia_3a9.8.orig.tar.gz
+http://snapshot.debian.net/archive/2003/08/01/debian/pool/main/c/cdparanoia/cdparanoia_3a9.8-10.diff.gz
+# cdrdao
+# cdrecord
+# cdtool
+http://snapshot.debian.net/archive/2004/03/20/debian/pool/main/c/cdtool/cdtool_2.1.5.orig.tar.gz
+http://snapshot.debian.net/archive/2004/03/20/debian/pool/main/c/cdtool/cdtool_2.1.5-7.diff.gz
+# checkmem
+# chkrootkit
+http://snapshot.debian.net/archive/2004/01/12/debian/pool/main/c/chkrootkit/chkrootkit_0.43.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/12/debian/pool/main/c/chkrootkit/chkrootkit_0.43-1.diff.gz
+# cloop-module
+# cloop-utils
+http://snapshot.debian.net/archive/2004/03/12/debian/pool/main/c/cloop/cloop_2.01.orig.tar.gz
+http://snapshot.debian.net/archive/2004/03/12/debian/pool/main/c/cloop/cloop_2.01-1.diff.gz
+# colorgcc
+http://snapshot.debian.net/archive/2003/08/11/debian/pool/main/c/colorgcc/colorgcc_1.3.2.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/08/11/debian/pool/main/c/colorgcc/colorgcc_1.3.2.0-2.diff.gz
+# comerr-dev
+# configure-xawtv
+# console-common
+http://snapshot.debian.net/archive/2004/02/14/debian/pool/main/c/console-common/console-common_0.7.35.tar.gz
+# console-data
+http://snapshot.debian.net/archive/2004/02/14/debian/pool/main/c/console-data/console-data_2002.12.04dbs-29.tar.gz
+# console-tools
+# coreutils
+http://snapshot.debian.net/archive/2003/10/06/debian/pool/main/c/coreutils/coreutils_5.0.91.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/06/debian/pool/main/c/coreutils/coreutils_5.0.91-2.diff.gz
+# cpio
+http://snapshot.debian.net/archive/2003/08/24/debian/pool/main/c/cpio/cpio_2.5.orig.tar.gz
+http://snapshot.debian.net/archive/2003/08/24/debian/pool/main/c/cpio/cpio_2.5-1.1.diff.gz
+# cpp
+# cpp-2.95
+# cpp-3.2
+# cpp-3.3
+# cpuburn
+http://snapshot.debian.net/archive/2002/09/08/debian/pool/main/c/cpuburn/cpuburn_1.4.orig.tar.gz
+http://snapshot.debian.net/archive/2002/09/08/debian/pool/main/c/cpuburn/cpuburn_1.4-4.diff.gz
+# cramfsprogs
+http://snapshot.debian.net/archive/2002/10/28/debian/pool/main/c/cramfs/cramfs_1.1.orig.tar.gz
+http://snapshot.debian.net/archive/2002/10/28/debian/pool/main/c/cramfs/cramfs_1.1-4.diff.gz
+# cron
+http://snapshot.debian.net/archive/2004/01/22/debian/pool/main/c/cron/cron_3.0pl1.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/22/debian/pool/main/c/cron/cron_3.0pl1-83.diff.gz
+# csh
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/c/csh/csh_20020413.orig.tar.gz
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/c/csh/csh_20020413-1.diff.gz
+# cupsconfig-knoppix
+# cupsys
+http://snapshot.debian.net/archive/2004/02/12/debian/pool/main/c/cupsys/cupsys_1.1.20final.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/12/debian/pool/main/c/cupsys/cupsys_1.1.20final-14.diff.gz
+# cupsys-bsd
+http://snapshot.debian.net/archive/2004/02/12/debian/pool/main/c/cupsys/cupsys_1.1.20final.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/12/debian/pool/main/c/cupsys/cupsys_1.1.20final-14.diff.gz
+# cupsys-client
+http://snapshot.debian.net/archive/2004/02/12/debian/pool/main/c/cupsys/cupsys_1.1.20final.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/12/debian/pool/main/c/cupsys/cupsys_1.1.20final-14.diff.gz
+# cvs
+# dante-client
+http://snapshot.debian.net/archive/2003/11/16/debian/pool/main/d/dante/dante_1.1.14.orig.tar.gz
+http://snapshot.debian.net/archive/2003/11/16/debian/pool/main/d/dante/dante_1.1.14-2.diff.gz
+# dash
+http://snapshot.debian.net/archive/2004/01/20/debian/pool/main/d/dash/dash_0.4.21.tar.gz
+# dc
+http://snapshot.debian.net/archive/2003/10/16/debian/pool/main/b/bc/bc_1.06.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/16/debian/pool/main/b/bc/bc_1.06-12.diff.gz
+# dd-rescue
+# ddcxinfo-knoppix
+# debconf
+http://snapshot.debian.net/archive/2004/02/12/debian/pool/main/d/debconf/debconf_1.4.10.tar.gz
+# debconf-i18n
+http://snapshot.debian.net/archive/2004/02/12/debian/pool/main/d/debconf/debconf_1.4.10.tar.gz
+# debconf-utils
+http://snapshot.debian.net/archive/2004/02/12/debian/pool/main/d/debconf/debconf_1.4.10.tar.gz
+# debfoster
+http://snapshot.debian.net/archive/2003/02/10/debian/pool/main/d/debfoster/debfoster_2.5.orig.tar.gz
+http://snapshot.debian.net/archive/2003/02/10/debian/pool/main/d/debfoster/debfoster_2.5-3.diff.gz
+# debhelper
+http://snapshot.debian.net/archive/2004/02/13/debian/pool/main/d/debhelper/debhelper_4.2.2.tar.gz
+# debianutils
+http://snapshot.debian.net/archive/2004/01/08/debian/pool/main/d/debianutils/debianutils_2.6.2.tar.gz
+# debootstrap
+http://snapshot.debian.net/archive/2004/02/15/debian/pool/main/d/debootstrap/debootstrap_0.2.27.tar.gz
+# deborphan
+http://snapshot.debian.net/archive/2004/01/22/debian/pool/main/d/deborphan/deborphan_1.5.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/22/debian/pool/main/d/deborphan/deborphan_1.5-17.diff.gz
+# debsums
+http://snapshot.debian.net/archive/2003/02/09/debian/pool/main/d/debsums/debsums_2.0.6.tar.gz
+# defoma
+http://snapshot.debian.net/archive/2004/01/29/debian/pool/main/d/defoma/defoma_0.11.7.tar.gz
+# defrag
+http://snapshot.debian.net/archive/2004/02/12/debian/pool/main/d/defrag/defrag_0.73pjm1.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/12/debian/pool/main/d/defrag/defrag_0.73pjm1-5.diff.gz
+# devscripts
+http://snapshot.debian.net/archive/2003/12/12/debian/pool/main/d/devscripts/devscripts_2.7.95.1.tar.gz
+# dh-make
+http://snapshot.debian.net/archive/2004/01/16/debian/pool/main/d/dh-make/dh-make_0.36.tar.gz
+# dhcp3-common
+http://snapshot.debian.net/archive/2003/07/03/debian/pool/main/d/dhcp3/dhcp3_3.0+3.0.1rc11.orig.tar.gz
+http://snapshot.debian.net/archive/2003/07/03/debian/pool/main/d/dhcp3/dhcp3_3.0+3.0.1rc11-5.diff.gz
+# dhcp3-server
+http://snapshot.debian.net/archive/2003/07/03/debian/pool/main/d/dhcp3/dhcp3_3.0+3.0.1rc11.orig.tar.gz
+http://snapshot.debian.net/archive/2003/07/03/debian/pool/main/d/dhcp3/dhcp3_3.0+3.0.1rc11-5.diff.gz
+# dialog
+http://snapshot.debian.net/archive/2003/12/09/debian/pool/main/d/dialog/dialog_0.9b-20031207.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/09/debian/pool/main/d/dialog/dialog_0.9b-20031207-1.diff.gz
+# dict
+http://snapshot.debian.net/archive/2004/02/07/debian/pool/main/d/dictd/dictd_1.9.11.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/07/debian/pool/main/d/dictd/dictd_1.9.11-4.diff.gz
+# dietlibc-dev
+http://snapshot.debian.net/archive/2004/02/10/debian/pool/main/d/dietlibc/dietlibc_0.24.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/10/debian/pool/main/d/dietlibc/dietlibc_0.24-4.diff.gz
+# diff
+http://snapshot.debian.net/archive/2003/11/06/debian/pool/main/d/diff/diff_2.8.1.orig.tar.gz
+http://snapshot.debian.net/archive/2003/11/06/debian/pool/main/d/diff/diff_2.8.1-6.diff.gz
+# diffstat
+http://snapshot.debian.net/archive/2003/12/20/debian/pool/main/d/diffstat/diffstat_1.34.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/20/debian/pool/main/d/diffstat/diffstat_1.34-1.diff.gz
+# ding
+http://snapshot.debian.net/archive/2004/02/09/debian/pool/main/d/ding/ding_1.2.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/09/debian/pool/main/d/ding/ding_1.2-7.diff.gz
+# distcc
+http://snapshot.debian.net/archive/2004/01/22/debian/pool/main/d/distcc/distcc_2.12.1.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/22/debian/pool/main/d/distcc/distcc_2.12.1-2.diff.gz
+# dlint
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/d/dlint/dlint_1.4.0.orig.tar.gz
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/d/dlint/dlint_1.4.0-4.diff.gz
+# dlocate
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/d/dlocate/dlocate_0.5-0.1.tar.gz
+# dnsutils
+# doc-base
+http://snapshot.debian.net/archive/2003/03/31/debian/pool/main/d/doc-base/doc-base_0.7.18.tar.gz
+# dosfstools
+http://snapshot.debian.net/archive/2003/09/24/debian/pool/main/d/dosfstools/dosfstools_2.10.orig.tar.gz
+http://snapshot.debian.net/archive/2003/09/24/debian/pool/main/d/dosfstools/dosfstools_2.10-1.diff.gz
+# dpkg
+http://snapshot.debian.net/archive/2003/10/29/debian/pool/main/d/dpkg/dpkg_1.10.18.tar.gz
+# dpkg-dev
+http://snapshot.debian.net/archive/2003/10/29/debian/pool/main/d/dpkg/dpkg_1.10.18.tar.gz
+# dpkg-repack
+http://snapshot.debian.net/archive/2003/10/26/debian/pool/main/d/dpkg-repack/dpkg-repack_1.18.tar.gz
+# dselect
+http://snapshot.debian.net/archive/2003/10/29/debian/pool/main/d/dpkg/dpkg_1.10.18.tar.gz
+# dump
+http://snapshot.debian.net/archive/2003/08/21/debian/pool/main/d/dump/dump_0.4b34.orig.tar.gz
+http://snapshot.debian.net/archive/2003/08/21/debian/pool/main/d/dump/dump_0.4b34-1.diff.gz
+# dupload
+http://snapshot.debian.net/archive/2003/09/23/debian/pool/main/d/dupload/dupload_2.6.3.tar.gz
+# dvd+rw-tools
+http://snapshot.debian.net/archive/2004/01/25/debian/pool/main/d/dvd+rw-tools/dvd+rw-tools_5.17.4.8.6.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/25/debian/pool/main/d/dvd+rw-tools/dvd+rw-tools_5.17.4.8.6-1.diff.gz
+# dvdrecord
+http://snapshot.debian.net/archive/2003/04/02/debian/pool/main/d/dvdrecord/dvdrecord_0.1.4.orig.tar.gz
+http://snapshot.debian.net/archive/2003/04/02/debian/pool/main/d/dvdrecord/dvdrecord_0.1.4-1.diff.gz
+# dvgrab
+http://snapshot.debian.net/archive/2004/01/22/debian/pool/main/d/dvgrab/dvgrab_1.5deb.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/22/debian/pool/main/d/dvgrab/dvgrab_1.5deb-1.diff.gz
+# e2fslibs
+http://snapshot.debian.net/archive/2004/02/03/debian/pool/main/e/e2fsprogs/e2fsprogs_1.34+1.35-WIP-2004.01.31.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/03/debian/pool/main/e/e2fsprogs/e2fsprogs_1.34+1.35-WIP-2004.01.31-1.diff.gz
+# e2fsprogs
+http://snapshot.debian.net/archive/2004/02/03/debian/pool/main/e/e2fsprogs/e2fsprogs_1.34+1.35-WIP-2004.01.31.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/03/debian/pool/main/e/e2fsprogs/e2fsprogs_1.34+1.35-WIP-2004.01.31-1.diff.gz
+# ecasound
+http://snapshot.debian.net/archive/2004/01/29/debian/pool/main/e/ecasound/ecasound_2.0.4.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/29/debian/pool/main/e/ecasound/ecasound_2.0.4-12.diff.gz
+# ed
+http://snapshot.debian.net/archive/2003/04/03/debian/pool/main/e/ed/ed_0.2.orig.tar.gz
+http://snapshot.debian.net/archive/2003/04/03/debian/pool/main/e/ed/ed_0.2-20.diff.gz
+# efax
+# eflite
+http://snapshot.debian.net/archive/2004/02/26/debian/pool/main/e/eflite/eflite_0.3.8.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/26/debian/pool/main/e/eflite/eflite_0.3.8-1.diff.gz
+# eject
+http://snapshot.debian.net/archive/2004/01/22/debian/pool/main/e/eject/eject_2.0.13.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/22/debian/pool/main/e/eject/eject_2.0.13-4.diff.gz
+# elinks
+http://snapshot.debian.net/archive/2004/02/04/debian/pool/main/e/elinks/elinks_0.9.1.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/04/debian/pool/main/e/elinks/elinks_0.9.1-1.diff.gz
+# emacs21
+http://snapshot.debian.net/archive/2003/11/01/debian/pool/main/e/emacs21/emacs21_21.3+1.orig.tar.gz
+http://snapshot.debian.net/archive/2003/11/01/debian/pool/main/e/emacs21/emacs21_21.3+1-4.diff.gz
+# emacs21-common
+http://snapshot.debian.net/archive/2003/11/01/debian/pool/main/e/emacs21/emacs21_21.3+1.orig.tar.gz
+http://snapshot.debian.net/archive/2003/11/01/debian/pool/main/e/emacs21/emacs21_21.3+1-4.diff.gz
+# emacsen-common
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/e/emacsen-common/emacsen-common_1.4.15.tar.gz
+# enscript
+http://snapshot.debian.net/archive/2003/12/08/debian/pool/main/e/enscript/enscript_1.6.4.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/08/debian/pool/main/e/enscript/enscript_1.6.4-3.diff.gz
+# erc
+http://snapshot.debian.net/archive/2003/10/28/debian/pool/main/e/erc/erc_4.0.cvs.20031027.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/28/debian/pool/main/e/erc/erc_4.0.cvs.20031027-1.diff.gz
+# esound-common
+http://snapshot.debian.net/archive/2003/03/21/debian/pool/main/e/esound/esound_0.2.29.orig.tar.gz
+http://snapshot.debian.net/archive/2003/03/21/debian/pool/main/e/esound/esound_0.2.29-1.diff.gz
+# etcskel-knoppix
+# ethereal-common
+http://snapshot.debian.net/archive/2004/01/30/debian/pool/main/e/ethereal/ethereal_0.10.0.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/30/debian/pool/main/e/ethereal/ethereal_0.10.0-6.diff.gz
+# etherwake
+http://snapshot.debian.net/archive/2003/06/08/debian/pool/main/e/etherwake/etherwake_1.08.orig.tar.gz
+http://snapshot.debian.net/archive/2003/06/08/debian/pool/main/e/etherwake/etherwake_1.08-1.diff.gz
+# ethtool
+http://snapshot.debian.net/archive/2003/09/25/debian/pool/main/e/ethtool/ethtool_1.8.orig.tar.gz
+http://snapshot.debian.net/archive/2003/09/25/debian/pool/main/e/ethtool/ethtool_1.8-2.diff.gz
+# ettercap-common
+# ettercap-gtk
+# euro-support
+http://snapshot.debian.net/archive/2004/01/25/debian/pool/main/e/euro-support/euro-support_1.24.tar.gz
+# euro-support-console
+http://snapshot.debian.net/archive/2004/01/25/debian/pool/main/e/euro-support/euro-support_1.24.tar.gz
+# euro-support-x
+http://snapshot.debian.net/archive/2004/01/25/debian/pool/main/e/euro-support/euro-support_1.24.tar.gz
+# fakeroot
+http://snapshot.debian.net/archive/2003/12/20/debian/pool/main/f/fakeroot/fakeroot_0.8.3.tar.gz
+# fbset
+http://snapshot.debian.net/archive/2004/01/16/debian/pool/main/f/fbset/fbset_2.1.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/16/debian/pool/main/f/fbset/fbset_2.1-13.diff.gz
+# fdflush
+http://snapshot.debian.net/archive/2003/04/02/debian/pool/main/f/fdflush/fdflush_1.0.1-11.tar.gz
+# fdisk-udeb
+# fdutils
+http://snapshot.debian.net/archive/2003/12/05/debian/pool/main/f/fdutils/fdutils_5.4-20030718.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/05/debian/pool/main/f/fdutils/fdutils_5.4-20030718-2.diff.gz
+# fetchmail
+http://snapshot.debian.net/archive/2004/04/11/debian/pool/main/f/fetchmail/fetchmail_6.2.5.orig.tar.gz
+http://snapshot.debian.net/archive/2004/04/11/debian/pool/main/f/fetchmail/fetchmail_6.2.5-7.diff.gz
+# fftw2
+http://snapshot.debian.net/archive/2003/08/11/debian/pool/main/f/fftw/fftw_2.1.3.orig.tar.gz
+http://snapshot.debian.net/archive/2003/08/11/debian/pool/main/f/fftw/fftw_2.1.3-16.diff.gz
+# file
+http://snapshot.debian.net/archive/2004/01/21/debian/pool/main/f/file/file_4.07.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/21/debian/pool/main/f/file/file_4.07-2.diff.gz
+# fileutils
+http://snapshot.debian.net/archive/2003/10/06/debian/pool/main/c/coreutils/coreutils_5.0.91.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/06/debian/pool/main/c/coreutils/coreutils_5.0.91-2.diff.gz
+# findutils
+http://snapshot.debian.net/archive/2003/10/27/debian/pool/main/f/findutils/findutils_4.1.20.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/27/debian/pool/main/f/findutils/findutils_4.1.20-3.diff.gz
+# finger
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/b/bsd-finger/bsd-finger_0.17.orig.tar.gz
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/b/bsd-finger/bsd-finger_0.17-6.diff.gz
+# flex
+http://snapshot.debian.net/archive/2003/12/25/debian/pool/main/f/flex/flex_2.5.31.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/25/debian/pool/main/f/flex/flex_2.5.31-21.diff.gz
+# flite
+# fontconfig
+http://snapshot.debian.net/archive/2004/02/11/debian/pool/main/f/fontconfig/fontconfig_2.2.1.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/11/debian/pool/main/f/fontconfig/fontconfig_2.2.1-14.diff.gz
+# fonts-ttf-decoratives
+# fonts-ttf-west-european
+# foomatic-bin
+http://snapshot.debian.net/archive/2004/02/10/debian/pool/main/f/foomatic-db-engine/foomatic-db-engine_3.0.0-20040203.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/10/debian/pool/main/f/foomatic-db-engine/foomatic-db-engine_3.0.0-20040203-2.diff.gz
+# foomatic-db
+http://snapshot.debian.net/archive/2004/02/05/debian/pool/main/f/foomatic-db/foomatic-db_20040203.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/05/debian/pool/main/f/foomatic-db/foomatic-db_20040203-1.diff.gz
+# foomatic-db-engine
+http://snapshot.debian.net/archive/2003/10/15/debian/pool/main/f/foomatic-db-engine/foomatic-db-engine_3.0.0-20030907.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/15/debian/pool/main/f/foomatic-db-engine/foomatic-db-engine_3.0.0-20030907-3.diff.gz
+# foomatic-db-gimp-print
+http://snapshot.debian.net/archive/2004/02/12/debian/pool/main/g/gimp-print/gimp-print_4.2.6.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/12/debian/pool/main/g/gimp-print/gimp-print_4.2.6-2.diff.gz
+# foomatic-db-hpijs
+http://snapshot.debian.net/archive/2004/02/10/debian/pool/main/f/foomatic-db-hpijs/foomatic-db-hpijs_1.5-20040203.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/10/debian/pool/main/f/foomatic-db-hpijs/foomatic-db-hpijs_1.5-20040203-2.diff.gz
+# foomatic-filters
+http://snapshot.debian.net/archive/2004/02/05/debian/pool/main/f/foomatic-filters/foomatic-filters_3.0.0-20040203.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/05/debian/pool/main/f/foomatic-filters/foomatic-filters_3.0.0-20040203-1.diff.gz
+# freetype-tools
+# ftape-util
+# ftp
+http://snapshot.debian.net/archive/2003/06/30/debian/pool/main/n/netkit-ftp/netkit-ftp_0.17.orig.tar.gz
+http://snapshot.debian.net/archive/2003/06/30/debian/pool/main/n/netkit-ftp/netkit-ftp_0.17-11.diff.gz
+# ftpd
+http://snapshot.debian.net/archive/2003/06/22/debian/pool/main/l/linux-ftpd/linux-ftpd_0.17.orig.tar.gz
+http://snapshot.debian.net/archive/2003/06/22/debian/pool/main/l/linux-ftpd/linux-ftpd_0.17-16.diff.gz
+# fttools
+http://snapshot.debian.net/archive/2002/09/01/debian/pool/main/p/perlftlib/perlftlib_1.2.orig.tar.gz
+http://snapshot.debian.net/archive/2002/09/01/debian/pool/main/p/perlftlib/perlftlib_1.2-13.1.diff.gz
+# g++
+# g++-3.3
+# gawk
+# gcc
+# gcc-2.95
+# gcc-3.2-base
+# gcc-3.3
+# gcc-3.3-base
+# gcj-3.3
+# gdb
+http://snapshot.debian.net/archive/2004/02/04/debian/pool/main/g/gdb/gdb_6.0.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/04/debian/pool/main/g/gdb/gdb_6.0-6.diff.gz
+# gdk-imlib1
+http://snapshot.debian.net/archive/2003/10/15/debian/pool/main/i/imlib+png2/imlib+png2_1.9.14.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/15/debian/pool/main/i/imlib+png2/imlib+png2_1.9.14-14.diff.gz
+# genliloconf
+# gettext
+http://snapshot.debian.net/archive/2004/02/15/debian/pool/main/g/gettext/gettext_0.14.1.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/15/debian/pool/main/g/gettext/gettext_0.14.1-1.diff.gz
+# gettext-base
+http://snapshot.debian.net/archive/2004/02/15/debian/pool/main/g/gettext/gettext_0.14.1.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/15/debian/pool/main/g/gettext/gettext_0.14.1-1.diff.gz
+# gettext-el
+http://snapshot.debian.net/archive/2004/02/15/debian/pool/main/g/gettext/gettext_0.14.1.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/15/debian/pool/main/g/gettext/gettext_0.14.1-1.diff.gz
+# gnupg
+http://snapshot.debian.net/archive/2004/01/21/debian/pool/main/g/gnupg/gnupg_1.2.4.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/21/debian/pool/main/g/gnupg/gnupg_1.2.4-2.diff.gz
+# gnus
+http://snapshot.debian.net/archive/2004/04/04/debian/pool/main/g/gnus/gnus_5.10.6.orig.tar.gz
+http://snapshot.debian.net/archive/2004/04/04/debian/pool/main/g/gnus/gnus_5.10.6-5.diff.gz
+# gocr
+http://snapshot.debian.net/archive/2003/12/25/debian/pool/main/g/gocr/gocr_0.38.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/25/debian/pool/main/g/gocr/gocr_0.38-1.diff.gz
+# gpart
+http://snapshot.debian.net/archive/2003/12/26/debian/pool/main/g/gpart/gpart_0.1h.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/26/debian/pool/main/g/gpart/gpart_0.1h-4.diff.gz
+# gpm
+http://snapshot.debian.net/archive/2003/02/12/debian/pool/main/g/gpm/gpm_1.19.6.orig.tar.gz
+http://snapshot.debian.net/archive/2003/02/12/debian/pool/main/g/gpm/gpm_1.19.6-12.1.diff.gz
+# gramofile
+http://snapshot.debian.net/archive/2004/01/08/debian/pool/main/g/gramofile/gramofile_1.6.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/08/debian/pool/main/g/gramofile/gramofile_1.6-5.diff.gz
+# grep
+http://snapshot.debian.net/archive/2003/12/09/debian/pool/main/g/grep/grep_2.5.1.ds1.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/09/debian/pool/main/g/grep/grep_2.5.1.ds1-2.diff.gz
+# grep-dctrl
+http://snapshot.debian.net/archive/2004/02/12/debian/pool/main/g/grep-dctrl/grep-dctrl_2.1.2.tar.gz
+# groff
+http://snapshot.debian.net/archive/2004/01/24/debian/pool/main/g/groff/groff_1.18.1.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/24/debian/pool/main/g/groff/groff_1.18.1-15.diff.gz
+# groff-base
+http://snapshot.debian.net/archive/2004/01/24/debian/pool/main/g/groff/groff_1.18.1.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/24/debian/pool/main/g/groff/groff_1.18.1-15.diff.gz
+# grub
+http://snapshot.debian.net/archive/2004/01/08/debian/pool/main/g/grub/grub_0.93+cvs20031021.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/08/debian/pool/main/g/grub/grub_0.93+cvs20031021-8.diff.gz
+# gs-common
+http://snapshot.debian.net/archive/2003/03/06/debian/pool/main/g/gs-common/gs-common_0.3.3.1.tar.gz
+# gs-esp
+http://snapshot.debian.net/archive/2003/10/29/debian/pool/main/g/gs-esp/gs-esp_7.07.1.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/29/debian/pool/main/g/gs-esp/gs-esp_7.07.1-1.diff.gz
+# gsfonts
+http://snapshot.debian.net/archive/2003/12/18/debian/pool/main/g/gsfonts/gsfonts_6.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/18/debian/pool/main/g/gsfonts/gsfonts_6.0-2.2.diff.gz
+# gsfonts-x11
+http://snapshot.debian.net/archive/2003/03/03/debian/pool/main/g/gsfonts-x11/gsfonts-x11_0.17.tar.gz
+# gsm-utils
+http://snapshot.debian.net/archive/2003/07/20/debian/pool/main/g/gsmlib/gsmlib_1.10.orig.tar.gz
+http://snapshot.debian.net/archive/2003/07/20/debian/pool/main/g/gsmlib/gsmlib_1.10-5.diff.gz
+# gtk-engines-geramik-data
+http://snapshot.debian.net/archive/2003/08/19/debian/pool/main/g/geramik/geramik_0.26.orig.tar.gz
+http://snapshot.debian.net/archive/2003/08/19/debian/pool/main/g/geramik/geramik_0.26-2.diff.gz
+# gtk-engines-qtpixmap
+http://snapshot.debian.net/archive/2003/08/08/debian/pool/main/q/qtpixmap/qtpixmap_0.26.orig.tar.gz
+http://snapshot.debian.net/archive/2003/08/08/debian/pool/main/q/qtpixmap/qtpixmap_0.26-1.diff.gz
+# gtk2-engines-qtpixmap
+http://snapshot.debian.net/archive/2003/08/08/debian/pool/main/q/qtpixmap/qtpixmap_0.26.orig.tar.gz
+http://snapshot.debian.net/archive/2003/08/08/debian/pool/main/q/qtpixmap/qtpixmap_0.26-1.diff.gz
+# gv
+# gzip
+http://snapshot.debian.net/archive/2003/07/11/debian/pool/main/g/gzip/gzip_1.3.5.orig.tar.gz
+http://snapshot.debian.net/archive/2003/07/11/debian/pool/main/g/gzip/gzip_1.3.5-7.diff.gz
+# hdparm
+http://snapshot.debian.net/archive/2004/02/15/debian/pool/main/h/hdparm/hdparm_5.5.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/15/debian/pool/main/h/hdparm/hdparm_5.5-1.diff.gz
+# hermes1
+http://snapshot.debian.net/archive/2003/10/04/debian/pool/main/h/hermes1/hermes1_1.3.3+really1.3.2.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/04/debian/pool/main/h/hermes1/hermes1_1.3.3+really1.3.2-2.diff.gz
+# hexedit
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/h/hexedit/hexedit_1.2.2.orig.tar.gz
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/h/hexedit/hexedit_1.2.2-1.diff.gz
+# host
+http://snapshot.debian.net/archive/2003/06/10/debian/pool/main/h/host/host_20000331.orig.tar.gz
+http://snapshot.debian.net/archive/2003/06/10/debian/pool/main/h/host/host_20000331-9.diff.gz
+# hostname
+http://snapshot.debian.net/archive/2003/12/19/debian/pool/main/h/hostname/hostname_2.13.tar.gz
+# hotplug
+http://snapshot.debian.net/archive/2004/02/10/debian/pool/main/h/hotplug/hotplug_0.0.20040105.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/10/debian/pool/main/h/hotplug/hotplug_0.0.20040105-3.diff.gz
+# hotplug-knoppix
+# hotplug-utils
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/h/hotplug/hotplug_0.0.20020401.orig.tar.gz
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/h/hotplug/hotplug_0.0.20020401-4.diff.gz
+# hpijs
+http://snapshot.debian.net/archive/2003/10/30/debian/pool/main/h/hpijs/hpijs_1.5.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/30/debian/pool/main/h/hpijs/hpijs_1.5-1.diff.gz
+# hping2
+http://snapshot.debian.net/archive/2004/01/04/debian/pool/main/h/hping2/hping2_2.rc2.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/04/debian/pool/main/h/hping2/hping2_2.rc2-3.diff.gz
+# html2text
+http://snapshot.debian.net/archive/2004/01/19/debian/pool/main/h/html2text/html2text_1.3.2a.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/19/debian/pool/main/h/html2text/html2text_1.3.2a-1.diff.gz
+# httptunnel
+http://snapshot.debian.net/archive/2002/10/27/debian/pool/main/h/httptunnel/httptunnel_3.3.orig.tar.gz
+http://snapshot.debian.net/archive/2002/10/27/debian/pool/main/h/httptunnel/httptunnel_3.3-2.diff.gz
+# hunt
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/h/hunt/hunt_1.5.orig.tar.gz
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/h/hunt/hunt_1.5-3.diff.gz
+# hwdata-knoppix
+# hwsetup
+# ibod
+http://snapshot.debian.net/archive/2003/12/14/debian/pool/main/i/ibod/ibod_1.5.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/14/debian/pool/main/i/ibod/ibod_1.5.0-3.diff.gz
+# ifupdown
+http://snapshot.debian.net/archive/2003/09/08/debian/pool/main/i/ifupdown/ifupdown_0.6.4.orig.tar.gz
+http://snapshot.debian.net/archive/2003/09/08/debian/pool/main/i/ifupdown/ifupdown_0.6.4-4.6.diff.gz
+# ijsgimpprint
+http://snapshot.debian.net/archive/2004/02/12/debian/pool/main/g/gimp-print/gimp-print_4.2.6.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/12/debian/pool/main/g/gimp-print/gimp-print_4.2.6-2.diff.gz
+# imlib-base
+http://snapshot.debian.net/archive/2003/10/15/debian/pool/main/i/imlib+png2/imlib+png2_1.9.14.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/15/debian/pool/main/i/imlib+png2/imlib+png2_1.9.14-14.diff.gz
+# imlib1
+http://snapshot.debian.net/archive/2003/10/15/debian/pool/main/i/imlib+png2/imlib+png2_1.9.14.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/15/debian/pool/main/i/imlib+png2/imlib+png2_1.9.14-14.diff.gz
+# info
+http://snapshot.debian.net/archive/2003/07/13/debian/pool/main/t/texinfo/texinfo_4.6.orig.tar.gz
+http://snapshot.debian.net/archive/2003/07/13/debian/pool/main/t/texinfo/texinfo_4.6-1.diff.gz
+# initrd-tools
+http://snapshot.debian.net/archive/2004/01/22/debian/pool/main/i/initrd-tools/initrd-tools_0.1.57.tar.gz
+# intltool-debian
+http://snapshot.debian.net/archive/2004/02/12/debian/pool/main/i/intltool-debian/intltool-debian_0.30+20040211.tar.gz
+# ipchains
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/i/ipchains/ipchains_1.3.10.orig.tar.gz
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/i/ipchains/ipchains_1.3.10-15.diff.gz
+# ipppd
+# iproute
+http://snapshot.debian.net/archive/2004/01/27/debian/pool/main/i/iproute/iproute_20010824.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/27/debian/pool/main/i/iproute/iproute_20010824-13.diff.gz
+# iptables
+http://snapshot.debian.net/archive/2004/02/13/debian/pool/main/i/iptables/iptables_1.2.9-4.tar.gz
+# iptraf
+http://snapshot.debian.net/archive/2003/12/12/debian/pool/main/i/iptraf/iptraf_2.7.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/12/debian/pool/main/i/iptraf/iptraf_2.7.0-5.diff.gz
+# ipx
+http://snapshot.debian.net/archive/2003/03/18/debian/pool/main/n/ncpfs/ncpfs_2.2.3.orig.tar.gz
+http://snapshot.debian.net/archive/2003/03/18/debian/pool/main/n/ncpfs/ncpfs_2.2.3-1.diff.gz
+# ircii
+# irda-common
+# irda-tools
+# isapnptools
+http://snapshot.debian.net/archive/2003/12/08/debian/pool/main/i/isapnptools/isapnptools_1.26.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/08/debian/pool/main/i/isapnptools/isapnptools_1.26-2.diff.gz
+# isdnactivecards
+# isdnutils-base
+# isdnutils-xtools
+# isdnvboxclient
+# java-common
+http://snapshot.debian.net/archive/2003/09/09/debian/pool/main/j/java-common/java-common_0.22.tar.gz
+# jfsutils
+http://snapshot.debian.net/archive/2004/01/31/debian/pool/main/j/jfsutils/jfsutils_1.1.4.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/31/debian/pool/main/j/jfsutils/jfsutils_1.1.4-2.diff.gz
+# joe
+http://snapshot.debian.net/archive/2003/08/20/debian/pool/main/j/joe/joe_2.8.orig.tar.gz
+http://snapshot.debian.net/archive/2003/08/20/debian/pool/main/j/joe/joe_2.8-23.diff.gz
+# joystick
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/j/joystick/joystick_20010903.orig.tar.gz
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/j/joystick/joystick_20010903-2.diff.gz
+# kbackup
+http://snapshot.debian.net/archive/2003/06/25/debian/pool/main/k/kbackup/kbackup_1.2.11.orig.tar.gz
+http://snapshot.debian.net/archive/2003/06/25/debian/pool/main/k/kbackup/kbackup_1.2.11-13.diff.gz
+# kbackup-multibuf
+http://snapshot.debian.net/archive/2003/06/25/debian/pool/main/k/kbackup/kbackup_1.2.11.orig.tar.gz
+http://snapshot.debian.net/archive/2003/06/25/debian/pool/main/k/kbackup/kbackup_1.2.11-13.diff.gz
+# kbdconfig
+# kde-update-menu-knoppix
+# kdelock-knoppix
+# kernel-image-2.4.24-xfs
+# kernel-package
+http://snapshot.debian.net/archive/2004/02/07/debian/pool/main/k/kernel-package/kernel-package_8.080.tar.gz
+# keyboard-tr-knoppix
+# kismet
+http://snapshot.debian.net/archive/2003/10/27/debian/pool/main/k/kismet/kismet_3.0.1.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/27/debian/pool/main/k/kismet/kismet_3.0.1-1.diff.gz
+# klogd
+http://snapshot.debian.net/archive/2003/10/03/debian/pool/main/s/sysklogd/sysklogd_1.4.1.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/03/debian/pool/main/s/sysklogd/sysklogd_1.4.1-13.diff.gz
+# knoppix-bookmarks
+# knoppix-customize
+# knoppix-graphics
+# knoppix-hdinstall
+# knoppix-menu
+# knoppix-remountrw
+# knoppix-sounds
+# knoppix-terminalserver
+# knx-alsa
+# knx-flashplugin
+# kudzu-knoppix
+# kudzu-knoppix-dev
+# kudzu-knoppix-vesa
+# latex-ttf-fonts
+# lde
+http://snapshot.debian.net/archive/2004/01/10/debian/pool/main/l/lde/lde_2.6.0.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/10/debian/pool/main/l/lde/lde_2.6.0-6.diff.gz
+# less
+http://snapshot.debian.net/archive/2004/02/05/debian/pool/main/l/less/less_381.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/05/debian/pool/main/l/less/less_381-3.diff.gz
+# lesstif1
+# lftp
+http://snapshot.debian.net/archive/2004/02/14/debian/pool/main/l/lftp/lftp_2.6.12.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/14/debian/pool/main/l/lftp/lftp_2.6.12-1.diff.gz
+# lha
+http://snapshot.debian.net/archive/2003/11/20/debian/pool/non-free/l/lha/lha_1.14i.orig.tar.gz
+http://snapshot.debian.net/archive/2003/11/20/debian/pool/non-free/l/lha/lha_1.14i-6.diff.gz
+# libacl1
+http://snapshot.debian.net/archive/2004/02/04/debian/pool/main/a/acl/acl_2.2.23-1.tar.gz
+# libao2
+http://snapshot.debian.net/archive/2004/01/04/debian/pool/main/liba/libao/libao_0.8.4.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/04/debian/pool/main/liba/libao/libao_0.8.4-1.1.diff.gz
+# libapache-mod-ssl
+http://snapshot.debian.net/archive/2004/02/02/debian/pool/main/liba/libapache-mod-ssl/libapache-mod-ssl_2.8.16.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/02/debian/pool/main/liba/libapache-mod-ssl/libapache-mod-ssl_2.8.16-7.diff.gz
+# libapm1
+http://snapshot.debian.net/archive/2004/02/04/debian/pool/main/a/apmd/apmd_3.2.1.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/04/debian/pool/main/a/apmd/apmd_3.2.1-2.diff.gz
+# libapt-pkg-perl
+http://snapshot.debian.net/archive/2003/09/25/debian/pool/main/liba/libapt-pkg-perl/libapt-pkg-perl_0.1.11.tar.gz
+# libart-2.0-2
+http://snapshot.debian.net/archive/2003/09/11/debian/pool/main/liba/libart-lgpl/libart-lgpl_2.3.16.orig.tar.gz
+http://snapshot.debian.net/archive/2003/09/11/debian/pool/main/liba/libart-lgpl/libart-lgpl_2.3.16-1.diff.gz
+# libart-2.0-dev
+http://snapshot.debian.net/archive/2003/09/11/debian/pool/main/liba/libart-lgpl/libart-lgpl_2.3.16.orig.tar.gz
+http://snapshot.debian.net/archive/2003/09/11/debian/pool/main/liba/libart-lgpl/libart-lgpl_2.3.16-1.diff.gz
+# libasound2
+http://snapshot.debian.net/archive/2004/01/27/debian/pool/main/a/alsa-lib/alsa-lib_1.0.1.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/27/debian/pool/main/a/alsa-lib/alsa-lib_1.0.1-1.diff.gz
+# libasound2-dev
+http://snapshot.debian.net/archive/2004/01/27/debian/pool/main/a/alsa-lib/alsa-lib_1.0.1.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/27/debian/pool/main/a/alsa-lib/alsa-lib_1.0.1-1.diff.gz
+# libaspell15
+http://snapshot.debian.net/archive/2004/02/13/debian/pool/main/a/aspell/aspell_0.50.5.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/13/debian/pool/main/a/aspell/aspell_0.50.5-1.diff.gz
+# libatk1.0-0
+http://snapshot.debian.net/archive/2003/10/20/debian/pool/main/a/atk1.0/atk1.0_1.4.1.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/20/debian/pool/main/a/atk1.0/atk1.0_1.4.1-1.diff.gz
+# libatm1
+http://snapshot.debian.net/archive/2003/12/09/debian/pool/main/l/linux-atm/linux-atm_2.4.1.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/09/debian/pool/main/l/linux-atm/linux-atm_2.4.1-14.diff.gz
+# libattr1
+http://snapshot.debian.net/archive/2004/02/04/debian/pool/main/a/attr/attr_2.4.15-1.tar.gz
+# libaudio-dev
+http://snapshot.debian.net/archive/2004/02/12/debian/pool/main/n/nas/nas_1.6b.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/12/debian/pool/main/n/nas/nas_1.6b-3.diff.gz
+# libaudio2
+http://snapshot.debian.net/archive/2004/02/12/debian/pool/main/n/nas/nas_1.6b.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/12/debian/pool/main/n/nas/nas_1.6b-3.diff.gz
+# libaudiofile-dev
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/a/audiofile/audiofile_0.2.3.orig.tar.gz
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/a/audiofile/audiofile_0.2.3-4.diff.gz
+# libaudiofile0
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/a/audiofile/audiofile_0.2.3.orig.tar.gz
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/a/audiofile/audiofile_0.2.3-4.diff.gz
+# libavc1394-0
+http://snapshot.debian.net/archive/2003/11/11/debian/pool/main/liba/libavc1394/libavc1394_0.4.1.orig.tar.gz
+http://snapshot.debian.net/archive/2003/11/11/debian/pool/main/liba/libavc1394/libavc1394_0.4.1-2.diff.gz
+# libblkid1
+http://snapshot.debian.net/archive/2004/02/03/debian/pool/main/e/e2fsprogs/e2fsprogs_1.34+1.35-WIP-2004.01.31.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/03/debian/pool/main/e/e2fsprogs/e2fsprogs_1.34+1.35-WIP-2004.01.31-1.diff.gz
+# libbz2-1.0
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/b/bzip2/bzip2_1.0.2.orig.tar.gz
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/b/bzip2/bzip2_1.0.2-1.diff.gz
+# libbz2-dev
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/b/bzip2/bzip2_1.0.2.orig.tar.gz
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/b/bzip2/bzip2_1.0.2-1.diff.gz
+# libc6
+http://snapshot.debian.net/archive/2004/01/22/debian/pool/main/g/glibc/glibc_2.3.2.ds1.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/22/debian/pool/main/g/glibc/glibc_2.3.2.ds1-11.diff.gz
+# libc6-dev
+http://snapshot.debian.net/archive/2004/01/22/debian/pool/main/g/glibc/glibc_2.3.2.ds1.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/22/debian/pool/main/g/glibc/glibc_2.3.2.ds1-11.diff.gz
+# libcap1
+# libcapi20-2
+# libcdparanoia0
+http://snapshot.debian.net/archive/2003/08/01/debian/pool/main/c/cdparanoia/cdparanoia_3a9.8.orig.tar.gz
+http://snapshot.debian.net/archive/2003/08/01/debian/pool/main/c/cdparanoia/cdparanoia_3a9.8-10.diff.gz
+# libcomerr2
+http://snapshot.debian.net/archive/2004/02/03/debian/pool/main/e/e2fsprogs/e2fsprogs_1.34+1.35-WIP-2004.01.31.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/03/debian/pool/main/e/e2fsprogs/e2fsprogs_1.34+1.35-WIP-2004.01.31-1.diff.gz
+# libconsole
+# libcupsimage2
+http://snapshot.debian.net/archive/2004/02/12/debian/pool/main/c/cupsys/cupsys_1.1.20final.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/12/debian/pool/main/c/cupsys/cupsys_1.1.20final-14.diff.gz
+# libcupsys2
+http://snapshot.debian.net/archive/2004/02/12/debian/pool/main/c/cupsys/cupsys_1.1.20final.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/12/debian/pool/main/c/cupsys/cupsys_1.1.20final-14.diff.gz
+# libcupsys2-dev
+http://snapshot.debian.net/archive/2004/02/12/debian/pool/main/c/cupsys/cupsys_1.1.20final.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/12/debian/pool/main/c/cupsys/cupsys_1.1.20final-14.diff.gz
+# libcurl2
+http://snapshot.debian.net/archive/2004/02/02/debian/pool/main/c/curl/curl_7.11.0.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/02/debian/pool/main/c/curl/curl_7.11.0-4.diff.gz
+# libdate-manip-perl
+http://snapshot.debian.net/archive/2003/07/09/debian/pool/main/libd/libdate-manip-perl/libdate-manip-perl_5.42a.orig.tar.gz
+http://snapshot.debian.net/archive/2003/07/09/debian/pool/main/libd/libdate-manip-perl/libdate-manip-perl_5.42a-2.diff.gz
+# libdb1-compat
+http://snapshot.debian.net/archive/2002/10/20/debian/pool/main/d/db1-compat/db1-compat_2.1.3.orig.tar.gz
+http://snapshot.debian.net/archive/2002/10/20/debian/pool/main/d/db1-compat/db1-compat_2.1.3-7.diff.gz
+# libdb2
+# libdb3
+http://snapshot.debian.net/archive/2003/06/17/debian/pool/main/d/db3/db3_3.2.9.orig.tar.gz
+http://snapshot.debian.net/archive/2003/06/17/debian/pool/main/d/db3/db3_3.2.9-19.diff.gz
+# libdb3-util
+http://snapshot.debian.net/archive/2003/06/17/debian/pool/main/d/db3/db3_3.2.9.orig.tar.gz
+http://snapshot.debian.net/archive/2003/06/17/debian/pool/main/d/db3/db3_3.2.9-19.diff.gz
+# libdb4.0
+http://snapshot.debian.net/archive/2003/09/15/debian/pool/main/d/db4.0/db4.0_4.0.14.orig.tar.gz
+http://snapshot.debian.net/archive/2003/09/15/debian/pool/main/d/db4.0/db4.0_4.0.14-1.3.diff.gz
+# libdb4.1
+http://snapshot.debian.net/archive/2004/01/12/debian/pool/main/d/db4.1/db4.1_4.1.25.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/12/debian/pool/main/d/db4.1/db4.1_4.1.25-16.diff.gz
+# libdb4.2
+http://snapshot.debian.net/archive/2004/02/07/debian/pool/main/d/db4.2/db4.2_4.2.52.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/07/debian/pool/main/d/db4.2/db4.2_4.2.52-10.diff.gz
+# libdbd-mysql-perl
+http://snapshot.debian.net/archive/2003/12/09/debian/pool/main/libd/libdbd-mysql-perl/libdbd-mysql-perl_2.9003.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/09/debian/pool/main/libd/libdbd-mysql-perl/libdbd-mysql-perl_2.9003-1.diff.gz
+# libdbi-perl
+http://snapshot.debian.net/archive/2004/01/12/debian/pool/main/libd/libdbi-perl/libdbi-perl_1.40.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/12/debian/pool/main/libd/libdbi-perl/libdbi-perl_1.40-1.diff.gz
+# libdevmapper1.00
+# libdm0
+http://snapshot.debian.net/archive/2003/11/11/debian/pool/main/d/dmapi/dmapi_2.1.0-1.tar.gz
+# libdns11
+# libdps1
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# libdv2
+# libdvdnav1
+http://snapshot.debian.net/archive/2002/08/07/debian/pool/main/libd/libdvdnav/libdvdnav_0.1.3.orig.tar.gz
+http://snapshot.debian.net/archive/2002/08/07/debian/pool/main/libd/libdvdnav/libdvdnav_0.1.3-1.diff.gz
+# libdvdread2
+# libecasound7c102
+http://snapshot.debian.net/archive/2004/01/29/debian/pool/main/e/ecasound/ecasound_2.0.4.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/29/debian/pool/main/e/ecasound/ecasound_2.0.4-12.diff.gz
+# libesd0
+http://snapshot.debian.net/archive/2003/03/21/debian/pool/main/e/esound/esound_0.2.29.orig.tar.gz
+http://snapshot.debian.net/archive/2003/03/21/debian/pool/main/e/esound/esound_0.2.29-1.diff.gz
+# libexpat1
+http://snapshot.debian.net/archive/2003/07/31/debian/pool/main/e/expat/expat_1.95.6.orig.tar.gz
+http://snapshot.debian.net/archive/2003/07/31/debian/pool/main/e/expat/expat_1.95.6-6.diff.gz
+# libexpat1-dev
+http://snapshot.debian.net/archive/2003/07/31/debian/pool/main/e/expat/expat_1.95.6.orig.tar.gz
+http://snapshot.debian.net/archive/2003/07/31/debian/pool/main/e/expat/expat_1.95.6-6.diff.gz
+# libfam-dev
+http://snapshot.debian.net/archive/2004/02/11/debian/pool/main/f/fam/fam_2.7.0.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/11/debian/pool/main/f/fam/fam_2.7.0-5.diff.gz
+# libfam0c102
+http://snapshot.debian.net/archive/2004/02/11/debian/pool/main/f/fam/fam_2.7.0.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/11/debian/pool/main/f/fam/fam_2.7.0-5.diff.gz
+# libflac4
+http://snapshot.debian.net/archive/2003/08/01/debian/pool/main/f/flac/flac_1.1.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/08/01/debian/pool/main/f/flac/flac_1.1.0-10.diff.gz
+# libflite1
+# libfontconfig1
+http://snapshot.debian.net/archive/2004/02/11/debian/pool/main/f/fontconfig/fontconfig_2.2.1.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/11/debian/pool/main/f/fontconfig/fontconfig_2.2.1-14.diff.gz
+# libfontconfig1-dev
+http://snapshot.debian.net/archive/2004/02/11/debian/pool/main/f/fontconfig/fontconfig_2.2.1.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/11/debian/pool/main/f/fontconfig/fontconfig_2.2.1-14.diff.gz
+# libfreetype6
+http://snapshot.debian.net/archive/2004/01/25/debian/pool/main/f/freetype/freetype_2.1.7.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/25/debian/pool/main/f/freetype/freetype_2.1.7-2.diff.gz
+# libfreetype6-dev
+http://snapshot.debian.net/archive/2004/01/25/debian/pool/main/f/freetype/freetype_2.1.7.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/25/debian/pool/main/f/freetype/freetype_2.1.7-2.diff.gz
+# libft-perl
+http://snapshot.debian.net/archive/2002/09/01/debian/pool/main/p/perlftlib/perlftlib_1.2.orig.tar.gz
+http://snapshot.debian.net/archive/2002/09/01/debian/pool/main/p/perlftlib/perlftlib_1.2-13.1.diff.gz
+# libgc1
+# libgcc1
+# libgcj-common
+# libgcj4
+# libgcj4-dev
+# libgcrypt-dev
+http://snapshot.debian.net/archive/2003/10/04/debian/pool/main/libg/libgcrypt/libgcrypt_1.1.12.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/04/debian/pool/main/libg/libgcrypt/libgcrypt_1.1.12-4.diff.gz
+# libgcrypt1
+http://snapshot.debian.net/archive/2003/10/04/debian/pool/main/libg/libgcrypt/libgcrypt_1.1.12.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/04/debian/pool/main/libg/libgcrypt/libgcrypt_1.1.12-4.diff.gz
+# libgcrypt7
+http://snapshot.debian.net/archive/2003/12/30/debian/pool/main/libg/libgcrypt7/libgcrypt7_1.1.90.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/30/debian/pool/main/libg/libgcrypt7/libgcrypt7_1.1.90-1.1.diff.gz
+# libgdbm-dev
+http://snapshot.debian.net/archive/2003/09/10/debian/pool/main/g/gdbm/gdbm_1.8.3.orig.tar.gz
+http://snapshot.debian.net/archive/2003/09/10/debian/pool/main/g/gdbm/gdbm_1.8.3-2.diff.gz
+# libgdbm3
+http://snapshot.debian.net/archive/2003/09/10/debian/pool/main/g/gdbm/gdbm_1.8.3.orig.tar.gz
+http://snapshot.debian.net/archive/2003/09/10/debian/pool/main/g/gdbm/gdbm_1.8.3-2.diff.gz
+# libgimpprint1
+http://snapshot.debian.net/archive/2004/02/12/debian/pool/main/g/gimp-print/gimp-print_4.2.6.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/12/debian/pool/main/g/gimp-print/gimp-print_4.2.6-2.diff.gz
+# libgksu0
+http://snapshot.debian.net/archive/2004/02/01/debian/pool/main/g/gksu/gksu_1.0.3-2.tar.gz
+# libglib1.2
+http://snapshot.debian.net/archive/2003/05/18/debian/pool/main/g/glib1.2/glib1.2_1.2.10.orig.tar.gz
+http://snapshot.debian.net/archive/2003/05/18/debian/pool/main/g/glib1.2/glib1.2_1.2.10-9.diff.gz
+# libglib1.2-dev
+http://snapshot.debian.net/archive/2003/05/18/debian/pool/main/g/glib1.2/glib1.2_1.2.10.orig.tar.gz
+http://snapshot.debian.net/archive/2003/05/18/debian/pool/main/g/glib1.2/glib1.2_1.2.10-9.diff.gz
+# libglib2.0-0
+http://snapshot.debian.net/archive/2003/09/01/debian/pool/main/g/glib2.0/glib2.0_2.2.3.orig.tar.gz
+http://snapshot.debian.net/archive/2003/09/01/debian/pool/main/g/glib2.0/glib2.0_2.2.3-1.diff.gz
+# libglib2.0-data
+http://snapshot.debian.net/archive/2003/09/01/debian/pool/main/g/glib2.0/glib2.0_2.2.3.orig.tar.gz
+http://snapshot.debian.net/archive/2003/09/01/debian/pool/main/g/glib2.0/glib2.0_2.2.3-1.diff.gz
+# libglib2.0-dev
+http://snapshot.debian.net/archive/2003/09/01/debian/pool/main/g/glib2.0/glib2.0_2.2.3.orig.tar.gz
+http://snapshot.debian.net/archive/2003/09/01/debian/pool/main/g/glib2.0/glib2.0_2.2.3-1.diff.gz
+# libglide2
+http://snapshot.debian.net/archive/2003/12/06/debian/pool/main/g/glide/glide_2002.04.10.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/06/debian/pool/main/g/glide/glide_2002.04.10-5.diff.gz
+# libglide3
+http://snapshot.debian.net/archive/2003/12/06/debian/pool/main/g/glide/glide_2002.04.10.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/06/debian/pool/main/g/glide/glide_2002.04.10-5.diff.gz
+# libgnomecanvas2-common
+http://snapshot.debian.net/archive/2003/10/19/debian/pool/main/libg/libgnomecanvas/libgnomecanvas_2.4.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/19/debian/pool/main/libg/libgnomecanvas/libgnomecanvas_2.4.0-1.diff.gz
+# libgnomeprint2.2-data
+http://snapshot.debian.net/archive/2004/01/02/debian/pool/main/libg/libgnomeprint/libgnomeprint_2.4.2.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/02/debian/pool/main/libg/libgnomeprint/libgnomeprint_2.4.2-2.diff.gz
+# libgnutls10
+http://snapshot.debian.net/archive/2004/01/25/debian/pool/main/g/gnutls10/gnutls10_1.0.4.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/25/debian/pool/main/g/gnutls10/gnutls10_1.0.4-3.diff.gz
+# libgnutls7
+http://snapshot.debian.net/archive/2004/01/19/debian/pool/main/g/gnutls7/gnutls7_0.8.12.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/19/debian/pool/main/g/gnutls7/gnutls7_0.8.12-5.diff.gz
+# libgnutls7-dev
+http://snapshot.debian.net/archive/2004/01/19/debian/pool/main/g/gnutls7/gnutls7_0.8.12.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/19/debian/pool/main/g/gnutls7/gnutls7_0.8.12-5.diff.gz
+# libgpg-error0
+http://snapshot.debian.net/archive/2003/11/18/debian/pool/main/libg/libgpg-error/libgpg-error_0.6.orig.tar.gz
+http://snapshot.debian.net/archive/2003/11/18/debian/pool/main/libg/libgpg-error/libgpg-error_0.6-0.1.diff.gz
+# libgpmg1
+http://snapshot.debian.net/archive/2003/02/12/debian/pool/main/g/gpm/gpm_1.19.6.orig.tar.gz
+http://snapshot.debian.net/archive/2003/02/12/debian/pool/main/g/gpm/gpm_1.19.6-12.1.diff.gz
+# libgsf-1
+http://snapshot.debian.net/archive/2004/02/06/debian/pool/main/libg/libgsf/libgsf_1.8.2.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/06/debian/pool/main/libg/libgsf/libgsf_1.8.2-6.diff.gz
+# libgsm1
+http://snapshot.debian.net/archive/2004/01/29/debian/pool/main/libg/libgsm/libgsm_1.0.10.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/29/debian/pool/main/libg/libgsm/libgsm_1.0.10-12.diff.gz
+# libgsmme1c102
+http://snapshot.debian.net/archive/2003/07/20/debian/pool/main/g/gsmlib/gsmlib_1.10.orig.tar.gz
+http://snapshot.debian.net/archive/2003/07/20/debian/pool/main/g/gsmlib/gsmlib_1.10-5.diff.gz
+# libgtk1.2
+http://snapshot.debian.net/archive/2003/06/06/debian/pool/main/g/gtk+1.2/gtk+1.2_1.2.10.orig.tar.gz
+http://snapshot.debian.net/archive/2003/06/06/debian/pool/main/g/gtk+1.2/gtk+1.2_1.2.10-16.diff.gz
+# libgtk1.2-common
+http://snapshot.debian.net/archive/2003/06/06/debian/pool/main/g/gtk+1.2/gtk+1.2_1.2.10.orig.tar.gz
+http://snapshot.debian.net/archive/2003/06/06/debian/pool/main/g/gtk+1.2/gtk+1.2_1.2.10-16.diff.gz
+# libgtk2.0-0
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/g/gtk+2.0/gtk+2.0_2.2.4.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/g/gtk+2.0/gtk+2.0_2.2.4-3.diff.gz
+# libgtk2.0-common
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/g/gtk+2.0/gtk+2.0_2.2.4.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/g/gtk+2.0/gtk+2.0_2.2.4-3.diff.gz
+# libice-dev
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# libice6
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# libid3tag0
+http://snapshot.debian.net/archive/2003/10/23/debian/pool/main/libi/libid3tag/libid3tag_0.15.0b.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/23/debian/pool/main/libi/libid3tag/libid3tag_0.15.0b-3.diff.gz
+# libident
+http://snapshot.debian.net/archive/2003/09/08/debian/pool/main/libi/libident/libident_0.22.orig.tar.gz
+http://snapshot.debian.net/archive/2003/09/08/debian/pool/main/libi/libident/libident_0.22-2.2.diff.gz
+# libidl0
+http://snapshot.debian.net/archive/2003/06/01/debian/pool/main/libi/libidl/libidl_0.8.2.orig.tar.gz
+http://snapshot.debian.net/archive/2003/06/01/debian/pool/main/libi/libidl/libidl_0.8.2-1.diff.gz
+# libidn11
+http://snapshot.debian.net/archive/2004/01/08/debian/pool/main/libi/libidn/libidn_0.3.4.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/08/debian/pool/main/libi/libidn/libidn_0.3.4-1.diff.gz
+# libijs-0.34
+http://snapshot.debian.net/archive/2002/10/07/debian/pool/main/i/ijs/ijs_0.34.orig.tar.gz
+http://snapshot.debian.net/archive/2002/10/07/debian/pool/main/i/ijs/ijs_0.34-1.diff.gz
+# libisc7
+# libisccc0
+# libisccfg0
+# libiw27
+http://snapshot.debian.net/archive/2004/02/02/debian/pool/main/w/wireless-tools/wireless-tools_26+27pre9.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/02/debian/pool/main/w/wireless-tools/wireless-tools_26+27pre9-2.diff.gz
+# libjcode-perl
+http://snapshot.debian.net/archive/2003/09/22/debian/pool/main/libj/libjcode-perl/libjcode-perl_2.13.orig.tar.gz
+http://snapshot.debian.net/archive/2003/09/22/debian/pool/main/libj/libjcode-perl/libjcode-perl_2.13-2.diff.gz
+# libjcode-pm-perl
+http://snapshot.debian.net/archive/2003/09/22/debian/pool/main/libj/libjcode-pm-perl/libjcode-pm-perl_0.83-1.tar.gz
+# libjpeg62
+http://snapshot.debian.net/archive/2003/10/07/debian/pool/main/libj/libjpeg6b/libjpeg6b_6b.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/07/debian/pool/main/libj/libjpeg6b/libjpeg6b_6b-9.diff.gz
+# libjpeg62-dev
+http://snapshot.debian.net/archive/2003/10/07/debian/pool/main/libj/libjpeg6b/libjpeg6b_6b.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/07/debian/pool/main/libj/libjpeg6b/libjpeg6b_6b-9.diff.gz
+# libkeynote0
+http://snapshot.debian.net/archive/2003/05/17/debian/pool/main/k/keynote/keynote_2.3.orig.tar.gz
+http://snapshot.debian.net/archive/2003/05/17/debian/pool/main/k/keynote/keynote_2.3-10.diff.gz
+# libkpathsea3
+http://snapshot.debian.net/archive/2004/02/06/debian/pool/main/t/tetex-bin/tetex-bin_2.0.2.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/06/debian/pool/main/t/tetex-bin/tetex-bin_2.0.2-7.diff.gz
+# libkrb53
+http://snapshot.debian.net/archive/2004/02/05/debian/pool/main/k/krb5/krb5_1.3.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/05/debian/pool/main/k/krb5/krb5_1.3-3.diff.gz
+# libkvutils2c102
+http://snapshot.debian.net/archive/2004/01/29/debian/pool/main/e/ecasound/ecasound_2.0.4.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/29/debian/pool/main/e/ecasound/ecasound_2.0.4-12.diff.gz
+# liblcms1
+http://snapshot.debian.net/archive/2004/01/22/debian/pool/main/l/lcms/lcms_1.10.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/22/debian/pool/main/l/lcms/lcms_1.10-1.2.diff.gz
+# liblcms1-dev
+http://snapshot.debian.net/archive/2004/01/22/debian/pool/main/l/lcms/lcms_1.10.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/22/debian/pool/main/l/lcms/lcms_1.10-1.2.diff.gz
+# libldap2
+http://snapshot.debian.net/archive/2004/02/08/debian/pool/main/o/openldap2/openldap2_2.1.25.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/08/debian/pool/main/o/openldap2/openldap2_2.1.25-1.diff.gz
+# liblocale-gettext-perl
+# liblockfile1
+http://snapshot.debian.net/archive/2003/06/03/debian/pool/main/libl/liblockfile/liblockfile_1.05.tar.gz
+# liblua40
+http://snapshot.debian.net/archive/2003/09/16/debian/pool/main/l/lua40/lua40_4.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/09/16/debian/pool/main/l/lua40/lua40_4.0-12.diff.gz
+# liblua50
+http://snapshot.debian.net/archive/2004/03/19/debian/pool/main/l/lua50/lua50_5.0.2.orig.tar.gz
+http://snapshot.debian.net/archive/2004/03/19/debian/pool/main/l/lua50/lua50_5.0.2-1.diff.gz
+# liblualib50
+http://snapshot.debian.net/archive/2004/03/19/debian/pool/main/l/lua50/lua50_5.0.2.orig.tar.gz
+http://snapshot.debian.net/archive/2004/03/19/debian/pool/main/l/lua50/lua50_5.0.2-1.diff.gz
+# liblwres1
+# liblzo1
+http://snapshot.debian.net/archive/2003/06/09/debian/pool/main/l/lzo/lzo_1.08.orig.tar.gz
+http://snapshot.debian.net/archive/2003/06/09/debian/pool/main/l/lzo/lzo_1.08-1.diff.gz
+# libmad0
+http://snapshot.debian.net/archive/2003/10/23/debian/pool/main/libm/libmad/libmad_0.15.0b.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/23/debian/pool/main/libm/libmad/libmad_0.15.0b-3.diff.gz
+# libmad0-dev
+http://snapshot.debian.net/archive/2003/10/23/debian/pool/main/libm/libmad/libmad_0.15.0b.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/23/debian/pool/main/libm/libmad/libmad_0.15.0b-3.diff.gz
+# libmagic1
+http://snapshot.debian.net/archive/2004/01/21/debian/pool/main/f/file/file_4.07.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/21/debian/pool/main/f/file/file_4.07-2.diff.gz
+# libmagick5.5.7
+# libmal0
+http://snapshot.debian.net/archive/2003/10/17/debian/pool/main/libm/libmal/libmal_0.31.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/17/debian/pool/main/libm/libmal/libmal_0.31-2.diff.gz
+# libmikmod2
+http://snapshot.debian.net/archive/2003/01/24/debian/pool/main/libm/libmikmod/libmikmod_3.1.10.orig.tar.gz
+http://snapshot.debian.net/archive/2003/01/24/debian/pool/main/libm/libmikmod/libmikmod_3.1.10-5.diff.gz
+# libmm13
+http://snapshot.debian.net/archive/2003/04/01/debian/pool/main/m/mm/mm_1.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/04/01/debian/pool/main/m/mm/mm_1.3.0-1.diff.gz
+# libmng-dev
+http://snapshot.debian.net/archive/2003/04/04/debian/pool/main/libm/libmng/libmng_1.0.5.orig.tar.gz
+http://snapshot.debian.net/archive/2003/04/04/debian/pool/main/libm/libmng/libmng_1.0.5-1.diff.gz
+# libmng1
+http://snapshot.debian.net/archive/2003/04/04/debian/pool/main/libm/libmng/libmng_1.0.5.orig.tar.gz
+http://snapshot.debian.net/archive/2003/04/04/debian/pool/main/libm/libmng/libmng_1.0.5-1.diff.gz
+# libmodplug0
+http://snapshot.debian.net/archive/2003/07/10/debian/pool/main/m/modplugxmms/modplugxmms_2.04.orig.tar.gz
+http://snapshot.debian.net/archive/2003/07/10/debian/pool/main/m/modplugxmms/modplugxmms_2.04-2.diff.gz
+# libmysqlclient10
+http://snapshot.debian.net/archive/2003/04/15/debian/pool/main/libm/libmysqlclient-lgpl/libmysqlclient-lgpl_3.23.56.orig.tar.gz
+http://snapshot.debian.net/archive/2003/04/15/debian/pool/main/libm/libmysqlclient-lgpl/libmysqlclient-lgpl_3.23.56-2.diff.gz
+# libmysqlclient12
+http://snapshot.debian.net/archive/2004/02/11/debian/pool/main/m/mysql-dfsg/mysql-dfsg_4.0.17.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/11/debian/pool/main/m/mysql-dfsg/mysql-dfsg_4.0.17-2.diff.gz
+# libnasl2
+http://snapshot.debian.net/archive/2003/12/21/debian/pool/main/libn/libnasl/libnasl_2.0.9.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/21/debian/pool/main/libn/libnasl/libnasl_2.0.9-1.diff.gz
+# libncp
+http://snapshot.debian.net/archive/2003/03/18/debian/pool/main/n/ncpfs/ncpfs_2.2.3.orig.tar.gz
+http://snapshot.debian.net/archive/2003/03/18/debian/pool/main/n/ncpfs/ncpfs_2.2.3-1.diff.gz
+# libncurses5
+http://snapshot.debian.net/archive/2004/03/24/debian/pool/main/n/ncurses/ncurses_5.4.orig.tar.gz
+http://snapshot.debian.net/archive/2004/03/24/debian/pool/main/n/ncurses/ncurses_5.4-3.diff.gz
+# libncursesw5
+http://snapshot.debian.net/archive/2004/01/18/debian/pool/main/n/ncurses/ncurses_5.3.20030719.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/18/debian/pool/main/n/ncurses/ncurses_5.3.20030719-5.diff.gz
+# libnessus2
+http://snapshot.debian.net/archive/2003/12/21/debian/pool/main/n/nessus-libraries/nessus-libraries_2.0.9.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/21/debian/pool/main/n/nessus-libraries/nessus-libraries_2.0.9-1.diff.gz
+# libnet-perl
+# libnet1
+# libnetpbm10
+# libnetpbm9
+# libnewt-utf8-0
+http://snapshot.debian.net/archive/2003/03/01/debian/pool/main/n/newt-utf8/newt-utf8_0.50.17.orig.tar.gz
+http://snapshot.debian.net/archive/2003/03/01/debian/pool/main/n/newt-utf8/newt-utf8_0.50.17-13.diff.gz
+# libnewt0.51
+http://snapshot.debian.net/archive/2004/02/15/debian/pool/main/n/newt/newt_0.51.4.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/15/debian/pool/main/n/newt/newt_0.51.4-22.diff.gz
+# libnss3
+# libntfs5
+http://snapshot.debian.net/archive/2004/01/08/debian/pool/main/l/linux-ntfs/linux-ntfs_1.8.0.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/08/debian/pool/main/l/linux-ntfs/linux-ntfs_1.8.0-2.diff.gz
+# libogg-dev
+http://snapshot.debian.net/archive/2003/12/09/debian/pool/main/libo/libogg/libogg_1.1.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/09/debian/pool/main/libo/libogg/libogg_1.1.0-1.diff.gz
+# libogg0
+http://snapshot.debian.net/archive/2003/12/09/debian/pool/main/libo/libogg/libogg_1.1.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/09/debian/pool/main/libo/libogg/libogg_1.1.0-1.diff.gz
+# liboggflac1
+http://snapshot.debian.net/archive/2003/08/01/debian/pool/main/f/flac/flac_1.1.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/08/01/debian/pool/main/f/flac/flac_1.1.0-10.diff.gz
+# libopencdk-dev
+# libopencdk4
+# libopencdk8
+http://snapshot.debian.net/archive/2003/12/31/debian/pool/main/o/opencdk8/opencdk8_0.5.3.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/31/debian/pool/main/o/opencdk8/opencdk8_0.5.3-1.diff.gz
+# libpam-modules
+http://snapshot.debian.net/archive/2004/01/13/debian/pool/main/p/pam/pam_0.76.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/13/debian/pool/main/p/pam/pam_0.76-15.diff.gz
+# libpam-runtime
+http://snapshot.debian.net/archive/2004/01/13/debian/pool/main/p/pam/pam_0.76.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/13/debian/pool/main/p/pam/pam_0.76-15.diff.gz
+# libpam0g
+http://snapshot.debian.net/archive/2004/01/13/debian/pool/main/p/pam/pam_0.76.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/13/debian/pool/main/p/pam/pam_0.76-15.diff.gz
+# libpam0g-dev
+http://snapshot.debian.net/archive/2004/01/13/debian/pool/main/p/pam/pam_0.76.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/13/debian/pool/main/p/pam/pam_0.76-15.diff.gz
+# libpango1.0-0
+http://snapshot.debian.net/archive/2003/11/19/debian/pool/main/p/pango1.0/pango1.0_1.2.5.orig.tar.gz
+http://snapshot.debian.net/archive/2003/11/19/debian/pool/main/p/pango1.0/pango1.0_1.2.5-2.1.diff.gz
+# libpango1.0-common
+http://snapshot.debian.net/archive/2003/11/19/debian/pool/main/p/pango1.0/pango1.0_1.2.5.orig.tar.gz
+http://snapshot.debian.net/archive/2003/11/19/debian/pool/main/p/pango1.0/pango1.0_1.2.5-2.1.diff.gz
+# libpaper-utils
+http://snapshot.debian.net/archive/2004/01/21/debian/pool/main/libp/libpaper/libpaper_1.1.14.tar.gz
+# libpaper1
+http://snapshot.debian.net/archive/2004/01/21/debian/pool/main/libp/libpaper/libpaper_1.1.14.tar.gz
+# libparted1.6-0
+http://snapshot.debian.net/archive/2004/02/12/debian/pool/main/p/parted/parted_1.6.6.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/12/debian/pool/main/p/parted/parted_1.6.6-8.diff.gz
+# libpcap0.7
+http://snapshot.debian.net/archive/2003/11/12/debian/pool/main/libp/libpcap/libpcap_0.7.2.orig.tar.gz
+http://snapshot.debian.net/archive/2003/11/12/debian/pool/main/libp/libpcap/libpcap_0.7.2-5.diff.gz
+# libpcd2
+http://snapshot.debian.net/archive/2003/07/30/debian/pool/main/libp/libpcd/libpcd_1.0.1.tar.gz
+# libpcre3
+http://snapshot.debian.net/archive/2004/03/13/debian/pool/main/p/pcre3/pcre3_4.5.orig.tar.gz
+http://snapshot.debian.net/archive/2004/03/13/debian/pool/main/p/pcre3/pcre3_4.5-1.1.diff.gz
+# libpcre3-dev
+http://snapshot.debian.net/archive/2004/03/13/debian/pool/main/p/pcre3/pcre3_4.5.orig.tar.gz
+http://snapshot.debian.net/archive/2004/03/13/debian/pool/main/p/pcre3/pcre3_4.5-1.1.diff.gz
+# libperl5.8
+http://snapshot.debian.net/archive/2004/01/30/debian/pool/main/p/perl/perl_5.8.3.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/30/debian/pool/main/p/perl/perl_5.8.3-1.diff.gz
+# libpisock8
+http://snapshot.debian.net/archive/2003/09/29/debian/pool/main/p/pilot-link/pilot-link_0.11.8.orig.tar.gz
+http://snapshot.debian.net/archive/2003/09/29/debian/pool/main/p/pilot-link/pilot-link_0.11.8-7.diff.gz
+# libpng10-0
+http://snapshot.debian.net/archive/2003/06/12/debian/pool/main/libp/libpng/libpng_1.0.15.orig.tar.gz
+http://snapshot.debian.net/archive/2003/06/12/debian/pool/main/libp/libpng/libpng_1.0.15-4.diff.gz
+# libpng12-0
+http://snapshot.debian.net/archive/2003/06/12/debian/pool/main/libp/libpng3/libpng3_1.2.5.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/06/12/debian/pool/main/libp/libpng3/libpng3_1.2.5.0-4.diff.gz
+# libpng12-dev
+http://snapshot.debian.net/archive/2003/06/12/debian/pool/main/libp/libpng3/libpng3_1.2.5.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/06/12/debian/pool/main/libp/libpng3/libpng3_1.2.5.0-4.diff.gz
+# libpopt-dev
+http://snapshot.debian.net/archive/2003/12/12/debian/pool/main/p/popt/popt_1.7.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/12/debian/pool/main/p/popt/popt_1.7-4.diff.gz
+# libpopt0
+http://snapshot.debian.net/archive/2003/12/12/debian/pool/main/p/popt/popt_1.7.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/12/debian/pool/main/p/popt/popt_1.7-4.diff.gz
+# libpt-1.5.2
+http://snapshot.debian.net/archive/2003/09/26/debian/pool/main/p/pwlib/pwlib_1.5.2.orig.tar.gz
+http://snapshot.debian.net/archive/2003/09/26/debian/pool/main/p/pwlib/pwlib_1.5.2-2.diff.gz
+# libquicktime1
+http://snapshot.debian.net/archive/2003/10/14/debian/pool/main/libq/libquicktime/libquicktime_0.9.2release.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/14/debian/pool/main/libq/libquicktime/libquicktime_0.9.2release-2.diff.gz
+# libraw1394-5
+http://snapshot.debian.net/archive/2003/09/27/debian/pool/main/libr/libraw1394/libraw1394_0.10.1.orig.tar.gz
+http://snapshot.debian.net/archive/2003/09/27/debian/pool/main/libr/libraw1394/libraw1394_0.10.1-1.diff.gz
+# libreadline4
+http://snapshot.debian.net/archive/2004/01/23/debian/pool/main/r/readline4/readline4_4.3.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/23/debian/pool/main/r/readline4/readline4_4.3-10.diff.gz
+# libreiserfs0.3-0
+http://snapshot.debian.net/archive/2003/02/08/debian/pool/main/p/progsreiserfs/progsreiserfs_0.3.0.4.orig.tar.gz
+http://snapshot.debian.net/archive/2003/02/08/debian/pool/main/p/progsreiserfs/progsreiserfs_0.3.0.4-1.diff.gz
+# librpm4
+http://snapshot.debian.net/archive/2003/10/21/debian/pool/main/r/rpm/rpm_4.0.4.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/21/debian/pool/main/r/rpm/rpm_4.0.4-25.diff.gz
+# libruby1.8
+http://snapshot.debian.net/archive/2004/02/07/debian/pool/main/r/ruby1.8/ruby1.8_1.8.1.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/07/debian/pool/main/r/ruby1.8/ruby1.8_1.8.1-7.diff.gz
+# libsasl2
+http://snapshot.debian.net/archive/2003/10/27/debian/pool/main/c/cyrus-sasl2/cyrus-sasl2_2.1.15.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/27/debian/pool/main/c/cyrus-sasl2/cyrus-sasl2_2.1.15-6.diff.gz
+# libsasl7
+http://snapshot.debian.net/archive/2003/10/06/debian/pool/main/c/cyrus-sasl/cyrus-sasl_1.5.28.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/06/debian/pool/main/c/cyrus-sasl/cyrus-sasl_1.5.28-6.1.diff.gz
+# libsdl-console
+http://snapshot.debian.net/archive/2003/10/12/debian/pool/main/libs/libsdl-console/libsdl-console_1.3.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/12/debian/pool/main/libs/libsdl-console/libsdl-console_1.3-3.diff.gz
+# libsdl-gfx1.2
+http://snapshot.debian.net/archive/2004/02/01/debian/pool/main/s/sdlgfx/sdlgfx_2.0.9.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/01/debian/pool/main/s/sdlgfx/sdlgfx_2.0.9-3.diff.gz
+# libsdl-image1.2
+http://snapshot.debian.net/archive/2003/06/25/debian/pool/main/s/sdl-image1.2/sdl-image1.2_1.2.3.orig.tar.gz
+http://snapshot.debian.net/archive/2003/06/25/debian/pool/main/s/sdl-image1.2/sdl-image1.2_1.2.3-2.diff.gz
+# libsdl-mixer1.2
+http://snapshot.debian.net/archive/2003/10/27/debian/pool/main/s/sdl-mixer1.2/sdl-mixer1.2_1.2.5.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/27/debian/pool/main/s/sdl-mixer1.2/sdl-mixer1.2_1.2.5-3.diff.gz
+# libsdl-net1.2
+http://snapshot.debian.net/archive/2003/10/09/debian/pool/main/s/sdl-net1.2/sdl-net1.2_1.2.5.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/09/debian/pool/main/s/sdl-net1.2/sdl-net1.2_1.2.5-3.diff.gz
+# libsdl-perl
+http://snapshot.debian.net/archive/2003/07/18/debian/pool/main/s/sdlperl/sdlperl_1.20.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/07/18/debian/pool/main/s/sdlperl/sdlperl_1.20.0-12.diff.gz
+# libsdl-ttf2.0-0
+http://snapshot.debian.net/archive/2004/01/11/debian/pool/main/s/sdl-ttf2.0/sdl-ttf2.0_2.0.6.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/11/debian/pool/main/s/sdl-ttf2.0/sdl-ttf2.0_2.0.6-5.diff.gz
+# libsdl1.2debian
+http://snapshot.debian.net/archive/2004/01/27/debian/pool/main/libs/libsdl1.2/libsdl1.2_1.2.6.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/27/debian/pool/main/libs/libsdl1.2/libsdl1.2_1.2.6-3.diff.gz
+# libsdl1.2debian-oss
+http://snapshot.debian.net/archive/2004/01/27/debian/pool/main/libs/libsdl1.2/libsdl1.2_1.2.6.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/27/debian/pool/main/libs/libsdl1.2/libsdl1.2_1.2.6-3.diff.gz
+# libslp1
+http://snapshot.debian.net/archive/2003/12/11/debian/pool/main/o/openslp/openslp_1.0.11.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/11/debian/pool/main/o/openslp/openslp_1.0.11-6.diff.gz
+# libsm-dev
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# libsm6
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# libsmbclient
+http://snapshot.debian.net/archive/2004/02/14/debian/pool/main/s/samba/samba_3.0.2.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/14/debian/pool/main/s/samba/samba_3.0.2-2.diff.gz
+# libsmpeg0
+http://snapshot.debian.net/archive/2003/08/26/debian/pool/main/s/smpeg/smpeg_0.4.5+cvs20030824.orig.tar.gz
+http://snapshot.debian.net/archive/2003/08/26/debian/pool/main/s/smpeg/smpeg_0.4.5+cvs20030824-1.diff.gz
+# libsndfile1
+http://snapshot.debian.net/archive/2003/04/29/debian/pool/main/libs/libsndfile/libsndfile_1.0.4.orig.tar.gz
+http://snapshot.debian.net/archive/2003/04/29/debian/pool/main/libs/libsndfile/libsndfile_1.0.4-3.diff.gz
+# libspeex1
+http://snapshot.debian.net/archive/2003/11/21/debian/pool/main/s/speex/speex_1.0.rel.3.orig.tar.gz
+http://snapshot.debian.net/archive/2003/11/21/debian/pool/main/s/speex/speex_1.0.rel.3-1.diff.gz
+# libss2
+http://snapshot.debian.net/archive/2004/02/03/debian/pool/main/e/e2fsprogs/e2fsprogs_1.34+1.35-WIP-2004.01.31.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/03/debian/pool/main/e/e2fsprogs/e2fsprogs_1.34+1.35-WIP-2004.01.31-1.diff.gz
+# libssl-dev
+http://snapshot.debian.net/archive/2003/10/17/debian/pool/main/o/openssl/openssl_0.9.7c.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/17/debian/pool/main/o/openssl/openssl_0.9.7c-5.diff.gz
+# libssl0.9.6
+# libssl0.9.7
+http://snapshot.debian.net/archive/2003/10/17/debian/pool/main/o/openssl/openssl_0.9.7c.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/17/debian/pool/main/o/openssl/openssl_0.9.7c-5.diff.gz
+# libstartup-notification0
+http://snapshot.debian.net/archive/2003/09/23/debian/pool/main/s/startup-notification/startup-notification_0.5.orig.tar.gz
+http://snapshot.debian.net/archive/2003/09/23/debian/pool/main/s/startup-notification/startup-notification_0.5-4.diff.gz
+# libstdc++2.10-glibc2.2
+# libstdc++5
+# libstdc++5-3.3-dev
+# libtasn1-0
+http://snapshot.debian.net/archive/2002/10/12/debian/pool/main/libt/libtasn1/libtasn1_0.1.2.orig.tar.gz
+http://snapshot.debian.net/archive/2002/10/12/debian/pool/main/libt/libtasn1/libtasn1_0.1.2-1.diff.gz
+# libtasn1-2
+http://snapshot.debian.net/archive/2004/03/24/debian/pool/main/libt/libtasn1-2/libtasn1-2_0.2.7.orig.tar.gz
+http://snapshot.debian.net/archive/2004/03/24/debian/pool/main/libt/libtasn1-2/libtasn1-2_0.2.7-1.diff.gz
+# libtasn1-dev
+http://snapshot.debian.net/archive/2002/10/12/debian/pool/main/libt/libtasn1/libtasn1_0.1.2.orig.tar.gz
+http://snapshot.debian.net/archive/2002/10/12/debian/pool/main/libt/libtasn1/libtasn1_0.1.2-1.diff.gz
+# libtext-charwidth-perl
+http://snapshot.debian.net/archive/2003/07/03/debian/pool/main/libt/libtext-charwidth-perl/libtext-charwidth-perl_0.04.orig.tar.gz
+http://snapshot.debian.net/archive/2003/07/03/debian/pool/main/libt/libtext-charwidth-perl/libtext-charwidth-perl_0.04-1.diff.gz
+# libtext-iconv-perl
+http://snapshot.debian.net/archive/2003/04/01/debian/pool/main/libt/libtext-iconv-perl/libtext-iconv-perl_1.2.orig.tar.gz
+http://snapshot.debian.net/archive/2003/04/01/debian/pool/main/libt/libtext-iconv-perl/libtext-iconv-perl_1.2-2.diff.gz
+# libtext-wrapi18n-perl
+http://snapshot.debian.net/archive/2003/07/03/debian/pool/main/libt/libtext-wrapi18n-perl/libtext-wrapi18n-perl_0.06.orig.tar.gz
+http://snapshot.debian.net/archive/2003/07/03/debian/pool/main/libt/libtext-wrapi18n-perl/libtext-wrapi18n-perl_0.06-1.diff.gz
+# libtextwrap1
+http://snapshot.debian.net/archive/2003/09/01/debian/pool/main/libt/libtextwrap/libtextwrap_0.1.orig.tar.gz
+http://snapshot.debian.net/archive/2003/09/01/debian/pool/main/libt/libtextwrap/libtextwrap_0.1-1.diff.gz
+# libtiff3g
+http://snapshot.debian.net/archive/2002/12/11/debian/pool/main/t/tiff/tiff_3.5.7.orig.tar.gz
+http://snapshot.debian.net/archive/2002/12/11/debian/pool/main/t/tiff/tiff_3.5.7-2.diff.gz
+# libtool
+http://snapshot.debian.net/archive/2004/01/26/debian/pool/main/libt/libtool/libtool_1.5.2.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/26/debian/pool/main/libt/libtool/libtool_1.5.2-1.diff.gz
+# libttf2
+http://snapshot.debian.net/archive/2003/10/27/debian/pool/main/f/freetype1/freetype1_1.4pre.20030402.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/27/debian/pool/main/f/freetype1/freetype1_1.4pre.20030402-1.1.diff.gz
+# libungif4g
+http://snapshot.debian.net/archive/2003/11/02/debian/pool/main/libu/libungif4/libungif4_4.1.0b1.orig.tar.gz
+http://snapshot.debian.net/archive/2003/11/02/debian/pool/main/libu/libungif4/libungif4_4.1.0b1-6.diff.gz
+# libusb-0.1-4
+# libusb-dev
+# libuuid1
+http://snapshot.debian.net/archive/2004/02/03/debian/pool/main/e/e2fsprogs/e2fsprogs_1.34+1.35-WIP-2004.01.31.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/03/debian/pool/main/e/e2fsprogs/e2fsprogs_1.34+1.35-WIP-2004.01.31-1.diff.gz
+# libvorbis-dev
+http://snapshot.debian.net/archive/2003/12/10/debian/pool/main/libv/libvorbis/libvorbis_1.0.1.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/10/debian/pool/main/libv/libvorbis/libvorbis_1.0.1-1.diff.gz
+# libvorbis0a
+http://snapshot.debian.net/archive/2003/12/10/debian/pool/main/libv/libvorbis/libvorbis_1.0.1.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/10/debian/pool/main/libv/libvorbis/libvorbis_1.0.1-1.diff.gz
+# libvorbisenc2
+http://snapshot.debian.net/archive/2003/12/10/debian/pool/main/libv/libvorbis/libvorbis_1.0.1.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/10/debian/pool/main/libv/libvorbis/libvorbis_1.0.1-1.diff.gz
+# libvorbisfile3
+http://snapshot.debian.net/archive/2003/12/10/debian/pool/main/libv/libvorbis/libvorbis_1.0.1.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/10/debian/pool/main/libv/libvorbis/libvorbis_1.0.1-1.diff.gz
+# libweakref-perl
+http://snapshot.debian.net/archive/2002/08/26/debian/pool/main/libw/libweakref-perl/libweakref-perl_0.01.orig.tar.gz
+http://snapshot.debian.net/archive/2002/08/26/debian/pool/main/libw/libweakref-perl/libweakref-perl_0.01-4.diff.gz
+# libwmf-bin
+http://snapshot.debian.net/archive/2003/12/15/debian/pool/main/libw/libwmf/libwmf_0.2.8.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/15/debian/pool/main/libw/libwmf/libwmf_0.2.8-1.1.diff.gz
+# libwmf0.2-7
+http://snapshot.debian.net/archive/2003/12/15/debian/pool/main/libw/libwmf/libwmf_0.2.8.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/15/debian/pool/main/libw/libwmf/libwmf_0.2.8-1.1.diff.gz
+# libwrap0
+http://snapshot.debian.net/archive/2002/09/06/debian/pool/main/t/tcp-wrappers/tcp-wrappers_7.6-ipv6.1.orig.tar.gz
+http://snapshot.debian.net/archive/2002/09/06/debian/pool/main/t/tcp-wrappers/tcp-wrappers_7.6-ipv6.1-3.diff.gz
+# libwrap0-dev
+http://snapshot.debian.net/archive/2002/09/06/debian/pool/main/t/tcp-wrappers/tcp-wrappers_7.6-ipv6.1.orig.tar.gz
+http://snapshot.debian.net/archive/2002/09/06/debian/pool/main/t/tcp-wrappers/tcp-wrappers_7.6-ipv6.1-3.diff.gz
+# libwww-ssl0
+http://snapshot.debian.net/archive/2003/10/01/debian/pool/main/w/w3c-libwww/w3c-libwww_5.4.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/01/debian/pool/main/w/w3c-libwww/w3c-libwww_5.4.0-9.diff.gz
+# libwxgtk2.4
+http://snapshot.debian.net/archive/2003/10/26/debian/pool/main/w/wxwindows2.4/wxwindows2.4_2.4.2.4.tar.gz
+# libx11-6
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# libx11-dev
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# libxaw7
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# libxaw7-dev
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# libxcursor-dev
+http://snapshot.debian.net/archive/2003/12/31/debian/pool/main/x/xcursor/xcursor_1.0.2.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/31/debian/pool/main/x/xcursor/xcursor_1.0.2-4.diff.gz
+# libxcursor1
+http://snapshot.debian.net/archive/2003/12/31/debian/pool/main/x/xcursor/xcursor_1.0.2.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/31/debian/pool/main/x/xcursor/xcursor_1.0.2-4.diff.gz
+# libxdelta2
+http://snapshot.debian.net/archive/2003/05/21/debian/pool/main/x/xdelta/xdelta_1.1.3.orig.tar.gz
+http://snapshot.debian.net/archive/2003/05/21/debian/pool/main/x/xdelta/xdelta_1.1.3-6.diff.gz
+# libxext-dev
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# libxext6
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# libxft1
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# libxft2
+http://snapshot.debian.net/archive/2003/05/02/debian/pool/main/x/xft2/xft2_2.1.1.orig.tar.gz
+http://snapshot.debian.net/archive/2003/05/02/debian/pool/main/x/xft2/xft2_2.1.1-2.diff.gz
+# libxi-dev
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# libxi6
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# libxml2
+http://snapshot.debian.net/archive/2004/04/22/debian/pool/main/libx/libxml2/libxml2_2.6.9.orig.tar.gz
+http://snapshot.debian.net/archive/2004/04/22/debian/pool/main/libx/libxml2/libxml2_2.6.9-1.diff.gz
+# libxml2-utils
+http://snapshot.debian.net/archive/2004/01/31/debian/pool/main/libx/libxml2/libxml2_2.6.5.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/31/debian/pool/main/libx/libxml2/libxml2_2.6.5-1.diff.gz
+# libxmu-dev
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# libxmu6
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# libxmuu-dev
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# libxmuu1
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# libxp-dev
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# libxp6
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# libxpm-dev
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# libxpm4
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# libxrandr-dev
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# libxrandr2
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# libxrender-dev
+http://snapshot.debian.net/archive/2003/12/06/debian/pool/main/x/xrender/xrender_0.8.3.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/06/debian/pool/main/x/xrender/xrender_0.8.3-5.diff.gz
+# libxrender1
+http://snapshot.debian.net/archive/2003/12/06/debian/pool/main/x/xrender/xrender_0.8.3.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/06/debian/pool/main/x/xrender/xrender_0.8.3-5.diff.gz
+# libxt-dev
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# libxt6
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# libxtrap-dev
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# libxtrap6
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# libxtst-dev
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# libxtst6
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# libxv-dev
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# libxv1
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# libzvbi-common
+http://snapshot.debian.net/archive/2003/11/11/debian/pool/main/z/zvbi/zvbi_0.2.5.orig.tar.gz
+http://snapshot.debian.net/archive/2003/11/11/debian/pool/main/z/zvbi/zvbi_0.2.5-1.diff.gz
+# libzvbi0
+http://snapshot.debian.net/archive/2003/11/11/debian/pool/main/z/zvbi/zvbi_0.2.5.orig.tar.gz
+http://snapshot.debian.net/archive/2003/11/11/debian/pool/main/z/zvbi/zvbi_0.2.5-1.diff.gz
+# lilo
+# links-ssl
+http://snapshot.debian.net/archive/2002/12/02/debian/pool/main/l/links/links_0.98.orig.tar.gz
+http://snapshot.debian.net/archive/2002/12/02/debian/pool/main/l/links/links_0.98-2.diff.gz
+# linux-kernel-headers-knoppix
+# linux-wlan-ng
+http://snapshot.debian.net/archive/2003/11/05/debian/pool/main/l/linux-wlan-ng/linux-wlan-ng_0.2.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/11/05/debian/pool/main/l/linux-wlan-ng/linux-wlan-ng_0.2.0-13.diff.gz
+# linux-wlan-ng-modules-2.4.24-xf
+# loadlin
+http://snapshot.debian.net/archive/2003/08/08/debian/pool/main/l/loadlin/loadlin_1.6c-0.3.tar.gz
+# locales
+http://snapshot.debian.net/archive/2004/01/22/debian/pool/main/g/glibc/glibc_2.3.2.ds1.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/22/debian/pool/main/g/glibc/glibc_2.3.2.ds1-11.diff.gz
+# lockfile-progs
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/l/lockfile-progs/lockfile-progs_0.1.9.tar.gz
+# login
+# logrotate
+http://snapshot.debian.net/archive/2002/10/10/debian/pool/main/l/logrotate/logrotate_3.6.5.orig.tar.gz
+http://snapshot.debian.net/archive/2002/10/10/debian/pool/main/l/logrotate/logrotate_3.6.5-2.diff.gz
+# loop-aes
+# lrzsz
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/l/lrzsz/lrzsz_0.12.21.orig.tar.gz
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/l/lrzsz/lrzsz_0.12.21-4.diff.gz
+# lsof
+http://snapshot.debian.net/archive/2002/07/19/debian/pool/main/l/lsof/lsof_4.64.orig.tar.gz
+http://snapshot.debian.net/archive/2002/07/19/debian/pool/main/l/lsof/lsof_4.64-1.diff.gz
+# lvm-common
+http://snapshot.debian.net/archive/2004/01/02/debian/pool/main/l/lvm-common/lvm-common_1.5.11.tar.gz
+# lvm10
+# lynx-ssl
+# lzop
+http://snapshot.debian.net/archive/2003/06/09/debian/pool/main/l/lzop/lzop_1.01.orig.tar.gz
+http://snapshot.debian.net/archive/2003/06/09/debian/pool/main/l/lzop/lzop_1.01-1.diff.gz
+# m4
+http://snapshot.debian.net/archive/2003/09/19/debian/pool/main/m/m4/m4_1.4.orig.tar.gz
+http://snapshot.debian.net/archive/2003/09/19/debian/pool/main/m/m4/m4_1.4-17.diff.gz
+# macutils
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/m/macutils/macutils_2.0b3.orig.tar.gz
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/m/macutils/macutils_2.0b3-12.diff.gz
+# mailx
+# make
+http://snapshot.debian.net/archive/2003/09/25/debian/pool/main/m/make/make_3.80.orig.tar.gz
+http://snapshot.debian.net/archive/2003/09/25/debian/pool/main/m/make/make_3.80-4.diff.gz
+# makedev
+http://snapshot.debian.net/archive/2004/01/27/debian/pool/main/m/makedev/makedev_2.3.1.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/27/debian/pool/main/m/makedev/makedev_2.3.1-65.diff.gz
+# man-db
+http://snapshot.debian.net/archive/2004/02/12/debian/pool/main/m/man-db/man-db_2.4.2.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/12/debian/pool/main/m/man-db/man-db_2.4.2-9.diff.gz
+# manpages
+http://snapshot.debian.net/archive/2003/12/13/debian/pool/main/m/manpages/manpages_1.62.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/13/debian/pool/main/m/manpages/manpages_1.62-1.diff.gz
+# manpages-de
+http://snapshot.debian.net/archive/2002/10/27/debian/pool/main/m/manpages-de/manpages-de_0.4.orig.tar.gz
+http://snapshot.debian.net/archive/2002/10/27/debian/pool/main/m/manpages-de/manpages-de_0.4-6.diff.gz
+# manpages-dev
+http://snapshot.debian.net/archive/2003/12/13/debian/pool/main/m/manpages/manpages_1.62.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/13/debian/pool/main/m/manpages/manpages_1.62-1.diff.gz
+# mawk
+http://snapshot.debian.net/archive/2003/05/31/debian/pool/main/m/mawk/mawk_1.3.3.orig.tar.gz
+http://snapshot.debian.net/archive/2003/05/31/debian/pool/main/m/mawk/mawk_1.3.3-11.diff.gz
+# mbr
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/m/mbr/mbr_1.1.5.orig.tar.gz
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/m/mbr/mbr_1.1.5-1.diff.gz
+# mc
+# mdadm
+http://snapshot.debian.net/archive/2004/02/02/debian/pool/main/m/mdadm/mdadm_1.4.0.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/02/debian/pool/main/m/mdadm/mdadm_1.4.0-3.diff.gz
+# menu
+http://snapshot.debian.net/archive/2004/01/25/debian/pool/main/m/menu/menu_2.1.9-5.tar.gz
+# mh-e
+http://snapshot.debian.net/archive/2003/11/20/debian/pool/main/m/mh-e/mh-e_7.4.3.orig.tar.gz
+http://snapshot.debian.net/archive/2003/11/20/debian/pool/main/m/mh-e/mh-e_7.4.3-1.diff.gz
+# mikmod
+http://snapshot.debian.net/archive/2004/01/01/debian/pool/main/m/mikmod/mikmod_3.2.1.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/01/debian/pool/main/m/mikmod/mikmod_3.2.1-1.diff.gz
+# mime-support
+http://snapshot.debian.net/archive/2004/01/20/debian/pool/main/m/mime-support/mime-support_3.24-1.tar.gz
+# mindi
+http://snapshot.debian.net/archive/2003/10/16/debian/pool/main/m/mindi/mindi_0.86.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/16/debian/pool/main/m/mindi/mindi_0.86-2.diff.gz
+# mindi-kernel
+http://snapshot.debian.net/archive/2003/08/25/debian/pool/main/m/mindi-kernel/mindi-kernel_1.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/08/25/debian/pool/main/m/mindi-kernel/mindi-kernel_1.0-1.diff.gz
+# minicom
+http://snapshot.debian.net/archive/2003/11/13/debian/pool/main/m/minicom/minicom_2.1.orig.tar.gz
+http://snapshot.debian.net/archive/2003/11/13/debian/pool/main/m/minicom/minicom_2.1-7.diff.gz
+# mkdesktophdicons-knoppix
+# mkdosswapfile-knoppix
+# mkisofs
+# mkmenusfromkde-knoppix
+# mknbi
+http://snapshot.debian.net/archive/2003/07/16/debian/pool/main/m/mknbi/mknbi_1.4.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/07/16/debian/pool/main/m/mknbi/mknbi_1.4.0-1.diff.gz
+# mkpersistenthome-knoppix
+# modconf
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/m/modconf/modconf_0.2.45.tar.gz
+# module-init-tools
+http://snapshot.debian.net/archive/2004/02/01/debian/pool/main/m/module-init-tools/module-init-tools_3.0-pre9.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/01/debian/pool/main/m/module-init-tools/module-init-tools_3.0-pre9-1.diff.gz
+# modutils
+http://snapshot.debian.net/archive/2004/01/01/debian/pool/main/m/modutils/modutils_2.4.26.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/01/debian/pool/main/m/modutils/modutils_2.4.26-1.diff.gz
+# mondo
+http://snapshot.debian.net/archive/2003/10/16/debian/pool/main/m/mondo/mondo_1.66.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/16/debian/pool/main/m/mondo/mondo_1.66-2.diff.gz
+# mount-aes
+# mouseconfig
+# mpack
+http://snapshot.debian.net/archive/2003/07/26/debian/pool/main/m/mpack/mpack_1.6.orig.tar.gz
+http://snapshot.debian.net/archive/2003/07/26/debian/pool/main/m/mpack/mpack_1.6-1.diff.gz
+# mpage
+# mpg321
+http://snapshot.debian.net/archive/2004/01/05/debian/pool/main/m/mpg321/mpg321_0.2.10.3.tar.gz
+# mt-st
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/m/mt-st/mt-st_0.7.orig.tar.gz
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/m/mt-st/mt-st_0.7-2.diff.gz
+# mtools
+http://snapshot.debian.net/archive/2004/02/03/debian/pool/main/m/mtools/mtools_3.9.9.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/03/debian/pool/main/m/mtools/mtools_3.9.9-2.diff.gz
+# mutt
+http://snapshot.debian.net/archive/2004/01/18/debian/pool/main/m/mutt/mutt_1.5.5.1.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/18/debian/pool/main/m/mutt/mutt_1.5.5.1-20040112+1.diff.gz
+# mysql-client
+http://snapshot.debian.net/archive/2004/02/11/debian/pool/main/m/mysql-dfsg/mysql-dfsg_4.0.17.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/11/debian/pool/main/m/mysql-dfsg/mysql-dfsg_4.0.17-2.diff.gz
+# mysql-common
+http://snapshot.debian.net/archive/2004/02/11/debian/pool/main/m/mysql-dfsg/mysql-dfsg_4.0.17.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/11/debian/pool/main/m/mysql-dfsg/mysql-dfsg_4.0.17-2.diff.gz
+# mysql-server
+http://snapshot.debian.net/archive/2004/02/11/debian/pool/main/m/mysql-dfsg/mysql-dfsg_4.0.17.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/11/debian/pool/main/m/mysql-dfsg/mysql-dfsg_4.0.17-2.diff.gz
+# nasm
+http://snapshot.debian.net/archive/2003/05/09/debian/pool/main/n/nasm/nasm_0.98.36.orig.tar.gz
+http://snapshot.debian.net/archive/2003/05/09/debian/pool/main/n/nasm/nasm_0.98.36-1.diff.gz
+# ncpfs
+http://snapshot.debian.net/archive/2003/03/18/debian/pool/main/n/ncpfs/ncpfs_2.2.3.orig.tar.gz
+http://snapshot.debian.net/archive/2003/03/18/debian/pool/main/n/ncpfs/ncpfs_2.2.3-1.diff.gz
+# ncurses-base
+http://snapshot.debian.net/archive/2004/01/18/debian/pool/main/n/ncurses/ncurses_5.3.20030719.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/18/debian/pool/main/n/ncurses/ncurses_5.3.20030719-5.diff.gz
+# ncurses-bin
+http://snapshot.debian.net/archive/2004/01/18/debian/pool/main/n/ncurses/ncurses_5.3.20030719.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/18/debian/pool/main/n/ncurses/ncurses_5.3.20030719-5.diff.gz
+# ne
+http://snapshot.debian.net/archive/2004/04/03/debian/pool/main/n/ne/ne_1.30.orig.tar.gz
+http://snapshot.debian.net/archive/2004/04/03/debian/pool/main/n/ne/ne_1.30-1.diff.gz
+# nessus-plugins
+http://snapshot.debian.net/archive/2003/12/25/debian/pool/main/n/nessus-plugins/nessus-plugins_2.0.9.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/25/debian/pool/main/n/nessus-plugins/nessus-plugins_2.0.9-2.diff.gz
+# nessusd
+http://snapshot.debian.net/archive/2004/01/23/debian/pool/main/n/nessus-core/nessus-core_2.0.9.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/23/debian/pool/main/n/nessus-core/nessus-core_2.0.9-3.diff.gz
+# net-tools
+http://snapshot.debian.net/archive/2003/12/30/debian/pool/main/n/net-tools/net-tools_1.60.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/30/debian/pool/main/n/net-tools/net-tools_1.60-9.diff.gz
+# netbase
+http://snapshot.debian.net/archive/2004/02/14/debian/pool/main/n/netbase/netbase_4.16.tar.gz
+# netcardconfig-knoppix
+# netcat
+http://snapshot.debian.net/archive/2003/08/25/debian/pool/main/n/netcat/netcat_1.10.orig.tar.gz
+http://snapshot.debian.net/archive/2003/08/25/debian/pool/main/n/netcat/netcat_1.10-23.diff.gz
+# nethack
+http://snapshot.debian.net/archive/2004/03/15/debian/pool/main/n/nethack/nethack_3.4.3.orig.tar.gz
+http://snapshot.debian.net/archive/2004/03/15/debian/pool/main/n/nethack/nethack_3.4.3-4.diff.gz
+# nethack-common
+http://snapshot.debian.net/archive/2004/03/15/debian/pool/main/n/nethack/nethack_3.4.3.orig.tar.gz
+http://snapshot.debian.net/archive/2004/03/15/debian/pool/main/n/nethack/nethack_3.4.3-4.diff.gz
+# nethack-console
+http://snapshot.debian.net/archive/2004/03/15/debian/pool/main/n/nethack/nethack_3.4.3.orig.tar.gz
+http://snapshot.debian.net/archive/2004/03/15/debian/pool/main/n/nethack/nethack_3.4.3-4.diff.gz
+# nethack-x11
+http://snapshot.debian.net/archive/2004/03/15/debian/pool/main/n/nethack/nethack_3.4.3.orig.tar.gz
+http://snapshot.debian.net/archive/2004/03/15/debian/pool/main/n/nethack/nethack_3.4.3-4.diff.gz
+# netkit-inetd
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/n/netkit-base/netkit-base_0.10.orig.tar.gz
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/n/netkit-base/netkit-base_0.10-9.diff.gz
+# netkit-ping
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/n/netkit-base/netkit-base_0.10.orig.tar.gz
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/n/netkit-base/netkit-base_0.10-9.diff.gz
+# netpbm
+# netpipe-tcp
+http://snapshot.debian.net/archive/2004/01/24/debian/pool/main/n/netpipe/netpipe_3.6.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/24/debian/pool/main/n/netpipe/netpipe_3.6-1.diff.gz
+# netpipes
+http://snapshot.debian.net/archive/2003/07/30/debian/pool/main/n/netpipes/netpipes_4.2.orig.tar.gz
+http://snapshot.debian.net/archive/2003/07/30/debian/pool/main/n/netpipes/netpipes_4.2-3.diff.gz
+# networkconfig-knoppix
+# nfs-common
+# nfs-kernel-server
+# nis
+http://snapshot.debian.net/archive/2004/01/29/debian/pool/main/n/nis/nis_3.10.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/29/debian/pool/main/n/nis/nis_3.10-5.diff.gz
+# nmap
+http://snapshot.debian.net/archive/2004/01/25/debian/pool/main/n/nmap/nmap_3.50.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/25/debian/pool/main/n/nmap/nmap_3.50-1.diff.gz
+# nmh
+http://snapshot.debian.net/archive/2003/06/21/debian/pool/main/n/nmh/nmh_1.1-RC1.orig.tar.gz
+http://snapshot.debian.net/archive/2003/06/21/debian/pool/main/n/nmh/nmh_1.1-RC1-3.diff.gz
+# nparted
+# ntfstools
+http://snapshot.debian.net/archive/2004/01/08/debian/pool/main/l/linux-ntfs/linux-ntfs_1.8.0.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/08/debian/pool/main/l/linux-ntfs/linux-ntfs_1.8.0-2.diff.gz
+# ntpdate
+# openssl
+http://snapshot.debian.net/archive/2003/10/17/debian/pool/main/o/openssl/openssl_0.9.7c.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/17/debian/pool/main/o/openssl/openssl_0.9.7c-5.diff.gz
+# orinoco
+# partimage
+http://snapshot.debian.net/archive/2004/02/10/debian/pool/main/p/partimage/partimage_0.6.4.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/10/debian/pool/main/p/partimage/partimage_0.6.4-1.diff.gz
+# partimage-server
+http://snapshot.debian.net/archive/2004/02/10/debian/pool/main/p/partimage/partimage_0.6.4.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/10/debian/pool/main/p/partimage/partimage_0.6.4-1.diff.gz
+# passwd
+# patch
+http://snapshot.debian.net/archive/2003/05/22/debian/pool/main/p/patch/patch_2.5.9.orig.tar.gz
+http://snapshot.debian.net/archive/2003/05/22/debian/pool/main/p/patch/patch_2.5.9-1.diff.gz
+# pciutils
+# pciutils-dev
+# pcmcia-cs
+http://snapshot.debian.net/archive/2003/11/11/debian/pool/main/p/pcmcia-cs/pcmcia-cs_3.2.5.orig.tar.gz
+http://snapshot.debian.net/archive/2003/11/11/debian/pool/main/p/pcmcia-cs/pcmcia-cs_3.2.5-2.diff.gz
+# perl
+http://snapshot.debian.net/archive/2004/01/30/debian/pool/main/p/perl/perl_5.8.3.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/30/debian/pool/main/p/perl/perl_5.8.3-1.diff.gz
+# perl-base
+http://snapshot.debian.net/archive/2004/01/30/debian/pool/main/p/perl/perl_5.8.3.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/30/debian/pool/main/p/perl/perl_5.8.3-1.diff.gz
+# perl-modules
+http://snapshot.debian.net/archive/2004/01/30/debian/pool/main/p/perl/perl_5.8.3.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/30/debian/pool/main/p/perl/perl_5.8.3-1.diff.gz
+# php4
+# php4-cgi
+# php4-mysql
+# pilot-link
+http://snapshot.debian.net/archive/2003/09/29/debian/pool/main/p/pilot-link/pilot-link_0.11.8.orig.tar.gz
+http://snapshot.debian.net/archive/2003/09/29/debian/pool/main/p/pilot-link/pilot-link_0.11.8-7.diff.gz
+# pkg-config
+http://snapshot.debian.net/archive/2003/11/01/debian/pool/main/p/pkgconfig/pkgconfig_0.15.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/11/01/debian/pool/main/p/pkgconfig/pkgconfig_0.15.0-3.diff.gz
+# playmidi
+http://snapshot.debian.net/archive/2003/08/24/debian/pool/main/p/playmidi/playmidi_2.4.orig.tar.gz
+http://snapshot.debian.net/archive/2003/08/24/debian/pool/main/p/playmidi/playmidi_2.4-6.diff.gz
+# pm-dev
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# pnm2ppa
+http://snapshot.debian.net/archive/2004/01/27/debian/pool/main/p/pnm2ppa/pnm2ppa_1.12.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/27/debian/pool/main/p/pnm2ppa/pnm2ppa_1.12-10.diff.gz
+# po-debconf
+http://snapshot.debian.net/archive/2004/02/08/debian/pool/main/p/po-debconf/po-debconf_0.8.8.tar.gz
+# portmap
+http://snapshot.debian.net/archive/2003/09/14/debian/pool/main/p/portmap/portmap_5.orig.tar.gz
+http://snapshot.debian.net/archive/2003/09/14/debian/pool/main/p/portmap/portmap_5-2.1.diff.gz
+# poster
+http://snapshot.debian.net/archive/2003/04/11/debian/pool/main/p/poster/poster_20020830.orig.tar.gz
+http://snapshot.debian.net/archive/2003/04/11/debian/pool/main/p/poster/poster_20020830-2.diff.gz
+# powermgmt-base
+http://snapshot.debian.net/archive/2003/09/19/debian/pool/main/p/powermgmt-base/powermgmt-base_1.17.tar.gz
+# ppmd
+http://snapshot.debian.net/archive/2004/01/24/debian/pool/main/p/ppmd/ppmd_9.1.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/24/debian/pool/main/p/ppmd/ppmd_9.1-8.diff.gz
+# ppmtofb
+http://snapshot.debian.net/archive/2003/08/12/debian/pool/main/p/ppmtofb/ppmtofb_0.32.tar.gz
+# ppp
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/p/ppp/ppp_2.4.2+20031127.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/p/ppp/ppp_2.4.2+20031127-2.diff.gz
+# ppp-scripts-knoppix
+# pppconfig
+http://snapshot.debian.net/archive/2002/12/19/debian/pool/main/p/pppconfig/pppconfig_2.1.tar.gz
+# pppdcapiplugin
+# pppoe
+http://snapshot.debian.net/archive/2003/09/18/debian/pool/main/r/rp-pppoe/rp-pppoe_3.5.orig.tar.gz
+http://snapshot.debian.net/archive/2003/09/18/debian/pool/main/r/rp-pppoe/rp-pppoe_3.5-3.diff.gz
+# pppoeconf
+http://snapshot.debian.net/archive/2003/09/27/debian/pool/main/p/pppoeconf/pppoeconf_1.0.tar.gz
+# pppstatus
+http://snapshot.debian.net/archive/2003/02/03/debian/pool/main/p/pppstatus/pppstatus_0.4.2.orig.tar.gz
+http://snapshot.debian.net/archive/2003/02/03/debian/pool/main/p/pppstatus/pppstatus_0.4.2-6.diff.gz
+# pptp-linux
+http://snapshot.debian.net/archive/2003/06/28/debian/pool/main/p/pptp-linux/pptp-linux_1.3.1.orig.tar.gz
+http://snapshot.debian.net/archive/2003/06/28/debian/pool/main/p/pptp-linux/pptp-linux_1.3.1-1.diff.gz
+# prism54
+# prism54-nonfree
+# procmail
+http://snapshot.debian.net/archive/2004/01/21/debian/pool/main/p/procmail/procmail_3.22.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/21/debian/pool/main/p/procmail/procmail_3.22-9.diff.gz
+# procps
+# psfontmgr
+http://snapshot.debian.net/archive/2004/01/29/debian/pool/main/d/defoma/defoma_0.11.7.tar.gz
+# psmisc
+http://snapshot.debian.net/archive/2003/12/09/debian/pool/main/p/psmisc/psmisc_21.4.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/09/debian/pool/main/p/psmisc/psmisc_21.4-1.diff.gz
+# psutils
+http://snapshot.debian.net/archive/2003/04/05/debian/pool/main/p/psutils/psutils_1.17.orig.tar.gz
+http://snapshot.debian.net/archive/2003/04/05/debian/pool/main/p/psutils/psutils_1.17-17.diff.gz
+# pump
+http://snapshot.debian.net/archive/2004/02/01/debian/pool/main/p/pump/pump_0.8.19.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/01/debian/pool/main/p/pump/pump_0.8.19-3.diff.gz
+# python
+http://snapshot.debian.net/archive/2004/05/02/debian/pool/main/p/python2.3/python2.3_2.3.3.orig.tar.gz
+http://snapshot.debian.net/archive/2004/05/02/debian/pool/main/p/python2.3/python2.3_2.3.3-7.diff.gz
+# python2.3
+http://snapshot.debian.net/archive/2004/02/25/debian/pool/main/p/python2.3/python2.3_2.3.3.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/25/debian/pool/main/p/python2.3/python2.3_2.3.3-6.diff.gz
+# python2.3-imaging
+http://snapshot.debian.net/archive/2004/01/08/debian/pool/main/p/python-imaging/python-imaging_1.1.4.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/08/debian/pool/main/p/python-imaging/python-imaging_1.1.4-3.diff.gz
+# python2.3-tk
+http://snapshot.debian.net/archive/2004/02/25/debian/pool/main/p/python2.3/python2.3_2.3.3.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/25/debian/pool/main/p/python2.3/python2.3_2.3.3-6.diff.gz
+# radio
+http://snapshot.debian.net/archive/2004/01/30/debian/pool/main/x/xawtv/xawtv_3.91.tar.gz
+# raidtools2
+http://snapshot.debian.net/archive/2003/10/29/debian/pool/main/r/raidtools2/raidtools2_1.00.3.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/29/debian/pool/main/r/raidtools2/raidtools2_1.00.3-5.diff.gz
+# rcs
+http://snapshot.debian.net/archive/2003/08/06/debian/pool/main/r/rcs/rcs_5.7.orig.tar.gz
+http://snapshot.debian.net/archive/2003/08/06/debian/pool/main/r/rcs/rcs_5.7-13.1.diff.gz
+# rdate
+http://snapshot.debian.net/archive/2003/04/06/debian/pool/main/r/rdate/rdate_1.4.orig.tar.gz
+http://snapshot.debian.net/archive/2003/04/06/debian/pool/main/r/rdate/rdate_1.4-4.diff.gz
+# rebuildfstab-knoppix
+# reiserfsprogs
+# render-dev
+http://snapshot.debian.net/archive/2003/10/17/debian/pool/main/r/render/render_0.8.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/17/debian/pool/main/r/render/render_0.8-3.diff.gz
+# rootshell-knoppix
+# rosegarden
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/r/rosegarden/rosegarden_2.1pl3.orig.tar.gz
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/r/rosegarden/rosegarden_2.1pl3-1.diff.gz
+# rpm
+http://snapshot.debian.net/archive/2003/10/21/debian/pool/main/r/rpm/rpm_4.0.4.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/21/debian/pool/main/r/rpm/rpm_4.0.4-25.diff.gz
+# rsync
+http://snapshot.debian.net/archive/2004/01/27/debian/pool/main/r/rsync/rsync_2.6.0.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/27/debian/pool/main/r/rsync/rsync_2.6.0-2.diff.gz
+# ruby
+http://snapshot.debian.net/archive/2004/01/21/debian/pool/main/r/ruby-defaults/ruby-defaults_1.8.1-3.tar.gz
+# ruby1.8
+http://snapshot.debian.net/archive/2004/02/07/debian/pool/main/r/ruby1.8/ruby1.8_1.8.1.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/07/debian/pool/main/r/ruby1.8/ruby1.8_1.8.1-7.diff.gz
+# rxvt-beta
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/r/rxvt-beta/rxvt-beta_2.7.8.orig.tar.gz
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/r/rxvt-beta/rxvt-beta_2.7.8-5.diff.gz
+# s3switch
+http://snapshot.debian.net/archive/2003/10/28/debian/pool/main/s/s3switch/s3switch_0.0.20030423.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/28/debian/pool/main/s/s3switch/s3switch_0.0.20030423-2.diff.gz
+# samba
+http://snapshot.debian.net/archive/2004/02/14/debian/pool/main/s/samba/samba_3.0.2.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/14/debian/pool/main/s/samba/samba_3.0.2-2.diff.gz
+# samba-common
+http://snapshot.debian.net/archive/2004/02/14/debian/pool/main/s/samba/samba_3.0.2.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/14/debian/pool/main/s/samba/samba_3.0.2-2.diff.gz
+# sambastart-knoppix
+# sash
+http://snapshot.debian.net/archive/2004/02/11/debian/pool/main/s/sash/sash_3.7.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/11/debian/pool/main/s/sash/sash_3.7-3.diff.gz
+# saveconfig-knoppix
+# scanpartitions-knoppix
+# scantv
+http://snapshot.debian.net/archive/2004/01/30/debian/pool/main/x/xawtv/xawtv_3.91.tar.gz
+# scli
+http://snapshot.debian.net/archive/2002/09/03/debian/pool/main/s/scli/scli_0.2.12.orig.tar.gz
+http://snapshot.debian.net/archive/2002/09/03/debian/pool/main/s/scli/scli_0.2.12-1.diff.gz
+# screen
+http://snapshot.debian.net/archive/2004/01/08/debian/pool/main/s/screen/screen_4.0.2.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/08/debian/pool/main/s/screen/screen_4.0.2-2.diff.gz
+# sed
+http://snapshot.debian.net/archive/2003/10/26/debian/pool/main/s/sed/sed_4.0.7.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/26/debian/pool/main/s/sed/sed_4.0.7-3.diff.gz
+# sendfile
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/s/sendfile/sendfile_2.1.orig.tar.gz
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/s/sendfile/sendfile_2.1-26.diff.gz
+# setserial
+# shaper
+http://snapshot.debian.net/archive/2003/11/16/debian/pool/main/s/shaper/shaper_2.2.12-0.7.1.orig.tar.gz
+http://snapshot.debian.net/archive/2003/11/16/debian/pool/main/s/shaper/shaper_2.2.12-0.7.1-2.diff.gz
+# sharutils
+# shellutils
+http://snapshot.debian.net/archive/2003/10/06/debian/pool/main/c/coreutils/coreutils_5.0.91.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/06/debian/pool/main/c/coreutils/coreutils_5.0.91-2.diff.gz
+# sitar
+# slang1
+http://snapshot.debian.net/archive/2003/10/03/debian/pool/main/s/slang/slang_1.4.9.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/03/debian/pool/main/s/slang/slang_1.4.9-2.diff.gz
+# slang1a-utf8
+http://snapshot.debian.net/archive/2003/10/03/debian/pool/main/s/slang/slang_1.4.9.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/03/debian/pool/main/s/slang/slang_1.4.9-2.diff.gz
+# slrn
+http://snapshot.debian.net/archive/2004/02/01/debian/pool/main/s/slrn/slrn_0.9.8.0.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/01/debian/pool/main/s/slrn/slrn_0.9.8.0-10.diff.gz
+# smail
+http://snapshot.debian.net/archive/2003/09/22/debian/pool/main/s/smail/smail_3.2.0.115.orig.tar.gz
+http://snapshot.debian.net/archive/2003/09/22/debian/pool/main/s/smail/smail_3.2.0.115-5.diff.gz
+# smartsuite
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/s/smartsuite/smartsuite_2.1.orig.tar.gz
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/s/smartsuite/smartsuite_2.1-1.diff.gz
+# smbclient
+http://snapshot.debian.net/archive/2004/02/14/debian/pool/main/s/samba/samba_3.0.2.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/14/debian/pool/main/s/samba/samba_3.0.2-2.diff.gz
+# smbfs
+http://snapshot.debian.net/archive/2004/02/14/debian/pool/main/s/samba/samba_3.0.2.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/14/debian/pool/main/s/samba/samba_3.0.2-2.diff.gz
+# sndconfig-knoppix
+# sound-recorder
+http://snapshot.debian.net/archive/2002/12/24/debian/pool/main/s/sound-recorder/sound-recorder_0.06.orig.tar.gz
+http://snapshot.debian.net/archive/2002/12/24/debian/pool/main/s/sound-recorder/sound-recorder_0.06-6.diff.gz
+# soundcardconfig-knoppix
+# sox
+http://snapshot.debian.net/archive/2004/01/14/debian/pool/main/s/sox/sox_12.17.4.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/14/debian/pool/main/s/sox/sox_12.17.4-7.diff.gz
+# speedtouch
+http://snapshot.debian.net/archive/2003/12/06/debian/pool/main/s/speedtouch/speedtouch_1.2-0beta3.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/06/debian/pool/main/s/speedtouch/speedtouch_1.2-0beta3-1.diff.gz
+# speex
+http://snapshot.debian.net/archive/2003/11/21/debian/pool/main/s/speex/speex_1.0.rel.3.orig.tar.gz
+http://snapshot.debian.net/archive/2003/11/21/debian/pool/main/s/speex/speex_1.0.rel.3-1.diff.gz
+# squid
+http://snapshot.debian.net/archive/2003/12/12/debian/pool/main/s/squid/squid_2.5.4.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/12/debian/pool/main/s/squid/squid_2.5.4-3.diff.gz
+# ssh
+# sshstart-knoppix
+# sslwrap
+http://snapshot.debian.net/archive/2003/11/18/debian/pool/main/s/sslwrap/sslwrap_2.0.6.orig.tar.gz
+http://snapshot.debian.net/archive/2003/11/18/debian/pool/main/s/sslwrap/sslwrap_2.0.6-12.diff.gz
+# startsyslog-knoppix
+# statserial
+http://snapshot.debian.net/archive/2002/12/19/debian/pool/main/s/statserial/statserial_1.1.orig.tar.gz
+http://snapshot.debian.net/archive/2002/12/19/debian/pool/main/s/statserial/statserial_1.1-21.diff.gz
+# strace
+http://snapshot.debian.net/archive/2003/09/26/debian/pool/main/s/strace/strace_4.5.orig.tar.gz
+http://snapshot.debian.net/archive/2003/09/26/debian/pool/main/s/strace/strace_4.5-1.diff.gz
+# stunnel
+# sudo
+http://snapshot.debian.net/archive/2003/09/04/debian/pool/main/s/sudo/sudo_1.6.7p5.orig.tar.gz
+http://snapshot.debian.net/archive/2003/09/04/debian/pool/main/s/sudo/sudo_1.6.7p5-1.diff.gz
+# sudoers-knoppix
+# symlinks
+# sysklogd
+http://snapshot.debian.net/archive/2003/10/03/debian/pool/main/s/sysklogd/sysklogd_1.4.1.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/03/debian/pool/main/s/sysklogd/sysklogd_1.4.1-13.diff.gz
+# syslinux-knoppix
+# sysutils
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/s/sysutils/sysutils_1.3.8.5.1.tar.gz
+# sysvinit
+# sysvinit-knoppix
+# t1lib1
+http://snapshot.debian.net/archive/2004/01/19/debian/pool/main/t/t1lib-old/t1lib-old_1.3.1.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/19/debian/pool/main/t/t1lib-old/t1lib-old_1.3.1-9.diff.gz
+# tar
+http://snapshot.debian.net/archive/2004/02/14/debian/pool/main/t/tar/tar_1.13.92.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/14/debian/pool/main/t/tar/tar_1.13.92-4.diff.gz
+# tasksel
+http://snapshot.debian.net/archive/2004/01/30/debian/pool/main/t/tasksel/tasksel_1.43.tar.gz
+# tcl8.3
+http://snapshot.debian.net/archive/2003/08/11/debian/pool/main/t/tcl8.3/tcl8.3_8.3.5.orig.tar.gz
+http://snapshot.debian.net/archive/2003/08/11/debian/pool/main/t/tcl8.3/tcl8.3_8.3.5-4.diff.gz
+# tcl8.3-dev
+http://snapshot.debian.net/archive/2003/08/11/debian/pool/main/t/tcl8.3/tcl8.3_8.3.5.orig.tar.gz
+http://snapshot.debian.net/archive/2003/08/11/debian/pool/main/t/tcl8.3/tcl8.3_8.3.5-4.diff.gz
+# tcl8.4
+http://snapshot.debian.net/archive/2003/12/24/debian/pool/main/t/tcl8.4/tcl8.4_8.4.5.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/24/debian/pool/main/t/tcl8.4/tcl8.4_8.4.5-1.diff.gz
+# tclx8.3
+http://snapshot.debian.net/archive/2004/01/15/debian/pool/main/t/tclx8.3/tclx8.3_8.3.5-4.tar.gz
+# tclx8.3-dev
+http://snapshot.debian.net/archive/2004/01/15/debian/pool/main/t/tclx8.3/tclx8.3_8.3.5-4.tar.gz
+# tcpd
+http://snapshot.debian.net/archive/2002/09/06/debian/pool/main/t/tcp-wrappers/tcp-wrappers_7.6-ipv6.1.orig.tar.gz
+http://snapshot.debian.net/archive/2002/09/06/debian/pool/main/t/tcp-wrappers/tcp-wrappers_7.6-ipv6.1-3.diff.gz
+# tcpdump
+http://snapshot.debian.net/archive/2004/01/18/debian/pool/main/t/tcpdump/tcpdump_3.7.2.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/18/debian/pool/main/t/tcpdump/tcpdump_3.7.2-3.diff.gz
+# tct
+http://snapshot.debian.net/archive/2003/02/15/debian/pool/main/t/tct/tct_1.11.orig.tar.gz
+http://snapshot.debian.net/archive/2003/02/15/debian/pool/main/t/tct/tct_1.11-6.diff.gz
+# telnet-ssl
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/n/netkit-telnet-ssl/netkit-telnet-ssl_0.17.17+0.1.orig.tar.gz
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/n/netkit-telnet-ssl/netkit-telnet-ssl_0.17.17+0.1-2.diff.gz
+# telnetd-ssl
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/n/netkit-telnet-ssl/netkit-telnet-ssl_0.17.17+0.1.orig.tar.gz
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/n/netkit-telnet-ssl/netkit-telnet-ssl_0.17.17+0.1-2.diff.gz
+# testdisk
+http://snapshot.debian.net/archive/2003/07/23/debian/pool/main/t/testdisk/testdisk_4.2.orig.tar.gz
+http://snapshot.debian.net/archive/2003/07/23/debian/pool/main/t/testdisk/testdisk_4.2-1.diff.gz
+# tetex-base
+http://snapshot.debian.net/archive/2003/11/15/debian/pool/main/t/tetex-base/tetex-base_2.0.2.orig.tar.gz
+http://snapshot.debian.net/archive/2003/11/15/debian/pool/main/t/tetex-base/tetex-base_2.0.2-5.1.diff.gz
+# tetex-bin
+http://snapshot.debian.net/archive/2004/02/06/debian/pool/main/t/tetex-bin/tetex-bin_2.0.2.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/06/debian/pool/main/t/tetex-bin/tetex-bin_2.0.2-7.diff.gz
+# tetex-extra
+http://snapshot.debian.net/archive/2003/04/08/debian/pool/main/t/tetex-base/tetex-base_2.0.2.orig.tar.gz
+http://snapshot.debian.net/archive/2003/04/08/debian/pool/main/t/tetex-base/tetex-base_2.0.2-3.diff.gz
+# texinfo
+http://snapshot.debian.net/archive/2003/07/13/debian/pool/main/t/texinfo/texinfo_4.6.orig.tar.gz
+http://snapshot.debian.net/archive/2003/07/13/debian/pool/main/t/texinfo/texinfo_4.6-1.diff.gz
+# textutils
+http://snapshot.debian.net/archive/2003/10/06/debian/pool/main/c/coreutils/coreutils_5.0.91.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/06/debian/pool/main/c/coreutils/coreutils_5.0.91-2.diff.gz
+# tftp
+http://snapshot.debian.net/archive/2002/12/23/debian/pool/main/n/netkit-tftp/netkit-tftp_0.17.orig.tar.gz
+http://snapshot.debian.net/archive/2002/12/23/debian/pool/main/n/netkit-tftp/netkit-tftp_0.17-10.diff.gz
+# tftpd-hpa
+http://snapshot.debian.net/archive/2004/01/27/debian/pool/main/t/tftp-hpa/tftp-hpa_0.36.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/27/debian/pool/main/t/tftp-hpa/tftp-hpa_0.36-1.diff.gz
+# thttpd
+http://snapshot.debian.net/archive/2003/10/30/debian/pool/main/t/thttpd/thttpd_2.23beta1.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/30/debian/pool/main/t/thttpd/thttpd_2.23beta1-2.3.diff.gz
+# timeout
+http://snapshot.debian.net/archive/2003/02/15/debian/pool/main/t/tct/tct_1.11.orig.tar.gz
+http://snapshot.debian.net/archive/2003/02/15/debian/pool/main/t/tct/tct_1.11-6.diff.gz
+# tk8.4
+http://snapshot.debian.net/archive/2003/12/24/debian/pool/main/t/tk8.4/tk8.4_8.4.5.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/24/debian/pool/main/t/tk8.4/tk8.4_8.4.5-1.diff.gz
+# tnef
+http://snapshot.debian.net/archive/2003/12/30/debian/pool/main/t/tnef/tnef_1.2.3.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/30/debian/pool/main/t/tnef/tnef_1.2.3-0.1.diff.gz
+# tnt
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/non-free/t/tnt/tnt_2.4.orig.tar.gz
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/non-free/t/tnt/tnt_2.4-2.diff.gz
+# traceroute
+http://snapshot.debian.net/archive/2003/10/12/debian/pool/main/t/traceroute/traceroute_1.4a12.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/12/debian/pool/main/t/traceroute/traceroute_1.4a12-13.diff.gz
+# transfig
+# tsocks
+http://snapshot.debian.net/archive/2003/04/09/debian/pool/main/t/tsocks/tsocks_1.8beta5.orig.tar.gz
+http://snapshot.debian.net/archive/2003/04/09/debian/pool/main/t/tsocks/tsocks_1.8beta5-1.1.diff.gz
+# ttf-bitstream-vera
+http://snapshot.debian.net/archive/2003/05/13/debian/pool/main/t/ttf-bitstream-vera/ttf-bitstream-vera_1.10.orig.tar.gz
+http://snapshot.debian.net/archive/2003/05/13/debian/pool/main/t/ttf-bitstream-vera/ttf-bitstream-vera_1.10-3.diff.gz
+# ttmkfdir
+http://snapshot.debian.net/archive/2003/11/19/debian/pool/main/t/ttmkfdir/ttmkfdir_3.0.9.orig.tar.gz
+http://snapshot.debian.net/archive/2003/11/19/debian/pool/main/t/ttmkfdir/ttmkfdir_3.0.9-3.diff.gz
+# txt2regex
+# type1inst
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/t/type1inst/type1inst_0.6.1.orig.tar.gz
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/t/type1inst/type1inst_0.6.1-3.1.diff.gz
+# ucf
+http://snapshot.debian.net/archive/2004/02/07/debian/pool/main/u/ucf/ucf_0.27.tar.gz
+# unarj
+http://snapshot.debian.net/archive/2002/12/27/debian/pool/non-free/u/unarj/unarj_2.65.orig.tar.gz
+http://snapshot.debian.net/archive/2002/12/27/debian/pool/non-free/u/unarj/unarj_2.65-1.diff.gz
+# unifont
+# unp
+http://snapshot.debian.net/archive/2004/01/11/debian/pool/main/u/unp/unp_1.0.9.tar.gz
+# unzip
+http://snapshot.debian.net/archive/2003/08/22/debian/pool/main/u/unzip/unzip_5.50.orig.tar.gz
+http://snapshot.debian.net/archive/2003/08/22/debian/pool/main/u/unzip/unzip_5.50-3.diff.gz
+# unzoo
+http://snapshot.debian.net/archive/2002/11/16/debian/pool/main/u/unzoo/unzoo_4.4.orig.tar.gz
+http://snapshot.debian.net/archive/2002/11/16/debian/pool/main/u/unzoo/unzoo_4.4-2.diff.gz
+# update
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/u/update/update_2.11.orig.tar.gz
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/u/update/update_2.11-4.diff.gz
+# urlview
+http://snapshot.debian.net/archive/2003/12/23/debian/pool/main/u/urlview/urlview_0.9.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/23/debian/pool/main/u/urlview/urlview_0.9-10.diff.gz
+# usbutils
+http://snapshot.debian.net/archive/2003/12/30/debian/pool/main/u/usbutils/usbutils_0.11.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/30/debian/pool/main/u/usbutils/usbutils_0.11-7.diff.gz
+# user-de
+http://snapshot.debian.net/archive/2003/10/21/debian/pool/main/u/user-de/user-de_0.20.tar.gz
+# user-profile-knoppix
+# usleep-knoppix
+# util-linux
+http://snapshot.debian.net/archive/2003/12/08/debian/pool/main/u/util-linux/util-linux_2.12.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/08/debian/pool/main/u/util-linux/util-linux_2.12-6.diff.gz
+# util-linux-locales
+http://snapshot.debian.net/archive/2003/12/08/debian/pool/main/u/util-linux/util-linux_2.12.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/08/debian/pool/main/u/util-linux/util-linux_2.12-6.diff.gz
+# uudeview
+http://snapshot.debian.net/archive/2003/12/24/debian/pool/main/u/uudeview/uudeview_0.5.19+beta20030413.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/24/debian/pool/main/u/uudeview/uudeview_0.5.19+beta20030413-2.diff.gz
+# v4l-conf
+http://snapshot.debian.net/archive/2004/01/30/debian/pool/main/x/xawtv/xawtv_3.91.tar.gz
+# vcdtools
+http://snapshot.debian.net/archive/2003/06/10/debian/pool/main/v/vcdtools/vcdtools_0.4.orig.tar.gz
+http://snapshot.debian.net/archive/2003/06/10/debian/pool/main/v/vcdtools/vcdtools_0.4-2.diff.gz
+# vim
+# vim-common
+# vm
+http://snapshot.debian.net/archive/2004/04/03/debian/pool/main/v/vm/vm_7.18.orig.tar.gz
+http://snapshot.debian.net/archive/2004/04/03/debian/pool/main/v/vm/vm_7.18-7.diff.gz
+# vnc-common
+http://snapshot.debian.net/archive/2003/07/19/debian/pool/main/v/vnc/vnc_3.3.7.orig.tar.gz
+http://snapshot.debian.net/archive/2003/07/19/debian/pool/main/v/vnc/vnc_3.3.7-1.diff.gz
+# vncserver
+http://snapshot.debian.net/archive/2003/07/19/debian/pool/main/v/vnc/vnc_3.3.7.orig.tar.gz
+http://snapshot.debian.net/archive/2003/07/19/debian/pool/main/v/vnc/vnc_3.3.7-1.diff.gz
+# vorbis-tools
+http://snapshot.debian.net/archive/2003/12/12/debian/pool/main/v/vorbis-tools/vorbis-tools_1.0.1.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/12/debian/pool/main/v/vorbis-tools/vorbis-tools_1.0.1-1.diff.gz
+# vpnc
+http://snapshot.debian.net/archive/2004/01/30/debian/pool/main/v/vpnc/vpnc_0.2-rm+zomb-pre7.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/30/debian/pool/main/v/vpnc/vpnc_0.2-rm+zomb-pre7-3.diff.gz
+# vsound
+http://snapshot.debian.net/archive/2002/12/11/debian/pool/main/v/vsound/vsound_0.5.orig.tar.gz
+http://snapshot.debian.net/archive/2002/12/11/debian/pool/main/v/vsound/vsound_0.5-7.diff.gz
+# w3-el-e21
+http://snapshot.debian.net/archive/2003/10/05/debian/pool/main/w/w3-el-e21/w3-el-e21_4.0pre.2001.10.27.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/05/debian/pool/main/w/w3-el-e21/w3-el-e21_4.0pre.2001.10.27-15.diff.gz
+# w3-url-e21
+http://snapshot.debian.net/archive/2003/02/07/debian/pool/main/w/w3-url-e21/w3-url-e21_2001.11.08.orig.tar.gz
+http://snapshot.debian.net/archive/2003/02/07/debian/pool/main/w/w3-url-e21/w3-url-e21_2001.11.08-7.diff.gz
+# w3m
+http://snapshot.debian.net/archive/2004/04/04/debian/pool/main/w/w3m/w3m_0.5.orig.tar.gz
+http://snapshot.debian.net/archive/2004/04/04/debian/pool/main/w/w3m/w3m_0.5-6.diff.gz
+# w3m-el
+http://snapshot.debian.net/archive/2004/03/23/debian/pool/main/w/w3m-el/w3m-el_1.3.6.orig.tar.gz
+http://snapshot.debian.net/archive/2004/03/23/debian/pool/main/w/w3m-el/w3m-el_1.3.6-4.diff.gz
+# wavemon
+http://snapshot.debian.net/archive/2003/12/16/debian/pool/main/w/wavemon/wavemon_0.4.0b.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/16/debian/pool/main/w/wavemon/wavemon_0.4.0b-5.diff.gz
+# wavtools
+http://snapshot.debian.net/archive/2002/07/28/debian/pool/main/w/wavtools/wavtools_1.3.2.orig.tar.gz
+http://snapshot.debian.net/archive/2002/07/28/debian/pool/main/w/wavtools/wavtools_1.3.2-8.diff.gz
+# wget
+http://snapshot.debian.net/archive/2004/02/15/debian/pool/main/w/wget/wget_1.9.1.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/15/debian/pool/main/w/wget/wget_1.9.1-4.diff.gz
+# whiptail
+http://snapshot.debian.net/archive/2004/02/15/debian/pool/main/n/newt/newt_0.51.4.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/15/debian/pool/main/n/newt/newt_0.51.4-22.diff.gz
+# whois
+http://snapshot.debian.net/archive/2004/02/11/debian/pool/main/w/whois/whois_4.6.11.tar.gz
+# wipe
+http://snapshot.debian.net/archive/2003/09/30/debian/pool/main/w/wipe/wipe_0.19.20030913.orig.tar.gz
+http://snapshot.debian.net/archive/2003/09/30/debian/pool/main/w/wipe/wipe_0.19.20030913-1.diff.gz
+# wireless-tools
+http://snapshot.debian.net/archive/2004/02/02/debian/pool/main/w/wireless-tools/wireless-tools_26+27pre9.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/02/debian/pool/main/w/wireless-tools/wireless-tools_26+27pre9-2.diff.gz
+# wlcardconfig-knoppix
+# wordtrans-data
+http://snapshot.debian.net/archive/2003/09/30/debian/pool/main/w/wordtrans/wordtrans_1.1pre13.orig.tar.gz
+http://snapshot.debian.net/archive/2003/09/30/debian/pool/main/w/wordtrans/wordtrans_1.1pre13-4.diff.gz
+# workbone
+http://snapshot.debian.net/archive/2004/01/19/debian/pool/main/w/workbone/workbone_2.40.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/19/debian/pool/main/w/workbone/workbone_2.40-4.diff.gz
+# wprint
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/w/wprint/wprint_2.04.orig.tar.gz
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/w/wprint/wprint_2.04-1.diff.gz
+# wvdial
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/w/wvdial/wvdial_1.53.0.1.tar.gz
+# x-dev
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# x-ttcidfont-conf
+http://snapshot.debian.net/archive/2003/11/13/debian/pool/main/x/x-ttcidfont-conf/x-ttcidfont-conf_14.tar.gz
+# x3270
+http://snapshot.debian.net/archive/2003/07/22/debian/pool/non-free/3/3270/3270_3.2.20.orig.tar.gz
+http://snapshot.debian.net/archive/2003/07/22/debian/pool/non-free/3/3270/3270_3.2.20-2.diff.gz
+# xaw3dg
+http://snapshot.debian.net/archive/2003/10/25/debian/pool/main/x/xaw3d/xaw3d_1.5+E.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/25/debian/pool/main/x/xaw3d/xaw3d_1.5+E-6.diff.gz
+# xawtv-plugins
+http://snapshot.debian.net/archive/2004/01/30/debian/pool/main/x/xawtv/xawtv_3.91.tar.gz
+# xbase-clients
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# xchat-common
+http://snapshot.debian.net/archive/2004/01/31/debian/pool/main/x/xchat/xchat_2.0.7.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/31/debian/pool/main/x/xchat/xchat_2.0.7-1.diff.gz
+# xclass-common
+http://snapshot.debian.net/archive/2003/09/01/debian/pool/main/x/xclass/xclass_0.6.2.orig.tar.gz
+http://snapshot.debian.net/archive/2003/09/01/debian/pool/main/x/xclass/xclass_0.6.2-11.diff.gz
+# xdelta
+http://snapshot.debian.net/archive/2003/05/21/debian/pool/main/x/xdelta/xdelta_1.1.3.orig.tar.gz
+http://snapshot.debian.net/archive/2003/05/21/debian/pool/main/x/xdelta/xdelta_1.1.3-6.diff.gz
+# xdm
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# xf86config-knoppix
+# xfonts-100dpi-transcoded
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# xfonts-75dpi
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# xfonts-75dpi-transcoded
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# xfonts-artwiz
+http://snapshot.debian.net/archive/2003/02/19/debian/pool/main/x/xfonts-artwiz/xfonts-artwiz_2.5.tar.gz
+# xfonts-base
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# xfonts-base-transcoded
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# xfonts-bolkhov-cp1251-75dpi
+http://snapshot.debian.net/archive/2003/06/12/debian/pool/main/x/xfonts-bolkhov/xfonts-bolkhov_1.1.20001007.orig.tar.gz
+http://snapshot.debian.net/archive/2003/06/12/debian/pool/main/x/xfonts-bolkhov/xfonts-bolkhov_1.1.20001007-4.diff.gz
+# xfonts-bolkhov-cp1251-misc
+http://snapshot.debian.net/archive/2003/06/12/debian/pool/main/x/xfonts-bolkhov/xfonts-bolkhov_1.1.20001007.orig.tar.gz
+http://snapshot.debian.net/archive/2003/06/12/debian/pool/main/x/xfonts-bolkhov/xfonts-bolkhov_1.1.20001007-4.diff.gz
+# xfonts-konsole
+# xfonts-terminus
+http://snapshot.debian.net/archive/2004/02/06/debian/pool/main/x/xfonts-terminus/xfonts-terminus_4.05.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/06/debian/pool/main/x/xfonts-terminus/xfonts-terminus_4.05-2.diff.gz
+# xfonts-x3270-misc
+http://snapshot.debian.net/archive/2003/07/22/debian/pool/non-free/3/3270/3270_3.2.20.orig.tar.gz
+http://snapshot.debian.net/archive/2003/07/22/debian/pool/non-free/3/3270/3270_3.2.20-2.diff.gz
+# xfree86-common
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# xfs
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# xfsdump
+http://snapshot.debian.net/archive/2003/11/11/debian/pool/main/x/xfsdump/xfsdump_2.2.14-1.tar.gz
+# xfsprogs
+http://snapshot.debian.net/archive/2004/01/31/debian/pool/main/x/xfsprogs/xfsprogs_2.6.3-1.tar.gz
+# xkbset
+http://snapshot.debian.net/archive/2003/10/29/debian/pool/main/x/xkbset/xkbset_0.5.orig.tar.gz
+http://snapshot.debian.net/archive/2003/10/29/debian/pool/main/x/xkbset/xkbset_0.5-2.diff.gz
+# xlibmesa-dri
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# xlibmesa-gl
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# xlibmesa3-glu
+http://snapshot.debian.net/archive/2004/01/30/debian/pool/main/x/xfree86/xfree86_4.2.1.orig.tar.gz
+http://snapshot.debian.net/archive/2004/01/30/debian/pool/main/x/xfree86/xfree86_4.2.1-16.diff.gz
+# xlibs
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# xlibs-data
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# xlibs-dev
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# xlibs-pic
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# xlibs-static-dev
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# xlibs-static-pic
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# xloadimage
+http://snapshot.debian.net/archive/2003/11/01/debian/pool/main/x/xloadimage/xloadimage_4.1.orig.tar.gz
+http://snapshot.debian.net/archive/2003/11/01/debian/pool/main/x/xloadimage/xloadimage_4.1-13.diff.gz
+# xmms-modplug
+http://snapshot.debian.net/archive/2003/07/10/debian/pool/main/m/modplugxmms/modplugxmms_2.04.orig.tar.gz
+http://snapshot.debian.net/archive/2003/07/10/debian/pool/main/m/modplugxmms/modplugxmms_2.04-2.diff.gz
+# xpdf-common
+http://snapshot.debian.net/archive/2004/02/11/debian/pool/main/x/xpdf/xpdf_3.00.orig.tar.gz
+http://snapshot.debian.net/archive/2004/02/11/debian/pool/main/x/xpdf/xpdf_3.00-3.diff.gz
+# xserver-3dlabs
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/x/xfree86v3/xfree86v3_3.3.6.orig.tar.gz
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/x/xfree86v3/xfree86v3_3.3.6-44.diff.gz
+# xserver-8514
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/x/xfree86v3/xfree86v3_3.3.6.orig.tar.gz
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/x/xfree86v3/xfree86v3_3.3.6-44.diff.gz
+# xserver-agx
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/x/xfree86v3/xfree86v3_3.3.6.orig.tar.gz
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/x/xfree86v3/xfree86v3_3.3.6-44.diff.gz
+# xserver-common
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# xserver-common-v3
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/x/xfree86v3/xfree86v3_3.3.6.orig.tar.gz
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/x/xfree86v3/xfree86v3_3.3.6-44.diff.gz
+# xserver-i128
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/x/xfree86v3/xfree86v3_3.3.6.orig.tar.gz
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/x/xfree86v3/xfree86v3_3.3.6-44.diff.gz
+# xserver-mach32
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/x/xfree86v3/xfree86v3_3.3.6.orig.tar.gz
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/x/xfree86v3/xfree86v3_3.3.6-44.diff.gz
+# xserver-mach64
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/x/xfree86v3/xfree86v3_3.3.6.orig.tar.gz
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/x/xfree86v3/xfree86v3_3.3.6-44.diff.gz
+# xserver-mach8
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/x/xfree86v3/xfree86v3_3.3.6.orig.tar.gz
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/x/xfree86v3/xfree86v3_3.3.6-44.diff.gz
+# xserver-p9000
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/x/xfree86v3/xfree86v3_3.3.6.orig.tar.gz
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/x/xfree86v3/xfree86v3_3.3.6-44.diff.gz
+# xserver-s3
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/x/xfree86v3/xfree86v3_3.3.6.orig.tar.gz
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/x/xfree86v3/xfree86v3_3.3.6-44.diff.gz
+# xserver-s3v
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/x/xfree86v3/xfree86v3_3.3.6.orig.tar.gz
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/x/xfree86v3/xfree86v3_3.3.6-44.diff.gz
+# xserver-svga
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/x/xfree86v3/xfree86v3_3.3.6.orig.tar.gz
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/x/xfree86v3/xfree86v3_3.3.6-44.diff.gz
+# xserver-vga16
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/x/xfree86v3/xfree86v3_3.3.6.orig.tar.gz
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/x/xfree86v3/xfree86v3_3.3.6-44.diff.gz
+# xserver-w32
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/x/xfree86v3/xfree86v3_3.3.6.orig.tar.gz
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/x/xfree86v3/xfree86v3_3.3.6-44.diff.gz
+# xserver-xfree86
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# xsession-initscript-knoppix
+# xsession-knoppix
+# xtel
+http://snapshot.debian.net/archive/2003/09/26/debian/pool/main/x/xtel/xtel_3.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/09/26/debian/pool/main/x/xtel/xtel_3.3.0-5.diff.gz
+# xterm
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# xtv
+http://snapshot.debian.net/archive/2003/02/22/debian/pool/main/x/xtv/xtv_1.1.orig.tar.gz
+http://snapshot.debian.net/archive/2003/02/22/debian/pool/main/x/xtv/xtv_1.1-6.diff.gz
+# xutils
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0.orig.tar.gz
+http://snapshot.debian.net/archive/2003/12/28/debian/pool/main/x/xfree86/xfree86_4.3.0-0pre1v5.diff.gz
+# xviddetect
+http://snapshot.debian.net/archive/2002/06/04/debian/pool/main/x/xviddetect/xviddetect_0.3-4.tar.gz
+# xvncviewer
+http://snapshot.debian.net/archive/2003/07/19/debian/pool/main/v/vnc/vnc_3.3.7.orig.tar.gz
+http://snapshot.debian.net/archive/2003/07/19/debian/pool/main/v/vnc/vnc_3.3.7-1.diff.gz
+# xzoom
+http://snapshot.debian.net/archive/2003/08/10/debian/pool/main/x/xzoom/xzoom_0.3.orig.tar.gz
+http://snapshot.debian.net/archive/2003/08/10/debian/pool/main/x/xzoom/xzoom_0.3-16.diff.gz
+# yasr
+http://snapshot.debian.net/archive/2004/03/10/debian/pool/main/y/yasr/yasr_0.6.5.orig.tar.gz
+http://snapshot.debian.net/archive/2004/03/10/debian/pool/main/y/yasr/yasr_0.6.5-1.diff.gz
+# zile
+http://snapshot.debian.net/archive/2003/07/01/debian/pool/main/z/zile/zile_1.6.2.orig.tar.gz
+http://snapshot.debian.net/archive/2003/07/01/debian/pool/main/z/zile/zile_1.6.2-1.diff.gz
+# zip
+http://snapshot.debian.net/archive/2003/08/25/debian/pool/main/z/zip/zip_2.30.orig.tar.gz
+http://snapshot.debian.net/archive/2003/08/25/debian/pool/main/z/zip/zip_2.30-6.diff.gz
+# zlib1g
+# zlib1g-dev
+# zsh
+http://snapshot.debian.net/archive/2004/04/20/debian/pool/main/z/zsh/zsh_4.2.0.orig.tar.gz
+http://snapshot.debian.net/archive/2004/04/20/debian/pool/main/z/zsh/zsh_4.2.0-5.diff.gz
