@@ -3,6 +3,7 @@
 #
 LEX=flex
 CFLAGS=-g -DDEBUG -O3 -fpic -pedantic -Wall
+#CFLAGS=-g -O3 -fpic -pedantic -Wall
 terminfo: escape2terminfo.o terminfo.o
 escape2terminfo.o: escape2terminfo.l escape2terminfo.h
-terminfo.o:  escape2terminfo.h
+terminfo.o:  escape2terminfo.h Makefile

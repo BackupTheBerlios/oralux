@@ -28,6 +28,10 @@ In the following lines, + means evolution, - bug.
 
 1.1 Priority 1 (Urgent)
 
++ New patch from Igor B. Poretsky (emacs-w3m)
++ timidity, freepats
++ From Doug: cdrecord-prodvd
+
 aptitude, zgv, fbi
 
 + Feedback from Aldo faq: obsolete points

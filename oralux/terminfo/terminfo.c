@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 terminfo.c
-$Id: terminfo.c,v 1.3 2004/12/19 23:05:53 gcasse Exp $
+$Id: terminfo.c,v 1.4 2004/12/26 21:40:05 gcasse Exp $
 $Author: gcasse $
 Description: store the layout using the supplied terminfo commands. 
-$Date: 2004/12/19 23:05:53 $ |
-$Revision: 1.3 $ |
+$Date: 2004/12/26 21:40:05 $ |
+$Revision: 1.4 $ |
 Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -24,18 +24,47 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ----------------------------------------------------------------------------
 */
 
+/* < include */
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
 #include <stdlib.h>
 #include "escape2terminfo.h"
+/* > */
+/* < debug */
 
 #ifdef DEBUG
 int TheDebugIsOn=1;
+
+static char* TheENTERFilename="  ";
+
+#define ENTER(a) \
+if (strcmp(TheENTERFilename,__FILE__)!=0) \
+{\
+  TheENTERFilename=__FILE__;\
+  printf("\nFILE %s\n",__FILE__);\
+}\
+printf("== ENTER %s (%d)\n",a,__LINE__)
+
+#define SHOW(a) printf("%s\n",a)
+#define SHOW1(a) printf("%s\n",a)
+#define SHOW2(a,b) printf(a,b)
+#define SHOW3(a,b,c) printf(a,b,c)
+#define LEAVE(a) printf("LEAVE %s\n",a)
+#define LEAVE2(a,b) printf("LEAVE %s (%d)\n",a,b)
 #else
 int TheDebugIsOn=0;
+
+#define ENTER(a)
+#define SHOW(a)
+#define SHOW1(a)
+#define SHOW2(a,b)
+#define SHOW3(a,b,c)
+#define LEAVE(a)
+#define LEAVE2(a,b)
 #endif
 
+/* > */
 /* < flex declarations or definitions */
 
 extern int yylex (void);
@@ -46,16 +75,33 @@ int yywrap ()
 {  
    return 1; 
 }
-
 /* > */
 /* < cursor */
-
 struct t_cursor
 {
   int myLine;
   int myCol;
   struct t_style myStyle;
 };
+
+#define copyCursor( theDestination, theSource) memcpy( theDestination, theSource, sizeof(struct t_cursor))
+/* > */
+/* < linePortion */
+/* 
+A line portion describes an horizontal area in the screen.
+When a menu is browsed, the selected item and the previously ones are displayed with distinct styles (for example distinct backgrounds).
+These two line portions must be particularly managed to distinguish the selected one.
+*/
+struct t_linePortion
+{
+  int myLine; /* Line number */
+  int myFirstCol; /* First column of the portion */
+  int myLastCol; /* Last column of the portion */
+  int myContentIsModified; /* equals 1 if at least one char has been modified */
+  int myStyleIsModified; /* equals 1 if one of the style has been modified */
+};
+
+enum {MAX_LINE_PORTION=2}; /* 2 line portions are expected to distinguish the selected item */
 
 /* > */
 /* < array myStringCapacity */
@@ -464,6 +510,7 @@ char* myStringCapacity[]={
 
 void createBuffer( char** theDataBuffer, struct t_style** theStyleBuffer, int theNumberOfCell)
 {
+  ENTER("createBuffer");
   *theDataBuffer=(char*)malloc( theNumberOfCell * sizeof(char));
   *theStyleBuffer=(struct t_style*)malloc( theNumberOfCell * sizeof(struct t_style));
 }
@@ -473,6 +520,7 @@ void createBuffer( char** theDataBuffer, struct t_style** theStyleBuffer, int th
 
 void clearBuffer( char* theDataBuffer, struct t_style* theStyleBuffer, int theNumberOfCell)
 {
+  ENTER("clearBuffer");
   memset(theDataBuffer, 0x20, theNumberOfCell*sizeof(char));
   memset(theStyleBuffer, 0, theNumberOfCell*sizeof(struct t_style));
 }
@@ -484,6 +532,7 @@ void displayBuffer( char *theBuffer, int theMaxLine, int theMaxCol)
 {
   /* Init */
   int i=0;
+  ENTER("displayBuffer");
   for (i=0;i<theMaxLine;i++)
     {
       char* aLine=theBuffer + theMaxCol*i;
@@ -500,6 +549,8 @@ void displayCapacity( enum StringCapacity theCapacity)
 { /* debug: display pattern */
   char* aLine=strdup( yytext);
   char* aString=aLine;
+  ENTER("displayCapacity");
+
   while((aString=strchr (aString, '')))
     {
       *aString='E';
@@ -512,6 +563,7 @@ void displayCapacity( enum StringCapacity theCapacity)
 /* < displayModes */
 void displayModes(struct t_style* theModes)
 {
+  ENTER("displayModes");
   printf("|");
   if (theModes->isStandout)
     {
@@ -568,6 +620,8 @@ void displayColor( int theColor)
       "CYAN",
       "WHITE"
     };
+  ENTER("displayColor");
+
   if (theColor<sizeof(aColorArray)/sizeof(aColorArray[0]))
     {
       printf("|Color: %s|\n",aColorArray[theColor]);
@@ -581,6 +635,7 @@ This can be 0 or 1 according to the terminal.
 */
 void initCursor(struct t_cursor* theCursor, int theFirstCell)
 {
+  ENTER("initCursor");
   theCursor->myLine=theFirstCell;
   theCursor->myCol=theFirstCell;
   memset (& (theCursor->myStyle), 0, sizeof(struct t_style));
@@ -588,61 +643,361 @@ void initCursor(struct t_cursor* theCursor, int theFirstCell)
   theCursor->myStyle.myForegroundColor=TERM_COLOR_WHITE;
 }
 /* > */
-/* < copyCursor */
-void copyCursor( struct t_cursor* theDestination, struct t_cursor* theSource)
-{
-  memcpy( theDestination, theSource, sizeof(struct t_cursor));
-}
-
+/* < getCell*/
+#define getCell( theLine, theCol, theNumberOfCol) (theLine * theNumberOfCol + theCol)
 /* > */
-/* < storeChar */
-
-/* Store the char and its style (color, bold,...) return the possible changes (char or style) */
-enum t_storeChar { 
-  SAME_CHAR, /* the char and its style equal the previously ones displayed  */
-  NEW_CHAR, /* the char has changed */
-  NEW_STYLE /* the style has changed */
-};
- 
-enum t_storeChar storeChar(struct t_cursor* theCursor, char theChar, char* theDataBuffer, struct t_style* theStyleBuffer, int theNumberOfCol)
+/* < compareAndSetStyle */
+/* 
+search if the style of the cell equals one of the two supplied styles (in the ListOfStyle).
+If yes, this stykle is copied in theFoundStyle and 1 is returned. 
+Otherwise 0 is returned
+*/
+int compareAndSetStyle( struct t_style* theListOfStyle, struct t_style* theStyleBuffer, int theLine, int theCol, int theNumberOfCol, struct t_style* theFoundStyle)
 {
-  enum t_storeChar aStatus=SAME_CHAR;
-  int aCell=theCursor->myLine * theNumberOfCol + theCursor->myCol;
-  
-  /* Check if the character has changed */
-  if (theDataBuffer[ aCell] != theChar)
+  int aCell=getCell( theLine, theCol, theNumberOfCol);
+  int aStatus=0;
+  if ((compareStyle (theListOfStyle, theStyleBuffer+aCell) == 0)
+      || (compareStyle (theListOfStyle+1, theStyleBuffer+aCell) == 0))
     {
-      aStatus=NEW_CHAR;
-      theDataBuffer[ aCell] = theChar;
-    }
-
-  /* If this is still the same text, test if the style has changed */
-  if (0 != memcmp( &(theStyleBuffer[ aCell]), &(theCursor->myStyle), sizeof(struct t_style) ))
-    {
-      aStatus=NEW_STYLE;
-      memcpy( &(theStyleBuffer[ aCell]), &(theCursor->myStyle), sizeof(struct t_style));
+      copyStyle( theFoundStyle, theStyleBuffer+aCell);
+      aStatus=1;
     }
   return aStatus;
 }
 
 /* > */
-/* < isNewWord, processWord */
+/* < getBackgroundStyle */
 
-int isNewWord( struct t_cursor* theCursor, char theChar)
+/* retrieve the background style of a line portion. 
+If the background style has been found, theStyle is updated, and the number of distinct styles found in the line portion is returned (so 1, 2 or 3). 
+Otherwise 0 is returned. 
+
+Three cases are expected:
+- 1 style in the line portion: each character has the same style which is also considered as the background style.
+- 2 styles: then the surroundings of the line portion is checked to determine the background.
+- 3 styles: if two of them are equal, this the background.
+- other cases: not processed.
+*/ 
+
+int getBackgroundStyle( char* theDataBuffer, int theLine, int theCol, struct t_style* theStyleBuffer, int theLength, int theNumberOfLine, int theNumberOfCol, struct t_style* theStyle)
 {
-/*   static int aLastCol=-1; */
-/*   static int aLastLine=-1; */
-/*   static int aNewWord=((aLastLine != theCursor->myLine)  */
-/* 		       || (abs( aLastCol - theCursor->myCol) != 1 ) */
-/* 		       || (*yytext==0x20)); */
-/*   static int aSameText=1; /\* true if the written text is the same than the previous one *\/ */
-/*   static int aSameStyle=1; */
-  return 1;
+  enum {MAX_DISTINCT_STYLE=3};
+  struct t_style aStyle[MAX_DISTINCT_STYLE];
+  int aStyleWeight[MAX_DISTINCT_STYLE];
+  int aIndex=0;
+  int i=0;
+  int aCell=getCell( theLine, theCol, theNumberOfCol);
+
+  ENTER("getBackgroundStyle");
+
+  theStyle=NULL;
+
+  copyStyle( aStyle+aIndex, theStyleBuffer+aCell+i);
+  aStyleWeight[ aIndex]=1;
+
+  for(i=1; i<theLength; i++)
+    {
+      if (compareStyle (aStyle+aIndex, theStyleBuffer+aCell+i) == 0)
+	{
+	  ++aStyleWeight[ aIndex];
+	}
+      else if (++aIndex < MAX_DISTINCT_STYLE)
+	{
+	  copyStyle( aStyle+aIndex, theStyleBuffer+aCell+i);
+	  aStyleWeight[ aIndex]=1;
+	}
+      else
+	{ /* too many styles: abandon... */
+	  aIndex=-1;
+	}
+    }
+
+#ifdef DEBUG
+  for (i=0; i<=aIndex; i++)
+    {
+      SHOW3("style %d: %d samples", i, aStyleWeight[i]);
+    }
+#endif
+
+  switch(aIndex)
+    {
+    case 0: /* just one style */
+      copyStyle( theStyle, aStyle);
+      break;
+    case 1: /* two styles: look around the line portion */
+      aIndex=-1; /* no result at the moment */
+
+      /* Check the top cells */
+      if (theLine > 0)
+	{ 
+	  if (theCol > 0)
+	    {
+	      SHOW("Top Left Cell");
+	      aIndex=compareAndSetStyle( aStyle, theStyleBuffer, theLine-1, theCol-1, theNumberOfCol, theStyle);
+	    }
+	  if((theCol+theLength < theNumberOfCol) && (aIndex != 1))
+	    {
+	      SHOW("Top Right Cell");
+	      aIndex=compareAndSetStyle( aStyle, theStyleBuffer, theLine-1, theCol+theLength, theNumberOfCol, theStyle);
+	    }
+	}
+      /* otherwise check the bottom cells */
+      if ((theLine+1 < theNumberOfLine) && (aIndex != 1))
+	{
+	  if (theCol > 0)
+	    {
+	      SHOW("Bottom Left Cell");
+	      aIndex=compareAndSetStyle( aStyle, theStyleBuffer, theLine+1, theCol-1, theNumberOfCol, theStyle);
+	    }
+	  if((theCol+theLength < theNumberOfCol) && (aIndex != 1))
+	    {
+	      SHOW("Bottom Right Cell");
+	      aIndex=compareAndSetStyle( aStyle, theStyleBuffer, theLine+1, theCol+theLength, theNumberOfCol, theStyle);
+	    }
+	}
+      if (aIndex != 1)
+	{
+	  SHOW("Can't decide...");
+	  aIndex=-1;
+	}
+      break;
+    case 2: /* 3 styles: 2 of them are equal */
+      if (compareStyle (aStyle, aStyle+1) == 0)
+	{
+	  copyStyle( theStyle, aStyle);
+	}
+      else if(compareStyle (aStyle, aStyle+2) == 0)
+	{
+	  copyStyle( theStyle, aStyle);
+	}
+      else if(compareStyle (aStyle+1, aStyle+2) == 0)
+	{
+	  copyStyle( theStyle, aStyle+1);
+	}
+      else
+	{
+	  aIndex=-1;
+	}
+      break;
+    case -1:
+    default:
+      aIndex=-1;
+      break;
+    }
+  return aIndex + 1;
+}
+/* > */
+/* < eraseCharWithThisStyle */
+void eraseCharWithThisStyle( char* theDataBuffer, struct t_style* theStyleBuffer, int theLength, struct t_style* theStyle)
+{
+  int i=0;
+
+  ENTER("eraseCharWithThisStyle");
+  for(i=0; i<theLength; i++)
+    {
+      if (compareStyle( theStyle, theStyleBuffer+i)==0)
+	{
+	  theDataBuffer[i]=0x20;
+	}
+    }
+}
+/* > */
+/* < flushText */
+void flushText( char* theDataBuffer, struct t_style* theStyleBuffer, int theLength)
+{
+  char c=theDataBuffer[ theLength];
+  
+  ENTER("flushText");
+
+#ifdef DEBUG
+  theDataBuffer[ theLength]=0;
+  SHOW2("Text=>>>%s<<<\n",theDataBuffer);
+  theDataBuffer[ theLength]=c;
+#endif
+
+}
+/* > */
+/* < testIfPortionsAreItems */
+int testIfPortionsAreItems( struct t_linePortion* theLinePortion1, struct t_linePortion* theLinePortion2)
+{
+  ENTER("testIfPortionsAreItems");
+  return !theLinePortion1->myContentIsModified 
+    && !theLinePortion2->myContentIsModified
+    && theLinePortion1->myStyleIsModified
+    && theLinePortion2->myStyleIsModified;
+}
+/* > */
+
+/* < initPortion */
+
+void initPortion( struct t_linePortion* thePortion, struct t_cursor* theCursor)
+{
+  ENTER("initPortion");
+  SHOW3("myLine=%d, myCol=%d\n", theCursor->myLine, theCursor->myCol);
+  thePortion->myLine=theCursor->myLine;
+  thePortion->myFirstCol=theCursor->myCol;
+  thePortion->myLastCol=0;
+  thePortion->myContentIsModified=0;
+  thePortion->myStyleIsModified=0;
 }
 
-char* processWord( struct t_cursor* theLastWord, enum t_storeChar theStatus)
+/* > */
+/* < flushPortion */
+
+/* process and display the stored line portions according to the style.
+This function can:
+- determine the possible selected item in a menu and displays it.
+- take in account the style (single letter as shortcut, distinct voices)
+
+* selected item
+If there are 1 or 2 line portions without any content modification but with style change, it can be the new selected item and the previous one which are displayed. 
+The current background style around the line portion is determined.
+
+*/
+void flushPortion( struct t_linePortion* theLinePortion, int* theLinePortionIndex, char* theDataBuffer, int theNumberOfLine, int theNumberOfCol, struct t_style* theStyleBuffer)
 {
-  return NULL;
+  ENTER("flushPortion");
+
+  /* Look for two lines without any content modification but style change */ 
+  if ((*theLinePortionIndex==1)
+      && testIfPortionsAreItems(theLinePortion, theLinePortion+1))
+    {
+      
+    }
+  else
+    { /* process each line portion */
+      struct t_linePortion* aPortion=NULL;
+      int aFirstCell=0;
+      int aLastCell=0;
+      int i=0;
+
+      for (i=0; i<=*theLinePortionIndex; i++)
+	{
+	  struct t_style aStyle;
+	  int aLength=0;
+	  aPortion=theLinePortion+i;
+	  aFirstCell=getCell(aPortion->myLine, aPortion->myFirstCol, theNumberOfCol);
+	  aLastCell=getCell(aPortion->myLine, aPortion->myLastCol, theNumberOfCol);
+
+	  aLength=aLastCell + 1 - aFirstCell;
+
+	  if (aPortion->myContentIsModified)
+	    {
+	      flushText( theDataBuffer + aFirstCell, NULL, aLength);
+	    }
+	  else if (aPortion->myStyleIsModified)
+	    {
+	      int aStatus=getBackgroundStyle( theDataBuffer, aPortion->myLine, aPortion->myFirstCol, theStyleBuffer, aLength, theNumberOfLine, theNumberOfCol, &aStyle);
+
+	      /* The characters associated with the background style are not displayed */
+	      if (aStatus)
+		{
+		  eraseCharWithThisStyle( theDataBuffer + aFirstCell, theStyleBuffer + aFirstCell, aLength, &aStyle);
+		}
+	      flushText( theDataBuffer + aFirstCell, NULL, aLength);
+	    }
+	}
+    }
+
+
+
+/*   for (i=0; i<=*theLinePortionIndex; i++) */
+/*     { */
+/*       char c; */
+
+/*       aPortion=theLinePortion + i; */
+/*       aFirstCell=aPortion->myLine * theNumberOfCol + aPortion->myFirstCol; */
+/*       aLastCell=aPortion->myLine * theNumberOfCol + aPortion->myLastCol; */
+/*       c=theDataBuffer[ aLastCell+1]; */
+/*       theDataBuffer[ aLastCell+1]=0; */
+/*       SHOW3("portion %d=>>>%s<<<\n",i,theDataBuffer+aFirstCell); */
+/*       SHOW2("myLine=%d\n",aPortion->myLine); */
+/*       SHOW3("myFirstCol=%d, myLastCol=%d\n",aPortion->myFirstCol, aPortion->myLastCol); */
+/*       theDataBuffer[ aLastCell+1]=c; */
+/*     } */
+  *theLinePortionIndex=-1;
+}
+
+/* > */
+/* < setPortion */
+
+/* 
+Check if a new line portion is supplied.
+If yes, try to store its features.
+If no, update the current portion (column)
+OUTPUT: theLinePortionIndex is the current line portion.
+*/ 
+
+enum t_linePortionStatus 
+{
+  SAME_PORTION,
+  MAX_PORTION_REACHED,
+  NEW_PORTION
+};
+
+enum t_linePortionStatus setPortion( struct t_cursor* theCursor, struct t_linePortion* theLinePortion, int* theLinePortionIndex)
+{
+  enum t_linePortionStatus aStatus=SAME_PORTION;
+  ENTER("setPortion");
+
+  if ((*theLinePortionIndex==-1) /* first portion */
+      || (theLinePortion[ *theLinePortionIndex].myLine != theCursor->myLine))
+    { /* a new portion */
+      if (++*theLinePortionIndex >= MAX_LINE_PORTION)
+	{
+	  --*theLinePortionIndex;
+	  aStatus=MAX_PORTION_REACHED;
+	  SHOW("MAX_PORTION_REACHED");
+	}
+      else
+	{ /* add a new portion */
+	  initPortion( theLinePortion + *theLinePortionIndex, theCursor);
+	  aStatus=NEW_PORTION;
+	  SHOW("NEW_PORTION");
+	}
+    }
+  else
+    {
+      theLinePortion[ *theLinePortionIndex].myLastCol=theCursor->myCol;
+    }
+  return aStatus;
+}
+
+/* > */
+/* < storeChar, storeStyle */
+
+/* Store the style (color, bold,...); return 1 if the style is new (the style of the cell has been changed) */
+int storeStyle(int theCell, struct t_style* theStyle, struct t_style* theStyleBuffer)
+{
+  int aNewStyle=0;
+  ENTER("storeStyle");
+  
+  /* Test if the style has changed */
+  if (0 != compareStyle( theStyleBuffer+theCell, theStyle))
+    {
+      aNewStyle=1;
+      copyStyle( theStyleBuffer+theCell, theStyle);
+      SHOW("New Style!");
+    }
+
+  return aNewStyle;
+}
+
+/* Store the char; return 1 if the char is new (the cell content has been changed) */
+int storeChar(int theCell, char theChar, char* theDataBuffer, int theNumberOfCol)
+{
+  int aNewChar=0;
+  ENTER("storeChar");
+
+  /* Check if the character has changed */
+  if (theDataBuffer[ theCell] != theChar)
+    {
+      aNewChar=1;
+      theDataBuffer[ theCell] = theChar;
+      SHOW("New Char!");
+    }
+
+  return aNewChar;
 }
 
 /* > */
@@ -653,9 +1008,9 @@ void copyModes( struct t_style* theDestination, struct t_style* theSource)
   /* First save the colors fields */
   int aForegroundColor=theDestination->myForegroundColor;
   int aBackgroundColor=theDestination->myBackgroundColor;
+  ENTER("copyModes");
 
-  /* then raw copy */
-  memcpy( theDestination, theSource, sizeof(struct t_style));
+  copyStyle( theDestination, theSource);
 
   /* and restore colors */
   theDestination->myForegroundColor=aForegroundColor;
@@ -668,6 +1023,7 @@ void copyModes( struct t_style* theDestination, struct t_style* theSource)
 void eraseLine( char* theLine, int theLength)
 {
   int i=0;
+  ENTER("eraseLine");
   for (i=0;i<theLength;i++)
     {
       theLine[i]=0x20;
@@ -679,6 +1035,7 @@ void eraseLine( char* theLine, int theLength)
 
 void deleteCharacter(char* theLine, int theErasedLength, int theTotalLength)
 {
+  ENTER("deleteCharacter");
   memmove(theLine, theLine+theErasedLength, theErasedLength);
   eraseLine(&(theLine[theTotalLength-theErasedLength]), theErasedLength);
 }
@@ -691,18 +1048,21 @@ int main()
   enum StringCapacity aCapacity;
   struct t_cursor aCursor;
   struct t_cursor aSavedCursor;
-  enum terminalColor aBackgroundColor=TERM_COLOR_BLUE; /* RAF determine the main area background */
   char* aDataBuffer=NULL;
   struct t_style* aStyleBuffer=NULL;
   int aNumberOfLine=30;
   int aNumberOfCol=30;
   int aNumberOfCell = aNumberOfLine * aNumberOfCol;
+  struct t_linePortion aLinePortion[ MAX_LINE_PORTION];
+  int aLinePortionIndex=-1;
 
 #ifdef DEBUG
   /* RAF GC: debug */
   extern FILE *yyin;
   yyin=fopen("test/1e.txt","r");
 #endif
+
+  ENTER("main");
 
   initCursor( &aCursor, 0);
   copyCursor( &aSavedCursor, &aCursor);
@@ -751,13 +1111,15 @@ int main()
 	case DCH: /* delete characters */
 	  {
 	    int aShift=myParameters[0]; /* number of characters to delete, the following chars shift to the left */
-	    deleteCharacter(&(aDataBuffer[aCursor.myLine*aNumberOfCol+aCursor.myCol]), aShift, aNumberOfCol-aShift);
+	    int aCell=getCell(aCursor.myLine, aCursor.myCol, aNumberOfCol);
+	    deleteCharacter(&(aDataBuffer[ aCell]), aShift, aNumberOfCol-aShift);
 	  }
 	  break;
 	case DCH1:
 	  {
 	    int aShift=1;
-	    deleteCharacter(&(aDataBuffer[aCursor.myLine*aNumberOfCol+aCursor.myCol]), aShift, aNumberOfCol-aShift);
+	    int aCell=getCell(aCursor.myLine, aCursor.myCol, aNumberOfCol);
+	    deleteCharacter(&(aDataBuffer[ aCell]), aShift, aNumberOfCol-aShift);
 	  }
 	  break;
 	case DL: /* delete lines */
@@ -767,7 +1129,8 @@ int main()
 	case ECH: /* Erase characters */
 	  {
 	    int aErasedLength=myParameters[0];
-	    eraseLine(&(aDataBuffer[aCursor.myLine*aNumberOfCol+aCursor.myCol]), aErasedLength);
+	    int aCell=getCell(aCursor.myLine, aCursor.myCol, aNumberOfCol);
+	    eraseLine(&(aDataBuffer[ aCell]), aErasedLength);
 	  }
 	  break;
 	case ED: /* Clear the display after the cursor */
@@ -819,39 +1182,34 @@ int main()
 	case VPA:
 	  aCursor.myLine=myParameters[0];
 	  break;
-	default:
+	case TEXTFIELD:
 	  {
-	    /* TBD: init,...*/
-	    static struct t_cursor aLastWord;
-	    static struct t_cursor aLastChar;
-	    enum t_storeChar aStatus=NEW_CHAR;
-
-	    if (isNewWord(&aCursor, *yytext))
-	      {
-		char* aString=processWord( &aLastWord, aStatus);
-		if (aString)
-		  {
-		    printf(">>>Word: %s<<<\n", aString);
-		    free( aString);
-		  }
-		copyCursor( &aLastWord, &aCursor);
+	    int aCell=getCell(aCursor.myLine, aCursor.myCol, aNumberOfCol);
+	    if (storeChar( aCell, *yytext, aDataBuffer, aNumberOfCol))
+	      { /* the content has been modified */
+		aLinePortion[ aLinePortionIndex].myContentIsModified=1;
 	      }
-	    copyCursor( &aLastChar, &aCursor);
-
-	    aStatus=storeChar(&aCursor, *yytext, aDataBuffer, aStyleBuffer, aNumberOfCol);
-	    switch (aStatus)
-	      {
-	      case SAME_CHAR:
-		break;
-	      case NEW_CHAR:
-		break;
-	      case NEW_STYLE:
-		break;
-	      }
+	    if (storeStyle( aCell, &(aCursor.myStyle), aStyleBuffer))
+	      { /* the style has been modified */
+		aLinePortion[ aLinePortionIndex].myStyleIsModified=1;
+	      }  
 	    aCursor.myCol++;
 	  }
+	  break;
+	default:
+	  break;
+	}
+
+      if( setPortion( &aCursor, aLinePortion, &aLinePortionIndex) == MAX_PORTION_REACHED)
+	{
+	  flushPortion( aLinePortion, &aLinePortionIndex, aDataBuffer, aNumberOfLine, aNumberOfCol, aStyleBuffer);
+
+	  /* and build the new portion */ 
+	  setPortion( &aCursor, aLinePortion, &aLinePortionIndex);	  
 	}
     }
+
+  flushPortion( aLinePortion, &aLinePortionIndex, aDataBuffer, aNumberOfLine, aNumberOfCol, aStyleBuffer);
 
   if (TheDebugIsOn)
     {
@@ -864,4 +1222,3 @@ int main()
 }
 
 /* > */
-

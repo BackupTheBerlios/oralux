@@ -32,6 +32,10 @@ struct t_style
   unsigned int isProtect : 1;
   unsigned int isAlternate : 1;
 };
+
+#define copyStyle( theDestination, theSource) memcpy( theDestination, theSource, sizeof(struct t_style))
+#define compareStyle( theStyle1, theStyle2) memcmp( theStyle1, theStyle2, sizeof(struct t_style))
+
 /* > */
 
 /* < enum StringCapacity */
