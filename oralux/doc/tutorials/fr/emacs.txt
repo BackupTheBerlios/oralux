@@ -49,33 +49,33 @@ En fait, tant que vous n'avez pas fait un retour chariot volontaire, votre texte
 
 4.1 Déplacement dans le document
 
-Alt b déplace le curseur sur le mot précédent et Emacspeak le prononce
-Alt f déplace le curseur sur le mot suivant et Emacspeak le prononce
+Alt b déplace le curseur sur le mot précédent et Emacspeak le prononce.
+Alt f déplace le curseur sur le mot suivant et Emacspeak le prononce.
 
-C-a déplace le curseur au début de la ligne sur laquelle il se trouve et Emacspeak la prononce
-Alt a déplace le curseur au début de la phrase sur laquelle il se trouve et Emacspeak la prononce
+C-a déplace le curseur au début de la ligne sur laquelle il se trouve.
+Alt a déplace le curseur au début de la phrase sur laquelle il se trouve et Emacspeak la prononce.
 
-C-e déplace le curseur à la fin de la ligne sur laquelle il se trouve et Emacspeak la prononce
+C-e C-e déplace le curseur à la fin de la ligne sur laquelle il se trouve.
 Alt e déplace le curseur à la fin de la phrase sur laquelle il se trouve et Emacspeak prononce la phrase suivante.
 
-Alt- [ Aller au paragraphe précédent.
+Alt-[ Aller au paragraphe précédent.
 
-Alt- ] Aller au paragraphe suivant.
+Alt-] Aller au paragraphe suivant.
 
-C- x [ Aller à la page précédente.
+C-x [ Aller à la page précédente.
 
-C- x ] Aller à la page suivante.
+C-x ] Aller à la page suivante.
 
-Alt- < Aller au début du buffer.
+Alt-< Aller au début du buffer.
 
-Alt- > Aller à la fin du buffer.
+Alt-> Aller à la fin du buffer.
 
 5) Naviguer dans les buffers ouverts C-x b
 
 Vous avez ouvert et/ou créé plusieurs fichiers (on rappelle, chaque fichier se retrouve donc avec un buffer qui lui est associé) et vous voulez aller de l'un à l'autre. Pas de problème. Il suffit de taper C-x b 
 Par défaut, si vous appuyer sur la touche entrée, vous retournez sur le dernier buffer ouvert sinon il suffit d'entrer le nom du buffer ou plus simplement la première lettre et appuyer sur la touche tabulation pour que le nom de votre buffer apparaisse automatiquement  (la touche de tabulation est la touche de complétion).
 Chaque buffer est associer à un processus. Pour fermer un buffer ouvert il faut donc tuer le processus.
-taper la commande c-x k , par défaut, c'est le buffer en cours qui est fermé
+taper la commande c-x k , par défaut, c'est le buffer en cours qui est fermé.
 
 Pour aller d'un buffer à l'autre taper C-x o
 
@@ -102,7 +102,7 @@ c copier un fichier.  vous êtes invité à donner un nouveau nom à votre fichier c
 r renommer un fichier.  vous êtes invité à donner un nouveau nom.
 
 Une page d'info sur les raccourcis des commandes en mode Dired est accessible en tapant,
-C- h m
+C-h m
 Cette page d'info se trouve dans un nouveau buffer, utiliser C-x o pour aller dans ce buffer
 
 7) accéder au shell M-x shell
@@ -130,13 +130,13 @@ Puis taper le nom de la commande pour laquelle vous souhaiter obtenir de l'aide.
 C-x C-c
 
 9) Informations complémentaires
-C- h i m
+C-h i m
 Accéder à la FAQ d'Emacs.
 
-C- h t
+C-h t
 Accéder au tutoriel en ligne de Emacs.
 
-C- h k
+C-h k
 Accéder à la documentation d'une séquence de touche.
 
 Pour en savoir plus sur  GNU/Emacs et Emacspeak, visiter le site suivant,

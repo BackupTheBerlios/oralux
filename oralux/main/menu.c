@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // menu.c
-// $Id: menu.c,v 1.1 2004/09/27 20:30:26 gcasse Exp $
+// $Id: menu.c,v 1.2 2004/10/24 21:34:34 gcasse Exp $
 // $Author: gcasse $
 // Description: introductory menu. 
-// $Date: 2004/09/27 20:30:26 $ |
-// $Revision: 1.1 $ |
+// $Date: 2004/10/24 21:34:34 $ |
+// $Revision: 1.2 $ |
 // Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -187,7 +187,7 @@ enum MenuAnswer getAnswer()
 static int isInstalled()
 {
   struct stat buf;
-  return (0==lstat("/KNOPPIX/bin/ash", &buf));
+  return (0!=lstat("/KNOPPIX/bin/ash", &buf));
 }
 
 // setVolume

@@ -1,0 +1,474 @@
+#!/bin/bash
+# $Id: eagleconfig.sav,v 1.1 2004/10/24 21:34:34 gcasse Exp $
+# Name: eagleconfig
+# Goal: configuration utility for Eagle-USB modems
+# Author: Tux
+# Version: 1.9.5
+# Params:
+#	h = display help
+#	l = choose language (keep, auto or [LL])
+#		keep => use previous language (read $LANG in eagle-usb.conf)
+#		auto => use system language (given by $LANG var)
+#		LL   => language you want to use (en, fr, pl...)
+#	e = expert mode (additional choices)
+# Params set by setvars:
+#	USE_HOTPLUG=1		=> use hotplug
+#	USE_UPD_USB_USERMAP=1	=> use update-usb.usermap to update usb.usermap
+#	USE_IFUPDOWN=1		=> use ifup/ifdown scripts instead of ifconfig
+#	SIMPLE=1		=> don't use hotplug nor ifup/ifdown
+
+. /etc/eagle-usb/scripts/setvars
+
+for param in $* ; do
+	if [ $i -gt 0 ] ; then
+			param=${param//--help/-h}
+			param=${param//--lang=/-l}
+			param=${param//--lang/-l}
+			param=${param//--expert/-e}
+			PARAMS="$PARAMS $param"
+	fi
+	let i++
+done
+evalParams() {
+	while getopts "hl:e" opt; do
+		case $opt in
+			h  )	echo -e $EAGLECONFIG_USAGE_MSG ; exit 0 ;;
+			l  )	FORCE_LANG="$OPTARG" ;;
+			e  )	EXPERT=1 ;;
+			\? )	echo -e $EAGLECONFIG_USAGE_MSG ; exit 1 ;;
+		esac
+	done
+}
+FORCE_LANG="keep"
+EXPERT=0
+TESTCONNEC_DELAY=2	# check every 2min
+evalParams $PARAMS
+
+# detect which language to use
+if [ "$FORCE_LANG" = "auto" ] ; then
+	EU_LANG="${LANG:0:2}"; # use system settings
+elif [ "$FORCE_LANG" = "keep" ] ; then
+	if [ -e $EU_DIR/eagle-usb.conf ] ; then
+		RES="`grep 'LANG=' $EU_DIR/eagle-usb.conf | cut -d '=' -f2`"
+	else
+		RES=""
+	fi
+	# if RES#"" it is used, else we keep old EU_LANG value (given by setvars)
+	if [ ! -z $RES ] ; then
+		EU_LANG="$RES"
+	fi
+else
+	EU_LANG="${FORCE_LANG:0:2}"
+fi
+# can't detect system settings => switch to english
+if [ -z $EU_LANG ] ; then
+	EU_LANG="en"
+fi
+if [ -e $EU_LANG_DIR/$EU_LANG ] ; then
+	. $EU_LANG_DIR/$EU_LANG
+else
+	echo "This language ($EU_LANG) is not supported!"
+	exit 1
+fi
+
+echo -e "\n\n${SEP_MSG}"
+echo -e "${GREETING_MSG}"
+echo -e "${SEP_MSG}"
+echo -e "${INFO_MSG}"
+
+# Connexion details
+echo -e $ISP_LIST_MSG
+echo -en \
+"------------------------------------------------------------------\n"\
+"1:  Belgium      Belgacom                08  23  06  PPPoA VCmux  \n"\
+"2:  Deutschland  DT (D.Telecom, 1&1...)  01  20  01  PPPoE LLC    \n"\
+"3:  España       Telefonica              08  20  01  PPPoE LLC    \n"\
+"4:  España       Telefonica ip fija      08  20  03  ROUTED IP LLC\n"\
+"5:  España       Retevision, Eresmas...  08  23  06  PPPoA VCmux  \n"\
+"6:  España       Tiscali                 01  20  ??  ?            \n"\
+"7:  Finland      Sonera                  08  23  01  PPPoE LLC    \n"\
+"8:  France       FT (Free, Wanadoo...)   08  23  06  PPPoA VCmux  \n"\
+"9:  France       FT (Free, Wanadoo...)   08  23  01  PPPoE LLC    \n"\
+"10: France       Tiscali 128k            08  23  05  PPPoA LLC    \n"\
+"11: France       Free dégroupé           08  24  04  ROUTED IP VC \n"\
+"12: France       9telecom dégroupé       08  23  06  PPPoA VCmux  \n"\
+"13: Hungary      Matav                   01  20  01  PPPoE LLC    \n"\
+"14: Italia       Telecom Italia          08  23  06  PPPoA VCmux  \n"\
+"15: Italia       MClink                  08  4B  ??  ?            \n"\
+"16: Netherlands  KPN                     08  30  06  PPPoA VCmux  \n"\
+"17: Polska       Telekomunikacja Polska  00  23  06  PPPoA VCmux  \n"\
+"18: Portugal     PT                      00  23  01  PPPoE LLC    \n"\
+"19: Sweden       Telia                   08  23  01  PPPoE LLC    \n"\
+"20: UK           BT (Tiscali...)         00  26  06  PPPoA VCmux  \n"\
+"------------------------------------------------------------------\n"\
+"?"
+isp_to_no $ISP
+if [ $NOISP != 0 ] ; then
+	echo -n "[$NOISP]"
+fi
+
+read REP
+if [ -z "$REP" ] ; then REP=$NOISP ; fi
+LINETYPE="00000001"
+if [ $REP == 1 ] ; then		VPI="00000008" ; VCI="00000023" ; ENC="00000006" ; ISP="BE"
+elif [ $REP == 2 ] ; then	VPI="00000001" ; VCI="00000020" ; ENC="00000001" ; LINETYPE="00000002" ; ISP="DE"
+elif [ $REP == 3 ] ; then	VPI="00000008" ; VCI="00000020" ; ENC="00000001" ; ISP="ESTE"
+elif [ $REP == 4 ] ; then	VPI="00000008" ; VCI="00000020" ; ENC="00000003" ; ISP="ESTEIPF"
+elif [ $REP == 5 ] ; then	VPI="00000008" ; VCI="00000023" ; ENC="00000006" ; ISP="ESRE"
+elif [ $REP == 6 ] ; then	VPI="00000001" ; VCI="00000020" ; ENC="????????" ; ISP="ESTIS"
+elif [ $REP == 7 ] ; then	VPI="00000008" ; VCI="00000023" ; ENC="00000001" ; ISP="FI"
+elif [ $REP == 8 ] ; then	VPI="00000008" ; VCI="00000023" ; ENC="00000006" ; ISP="FRFTA"
+elif [ $REP == 9 ] ; then	VPI="00000008" ; VCI="00000023" ; ENC="00000001" ; ISP="FRFTE"
+elif [ $REP == 10 ] ; then	VPI="00000008" ; VCI="00000023" ; ENC="00000005" ; ISP="FRTIS128"
+elif [ $REP == 11 ] ; then	VPI="00000008" ; VCI="00000024" ; ENC="00000004" ; ISP="FRFREEDEG"
+elif [ $REP == 12 ] ; then	VPI="00000008" ; VCI="00000023" ; ENC="00000006" ; ISP="FR9"
+elif [ $REP == 13 ] ; then	VPI="00000001" ; VCI="00000020" ; ENC="00000001" ; ISP="HU"
+elif [ $REP == 14 ] ; then	VPI="00000008" ; VCI="00000023" ; ENC="00000006" ; ISP="IT"
+elif [ $REP == 15 ] ; then	VPI="00000008" ; VCI="0000004B" ; ENC="????????" ; ISP="ITMC"
+elif [ $REP == 16 ] ; then	VPI="00000008" ; VCI="00000030" ; ENC="00000006" ; ISP="NE"
+elif [ $REP == 17 ] ; then	VPI="00000000" ; VCI="00000023" ; ENC="00000006" ; ISP="PL"
+elif [ $REP == 18 ] ; then	VPI="00000000" ; VCI="00000023" ; ENC="00000001" ; ISP="PO"
+elif [ $REP == 19 ] ; then	VPI="00000008" ; VCI="00000023" ; ENC="00000001" ; ISP="SW"
+elif [ $REP == 20 ] ; then	VPI="00000000" ; VCI="00000026" ; ENC="00000006" ; ISP="UK"
+else
+	echo -e $WRONG_CHOICE_MSG
+	exit 1
+fi
+
+if [ "$VPI" = "????????" ] || [ "$VCI" = "????????" ] || [ "$ENC" = "????????" ] ; then
+	echo -e "\nThere are missing data for your ISP.\nPlease notify this on http://www.eagle-usb.fr.st\n"
+	exit 1
+fi
+
+encapsToPppox "$ENC"
+
+# stop adsl (else eaglectrl -d can't send DSP)
+fctStopAdsl -sf
+
+if [ "$PPPOX" = "none" ] ; then
+# ================== WITHOUT PPPD =====================
+	echo -en $STATIC_IP_MSG
+	read STATIC_IP
+	if [ -z "$STATIC_IP" ] ; then STATIC_IP="none" ; fi
+	if [ "$STATIC_IP" != "none" ] ; then
+		if [ -e /etc/resolv.conf ] ; then
+			echo -e "\nYour /etc/resolv.conf contains the following lines:"
+			echo $SEP_MSG
+			cat -s /etc/resolv.conf
+			echo $SEP_MSG
+			echo -e "You can modify this file manually if it contains wrong DNS."
+		else
+			echo -e "\nwarning: /etc/resolv.conf doesn't exist!"
+		fi
+	fi
+else
+# =================== WITH PPPD =======================
+	STATIC_IP="none"
+	# Search for existing User&Password
+	OLD_PWD_FOUND=0
+	if [ -e $PPP_OPTIONS_ADSL ] ; then
+		# the user name has to be in /etc/ppp/peers/adsl and (pap-secrets or chap-secrets)
+		NAME_IN_OPTIONS=`grep user $PPP_OPTIONS_ADSL | cut -d ' ' -f2 | sed 's_"__g'`
+		if [ ! -z $NAME_IN_OPTIONS ] ; then
+			if [ -e $PPP_DIR/pap-secrets ] && grep -q "$NAME_IN_OPTIONS" $PPP_DIR/pap-secrets ; then
+				OLD_PWD_FOUND=1
+			fi
+			if [ -e $PPP_DIR/chap-secrets ] && grep -q "$NAME_IN_OPTIONS" $PPP_DIR/chap-secrets ; then
+				OLD_PWD_FOUND=1
+			fi
+		fi
+	fi
+	# Old password found?
+	if [ $OLD_PWD_FOUND == 1 ] ; then
+		if ! confirm "$KEEP_OLD_PWD_MSG" 1 ; then
+			OLD_PWD_FOUND=0
+		fi
+	fi
+	# No User/Password or don't want to keep existing
+	if [ $OLD_PWD_FOUND == 0 ] ; then
+		# Ask for user and password:
+		echo -e $LOGIN_MSG
+		read FAI_LOGIN
+		echo -e $PWD_MSG
+		read -s FAI_PWD
+		# Ask for data encryption or not
+		if confirm "$PWD_ENCRYPT_MSG" 1 ; then
+			PWD_ENCRYPT=1
+		else
+			PWD_ENCRYPT=0
+		fi
+	fi
+fi
+
+# === testconnec ===
+if [ $EXPERT == 1 ] ; then
+	if confirm "$USE_TESTCONNEC_MSG" $USE_TESTCONNEC ; then
+		USE_TESTCONNEC=1
+	else
+		USE_TESTCONNEC=0
+	fi
+fi
+# --------------------------------------------------------
+
+
+# ============== APPLY CHANGES TO SYSTEM =================
+# should /etc/eagle-usb/eagle-usb.conf be created?
+if [ ! -e $EU_DIR/eagle-usb.conf ] ; then
+	#echo -e "\nThe file $EU_DIR/eagle-usb.conf is missing!\nYou should reinstall this driver!\n"
+	#exit 1
+	cp $EU_SCRIPT_DIR/eagle-usb.conf.template $EU_DIR/eagle-usb.conf
+fi
+if ! grep -q "STATIC_IP=" $EU_DIR/eagle-usb.conf ; then
+	echo "STATIC_IP=" >> $EU_DIR/eagle-usb.conf
+fi
+if ! grep -q "ISP=" $EU_DIR/eagle-usb.conf ; then
+	echo "ISP=" >> $EU_DIR/eagle-usb.conf
+fi
+if ! grep -q "LANG=" $EU_DIR/eagle-usb.conf ; then
+	echo "LANG=" >> $EU_DIR/eagle-usb.conf
+fi
+if ! grep -q "ASYNCHRONOUS_START=" $EU_DIR/eagle-usb.conf ; then
+	echo "ASYNCHRONOUS_START=1" >> $EU_DIR/eagle-usb.conf
+fi
+# language, VPI, VCI, encapsulation
+cat $EU_DIR/eagle-usb.conf | sed \
+	-e "s|STATIC_IP *=.*|STATIC_IP=$STATIC_IP|g" \
+	-e "s|ISP *=.*|ISP=$ISP|g" \
+	-e "s|LANG *=.*|LANG=$EU_LANG|g" \
+	-e "s|Linetype *=.*|Linetype=$LINETYPE|g" \
+	-e "s|VCI *=.*|VCI=$VCI|g" \
+	-e "s|VPI *=.*|VPI=$VPI|g" \
+	-e "s|Encapsulation *=.*|Encapsulation=$ENC|g" > $EU_DIR/tmp
+cat $EU_DIR/tmp > $EU_DIR/eagle-usb.conf
+
+if [ "$PPPOX" = "none" ] ; then
+	if [ "$STATIC_IP" = "none" ] ; then
+	# degroupé - dhcp
+		# if /etc/resolv.conf is a link (probably -> /etc/ppp/resolv.conf), it is removed
+		if [ -h /etc/resolv.conf ] ; then
+			rm -f /etc/resolv.conf
+		fi
+	fi
+else
+	if [ $OLD_PWD_FOUND == 1 ] ; then
+	# keep user/password
+		# does /etc/ppp/peers need to be updated?
+		NEED_UPDATE=0
+		if grep -q "/usr/sbin/adictrl" $PPP_OPTIONS_ADSL ; then
+			NEED_UPDATE=1
+		fi
+		if ! grep -q "$SBIN_DIR/fctStartAdsl" $PPP_OPTIONS_ADSL ; then
+			NEED_UPDATE=1
+		fi
+		if [ $NEED_UPDATE == 1 ] ; then
+			# remove outdated or unnecessary lines
+			cat $PPP_OPTIONS_ADSL | \
+				grep -v "adictrl" | \
+				grep -v "eaglectrl" | \
+				grep -v "kdebug" | \
+				grep -v "noccp" | \
+				grep -v "holdoff" | \
+				grep -v "maxfail" > $EU_DIR/tmp
+			cat $EU_DIR/tmp > $PPP_OPTIONS_ADSL
+			# then add the new line
+			echo "pty \"$SBIN_DIR/pppoa -I \`$SBIN_DIR/fctStartAdsl -i\`\"" >> $PPP_OPTIONS_ADSL	# `
+		fi
+	else
+	# user/password not found or user wants to change there
+		echo "user \"$FAI_LOGIN\"" > $PPP_OPTIONS_ADSL
+		echo "pty \"$SBIN_DIR/pppoa -I \`$SBIN_DIR/fctStartAdsl -i\`\"" >> $PPP_OPTIONS_ADSL	# `
+		cat $EU_SCRIPT_DIR/options >> $PPP_OPTIONS_ADSL
+		# Now we must be careful:
+		umask 0077
+		if [ $PWD_ENCRYPT == 0 ] ; then
+			PAP_CHAP="pap"
+		else
+			PAP_CHAP="chap"
+		fi
+		if [ -f $PPP_DIR/$PAP_CHAP-secrets ] ; then
+			grep -v "freeadsl" $PPP_DIR/$PAP_CHAP-secrets > $PPP_DIR/$PAP_CHAP-secrets.temp
+			grep -v "$FAI_LOGIN" $PPP_DIR/$PAP_CHAP-secrets.temp > $PPP_DIR/$PAP_CHAP-secrets
+			rm -f $PPP_DIR/$PAP_CHAP-secrets.temp
+		else
+			echo "# Secrets for authentication using $PAPCHAP" > $PPP_DIR/$PAP_CHAP-secrets
+			echo "# client        server  secret          IP addresses" >> $PPP_DIR/$PAP_CHAP-secrets
+			echo "# userlogin     *       password        *" >> $PPP_DIR/$PAP_CHAP-secrets
+		fi
+		echo "$FAI_LOGIN *       $FAI_PWD *" >> $PPP_DIR/$PAP_CHAP-secrets
+		# mire
+		if ! grep -q "adsl@adsl" $PPP_DIR/$PAP_CHAP-secrets ; then
+			echo "adsl@adsl	*	adsl	*" >> $PPP_DIR/$PAP_CHAP-secrets
+		fi
+		umask 0022
+		echo "user \"adsl@adsl\"" > $PPP_OPTIONS_MIRE
+		echo "pty \"$SBIN_DIR/pppoa -I \`$SBIN_DIR/fctStartAdsl -i\`\"" >> $PPP_OPTIONS_MIRE	# `
+		cat $EU_SCRIPT_DIR/options >> $PPP_OPTIONS_MIRE
+	fi
+
+	# DNS
+	if [ "$DISTRIB" = "Mandrake" ] ; then
+		# Mandrake use the ifup script to update /etc/resolv.conf
+		touch /etc/resolv.conf
+		chmod a+r /etc/resolv.conf
+	else
+		# if resolv.conf exists and is not a link, it is saved
+		if [ -e /etc/resolv.conf ] && [ ! -h /etc/resolv.conf ] ; then
+			cat /etc/resolv.conf >> /etc/resolv.conf.old
+		fi
+		ln -sf $PPP_DIR/resolv.conf /etc/resolv.conf
+	fi
+
+	# to allow "pppd call adsl", adsl must contains the right app
+	sed "s|/pppo[a-z]|/$PPPOX|" $PPP_OPTIONS_ADSL > $EU_DIR/tmp
+	cat $EU_DIR/tmp > $PPP_OPTIONS_ADSL
+	if [ -e $PPP_OPTIONS_MIRE ] ; then
+		sed "s|/pppo[a-z]|/$PPPOX|" $PPP_OPTIONS_MIRE > $EU_DIR/tmp
+		cat $EU_DIR/tmp > $PPP_OPTIONS_MIRE
+	fi
+fi
+touch /etc/resolv.conf
+
+
+# === hotplug ===
+if [ $USE_HOTPLUG == 1 ] && [ $SIMPLE == 0 ] ; then
+	if [ $USE_UPD_USB_USERMAP == 1 ] ; then
+		mkdir -p $HOTPLUG_USERMAP_DIR/eagle-usb
+		ln -sf $EU_SCRIPT_DIR/usb.usermap $HOTPLUG_USERMAP_DIR/eagle-usb/usb.usermap
+		update-usb.usermap > /dev/null
+	else
+		if [ -e $HOTPLUG_USERMAP_FILE ] ; then
+			grep -v "eu_dsp" $HOTPLUG_USERMAP_FILE > /tmp/usermap.temp
+			cat /tmp/usermap.temp > $HOTPLUG_USERMAP_FILE
+			rm -f /tmp/usermap.temp
+		fi
+		cat $EU_SCRIPT_DIR/usb.usermap >> $HOTPLUG_USERMAP_FILE
+	fi
+	ln -sf $EU_SCRIPT_DIR/eu_dsp $HOTPLUG_SCRIPT_DIR/eu_dsp
+fi
+
+
+# === init.d ===
+if [ "$DISTRIB" = "Fedora" ] || [ "$DISTRIB" = "Redhat" ] || [ "$DISTRIB" = "Suse" ] ; then
+	ln -sf $EU_SCRIPT_DIR/eu_init $INIT_DIR/eagle-usb
+	if confirm "$START_ON_BOOT_MSG" $START_ON_BOOT ; then
+		chkconfig --add eagle-usb >/dev/null
+	else
+		chkconfig --del eagle-usb >/dev/null
+	fi
+elif [ "$DISTRIB" = "Debian" ] ; then
+	ln -sf $EU_SCRIPT_DIR/eu_init $INIT_DIR/eagle-usb
+	if confirm "$START_ON_BOOT_MSG" $START_ON_BOOT ; then
+		update-rc.d eagle-usb start 99 2 3 4 5 . stop 01 0 1 6 . 0>/dev/null 1>/dev/null 2>/dev/null
+	else
+		update-rc.d -f eagle-usb remove 0>/dev/null 1>/dev/null 2>/dev/null
+	fi
+elif [ "$DISTRIB" = "Mandrake" ] ; then
+	if [ -e /etc/init.d/internet ] ; then
+		if confirm "$START_ON_BOOT_MSG" $START_ON_BOOT ; then
+			chkconfig --add internet
+		else
+			chkconfig --del internet
+		fi
+	else
+		echo -e "\nwarning: 'internet' service is not present, connection on boot is disabled.\nYou should try to install adiusbadsl package first."
+	fi
+fi
+
+
+# === testconnec ===
+if [ $EXPERT == 1 ] ; then
+	if [ $USE_TESTCONNEC == 1 ] ; then
+		# add testconnec in /etc/cron.d
+		if [ ! -d /etc/cron.d ] ; then
+			echo -e "\warning: /etc/cron.d does not exist. testconnec is disabled"
+		else
+			echo "*/${TESTCONNEC_DELAY} * * * * root /etc/eagle-usb/scripts/testconnec -d1" > /etc/cron.d/eagle-usb
+			chmod 755 /etc/cron.d/eagle-usb
+		fi
+	else
+		# remove testconnec in /etc/cron.d
+		rm -f /etc/cron.d/eagle-usb
+	fi
+fi
+
+
+# OK
+echo -e "$GENER_MSG\n"
+rm -f $EU_SCRIPT_DIR/lock
+
+
+# === load module, dsp... ===
+# on kernel 2.6 "lsmod" display "eagle_usb" instead of "eagle-usb"
+if ! lsmod | sed s/_/-/g | grep -q "${MODULE}" ; then
+	echo -en "\n\n${MODULE_MSG}"
+	depmod -a
+	modprobe $MODULE 1>/dev/null 2>/dev/null
+	RES=$?
+	sleep 5s
+	if [ $RES == 0 ] ; then
+		echo $OK_MSG
+	else
+		echo $ERR_MSG
+		exit 1
+	fi
+fi
+if $EAGLESTAT | grep -q "Pre-firmware device" ; then
+	echo -en "\n$DSP_MSG"
+	echo $ERR_MSG
+	#echo -e "\nEnsure that your modem is plugged.\n"
+	exit 1
+fi
+
+# === DSP & options are always send to take in account new params ==
+echo -en "\n$DSP_MSG"
+$EAGLECTRL -d 1>/dev/null 2>/dev/null
+if [ $? == 0 ] ; then
+	echo $OK_MSG
+else
+	echo $ERR_MSG
+	exit 1
+fi
+
+# ==== waiting for "operational state" ===
+echo -en "\n${WAIT_OPER_MSG}"
+# wait 5s to see if modem has crashed.
+# (5s is the maximum delay between "booting" and "initializing" states)
+$EAGLECTRL -s5 1>/dev/null 2>/dev/null
+if $EAGLESTAT | grep -q "${BOOTING_STR}" ; then
+	# crashed when "booting"?
+	echo_log "== Modem crashed! Rebooting... =="
+	sleep 1
+	$EAGLECTRL -w 1>/dev/null 2>/dev/null
+else
+	# not crashed => wait until end of synchro (or timeout)
+	$EAGLECTRL -s 1>/dev/null 2>/dev/null
+fi
+if [ $? == 0 ] ; then
+	echo -e "$OK_MSG\n"
+else
+	echo $ERR_MSG
+	exit 1
+fi
+
+# === ifup / ifdown ===
+INTERFACE=`${EAGLECTRL} -i 2>/dev/null`
+if [ $? == 0 ] ; then
+	if [ $USE_IFUPDOWN == 1 ] && [ $SIMPLE == 0 ] ; then
+		rm -f $NET_SCRIPT_DIR/ifcfg-$INTERFACE
+		touch $NET_SCRIPT_DIR/ifcfg-$INTERFACE
+		echo "DEVICE=$INTERFACE" >> $NET_SCRIPT_DIR/ifcfg-$INTERFACE
+		if [ $PPPOX != "none" ] ; then
+			echo "BOOTPROTO=static" >> $NET_SCRIPT_DIR/ifcfg-$INTERFACE
+			echo "IPADDR=192.168.60.30" >> $NET_SCRIPT_DIR/ifcfg-$INTERFACE
+			echo "NETMASK=255.255.255.0" >> $NET_SCRIPT_DIR/ifcfg-$INTERFACE
+			echo "BROADCAST=192.168.60.255" >> $NET_SCRIPT_DIR/ifcfg-$INTERFACE
+		else
+			echo "BOOTPROTO=dhcp" >> $NET_SCRIPT_DIR/ifcfg-$INTERFACE
+		fi
+		echo "ONBOOT=no" >> $NET_SCRIPT_DIR/ifcfg-$INTERFACE
+		echo "MII_NOT_SUPPORTED=yes" >> $NET_SCRIPT_DIR/ifcfg-$INTERFACE
+	fi
+fi
+
+rm -f $EU_DIR/tmp
+echo -e $EAGLECONFIG_END_MSG

@@ -149,7 +149,7 @@ J'avais modifié le fichier .emacs soigneusement comme tu l'as indiqué dans un me
 
 Feedback from Nigel
 --------------------------------------
-- C-a doesn't speak the line
+/ C-a doesn't speak the line: the rather an emacspeak feature.
 - Dired mode: no audio feedback
 - kill buffer: the next current buffer is not announced. 
 * Pb using the uk keyboard
@@ -293,6 +293,8 @@ and then return.
 using the su command to switch to root works fine.  pressing return after
 the cd has ejected shut down the machine fine.
 --------------------------------------
++ speak the C-x,... pressed keys
+--------------------------------------
 
 
 + Clarify: Parlemax + english menu: gives US locale (FR expected ?). The braill driver depends on the type of keyboard. 
@@ -397,6 +399,8 @@ http://nebuchadnezzar.zion.cz/download/xlhtml-0.5.1-vd2.tgz
 
 1.2 Priority 2
 
++ General default auditory icons player whichever the voice synthesis. At the moment, most of our proposed voice synthesizers, do not manage the auditory icons.
+  
 + From Terrence:
 Also, I've made my persistent home directory so big that it's crowded my c:/hda1 hard drive.  Is there a way to remake the directory so it's not so huge?
 

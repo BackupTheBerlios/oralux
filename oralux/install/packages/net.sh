@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # net.sh
-# $Id: net.sh,v 1.1 2004/09/27 20:30:00 gcasse Exp $
+# $Id: net.sh,v 1.2 2004/10/24 21:34:34 gcasse Exp $
 # $Author: gcasse $
 # Description: ppp configuration tool, adsl drivers,...
-# $Date: 2004/09/27 20:30:00 $ |
-# $Revision: 1.1 $ |
+# $Date: 2004/10/24 21:34:34 $ |
+# $Revision: 1.2 $ |
 # Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -71,9 +71,9 @@ Copy2Oralux()
 	make install;\
 	depmod -a;\
 	mkdir -p /etc/eagle-usb/hotplug;\
-	cd /usr/lib/hotplug;\
-	ln -s /etc/eagle-usb/hotplug eagle-usb;"
-    
+	cd /usr/lib/hotplug;ln -s /etc/eagle-usb/hotplug eagle-usb;"
+
+    cp $INSTALL_PACKAGES/net/eagleconfig $BUILD/usr/local/eagle-usb/sbin
 }
 
 case $1 in

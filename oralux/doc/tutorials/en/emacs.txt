@@ -50,27 +50,27 @@ Each time you open or create a file, this opens a new buffer within Emacs. If yo
 When typing in an Emacs buffer new lines will be created as you type. This is known as word wrapping. If you want to create a new line press the return key.
 
 4.1 To move in a document
-Alt- b move the cursor to the preceding word and emacspeak pronounces it.
+Alt-b move the cursor to the preceding word and emacspeak pronounces it.
 
-Alt- f move the cursor to the following word and emacspeak pronounces it.
+Alt-f move the cursor to the following word and emacspeak pronounces it.
 
-C- a moves the cursor to the beginning of the line and Emacspeak reads the line. 
-Alt- a moves the cursor to the beginning of the sentence and emacspeak pronounces it.
+C-a moves the cursor to the beginning of the line. 
+Alt-a moves the cursor to the beginning of the sentence and emacspeak pronounces it.
 
-C- e moves the cursor to the end of the line and Emacspeak reads the line. 
-Alt- e moves the cursor to the end of the sentence and emacspeak pronounces it.
+C-e C-e moves the cursor to the end of the line. 
+Alt-e moves the cursor to the end of the sentence and emacspeak pronounces it.
 
-Alt- [ moves back a paragraph.
+Alt-[ moves back a paragraph.
 
-Alt- ] moves forward a paragraph.
+Alt-] moves forward a paragraph.
 
-C- x [ moves back a page.
+C-x [ moves back a page.
 
-C- x ] moves forwood a page.
+C-x ] moves forwood a page.
 
-Alt- < Moves to the beginning of the buffer.
+Alt-< Moves to the beginning of the buffer.
 
-Alt- > Moves to the end of the buffer.
+Alt-> Moves to the end of the buffer.
 
 5 To surf the open buffers C-x b
 
@@ -85,7 +85,7 @@ You can go up to the higher directory by selecting
 The dot on the first line stands for the current directory.
 
 7 Using the command line (shell) M-x shell
-The command for opening a shell buffer is Alt- x shell ( caution press Alt key and x then type shell)
+The command for opening a shell buffer is Alt-x shell ( caution press Alt key and x then type shell)
 
 Some useful commands:
 
@@ -106,7 +106,7 @@ mkdir : create a directory
 
 cp : copy files example : cp /home/knoppix/emacs.txt /mnt/floppy (copy the file emacs.txt to a floppy disc)
 
-7.1 Using the man command in Emacs Warning! Never use the man command in a shell buffer. Man stands for manual. The man pages as they are referred to, can be used to get help on any command in Linux. To use the man command type, Alt- x man Then enter the command you wish to view the manual pages of.
+7.1 Using the man command in Emacs Warning! Never use the man command in a shell buffer. Man stands for manual. The man pages as they are referred to, can be used to get help on any command in Linux. To use the man command type, Alt-x man Then enter the command you wish to view the manual pages of.
 
 8 To quit Emacs C-x C-c.
 

@@ -84,11 +84,11 @@ Esc b mueve el cursor a la palabra precedente y emacspeak la pronuncia.
 
 Esc f mueve el cursor a la siguiente palabra y emacspeak la pronuncia.
 
-C- a mueve el cursor al comienzo de la línea y Emacs lee la línea.
+C-a mueve el cursor al comienzo de la línea.
 
 Esc a mueve el cursor al comienzo de la sentencia y emacspeak la pronuncia.
 
-C- e mueve el cursor al final de la línea y Emacs lee la línea.
+C-e C-e mueve el cursor al final de la línea.
 
 Esc e mueve el cursor al final de la sentencia y emacspeak la pronuncia.
 
@@ -96,9 +96,9 @@ Esca [ mueve un párrafo atrás.
 
 Esc ] mueve un párrafo adelante.
 
-C- x [ mueve atrás una página.
+C-x [ mueve atrás una página.
 
-C- x ] mueve adelante una página.
+C-x ] mueve adelante una página.
 
 Esc < Mueve hacia el comienzo del buffer.
 

@@ -1,11 +1,11 @@
 <?php
 // ----------------------------------------------------------------------------
 // cliDialog.php
-// $Id: cliDialog.php,v 1.2 2004/10/17 21:35:25 gcasse Exp $
+// $Id: cliDialog.php,v 1.3 2004/10/24 21:34:34 gcasse Exp $
 // $Author: gcasse $
 // Description: command line based dialog (menu, yes/no question, dialog box,...)
-// $Date: 2004/10/17 21:35:25 $ |
-// $Revision: 1.2 $ |
+// $Date: 2004/10/24 21:34:34 $ |
+// $Revision: 1.3 $ |
 // Copyright (C) 2004 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -844,8 +844,6 @@ class cliDialog
       // RAF $this->_myTerminal=new enhancedTerminal();
       //RAF if (!$this->_myTerminal->isBuild())
 	{
-	  echo "RAF theTerminal==$theTerminal==\n";
-
 	  $this->_myTerminal=$theTerminal;
 	    //new dumbTerminal($theTerminal);
 	}

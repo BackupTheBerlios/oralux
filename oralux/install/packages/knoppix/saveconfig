@@ -14,8 +14,9 @@
 # * /etc/fstab is not stored
 # * If the (basic) configuration files are saved to the boot floppy, 
 #   cheatcode floppyconfig is added in syslinux.cfg instaed of myconf=...
+# * knoppix.sh: once the files are restored, it installs the symbolic links (/etc/sysconfig/symlinks)
 #
-set -v 
+#set -v 
 export DIALOG="/usr/bin/php5 /usr/share/oralux/main/dialog.php"
 
 PATH="/bin:/sbin:/usr/bin:/usr/sbin"
@@ -112,6 +113,13 @@ echo "Extracting config archive \$CONFIGS..."
 tar -jpPtf "\$CONFIGS" | while read i; do rm -f "\$i"; done
 tar -jpPxf "\$CONFIGS" ; $CHOWNHOME
 fi
+
+# Restoring the symlinks
+symlinksfile="/etc/sysconfig/symlinks"
+if [ -e "\$symlinksfile" ]; then
+bash "\$symlinksfile" 
+fi
+
 EOT
 
 SCRIPTS=""
@@ -151,7 +159,8 @@ if [ "$DIRECTORY" = "$FLOPPYDIR" ]; then
 
 if [ -e "$DIRECTORY/syslinux.cfg" ]; then
 # We use the floppyconfig cheatcode
-sed "s;[^ ]*conf[^=]*=[^ ]*/[^ ]*;floppyconfig;g" "$DIRECTORY/syslinux.cfg"
+sed "s;[^ ]*conf[^=]*=[^ ]*/[^ ]*;floppyconfig;g" "$DIRECTORY/syslinux.cfg" > $TMP
+mv -f $TMP "$DIRECTORY/syslinux.cfg"
 fi
 
 umountfloppy
@@ -203,7 +212,7 @@ MESSAGE2="Please insert an empty DOS- or ext2-formatted, writable floppy disk."
 $DIALOG --msgbox "$MESSAGE2" 16 51 2 || bailout
 
 echo "$FLOPPYDIR" | grep -q auto || mount /mnt/floppy
-[ "$?" = "0" ] && writescript "$KNOPPIXSH" && break
+[ "$?" = "0" ] && writescript "$KNOPPIXSH" "$CONFIGS_FILE" && break
 done
 ;;
 *)
