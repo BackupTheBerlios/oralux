@@ -1,15 +1,15 @@
-#!/usr/bin/php
+#! /usr/bin/php
 <?php
 
 // raf: utf8
 
 // ----------------------------------------------------------------------------
 // mailMenu.php
-// $Id: mailMenu.php,v 1.4 2004/11/10 18:24:25 gcasse Exp $
+// $Id: mailMenu.php,v 1.5 2004/11/12 21:46:13 gcasse Exp $
 // $Author: gcasse $
 // Description: Menu for mail settings (php5)
-// $Date: 2004/11/10 18:24:25 $ |
-// $Revision: 1.4 $ |
+// $Date: 2004/11/12 21:46:13 $ |
+// $Revision: 1.5 $ |
 // Copyright (C) 2004 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -65,81 +65,63 @@ class mailMenu
 
       do {
 	unset($aMenu);
-	$aMenu["ADD"]=gettext("Add a new mailbox");
+
+	$aIndex=-1;
+
+	$aAction[ ++$aIndex]="ADD";
+	$aMenu[ $aIndex]=gettext("Add a mailbox");
 
 	// Is there already a mailbox ?
 	if ($aNumberOfMailsource=$this->_myConf->getNumberOfMailSource())
 	  {
-	    $aMenu["MODIFY"]=gettext("Modify a mailbox");
-	    $aMenu["DELETE"]=gettext("Delete a mailbox");
+	    $aAction[ ++$aIndex]="MODIFY";
+	    $aMenu[ $aIndex]=gettext("Modify a mailbox");
+
+	    $aAction[ ++$aIndex]="DELETE";
+	    $aMenu[ $aIndex]=gettext("Delete a mailbox");
 	  }
 
-	$aMenu["QUIT"]=gettext("Return to main menu");
+	$aAction[ ++$aIndex]="QUIT";
+	$aMenu[ $aIndex]=gettext("Return to main menu");
 
 	$aDialog= new cliDialog($this->_myTerminal, false);
-	$aKeyPressed=$aDialog->menu(gettext("About mail boxes"), $aMenu, $aResult);
+	$aText=NULL;
+	$aSelectedOption=NULL;
+	$aKeyIsDisplayed=true;
+	$aKeyPressed=$aDialog->menu(gettext("About mail boxes"), $aMenu, $aResult, 
+				    $aText, $aSelectedOption, 
+				    $aKeyIsDisplayed);
 	unset($aDialog);
 
-	switch( (string)$aResult)
+	if ($aKeyPressed==OkPressedValue)
 	  {
-	  case "ADD":
-	    $aMailbox=array();
-	    $this->_inputMailbox( $aMailbox);
-	    $this->_myConf->addMailSource( $aMailbox);
-	    break;
+	    switch( $aAction[$aResult])
+	      {
+	      case "ADD":
+		$aKeyPressed=$this->_addMailbox();
+		break;
 
-	  case "MODIFY":
-	    $aMailbox=array();
-	    $aMailboxIdentifier=NULL;
-	    if ($aNumberOfMailsource==1)
-	      {
-		$this->_myConf->initMailSourceIndex();
-		$this->_myConf->getNextMailSource( $aMailbox, $aMailboxIdentifier);
-	      }
-	    else
-	      {
-		$this->_selectMailbox( gettext("Which mailbox do you want to modify?\n"), $aMailbox, $aMailboxIdentifier);
-	      }
-	    $this->_inputMailbox( $aMailbox);
-	    $this->_myConf->setMailSource( $aMailboxIdentifier, $aMailbox);
-	    break;
+	      case "MODIFY":
+		$aKeyPressed=$this->_modifyMailbox();
+		break;
 
-	  case "DELETE":
-	    $aMailboxIdentifier=NULL;
-	    
-	    if ($aNumberOfMailsource==1)
-	      {
-		$this->_myConf->initMailSourceIndex();
-		$this->_myConf->getNextMailSource( $aMailbox, $aMailboxIdentifier);
+	      case "DELETE":
+		$aKeyPressed=$this->_deleteMailbox();
+		break;
+	 
+	      case "QUIT":
+	      default:
+		$aKeyPressed=EscapePressedValue;
+		break;
 	      }
-	    else
-	      {
-		$this->_selectMailbox( gettext("Which mailbox do you want to delete?\n"), $aMailbox, $aMailboxIdentifier);
-	      }
-	    
-	    $aDialog= new cliDialog($this->_myTerminal, false);
-	    $aCorrectData = !$aDialog->yesNo(sprintf(gettext("Do you really want to delete %s?"), $aMailbox["label"]));
-	    unset($aDialog);
-	    
-	    if ($aCorrectData)
-	      {
-		$this->_myConf->deleteMailSource( $aMailboxIdentifier);
-	      }
-	    break;
-	    
-	  case "QUIT":
-	  default:
-	    $aKeyPressed=EscapePressedValue;
-	    break;
-	}
+	  }
       } while($aKeyPressed==OkPressedValue);
 
-
       $aDialog= new cliDialog($this->_myTerminal, false);
-      $aCorrectData = !$aDialog->yesNo(gettext("Do you want to save your changes"));
+      $aKeyPressed = $aDialog->yesNo(gettext("Do you want to save your changes"));
       unset($aDialog);
    
-      if ($aCorrectData)
+      if ($aKeyPressed==OkPressedValue)
 	{
 	  $this->_myConf->save();
 	  $a=new vmConfig($this->_myConf);
@@ -154,6 +136,76 @@ class mailMenu
     }
 
   // }}}
+  // {{{ _addMailbox
+  protected function _addMailbox()
+    {
+      $aMailbox=array();
+      $aKeyPressed=$this->_inputMailbox( $aMailbox);
+      if ($aKeyPressed == OkPressedValue)
+	{
+	  $this->_myConf->addMailSource( $aMailbox);
+	}
+      return $aKeyPressed;
+    }
+  // }}}
+  // {{{ _modifyMailbox
+  protected function _modifyMailbox()
+    {
+      $aMailbox=array();
+      $aMailboxIdentifier=NULL;
+      $aKeyPressed=OkPressedValue;
+      
+      if ($this->_myConf->getNumberOfMailSource()==1)
+	{
+	  $this->_myConf->initMailSourceIndex();
+	  $this->_myConf->getNextMailSource( $aMailbox, $aMailboxIdentifier);
+	}
+      else
+	{
+	  $aKeyPressed=$this->_selectMailbox( gettext("Which mailbox do you want to modify?\n"), $aMailbox, $aMailboxIdentifier);
+	}
+      
+      if (($aKeyPressed==OkPressedValue)
+	  && ($this->_inputMailbox( $aMailbox) == OkPressedValue))
+	{
+	  $this->_myConf->setMailSource( $aMailboxIdentifier, $aMailbox);
+	}
+      
+      return $aKeyPressed;
+    }
+  // }}}
+  // {{{ _deleteMailbox
+  protected function _deleteMailbox()
+    {
+      $aMailboxIdentifier=NULL;
+      $aKeyPressed=OkPressedValue;
+      
+      if ($this->_myConf->getNumberOfMailSource()==1)
+	{
+	  $this->_myConf->initMailSourceIndex();
+	  $this->_myConf->getNextMailSource( $aMailbox, $aMailboxIdentifier);
+	}
+      else
+	{
+	  $aKeyPressed=$this->_selectMailbox( gettext("Which mailbox do you want to delete?\n"), $aMailbox, $aMailboxIdentifier);
+	}
+      
+      if ($aKeyPressed==OkPressedValue)
+	{
+	  $aDialog= new cliDialog($this->_myTerminal, false);
+	  $aKeyPressed = $aDialog->yesNo(sprintf(gettext("Do you really want to delete %s?"), $aMailbox["label"]));
+	  unset($aDialog);
+	  
+	  if ($aKeyPressed==OkPressedValue)
+	    {
+	      $this->_myConf->deleteMailSource( $aMailboxIdentifier);
+	    }
+	}
+      
+      return $aKeyPressed;
+    }
+  // }}}
+
   // {{{ _selectMailbox
 
   // Display a Mailbox selection list
@@ -161,6 +213,9 @@ class mailMenu
     {
       ENTER("mailMenu::_selectMailbox",__LINE__);
       $aMailboxIsSelected=false;
+      $aKeyPressed=EscapePressedValue;
+
+      // Building the menu from the known mailboxes
       $this->_myConf->initMailSourceIndex();
       $i=0;
       $anArray=array();
@@ -170,26 +225,35 @@ class mailMenu
 	  $i++;
 	}
 
-      if ($i)
-	{	  
+      if ($i>0)
+	{ 
+	  // Select a mailbox from the menu
 	  $aDialog= new cliDialog($this->_myTerminal, false);
-	  $aResult=$aDialog->menu($theTitle, $aMenu);
-	  unset($aDialog);
+	  $aText=NULL;
+	  $aSelectedOption=NULL;
+	  $aKeyIsDisplayed=true;
+	  $aKeyPressed=$aDialog->menu($theTitle, $aMenu, $aResult, 
+				      $aText, $aSelectedOption, 
+				      $aKeyIsDisplayed);
 
-	  $aMailboxIsSelected=true;
-
-	  $this->_myConf->initMailSourceIndex();
-	  $j=1;
-	  while ($j <= $i)
+	  if ($aKeyPressed==OkPressedValue)
 	    {
-	      $this->_myConf->getNextMailSource( $theSelectedMailbox, $theMailboxIdentifier);
-	      if ($aResult==$theMailboxIdentifier)
+	      unset($aDialog);      
+	      $aMailboxIsSelected=true;
+	      $this->_myConf->initMailSourceIndex();
+	      $j=0;
+	      while ($j < $i)
 		{
-		  break;
+		  $this->_myConf->getNextMailSource( $theSelectedMailbox, $theMailboxIdentifier);
+		  if ($aResult==$theMailboxIdentifier)
+		    {
+		      break;
+		    }
+		  $j++;
 		}
-	      $j++;
 	    }
 	}
+      return $aKeyPressed;
     }
 
   // }}}
@@ -239,14 +303,14 @@ class mailMenu
 	      exit();
 	      break;
 	    }
-	  $aFollowingKeyExists=$this->_getWishedState( $aKeyPressed);
+	  $aFollowingKeyExists=$this->_getWishedState( $this->_myConf->mySimpleFields, $aKeyPressed);
 	}
     }
 
   // }}}
   // {{{ _getWishedState
 
-  protected function _getWishedState( $theKeyPressed)
+  protected function _getWishedState( & $theArray, $theKeyPressed)
     {
       ENTER("mailMenu::_getWishedState",__LINE__);
       $aResult = true;
@@ -254,7 +318,7 @@ class mailMenu
       switch($theKeyPressed)
 	{
 	case OkPressedValue:
-	  if (NULL == next($this->_myConf->mySimpleFields))
+	  if (NULL == next($theArray))
 	    {
 	      $aResult = false;
 	    }
@@ -277,20 +341,21 @@ class mailMenu
     {
       ENTER("mailMenu::_inputMailbox",__LINE__);
       $aFollowingKeyExists=true;
-      reset( $this->_myConf->myMailSourceFields);
+      reset( $this->_myConf->myMailSourceFieldName);
 
       while ($aFollowingKeyExists)
 	{
-	  $aState=$this->_myConf->myMailSourceFields[$aKey];
+	  //	  $aState=$this->_myConf->myMailSourceFieldName[$aKey];
+	  $aState=current($this->_myConf->myMailSourceFieldName);
+	  $aKeyPressed=OkPressedValue;
 
 	  switch($aState)
 	    {
 	    case "label":
 	      $aDialog= new cliDialog($this->_myTerminal, false);
 	      $aKeyPressed=$aDialog->inputBox(gettext("Enter the name of this mailbox, for example: My Mailbox"),
-						      $theArray[$aState], $aValue);
+					      $theArray[$aState], $aValue);
 	      unset($aDialog);
-	      $theArray[ $aState]=$aValue;
 	      break;
 	      
 	    case "host":
@@ -298,7 +363,6 @@ class mailMenu
 	      $aKeyPressed=$aDialog->inputBox(gettext("Enter the hostname of your ISP, for example: pop.pantheon.org"),
 						      $theArray[$aState], $aValue);
 	      unset($aDialog);
-	      $theArray[ $aState]=$aValue;
 	      break;
 
 	    case "port":
@@ -310,36 +374,43 @@ class mailMenu
 	      $aDialog= new cliDialog($this->_myTerminal, false);
 	      $aKeyPressed=$aDialog->inputBox(gettext("Enter the port or press return"), $aPort, $aValue);
 	      unset($aDialog);
-	      $theArray[ $aState]=$aValue;
 	      break;
 
 	    case "login":
 	      $aDialog= new cliDialog($this->_myTerminal, false);
 	      $aKeyPressed=$aDialog->inputBox(gettext("Enter the login"), $theArray[$aState], $aValue);
 	      unset($aDialog);
-	      $theArray[ $aState]=$aValue;
 	      break;
 
 	    case "password":
 	      $aDialog= new cliDialog($this->_myTerminal, false);
 	      $aKeyPressed=$aDialog->inputBox(gettext("Enter the password"), $theArray[$aState], $aValue);
 	      unset($aDialog);
-	      $theArray[ $aState]=$aValue;
 	      break;
 
 	    case "keep":
 	      $aDialog= new cliDialog($this->_myTerminal, false);
-	      $aKeyPressed= (!$aDialog->yesNo(gettext("Do you want to keep the messages in the server once they have been fetched?"), $aValue)) ? 1:0;
+	      $aValue= $aDialog->yesNo(gettext("Do you want to keep the messages in the server once they have been fetched?"));
 	      unset($aDialog);
-	      $theArray[ $aState]=$aValue;
+	      if ($aKeyPressed!=EscapePressedValue)
+		{
+		  $theArray[ $aState]=$aValue;
+		}
 	      break;
 
 	    default:
 	      exit();
 	      break;
 	    }
-	  $aFollowingKeyExists=$this->_getWishedState($aKey);
+
+	  if ($aKeyPressed==OkPressedValue)
+	    {
+	      $theArray[ $aState]=$aValue;
+	    }
+
+	  $aFollowingKeyExists=$this->_getWishedState( $this->_myConf->myMailSourceFieldName, $aKeyPressed);
 	}
+      return $aKeyPressed;
     }
 
   // }}}

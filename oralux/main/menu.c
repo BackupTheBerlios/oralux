@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // menu.c
-// $Id: menu.c,v 1.3 2004/11/07 21:19:14 gcasse Exp $
+// $Id: menu.c,v 1.4 2004/11/12 21:46:13 gcasse Exp $
 // $Author: gcasse $
 // Description: introductory menu. 
-// $Date: 2004/11/07 21:19:14 $ |
-// $Revision: 1.3 $ |
+// $Date: 2004/11/12 21:46:13 $ |
+// $Revision: 1.4 $ |
 // Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -39,6 +39,7 @@
 static char TheLine[BUFSIZE];
 static int pf=0;
 
+/* < keyPressedCallback */
 // When setting the volume, the user presses either the space or the return key.
 // If the left arrow key is pressed, the previous sentences might be still said.
 // If another key is pressed, the volume is set, and the previous sentence might be cleared.
@@ -83,6 +84,9 @@ static void keyPressedCallback(char* theKeyPressed)
     }
 }
 
+/* > */
+/* < keyPressedCallback2 */
+
 // keyPressedCallback2: same than keyPressedCallback
 // Useful to set the volume with the return and space keys.
 // The sentences are cleared if the key is distinct of a space or a return key.
@@ -118,6 +122,9 @@ static void keyPressedCallback2(char* theKeyPressed)
     }
 }
 
+/* > */
+/* < keyPressedCallback3 */
+
 // keyPressedCallback3: same than keyPressedCallback
 // The sentences are cleared if the key equals a return key
 void keyPressedCallback3(char* theKeyPressed)
@@ -149,6 +156,9 @@ void keyPressedCallback3(char* theKeyPressed)
 	}
     }
 }
+
+/* > */
+/* < getAnswer */
 
 // getAnswer
 enum MenuAnswer getAnswer()
@@ -184,11 +194,17 @@ enum MenuAnswer getAnswer()
   return (aMenuAnswer);
 }
 
+/* > */
+/* < isInstalled */
+
 static int isInstalled()
 {
   struct stat buf;
   return (0!=lstat("/KNOPPIX/bin/ash", &buf));
 }
+
+/* > */
+/* < setVolume */
 
 // setVolume
 // Selecting the sound volume
@@ -230,6 +246,9 @@ static void setVolume()
     }
   }
 }
+
+/* > */
+/* < setMenuLanguage */
 
 static enum language setMenuLanguage(enum language theDefaultLanguage)
 {
@@ -285,6 +304,9 @@ static enum language setMenuLanguage(enum language theDefaultLanguage)
   }
   return aLanguage;
 }
+
+/* > */
+/* < setKeyborad, +... */
 
 // TheKeyboards: an array useful to sort the keybord labels in alphabetical order (depends on the current language).
 static enum keyboard TheKeyboards[MaxKeyboard];
@@ -380,6 +402,9 @@ static enum keyboard setKeyboard(enum keyboard theDefaultKeyboard, enum language
   return TheKeyboards[i];
 }
 
+/* > */
+/* < setKeyboardFeatures */
+
 static void setKeyboardFeatures(struct keyboardStruct * theKeyboardFeatures)
 {
   ENTER("setKeyboardFeatures");
@@ -465,8 +490,8 @@ static void setKeyboardFeatures(struct keyboardStruct * theKeyboardFeatures)
   }
 }
 
-
-
+/* > */
+/* < mustSetPreferences */
 // mustSetPreferences
 // If the preferences were already set, we ask if the menu must be run again.
 //
@@ -494,20 +519,10 @@ int mustSetPreferences()
     }
   return aStatus;
 }
+/* > */
 
-enum MENU_State {
-  MENU_Volume,
-  MENU_Language,
-  MENU_Keyboard,
-  MENU_KeyboardFeatures,
-  MENU_TTS,
-  MENU_Braille,
-  MENU_Desktop,
-  MENU_Internet,
-  MENU_End,
-};
+/* < askIfShutdownIsRequired */
 
-//
 enum ShutdownStatus askIfShutdownIsRequired()
 {
   ENTER("askIfShutdownIsRequired");
@@ -551,7 +566,79 @@ enum ShutdownStatus askIfShutdownIsRequired()
   return aStatus;
 }
 
-//
+/* > */
+/* < setYasr */
+
+// Start Yasr
+void setYasr( enum textToSpeech theTextToSpeech, enum language theMenuLanguage)
+{
+  // The end of the configuration relies on Yasr.
+  // We select a software synthesizer possibly compliant with the user preferences.
+
+  enum textToSpeech aYasrSynthesizer=TTS_Flite;
+  switch (theTextToSpeech)
+    {
+    case TTS_Flite:
+    case TTS_DECtalk:
+    case TTS_ParleMax:
+    case TTS_Multispeech:
+      aYasrSynthesizer=theTextToSpeech;
+      break;
+
+    default:
+      // We select the nearest possible synthesizer according to the language
+      switch (theMenuLanguage)
+	{
+	case French:
+	  aYasrSynthesizer=TTS_ParleMax;
+	  break;
+	case English:
+	case German:
+	case Spanish:
+	default:
+	  aYasrSynthesizer=TTS_Flite;
+	  break;
+	}
+      break;
+    }
+
+  // synthesizer port parameter
+  char* aParam=NULL;
+  switch( aYasrSynthesizer)
+    {
+    case TTS_DECtalk:
+      aParam="|/usr/bin/tcl /usr/share/emacs/site-lisp/emacspeak/servers/dtk-soft";
+      break;
+    case TTS_ParleMax:
+      aParam="|/usr/local/bin/maxlect";
+      break;
+    case TTS_Multispeech:
+      aParam="|/usr/local/lib/multispeech/speech_server";
+      break;
+    case TTS_Flite:
+    default:
+      aParam="|/usr/bin/eflite";
+      break;
+    }
+
+  sprintf(TheLine, "yasr -s \"emacspeak server\" -p \"%s\" /usr/share/oralux/main/mailMenu.php", aParam);
+  system(TheLine);
+}
+
+/* > */
+/* < menu */
+enum MENU_State {
+  MENU_Volume,
+  MENU_Language,
+  MENU_Keyboard,
+  MENU_KeyboardFeatures,
+  MENU_TTS,
+  MENU_Braille,
+  MENU_Desktop,
+  MENU_Internet,
+  MENU_End,
+};
+
 void menu(struct menuInfo* theSelectedInfo)
 {
   ENTER("menu");
@@ -624,9 +711,9 @@ void menu(struct menuInfo* theSelectedInfo)
 	  break;
 
 	case MENU_Internet:
-	  //	  setInternet();
-/* 	  aMenuState = (GNC_UpArrowKey == getLastKeyPressed()) ? MENU_TTS : MENU_End; */
-/* 	  break; */
+	  setYasr( theSelectedInfo->myTextToSpeech.myIdentifier, theSelectedInfo->myMenuLanguage);
+	  aMenuState = (GNC_UpArrowKey == getLastKeyPressed()) ? MENU_TTS : MENU_End;
+	  break;
 
 	default:
 	  aMenuState = MENU_End; // Security
@@ -635,3 +722,5 @@ void menu(struct menuInfo* theSelectedInfo)
     }
   clearStoredSentences();
 }
+
+/* > */

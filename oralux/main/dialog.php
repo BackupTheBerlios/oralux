@@ -2,11 +2,11 @@
 <?php
 // ----------------------------------------------------------------------------
 // dialog.php
-// $Id: dialog.php,v 1.3 2004/11/06 22:49:33 gcasse Exp $
+// $Id: dialog.php,v 1.4 2004/11/12 21:46:13 gcasse Exp $
 // $Author: gcasse $
 // Description: command line based dialog (menu, yes/no question, dialog box,...)
-// $Date: 2004/11/06 22:49:33 $ |
-// $Revision: 1.3 $ |
+// $Date: 2004/11/12 21:46:13 $ |
+// $Revision: 1.4 $ |
 // Copyright (C) 2004 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -109,7 +109,11 @@ define("END",$aValue++);
   class yesNo extends textDialog {
     function printDialog( & $theDialog, $theTitle, & $theResult)
       {
-	return $theDialog->yesNo($this->myText, $theTitle);
+	//0:yes
+	//1:no
+	//255:Esc
+	$theResult=$theDialog->yesNo($this->myText, $theTitle);
+	return $theResult;
       }
   }
 

@@ -1,13 +1,12 @@
-#!/usr/bin/php
 <?php
 // raf: utf8
 // ----------------------------------------------------------------------------
 // mailConfig.php
-// $Id: mailConfig.php,v 1.3 2004/11/10 18:24:25 gcasse Exp $
+// $Id: mailConfig.php,v 1.4 2004/11/12 21:46:13 gcasse Exp $
 // $Author: gcasse $
 // Description: Mail settings (php5)
-// $Date: 2004/11/10 18:24:25 $ |
-// $Revision: 1.3 $ |
+// $Date: 2004/11/12 21:46:13 $ |
+// $Revision: 1.4 $ |
 // Copyright (C) 2004 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -28,7 +27,7 @@
 class mailConfig extends DomDocument
 {
   var $mySimpleFields = array("name", "email", "delay");
-  var $myMailSourceFields = array("label", "host", "port", "login", "password", "keep");
+  var $myMailSourceFieldName = array("label", "host", "port", "login", "password", "keep");
 
   protected $_myFilename;
   protected $_myUser;
@@ -57,7 +56,7 @@ class mailConfig extends DomDocument
 	  if ($fd==NULL)
 	    {
 	      $aError=sprintf("Error: can't open file: %s\n", $this->_myFilename);
-	      ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.3 $');
+	      ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.4 $');
 	      return;
 	    }
 	  fwrite ( $fd, $this->_myInitialFile);
@@ -66,7 +65,7 @@ class mailConfig extends DomDocument
       if (!is_readable( $this->_myFilename))
 	{
 	      $aError=sprintf("Error: file unreadable: %s\n", $this->_myFilename);
-	      ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.3 $');
+	      ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.4 $');
 	      return;
 	}
 
@@ -111,7 +110,7 @@ class mailConfig extends DomDocument
 
       if ($aNode != NULL)
 	{
-	  foreach($this->myMailSourceFields as $aField)
+	  foreach($this->myMailSourceFieldName as $aField)
 	    {
 	      $aNodeList = $this->_myXpath->query( $aField, $aNode);
 	      $theArray[$aField] = $aNodeList->item(0)->textContent;
@@ -187,19 +186,19 @@ class mailConfig extends DomDocument
       if (unlink($this->_myFilename)==FALSE)
 	{
 	  $aError=sprintf("Error concerning file: %s\n", $this->_myFilename);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.3 $');
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.4 $');
 	  return;
 	}
       if (touch($this->_myFilename)==FALSE)
 	{
 	  $aError=sprintf("Error concerning file: %s\n", $this->_myFilename);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.3 $');
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.4 $');
 	  return;
 	}
       if (chmod ( $this->_myFilename, 0600)==FALSE)
 	{
 	  $aError=sprintf("Error concerning file: %s\n", $this->_myFilename);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.3 $');
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.4 $');
 	  return;
 	}
 

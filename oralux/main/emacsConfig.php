@@ -1,11 +1,11 @@
 <?php
 // ----------------------------------------------------------------------------
 // emacsConfig.php
-// $Id: emacsConfig.php,v 1.3 2004/11/07 21:52:35 gcasse Exp $
+// $Id: emacsConfig.php,v 1.4 2004/11/12 21:46:13 gcasse Exp $
 // $Author: gcasse $
 // Description: Emacs settings (php5)
-// $Date: 2004/11/07 21:52:35 $ |
-// $Revision: 1.3 $ |
+// $Date: 2004/11/12 21:46:13 $ |
+// $Revision: 1.4 $ |
 // Copyright (C) 2004 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -46,7 +46,7 @@ class emacsConfig
       if ($aSource==NULL)
 	{
 	  $aError=sprintf("Error: can't open file: %s\n", $this->_myFilename);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.3 $');
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.4 $');
 	  return FALSE;
 	}
 
@@ -54,12 +54,14 @@ class emacsConfig
       if ($aDestination==NULL)
 	{
 	  $aError=sprintf("Error: can't open file: %s\n", $this->_myTempFilename);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.3 $');
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.4 $');
 	  return FALSE;
 	}
       
-      while ($aLine=fgets($aSource))
+      while (!feof ($aSource))
 	{
+	  $aLine=fgets($aSource);
+
 	  $aTemplatePattern="/[ \t]*\([ \t]*setq[ \t]+%s[ \t]+\"[^\"]*\"[ \t]*\)[ \t]*/";
 	  $aTemplateReplacement="(setq %s \"%s\")";
 	  
@@ -70,7 +72,15 @@ class emacsConfig
 	  $aReplacement[1]=sprintf($aTemplateReplacement,  "user-full-name", $this->_myMailConfig->getValue( "name"));
 	  
 	  $aResult=preg_replace($aPattern, $aReplacement, $aLine);
+
 	  fprintf($aDestination, $aResult);
+	}
+
+      if ($aSource==NULL)
+	{
+	  $aError=sprintf("Error: can't open file: %s\n", $this->_myFilename);
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.4 $');
+	  return FALSE;
 	}
 
       fclose($aDestination);
@@ -85,7 +95,7 @@ class emacsConfig
 	  || (chgrp ( $this->_myFilename, $this->_myMailConfig->getUser())==FALSE))
 	{
 	  $aError=sprintf("Error concerning file: %s\n", $this->_myTempFilename);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.3 $');
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.4 $');
 	  return FALSE;
 	}
       return TRUE;

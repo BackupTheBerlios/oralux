@@ -1,11 +1,11 @@
 <?php
 // ----------------------------------------------------------------------------
 // cliDialog.php
-// $Id: cliDialog.php,v 1.9 2004/11/10 18:24:25 gcasse Exp $
+// $Id: cliDialog.php,v 1.10 2004/11/12 21:46:13 gcasse Exp $
 // $Author: gcasse $
 // Description: command line based dialog (menu, yes/no question, dialog box,...)
-// $Date: 2004/11/10 18:24:25 $ |
-// $Revision: 1.9 $ |
+// $Date: 2004/11/12 21:46:13 $ |
+// $Revision: 1.10 $ |
 // Copyright (C) 2004 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -34,6 +34,10 @@ define ("PreviousProcessedValue",1000);
 define ("ListProcessedValue",2000); // for internal use
 define ("InputProcessedValue",2001); // for internal use
 define ("CheckboxProcessedValue",2002); // for internal use
+
+// YesNo dialog
+define("DialogYesAnswer",0);
+define("DialogNoAnswer",1);
 
 define ("OtherAnswer", 0);
 define ("PreviousDialog", 1);
@@ -412,25 +416,19 @@ class cliAreaManager
 class cliList extends cliArea
 {
   protected $myOption;
-  protected $myKeyIsDisplayed=true;
-  
+  protected $myKeyIsDisplayed;
+
   // {{{ constructor
 
-  function __construct( $theOption, $theAnnounce)
+  function __construct( $theOption, $theAnnounce, $theKeyIsDisplayed=true)
     {
       ENTER("cliList::__construct",__LINE__);
       $this->myOption=$theOption;
       $this->myAnnounce=$theAnnounce;
+      $this->myKeyIsDisplayed = $theKeyIsDisplayed;
       reset($this->myOption);
     }
 
-  // }}}
-  // {{{ set KeyIsDisplayed
-  function setKeyIsDisplayed($theKeyIsDisplayed)
-    {
-      ENTER("cliList::setKeyIsDisplayed",__LINE__);
-      $this->myKeyIsDisplayed=$theKeyIsDisplayed;
-    }
   // }}}
   // {{{ getType
   function getType()
@@ -439,6 +437,20 @@ class cliList extends cliArea
       return areaList;
     }
   // }}}
+  // {{{ getDisplayedKey
+  protected function displayKey()
+    {
+      $aKey=key($this->myOption);
+      if (is_numeric($aKey))
+	{
+	  // The numeric key is incremented because 
+	  // the first numeric key is supposed to be zero.
+	  $aKey++;
+	}
+      echo "$aKey. ";
+    }
+  // }}}
+
   // {{{ announceItem
 
   function announceItem()
@@ -446,7 +458,7 @@ class cliList extends cliArea
       ENTER("cliList::announceItem",__LINE__);
       if ($this->myKeyIsDisplayed)
 	{
-	  echo key($this->myOption)." ";
+	  $this->displayKey();
 	}      
       echo current($this->myOption)."\n";
     }
@@ -514,10 +526,10 @@ class cliRadio extends cliList
   protected $mySelectedKey;
 
   // {{{ constructor
-  function __construct( $theOption, $theAnnounce, $theDefaultKey)
+  function __construct( $theOption, $theAnnounce, $theDefaultKey, $theKeyIsDisplayed=true)
     {
       ENTER("cliRadio::__construct",__LINE__);
-      parent::__construct($theOption, $theAnnounce);
+      parent::__construct($theOption, $theAnnounce, $theKeyIsDisplayed);
       $this->mySelectedKey=$theDefaultKey;
       $this->myDefaultKey=$theDefaultKey;
     }
@@ -532,6 +544,7 @@ class cliRadio extends cliList
     }
   // }}}
   // {{{ announceItem
+
   function announceItem()
     {
       ENTER("cliRadio::announceItem",__LINE__);
@@ -543,11 +556,12 @@ class cliRadio extends cliList
       
       if ($this->myKeyIsDisplayed)
 	{
-	  echo " $aKey";
+	  $this->displayKey();
 	}
       
       echo " ".current($this->myOption)."\n";
     }
+
   // }}}
 }
 
@@ -713,6 +727,7 @@ class cliCheckbox extends cliList
     }
   // }}}
   // {{{ announceItem
+
   function announceItem()
     {
       ENTER("cliCheckbox::announceItem",__LINE__);
@@ -724,11 +739,12 @@ class cliCheckbox extends cliList
 
       if ($this->myKeyIsDisplayed)
 	{
-	  echo " $aKey";
+	  $this->displayKey();
 	}
 
       echo " ".current($this->myOption)."\n";
     }
+
   // }}}
   // {{{ processInput
 
@@ -863,8 +879,6 @@ class cliMessage extends cliArea
 
 class cliDialog
 {
-  // {{{
-
   protected $myTerminal=NULL;
   protected $myDialogIsVerbose=true;
   protected $myList=NULL;
@@ -914,9 +928,10 @@ class cliDialog
   // $theSelectedOption (input) is useful for a radio box. Its value is a label. 
   // $theResult: (string) selected fields
   // Return value: 0 (OK), 1 (Cancel), 255 (Escape), or the value of the pressed button.
-  function menu($theTitle, $theOptions, & $theResult, $theText=NULL, $theSelectedOption=NULL)
+  function menu($theTitle, $theOptions, & $theResult, $theText=NULL, $theSelectedOption=NULL, $theKeyIsDisplayed=true)
     {
       ENTER("cliDialog::menu",__LINE__);
+
       echo "$theTitle\n";
       if ($theText)
 	{
@@ -942,7 +957,7 @@ class cliDialog
       if ($theSelectedOption)
 	{ // list
 	  $this->myTerminal->getMessage( MessageNavigationRadio, $aMessage);
-	  $this->myList=new cliRadio( $theOptions, $aMessage, $theSelectedOption);
+	  $this->myList=new cliRadio( $theOptions, $aMessage, $theSelectedOption, $theKeyIsDisplayed);
 	  
 	  if ($this->myDialogWithDefaultButton)
 	    {
@@ -953,7 +968,7 @@ class cliDialog
       else
 	{
 	  $this->myTerminal->getMessage( MessageNavigationMenu, $aMessage);
-	  $this->myList=new cliList( $theOptions, $aMessage);
+	  $this->myList=new cliList( $theOptions, $aMessage, $theKeyIsDisplayed);
 	  if ($this->myDialogWithDefaultButton)
 	    {
 	      // only the cancel button
@@ -1054,8 +1069,7 @@ class cliDialog
       return $aKeyPressedValue;
     }
 
-  // }}}
-  // {{{ yesno: Return 0 if yes, or 1 otherwise.
+  // {{{ yesno: Return OkPressedValue if yes, CancelPressedValue if no, or EscapePressedValue.
   // theIndex is a prefix to display
   function yesNo($theQuestion, $theTitle=NULL)
     {
@@ -1077,7 +1091,7 @@ class cliDialog
       // Area: list (first entry) + buttons
       $this->myAreaManager->addArea( $this->myYesNo);
       
-      return $this->myAreaManager->processKeys( $this->myTerminal, $theResult);
+      return $this->myAreaManager->processKeys( $this->myTerminal, $aResult);
     }
 
   // }}}
@@ -1239,7 +1253,6 @@ class cliDialog
 }
 
 // }}}
-
 // {{{ cliYesNo
 
 class cliYesNo extends cliArea
@@ -1272,7 +1285,11 @@ class cliYesNo extends cliArea
       ENTER("cliYesNo::processInput",__LINE__);
       $aResult=$theResult;
 
-      if ($aResult==getCharOK)
+      if (aResult==getCharEscape)
+	{
+	  $this->myCurrentValue = EscapePressedValue;
+	}
+      else if ($aResult==getCharOK)
 	{
 	  switch( $theInput)
 	    {
@@ -1298,7 +1315,7 @@ class cliYesNo extends cliArea
 	      if ($this->_isYesOrNo( $theInput, $aYesResult))
 		{
 		  $aResult = getCharApply;
-		  $this->myCurrentValue = $aYesResult ? OkPressedValue:CancelPressedValue;
+		  $this->myCurrentValue = $aYesResult ? DialogYesAnswer : DialogNoAnswer;
 		}
 	      else
 		{ // go to next field
