@@ -79,7 +79,7 @@
 (define-key-after menu-bar-tools-menu [smail] '("Send Mail" . vm-mail) 'rmail)
 
 (setq load-path (cons "~/.emacs.d" load-path)) 
-(load-file "~/.emacs.d/php-mode.el")
+;;(require 'php-mode)
 ;; (folding-add-to-marks-list 'php-mode "// {{{" "// }}}")
 
 (cond (

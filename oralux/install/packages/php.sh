@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # php.sh
-# $Id: php.sh,v 1.3 2004/10/23 22:19:18 gcasse Exp $
+# $Id: php.sh,v 1.4 2004/10/30 19:40:46 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing PHP
-# $Date: 2004/10/23 22:19:18 $ |
-# $Revision: 1.3 $ |
+# $Date: 2004/10/30 19:40:46 $ |
+# $Revision: 1.4 $ |
 # Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -24,7 +24,7 @@
 # ----------------------------------------------------------------------------
 ####
 source ../oralux.conf
-export OPT_CONF="--with-libxml-dir --disable-cgi --with-gettext --enable-dio --with-ncurses"
+export OPT_CONF="--prefix=/usr --program-suffix=-oralux --with-libxml-dir --disable-cgi --with-gettext --enable-dio --with-ncurses"
 
 ####
 # Installing the package in the current tree
@@ -45,13 +45,11 @@ InstallPackage()
     make
     make install
     cd /usr/bin 
-    ln -s /usr/local/bin/php php5
-
+    rm -f php5
+    ln -s ln -s /usr/bin/php-oralux php5
     cd /etc/alternatives;rm -f php;ln -s /usr/bin/php5 php
 
-    rm -rf /tmp/php-5*
-    
-    ;; php-mode
+    # php-mode
     cp $INSTALL_PACKAGES/php/php-mode.el /usr/share/emacs/site-lisp/
 }
 
@@ -68,10 +66,9 @@ Copy2Oralux()
     cp $INSTALL_PACKAGES/php/dio.c php-5.0.2/ext/dio
     cp $INSTALL_PACKAGES/php/php_dio.h php-5.0.2/ext/dio
 
-    chroot $BUILD  bash -c "apt-get install libxml2-dev; cd /var/tmp/php-5.0.2;./configure $OPT_CONF;make;make install;cd /usr/bin; ln -s /usr/local/bin/php php5;cd /etc/alternatives;rm -f php;ln -s /usr/bin/php5 php"
-    rm -rf $BUILD/var/tmp/php-5*
+    chroot $BUILD  bash -c "apt-get install libxml2-dev; cd /var/tmp/php-5.0.2;./configure $OPT_CONF;make;make install;cd /usr/bin; rm -f php5;ln -s /usr/bin/php-oralux php5;cd /etc/alternatives;rm -f php;ln -s /usr/bin/php5 php"
 
-    ;; php-mode
+    # php-mode
     cp $INSTALL_PACKAGES/php/php-mode.el $BUILD/usr/share/emacs/site-lisp/
 }
 

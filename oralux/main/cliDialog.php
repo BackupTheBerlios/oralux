@@ -1,11 +1,11 @@
 <?php
 // ----------------------------------------------------------------------------
 // cliDialog.php
-// $Id: cliDialog.php,v 1.3 2004/10/24 21:34:34 gcasse Exp $
+// $Id: cliDialog.php,v 1.4 2004/10/30 19:40:46 gcasse Exp $
 // $Author: gcasse $
 // Description: command line based dialog (menu, yes/no question, dialog box,...)
-// $Date: 2004/10/24 21:34:34 $ |
-// $Revision: 1.3 $ |
+// $Date: 2004/10/30 19:40:46 $ |
+// $Revision: 1.4 $ |
 // Copyright (C) 2004 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -803,51 +803,45 @@ class cliDialog
 {
   // {{{
 
-  protected $_myTerminal=NULL;
-  protected $_myDialogIsVerbose=true;
-  protected $_myList=NULL;
-  protected $_myCheckbox=NULL;
-  protected $_myInputBox=NULL;
-  protected $_myButton=NULL;
-  protected $_myDefaultButton=NULL;
+  protected $myTerminal=NULL;
+  protected $myDialogIsVerbose=true;
+  protected $myList=NULL;
+  protected $myCheckbox=NULL;
+  protected $myInputBox=NULL;
+  protected $myButton=NULL;
+  protected $myDefaultButton=NULL;
+  protected $myDialogWithDefaultButton=true;
 
-  protected $_myAreaManager=NULL; 
+  protected $myAreaManager=NULL; 
 
   // {{{ setVerbosity, isUpaArrowkey, isDownArrowkey functions
 
   function setVerbosity( $theDialogIsVerbose)
     {
       ENTER("cliDialog::setVerbosity",__LINE__);
-      $this->_myDialogIsVerbose=$theDialogIsVerbose;
+      $this->myDialogIsVerbose=$theDialogIsVerbose;
     }
 
   function isUpArrowKey()
     {
       ENTER("cliDialog::isUpArrowKey",__LINE__);
-      return ($this->_myTerminal->myLastAnswer==PreviousDialog);
+      return ($this->myTerminal->myLastAnswer==PreviousDialog);
     }
 
   function isDownArrowKey()
     {
       ENTER("cliDialog::isDownArrowKey",__LINE__);
-      return ($this->_myTerminal->myLastAnswer==NextDialog);
+      return ($this->myTerminal->myLastAnswer==NextDialog);
     }
   // }}}
   // {{{ constructor
 
-  function __construct($theTerminal)
+  function __construct($theTerminal, $theDialogWithDefaultButton=true)
     {
-      // RAF
-      //global $TheTerminal;
-
       ENTER("cliDialog::__construct",__LINE__);
-      // RAF $this->_myTerminal=new enhancedTerminal();
-      //RAF if (!$this->_myTerminal->isBuild())
-	{
-	  $this->_myTerminal=$theTerminal;
-	    //new dumbTerminal($theTerminal);
-	}
-      $this->_myAreaManager=new cliAreaManager();
+      $this->myTerminal=$theTerminal;
+      $this->myDialogWithDefaultButton=$theDialogWithDefaultButton;
+      $this->myAreaManager=new cliAreaManager();
     }
 
    // }}}     
@@ -856,7 +850,7 @@ class cliDialog
   // $theSelectedOption (input) is useful for a radio box. Its value is a label. 
   // $theResult: (string) selected fields
   // Return value: 0 (OK), 1 (Cancel), 255 (Escape), or the value of the pressed button.
-  function menu($theTitle, $theOptions, & $theResult, $theText=NULL, $theSelectedOption=NULL)
+  function menu($theTitle, $theOptions, & $theResult, $theText=NULL, $theSelectedOption=NULL, $withButton=true)
     {
       ENTER("cliDialog::menu",__LINE__);
       echo "$theTitle\n";
@@ -883,35 +877,35 @@ class cliDialog
 
       if ($theSelectedOption)
 	{ // list
-	  $this->_myTerminal->getMessage( MessageNavigationRadio, $aMessage);
-	  $this->_myList=new cliRadio( $theOptions, $aMessage, $theSelectedOption);
+	  $this->myTerminal->getMessage( MessageNavigationRadio, $aMessage);
+	  $this->myList=new cliRadio( $theOptions, $aMessage, $theSelectedOption);
 
-	  $this->_myButton[]=new cliButton( OkPressedValue, gettext("OK"), $aMessage2);
-	  $this->_myButton[]=new cliButton( CancelPressedValue, gettext("Cancel"), $aMessage2);
+	  $this->myButton[]=new cliButton( OkPressedValue, gettext("OK"), $aMessage2);
+	  $this->myButton[]=new cliButton( CancelPressedValue, gettext("Cancel"), $aMessage2);
 	}
       else
 	{
-	  $this->_myTerminal->getMessage( MessageNavigationMenu, $aMessage);
-	  $this->_myList=new cliList( $theOptions, $aMessage);
+	  $this->myTerminal->getMessage( MessageNavigationMenu, $aMessage);
+	  $this->myList=new cliList( $theOptions, $aMessage);
 	  // only the cancel button
-	  $this->_myButton[]=new cliButton( CancelPressedValue, gettext("Cancel"), $aMessage2);
+	  $this->myButton[]=new cliButton( CancelPressedValue, gettext("Cancel"), $aMessage2);
 	}
 
       // Area: list (first entry) + buttons
-      $this->_myAreaManager->addArea( $this->_myList);
+      $this->myAreaManager->addArea( $this->myList);
 
-      for ($i=0; $i<count($this->_myButton); $i++)
+      for ($i=0; $i<count($this->myButton); $i++)
 	{
-	  $this->_myAreaManager->addArea($this->_myButton[ $i]);
+	  $this->myAreaManager->addArea($this->myButton[ $i]);
 	}
 
-      $aKeyPressedValue = $this->_myAreaManager->processKeys( $this->_myTerminal, $theResult);
+      $aKeyPressedValue = $this->myAreaManager->processKeys( $this->myTerminal, $theResult);
 
       switch( $aKeyPressedValue)
 	{
 	case OkPressedValue:
 	  { // Ok button pressed: the list is concerned
-	    $this->_myList->apply( $theResult);
+	    $this->myList->apply( $theResult);
 	  }
 	  break;
 
@@ -956,27 +950,27 @@ class cliDialog
       $aMessage2[verbose][]=gettext("This is a button.\n");
       $aMessage2[notVerbose][]=gettext("Button.\n");
 
-      $this->_myTerminal->getMessage( MessageNavigationCheckbox, $aMessage);
-      $this->_myCheckbox=new cliCheckbox( $theOptions, $aMessage, $theSelectedOption);
+      $this->myTerminal->getMessage( MessageNavigationCheckbox, $aMessage);
+      $this->myCheckbox=new cliCheckbox( $theOptions, $aMessage, $theSelectedOption);
       
-      $this->_myButton[]=new cliButton( OkPressedValue, gettext("OK"), $aMessage2);
-      $this->_myButton[]=new cliButton( CancelPressedValue, gettext("Cancel"), $aMessage2);
+      $this->myButton[]=new cliButton( OkPressedValue, gettext("OK"), $aMessage2);
+      $this->myButton[]=new cliButton( CancelPressedValue, gettext("Cancel"), $aMessage2);
 
       // Area: checkbox + buttons
-      $this->_myAreaManager->addArea( $this->_myCheckbox);
+      $this->myAreaManager->addArea( $this->myCheckbox);
 
-      for ($i=0; $i<count($this->_myButton); $i++)
+      for ($i=0; $i<count($this->myButton); $i++)
 	{
-	  $this->_myAreaManager->addArea($this->_myButton[ $i]);
+	  $this->myAreaManager->addArea($this->myButton[ $i]);
 	}
 
-      $aKeyPressedValue = $this->_myAreaManager->processKeys( $this->_myTerminal, $theResult);
+      $aKeyPressedValue = $this->myAreaManager->processKeys( $this->myTerminal, $theResult);
 
       switch( $aKeyPressedValue)
 	{
 	case OkPressedValue:
 	  { // in fact, the checkbox is concerned
-	    $this->_myCheckbox->apply( $theResult);
+	    $this->myCheckbox->apply( $theResult);
 	  }
 	  break;
 
@@ -993,7 +987,7 @@ class cliDialog
   // }}}
   // {{{ yesno: Return 0 if yes, or 1 otherwise.
   // theIndex is a prefix to display
-  function yesNo($theQuestion, $theTitle=NULL)
+  function yesNo($theQuestion, $theTitle=NULL, $withButton=true)
     {
       ENTER("cliDialog::yesNo",__LINE__);
       if ($theTitle)
@@ -1004,31 +998,31 @@ class cliDialog
       // Message
       $aMessage[verbose][]=$theQuestion."\n";
       $aMessage[notVerbose][]=$theQuestion."\n";
-      $this->_myMessage=new cliMessage( $aMessage);
+      $this->myMessage=new cliMessage( $aMessage);
 
       // Buttons
       unset($aMessage);
       $aMessage[verbose][]=gettext("This is a button.\n");
       $aMessage[notVerbose][]=gettext("Button.\n");
 
-      $this->_myButton[]=new cliButton( OkPressedValue, gettext("Yes"), $aMessage);
-      $this->_myButton[]=new cliButton( CancelPressedValue, gettext("No"), $aMessage);
+      $this->myButton[]=new cliButton( OkPressedValue, gettext("Yes"), $aMessage);
+      $this->myButton[]=new cliButton( CancelPressedValue, gettext("No"), $aMessage);
 
       // Area: list (first entry) + buttons
-      $this->_myAreaManager->addArea( $this->_myMessage);
+      $this->myAreaManager->addArea( $this->myMessage);
 
-      for ($i=0; $i<count($this->_myButton); $i++)
+      for ($i=0; $i<count($this->myButton); $i++)
 	{
-	  $this->_myAreaManager->addArea($this->_myButton[ $i]);
+	  $this->myAreaManager->addArea($this->myButton[ $i]);
 	}
 
-      return $this->_myAreaManager->processKeys( $this->_myTerminal, $theResult);
+      return $this->myAreaManager->processKeys( $this->myTerminal, $theResult);
     }
 
   // }}}
   // {{{ messageBox
 
-  function messageBox($theQuestion, $theTitle=NULL)
+  function messageBox($theQuestion, $theTitle=NULL, $withButton=true)
     {
       ENTER("cliDialog::messageBox",__LINE__);
       if ($theTitle)
@@ -1039,24 +1033,24 @@ class cliDialog
       // Message
       $aMessage[verbose][]=$theQuestion."\n";
       $aMessage[notVerbose][]=$theQuestion."\n";
-      $this->_myMessage=new cliMessage( $aMessage);
+      $this->myMessage=new cliMessage( $aMessage);
 
       // Buttons
       unset($aMessage);
       $aMessage[verbose][]=gettext("This is a button.\n");
       $aMessage[notVerbose][]=gettext("Button.\n");
 
-      $this->_myButton[]=new cliButton( OkPressedValue, gettext("Ok"), $aMessage);
+      $this->myButton[]=new cliButton( OkPressedValue, gettext("Ok"), $aMessage);
 
       // Area: list (first entry) + buttons
-      $this->_myAreaManager->addArea( $this->_myMessage);
+      $this->myAreaManager->addArea( $this->myMessage);
 
-      for ($i=0; $i<count($this->_myButton); $i++)
+      for ($i=0; $i<count($this->myButton); $i++)
       	{
-	  $this->_myAreaManager->addArea($this->_myButton[ $i]);
+	  $this->myAreaManager->addArea($this->myButton[ $i]);
 	}
 
-      return $this->_myAreaManager->processKeys( $this->_myTerminal, $aResult);
+      return $this->myAreaManager->processKeys( $this->myTerminal, $aResult);
     }
 
   // }}}
@@ -1067,8 +1061,8 @@ class cliDialog
       $this->_printSentence( $theQuestion, $theIndex, $theTitle);
       while(1)
 	{
-	  $aResult=$this->_myTerminal->getLine( $anInput);
-	  //	  $aChoice=fgets($this->_myFileDescriptor);
+	  $aResult=$this->myTerminal->getLine( $anInput);
+	  //	  $aChoice=fgets($this->myFileDescriptor);
 	  if ($anInput==NULL)
 	    {
 	      break;
@@ -1084,7 +1078,7 @@ class cliDialog
   // {{{ inputBox
 
   // theIndex is a prefix to display
-  function inputBox($theQuestion, $theDefault=NULL, & $theResult, $theTitle=NULL)
+  function inputBox($theQuestion, $theDefault=NULL, & $theResult, $theTitle=NULL, $withButton=true)
     {
       ENTER("cliDialog::inputBox",__LINE__);
       echo "$theTitle\n";
@@ -1096,8 +1090,8 @@ class cliDialog
       // Main buttons (OK/Cancel)
       $aMessage[verbose][]=gettext("This is a button.\n");
       $aMessage[notVerbose][]=gettext("Button.\n");
-      $this->_myButton[]=new cliButton( OkPressedValue, gettext("OK"), $aMessage);
-      $this->_myButton[]=new cliButton( CancelPressedValue, gettext("Cancel"), $aMessage);
+      $this->myButton[]=new cliButton( OkPressedValue, gettext("OK"), $aMessage);
+      $this->myButton[]=new cliButton( CancelPressedValue, gettext("Cancel"), $aMessage);
 
       // Default button: useful to accept the default value
       if ($theDefault != NULL)
@@ -1106,8 +1100,8 @@ class cliDialog
 	  $aMessage[verbose][]="$theQuestion\n";
 	  $aMessage[notVerbose][]="$theQuestion\n";
 
-	  $this->_myTerminal->getMessage( MessageNavigationInputBoxDefaultButton, $aMessage, $theDefault);
-	  $this->_myDefaultButton=new cliButton( OkPressedValue, " ", $aMessage);
+	  $this->myTerminal->getMessage( MessageNavigationInputBoxDefaultButton, $aMessage, $theDefault);
+	  $this->myDefaultButton=new cliButton( OkPressedValue, " ", $aMessage);
 	}
 
       // Input box
@@ -1118,28 +1112,28 @@ class cliDialog
 	  $aMessage[notVerbose][]="$theQuestion\n";
 	}
 
-      $this->_myTerminal->getMessage( MessageNavigationInputBox, $aMessage);
-      $this->_myInputBox=new cliInputBox( $aMessage, $theDefault);
+      $this->myTerminal->getMessage( MessageNavigationInputBox, $aMessage);
+      $this->myInputBox=new cliInputBox( $aMessage, $theDefault);
 
       // Building the areas
-      if ($this->_myDefaultButton != NULL)
+      if ($this->myDefaultButton != NULL)
 	{
-	  $this->_myAreaManager->addArea( $this->_myDefaultButton);
+	  $this->myAreaManager->addArea( $this->myDefaultButton);
 	}
-      $this->_myAreaManager->addArea( $this->_myInputBox);
+      $this->myAreaManager->addArea( $this->myInputBox);
 
-      for ($i=0; $i<count($this->_myButton); $i++)
+      for ($i=0; $i<count($this->myButton); $i++)
 	{
-	  $this->_myAreaManager->addArea($this->_myButton[ $i]);
+	  $this->myAreaManager->addArea($this->myButton[ $i]);
 	}
 
-      $aKeyPressedValue = $this->_myAreaManager->processKeys( $this->_myTerminal, $theResult);
+      $aKeyPressedValue = $this->myAreaManager->processKeys( $this->myTerminal, $theResult);
 
       switch( $aKeyPressedValue)
 	{
 	case OkPressedValue:
 	  { // in fact, the input field is concerned
-	    $this->_myInputBox->apply( $theResult);
+	    $this->myInputBox->apply( $theResult);
 	  }
 	  break;
 

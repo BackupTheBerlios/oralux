@@ -160,7 +160,7 @@ if [ "$DIRECTORY" = "$FLOPPYDIR" ]; then
 if [ -e "$DIRECTORY/syslinux.cfg" ]; then
 # We use the floppyconfig cheatcode
 sed "s;[^ ]*conf[^=]*=[^ ]*/[^ ]*;floppyconfig;g" "$DIRECTORY/syslinux.cfg" > $TMP
-mv -f $TMP "$DIRECTORY/syslinux.cfg"
+mv -f $TMP "$DIRECTORY/syslinux.cfg" 2>/dev/null
 fi
 
 umountfloppy

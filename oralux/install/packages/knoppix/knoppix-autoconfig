@@ -1113,12 +1113,13 @@ CONFIGMD5=$(md5sum $MYCONFDIR/configs.tbz | awk '{printf $1}' )
 echo "CONFIGMD5=\"$CONFIGMD5\"" >> /etc/sysconfig/knoppix
 fi
 
-#RAF
-echo "pwd:"
-pwd
 echo "umount $MYCONFMOUNTPOINT"
-[ -n $MYCONFDEVICE ] || umount "$MYCONFMOUNTPOINT" 
-# RAF2>/dev/null
+[ -n $MYCONFDEVICE ] || umount "$MYCONFMOUNTPOINT" 2>/dev/null
+
+# /mnt/floppy must be unmounted to let the upcoming automounter works 
+if [ "$MYCONFDEVICE" == "/dev/fd0" ]; then
+    umount /dev/fd0
+fi
 
 fi
 fi

@@ -2,11 +2,11 @@
 <?php
 // ----------------------------------------------------------------------------
 // dialog.php
-// $Id: dialog.php,v 1.1 2004/09/27 20:30:29 gcasse Exp $
+// $Id: dialog.php,v 1.2 2004/10/30 19:40:46 gcasse Exp $
 // $Author: gcasse $
 // Description: command line based dialog (menu, yes/no question, dialog box,...)
-// $Date: 2004/09/27 20:30:29 $ |
-// $Revision: 1.1 $ |
+// $Date: 2004/10/30 19:40:46 $ |
+// $Revision: 1.2 $ |
 // Copyright (C) 2004 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -33,6 +33,7 @@ $aValue=0;
 
 define("UNDEFINED",$aValue++);
 define("TITLE",$aValue++);
+define("NOBUTTON",$aValue++);
 define("BACKTITLE",$aValue++);
 define("MENU_TEXT",$aValue++);
 define("MENU_NUM1",$aValue++);
@@ -116,16 +117,16 @@ define("END",$aValue++);
 // {{{ inputBox
 
   class inputBox extends textDialog {
-    protected $_myDefault;
+    protected $myDefault;
 
     function setDefault( $theDefault)
       {
-	$this->_myDefault = $theDefault;
+	$this->myDefault = $theDefault;
       }
 
     function printDialog( & $theDialog, $theTitle, & $theResult)
       {
-	return $theDialog->inputBox( $this->myText, $this->_myDefault, $theResult, $theTitle);
+	return $theDialog->inputBox( $this->myText, $this->myDefault, $theResult, $theTitle);
       }
   }
 
@@ -136,7 +137,7 @@ define("END",$aValue++);
     var $myText;
     var $myItem;
     var $mySelectedItem;
-    protected $_myName;
+    protected $myName;
 
     function selectList( $theText)
       {
@@ -147,17 +148,17 @@ define("END",$aValue++);
 
     function newItem( $theName)
       {
-	$this->_myName = $theName;
+	$this->myName = $theName;
       }
     
     function setLabel($theLabel)
       {
-	$this->myItem[$this->_myName] = $theLabel;
+	$this->myItem[$this->myName] = $theLabel;
       }
 
     function setSelected( $theItemIsSelected)
       {
-	$this->mySelectedItem[ $this->_myName] = $theItemIsSelected;
+	$this->mySelectedItem[ $this->myName] = $theItemIsSelected;
       }
   }
 
@@ -208,13 +209,14 @@ define("END",$aValue++);
 class dialog 
 {
   var $myStatus;
-  protected $_myBackTitle=NULL;
-  protected $_myTitle=NULL;
-  protected $_mySelectList=NULL;
-  protected $_myTextDialog=NULL;
-  protected $_myDialog=NULL;
-  protected $myItem=NULL; // supplies the kind of item (INPUT_BOX_TEXT means input box,...)
-  
+  protected $myBackTitle=NULL;
+  protected $myTitle=NULL;
+  protected $mySelectList=NULL;
+  protected $myTextDialog=NULL;
+  protected $myDialog=NULL;
+  protected $myItem=NULL; // supplies the kind of item (INPUT_BOX_TEXT means input box,...).
+  protected $myDialogWithDefaultButton=true; // If true the default buttons (OK and Cancel) are present.
+
   // {{{ getKeyword
 
   protected function getKeyword( $theWord)
@@ -226,6 +228,9 @@ class dialog
 	  break;
 	case "--backtitle":
 	  $aState=BACKTITLE;
+	  break;
+	case "--nobutton":
+	  $aState=NOBUTTON; // Added for Oralux: no default button
 	  break;
 	case "--menu":
 	  $aState=MENU_TEXT;
@@ -278,6 +283,11 @@ class dialog
 
 	    case TITLE:
 	      $this->myTitle=$arg;
+	      $aState=UNDEFINED;
+	      break;
+
+	    case NOBUTTON:
+	      $this->myDialogWithDefaultButton=false;
 	      $aState=UNDEFINED;
 	      break;
 
@@ -452,15 +462,14 @@ class dialog
       $this->myStatus=0;
       $aResult=NULL;
 
-
       $this->_myTerminal=new enhancedTerminal();
       if (!$this->_myTerminal->isBuild())
 	{
 	  $this->_myTerminal=new dumbTerminal($theTerminal);
 	}
 
-      $this->myDialog=new cliDialog($this->_myTerminal);
       $this->parse( $argc, $argv);
+      $this->myDialog=new cliDialog($this->_myTerminal, $this->myDialogWithDefaultButton);
 
       if ($this->myBackTitle)
 	{
