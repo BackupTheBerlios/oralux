@@ -1,0 +1,59 @@
+
+
+# Let previous line blank.
+# This is the end of emacspeak.conf
+
+export DTK_PORT=$EMACSPEAKTTSPORT
+unset DTK_TCL
+
+case $EMACSPEAKTTS in
+DECtalk )
+  export DTK_PROGRAM=dtk-soft
+  unset DTK_PORT;;
+
+Flite )
+  export DTK_PROGRAM=/usr/bin/eflite
+  unset DTK_PORT;;
+
+Multispeech )
+  export DTK_PROGRAM=/usr/local/lib/multispeech/speech_server
+  unset DTK_PORT;;
+
+ParleMax )
+  export DTK_PROGRAM=/usr/local/bin/maxlect
+  unset DTK_PORT;;
+
+AccentSA )
+  export DTK_PROGRAM=accent;;
+
+BrailleLite | BrailleNSpeak | TypeNSpeak )
+  export DTK_PROGRAM=braillenspeak;;
+
+Ciber232 | Ciber232Plus )
+  export DTK_PROGRAM=ciber;;
+
+DECtalkExpress )
+  export DTK_PROGRAM=dtk-exp;;
+
+DECtalkMultivoice | DECtalk3 )
+  export DTK_PROGRAM=dtk-mv;;
+
+DolphinApollo )
+  export DTK_PROGRAM=apollo;;
+
+DoubleTalkLT | LiteTalk )
+  export DTK_PROGRAM=doubletalk;;
+
+DoubleTalkPC )
+  export DTK_PROGRAM=doubletalk
+  unset DTK_PORT;;
+
+PcHabladoNotebook )
+  export DTK_PROGRAM=pchablado;;
+
+*)
+# EFM uses its own customized Emacspeak; here we set the default values for Emacspeak
+  export DTK_PROGRAM=/usr/bin/eflite
+  unset DTK_PORT;;
+
+esac

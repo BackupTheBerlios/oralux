@@ -1,0 +1,147 @@
+Mes premiers pas dans GNU/Emacs.
+C'est pas évident, mais pas insurmontable.
+
+1) Les bases pour saisir les commandes
+2) Ouvrir ou créer un fichier
+3) Sauvegarder ses fichiers 
+4) La saisie
+4.1 Déplacement dans le document
+5) Naviguer dans les buffers ouverts
+6) Naviguer dans l'arborescence
+7) accéder au shell
+8) Quitter 
+
+
+Lorsque Emacspeak démarre, il ouvre automatiquement un fichier d'aide sur Oralux. Je ne saurai trop vous conseiller de sauvegarder vos préférences et de stocker vos documents comme décrit dans la FAQ.
+
+1) Les bases pour saisir les commandes
+
+Les raccourcis clavier utilisés sont du style C-x obtenu en appuyant simultanément sur Ctrl et x .
+exemple 1 : la première commande que vous trouverez dans ce document est C-x C-f ce qui équivaut à appuyer simultanément sur la touche Ctrl et x puis appuyer simultanément sur la touche Ctrl et f
+exemple 2 : vous trouverez aussi des commandes du type C-x b ce qui équivaut à appuyer simultanément sur la touche Ctrl et x puis sur la touche b
+
+D'autres commandes commencent par la touche Meta représentée par M-.
+Exemple M-x
+La touche Meta peut s'obtenir soit en appuyant simultanément sur Esc et x ou sur Alt et x
+
+
+2) Ouvrir ou créer un fichier (Simplicité et efficacité)
+
+Ouvrir un fichier existant ou un nouveau fichier
+C-x C-f
+saisir le chemin complet du fichier à ouvrir et son nom
+ex: /home/knoppix/test
+Si le fichier existe, il est ouvert. S'il n'existe pas il est créé.
+
+
+3) Sauvegarder ses fichiers
+ 
+C-x C-s sauvegarde votre fichier
+Emacs est sympa, il sauvegarde régulièrement votre prose.
+
+Chaque fois que vous ouvrez ou créez un fichier, celui-ci est lié à ce que l'on appelle un buffer (tampon). Si vous avez oublié de sauvegarder un de vos fichiers ouverts, GNU/Emacs vous demandera si vous souhaitez abandonner les modifications au moment de quitter le programme. 
+
+4) La saisie
+
+GNU/Emacs gère les retours chariots automatiquement. On peut donc faire de la saisie au kilomètre. Cette notion est importante surtout pour gérer les déplacements dans le texte et la relecture avec la synthèse vocale. 
+
+En fait, tant que vous n'avez pas fait un retour chariot volontaire, votre texte est considéré comme une seule phrase, même s'il tient sur plusieurs lignes.
+
+4.1 Déplacement dans le document
+
+Alt b déplace le curseur sur le mot précédent et Emacspeak le prononce
+Alt f déplace le curseur sur le mot suivant et Emacspeak le prononce
+
+C-a déplace le curseur au début de la ligne sur laquelle il se trouve et Emacspeak la prononce
+Alt a déplace le curseur au début de la phrase sur laquelle il se trouve et Emacspeak la prononce
+
+C-e déplace le curseur à la fin de la ligne sur laquelle il se trouve et Emacspeak la prononce
+Alt e déplace le curseur à la fin de la phrase sur laquelle il se trouve et Emacspeak prononce la phrase suivante.
+
+Alt- [ Aller au paragraphe précédent.
+
+Alt- ] Aller au paragraphe suivant.
+
+C- x [ Aller à la page précédente.
+
+C- x ] Aller à la page suivante.
+
+Alt- < Aller au début du buffer.
+
+Alt- > Aller à la fin du buffer.
+
+5) Naviguer dans les buffers ouverts C-x b
+
+Vous avez ouvert et/ou créé plusieurs fichiers (on rappelle, chaque fichier se retrouve donc avec un buffer qui lui est associé) et vous voulez aller de l'un à l'autre. Pas de problème. Il suffit de taper C-x b 
+Par défaut, si vous appuyer sur la touche entrée, vous retournez sur le dernier buffer ouvert sinon il suffit d'entrer le nom du buffer ou plus simplement la première lettre et appuyer sur la touche tabulation pour que le nom de votre buffer apparaisse automatiquement  (la touche de tabulation est la touche de complétion).
+Chaque buffer est associer à un processus. Pour fermer un buffer ouvert il faut donc tuer le processus.
+taper la commande c-x k , par défaut, c'est le buffer en cours qui est fermé
+
+Pour aller d'un buffer à l'autre taper C-x o
+
+6) l'exploration ou mode dired C-x d
+
+Très pratique.
+Saisir le chemin complet du répertoire que vous souhaitez explorer et appuyer sur entrée.
+Qu'est-ce qu'il a fait notre ami GNU/Emacs, il a ouvert un nouveau buffer (comme quoi ça ne sert pas uniquement pour les fichiers). Par défaut, le curseur est positionné sur la première lettre du premier fichier ou répertoire. Les touches haut bas vous permettent de vous déplacer dans votre répertoire.
+Si votre curseur est positionné sur un répertoire, la touche entrée vous permet de l'explorer (et hop encore un nouveau buffer)
+Si votre curseur est positionné sur un fichier, la touche entrée ouvre votre fichier (encore un nouveau buffer). 
+
+Vous pouvez remonter au répertoire supérieur en sélectionnant .. (deuxième ligne du listing) et en appuyant sur entrée.
+
+Touches de commande en mode Dired
+
+d sélectionne un fichier à effacer.
+
+u déselectionne le fichier.
+
+x permet d'effacer les fichiers sélectionné. Confirmer l'effacement par yes ou no
+
+c copier un fichier.  vous êtes invité à donner un nouveau nom à votre fichier copié.
+
+r renommer un fichier.  vous êtes invité à donner un nouveau nom.
+
+Une page d'info sur les raccourcis des commandes en mode Dired est accessible en tapant,
+C- h m
+Cette page d'info se trouve dans un nouveau buffer, utiliser C-x o pour aller dans ce buffer
+
+7) accéder au shell M-x shell
+La commande pour ouvrir un buffer Shell est M-x shell. Attention, le M est obtenu grâce à la touche Escape. Donc appuyez sur Escape, puis x et enfin taper shell.
+A partir d'un buffer shell, vous avez accès à toutes les commandes de Linux. 
+L'objet de ce document n'est pas de les inventorier.
+En voici quelques unes qui peuvent être utiles :
+whoami : renvoie le nom de l'utilisateur logué
+pwd : renvoie le nom du répertoire où l'on se trouve
+cd : change de répertoire
+exemples : cd .. remonte au répertoire supérieur, cd / remonte à la racine du
+système , cd aller au répertoire personnel (/home/knoppix) , cd /mnt/floppy aller au répertoire de montage de la disquette
+ls : lister les fichiers et sous-répertoires
+mkdir : créer un répertoire
+cp : copier un fichier exemple: cp /home/knoppix/emacs.txt /mnt/floppy (copie
+le fichier emacs.txt sur une disquette)
+
+7.1) Utiliser la commande man
+Les pages de man  permettent d'obtenir de l'aide sur les commandes Linux
+Pour y accéder taper :
+Alt-x man
+Puis taper le nom de la commande pour laquelle vous souhaiter obtenir de l'aide.
+
+8) Quitter GNU/Emacs et par voie de conséquence Emacspeak
+C-x C-c
+
+9) Informations complémentaires
+C- h i m
+Accéder à la FAQ d'Emacs.
+
+C- h t
+Accéder au tutoriel en ligne de Emacs.
+
+C- h k
+Accéder à la documentation d'une séquence de touche.
+
+Pour en savoir plus sur  GNU/Emacs et Emacspeak, visiter le site suivant,
+http://emacspeak.sourceforge.net/
+
+Sylvie Xhaard
+Oralux
+Mise à jour:  20/06/2004

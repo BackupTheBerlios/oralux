@@ -1,0 +1,9 @@
+Here are the summary of the code rules. This file might be completed.
+
+1. Language: english
+2. Prefixes
+2.1 Arguments: the
+2.2 Local var: a (or an)
+2.3 Global var: The
+3. Bounds: ###
+

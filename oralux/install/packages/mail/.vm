@@ -1,0 +1,47 @@
+(setq vm-url-browser 'w3m-browse-url)
+
+;;(setq vm-mime-default-face-charsets t)
+
+(setq vm-reply-subject-prefix "Re: ")
+(setq vm-folder-directory "~/mail/")
+(setq vm-primary-inbox "inbox")
+
+(setq vm-auto-get-new-mail 600)
+
+(setq vm-spool-files
+      '(
+	"pop:MyHost:MyPort(110):pass:myLogin:MyPassword"
+	))
+
+;; (("inbox" "pop:HOST:PORT:AUTH:USER:PASSWORD" "inbox.crash"))
+;; (INBOX SPOOLNAME CRASHBOX)
+
+(setq vm-pop-auto-expunge-alist
+      '(
+	("MyHost:MyPort(110):pass:MyLogin:*" . nil)
+ 	))
+
+(cond ((string-match "ru" (getenv "LANGUAGE"))
+       (print "Russian environment")
+       ;; Begin Vm Russian stuff
+       
+       (setq vm-mime-8bit-text-transfer-encoding '8bit)
+       (setq vm-mime-8bit-composition-charset "koi8-r")
+
+       ;; Map the MULE charset to MIME charset
+       (add-to-list 'vm-mime-mule-charset-to-charset-alist
+		    '(cyrillic-iso8859-5 "koi8-r"))
+       (add-to-list 'vm-mime-mule-charset-to-coding-alist
+		    '("koi8-r" cyrillic-koi8))
+       (add-to-list 'vm-mime-mule-charset-to-coding-alist
+		    '("windows-1251" cp1251))
+       (add-to-list 'vm-mime-mule-coding-to-charset-alist
+		    '(cyrillic-koi8 "koi8-r"))
+       (add-to-list 'vm-mime-mule-coding-to-charset-alist
+		    '(cp1251 "windows-1251"))
+       (add-to-list 'vm-mime-mule-coding-to-charset-alist
+		    '(windows-1251 "windows-1251"))
+
+       ;; end of Vm Russian stuff.
+       )
+      )

@@ -1,0 +1,33 @@
+#!/bin/sh
+# emacspeak - execute emacs with speech enhancements
+#$Id: efm.sav,v 1.1 2004/09/27 20:30:03 gcasse Exp $
+    if [ -f /etc/emacspeak.conf ]
+    then
+    . /etc/emacspeak.conf
+fi
+
+if [ -f $HOME/.emacs ]
+then
+	INITSTR="-l $HOME/.emacs"
+fi
+
+CL_ALL=""
+for CL in $* ; do
+	if [ "$CL" = "-o" ]; then
+		DTK_PROGRAM=outloud
+		export DTK_PROGRAM
+                elif [ "$CL" = "-d" ]; then
+		DTK_PROGRAM=dtk-soft
+		export DTK_PROGRAM
+	elif [ "$CL" = "-q" ]; then
+		INITSTR=""
+	else
+		CL_ALL="$CL_ALL $CL"
+	fi
+done
+export DTK_PROGRAM=festival
+export FST_EXEC=/usr/local/share/efm/festival/bin/festival
+
+# EMACS_UNIBYTE=1
+# export EMACS_UNIBYTE
+exec emacs -q -l /usr/local/share/emacs/site-lisp/efm/lisp/emacspeak-setup.el $INITSTR $CL_ALL

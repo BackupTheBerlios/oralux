@@ -1,0 +1,134 @@
+SES -Simple Emacs Spreadsheet
+Sylvie Xhaard
+Oralux
+Mise à jour:  20/06/2004
+
+1. Introduction
+2. Création d'une feuille de calcul pas à pas
+3. Déplacement dans la feuille de calcul
+4. Saisie dans les cellules
+5. Éditer le contenu d'une cellule
+6. Modification de la feuille de calcul
+
+1. Introduction
+
+SES permet d'éditer des feuilles de calcul dans Emacs. Une feuille de calcul est une grille de cellules. Dans chaque cellule on peut saisir du texte, un nombre ou une formule de calcul.  
+Pour créer une nouvelle feuille de calcul, ouvrir un nouveau buffer C-x C-f , lui donner un nom par exemple compte.ses, puis taper M-x ses-mode.
+
+Par défaut, la nouvelle feuille de calcul contient 1 ligne et 1 colonne (donc une cellule)
+Les colonnes sont identifiées par une lettre : la première colonne par la lettre A, la 2ème par B etc...
+Les lignes sont identifiées par un nombre : la première  ligne par 1, la 2ième par 2 etc .. 
+Chaque cellule est identifiée par la lettre de la colonne et le numéro de la ligne où elle se trouve.
+Par exemple, la cellule D5 se trouve à l'intersection de la 4ième colonne et de la 5ième ligne
+
+2. Création d'une feuille de calcul pas à pas
+
+Nous allons créer une feuille de calcul qui permet de calculer le total des ventes de trois régions pour le premier trimestre
+Elle sera composée de 5 colonnes et 5 lignes
+
+Ouvrir un nouveau buffer
+C-x C-f
+A l'invite Find file :~/
+taper: ventes.ses
+activer le mode SES
+M-x ses-mode
+
+Appuyez sur TAB pour créer une deuxième colonne (B)
+Répéter cette opération  pour obtenir 5 colonnes
+
+Revenir dans la cellule B1
+Taper j
+A l'invite Jump to cell , taper B1 (Attention les lettres de colonnes doivent toujours être en Majuscule)
+
+Entrer le texte "Janvier" dans cette cellule
+taper " (" permet des saisir du texte dans les cellules) 
+A l'invite Cell B1 :"" taper Janvier puis RETURN
+Le texte est insérer dans la cellule B1, et le curseur s'est déplacé vers la droite, soit dans la cellule C1
+Entrer Février dans la cellule C1, Mars dans la cellule D1 et TOTAL dans la cellule E1
+
+Insérer une nouvelle ligne en appuyant sur TAB
+Le curseur se trouve maintenant dans la cellule A2
+Entrer Nord dans la cellule A2
+Entrer 100 dans la cellule B2. Pour entrer des nombres, il suffit juste de les taper
+Entrer 200 dans la cellule C2 et 300 dans la cellule D2
+Calculer le total pour la région Nord
+Dans la cellule E2 taper ( et à l'invite  E2:() taper + B2 C2 D2 puis RETURN
+
+Reprendre à partir de Insérer une ligne
+et saisissez les valeurs que vous voulez pour les régions Centre et Sud
+Calculer le total pour chaque région
+
+Insérer une nouvelle ligne
+cellule A5 entrer TOTAL
+Cellule B5 calculer le total du mois de janvier (+ B2 B3 B4)
+Cellule C5 calculer le total du mois de février
+cellule D5 calculer le total du mois de mars
+
+3. Déplacement dans la feuille de calcul
+
+j (ses-jump) permet de se déplacer à la cellule spécifiée
+
+On peut également se déplacer à l'aide des touches fléchées
+
+4. Saisie dans les cellules
+
+Saisie des nombres :
+se placer dans la cellule et taper le nombre puis RETURN
+pour les nombres négatif taper le signe moins puis le nombre et RETURN
+le séparateur pour les décimales est le point.
+
+Saisie de texte : taper " puis votre texte et RETURN
+
+Saisie de formules de calcul : taper ( puis votre formule et RETURN.
+
+Attention:	   taper un espace entre chaque adresse de cellule
+
+addition	  exemple : (+ A1 B1 C1)
+soustraction	  exemple : (- A1 B1 C1)
+multiplication    exemple : (* A1 B1 C1)
+division	  exemple : (/ A1 B1)
+
+somme de cellules contiguës	 (apply '+(ses-range A1 A12)) = somme des cellules A1 à A12
+produit de cellules contiguës	 (apply '*(ses-range A1 A12)) = produit des cellules A1 à A12
+MAX  trouver la valeur maximum	 exemple : (MAX A1 B1 C1) = trouve la valeur maximum entre A1 B1 et C1
+MIN  trouver la valeur minimum	 exemple : (MIN A1 B1 C1) = trouve la valeur minimum entre A1 B1 et C1
+
+5. Éditer le contenu d'une cellule
+placer le pointeur sur la cellule à éditer et taper RETURN
+
+6. Modification de la feuille de calcul
+
+   6.1 Insérer-supprimer des lignes ou des colonnes
+
+   C-o (ses-insert-row) insérer une ligne au dessus de la ligne courante
+   M-o (ses-insert-column) insérer une colonne avant la colonne courante
+   C-k (ses-delete-row) supprimer la ligne courante
+   M-k (ses-delete-column) supprimer la colonne courante
+
+   TAB : déplace le curseur d'une cellule vers la droite,
+      ou crée une nouvelle colonne si l'on se trouve dans la dernière cellule d'une ligne
+      ou crée une nouvelle ligne si l'on se trouve en fin de fichier
+
+   C-j : insérer une ligne après la ligne courante.
+
+   6.2 Format des colonnes ou des cellules
+
+   w (width)	  modifier la largeur de la colonne courante (par défaut 7 caractères)
+   p		  modifier le format de la cellule courante
+   M-p		  modifier le format de la colonne courante
+
+
+   La saisie des formats de colonne ou cellule commence toujours par "%. et se termine toujours par "
+
+   flottant : "%.g"
+   spécifie les nombres avec une virgule flottante utilisé aussi bien pour la notation décimale ou exponentielle
+   exemple : "%.7g", format par défaut de SES. permet de saisir les nombres que vous voulez avec une virgule là où vous la souhaitez
+
+   décimal : "%.f"
+   exemple "%.2f" format décimal avec deux chiffres après la virgule
+
+   exponentiel : "%.e"
+   exemple "%.2e" si la cellule contient la valeur 120 cela donnera 1.20e+02
+
+   base 8 : "%.o"
+  convertie la valeur en base 8

@@ -1,0 +1,546 @@
+Todo
+----
+
+This document lists the known bugs (-) and the next hoped features (+) in four categories:
+1. Runtime
+2. SDK (Software development kit) 
+3. Website
+4. Info
+5. Suggestions
+
+The so called SDK is a set of tools useful to build or rebuild the Oralux CD. 
+Besides it, the runtime manages the following stages:
+- Initializing the user account
+- Asking to the user about her preferences (TTS, language,..)
+- Starting Emacspeak
+
+The Info paragraph is useful to remember the informations to collect for the next developments.
+
+Conventions:
+
++ Evolution
+- Bug
+/ Done 
+X Checked
+
+1. Runtime
+In the following lines, + means evolution, - bug.
+
+1.1 Priority 1 (Urgent)
+
++ check if persistenthome still works
+
++ update main.c DESKTOP = shell, the oralux.sh proposes then to start zsh.
+main.c must indicate that CTRL-D will be rquired to come back to the menu (ther e must be a more direct way in the future).
++ zsh and "sudo su"
+
++ oralux.sh c can start zsh (DESKTOP)
++ minimenu proposes zsh instead of bash
++ HardDiskInstall: do not ask any more to take the CD
+
++ edbrowse (0.6 beta or 0.6)
+
++ A persistent /var 
+/ mail about RealPlayer and Helix to the Helix forum. 
++ Helix forum: asks about the SDK, see test suite.
++ http://www.linux-speakup.org/trplayer.html
+wget ftp://linux-speakup.org/pub/linux/goodies/trplayer/trplayer-1.2.0.tar.gz
+
++ Mails from Doug
+---------------------
+gobjc package.  
+Debian Ada packages (-gtk +cryptography support as well
+as many of the libraries including the text one).  
+---------------------
++ ".mailcap and .mime.types.  These files were in the user's
+home directory, and assisted with the connection between such browsers
+as w3 and w3m and the trplayer program and any other "viewers" for
+file types that the user might want.  Their contents were rather
+cryptic so I never messed mutch with them, but you could add to them
+to make other programs work.  This little package, which, at the time
+I had it, came in a tarball, made it possible to just click on
+something and it would play.  You will need to track this down as well
+before adding trplayer/realplayer to the system. "
+---------------------
++ the LAME mp3 encoder is actually released under the LGPL.
++ codec RealPlayer 9 + 10
+---------------------
+
++ saveconfig in the menu
++ menu and new brltty usb drivers
++ gettext and the menu.
++ menu: see which fields are mandatory, and which one must propose a default value
++ XML Conf file: managing an erroneous file
++ Check how the Conf file access rights modification is secure  
+
+
++ Notice from Teresa: contraction table
+---------------------
+Subject: [Oralux] Saving Braille Preferences
+Date: Thu, 29 Jul 2004 06:31:12 -0700
+
+Or rather, not succeeding at saving them.  [smile]  I found the TTY
+preferences menu and set the Braille contraction table to US Grade 2.  I
+wasn't sure if the "save on exit" menu item was relevant, but I specified
+"yes"
+
+I ran the saveconfig script and said "yes' to all.  Everything is being
+saved on a zip disk, and I've successfully saved my other preferences.  Am I
+missing something?
+
+Just for the record, I have to say that I very much appreciate the Braille
+options in the startup menu.  That has helped quite a lot.
+
+---------------------
+
+
++ VM configuration (name, mail address, host parameters)
+Note:
+(setq vm-folder-directory "~/mail/")
+(setq vm-primary-inbox "free")
+one name per mailbox ?
+
++ see gnus configuration
+
+/ Internet: Eagle driver (Sagem fast 800)
+/ Internet: 56K External modem
+
++ At the end of the menu, asks if the preferences must be saved (except for hdinstal...).
++ When a new release is available, ask if the .emacs, .vm,... files must be removed.
++ Clearly say that RETURN must be pressed once the CD is ejected.
++ New messages without translation.
++ dialog: --extra-label --extra-button (return 3) --cancel-label (1) --ok-label (0)  --help-button --help-label (2)
+
++ D'ou vient le .bashrc obsolete sous /root ?
+
++ After this message, DECtalk hangs: "MML Voice Abrev Fill Charac auto-saving done" (From Nath).
+
+
+Notices from Doug
+--------------------------------------
+ > 
+ > It appears as though it does. I haven't gotten yasr to work to a level
+ > where I am satisfied with it. I hope this can be corrected in the next
+ > version. It speaks too slowly for me. It won't drive flite faster than
+ > 250 words per minute. I use the speech in emacspeak on level either
+ > eight or nine. It also doesn't tell me what I'm entering as I key data
+ > in. 
+--------------------------------------
+
+
+Feedback from Eric
+--------------------------------------
+Update the F2/F3 cheatcodes page 
+--------------------------------------
+
+Message from Edmond.
+--------------------------------------
+dot emacs saved in the persistent home, unfortunately saveconfig was not called again. 
+Then the old one .emacs is retreived at the next boot.
+
+"Une petite remarque qui m'a coûté bien du temps et que peut-être tu pourras répercuté sur lal liste mieux que moi.
+J'avais modifié le fichier .emacs soigneusement comme tu l'as indiqué dans un message mais quelle ne fut pas ma surprise de voir que malgré la modification, rien ne partait. Je te rappelle ma config : démarrage sur le cd, une partition créée avec mkpersistenthome et une disquette sur laquelle je sauvegardais les paramètres. "
+--------------------------------------
+
+Feedback from Nigel
+--------------------------------------
+- C-a doesn't speak the line
+- Dired mode: no audio feedback
+- kill buffer: the next current buffer is not announced. 
+* Pb using the uk keyboard
+* End of file missing at DECtalk installation ?
+
+Feedback from IBP
+--------------------------------------
+1) It is something wrong with the pre-generated letters. All letters
+   are spoken by one voice though the voice must depend on register
+   and some letters are spoken wrongly, for example, the letter "o" is
+   spoken as "r".
+
+2) The English pronunciation dictionary
+   /usr/local/share/mbrola/lexicon.en is wrong or is not used.
+
+3) There are some problems in the Emacs russification.
+
+4) The Russian pronunciation dictionary Rulex is not used outside
+   Emacspeak.
+
+5) All items in the dired mode are spoken by one voice. This problem
+   had appeared in new versions of Emacspeak. In the old versions (up
+   to 17 anyway) the files, symlinks and directories were spoken by
+   different voices.
+
+
+Feedback from Sergei
+--------------------------------------
+
+The actual code that
+causes problem with Russian stuff is under "keyboard" section. This
+part might be either removed if the Russian language is selected or
+put somewhere before loading Russian stuff. There are some tips to
+help you testing whether it is OK or not. 
+
+1. In the startup menu select all Russian settings "including
+   keyboard". 
+2. After Emacspeak is loaded, open a new buffer.
+3. Switch your keyboard to Russian. It is done by pressing the right
+   ctrl key (very inconvenient, another reason for me not to use the
+   default driver).
+4. Try typing some symbols. If evrything is correct, you then should
+   hear the Russian voice echoing what you type. Otherwise you will
+   hear English voice echoing punctuation marks, octal codes etc. 
+5. Switch the keyboard back to English (withh the same right ctrl key)
+   and now try to switch keyboard within Emacs itself by pressing
+   Ctrl+backslash keys. If all settings are correct, you will hear the
+   Russian letters. If not, there will still be English.
+
+I hope that it will help you better debug the Russian settings.
+
+Another issue i have noticed is a behaviour of the English voice. It
+speaks with strange accent. I suspect, that somewhere perhaps by
+mistake a French pronounciation dictionry is loaded for mbrola?
+
+--------------------------------------
++ package console-cyrillic
++ Yasr: bsdgames includes a very good "adventure" game wich can be played from the command line.
+
+--------------------------------------
+
+Feedback from Barak
+--------------------------------------
+1. First time no sound - solved by cheatcode 
+knoppix alsa
+Cheatcode not needed after preferences are saved.
+
+2. Long wait time caused by Oralux searching for config file on non-existing 
+floppy - no longer happens after saveconfig to hard-drive.
+
+3. Missing ADSL (ALE070) support.
+This is a "chicken and egg" problem, must first have the tar gz package
+on a partition that is readable by Oralux before booting Oralux.
+Extracted eciadsl-usermode-0.8 (latest is 0.9 on eciadsl.flashtux.org) to 
+a persistent home directory. 
+configured and installed using:
+
+(as root)
+$ ./configure --prefix=/home/knoppix/eciadsl_install --conf-prefix=/home/knoppix/eciadsl_install --conf-dir=/etc --etc-prefix=/home/knoppix/eciadsl_install
+$ make
+$ make install
+and later running ~knoppix/eciadsl_install/bin/eciconftxt.sh 
+accepting default suggestion for all questions without going too much into
+what these mean (just chose yes when unsure, seems quite far from knoppix 
+autodetect).
+Expected pitfalls:
+VPI/VCI are 8,48 as I remember from windows connection.
+User is username@IBezint and not just username.
+
+startmodem can be launched after copying additional files (required by pppd)
+cp -rf ~knoppix/eciadsl_install/etc/* /etc
+~knoppix/eciadsl_install/bin/startmodem
+(sometimes fails synchronizations, most of the time successful connect).
+
+4. the dot emacs file is overwritten by the original dot emacs file 
+after next oralux reboot (I needed to remodify user-mail-address 
+and user-full name again).
+
+5. Sending and Receiving Mail
+Once connected, M-x mail works fine, but trying to receive mail fails.
+fetchmail appears to be too much work to configure.
+
+So I utilized my fresh .gnus file (gathered from the *info* pages).
+Normally M-x gnus causes .gnus to be evaluated, but with emacspeak it
+should be evaluated explicitly (or better add it to .emacs file)
+
+(setq gnus-secondary-select-methods
+      '((nnml "private")))
+
+(setq mail-sources
+      '(
+;;(file :path "/var/spool/mail/username")
+	(pop :server "mail.server"
+	     :user "username"
+	     :port "pop3"
+	     :password "secret"
+)))
+--------------------------------------
+Games:
+Since Yasr have become a part of the Oralux distribution, i would
+suggest to include "bsd-games" package, which contains, among other
+tools a very good "adventure" game wich can be played from the command
+line.
+--------------------------------------
+
+Feedback from Nigel
+--------------------------------------
+Just want to clarify a few things.  Reading the title of the buffer reads
+out all the buffers that are open.
+When using F10 and then the F key there is a cariter at the end that sounds
+like control 3 although it is only one character.
+dot dot does not seem to be pronounced to well as in save as..
+I tried to create a new buffer and typed something in it, but I must have
+done some thing wrong when I tried to load ispell, got a bit lost and had a
+devil of a time trying to close down cd tool.
+Not sure if this is why i was having trouble closing the *scratch* buffer,
+which latterer turned into *compleate*.  This was dispite me hitting c-x k
+and then return.
+using the su command to switch to root works fine.  pressing return after
+the cd has ejected shut down the machine fine.
+--------------------------------------
+
+
++ Clarify: Parlemax + english menu: gives US locale (FR expected ?). The braill driver depends on the type of keyboard. 
++ les droits d'acces des fichiers sous /home/knoppix correspondent a root !
+
++ Adding a sentence in intro-xx.txt to explain how to reach the doc.
+
++ A general way to increase the speech rate 
++ set speech rate in the menu (soundtouch)
++ A programmable speech rate ?
++ speech rate: how to easily store it (.emacs dtk-set-rate + saveconfig).
+
++ Test Michel: 
+++ menu: la signification chagenante des touches return/espace induise en erreur.
+++ l'appui sur alt + fleche fait changer de console sans aucune indication sonore (déjà indiqué par Georges).
+
++ Sur les autres consoles les var d'env ne sont pas a jour
+
++ Gnutypist
+
++ Compatibility home/config : config saved but not really considered as saved...
+
++ Starts alsa if the default OSS driver fails.
++ misc.sh: apt-get install sndconfig
++ minimenu: configuration file
++ undelete (recover)
++ Ease the access to the included tutorials.
+
++ Menu: braille, usb port (voyager)
++ Writing the CD to the hard disk
++ CD optimization (Festival)
++ The menu might propose the possible TTS, according e.g. to the available hardware (memory size,...).
++ Menu: explicitly explain the role of the arrow keys (better feedback).
++ Avoiding the question 'do you want to update your configuration'.
+
++ Storing if possible the user cheat code: ALSA, braille features,...
++ If there is no persistent home, the configuration files might be saved.
++ Keyboard rate
++ buildi18n: see locale.
++ TimeZone (i18n.c,+ menu)
++ Alsa as default choice ?
++ Adding a beep at boot time (CTRL G)
+
+
++ Internet: eciadsl-usermode-0.7
++ Internet: SpeedTouch
++ Internet: Ethernet modems.
+
++ lliaphon: suppression no comprendo et softspeech.log
+
++ minimenu: double list (http://www.greatsnakes.com/savannah/list.asp) + gettext
++ yasr: how to restart the speechserver ? does alt-i actually work ?
++ yasr: auditory icons for the web browser.
++ yasr: translations in german, spanish, french (see also the dictionnary in yasr.conf).
++ ne: disabling Undo ? (DoUndo)
++ ne: AutoIndent
++ ne: wordwrap
+
+* 0.05: No sound with Asus P4PE-X. Mail from Jackie:
+"...Carte mère Asus P4PE-X  chipset i845, et  audio controller AC'97 Audio, ainsi que mes deux cartes Ethernet et mon pentium céleron 2,4 Ghz, 512 mo de RAM..."
+
+* 0.05 No sound Audigy + P4S8X Mail from Bat:
+"...My motherboard is an Asus P4S8X and my sound card is a creative Labs SB Audigy."
+
++ Is it really useful in the .emacs: (require 'w3-auto)
++ Emacspeak: 'Process Speaker not running': Say it! :-)
++ How to introduce browsing the tree directories, coping and yanking regions.
++ Selecting in a buffer the current language (DECtalk): us/fr (dtk-set-language)
++ Pressing one key to stop the speech server
++ Check that the us/fr switch works if Flite or only the English DECtalk is installed 
++ The default directory reachable by C-c C-f should be `~/'.
+
++ EFM: Stopping the voice: today, C-e C-s. It concerns emacspeak.scm.
++ Festival: keybinding for language switching (From French to English: twice M-x fst-set-language)
+
++ Today, in French, punctuation is said in English.
+
++ use caps-lock as the control key, see a solution whichever the current keymap (fr, qwerty,...).
+Original message from Barak:
+We might want to add Robert J. Chassel's suggestion from the
+Emacspeak new user guide to the introduction menu/this text . For
+example: add an option to use caps-lock as the control key by running:
+loadkeys /usr/share/keymaps/i386/qwerty/emacs2.kmap.gz 
+Note that running this command from an emacs shell fails, but running it from the other terminals (type Alt F2 to get there, type Alt F1 to get back here) works.
+
+
+* w3m
+During login at gna.org, this kind of message is briefly displayed: cookie rejected for security (RFC 2109 4.3.2).
+http://www.cis.ohio-state.edu/cgi-bin/rfc/rfc2109.html#sec-4.3.2
+
++ w3m: can we remove this 'about:' which appear before entering an url ?
++ w3m: do not talk the link (http://)
++ w3m: From CVS (check the path used by emacs)
++ w3m-js: http://abe.nwr.jp/w3m/w3m-js-en.html
+
++ Add for xls: xlhtml (most recent one)
+http://nebuchadnezzar.zion.cz/download/xlhtml-0.5.1-vd2.tgz
+
++ Oralux-installer: remove in the .sh the copy of the knoppix-install file. Was only useful for 0.6 alpha. 
++ Knoblind: translations
+
+
+1.2 Priority 2
+
++ From Terrence:
+Also, I've made my persistent home directory so big that it's crowded my c:/hda1 hard drive.  Is there a way to remake the directory so it's not so huge?
+
++ By default, the return key means yes and any other key means no. 
+Yes, once the keyboard has been selected, this expectation (return key instead of S in spanish) can be misleading. 
+The menu could be updated so that the localized yes/no key are accepted. 
+
++ German synthethis based on Festival+MBROLA:
+For information, Thomas in his mail informed us about a German software synthesis based on Festival and MBROLA; it is available at this URL:
+http://www.ims.uni-stuttgart.de/phonetik/synthesis/
+He asked if it would be possible to include in Oralux. 
+However, I do not know who at the moment, could work on it. 
+
++ Seebytouch: as soon as the GUI is available, we will include the Seebytouch project (http://see-by-touch.sourceforge.net/index_.html).
++ take in account the new emacs intro from Nigel (en/draft)
++ Repeat keys : delay and rate.
++ command key echo in emacspeak
++ ebooks: talk with Doug.
++ Spec TechniBraille for Braille display (after 0.6).
++ Building menu using MBROLA for languages not supported by DECtalk (Dutch,...).
++ If the user types C-z, Alt F2,..., a clear report must inform him. 
++ (C-e d c) Using Flite or EFM, the capital letters are not preceded by a specific sound (as it is with DECtalk).
++ C-e d r 180 doesn't work using EFM (but C-e d 1 works).
++ License of RealPlayer? 
++ hd installation (non-ncurses-based formatting tool instead of cfdisk).
++ From Nigel: Firewall/iptables. kurumin ? See this thread:
+http://www.knoppix.net/forum/viewtopic.php?p=38868
+
+package: shorewall (Shoreline Firewall), gshield
+Webmin: accessible ?
+
++ Spanish Translation: mkpersistenthome: MESSAGE_NO_PARTS en espagnol "No suitable partitions could be found. Remember that NTFS-Partitions are not writable with linux."
++ Spanish and German translation: "to accept it" replace "to quit"
+  {"Press Enter to increase volume, or Space to decrease volume, or any other key to accept it",
+   "Eingabetaste drücken um die Lautstärke zu erhöhen oder Leertaste drücken um die Lautstärke zu verringern oder jede andere Taste zum beenden",
+   "Pulsar enter para subir el volumen, o sobre la barra espaciadora para bajar el volumen, o sobre cualquier teclar para salir",
+
++ Text2Wav features.
++ Check pstotext, ps2ascii.
++ Notice from Janusz: playing ogg files at 11025 Hz hangs if the ALSA driver is not installed. With mplayer or xmms, this issue doesn't appear.
++ Mplayer (reachable from Emacspeak too).
++ Trplayer (See license issues with RealPlayer, RealOne for Unix)
++ A request for freeamp, mpg123
++ Adding X
++ Adding Sawfish
++ Adding a magnifier
+
++ Listen-up
++ Second tty with aural feedback: scenario.
+
+From Edmond
+---
+Est-il possible lorsque le bureau choisi est emacspeak et la synthèse
+parlemax, d'ouvrir une autre console et de lancer sur celle-ci parlemax ? Si
+EFM est sélectionné, aucun problème pour avoir deux consoles sonorisées.
+---
+From Laurent
+---
+Great, it works, -- well sort of.
+
+Under flight, no problem switching between an emacspeak session on tty1 and loading Yasr.  However, I had to fiddle around to make it "work" using dectalk.
+
+Starting off with the Dectalk synth and Emacspeak, it appears that despite being loaded on virtual consoles (remember, I don't fully know the implications) Dectalk and Flight have a fight concerning use of the soundcard.  Well, that is only my deduction.  Simply typing "yasr" on tty2 starts it with Flight.
+
+To "disengage the soundcard from dectalk", I have to press c-e s in Emacspeak to enable flight to speak under tty2.  For myself, its not a big problem, since I've actually come to like flight, finding it quite responsive.
+
+The issue of the yasr keymaps is a problem, with e.g. the crucial review key not working.  The reverse i-search, e.g., still works, but I'm not sure whether its a bash or Yasr function.  Still have lots of reading to do.
+
+So my main question is:  Firstly, how to envoke Yasr with Dectalk from the command line and
+---
+
+From Laurent: multi channel sound card
+---
+Under Windows, my soundcard can handle various outputs, e.g. a speech synth talking while playing music.  This does not work, to my knowledge, under Oralux and means that to use audio programmes effectively, I would have to use an external synthesizer.  It is then also probably the reason for the phenomenon between Dectalk and Flight mentioned in my previous post.
+
+Is it a driver issue, or an issue with my card?  Is there a way to resolve this problem?  I have tried the alsa drivers, but it makes no difference.
+---
+
++ Including Yasr. When the user quit Emacspeak, could we be under
+Yasr?
+
++ Easy mounts
++ Console switching and aural feedback
+- Initial Logo issue ? See Georges' answer
+http://oralux.org/archives-ml.php?A=READ&L=ml_oralux.org/2003/7/15/0
++ Resizing a huge NTFS partition.
+
++ Consistent solution braille/voice
+
++ It the sound card detection fails, the oralux script must not be
+started. The shell must be usable.
+
++ Check calendar and todo mode. 
++ Test babel.el 
+
++ Check the size of the ramdisk when the external tts is installed
++ Check the size of the user's partition
++ See how a root term may be used with Emacspeak without supplying any password 
++ HOWTO English/French (reachable from Emacspeak).
+
+1.3 Priority 3
++ Oralux 1.x: clearer messages. E.g. the Emacs question once C-x k is pressed: "Kill buffer" is a question but can be understood as a confirmation. "Which buffer must be killed" would be better.
++ Check that installed binaries are i386 compliant
++ OCR
++ Test most of the Emacspeak applications
+  http://Emacspeak.sourceforge.net/applications.html 
++ Installing the French TTS whereas DECtalk was already installed.
++ Loud speaker
+
+1.4 Priority 4
++ A solution to store the user configuration on a NTFS filesystem.
++ Adding the oralux user
++ Automatic Speech recognition
+
+2. SDK
+2.1 Priority 1 (Urgent)
++ An easy process to customize the Oralux CD
+
+2.2 Priority 2
++ After a new install on hd, fastly getting the usual environment (internet,...)
+
+3. Website
+3.1 Priority 1 (Urgent)
++ A visitor can't access the site (emacs 20.7 with w3-4.0-pre46). Not because of the web pages. Due to the server configuration?
+/ Updating the FAQ, with the sent answers.
++ Adding a link about the hardware knoppix database 
+http://knoppixfr.tuxfamily.org/index.php?page=hardware
+
+3.2 Priority 2
++ The mailing list management must be enhanced
++ Adding an entry 'Forum'
+
+4. Info
++ Info required about Emacspeak and browsing the web (javascript).
+
+5. Suggestions from Mario Fux and Alireza Darvishy
+
+1. The arrow keys left and right should work to read a word.
+2. Shift+arrow keys should read the letters.
+3. When you finish and restart Emacspeak there should be an acoustic signal
+(btw: What about the a possible login with password. Did you find a solution
+?)
+4. It should be easier to stop the sound server, for example with double CTRL
+?
+5. The sound server shouldn't read the deleted letters.
+/ 6. The menu thing (F10 and so on) is bad. When you press F10 it reads
+something like "f equal equal greater than File" etc. and when you chose File
+it reads again "o equal equal greater than Open File ( C dash x f )". It
+would be easier when it only read (after pressing F10): "File   Edit  
+Options" and in the menu File: "Open File   Open Directory".
+
+
+
+

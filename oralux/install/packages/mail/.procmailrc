@@ -1,0 +1,5 @@
+MAILDIR=$HOME/mail # You'd better make sure it exists
+LOGFILE=$HOME/.procmail.log
+LOCKFILE=$HOME/.lockmail
+#DEFAULT=$MAILDIR/inbox
+

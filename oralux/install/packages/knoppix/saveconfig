@@ -1,0 +1,341 @@
+#!/bin/bash
+# saveconfig - create KNOPPIX configuration floppy
+# (C) Klaus Knopper Mar 2002
+# Spanish translation by Luis Llorente, luis.llorente@hispalinux.es
+# 2003 Gilles Casse: A few changes for Oralux
+# * French translation
+# * No dialog boxes
+# Sep 2003: 
+# German translations by Guenther Harrasser.
+# Spanish translations by Fernando Pinto da Silva.
+#
+
+yesOrNo(){
+    case $LANGUAGE in
+        fr*)
+            YES1="o"
+            YES2="O"
+            NO1="n"
+            NO2="N"
+            SENTENCE="Si oui tapez sur la touche o, si non tapez sur n. Appuyer ensuite sur la touche Entrée"
+            ;;
+        *)
+            YES1="y"
+            YES2="Y"
+            NO1="n"
+            NO2="N"
+            echo "Please, press key $YES1 or $NO1. Then, press the return key" 
+            ;;
+    esac
+
+    read=1
+
+    while [ "$read" == "1" ]; do
+        echo $SENTENCE 
+        read c
+
+        case $c in
+            $YES1|$YES2)
+                ANSWER=0
+                read=0;;
+
+            $NO1|$NO2)
+                ANSWER=1
+                read=0;;
+        esac
+    done
+
+    return $ANSWER
+}
+
+PATH="/bin:/sbin:/usr/bin:/usr/sbin"
+export PATH
+
+XDIALOG_HIGH_DIALOG_COMPAT=1
+export XDIALOG_HIGH_DIALOG_COMPAT
+
+# Get root
+[ "`id -u`" != "0" ] && exec sudo "$0" "$@"
+
+TMP="/tmp/saveconfig.tmp$$"
+
+bailout(){
+rm -f "$TMP" "$TMP.done" "$TMP.err"
+umount "$DIRECTORY" 2>/dev/null
+exit 0
+}
+
+trap bailout 1 2 3 15
+
+# LANGUAGE etc.
+[ -f /etc/sysconfig/knoppix ] && . /etc/sysconfig/knoppix
+[ -z "$LANG" ] && export LANG
+[ -z "$LANGUAGE" ] && export LANGUAGE
+[ -z "$CHARSET" ] && export CHARSET
+
+DESKTOPKB="$(du -sk $HOME/Desktop 2>/dev/null | awk '{print $1}')"
+
+# Language-dependent Messages
+case "$LANGUAGE" in
+de*|at*|ch*)
+TITLE1="KNOPPIX Konfigurationsarchiv anlegen."
+MESSAGE1="Wollen Sie folgende Konfigurationsdateien speichern:"
+MESSAGE2="Bitte legen Sie jetzt eine leere DOS- oder ext2-formatierte, schreibbare Diskette ein."
+MESSAGE3="Archiviere geänderte Konfigurationsdateien..."
+# MESSAGE4="Bitte wählen Sie das Verzeichnis, in das Sie die Konfigurationsdateien schreiben wollen."
+DIRECTORY_MSG1="Verzeichnis"
+DIRECTORY_MSG2="Tippen Sie bitte die Nummer des Verzeichnisses wo die Konfigurationsdateien gespeichert werden"
+E1="Persönliche Einstellungen (Desktop, Programme)"
+E2="Netzwerk Einstellungen (LAN, Modem, ISDN, ASDL)"
+# E3="Grafik Subsystem Einstellungen (XF86Config)"
+E4="Weitere systemweite Einstellungen (Drucker etc.)"
+# E5="Alle Desktop-Dateien (${DESKTOPKB}kB)"
+ERROR="Leider konnte die KNOPPIX-Konfiguration NICHT gespeichert werden:"
+;;
+
+es*)
+TITLE1="Crear un archivo de configuración de KNOPPIX."
+MESSAGE1="¿Desea guardar los siguientes archivos de configuración ?"
+MESSAGE2="Inserte un disquete vacío formateado para DOS o ext2."
+MESSAGE3="Guardando archivos de configuración..."
+# MESSAGE4="Seleccione el directorio para guardar los archivos de configuración."
+DIRECTORY_MSG1="Directorio"
+DIRECTORY_MSG2="Teclee el número del directorio donde se almazenarán los archivos de configuración"
+E1="Configuración personal (escritorio, programas)"
+E2="Configuración de Red (internet, intranet)"
+# E3="Parametros gráficos (XF86Config)"
+E4="Otra configuración del sistema (impresora, etc.)"
+# E5="Todos los archivos en el Escritorio (${DESKTOPKB}kB)"
+ERROR="No se pudo guardar la configuración de KNOPPIX:"
+;;
+
+fr*)
+TITLE1="Création d'une archive pour la configuration KNOPPIX."
+MESSAGE1="Souhaitez-vous sauvegarder les fichiers de configuration suivants :"
+MESSAGE2="Insérez s'il vous plait une disquette déjà formattée DOS ou ext2, et inscriptible."
+MESSAGE3="Sauvegarde en cours..."
+# MESSAGE4="Choisissez, s'il vous plait, le répertoire de sauvegarde des fichiers de configuration :"
+DIRECTORY_MSG1="Répertoire"
+DIRECTORY_MSG2="Taper le numéro du répertoire où seront stockés les fichiers de configuration"
+E1="Configuration personnelle (bureau, programmes)"
+E2="Paramètres réseau (internet, intranet)"
+# E3="Paramètres graphiques (XF86Config)"
+E4="Autre configuration système (imprimante etc.)"
+# E5="Tous les fichiers sur le bureau (${DESKTOPKB}kB)"
+ERROR="La configuration KNOPPIX n'a pu être sauvée :"
+;;
+*)
+TITLE1="Create KNOPPIX configuration archive."
+MESSAGE1="Do you want to save the following configuration files:"
+MESSAGE2="Please insert an empty DOS- or ext2-formatted, writable floppy disk."
+MESSAGE3="Saving configuration archive..."
+# MESSAGE4="Please select directory for saving configuration files:"
+DIRECTORY_MSG1="Directory"
+DIRECTORY_MSG2="Type the number of the directory where will be stored the configuration files"
+E1="Personal configuration (desktop, programs)"
+E2="Network settings (Internet, intranet)"
+# E3="Graphics subsystem settings (XF86Config)"
+E4="Other system configuration (printer etc.)"
+# E5="All files on the Desktop (${DESKTOPKB}kB)"
+ERROR="The KNOPPIX configuration could NOT be saved:"
+;;
+esac
+
+echo $TITLE1
+echo $MESSAGE1
+
+
+FILES=""
+SAVEHOME=""
+# In console mode, I expect nothing in the Desktop directory
+# The question won't be asked. 
+SAVEDESK="yes"
+SAVEETC=""
+SAVENET=""
+# Question wont' be asked
+SAVEX=""
+CHOWNHOME=""
+NETFILES='/etc/network|/etc/ppp|/etc/chat|/etc/isdn|/etc/sysconfig/isdn|/etc/sysconfig/provider|/etc/resolv\.conf|/etc/hosts|/etc/hosts\.|/etc/inetd\.conf'
+XFILES='/etc/X11'
+
+echo $E1
+yesOrNo && SAVEHOME="yes"
+
+# Original default value=Off
+#echo $E5
+#yesOrNo && SAVEDESK="yes"
+
+echo $E2
+yesOrNo && SAVEETC="yes"; SAVENET="yes"
+
+#echo $E3
+#yesOrNo && SAVEETC="yes"; SAVEX="yes"
+
+echo $E4
+yesOrNo && SAVEETC="yes"
+
+[ -n "$SAVEHOME" -o -n "$SAVEDESK" ] && CHOWNHOME="chown -R $(ls -ld $HOME | awk '{print $3"."$4}') $HOME"
+
+# Find changes in (real) files of dir1 ... dir2
+findchanged(){
+if [ -d "$1" ]; then
+for i in `( cd "$1"; find . -type f | sed 's,^\./,,g' | grep -v ' ' )`; do
+cmp -s "$1/$i" "$2/$i" || echo "$1/$i"
+done
+elif [ -e "$1" ]; then
+cmp -s "$1" "$2" || echo "$1"
+fi
+}
+
+writescript(){
+cat >"$1" <<EOT
+#!/bin/sh
+[ "\`id -u\`" = "0" ] || { echo "You need root privileges to modify the system!" >&2 ; exit 1; }
+[ -d "\$1" ] && CONFIGS="\$1/configs.tbz"
+[ -f "\$CONFIGS" ] || CONFIGS="/cdrom/KNOPPIX/configs.tbz"
+[ -f "\$CONFIGS" ] || CONFIGS="/mnt/floppy/configs.tbz"
+if [ -f "\$CONFIGS" ]; then
+echo "Extracting config archive \$CONFIGS..."
+tar -jpPtf "\$CONFIGS" | while read i; do rm -f "\$i"; done
+tar -jpPxf "\$CONFIGS" ; $CHOWNHOME
+fi
+EOT
+return "$?"
+}
+
+FLOPPYDIR="$(ls -l /mnt/floppy | awk '{print $NF}')"
+
+umountfloppy(){
+#mount | grep -q "$FLOPPYDIR" && umount "$FLOPPYDIR" 2>/dev/null
+mount | grep -q "$FLOPPYDIR" && umount "$FLOPPYDIR" 2>/dev/null
+}
+
+
+PARTITIONS=""
+
+PARTITIONS[1]="/mnt/floppy"
+count=2
+
+# Directory selector
+for i in `awk '/^\/dev\/[hs]d[a-z].*\/mnt\/[hs]d[a-z]/{if(!/ntfs/){print $2}}' /etc/fstab`; do
+    PARTITIONS[$count]="$i"
+    count=$(($count+1))
+done
+
+echo $DIRECTORY_MSG2
+
+while [ -z "${PARTITIONS[$c]}" ]
+  do
+  i=1
+  while [ $i -lt $count ]
+  do
+    echo $DIRECTORY_MSG1 $i ${PARTITIONS[$i]}
+    i=$(($i+1))
+  done  
+  read c
+done
+
+DIRECTORY="${PARTITIONS[$c]}"
+
+echo $DIRECTORY
+
+[ -z "$DIRECTORY" -o ! -e "$DIRECTORY" ] && bailout
+
+case "$DIRECTORY" in *floppy*)
+DIRECTORY="$FLOPPYDIR"
+KNOPPIXSH="$DIRECTORY/knoppix.sh"
+while :; do
+umountfloppy
+echo $MESSAGE2
+yesOrNo || bailout
+
+echo "$FLOPPYDIR" | grep -q auto || mount /mnt/floppy
+[ "$?" = "0" ] && writescript "$KNOPPIXSH" && break
+done
+;;
+*)
+rm -f "$TMP.err"
+mount | grep -q "$DIRECTORY" || mount -r "$DIRECTORY" >"$TMP.err"
+[ "$?" != "0" ] && { echo "$ERROR `cat $TMP.err`"; bailout; }
+mount | grep -q "$DIRECTORY.*ntfs" && { echo "$ERROR NTFS"; bailout; }
+mount -o remount,rw "$DIRECTORY"
+KNOPPIXSH="$DIRECTORY/knoppix.sh"
+writescript "$KNOPPIXSH"
+esac
+
+rm -f "$TMP"
+touch "$TMP"
+
+[ -n "$SAVEHOME" ] && for i in $HOME/.??* $HOME/office $HOME/evolution; do findchanged "$i" /etc/skel/$(basename "$i"); done | egrep -v -e '(\.ICEauthority|ksycoka|\.xsession-errors|\.DCOP|\.MCOP|kio_http/cache|\.mozilla/.*/Cache/|favicons|office/user/work)' >"$TMP"
+[ -n "$SAVEDESK" ] && for i in $HOME/Desktop; do findchanged "$i" /etc/skel/$(basename "$i"); done >>"$TMP"
+
+IGNORE='/etc/ioctl.save|/etc/mtab'
+
+if [ -n "$SAVEETC" -a -d /KNOPPIX/etc ]; then
+findchanged /etc /KNOPPIX/etc >>"$TMP"
+[ -n "$SAVENET" ] || IGNORE="$IGNORE|$NETFILES"
+[ -n "$SAVEX" ] || IGNORE="$IGNORE|$XFILES"
+fi
+
+rm -f "$TMP.tmp"
+egrep -v -e '('"$IGNORE"')' "$TMP" > "$TMP.tmp"
+mv -f "$TMP.tmp" "$TMP"
+
+SCRIPTS=""
+STARTNET=""
+STARTPCMCIA=""
+STARTCUPS=""
+REINIT=""
+
+while read i; do
+case "$i" in
+/etc/network/interfaces) STARTNET="yes";;
+/etc/pcmcia/*) STARTPCMCIA="yes";;
+/etc/cups*) STARTCUPS="yes";;
+/etc/inittab) REINIT="yes";;
+esac
+done <"$TMP"
+
+[ -n "$STARTNET" ]    && { echo "killall pump 2>/dev/null && sleep 2 && killall -9 pump 2>/dev/null && sleep 2" >>"$KNOPPIXSH" ; SCRIPTS="$SCRIPTS ifupdown networking"; }
+[ -n "$STARTPCMCIA" ] && echo 'echo "(Re)starting PCMCIA services."; killall cardmgr 2>/dev/null && sleep 4; cardmgr && sleep 4' >>"$KNOPPIXSH"
+[ -n "$STARTCUPS" ]   && SCRIPTS="$SCRIPTS cupsys"
+
+if [ -n "$SCRIPTS" ]; then
+echo 'echo "Starting daemons..."' >>"$KNOPPIXSH"
+echo "for i in $SCRIPTS; do [ -x /etc/init.d/\$i ] && /etc/init.d/\$i start; done" >>"$KNOPPIXSH"
+fi
+
+[ -n "$REINIT" ] && echo 'echo "Reloading INIT." ; init q' >> "$KNOPPIXSH"
+
+rm -f "$TMP.err"
+BZIP2=-9 tar -T - -cpPjf "$DIRECTORY/configs.tbz" <"$TMP" 2>"$TMP.err"
+
+RC="$?"
+
+if [ "$DIRECTORY" = "$FLOPPYDIR" ]; then
+umountfloppy
+else
+umount "$DIRECTORY" 2>/dev/null
+fi
+
+# More language-dependent Messages
+case "$LANGUAGE" in
+de*|at*|ch*)
+SUCCESS="Die KNOPPIX-Konfiguration wurde erfolgreich gespeichert. Ihre Konfigurationsdateien werden beim nächsten Oralux-Bootvorgang in die Ramdisk restauriert."
+;;
+es*)
+SUCCESS="La creación de la configuración de KNOPPIX fue satisfactoria. Sus archivos de configuración se reinstalaran en el próximo arranque de Oralux."
+;;
+fr*)
+SUCCESS="L'archivage de la configuration KNOPPIX a réussi. Vos fichiers de configuration seront réinstallés dans le ramdisk au prochain boot d'Oralux."
+;;
+*)
+SUCCESS="Creation of the KNOPPIX configuration archive was successful. Your configuration files will be reinstalled to the ramdisk on next Oralux boot."
+;;
+esac
+
+touch "$TMP.done" ; wait ; rm -f "$TMP.done"
+
+[ "$RC" = "0" ] && echo "$SUCCESS" || echo "$ERROR `cat $TMP.err`"
+
+bailout

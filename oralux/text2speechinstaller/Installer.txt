@@ -1,0 +1,78 @@
+Oralux Installer
+----------------
+Gilles Casse (gcasse@helis.org) 7 April 2003 
+
+
+1. Introduction
+2. First use
+3. Following uses 
+
+1. Introduction
+---------------
+
+A typical user is a low sighted or blind person using e.g. the Windows
+OS with a screen reader. This is just an example. In fact, this is someone who
+would like to use emacspeak but who has no particular skill to install
+Linux, and all the concerned softwares.
+
+The following lines describe how Oralux will install the DECtalk software through the Fonix installer.
+
+2 First use
+-----------
+The user ownes e.g. a PC such as: OS is Windows; a hard disk with a FAT partition 
+
+a. The person buys online thanks to her screen reader the DECtalk software (today named linux_runtime_4.61_intel.tar.gz).
+
+b. She stores it on her hard disk under directory C:/dtk
+   (C: is a FAT partition).
+
+   Finally, we have :
+
+   C:/dtk/linux_runtime_4.61_intel.tar.gz
+
+c. She inserts the Oralux CD and reboots her PC.
+
+d. The PC boots on the CD which starts the Oralux installer.
+
+e. It checks if the usual DECtalk files (libtts.so,...) are present on her hard disk (under C:/dtk).
+
+d. Since there is only the linux_runtime tar.gz under C:/dtk, the Oralux installer follows this sequence:
+
+- 'Untars' the linux runtime (linux_runtime_4.61_intel.tar.gz)
+- Updates the BASE_DIR variable in files.sh
+  so that the DECtalk files are installed in the wished directory.
+  e.g.:
+  BASE_DIR="/ramdisk/user/local"
+- Plays a wav file (detailled in paragraph e.)
+- Starts the Fonix installer which prints "Please enter your serial number".
+
+e. The user hears: 
+
+   "Please enter your serial number".
+
+   (The talked sentence may come from an audio file (wav,...) included
+   in the Oralux CD).
+
+   and types the serial number which is checked by the Fonix installer
+ 
+f. The FONIX installer installs its distinct files. 
+   With a usual Linux distribution, the Fonix installer copies the files to the hard disk.
+g. Finally, the Oralux installer copies the files from the RAM to C:/dtk 
+   Because of the bootable distribution, the usual tree is in RAM.
+   E.g. DECtalk.conf is in RAM and libtts.so is in RAM too.
+   So that the DECtalk files aren't lost when the PC is turned off, the files are copied from RAM to the hard drive. 
+
+h. The user may enjoy the DECtalk software.
+
+3. Following uses
+-----------------
+For the following boots up, the sequence is lighter:
+
+a. The PC boots on the CD which starts the Oralux installer.
+
+b. It checks if the usual DECtalk files (libtts.so,...) are present on her hard disk (under C:/dtk).
+
+c. Since there are present, the Oralux installer copies the distinct files from C:/dtk to RAM (e.g. to /ramdisk/user/local, /etc)
+
+d. The user still may enjoy the DECtalk software.
+

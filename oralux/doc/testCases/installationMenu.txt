@@ -1,0 +1,68 @@
+* title: Default values of the Installation Menu
+creation: 2003 07 06
+checked by:
+required:
+** status: not passed
+description:
+- Reboot
+- When the installation menu will ask you, choose to jump the menu
+- Emacspeak is started with the default values:
+  sound level: 
+  keyboard: us 
+  sound driver: oss  
+  tts: flite
+
+* title: sound volume
+creation: 2003 07 06
+checked by:
+required:
+** status: not passed
+description:
+- Reboot
+- When the installation menu will ask you, choose to increase the
+volume (ENTER key)
+- Then, decrease the volume (SPACE key)
+- Finally choose the best available level.
+- Quit this menu (any other key)
+- Jump the other choices and start emacspeak
+
+* title: french keyboard
+creation: 2003 07 06
+checked by:
+required: french keyboard
+** status: not passed
+description:
+- Reboot
+- When the installation menu will ask you, choose the french keyboard
+- Jump the other choices and start emacspeak
+- Check that LANG=fr_FR@euro LANGUAGE=fr
+
+* title: other keyboards
+creation: 2003 07 06
+checked by:
+required:
+** status: not passed
+description:
+- Do the previous test for the following keyboards (displayed on the
+cheatcode page)
++ us
++ cs
++ da
++ de
++ es
++ nl
++ it
++ pl
++ ru
++ sk
+
+* title: alsa driver
+creation: 2003 07 06
+checked by:
+required: oss and alsa drivers compliant hardware
+** status: not passed
+description:
+- Reboot
+- When the installation menu will ask you, choose the alsa driver
+- Jump the other choices and start emacspeak
+

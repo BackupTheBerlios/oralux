@@ -1,0 +1,28 @@
+# see /usr/share/postfix/main.cf.dist for a commented, fuller
+# version of this file.
+
+# Do not change these directory settings - they are critical to Postfix
+# operation.
+command_directory = /usr/sbin
+daemon_directory = /usr/lib/postfix
+program_directory = /usr/lib/postfix
+setgid_group = postdrop
+
+# appending .domain is the MUA's job.
+append_dot_mydomain = no
+
+smtpd_banner = $myhostname ESMTP $mail_name (Debian/GNU)
+biff = no
+
+# Uncomment the next line to generate delayed mail warnings
+#delay_warning_time = 4h
+
+myhostname = Knoppix
+alias_maps = hash:/etc/aliases
+alias_database = hash:/etc/aliases
+mydestination = Knoppix, localhost.localdomain, , localhost
+relayhost = 
+mynetworks = 127.0.0.0/8
+mailbox_command = procmail -a "$EXTENSION"
+mailbox_size_limit = 0
+recipient_delimiter = +

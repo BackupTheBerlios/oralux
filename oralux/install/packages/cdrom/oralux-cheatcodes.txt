@@ -1,0 +1,157 @@
+                     CHEATCODES AND HINTS FOR Oralux 0.6 alpha
+==============================================================================
+                         (last update: 18 May 2004)
+
+These options (can be combined) work from the SYSLINUX bootprompt:
+
+knoppix tts=doubletalk
+or 
+knoppix tts=doubletak,ttyS0
+specify an external speech synthesizer on the first serial port (ttyS0)
+
+the tts expected values are:
+
+accent: Accent SA
+braillenspeak: Braille Lite, Braille 'n Speak, Type 'n Speak
+ciber: Ciber 232, Ciber 232 Plus
+dtk-exp: DECtalk Express
+dtk-mv: DECtalk Multivoice, DECtalk 3
+apollo: Dolphin Apollo
+doubletalk: DoubleTalk LT, LiteTalk
+doubletalkpc: DoubleTalk PC
+pchablado: PC Hablado notebook
+
+the possible serial ports are 
+ttyS0 for the first one, 
+ttyS1 for the second one 
+
+knoppix lang=cn|de|da|es|fr|it|nl   specify language/keyboard
+knoppix lang=pl|ru|sk|tr|tw|us      specify language/keyboard
+knoppix alsa (or alsa=es1938)       Use ALSA sound driver (at your own risk)
+knoppix desktop=fluxbox|icewm       Use specified WM instead of KDE (1)
+knoppix desktop=kde|larswm|twm      Use specified WM instead of KDE (2)
+knoppix desktop=wmaker|xfce         Use specified WM instead of KDE (3)
+knoppix screen=1280x1024            Use specified Screen resolution for X
+knoppix xvrefresh=60 (or vsync=60)  Use 60 Hz vertical refresh rate for X
+knoppix xhrefresh=80 (or hsync=80)  Use 80 kHz horizontal refresh rate for X
+knoppix xserver=XFree86|XF86_SVGA   Use specified X-Server
+knoppix xmodule=ati|fbdev|i810|mga  Use specified XFree4-Module (1)
+knoppix xmodule=nv|radeon|savage|s3 Use specified XFree4-Module (2)
+knoppix xmodule=radeon|svga|i810    Use specified XFree4-Module (3)
+knoppix 2                           Runlevel 2, Textmode only
+knoppix floppyconfig                Run "knoppix.sh" from a floppy
+knoppix myconf=/dev/sda1            Run "knoppix.sh" from a partition
+knoppix myconf=scan (or config=scan) Try to find "knoppix.sh" automatically
+knoppix home=/dev/sda1/knoppix.img  Mount loopback file as /home/knoppix
+knoppix home=scan                   Automatic search for knoppix homedir
+knoppix no{apic,agp,apm,audio,ddc}  Skip parts of HW-detection (1)
+knoppix no{firewire,isapnpbios}     Skip parts of HW-detection (2)
+knoppix no{pcmcia,scsi,swap,usb}    Skip parts of HW-detection (3)
+failsafe                            Boot with (almost) no HW-detection
+knoppix pci=irqmask=0x0e98          Try this, if PS/2 mouse doesn't work *)
+knoppix pci=bios                    Workaround for bad PCI controllers
+knoppix ide2=0x180 nopcmcia         Boot from PCMCIA-CD-Rom (some notebooks)
+knoppix mem=128M                    Specify Memory size in MByte
+knoppix dma                         Enable DMA for ALL IDE-Drives
+knoppix noeject                     Do NOT eject CD after halt
+knoppix noprompt                    Do NOT prompt to remove the CD
+knoppix vga=normal                  No-framebuffer mode, but X
+knoppix blind                       Start Braille-Terminal (no X)
+knoppix brltty=type,port,table      Parameters for Braille device
+knoppix wheelmouse                  Enable IMPS/2 protocol for wheelmice
+knoppix nowheelmouse                Force plain PS/2 protocol for PS/2-mouse
+fb1280x1024                         Use fixed framebuffer graphics (1)
+fb1024x768                          Use fixed framebuffer graphics (2)
+fb800x600                           Use fixed framebuffer graphics (3)
+knoppix keyboard=us xkeyboard=us    Use different keyboard (text/X)
+knoppix splash                      Boot with fancy background splashscreen
+knoppix toram                       Copy CD to RAM and run from there
+knoppix tohd=/dev/hda1              Copy CD to HD partition and run from there
+knoppix fromhd=/dev/hda1            Boot from previously copied CD-Image
+knoppix testcd                      Check CD data integrity and md5sums
+expert                              Interactive setup for experts
+
+Hint: Using the default DE-bootimage, SYSLINUX boots with german keyboard
+layout. The '=' letter is located at Shift-0 on this keyboard (just in
+case you want to change keyboard and language with lang=us).
+
+*) Try "knoppix pci=irqmask=0x0e98" if (you have a notebook and) your
+PS/2 mouse doesn't work. (Possibly caused by a BIOS-flaw on your board,
+BIOS updates can help.) Sometimes, switching to the text console with
+Control-Alt-F1 and back to the X-screen with Control-F5 solves the
+problem without rebooting, since the X server reinitializes the mouse
+driver during that procedure.
+
+If your KNOPPIX CD makes strange noises during boot, or you see
+frequent errors like "cloop: read error", or programs on your KDE
+desktop keep crashing randomly, then your CD image is probably defective
+or incomplete, or your CD-burner created a defective CD due to wrong
+writing speed or bad media. This is the most common error reported.
+Please boot with "knoppix testcd" to check if the CD is OK, and/or even
+better, verify the MD5 checksums that are present on the mirrors before
+writing the CD. In some cases, defective IDE controllers cause this
+error if you have DMA enabled. Also, please read the KNOPPIX-FAQ.
+
+In case of a failing hardware autodetection, try booting with any of
+the "no-" options as shown in the table above, like in
+   knoppix noagp noaudio noddc noapm noapic nodma nopcmcia noscsi nousb
+to skip some critical parts of the autodetection system.
+
+The "noswap" option is useful for a forensic analysis without touching
+existing swap partitions.
+
+Some Boards apparently don't pass the proper memory size to the 
+linux-kernel. It may cause the message "Panic: cannot mount root file 
+system" and the system hangs. Use "knoppix mem=128M" to solve that 
+problem if your system has 128MByte memory for example (caution:
+you MUST use a capital "M" here).
+
+The "expert" mode provides a very simple interface to loading additional
+Kernel modules from floppy disks (ext2 or vfat), plus interactive
+configuration of mouse/keyboard/soundcard/xserver. "expert" mode supports
+the same boot options as "knoppix".
+
+The "floppyconfig" or "(my)config=/dev/partition" options allow you to
+reconfigure the system after autoconfiguration by running a bourne
+shell script called "knoppix.sh" from the root directory on the given
+device (or floppy). There is a GUI to create such a configuration
+floppy disk calles "saveconfig" (also located in the KDE menu under
+"KNOPPIX", but experts also know how to do this by creating their own
+shellscripts. From Version 2.1 and up, a file called "knoppix.sh", if
+located in the toplevel KNOPPIX directory on CD, will also be executed
+at startup. This makes ist easier to create customized versions without
+having to change anything on the compressed filesystem KNOPPIX/KNOPPIX.
+
+SCSI-Emulation is active for all CD-Roms, so IDE CD-Writers should
+work with the installed versions of cdrecord and cdrdao (or the
+graphical frontends thereof, k3b for example).
+
+If your BIOS does not support el torito booting from CD, you can create
+a bootable floppy disk by issuing (on Linux)
+dd if=/cdrom/KNOPPIX/boot.img of=/dev/fd0 bs=18k
+or, in case of DOS, use the rawrite.exe program provided in the
+KNOPPIX directory on CD.
+
+If you wish to remaster the CD, please don't forget to specify
+	-b KNOPPIX/boot.img
+for the german version of the bootfloppy, or
+	-b KNOPPIX/boot-en.img
+for the english version, as option to mkisofs. Otherwise your CD
+won't be bootable. The directory KNOPPIX, containig the compressed
+filesystem file "KNOPPIX", must be located in the top level
+directory of the CD.
+
+Caution: X-Screensaver: Don't start xlock or any screensaver that
+requires a password. There are no default passwords on KNOPPIX,
+i.e. all accounts are LOCKED unless you explicitly set a password.
+See also README_Security.txt about this issue.
+If you accidentially hit the screensaver button in KDE,
+switch to one of the textconsoles by Control-Alt-F1 and kill
+the screensaver (or just set a password for the knoppix user).
+
+If you would like to edit your X-Server configuration manually
+(/etc/X11/XF86Config-4 for XFree86 V4.x), use "knoppix 2" to boot
+into runlevel 2 (textmode only) and, after changing the X
+configuration, start the X environment with "init 5". Note that
+you can always leave the graphical environment with "init 2", and
+restart it later with "init 5".

@@ -1,0 +1,83 @@
+#!/bin/bash
+
+function update_passwd
+{
+  update_status $"Changing user in Passwd/Shadow..."
+  [ -z "$USER_NAME" ] && USER_NAME="$DEFAULT_USER"
+  cp $TARGET_MNT_POINT/etc/passwd $TMPDIR/
+  cp $TARGET_MNT_POINT/etc/shadow $TMPDIR/
+  cp $TARGET_MNT_POINT/etc/group $TMPDIR/
+  # Change user in passwd
+  sed "s/$DEFAULT_USER/$USER_NAME/g; s,/home/$DEFAULT_USER,/home/$USER_NAME,g; s/$DEFAULT_NAME/$NAME_NAME/g" $TMPDIR/passwd > $TARGET_MNT_POINT/etc/passwd
+  
+  # Change home of root to /home/root in passwd
+  #  -> Not needed anymore ?
+  # Do not uncomment, this won't work as its stated here and is only for completeness
+  # in regard to the old installer.
+  #
+  # sed 's,/home/root,/root,g' /etc/passwd > $TR/etc/passwd
+
+  # Change user in shadow
+  sed "s/$DEFAULT_USER/$USER_NAME/g;" $TMPDIR/shadow > $TARGET_MNT_POINT/etc/shadow
+  
+  update_status $"Setting passwords ..."
+  # Change password of user/root
+  chroot $TARGET_MNT_POINT sh -c "echo \"root:$ROOTPASS_CRYPT\" | chpasswd -e"
+  chroot $TARGET_MNT_POINT sh -c "echo \"$USER_NAME:$USERPASS_CRYPT\" | chpasswd -e"
+
+  update_status $"Updating group ..."
+  # change user in /etc/group
+  sed "s/$DEFAULT_USER/$USER_NAME/g;" $TMPDIR/group > $TARGET_MNT_POINT/etc/group
+}
+
+function suknoppixmenus
+{
+  [ "$#" -lt "2" ] && return 1
+
+  supath=$1
+  suprog=$2
+  SUTMPDIR="$TMPDIR/suknxmenus"
+  mkdir -p $SUTMPDIR
+
+  cp -a $supath/* $SUTMPDIR
+  cd $SUTMPDIR
+  for i in $(find . -name "*.desktop")
+  do
+    sed 's/Exec=/Exec='$suprog' \-\- /g' $i > $supath/$i
+  done
+
+  # Cleanup
+  rm -rf $SUTMPDIR
+}
+
+#
+# Compatibility option for mepis installer
+#
+# Syntax: msetuser username 
+function msetuser_func
+{
+  ROOTPASS_CRYPT=$(htpasswd -nbd user root | awk -F: '{ print $2}')
+  USERPASS_CRYPT=$(htpasswd -nbd user demo | awk -F: '{ print $2}')
+  NAME_NAME="$DEFAULT_NAME"
+  USER_NAME="$1"
+  update_passwd
+
+  # Let Knoppix detect all other partitions
+  chroot "$TARGET_MNT_POINT" mount /proc
+  chroot "$TARGET_MNT_POINT" rebuildfstab -r
+  chroot "$TARGET_MNT_POINT" umount /proc
+  
+  # copy home directory
+  cp -a /home/knoppix $TR/home
+  mv $TARGET_MNT_POINT/home/knoppix $TARGET_MNT_POINT/home/$USER_NAME
+
+  # configure knoppix menus
+  TR=$TARGET_MNT_POINT
+  suknoppixmenus $TR/usr/share/applnk/Knoppix kdesu
+  suknoppixmenus $TR/usr/share/gnome/apps/Knoppix gksu 
+
+  # backup Knoppix specific Xsession file
+  mv $TR/etc/X11/Xsession.d/45xsession $TR/root/xsession.knx-hdinstall.backup
+  
+  true
+}

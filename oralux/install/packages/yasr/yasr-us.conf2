@@ -1,0 +1,16 @@
+[dict]
+"=quote
+*=star
+<=less than
+>=greater than
+@=at
+0x23=number
+0x5b=left bracket
+\=backslash
+]=right bracket
+_=underscore
+`=accent
+{=left brace
+|=bar
+}=right brace
+~=tilde

@@ -1,0 +1,50 @@
+#!/bin/bash
+
+[ -d /mnt/mepis ] || exit 1
+
+  TMPDIR="/tmp/knoppix-installer.$$-$RANDOM"
+  UMASK=$(umask)
+  umask 077
+  mkdir $TMPDIR # make a secure directory
+  [ $? -ne 0 ] && echo $"Fatal security error."
+  umask $UMASK
+
+  TARGET_MNT_POINT="/mnt/mepis" # TR1 in old installer
+  TARGET_MNT_NAME="mepis" # TR1 in old installer
+
+DEFAULT_USER="knoppix"
+DEFAULT_NAME="Knoppix User"
+DEFAULT_DIR="KNOPPIX"
+
+SYSTEM_TYPE="knoppix"
+
+SHAREPATH="/usr/share/knoppix-installer"
+
+sudo ln -sf /KNOPPIX /linux
+
+
+SEARCHPATH="$SHAREPATH:."
+BASH_MODULES="knoppix-utils setuser boot floppy"
+
+for i in $BASH_MODULES
+do
+  IFS=":"
+  for j in $SEARCHPATH
+  do
+    unset IFS
+    MPATH="$j/modules/$i.bm"
+    [ -r "$MPATH" ] && . "$MPATH"
+  done
+  unset IFS
+done
+
+function update_status
+{
+  echo "$@"
+}
+
+BASE=$(basename $0)
+case $BASE in
+  msetuser|mbfloppy|makelilo) ${BASE}_func "$@" ;;
+  makepart|msetcomp) echo "Not yet implemented." ;;
+esac

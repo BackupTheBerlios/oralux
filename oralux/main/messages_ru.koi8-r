@@ -1,0 +1,559 @@
+struct t_translation TheRussianMessages[]=
+{
+  {"American",
+   "Американский",
+  },
+
+  {"Belgian",
+   "Бельгийский",
+  },
+
+  {"British",
+   "Британский",
+  },
+
+  {"Bulgarian",
+   "Болгарский",
+  },
+
+  {"Czech",
+   "Чешский",
+  },
+
+  {"Danish",
+   "Датский",
+  },
+
+  {"Finnish",
+   "Финский",
+  },
+
+  {"French",
+   "Французский",
+  },
+
+  {"German",
+   "Немецкий",
+  },
+
+  {"Italian",
+   "Итальянский",
+  },
+
+  {"Polish",
+   "Польский",
+  },
+
+  {"Russian",
+   "Русский",
+  },
+
+  {"Slovaq",
+   "Словацкий",
+  },
+
+  {"Spanish",
+   "Испанский",
+  },
+
+  {"Swiss",
+   "Швейцарский",
+  },
+
+  {"Turkish",
+   "Турецкий",
+  },
+
+  {"Delete",
+   "Удалить",
+  },
+
+  {"Welcome To Oralux!",
+   "Добро пожаловать в Оралукс!",
+  },
+
+  {"Do you want to install the DECtalk software ?",
+   "Вы хотите установить DECtalk",
+  },
+
+  {"Please press the Return key if you agree, or any other key if you disagree",
+   "Пожалуйста нажмите клавишу Ввод если Вы согласны, или любую другую если не согласны",
+  },
+
+  {"Problem with the file PHP status",
+   "Проблема со статусом файла PHP",
+  },
+
+  {"The DECtalk package can't be found",
+   "Пакет DECtalk не найден",
+  },
+
+  {"The Makefile can't be found",
+   "Не найден Makefile",
+  },
+
+  {"The shared library is not built",
+   "Не собрана общая библиотека",
+  },
+
+  {"The Emacspeak variable is not defined",
+   "Переменная Emacspeak не определена",
+  },
+
+  {"The software-dtk directory is not found",
+   "Каталог software-dtk не найден",
+  },
+
+  {"The dtk directory is not found",
+   "Каталог dtk не найден",
+  },
+
+  {"Please enter your serial number, and press Return",
+   "пожалуйста введите серийный номер и нажмите Enter",
+  },
+
+  {"Sorry, your serial number is not correct",
+   "Извините, серийный номер не верный",
+  },
+
+  {"If you want to try again, press Return",
+   "Если хотите попробовать ещё раз, нажмите Enter",
+  },
+
+  {"If you want to stop this stage, press any other key",
+   "Если хотите прервать этот этап, нажмите любую клавишу",
+  },
+
+  {"Do you want this menu in English ?",
+   "Хотите читать это меню на английском?",
+  },
+
+  {"Do you want this menu in French ?",
+   "Хотите читать это меню на французском",
+  },
+
+  {"y",
+   "y",
+  },
+
+  {"left angle bracket",
+   "левая угловая скобка",
+  },
+
+  {"left curly bracket",
+   "левая фигурная скобка",
+  },
+
+  {"left parenthesis",
+   "левая скобка",
+  },
+
+  {"left square bracket",
+   "левая квадратная скобка",
+  },
+
+  {"vertical line",
+   "вертикальная черта",
+  },
+
+  {"space",
+   "пробел",
+  },
+
+  {"at",
+   "собака",
+  },
+
+  {"right curly bracket",
+   "правая фигурная скобка",
+  },
+
+  {"What kind of keyboard is used ?",
+   "Какой тип клавиатуры Вы используете",
+  },
+
+  {"Press Enter to increase the volume, or Space to decrease the volume, or any other key to accept it",
+   "Нажмите Enter для увеличения громкости, Пробел для уменьшения громкости, или любую другую клавишу для принятия",
+  },
+
+  {"Do you want to change the type of keyboard ?",
+   "Вы хотите изменить тип клавиатуры",
+  },
+
+  {"Your keyboard is supposed to be",
+   "Предположительно, Ваша клавиатура",
+  },
+
+  {"Do you want to update your preferences ?",
+   "Вы хотите обновить Ваши настройки?",
+  },
+
+  {"Do you want to eject the CD ROM ?",
+   "Вы хотите извлечь CD ROM?",
+  },
+
+  {"Once the CD is taken, out, press Return",
+   "Как только диск извлечен нажмите Enter",
+  },
+
+  {"Do you want this menu in German ?",
+   "Вы хотите видеть это меню на немецком?",
+  },
+
+  {"Do you want this menu in Spanish ?",
+   "Вы хотите видеть это меню на испанском?",
+  },
+
+  {"Do you want Emacspeak Festival M Brola ?",
+   "Вам нужен Emacspeak Festival M Brola ?",
+  },
+
+  {"Do you want Flite ?",
+   "Вам нужен Flite?",
+  },
+
+  {"Yes",
+   "Да",
+  },
+
+  {"No",
+   "Нет",
+  },
+
+  {"Alva",
+   "Alva",
+  },
+
+  {"BrailleLite",
+   "BrailleLite",
+  },
+
+  {"BrailleNote",
+   "BrailleNote",
+  },
+
+  {"CombiBraille",
+   "CombiBraille",
+  },
+
+  {"EcoBraille",
+   "EcoBraille",
+  },
+
+  {"EuroBraille",
+   "EuroBraille",
+  },
+
+  {"HandyTech",
+   "HandyTech",
+  },
+
+  {"Log Text",
+   "Log Text",
+  },
+
+  {"MultiBraille",
+   "MultiBraille",
+  },
+
+  {"MDV",
+   "MDV",
+  },
+
+  {"MiniBraille",
+   "MiniBraille",
+  },
+
+  {"Papen meier",
+   "Papen meier",
+  },
+
+  {"Telesensory Systems Inc.",
+   "Telesensory Systems Inc.",
+  },
+
+  {"Vario, R B T (emulation 1)",
+   "Vario, R B T (emulation 1)",
+  },
+
+  {"VideoBraille",
+   "VideoBraille",
+  },
+
+  {"Vario, R B T (emulation 2)",
+   "Vario, R B T (emulation 2)",
+  },
+
+  {"Voyager",
+   "Voyager",
+  },
+
+  {"VisioBraille",
+   "VisioBraille",
+  },
+
+  {"French c b i f s",
+   "Французский c b i f s",
+  },
+
+  {"American N A B C C",
+   "Американский N A B C C",
+  },
+
+  {"Norwegian and German",
+   "Норвежский и немецкий",
+  },
+
+  {"Norwegian",
+   "Норвежский",
+  },
+
+  {"Swedish",
+   "Шведский",
+  },
+
+  {"Swedish 2",
+   "Шведский 2",
+  },
+
+  {"Vietnamese",
+   "Вьетнамский",
+  },
+
+  {"Do you want to select a braille display ?",
+   "Вы хотите выбрать брайлевский дисплей?",
+  },
+
+  {"What kind of braille display do you have ?",
+   "Какой тип брайлевского дисплея Вы используете?",
+  },
+
+  {"First serial port",
+   "Первый последовательный порт",
+  },
+
+  {"Second serial port",
+   "Второй последовательный порт",
+  },
+
+  {"Which table do you want ?",
+   "Какую таблицу Вы выбираете ?",
+  },
+
+
+  {"Which is the port ?",
+   "Какой порт?",
+  },
+
+
+  {"Do you want to change the type of braille display ?",
+   "Вы хотите изменить тип брайлевского дисплея?",
+  },
+
+  {"Your braille display is supposed to be",
+   "Предположительно, Ваш брайлевский дисплей",
+  },
+
+  {"Do you want to change the table ?",
+   "Вы хотите изменить таблицу?",
+  },
+
+  {"The braille table is supposed to be",
+   "Предположительно, брайлевская таблица", 
+  },
+
+  {"Do you want to change the port ?",
+   "Вы хотите изменить порт?",
+  },
+
+  {"The communication port is supposed to be",
+   "Предположительно, коммуникационный порт",
+  },
+
+  {"Do you want to start your braille display ?",
+   "Вы хотите запустить Ваш брайлевский дисплей?",
+  },
+
+  {
+    "Accent S A",
+    "Accent S A",
+  },
+
+  {
+    "Braille Lite",
+    "Braille Lite",
+  },
+
+  {
+    "Braille 'n Speak",
+    "Braille 'n Speak",
+  },
+
+  {
+    "Ciber 232",
+    "Ciber 232",
+  },
+
+  {
+    "Ciber 232 Plus",
+    "Ciber 232 Plus",
+  },
+
+  {
+    "DECtalk Express",
+    "DECtalk Express",
+  },
+
+  {
+    "DECtalk Multivoice",
+    "DECtalk Multivoice",
+  },
+
+  {
+    "DECtalk 3",
+    "DECtalk 3",
+  },
+
+  {
+    "Dolphin Apollo",
+    "Dolphin Apollo",
+  },
+
+  {
+    "DoubleTalk LT",
+    "DoubleTalk LT",
+  },
+
+  {
+    "DoubleTalk PC",
+    "DoubleTalk PC",
+  },
+
+  {
+    "LiteTalk",
+    "LiteTalk",
+  },
+
+  {
+    "PC Hablado notebook",
+    "PC Hablado notebook",
+  },
+
+  {
+    "Type 'n Speak",
+    "Type 'n Speak",
+  },
+
+  {"Do you want to select an external voice synthesizer ?",
+   "Вы хотите выбрать внешний синтезатор речи?",
+  },
+
+  {"What kind of synthesizer do you have ?",
+   "Какой тип синтезатора Вы используете?",
+  },
+
+  {"Your external synthesizer is supposed to be",
+   "Предположительно, Ваш внешний синтезатор",
+  },
+
+  {"Do you want to change the type of external synthesizer ?",
+   "Вы хотите изменить тип внешнего синтезатора?",
+  },
+
+  {
+    "Emacspeak",
+    "Emacspeak",
+  },
+
+  {
+    "Yasr",
+    "Yasr",
+  },
+
+  {"Your desktop is supposed to be",
+   "Ваш рабочий стол предположительно",
+  },
+
+  {"Do you want to change the kind of desktop ?",
+   "Вы хотите изменить тип рабочего стола?",
+  },
+
+  {"Which desktop do you want ?",
+   "Какой рабочий стол Вы выбираете ?"
+  },
+
+  {"Do you want ParleMax ?",
+   "Вы выбираете ParleMax?",
+  },
+
+  {"Do you want to reboot your PC?",
+   "Вы хотите перезагрузить свой компьютер?",
+  },
+
+  {"Do you want to shutdown your PC?",
+   "Вы хотите выключить свой компьютер?",
+  },
+
+  {"Do you want MultiSpeech (English and Russian) ?",
+   "Вы хотите Мультиспич, Русский и Английский языки?",
+  },
+
+  {"Do you really want to stop the Braille driver ?",
+   "Вы действительно хотите остановить брайлевский драйвер?",
+  },
+
+  {"Do you want this menu in Russian ?",
+   "Хотите читать это меню на Русском?",
+  },
+
+  {"0.6",
+   "0.6",
+  },
+
+  // 7B
+  {"Do you want to change the keyboard features?",
+   NULL,
+  },
+
+  // 7C
+  {"You can hold three keys at a time; for example Control Alt Del",
+   NULL,
+  },
+
+  // 7D
+  {"You prefer to hold one key at a time",
+   NULL,
+  },
+
+  // 7E
+  {"Automatically repeat the pressed key",
+   NULL,
+  },
+
+  // 7F
+  {"Do not automatically repeat the pressed key",
+   NULL,
+  },
+
+  // 80
+  {"Do you want to set up your internet connection",
+   NULL,
+  },
+
+  // 81
+  {"Configure an external serial modem",
+   NULL,
+  },
+
+  // 82
+  {"Install an ADSL USB Modem",
+   NULL,
+  },
+
+  // 83
+  {"Set up mail",
+   NULL,
+  },
+
+
+};

@@ -1,0 +1,66 @@
+Ce fichier a été mis a jour pour Oralux 0.6 alpha.
+
+YASR est un lecteur d'écran léger et portable. Il est encore en cours de développement.
+
+Il y a deux jeux de touches, l'un pour le mode revue qui sert à relire l'écran, et l'autre pour le mode standard.
+Lorsque YASR se lance, vous vous trouverez dans le mode standard.
+
+Pour passer du mode standard au mode revue (et vice versa), vous appuierez sur ctrl-alt-r . 
+Cet a dire maintenez appuyé les touches ALT et Control de gauche, tout en appuyant sur r.  
+
+Les touches pour le mode standard sont aussi valables dans le mode revue.
+
+Voici la liste de quelques commandes définies par défaut.
+[N] signifie qu'un nombre peut précéder la commande.
+
+-- Mode revue--
+
+Barre d'espace: lire la position du curseur du mode revue
+^: se déplacer au premier caractère de la ligne et lire le mot.
+$: se déplacer au dernier caractère de la ligne et lire le mot.
+[N]b: lire le caractère précédant ou bien se déplacer de N caractères vers la gauche
+[N]c: lire le caractère courant ou bien le caractère N.
+[N]d: lire le caractère suivant ou bien se déplacer de N caractères vers la droite
+e: Lire du curseur jusqu'en bas de l'écran.
+f: recherche de texte sur l'écran.
+<: recherche a partir de la position du curseur vers le haut de l'écran en utilisant la chaîne précédemment saisie.
+>: recherche a partir de la position du curseur vers le bas de l'écran en utilisant la chaîne précédemment saisie.
+[N]k: monter d'une ligne et la lire (comme flèche en haut).
+[N]l: lire la ligne courante, ou bien sauter en ligne N et la lire.
+[N]m: descendre d'une ligne et la lire (comme flèche en bas).
+n: envoie direct à l'application
+t: lire du haut de l'écran jusqu'au curseur.
+w: lire l'écran en entier.
+z: se déplacer au début du mot précédant et le lire.
+x: se déplacer au début du mot suivant et le lire.
+[N]flèche vers le haut : se déplacer a la ligne précédante et la lire.
+[N]flèche vers le bas : se déplacer a la ligne suivante et la lire.
+[N]flèche vers la gauche : se déplacer au caractère précédant et le lire.
+[N]flèche vers la droite : se déplacer au caractère suivant et le lire.
+(: aller au paragraphe précédant.
+): aller au paragraphe suivant.
+ctrl-alt-i: réinitialiser la synthèse.
+`: lire la valeur ASCII du caractère courant.
+
+** mode standard ** (ces touches fonctionnent aussi en mode revue)
+ctrl-alt-b: lire le caractère précédant
+ctrl-alt-c: lire le caractère
+ctrl-alt-d: lire le mot
+ctrl-alt-e: lire du curseur jusqu'en bas de l'écran.
+ctrl-alt-k: lire la ligne précédente.
+ctrl-alt-l: lire la ligne.
+ctrl-alt-r: changer de mode
+ctrl-alt-t: lire du haut de l'écran jusqu'au curseur.
+ctrl-alt-w: lire tout l'écran.
+ctrl-alt-x: silence. Appuyer par exemple a nouveau sur ctrl-alt-x pour redémarrer la voix..
+
+alt-enter: désactiver yasr. Yasr est silencieux et ignore toute tocuhe appuyée.
+Appuyer à nouveau sur alt-enter pour le réactiver.
+
+Remarque: cette touche est appelée dans la section [options] : "DisableKey"
+
+Toute suggestion, patches, etc sont les bienvenues par l'auteur de Yasr:
+
+   -Michael P. Gorse <mgorse@users.sourceforge.net>
+
+

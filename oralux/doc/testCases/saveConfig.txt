@@ -1,0 +1,21 @@
+title: Save Config
+creation: 2003 07 06
+checked by:
+required: french keyboard, alsa driver compliant hardware, DECtalk software.
+status; not passed
+description:
+* Reboot
+* When the first menu will ask you, choose a french keyboard
+* Choose to install the alsa driver
+* Choose the DECtalk software in english
+* Under emacspeak, change the speech rate to 123
+* Configure your internet connection.
+* Select the sound volume to 71
+* Reboot (no cheat code might be typed)
+* Jump the menu
+* Check that the french keyboard is installed
+* Check that the alsa driver is installed
+* Check that the english DECtalk TTS is operational
+* Check that the emacspeak speech level is 123
+* Check your internet connection.
+* Check the aumix volume level is 71

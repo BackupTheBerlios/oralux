@@ -1,0 +1,76 @@
+# ----------------------------------------------------------------------------
+# README
+# $Id: README,v 1.1 2004/09/27 20:30:30 gcasse Exp $
+# $Author: gcasse $
+# Description: Info about the TTS installer.
+# $Date: 2004/09/27 20:30:30 $ |
+# $Revision: 1.1 $ |
+# Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+# ----------------------------------------------------------------------------
+####
+
+I Introduction
+II Scenario
+III Sources
+
+I Introduction
+I.1 Free TTS
+In the Oralux CDrom is embedded a free TTS software. In the first Oralux release, flite is driven by eflite so that Oralux may speak english.
+Many thanks to their contributors. 
+Hoping that in the future, the french language will be provided too :)
+
+I.2 Commercial TTS
+I contacted a few companies selling multi languages TTS, especially english and french languages.
+This is not for profit, we do not receive any money for that! 
+We just need to work with french texts. 
+
+With this approach, Oralux let people choose: either free or commercial TTS or both!
+
+The DECtalk software from Fonix was already compliant with emacspeak. 
+This is the only company that I found, able to sell a multi language and low cost run time package for Linux.
+So, thanks to the Fonix team.
+ 
+Besides it, if you know other synthesis, well you are welcome to inform us!
+
+I.3 Installing a commercial TTS
+So, Oralux is now able to install the DECtalk software package that you bought from the Fonix website www.fonix.com and that you stored on your hard disk.
+If you stored DECtalk on a partition which is not a NTFS partition, your serial number will be asked just once. 
+Because we are able to copy the files uncompressed by the Fonix installer on your partition for the future uses.
+If DECtalk is stored on a NTFS partition, well as we do not know yet writing on it, the serial number will be asked each time you boot on the CD. 
+
+II Scenario
+The scenario is described in the file named Installer.txt
+
+III Sources
+List of the php files in this directory 
+
+* TextToSpeechInstaller.php
+Installing the TextToSpeech. This is the entry point.
+
+* dtk-soft-Installer.php
+Installing the DECtalk software. This file concerns the class DECtalkSoftwareInstaller.
+This class is managed by the file TextToSpeechInstaller.php
+
+* Constants.php
+A few constants are defined.
+
+* Files.php
+A few tools to manage files or directories.
+
+* GenericTextToSpeech.php
+Using the TextToSpeech embedded with the distribution.
+

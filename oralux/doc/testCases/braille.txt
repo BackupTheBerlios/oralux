@@ -1,0 +1,9 @@
+title: Restoring the braille configuration
+creation: 2004 01 27
+checked by:
+status: not passed
+description:
+* In the introductory menu, select a braille display 
+* Save the preferences
+* Reboot the system
+* Check that the braille display is restarted

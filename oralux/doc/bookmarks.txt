@@ -1,0 +1,2 @@
+// french
+http://fr.tldp.org/HOWTO/lecture//DOS-Win-to-Linux-HOWTO.html

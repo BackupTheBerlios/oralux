@@ -1,0 +1,153 @@
+How to add new softwares to Oralux
+
+G.Casse 10 April 2004
+
+In the following file, we will describe how a new software can be added to Oralux. We will call this new software: MyNewSoft
+
+This process can be as easy as adding one or two lines to the script: install/package/misc.sh .
+For example:
+apt-get install NewScript
+
+However, sometimes, it is better to create a whole new script, say myNewSoft.sh, to install the new software. 
+Thare are two main reasons:
+- the installation is complicated; and this will clarify it to place it in a separate file.
+- Using a separate file for installing MyNewSoft, there will be at the installation time, the question "do you want to install MyNewSoft". This is particular useful when we are debugging the installation stage. 
+
+Here are the four stages to create and install the new script myNewSoft.sh:
+
+1. Precisely list every command line which must be typed for installing the software.
+2. Write a shell script which includes these commands.
+3. Include this script to the Oralux scripts.
+4. How to call this new script
+
+* 1. Precisely list every command line which must be typed for installing the software.
+
+In a shell terminal, type the commands for installing the software.
+Precisely write these commands in a file.
+
+* 2 Write a shell script which includes these commands.
+
+Please, jump to stage 3, if you already wrote shell scripts. 
+
+- The first line of a shell script is e.g. : 
+
+#! /bin/sh
+
+it points out that the commands interpreter /bin/sh must be run to execute the script.
+
+- Commentaries starts with # and are in English.
+- The file is executable: chmod u+x MyFile.sh 
+
+Check that this script can install MyNewSoft in your HardDisk installed distro.
+
+* 3. Include this script to the Oralux scripts.
+
+You may want to find the template named skeleton.sh (in directory: install/packages)
+
+You will rename it in myNewSoft.sh . Please note, that we avoid the underscore character in the Oralux names: using a voice synthesizer, "myNewSoft" sounds better than "my undescore New undescore soft"!
+
+A few header fields must be filled. Search please the keyword INPUT to more easily find them.
+
+The function Copy2Oralux() will be called to install MyNewSoft in the CD tree.
+Thus, Copy2Oralux installs the software in the directory:
+oralux/factory/build
+where the CD tree is.
+We will find under the build directory, the bin, boot, dev, etc, usr,... directories.
+
+To avoid to type the whole path, the build directory is given by the $BUILD variable.
+These variables are defined in the file named install/oralux.conf .
+
+If the script's author think there is an interest to do it, his script can also install the software in the current distro. 
+For example, to be able to quickly install MyNewSoft in a recent HardDisk installed Knoppix distro. 
+The only work is to copy the script written in Stage 2, in the function named: 
+InstallPackage()
+
+So, in summary, your script has two functions: 
+InstallPackage for eventually installing MyNewSoft in Knoppix.
+and function Copy2Oralux which installs MyNewSoft for the future Oralux CD.
+
+Here are four examples concerning Copy2Oralux.
+
+** Example 1: how to copy a file
+This is the easiest operation: copying a file to the tree under the build directory.
+For example, to copy a documentation file to the future CD directory /usr/share/oralux/doc, we just add to Copy2Oralux:
+  
+cp myFile.txt $BUILD/usr/share/oralux/doc
+
+** Example 2: apt-get
+To install a software using apt-get, we call chroot which changes the root directory.
+Here, instead of the / directory, we choose $BUILD as the new root directory.
+Here is an example to install a Debian package named myNewSoft:
+
+chroot $BUILD apt-get install myNewSoft
+
+** Example 3: apt-get and a few more commands
+If apt get alone is not enough and others commands must follow, we start a bash with a list of commands.
+For example, for cdtool, we call apt-get and then a symbolic link is required:
+
+chroot $BUILD bash -c "apt-get install cdtool; cd /usr/bin; ln -s ./cdtool cdstart"
+
+** Example 4: emacspeak
+Finally, a little example, to install emacspeak: 
+
+the tarball (tar.gz file) is uncompressed
+then the environment variables are updated in /etc/profile.
+We have added a few comments just to clarify the following example.
+
+    # Warning, instead of /tmp please use /var/tmp :
+    cd $BUILD/var/tmp
+
+    # Uncompressing the emacspeak archive, stored in directory $ARCH
+    tar -zxvf $ARCH/emacspeak-19.tar.bz2
+
+    # we change the root directory, and we compile and install emacspeak:
+    chroot $BUILD bash -c "cd /var/tmp/emacspeak*; make config; make; make install"
+
+    # we update an environment variable in  /etc/profile
+    echo "export EMACSPEAK_DIR=/usr/share/emacs/site-lisp/emacspeak" >> $BUILD/etc/profile
+
+    # Once the binary is built and installed, you may want to remove the sources to preserve the CD space:
+    cd $BUILD/var/tmp
+    rm -rf emacspeak*
+
+** Example 5: using the web from chroot
+
+If we have to download a file after a chroot, we copy the /etc/resolv.conf file under build:
+
+    cp /etc/resolv.conf $BUILD/etc
+    chroot $BUILD wget http://myURL
+
+* 4. How to call this new script
+
+The new script must be called by install/mkmyknoppix.sh
+This is the function named add_soft which must call the new script.
+
+add_soft simply calls the relevant scripts as eflite.sh, emacspeak.sh, etc... 
+
+Before actually running a particular script, add_soft asks if it must be called. To ask a question is useful, because sometimes the first installation scripts work correctly but, say, the fourth one crashes. So we can start again mkmyknoppix, and because of the questions, just run the fourth one script.
+
+Here is an example of the current add_soft:
+
+add_soft() {
+    cd $INSTALL_PACKAGES
+    next_script general.sh "General"
+    next_script tcl.sh "Tcl"
+    next_script flite.sh "flite"
+    next_script eflite.sh "eflite"
+    next_script emacspeak.sh "emacspeak"
+    next_script emacspeak-ss.sh "emacspeak-ss"
+    next_script php4.sh "php4"
+    next_script misc.sh "misc"
+    next_script efm.sh "efm"
+    next_script lliaphonParlemax.sh "lliaphonParlemax"
+    next_script kiebitz.sh "kiebitz"
+
+# The following script must be the last one
+    next_script end.sh "end"
+    cd ..
+}
+
+* Conclusion
+
+We described in this file how to create a script: first in typing the command in a shell terminal, and finally in writing a new file from the template, skeleton.sh. 
+We describe how chroot can be used to install the new software in the build directory. 

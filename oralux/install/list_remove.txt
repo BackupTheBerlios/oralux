@@ -1,0 +1,141 @@
+#Games
+   falconseye-data
+   rocks-n-diamonds
+   amor
+   nethack-x11
+   gnome-games-locale
+   xboard
+   gnocatan-client
+   imaze
+   kmahjongg
+   gnome-gnibbles
+   freeciv-gtk
+   ktuberling
+   gnocatan-help
+   ksirtet
+   gnome-gnobots2
+   jumpnbump
+   ksnake
+   xgalaga
+   lskat
+   katomic
+   kshisen
+   konquest
+   chromium
+   ktux
+   moon-buggy
+   kmoon
+   ksame
+   gnuchess
+   ktron
+   frozen-bubblekjumpingcube
+   fortune-mod
+   kodo
+   gnocatan-ai
+   gnocatan-server-console
+   gnocatan-server-data
+   nethack
+   gnome-games-locale
+#   821
+   fortunes
+   searchandrescue
+   xbill
+   kspaceduel
+   libkdegames
+   tipptrainer-data-dexconq
+   gcompris
+   gnome-chess
+   tuxracer-data
+   abuse-frabs
+   gnome-gnotski
+   frotz
+   kblackbox
+   gnome-games
+   gnome-gtali
+   gnome-iagno
+   gnome-stones
+   gnocatan-server-gtk
+   lxdoom-x11
+   maelstrom
+   kabalone
+   gnome-gnotravex
+   fortunes-min
+   chromium-data
+   kdegames
+   pingus-data
+   task-kde-games
+   stax
+   gnome-card-games
+   xtris
+   xtux
+   kjezz
+   lxdoom
+
+#Non -free
+#   x3270
+   xanim 
+##   festlex-oald
+   netscape-java-477
+#   j2re1.3
+#   3270-common
+   tgif
+   giflib-bin
+   frotz 
+   xfractint
+   giflib3g 
+   communicator-smotif-477
+   netscape-base-477
+   maelstrom communicator-base-477
+   gimp1.2-nonfree
+#   lha
+#   unarj
+   xsnow
+#Misc  
+#   tetex-base
+#   tetex-extra
+   lyx
+   acroread
+   qcad
+   rocks-n-diamonds
+   kde-i18n-da
+   kde-i18n-it
+   kde-i18n-de
+   kde-i18n-fr
+   kde-i18n-ru
+   kde-i18n-nl
+   kde-i18n-ja
+   kde-i18n-es
+   kde-i18n-cs
+   kde-i18n-pl
+   kde-i18n-tr
+#   xfonts-intl-chinese
+   kword
+   kpresenter
+   abiword-gtk
+   karbon
+   kchart
+   kformula
+   kivio
+   koffice-libs
+   kontour
+   koshell
+   kspread
+kdebase-data 
+kdelibs4 
+kdelibs4-dev 
+kdelibs-data 
+kdoc 
+libgimp1.2 
+libopenh323-1.9.10 
+libqt3 
+libqt3-dev 
+libqt3-mt 
+mozilla-browser 
+openoffice-de-en 
+#selflinux
+#trans-de-en 
+ttf-openoffice 
+koffice-i18n-de
+k3b-i18n
+libncurses5-dev
+

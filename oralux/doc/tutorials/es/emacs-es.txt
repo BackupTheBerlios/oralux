@@ -1,0 +1,167 @@
+Firmas: Miguel Paolino,
+
+Mis primeros pasos en GNU/Emacs.
+
+Por Sylvie Xhaard
+
+Para usar con Oralux Linux
+
+"No es obvio, aunque no insuperable".
+
+1 Lo básico de escribir comandos
+
+2 Abrir o crear un archivo
+
+3 Guardar archivos
+
+4 Escribiendo en Emacs
+
+4.1 Moverse a través del documento
+
+5 Navegar por los buffers abiertos
+
+6 Usando el editor de directorio
+
+7 Usar la línea de comandos
+
+8 Salir
+
+Cuando Emacspeak arranca, éste automáticamente abre un buffer de ayuda sobre el uso de Emacs y Emacs Speak. Guarde sus preferencias y almacene sus documentos de la manera descripta en la FAQ. Vea http://www.oralux.org/faq.php#savepref 
+
+----
+1 Lo básico de escribir comandos
+----
+
+Un ejemplo de un atajo de teclado es C-x, esto se obtiene presionando simultáneamente Ctrl y x.
+
+ejemplo 1: el primer comando que encontrarás en este documento es C-x C-f : presiona simultáneamente la tecla Ctrl y la tecla x luego presione simultáneamente la tecla Ctrl y la tecla f
+
+ejemplo 2: usted también encontrará comandos del tipo C-x b para hacer esto presione simultáneamente la tecla Ctrl y x luego presione solo la tecla b.
+
+En Emacs también existe una tecla Meta. Referenciada como M- ésta puede ser usada de dos maneras distintas.
+
+Esc x ésto es, presionar la tecla Esc y luego la tecla x.
+
+O Alt-x Ésto es, sostener la tecla Alt presionada mientras simultáneamente se presiona la tecla x.
+
+Es tu decisición elegir que método usar.
+En este documento se utilizará el metodo de presionar la tecla Esc y luego presionar cualquier tecla.
+
+
+----
+2 Abrir o crear un archivo (Simple y efectivamente)
+----
+
+Para abrir un archivo existente o un nuevo archivo use el atajo de teclado.
+C-x C-f
+
+Luego escriba el camino completo y el nombre del archivo a ser abierto.
+ejemplo: /home/knoppix/test
+
+Si el archivo existe, será abierto. Si no existe, será creado.
+
+----
+3 Guardar archivos
+----
+
+C-x C-s guarda tu archivo
+
+Emacs es [sympathetic], salva tu trabajo regularmente.
+
+Cada vez que abres o creas un archivo, esto abre un nuevo buffer dentro de Emacs. Si te olvidas de guardar uno de tus archivos abiertos, emacs te preguntará si deseas guardar las modificaciones cuando estés saliendo de Emacs.
+
+----
+4 Escribiendo en Emacs
+----
+
+Cuando escribes en un buffer de Emacs nuevas líneas serán creadas mientras escribes. Esto es conocido como ajuste de línea. Si desea crear una nueva línea presione la tecla de retorno de carro.
+
+----
+4.1 Moverse en un documento
+----
+
+Esc b mueve el cursor a la palabra precedente y emacspeak la pronuncia.
+
+Esc f mueve el cursor a la siguiente palabra y emacspeak la pronuncia.
+
+C- a mueve el cursor al comienzo de la línea y Emacs lee la línea.
+
+Esc a mueve el cursor al comienzo de la sentencia y emacspeak la pronuncia.
+
+C- e mueve el cursor al final de la línea y Emacs lee la línea.
+
+Esc e mueve el cursor al final de la sentencia y emacspeak la pronuncia.
+
+Esca [ mueve un párrafo atrás.
+
+Esc ] mueve un párrafo adelante.
+
+C- x [ mueve atrás una página.
+
+C- x ] mueve adelante una página.
+
+Esc < Mueve hacia el comienzo del buffer.
+
+Esc > Mueve hacia el final del buffer.
+
+----
+ 5 Navegar a través de buffers abiertos C-x b
+----
+
+Has abierto o creado varios archivos y quieres ir de uno hacia otro. No hay problema. Tipea C-x b
+
+Por defecto, si precionas la tecla Enter, vuelves al último buffer abierto.
+
+Si deseas abrir otro buffer, tipea el nombre, o simplemente la primera letra y presiona la tecla de tabulación (el nombre de tu buffer aparece automáticamente).
+
+Cada buffer está asociado con un proceso. Para cerrar un buffer abierto, debes matar al proceso. C-x k, mata el buffer activo.
+
+----
+6 Usando el editor de directorio (Modo directorio) C-x d
+----
+Escriba el camino completo del directorio a ser explorado y presiona enter. Un nuevo buffer será abierto. Por defecto, el cursor se ubica en la primer letra del primer archivo o directorio. Te puedes mover en el directorio con la teclas Arriba y Abajo.
+
+Si el cursor se encuentra sobre un archivo, la tecla Enter abre el archivo.
+
+Si el cursor se encuentra sobre un directorio, la tecla Enter abre el directorio.
+
+Puedes ir a directorio superior seleccionando
+
+..
+(la segunda linea del listado) y presionando enter.
+
+El punto en la primer línea hace referencia al directorio actual.
+
+----
+7 Usando la línea de comandos (shell) M-x shell
+----
+
+El comando para abrir un buffer de shell es M-x shell (precaución presione la tecla Escape y luego x y escribe shell)
+
+Algunos comandos útiles:
+
+who am i: le dice el nombre de usuario con el cual esta logueado
+
+pwd: imprime el directorio actual de trabajo
+
+cd: Cambia de directorio
+
+ejemplos:
+cd .. sube al directorio superior (sube un directorio)
+cd / cambia al directorio raíz del sistema
+cd  cambia a tu directorio home (/home/knoppix)
+cd /mnt/floppy va al directorio del disco floppy (disquete)
+
+ls : lista archivos o directorios (del directorio actual)
+
+mkdir: crea un directorio
+
+cp : copia archivos
+
+ejemplo: cp /home/knoppix/emacs.txt /mnt/floppy (copia el archivo emacs.txt al directorio del disco floppy)
+
+----
+8 Salir de Emacs
+----
+
+C-x C-c

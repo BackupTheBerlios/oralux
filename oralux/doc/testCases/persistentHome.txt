@@ -1,0 +1,48 @@
+title: Persistent Home on a hard disk
+creation: 2003 07 06
+checked by:
+status; not passed
+description:
+* Create a new file and saves it under your account
+* Compute the md5sum of this file and save it under your account too  
+* Choose under emacspeak to create a persistent home on a hard disk
+partition
+* Reboot (no cheatcode might be required)
+* Check that your home still includes the two files
+* Compute the md5sum.
+
+title: Removing a persistent home on a hard disk
+creation: 2003 07 06
+checked by:
+status; not passed
+description:
+* Choose under emacspeak to remove the persistent home
+* Reboot (no cheatcode might be required)
+* The two files are lost.
+
+title:  Crypted persistent home on a usb key
+creation: 2003 07 06
+checked by:
+status; not passed
+description:
+* Choose under emacspeak to create a crypted persistent home on the
+plugged usb key
+* Create a new file and saves it under your account
+* Compute the md5sum of this file and save it under your account too  
+* Reboot (no cheatcode might be required)
+* Enter the very long password
+* Check that your home still includes the two files
+* Compute the md5sum.
+
+
+title: Persistent Home on a zip drive
+creation: 2003 07 06
+checked by:
+status; not passed
+description:
+* Create a new file and saves it under your account
+* Compute the md5sum of this file and save it under your account too  
+* Choose under emacspeak to create a persistent home on a ZIP drive
+* Reboot
+* Check that your home still includes the two files
+* Compute the md5sum.

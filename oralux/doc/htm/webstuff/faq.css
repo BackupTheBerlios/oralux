@@ -1,0 +1,41 @@
+div#main {
+ clear:both;
+ float:left;
+ width: 30%;
+ margin:0;
+ margin-top:1em;
+ border-right:solid 2px #fdffba;
+}
+
+div#answers {
+ float: none;
+ margin: 0 0 0 32%;
+ margin-top:1em;
+ text-align:left;
+}
+
+h2 {
+ margin-bottom:0.2em;
+}
+
+
+div#answers h2 {
+/*
+ border-bottom:2px dashed #f90;
+*/
+}
+
+div#main h2 {
+ border-bottom:2px dotted #f90;
+}
+
+div#main ul, div#main ol {
+ margin:0;
+ padding-left:1.5em;
+}
+
+div#main li{
+/* list-style-type:circle;*/
+ list-style-position:outside;
+ margin-bottom:0.5em;
+}

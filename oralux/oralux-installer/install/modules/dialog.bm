@@ -1,0 +1,228 @@
+#!/bin/bash
+#
+# Abstraction Layer Functions needed for (X)dialog
+#
+
+# setup_dialog program_name
+function setup_dialog()
+{
+  # Set up dialog
+  XDIALOG_HIGH_DIALOG_COMPAT=1
+  export XDIALOG_HIGH_DIALOG_COMPAT
+  export DIALOG_ESC=1
+
+  TMPDIR="/tmp/$1.$$-$RANDOM"
+  UMASK=$(umask)
+  umask 077
+  mkdir $TMPDIR # make a secure directory
+  [ $? -ne 0 ] && echo $"Fatal security error."
+  umask $UMASK
+
+  TMP="$TMPDIR/dialog"
+
+  DIALOG="dialog"
+  [ -n "$DISPLAY" ] && [ -x /usr/bin/Xdialog ] && DIALOG="Xdialog"
+
+  [ -f /etc/sysconfig/i18n ] && . /etc/sysconfig/i18n
+}
+
+function error_code
+{
+  return $1
+}
+
+# Backtitle, Title, Help-Text, Wizard ?, ...
+function dialog_with_help
+{
+  RC=2
+  DIA_BT=$1
+  shift
+  DIA_T=$1
+  shift
+  DIA_HELP=$1
+  shift
+  DIA_WIZARD=$1
+  shift
+
+  DIA_HEIGHT_HELP=10
+  DIA_WIDTH=60
+
+  while [ $RC -ne "0" ];
+  do
+    if [ "$DIALOG" = "Xdialog" ]; 
+    then
+      if [ "$DIA_WIZARD" = "yes" ]; 
+      then
+        $DIALOG --cr-wrap --backtitle "$DIA_BT" --title "$DIA_T" --wizard --cancel-label $"Quit" --help "$DIA_HELP" "$@" 2>$TMP
+      else
+        $DIALOG --cr-wrap --backtitle "$DIA_BT" --title "$DIA_T" --cancel-label $"Quit" --help "$DIA_HELP" "$@" 2>$TMP
+      fi
+    else
+      if [ "$DIA_WIZARD" = "yes" ]; 
+      then
+	#$DIALOG --backtitle "$DIA_BT" --title "$DIA_T" --extra-button --cancel-label $"Quit" --ok-label $"Previous" --extra-label $"Next" --help-button "$@" 2>$TMP
+	$DIALOG --backtitle "$DIA_BT" --title "$DIA_T" --extra-button --cancel-label $"Previous" --ok-label $"Next" --extra-label $"Quit" --help-button --help-label $"Help" "$@" 2>$TMP
+	RC=$?
+	if [ "$RC" -eq "1" ];
+	then
+	  RC=3;
+	elif [ "$RC" -eq "3" ]; 
+	then
+	  RC=1;  
+	fi
+	error_code $RC
+      else
+        $DIALOG --backtitle "$DIA_BT" --title "$DIA_T" --cancel-label $"Quit" --help-button "$@" 2>$TMP
+      fi
+    fi
+    RC=$?
+    [ "$RC" -eq "1" ] && exit_proc $RC
+    [ "$RC" -eq "255" ] && echo "$FATAL_DIALOG:" | cat - $TMP && exit $RC # exit on dialog error
+    [ "$RC" -eq "2" ] && $DIALOG --backtitle "$DIA_BT" --title "$DIA_T" --msgbox "$DIA_HELP" $DIA_HEIGHT_HELP $DIA_WIDTH
+    [ "$RC" -eq "3" ] && return 1 # return an "Cancel"
+  done
+  return $RC
+}
+
+# Backtitle, Title, Help-Text, Menu-Title, Menu-Items
+function menu
+{
+  RC=2
+  MENU_BT=$1
+  shift
+  MENU_T=$1
+  shift
+  MENU_HELP=$1
+  shift
+  MENU_TITLE=$1
+  shift
+  MENU_NI=$(($# / 2)) # Number of Items
+
+  MENU_WIDTH=60
+  MENU_HEIGHT=$((10+$MENU_NI))
+
+  dialog_with_help "$MENU_BT" "$MENU_T" "$MENU_HELP" "no_wizard" "--menu" "$MENU_TITLE" $MENU_HEIGHT $MENU_WIDTH $MENU_NI "$@"
+}
+
+# Help, Title, ...
+function do_menu
+{
+  c=0
+  DO_MENU_HELP="$1"
+  shift
+  DO_MENU_TITLE="$1"
+  shift
+  while [ "$#" -gt 0 ];
+  do
+    MENU_ACTION[$(($c/2+1))]="$1"
+    MENU_PARAM[$c]=$(($c/2+1))". $2"
+    MENU_PARAM[$(($c+1))]="$3"
+    c=$(($c+2))
+    shift
+    shift
+    shift
+  done
+  menu "$BT" "${T1/0/$N}" "$DO_MENU_HELP" "$DO_MENU_TITLE" "${MENU_PARAM[@]}"
+  MENUPART_CHOICE=$(cat $TMP)
+  NUM_CH=$(echo $MENUPART_CHOICE | cut -d. -f1)
+  ${MENU_ACTION[NUM_CH]}
+}
+
+function radiolist
+{
+  RADIO_HELP="$1"
+  shift
+  RADIO_TITLE="$1"
+  shift
+ 
+  RADIO_NI=$[$#/3]
+  RADIO_WIDTH=70
+  RADIO_HEIGHT=$((10+$RADIO_NI*2))
+  dialog_with_help "$BT" "${T1/0/$N}" "$RADIO_HELP" "yes" --radiolist "$RADIO_TITLE" $RADIO_HEIGHT $RADIO_WIDTH $RADIO_NI "$@" # yes means use wizard
+}
+
+function checklist
+{
+  RADIO_HELP="$1"
+  shift
+  RADIO_TITLE="$1"
+  shift
+ 
+  RADIO_NI=$[$#/3]
+  RADIO_WIDTH=70
+  RADIO_HEIGHT=$((10+$RADIO_NI*2))
+  dialog_with_help "$BT" "${T1/0/$N}" "$RADIO_HELP" "yes" --checklist "$RADIO_TITLE" $RADIO_HEIGHT $RADIO_WIDTH $RADIO_NI "$@" # yes means use wizard
+}
+
+#
+# simple wrapper for dialog_with_help
+#
+# Syntax: wizard help-text, ...
+
+function wizard
+{
+  W_HELP="$1"
+  shift
+  dialog_with_help "$BT" "${T1/0/$N}" "$W_HELP" "yes" "$@" # yes means use wizard
+}
+
+function no_wizard
+{
+  W_HELP="$1"
+  shift
+  dialog_with_help "$BT" "${T1/0/$N}" "$W_HELP" "no" "$@" # yes means use wizard
+}
+
+
+
+function msgbox
+{
+  $DIALOG --backtitle "$BT" --title "${T1/0/$N}" --msgbox "$@"
+}
+
+#
+# Syntax: help, height, width, text1, text2, err-text
+#
+
+function passwordbox
+{
+  PASSBOX_HELP=$1
+  PASSBOX_HEIGHT=$2
+  PASSBOX_WIDTH=$3
+  PASSBOX_TITLE1=$4
+  PASSBOX_TITLE2=$5
+  PASSBOX_ERROR=$6
+
+  PASSBOX_CRYPT="$7"
+  PASS1=""
+  PASS2=""
+
+  while true
+  do
+    if [ "$DIALOG" = "Xdialog" ]
+    then
+      wizard "$PASSBOX_HELP" --password --password --2inputsbox "" "$PASSBOX_HEIGHT" "$PASSBOX_WIDTH" "$PASSBOX_TITLE1" "$PASS1" "$PASSBOX_TITLE2" "$PASS2"
+      [ $? -eq 1 ] && return 1
+      PASS1=$(awk -F/ '{ print $1 }' $TMP)
+      PASS2=$(awk -F/ '{ print $2 }' $TMP)
+    else
+      wizard "$PASSBOX_HELP" --passwordbox "$PASSBOX_TITLE1" "$PASSBOX_HEIGHT" "$PASSBOX_WIDTH" ""
+      [ $? -eq 1 ] && return 1
+      PASS1=$(cat $TMP)
+      wizard "$PASSBOX_HELP" --passwordbox "$PASSBOX_TITLE2" "$PASSBOX_HEIGHT" "$PASSBOX_WIDTH" ""
+      [ $? -eq 1 ] && return 1
+      PASS2=$(cat $TMP)
+    fi
+    #if [ -z "$PASS1" -a -z "$PASS2" -a -n "$PASSBOX_CRYPT" ] # User wants to hold the already supplied pass
+    #then
+    #  echo "$PASSBOX_CRYPT" > $TMP
+    #  return 0
+    #fi
+    [ "$PASS1" = "$PASS2" -a -n "$PASS1" ] && break
+    msgbox "$PASSBOX_ERROR" "$PASSBOX_HEIGHT" "$PASSBOX_WIDTH"
+  done
+  PASSBOX_CRYPT=$(htpasswd -nbd user $PASS1 | awk -F: '{ print $2}')
+  echo "$PASSBOX_CRYPT" > $TMP
+  PASS1=""
+  PASS2=""
+}

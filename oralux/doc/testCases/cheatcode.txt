@@ -1,0 +1,24 @@
+* title: tts
+creation: 2004 04 10
+checked by:
+required: 
+** status: not passed
+description:
+At boot time, enters the following cheatcode
+knoppix tts=doubletalk,ttyS0 lang=fr
+
+select the doubletalk LT, com 0
+tts=
+
+* title: cheatcode.txt
+creation: 2004 04 10
+checked by:
+required: 
+** status: not passed
+description:
+check that the oralux specific cheatcodes are described in the file.
+
+tts
+auto selection of the configuration
+auto selection of the persistent home
+

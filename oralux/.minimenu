@@ -1,0 +1,17 @@
+* Mini Menu
+* List of the text-based softwares for the mini menu of Oralux.
+* Each software description includes three lines: first a line 
+* with only the * character, then two lines for the title and the command.
+*
+title: N E, the nice editor
+command: ne
+*
+title: Links, web browser
+command: links http://oralux.org
+*
+title: bash, the shell terminal
+command: bash
+*
+title: Calculator
+command: python 
+*

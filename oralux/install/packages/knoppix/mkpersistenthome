@@ -1,0 +1,367 @@
+#!/bin/bash
+# mkpersistenthome - create KNOPPIX home directory image
+# (C) Klaus Knopper Feb 2003
+#
+# Aug 2003, Gilles Casse: update for Oralux
+# * French translation
+# * No dialog boxes
+# Sep 2003: 
+# German translations by Guenther Harrasser.
+# Spanish translations by Fernando Pinto da Silva.
+#
+PATH="/bin:/sbin:/usr/bin:/usr/sbin"
+export PATH
+
+# Get root
+[ "`id -u`" != "0" ] && exec sudo "$0" "$@"
+
+TMP="/tmp/mkpersistenthome.tmp$$"
+
+DIRECTORY=""
+
+bailout(){
+rm -f "$TMP" "$TMP.done" "$TMP.err"
+[ -n "$DIRECTORY" ] && umount "$DIRECTORY" 2>/dev/null
+exit 0
+}
+
+yesOrNo(){
+    case $LANGUAGE in
+        de*)
+            YES1="j"
+            YES2="J"
+            NO1="n"
+            NO2="N"
+            SENTENCE="Bitte j oder n gefolgt von der Eingabetaste drücken"
+            ;;
+        es*)
+            YES1="s"
+            YES2="S"
+            NO1="n"
+            NO2="N"
+            SENTENCE="Pulse S para Si, pulse N par No, y a continuación pulse enter"
+            ;;
+        fr*)
+            YES1="o"
+            YES2="O"
+            NO1="n"
+            NO2="N"
+            SENTENCE="Si oui, appuyez sur la touche o, si non sur n. Puis appuyez sur la touche Entrée"
+            ;;
+        *)
+            YES1="y"
+            YES2="Y"
+            NO1="n"
+            NO2="N"
+            echo "Please press y or n followed by the return key" 
+            ;;
+    esac
+
+    read=1
+
+    while [ "$read" == "1" ]; do
+        echo $SENTENCE 
+        read c
+
+        case $c in
+            $YES1|$YES2)
+                ANSWER=0
+                read=0;;
+
+            $NO1|$NO2)
+                ANSWER=1
+                read=0;;
+        esac
+    done
+
+    return $ANSWER
+}
+
+trap bailout 1 2 3 15
+
+# LANGUAGE etc.
+[ -f /etc/sysconfig/knoppix ] && . /etc/sysconfig/knoppix
+[ -z "$LANG" ] && export LANG
+[ -z "$LANGUAGE" ] && export LANGUAGE
+[ -z "$CHARSET" ] && export CHARSET
+
+HOMEKB="$(du -sk $HOME 2>/dev/null | awk '{print $1}')"
+
+# Language-dependent Messages
+case "$LANGUAGE" in
+de*|at*|ch*)
+TITLE1="Permanentes KNOPPIX Heimverzeichnis anlegen"
+MESSAGE1="Dieses Skript richtet ein permanentes Heimverzeichnis für den User \"knoppix\" auf Ihrer Festplatte oder einem Wechselmedium wie Memorystick, Compactflash oder ZIP-Medium ein. Hierdurch ist es möglich, Daten und persönliche Konfigurationen über einen Reboot hinaus zu speichern, sofern sie im persönlichen Heimverzeichnis des Benutzers abgelegt werden.
+Möchten Sie das Heimverzeichnis des Benutzers \"knoppix\" permanent speichern?"
+MESSAGE2="Bitte wählen Sie die Partition, auf der Sie das Heimverzeichnis (oder ein Image davon) anlegen möchten:"
+MESSAGE3="Möchten Sie die KOMPLETTE Partition verwenden und mit den Linux-Dateisystem formatieren?
+NEIN=Image-Datei auf bestehendem Dateisystem anlegen."
+SUCCESS="FERTIG!
+Die KNOPPIX-Konfiguration wurde erfolgreich gespeichert. Ihre Konfigurationsdateien werden beim nächsten Oralux-Bootvorgang in die Ramdisk restauriert."
+ERROR="Leider konnte die KNOPPIX-Konfiguration NICHT gespeichert werden:"
+MESSAGE_NO_PARTS="Keine passende Partition gefunden. Zur Erinnerung: NTFS-Partitonen können mit Linux nicht beschrieben werden."
+;;
+
+es*)
+TITLE1="Creación de un directorio KNOPPIX permanente"
+MESSAGE1="Este script crea un directorio permanente para la cuenta KNOPPIX en su disco duro o en un medio externo como una tarjeta de memoria, una memoria flash o un disco ZIP.
+Después del reinicio, volverá a encontrar sus datos personales, los archivos de configuración del directorio /home/knoppix.
+¿Desea crear un directorio permanente para el usuario \"knoppix\" ?"
+
+MESSAGE2="Elija la partición para crear el directorio permanente /homedir (o la imagen) :"
+MESSAGE3="¿Desea utilizar TODA la partición y formatear con un sistema de archivos Linux ?
+NO=Sólo crear una imagen en el sistema de archivos ya existente."
+SUCCESS="OK !
+La operación está realizada. Sus archivos de configuración serán reinstalados en el ramdisk en el próximo reinicio."
+ERROR="No se pudo guardar la configuración KNOPPIX :"
+MESSAGE_NO_PARTS="No suitable partitions could be found. Remember that NTFS-Partitions are not writable with linux."
+;;
+
+fr*)
+TITLE1="Création d'un compte KNOPPIX persistant"
+MESSAGE1="Ce script crée un répertoire persistant pour le compte \"knoppix\" sur votre disque dur ou sur un media externe comme une carte mémoire, de la mémoire flash ou un disque zip. 
+Après le redémarrage, vous retrouverez vos données personnelles, les fichiers de configuration du répertoire /home/knoppix.
+Souhaitez-vous créer un répertoire persistant pour l'utilisateur \"knoppix\" ?"
+
+MESSAGE2="Choisissez s'il vous plait la partition où sera créé le répertoire persistant (ou l'image) :"
+MESSAGE3="Voulez-vous utiliser TOUTE la partition et souhaitez-vous la formater avec un système de fichier Linux ?
+NON=Créer juste une image dans le système de fichier existant déjà."
+SUCCESS="OK !
+L'opération a réussi. Vos fichiers de configuration seront réinstallés dans le ramdisk au prochain démarrage d'Oralux."
+ERROR="La configuration KNOPPIX n'a pu être sauvegardée :"
+MESSAGE_NO_PARTS="Aucune partition utilisable n'a pu être trouvée. Pour rappel, Linux ne sait pas écrire sur une partition NTFS."
+;;
+
+*)
+TITLE1="Create persistent KNOPPIX home directory"
+MESSAGE1="This script creates a persistent home directory for the \"knoppix\" account on your harddisk or on a changeable medium like memory stick, compact flash or zip media. Using this features makes it possible to store personal data and config files permanently over a reboot, if they are stored inside the home directory of the \"knoppix\" user.
+Do you want to create a persistent home directory for the \"knoppix\" user?"
+
+MESSAGE2="Please select partition for creating persistent homedir (or image):"
+MESSAGE3="Do you want to use the ENTIRE Partition, and would like to format it with the Linux filesystem?
+NO=Just create an image in the existing filesystem."
+SUCCESS="SUCCESS!
+Creation of KNOPPIX configuration floppy was successful. Your configuration files will be reinstalled to the ramdisk on next Oralux boot."
+ERROR="The KNOPPIX configuration could NOT be saved:"
+MESSAGE_NO_PARTS="No suitable partitions could be found. Remember that NTFS-Partitions are not writable with linux."
+;;
+esac
+
+echo $TITLE1
+echo $MESSAGE1
+
+yesOrNo || bailout
+
+# if [ "$ANSWER" == "0" ]
+#     then
+#     bailout
+# fi
+
+# Partition selector
+case "$LANGUAGE" in
+    de*)
+        PARTITION_MSG1="Partition"
+        PARTITION_MSG2="Bitte die Nummer der Partition eingeben, auf der das persistente Heimverzeichnis gespeichert wird."
+        ;;
+
+    es*)
+        PARTITION_MSG1="Partición"
+        PARTITION_MSG2="Teclee el número de la partición donde se almazenará el directorio permanente."
+        ;;
+
+    fr*)
+        PARTITION_MSG1="Partition"
+        PARTITION_MSG2="Taper le numéro de la partition ou sera stocké le répertoire persistant."
+        ;;
+    *)
+        PARTITION_MSG1="Partition"
+        PARTITION_MSG2="Type the number of the partition where will be stored the persistent home directory."
+        ;;
+esac
+
+PARTITIONS=""
+
+count=1
+for i in `awk '/^\/dev\/[hs]d[a-z].*\/mnt\/[hs]d[a-z]/{if(!/ntfs/){print $1}}' /etc/fstab`; do
+    PARTITIONS[$count]="$i"
+    count=$(($count+1))
+done
+
+[ -z "${PARTITIONS[1]}" ] && { echo "$ERROR $MESSAGE_NO_PARTS"; bailout; }
+
+while [ -z "${PARTITIONS[$c]}" ]
+  do
+  i=1
+  while [ $i -lt $count ]
+  do
+    echo $PARTITION_MSG1 $i ${PARTITIONS[$i]}
+    i=$(($i+1))
+  done
+  
+  echo $PARTITION_MSG2
+  read c
+done
+
+PARTITION="${PARTITIONS[$c]}"
+DIRECTORY="/mnt/${PARTITION##/dev/}"
+
+DEVICE=""
+
+echo $MESSAGE3
+yesOrNo
+
+if [ "$ANSWER" == "0" ]
+    then
+    DEVICE="$PARTITION"
+else
+    DEVICE="$DIRECTORY/knoppix.img"
+    mount | grep -q "$DIRECTORY" || mount -r "$DIRECTORY" 2>"$TMP.err"
+    [ "$?" != "0" ] && { echo "$ERROR `cat $TMP.err`"; bailout; }
+    mount | grep -q "$DIRECTORY.*ntfs" && { echo "$ERROR NTFS"; bailout; }
+    mount -o remount,rw "$DIRECTORY"
+fi
+echo $DEVICE
+
+# More language-dependent Messages
+case "$LANGUAGE" in
+de*|at*|ch*)
+MESSAGE4="Sind Sie ABSOLUT SICHER, dass Sie die Partition $PARTITION formatieren möchten? ALLE DATEN WERDEN DADURCH GELÖSCHT!"
+MESSAGE5="Möchten Sie Ihr Heimverzeichnis mit AES256 (=Advanced Encryption Standard 256bit, s.a. http://csrc.nist.gov/encryption/aes/) verschlüsselt speichern? Hierzu ist die Eingabe eines sehr langen Passwortes beim Einrichten sowie beim Einbinden des Verzeichnisses beim Systemstart erforderlich. NEIN=unverschlüsselt"
+MESSAGE6="Bitte geben Sie die gewünschte Größe Ihres persistenten Heimverzeichnisses in MB an (aktuell belegt: $HOMEKB Kilobyte, verfügbar:"
+MESSAGE7="Formatiere $DEVICE mit dem ext2 Dateisystem und kopiere Daten..."
+SUCCESS="$DEVICE wurde erfolgreich mit dem Linux ext2 Dateisystem formatiert, und Ihre Heimverzeichnis-Daten wurden darauf transferiert.
+Sie können jetzt Ihren Computer neu starten."
+;;
+
+es*)
+MESSAGE4="¿Está seguro de que quiere formatear la partición $PARTITION ? Todos los datos se perderán"
+MESSAGE5="¿Quiere guardar su directorio parmanente encriptado con AES256 (Advanced Encrption Standard, ver http:##csrc.nist.gov/encryption/aes/) ? Si es que sí, tendrá que especificar una contraseña muy larga al crear el directorio perminante y en el momento del arranque"
+MESSAGE6="Introduzca el tamaño del directorio en MB (utilizado actualmente : $HOMEKB kb, disponible :"
+MESSAGE7="Formateado del $DEVICE con el sistema de archivos ext2 y copia de los datos..."
+SUCCESS="Se ha realizado con éxito el formateo de $DEVICE con el sistema de archivos linux ext2, y su directorio permanente ha sido transferido a éste.
+Ahora reinicie su ordenador."
+;;
+
+fr*)
+MESSAGE4="Êtes-vous vraiment sûr de vouloir formater la partition $PARTITION ? TOUTES LES DONNEES SERONT PERDUES !"
+MESSAGE5="Voulez-vous crypter la sauvegarde de votre répertoire persistant avec AES256 (Advanced Encryption Standard, voir http://csrc.nist.gov/encryption/aes/)? Le cas échéant, vous indiquerez un tres long mot de passe a la creation du repertoire et lors du boot.
+De plus, considérez qu'il n'y a pas de retour audio au boot"
+MESSAGE6="Entrez s'il vous plaît la taille du répertoire en Méga octets (actuellement utilisé : $HOMEKB kilo octets, disponible :"
+MESSAGE7="Formattage de $DEVICE avec le système de fichiers ext2 et recopie des données..."
+SUCCESS="Le formatage de $DEVICE avec le systeme de fichiers Linux ext2 a réussi, et votre répertoire persistant y a été recopié.
+Redémarrer, s'il vous plaît, votre ordinateur maintenant."
+;;
+
+*)
+MESSAGE4="Are you positively SURE that you want to format partition $PARTITION ? ALL DATA WILL BE LOST!"
+MESSAGE5="Do you want to save your home directory encrypted with AES256 (Advanced Encryption Standard, see http://csrc.nist.gov/encryption/aes/)? If yes, you will have to specify a very long password at homedir creation and boot time.
+Furthermore, consider that there is no aural feedback at boot time"
+MESSAGE6="Please enter the desired size of your persistent homedir in MB (currently used: $HOMEKB kB, available:"
+MESSAGE7="Formatting $DEVICE with ext2 filesystem and copying data..."
+SUCCESS="$DEVICE has been succeessfully formatted with the Linux ext2 filesystem, and your home directory has been transferred to it.
+Please, reboot your system, now."
+;;
+esac
+
+if [ "$DEVICE" = "$PARTITION" ]; then
+    echo $MESSAGE4
+    yesOrNo || bailout
+ else
+    AMOUNT=0
+    AVAIL="$(df -m $DIRECTORY/. | awk '/^\/dev\//{print $4}')"
+    until [ "$AMOUNT" -ge 1 -a "$AMOUNT" -le "$AVAIL" ] 2>/dev/null; do
+        echo "$MESSAGE6 $AVAIL MB"
+        read AMOUNT
+    done
+    dd if=/dev/urandom of="$DEVICE" bs=1M count="$AMOUNT" &>/dev/null || { sleep 2; bailout; }
+fi
+
+ENCRYPTION=""
+#echo $MESSAGE5
+#yesOrNo && ENCRYPTION="AES256"
+
+findfreeloop(){
+i=0
+for i in 0 1 2 3 4 5 6 7; do
+LOOP="/dev/loop$i"
+losetup "$LOOP" >/dev/null 2>&1 || { echo "$LOOP"; return 0; }
+done
+return 1
+}
+
+getpassword(){
+case "$LANGUAGE" in
+de*|at*|ch*)
+HEADER="AES256 Verschlüsselungs-Passwort (Minimum 20 Zeichen!)"
+ENTER="Eingabe:"
+AGAIN="Noch einmal, um sicherzugehen:"
+;;
+
+es*)
+HEADER="Contraseña para el encriptamiento AES256 (20 caracteres como mínimo)."
+ENTER="Introdúzcala:"
+AGAIN="Para asegurarse, introdúzcala de nuevo:"
+;;
+
+fr*)
+HEADER="Mot de passe pour le cryptage AES256 (minimum 20 caractères!)."
+ENTER="Entrez le:"
+AGAIN="Une fois encore, pour être sûr:"
+;;
+
+*)
+HEADER="AES256 encryption password (minimum 20 characters!)."
+ENTER="Enter:"
+AGAIN="Again, just to be sure:"
+;;
+esac
+PASS1=""
+PASS2=""
+until [ -n "$PASS1" -a "$PASS1" = "$PASS2" ]; do
+echo $HEADER
+echo $ENTER
+read PASS1 || bailout
+
+echo $AGAIN
+read PASS2 || bailout
+done
+
+echo "$PASS1" >&2
+}
+
+LOOPDEV="$(findfreeloop)"
+FORMAT=""
+if [ -n "$ENCRYPTION" -a -n "$LOOPDEV" ]; then
+getpassword 2>"$TMP"
+PASSWORD="$(<$TMP)"
+rm -f "$TMP"
+losetup -p0 -e "$ENCRYPTION" "$LOOPDEV" "$DEVICE" 2>"$TMP.err" <<EOT
+$PASSWORD
+EOT
+if [ "$?" != "0" ]; then
+echo "$ERROR `cat $TMP.err`"
+bailout
+fi
+# Start progress display
+mke2fs -m0 "$LOOPDEV" 2>"$TMP.err" || { echo "$ERROR `cat $TMP.err`"; bailout; }
+mkdir -p /tmp/knxhome
+mount -t ext2 "$LOOPDEV" /tmp/knxhome 2>"$TMP.err" && rsync -Ha "$HOME/" /tmp/knxhome 2>"$TMP.err" || { echo "$ERROR `cat $TMP.err`"; bailout; }
+umount -l /tmp/knxhome
+losetup -d "$LOOPDEV"
+umount "$DIRECTORY" 2>/dev/null
+else
+# Normal loopback file or partition
+# Just to make sure...
+umount "$DEVICE" 2>/dev/null
+mke2fs -F -m0 "$DEVICE" 1>/dev/null 2>"$TMP.err" || { echo "$ERROR `cat $TMP.err`"; bailout; }
+LOOPOPT=""
+[ -f "$DEVICE" ] && LOOPOPT="-o loop"
+mkdir -p /tmp/knxhome
+mount -t ext2 $LOOPOPT "$DEVICE" /tmp/knxhome 2>"$TMP.err" && rsync -Ha "$HOME/" /tmp/knxhome 2>"$TMP.err" || { umount /tmp/knxhome 2>/dev/null; echo "$ERROR `cat $TMP.err`"; bailout; }
+umount /tmp/knxhome
+umount "$DIRECTORY" 2>/dev/null
+fi
+
+echo "$SUCCESS"
+
+bailout

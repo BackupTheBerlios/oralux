@@ -1,0 +1,16 @@
+[dict]
+"=AnfÃ¼hrungszeichen
+*=étoile
+<=inférieur
+>=supÃ©rieur
+@=arobasse
+0x23=dièse
+0x5b=crochet ouvrant
+\=backslash
+]=crochet fermant
+_=souligné
+`=accent
+{=accolade ouvrante
+|=barre verticale
+}=accolade fermante
+~=tildé

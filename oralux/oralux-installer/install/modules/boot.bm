@@ -1,0 +1,178 @@
+#!/bin/bash
+
+function add_bootmanager
+{
+update_status $"Creating initrd (if needed)"
+
+  TL1=/mnt/loop1
+  TL2=/mnt/loop2
+ 
+INITRD=""
+INITMODS=""
+mkdir -p $TL1 $TL2 >/dev/null 2>&1
+# loop-mount Knoppix bootfloppy
+mount -t vfat -o loop,ro /cdrom/$DEFAULT_DIR/boot.img $TL1
+gzip -cd $TL1/miniroot.gz > $TR/miniroot
+umount $TL1
+# loop-mount Knoppix miniroot
+mount -t ext2 -o loop,ro $TR/miniroot $TL1
+
+# if installing to SCSI disk: copy modules to initrd
+case "$HD_CHOICE" in
+  /dev/sd*)
+    # only SCSI modules contained on the bootfloppy
+    for i in `ls $TL1/modules/scsi`
+    do
+      i=${i%.o}
+      if [ -n "`grep $i /proc/modules`" ] ; then
+        INITMODS="$INITMODS $i"
+      fi
+    done
+    ;;
+  *)
+    ;;
+esac
+# if FSTYPE is ext3, reiserfs: copy modules to initrd
+case "$HD_FSTYPE" in
+  ext3)
+    INITMODS="$INITMODS jbd ext3"
+    PIVOTFS="ext3"
+    ;;
+  reiserfs)
+    INITMODS="$INITMODS reiserfs"
+    ;;
+  xfs)
+    INITMODS="$INITMODS xfs"
+    ;;
+  *)
+    ;;
+esac
+
+# Added by Joerg Schirottke
+
+# Quickhack for Kanotix FIXME!
+
+[ "$(hostname)" == "Kanotix" ] && INITMODS=""
+
+INSIZE=2500
+# create initrd if INITMODS is not empty
+if [ -n "$INITMODS" ] ; then
+  dd if=/dev/zero of=$TR/ird bs=1k count=$INSIZE
+  mke2fs -F -m 0 -i 1024 -q $TR/ird
+  # loop-mount new initrd
+  mount -t ext2 -o loop,rw $TR/ird $TL2
+  cp -a $TL1/dev $TL1/etc $TL1/static $TL2
+  mkdir -p $TL2/proc $TL2/modules $TL2/lib $TL2/mnt
+  echo "#!/static/sh" >$TL2/linuxrc
+  for i in $INITMODS
+  do
+    cp $(modinfo $i | grep "^filename:" | cut -d":" -f 2) $TL2/modules
+    echo "insmod /modules/$i.o" >>$TL2/linuxrc
+  done
+  if [ -n "$PIVOTFS" ] ; then
+    # copy mini pivot_root from templates
+    cp -a $TM/etc/knx_pivot_root $TL2/static/pivot_root
+    mkdir -p $TR/initrd
+    echo "mount -t proc proc /proc" >>$TL2/linuxrc
+    echo "echo 256 > /proc/sys/kernel/real-root-dev" >>$TL2/linuxrc
+    echo "umount /proc" >>$TL2/linuxrc
+    echo "mount -t $PIVOTFS $HD_CHOICE /mnt" >>$TL2/linuxrc
+    echo "/static/pivot_root /mnt /mnt/initrd" >>$TL2/linuxrc
+  fi
+  chmod 755 $TL2/linuxrc
+  umount $TL1
+  umount $TL2
+  rm -rf $TR/miniroot
+  gzip -9 -f $TR/ird
+  mv $TR/ird.gz $TR/boot/initrd.gz
+  INITRD="	initrd=/boot/initrd.gz"
+else
+  umount $TL1
+fi
+
+update_status $"Installing LILO to $BOOT_WHERE"
+
+if [ $BOOT_WHERE = "mbr" ] ; then
+  if stringinstring "hd" "$HD_CHOICE"
+  then
+    LBOOT=${HD_CHOICE%%?[1-9]*}a # Set MBR to /dev/hda
+  else
+    LBOOT=${HD_CHOICE%%[1-9]*}
+  fi
+  # Make a backup of the old mbr
+  dd if=$LBOOT of=$TR/boot/knoppix-old-mbr.$(date +"%s") bs=512 count=1
+else
+  LBOOT=$HD_CHOICE
+fi
+
+BKERNEL="/boot/vmlinuz-`uname -r`"
+[ ! -e "$TR/vmlinuz" ] && ln -sf "$BKERNEL" "$TR/vmlinuz"
+
+rm -f $TR/etc/lilo.conf
+
+# extract vga mode from CMDLINE
+DEFVGA="791"
+VGAMODE=`getbootparam vga`
+[ -z "$VGAMODE" ] && VGAMODE="$DEFVGA"
+
+# use genliloconf if present
+NEW_CMDLINE="hda=scsi hdb=scsi hdc=scsi hdd=scsi hde=scsi hdf=scsi hdg=scsi hdh=scsi apm=power-off nomce"
+
+if [ "$SYSTEM_TYPE" = "knoppix" ]
+then
+  NEW_CMDLINE=$(cat /proc/cmdline | sed 's/vga=[^ ]* //g; s/initrd=[^ ]* //g; s/BOOT_IMAGE=[^ ]* //g')
+fi
+
+if ! ( echo -ne "vga=$VGAMODE\n" ; /usr/sbin/genliloconf "$LBOOT" "$HD_CHOICE" "$NEW_CMDLINE" "$BKERNEL" $INITRD ) >$TR/etc/lilo.conf ; then
+  cat <<EOF >$TR/etc/lilo.conf
+boot=$LBOOT
+vga=$VGAMODE
+prompt
+timeout=50
+append = "$NEW_CMDLINE"
+
+image=$BKERNEL
+	label=knoppix
+	root=$HD_CHOICE
+	read-only
+$INITRD
+
+## A Windows installation, example for partition 1 on first IDE harddisk
+# other=/dev/hda1
+#	label=dos
+#	optional
+#	table=/dev/hda
+EOF
+fi
+
+lilo -r $TR
+# copy LILO bootsector to a file (for boot.ini in NT/2k/XP)
+if [ "$LBOOT" = "$HD_CHOICE" ] ; then
+  dd if=$LBOOT of=$TR/linboot.img bs=512 count=1
+fi
+
+update_status $"Finishing installation"
+
+
+
+return 0
+
+}
+
+#
+# disk partition
+#
+
+function makelilo_func
+{
+  BOOT_WHERE="partition"
+  HD_CHOICE="$2"
+  HD_FSTYPE="ext3"
+  TR=$TARGET_MNT_POINT
+  cp -f $SHAREPATH/knx_pivot_root /etc
+  add_bootmanager
+  cp $TR/etc/lilo.conf /tmp
+  sed "s,$2,$1,g" /tmp/lilo.conf > $TR/etc/lilo.conf
+  [ -L /boot ] && rm -f /boot
+  ln -sf $TR/boot /boot
+}

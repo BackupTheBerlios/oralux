@@ -1,0 +1,2 @@
+#!/bin/bash
+pump -i $1

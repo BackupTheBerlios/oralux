@@ -1,0 +1,242 @@
+#!/bin/bash
+# mkpersistenthome - create KNOPPIX home directory image
+# (C) Klaus Knopper Feb 2003
+
+PATH="/bin:/sbin:/usr/bin:/usr/sbin"
+export PATH
+
+XDIALOG_HIGH_DIALOG_COMPAT=1
+export XDIALOG_HIGH_DIALOG_COMPAT
+#XDIALOG_FORCE_AUTOSIZE=1
+#export XDIALOG_FORCE_AUTOSIZE
+
+# Get root
+[ "`id -u`" != "0" ] && exec sudo "$0" "$@"
+
+TMP="/tmp/mkpersistenthome.tmp$$"
+
+DIRECTORY=""
+
+bailout(){
+rm -f "$TMP" "$TMP.done" "$TMP.err"
+[ -n "$DIRECTORY" ] && umount "$DIRECTORY" 2>/dev/null
+exit 0
+}
+
+DIALOG="dialog"
+[ -n "$DISPLAY" ] && [ -x /usr/bin/Xdialog ] && DIALOG="Xdialog"
+
+trap bailout 1 2 3 15
+
+# LANGUAGE etc.
+[ -f /etc/sysconfig/knoppix ] && . /etc/sysconfig/knoppix
+[ -z "$LANG" ] && export LANG
+[ -z "$LANGUAGE" ] && export LANGUAGE
+[ -z "$CHARSET" ] && export CHARSET
+
+HOMEKB="$(du -sk $HOME 2>/dev/null | awk '{print $1}')"
+
+# Language-dependent Messages
+case "$LANGUAGE" in
+de*|at*|ch*)
+TITLE1="Permanentes KNOPPIX Heimverzeichnis anlegen"
+MESSAGE1="Dieses Skript richtet ein permanentes Heimverzeichnis für den User \"knoppix\" auf Ihrer Festplatte oder einem Wechselmedium wie Memorystick, Compactflash oder ZIP-Medium ein. Hierdurch ist es möglich, Daten und persönliche Konfigurationen über einen Reboot hinaus zu speichern, sofern sie im persönlichen Heimverzeichnis des Benutzers abgelegt werden. Per Bootoption, z.B. \"home=/dev/sda1\" für die erste Partition einer SCSI-Festplatte oder eines USB-Memorystick, können Sie beim Systemstart das permanente Heimverzeichnis wieder aktivieren. Die Bootoption \"home=scan\" durchsucht automatisch alle Partitionen und erkannten Speichermedien nach einem persistenten KNOPPIX-Heimverzeichnis.
+
+Möchten Sie das Heimverzeichnis des Benutzers \"knoppix\" permanent speichern?"
+MESSAGE2="Bitte wählen Sie die Partition, auf der Sie das Heimverzeichnis (oder ein Image davon) anlegen möchten."
+MESSAGE3="Möchten Sie die KOMPLETTE Partition verwenden und mit den Linux-Dateisystem formatieren?
+NEIN=Image-Datei auf bestehendem Dateisystem anlegen."
+E1="Persönliche Einstellungen (Desktop, Programme)"
+E2="Netzwerk Einstellungen (LAN, Modem, ISDN, ASDL)"
+E3="Grafik Subsystem Einstellungen (XF86Config)"
+E4="Weitere systemweite Einstellungen (Drucker etc.)"
+E5="Alle Desktop-Dateien (${DESKTOPKB}kB)"
+SUCCESS="FERTIG!
+
+Die KNOPPIX-Konfiguration wurde erfolgreich gespeichert. Ihre Konfigurationsdateien werden beim nächsten KNOPPIX-Bootvorgang in die Ramdisk restauriert, wenn Sie im Bootscreen \"knoppix floppyconfig\" (Diskette) bzw. \"knoppix myconfig=/mnt/verzeichnisname\" angeben."
+ERROR="Leider konnte die KNOPPIX-Konfiguration NICHT gespeichert werden:"
+MESSAGE_NO_PARTS="Keine passende Partition gefunden. Zur Erinnerung: NTFS-Partitonen können mit Linux nicht beschrieben werden."
+;;
+*)
+TITLE1="Create persistent KNOPPIX home directory"
+MESSAGE1="This script creates a persistent home directory for the \"knoppix\" account on your harddisk or on a changeable medium like memory stick, compact flash or zip media. Using this features makes it possible to store personal data and config files permanently over a reboot, if they are stored inside the home directory of the \"knoppix\" user. The boot option \"home=/dev/sda1\", for the first partition of a SCSI harddisk or USB memory stick as example, activates the persistent home directory at system startup. You can also let KNOPPIX scan all autodetected storage devices using the boot option \"home=scan\".
+
+Do you want to create a persistent home directory for the \"knoppix\" user?"
+
+MESSAGE2="Please select partition for creating persistent homedir (or image):"
+MESSAGE3="Do you want to use the ENTIRE Partition, and would like to format it with the Linux filesystem?
+NO=Just create an image in the existing filesystem."
+E1="Personal configuration (desktop, programs)"
+E2="Network settings (LAN, Modem, ISDN, ADSL)"
+E3="Graphics subsystem settings (XF86Config)"
+E4="Other system configuration (printer etc.)"
+E5="All files on the Desktop (${DESKTOPKB}kB)"
+SUCCESS="SUCCESS!
+
+Creation of KNOPPIX configuration floppy was successful. Your configuration files will be reinstalled to the ramdisk on next KNOPPIX boot if you specify \"knoppix floppyconf\" (floppy disk), or \"knoppix myconfig=/mnt/directoryname\" at the boot prompt."
+ERROR="The KNOPPIX configuration could NOT be saved:"
+MESSAGE_NO_PARTS="No suitable partitions could be found. Remember that NTFS-Partitions are not writable with linux."
+;;
+esac
+
+$DIALOG --cr-wrap --clear --title "$TITLE1" --yesno "$MESSAGE1" 18 75 || bailout
+
+# Partition selector
+PARTITIONS=""
+count=0
+for i in `awk '/^\/dev\/[hs]d[a-z].*\/mnt\/[hs]d[a-z]/{if(!/ntfs/){print $1}}' /etc/fstab`; do
+PARTITIONS="$PARTITIONS ${i} [Disk/Partition] off"
+done
+[ -z "$PARTITIONS" ] && { $DIALOG --cr-wrap --clear --title "$TITLE1" --msgbox "$ERROR $MESSAGE_NO_PARTS" 10 75; bailout; }
+
+DIRECTORY=""
+PARTITION=""
+while [ -z "$PARTITION" -o -z "$DIRECTORY" -o ! -e "$DIRECTORY" ]; do
+rm -f "$TMP"
+$DIALOG --cr-wrap --clear --title "$TITLE1" --radiolist "$MESSAGE2" 18 75 9 $PARTITIONS 2>"$TMP" || bailout
+PARTITION="$(<$TMP)"
+DIRECTORY="/mnt/${PARTITION##/dev/}"
+done
+
+DEVICE=""
+if $DIALOG --cr-wrap --clear --title "$TITLE1" --defaultno --yesno "$MESSAGE3" 15 75; then
+DEVICE="$PARTITION"
+else
+DEVICE="$DIRECTORY/knoppix.img"
+mount | grep -q "$DIRECTORY" || mount -r "$DIRECTORY" 2>"$TMP.err"
+[ "$?" != "0" ] && { $DIALOG --cr-wrap --title "$TITLE1" --msgbox "$ERROR `cat $TMP.err`" 10 75; bailout; }
+mount | grep -q "$DIRECTORY.*ntfs" && { $DIALOG --cr-wrap --title "$TITLE1" --msgbox "$ERROR NTFS" 10 75; bailout; }
+mount -o remount,rw "$DIRECTORY"
+fi
+
+
+# More language-dependent Messages
+case "$LANGUAGE" in
+de*|at*|ch*)
+MESSAGE4="Sind Sie ABSOLUT SICHER, dass Sie die Partition $PARTITION formatieren möchten? ALLE DATEN WERDEN DADURCH GELÖSCHT!"
+MESSAGE5="Möchten Sie Ihr Heimverzeichnis mit AES256 (=Advanced Encryption Standard 256bit, s.a. http://csrc.nist.gov/encryption/aes/) verschlüsselt speichern? Hierzu ist die Eingabe eines sehr langen Passwortes beim Einrichten sowie beim Einbinden des Verzeichnisses beim Systemstart erforderlich. NEIN=unverschlüsselt"
+MESSAGE6="Bitte geben Sie die gewünschte Größe Ihres persistenten Heimverzeichnisses in MB an (aktuell belegt: $HOMEKB Kilobyte, verfügbar:"
+MESSAGE7="Formatiere $DEVICE mit dem ext2 Dateisystem und kopiere Daten..."
+SUCCESS="$DEVICE wurde erfolgreich mit dem Linux ext2 Dateisystem formatiert, und Ihre Heimverzeichnis-Daten wurden darauf transferiert.
+
+Sie können jetzt Ihren Computer neu starten, und beim KNOPPIX boot:-Prompt durch Eingabe von \"knoppix home=$PARTITION\" oder \"knoppix home=scan\" Ihr permanentes Heimverzeichnis aktivieren. Falls Sie außerdem (mit dem saveconfig Skript) die Systemeinstellungen gesichert haben, können Sie diese Option mit der Angabe von \"myconf=$PARTITION\" oder \"myconf=scan\" kombinieren."
+;;
+*)
+MESSAGE4="Are you positively SURE that you want to format partition $PARTITION? ALL DATA WILL BE LOST!"
+MESSAGE5="Do you want to save your home directory encrypted with AES256 (Advanced Encryption Standard, see http://csrc.nist.gov/encryption/aes/)? If yes, you will have to specify a very long password at homedir creation and boot time."
+MESSAGE6="Please enter the desired size of your persistent homedir in MB (currently used: $HOMEKB kB, available:"
+MESSAGE7="Formatting $DEVICE with ext2 filesystem and copying data..."
+SUCCESS="$DEVICE has been succeessfully formatted with the Linux ext2 filesystem, and your home directory has been transferred to it.
+
+You may now reboot your computer and type \"knoppix home=$PARTITION\" or \"knoppix home=scan\" at the KNOPPIX boot: prompt to take advantage of your new persistent home directory. If you have also saved the system configuration (using the saveconfig script), you can use this in combination with \"myconf=$PARTITION\" or \"myconf=scan\"."
+;;
+esac
+
+if [ "$DEVICE" = "$PARTITION" ]; then
+$DIALOG --cr-wrap --clear --title "$TITLE1" --defaultno --yesno "$MESSAGE4" 6 75 || bailout
+else
+AMOUNT=0
+AVAIL="$(df -m $DIRECTORY/. | awk '/^\/dev\//{print $4}')"
+until [ "$AMOUNT" -ge 1 -a "$AMOUNT" -le "$AVAIL" ] 2>/dev/null; do
+$DIALOG --cr-wrap --clear --title "$TITLE1" --inputbox "$MESSAGE6 $AVAIL MB)" 10 62 "30" 2>"$TMP" || bailout
+AMOUNT="$(<$TMP)"
+done
+dd if=/dev/urandom of="$DEVICE" bs=1M count="$AMOUNT" || { sleep 2; bailout; }
+fi
+
+ENCRYPTION=""
+$DIALOG --cr-wrap --clear --title "$TITLE1" --defaultno --yesno "$MESSAGE5" 9 75 && ENCRYPTION="AES256"
+
+gauge(){
+rm -f "$TMP.done"
+status=0
+while [ ! -e "$TMP.done" ]; do echo "$status" ; status="`expr \( 100 - $status \) / 4 + $status`"; sleep 2; done | $DIALOG --title "$TITLE1" --gauge "$1" 8 75 0
+}
+
+# Stop status bar
+killgauge(){
+touch "$TMP.done" ; wait ; rm -f "$TMP.done"
+}
+
+findfreeloop(){
+i=0
+for i in 0 1 2 3 4 5 6 7; do
+LOOP="/dev/loop$i"
+losetup "$LOOP" >/dev/null 2>&1 || { echo "$LOOP"; return 0; }
+done
+return 1
+}
+
+getpassword(){
+case "$LANGUAGE" in
+de*|at*|ch*)
+HEADER="AES256 Verschlüsselungs-Passwort (Minimum 20 Zeichen!)"
+ENTER="Eingabe:"
+AGAIN="Noch einmal, um sicherzugehen:"
+;;
+*)
+HEADER="AES256 encryption password (minimum 20 characters!)"
+ENTER="Enter:"
+AGAIN="Again, just to be sure:"
+;;
+esac
+PASS1=""
+PASS2=""
+until [ -n "$PASS1" -a "$PASS1" = "$PASS2" ]; do
+rm -f "$TMP.pass"
+if [ "$DIALOG" = "Xdialog" ]; then
+Xdialog --title "$TITLE1" --password --password --2inputsbox "$HEADER" 15 60 "$ENTER" "" "$AGAIN" "" 2>"$TMP.pass" || bailout
+PASSWORDS="$(<$TMP.pass)"
+PASS1="${PASSWORDS%%/*}"
+PASS2="${PASSWORDS##*/}"
+else
+dialog --title "$HEADER" --passwordbox "$ENTER" 8 65 "" 2>"$TMP.pass" || bailout
+PASS1="$(<$TMP.pass)"
+dialog --title "$HEADER" --passwordbox "$AGAIN" 8 65 "" 2>"$TMP.pass" || bailout
+PASS2="$(<$TMP.pass)"
+fi
+done
+rm -f "$TMP.pass"
+echo "$PASS1" >&2
+}
+
+LOOPDEV="$(findfreeloop)"
+FORMAT=""
+if [ -n "$ENCRYPTION" -a -n "$LOOPDEV" ]; then
+getpassword 2>"$TMP"
+PASSWORD="$(<$TMP)"
+rm -f "$TMP"
+losetup -p0 -e "$ENCRYPTION" "$LOOPDEV" "$DEVICE" 2>"$TMP.err" <<EOT
+$PASSWORD
+EOT
+if [ "$?" != "0" ]; then
+$DIALOG --cr-wrap --title "$TITLE1" --msgbox "$ERROR `cat $TMP.err`" 10 75
+bailout
+fi
+# Start progress display
+gauge "$MESSAGE7" &
+mke2fs -m0 "$LOOPDEV" 2>"$TMP.err" || { killgauge; $DIALOG --cr-wrap --title "$TITLE1" --msgbox "$ERROR `cat $TMP.err`" 10 75; bailout; }
+mkdir -p /tmp/knxhome
+mount -t ext2 "$LOOPDEV" /tmp/knxhome 2>"$TMP.err" && rsync -Ha "$HOME/" /tmp/knxhome 2>"$TMP.err" || { killgauge; $DIALOG --cr-wrap --title "$TITLE1" --msgbox "$ERROR `cat $TMP.err`" 10 75; bailout; }
+umount -l /tmp/knxhome
+losetup -d "$LOOPDEV"
+umount "$DIRECTORY" 2>/dev/null
+killgauge
+else
+# Normal loopback file or partition
+gauge "$MESSAGE7" &
+# Just to make sure...
+umount "$DEVICE" 2>/dev/null
+mke2fs -F -m0 "$DEVICE" 2>"$TMP.err" || { killgauge; $DIALOG --cr-wrap --title "$TITLE1" --msgbox "$ERROR `cat $TMP.err`" 10 75; bailout; }
+LOOPOPT=""
+[ -f "$DEVICE" ] && LOOPOPT="-o loop"
+mkdir -p /tmp/knxhome
+mount -t ext2 $LOOPOPT "$DEVICE" /tmp/knxhome 2>"$TMP.err" && rsync -Ha "$HOME/" /tmp/knxhome 2>"$TMP.err" || { killgauge; umount /tmp/knxhome 2>/dev/null; $DIALOG --cr-wrap --title "$TITLE1" --msgbox "$ERROR `cat $TMP.err`" 10 75; bailout; }
+umount /tmp/knxhome
+umount "$DIRECTORY" 2>/dev/null
+killgauge
+fi
+
+$DIALOG --cr-wrap --title "$TITLE1" --msgbox "$SUCCESS" 17 65
+
+bailout

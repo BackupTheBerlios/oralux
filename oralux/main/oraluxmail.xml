@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<mailconfig version="1.0">
+
+<mailsource><label>My  Mailbox1</label><host>pop.free.fr</host><port>110</port><login>vhugo</login><password>ppp</password></mailsource><name>t&#xE9;chin&#xE9;</name><email>mn@free.fr</email><delay>12</delay></mailconfig>

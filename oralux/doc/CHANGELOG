@@ -1,0 +1,233 @@
+###
+
+###
+Release 0.6 beta
+Date: xx Month 2004
+
+* Overview
+* Major updates
+* Doc
+* Bug fixes
+* Enhancements
+* New packages
+
+
+/ File conversion: the xpdf-utils (pdftotext) and catdoc (.doc to text) packages have been added 
+/ Message: "Do you want to update your preferences?" is more explanatory, so that people know which key they have to press to answer.
+/ Calendar in Spanish has been updated by Miguel Paolino. 
+/ The listen-up digital talking book player is included.
+
+* New packages:
+- bsdgames
+
+** Russian support
+Thanks to Sergei V. Fleytin  
+- Russian.el is modified to include support for windows-1251 character set.
+- The .gnus and .vm files have been updated for Russian.
+- The "ru4" keymap is loaded for Russian keyboard settings (instead of "ru" before).
+
++ Yasr: in standard mode, alt+ctrl+m is no more reserved to read the next line (since ctrl-m is interpreted as enter).
+
+
+
+###
+Release "From Libre Software Meeting 2004"
+Date: 7 July 2004
+
+* Overview:
+the sticky keys and repeat keys can be selected from the audio menu, more doc in Spanish or Russian, a few bugs have been fixed, .  
+
+* Minor updates:
+
+This release is still based on Knoppix 3.3 (2004-02-16).
+
+* Doc
+- intro-ru.txt has been translated in Russian by Sergei V. Fleytin. 
+- Emacs and calendar tutorials in Spanish: Miguel Paolino has translated the tutorials written by Sylvie in Spanish. 
+He also translated the remaining sentences of the FAQ.
+
+* Bug fixes
+- DECtalk 5.0 speech server is much more usable, the dtk-soft changes were forgotten in the previous release. Tim Cross posts to the Emacspeak mailing list have been taken in account. 
+- Entering the serial number for DECtalk: the keyboard must be updated according to the last choice.
+- Shutdown: the PC is correctly turned off. 
+- cdtool: cdstart didn't work (wrong link)
+- Starting Yasr: only a shell, no menu! (Observed with DECtalk English or ParleMax). 
+- floppy: at init time, we do not check anymore if the configuration is saved on the floppy disk. Because when no floppy drive is present, it slows down a lot the initialization. To force the check, type at boot: 
+knoppix floppyconf 
+or 
+knoppix floppyconfig
+
+Note that by default we will select /dev/fd0. 
+
+* Enhancements
+
+- BRLTTY is not started by default (the "no speech support" message is misleading). 
+- dialog: text based output instead of the usual graphical layout (tested with pppconfig and knoppix-installer). 
+
+** Menu
+- yasr: when a new speech server is selected, the yasr conf is reinstalled. However, the other user's modifications (keybindings) must not be lost. 
+- Sticky keys: turned on or off. 
+- Repeat keys: turned on or off. 
+
+** Russian support:
+- Russian translations: still a few messages for the menu. 
+- aspell ru. 
+
+###
+Release 0.6 alpha
+Date: 20 May 2004
+
+* Overview:
+
+The audio menu is available in 5 languages (English, French, German, Russian and Spanish).
+The settings are easily updated using this menu. 
+The new settings concern the braille display or the external synthesizer. 
+
+A new cheatcode has been added to select the external synthesizer at boot time.
+
+Two new voice synthesizers have been added: ParleMax (in French) and Multispeech/Ru_tts (in Russian and English).
+
+This release proposes a new environment based on Yasr, a lightweight and portable screen reader. 
+A mini menu has been added so that the user can select and launch a software under Yasr. 
+
+* Major updates:
+
+This release is based on Knoppix 3.3 (2004-02-16).
+
+- BRLTTY 3.4-1
+- Emacspeak 20.0
+- Yasr 0.6.5
+
+* Doc
+- Tutorial "My first steps in GNU/Emacs" in English and French.
+- Tutorial "The Calendar and the Diary" in English and French.
+- Tutorial "SES -Simple Emacs Spreadsheet" (in French at the moment)
+- How to write a new installation script.
+- FAQ up to date in English, French, Spanish (new).
+- oralux-cheatcodes.txt 
+
+* Enhancements
+** Menu
+- A more responsive audio menu
+- Choice between Emacspeak or Yasr. Yasr will be available using the software synthesizers (except EFM).
+- Selecting the Braille preferences from the menu.
+- Once we quit Emacspeak, or Yasr, a message is said.
+
+** Voice synthesizer
+- A cheatcode for the external synth: tts (described in FAQ)
+- Installation script for ParleMax.
+- Script for Multispeech and Ru_tts.
+- For the internal DoubleTalk: module dtlk.o is loaded
+- DECtalk 5.0: compliant speach server.
+
+** Configuration
+.emacs
+- customisation: the man page is now opened in the current buffer, no other buffer is opened.
+- customisation: the middle prompt used in the Emacs menu is no more '==>' but simply ':'. 
+- Russian.el is added
+
+.links
+- Specific configuration file (links numbering,...) 
+
+** Braille
+- Once the configuration is saved, the braille driver will be started again at next boot.
+- Braille menu: if any, the relevant boot parameters are the default ones.
+- Knoblind: rawrite.exe is used
+- Knoblind: comments have been added about the available options
+
+* Fixes
+- dtk directory created from DOS 6: case and length shortened to 8+3 characters. 
+- The customized DECtalk file for Emacspeak (tcldtk.c) used a too small buffer.
+- The init took a very long time if no floppy drive was present.
+- emacs-w3m: the bug discovered by Doug, has been fixed by the emacs-w3m team. 
+-- This url was concerned: http://www.klas.com/talkingbooks/nc 
+-- "Attempt to submit a search and watch the miscommunication that takes place."
+
+###
+Release: 0.05
+Date: 1 October 2003
+- Based on Knoppix 3.3 (2003-09-24).
+- Emacspeak Festival MBROLA (EFM) is included. It supplies English or French software speech synthesis.
+- The Castillan Spanish or German files of the DECtalk software can be automatically installed.
+- If the alsa driver is required, the alsa cheatcode need only be typed once, and will be automatically restored during subsequent boots. More details.
+- The introductory menu is now available in 4 languages (Castillan Spanish and German have been added).
+- Selecting items in the menu: up and down arrow keys.
+- Repeating an item: left or right arrow keys.
+
+* New packages:
+
+- angband, angband-doc
+- aspell-fr, de, es, en
+- cdtool
+- ecasound
+- erc
+- vsound
+- links 2 (javascript+ssl)
+- nethack, nethack-console 
+- Simple Emacs Spreadsheat
+- tnt
+- zinf, zinf-extras, zinf-plugin-alsa, zinf-plugin-esound
+- .emacs: adding erc-speak
+- emacspeak-ss (DoubleTalk LT, Apollo2,...)
+
+###
+Release: 0.04
+Date: 15 August 2003
+- Based on Knoppix 3.2 (2003-06-06).
+- The preferences (volume, type of keyboard,...) are selected via the talking menu.
+- Preferences and documents may be saved. 
+- The iso image is smaller (378 MB).
+- Prompt whether the CD should be ejected or not ejected before the system is halted.
+- A few bugs have been fixed.
+
+###
+Release: 0.03
+Date: 6 June 2003
+- First public release.
+- Knoppix 3.2 (2003-05-20) customization.
+- The menu is more comfortable thanks to the aural feedback based on pre-recorded English and French messages.
+- Automatically logged in as user knoppix on tty1.
+- In French, the key map fr-pc is enforced.
+- The user may quit Emacspeak and run it again with the previously selected Text-To-Speech synthesizer loaded automatically.
+
+###
+Release: 0.02
+Date: 2003-05-04
+
+Description:
+- Knoppix 3.2
+- Emacspeak 18.0
+- The emacspeak dtk software speech server is customized: 
+  software-dtk/Makefile: compiling on Debian (thanks to the Nath's HowTo)
+
+- Using the flite, eflite Debian packages (instead of the tarballs).
+- Size of the iso file:
+
+Notices:
+- Emacspeak 18.0 requires the file cus-dep.el which is not found in the Knoppix 3.2 emacs tree.
+  The file was extracted from emacs-21.2.tar.gz (ftp.gnu.org) and just placed in the expected directory (/usr/share/emacs/21.2/lisp).
+
+###
+Release: 0.01
+Date: 2003-05-01
+
+Description:
+Emacspeak is started as soon as the user is logged. Thanks to eflite + flite the text is synthesized (in english).
+
+A quite buguous release: well, this is the first one.
+
+Size of the CD around 628 Mb.
+Coming from Knoppix 3.1
+
+A CD was built thanks to a few shell scripts. The aim is that the (hoped) contributors may work from scripts instead of a huge downloaded iso file. 
+
+###
+Release x.x 
+Date: Day Month YEAR
+
+* Overview
+* Major updates
+* Doc
+* Bug fixes
+* Enhancements
+* New packages

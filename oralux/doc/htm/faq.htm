@@ -1,0 +1,552 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>Oralux: FAQ</title>
+<meta http-equiv="Content-Type" content="text/html;
+     charset=iso-8859-1" />
+<meta name="Author" lang="fr" content="Oralux Team" />
+<meta name="Generator" content="emacs" />
+<link rel="stylesheet" href="webstuff/old.css" type="text/css" />
+<link rel="stylesheet" href="webstuff/oralux.css"
+ type="text/css" media="all" />
+<link rel="stylesheet" href="webstuff/faq.css"
+type="text/css" media="all" />
+</head>
+<body id="oralux-org">
+ <div id="header">
+  <h1>
+    <a href="index.htm">
+    <span id="firstspan">
+    <img alt="" src="webstuff/oralux.gif" />
+    Oralux
+    </span>
+    </a> <span class="sep">:</span> <span id="secondspan">Audio GNU/Linux distro for vision impaired persons</span>
+  </h1>
+ </div> <!-- header -->
+ <div class="nav">
+  <ul>
+   <li>[ <a href="#main">Go to content</a> | </li>
+   <li><a href="mailto:contact@oralux.org">Contact us</a> ]</li>
+   </ul>
+ </div> <!-- nav -->
+
+ <div id="main">
+
+  <h2 id="questions">Questions</h2>
+  <h3>Checking the downloaded iso file</h3>
+  <ul>
+    <li><a href="#check">How can I check that my iso file downloaded correctly?</a></li>
+    <li><a href="#checkwin">Under MS-Windows</a></li>
+    <li><a href="#checklin">Under GNU/Linux</a></li>
+  </ul>
+
+  <h3>Burning the Oralux CD from the downloaded iso file</h3>
+  <ul>
+    <li><a href="#burnwin">Burning the CD under MS-Windows</a></li>
+    <li><a href="#burnlin">Burning the CD under GNU/Linux</a></li>
+  </ul>
+
+  <h3>Starting Oralux</h3>
+  <ul>
+    <li><a href="#startcd">How do I start Oralux?</a></li>
+    <li><a href="#startboot">Why the 30 second delay before Oralux starts?</a></li>
+    <li><a href="#startsound">What will I hear at the very beginning?</a></li>
+    <li><a href="#desktop">Which are the possible desktops?</a></li>
+  </ul>
+
+  <h3>Sound</h3>
+  <ul>
+   <li><a href="#soundplus">How do I increase the sound volume?</a></li>
+   <li><a href="#soundalsa">But there is no sound!</a></li>
+   <li><a href="#soundems">How do I change the sound volume under Emacspeak?</a></li>
+  </ul>
+
+  <h3>Braille</h3>
+  <ul>
+   <li><a href="#braillepossible">is Oralux able to drive a braille terminal?</a></li>
+  </ul>
+ 
+  <h3>Cheat codes</h3>
+  <ul>
+   <li><a href="#cheatcodedef">What is a "cheat code"</a>?</li>   
+   <li><a href="#cheatcodesave">How to save the alsa cheatcode</a></li>   
+   <li><a href="#cheatcodelist">"cheat code" list</a></li>
+  </ul>
+
+  <h3>Boot floppy</h3>
+  <ul>
+   <li><a href="#floppyuse">When is it a good idea to boot from a boot floppy?</a></li>
+   <li><a href="#floppybuild">How do I create a boot floppy?</a></li>
+  </ul>
+
+  <h3>Voice synthesis</h3>
+  <ul>
+   <li><a href="#syntincluded">Which voice synthesizers are included on the CD?</a></li>
+   <li><a href="#syntdtk1">What is the DECtalk software?</a></li>
+   <li><a href="#syntdtk2">How do I install the DECtalk software?</a></li>
+   <li><a href="#syntext">Can Oralux drive an external synthesizer?</a></li>
+   <li><a href="#syntems">How do I set the speech rate under Emacspeak?</a></li>
+   <li><a href="#syntextcheatcode">My sound card does not work, how to use the external synthesizer?</a></li>
+  </ul>
+
+  <h3>Permanently saving your preferences and documents</h3>
+  <ul>
+   <li><a href="#savepref">How do I save my preferences?</a></li>
+   <li><a href="#savehome">How do I save my documents?</a></li>
+  </ul>
+
+  <h3>Halt</h3>
+  <ul>
+   <li><a href="#halthalt">How do I shutdown my PC?</a></li>
+   <li><a href="#haltreboot">And about reboot?</a></li>
+  </ul>
+  
+  <h3>Miscellaneous questions</h3>
+  <ul>
+   <li><a href="#othershd">How do I install Oralux on a hard disk?</a></li>
+   <li><a href="#othersml">Is there a mailing list for this project?</a></li>
+   <li><a href="#otherscocoralux">Why a cock as logo?</a></li>
+  </ul>
+
+  <h3>Documentation</h3>
+  <ul>
+   <li><a href="#docconv">Conventions</a></li>
+   <li><a href="#docinfo">Info</a></li>
+   <li><a href="#docemacspeak">Emacspeak</a></li>
+   <li><a href="#docemacs">Emacs</a></li>
+   <li><a href="#docgnulinux">GNU/Linux</a></li>
+  </ul>
+
+ </div> <!-- questions -->
+ 
+ <div id="answers">
+
+  <h2 id="answers1">Some answers to frequently asked questions:</h2>
+
+  <h3>Checking the downloaded iso file <a href="#note">[1]</a></h3>
+
+  <h4 id="check">How can I check that my iso file downloaded correctly?</h4>
+  <p>Important note: Make sure that you download the ISO in binary mode
+(FTP). By default, Netscape downloads the file in ASCII mode, which
+corrupts the image.</p>
+
+  <p>If the download fails, you can use &quot;Resume&quot; which allows you to
+continue the download. This works with wget, ftp (reget), ncftp,
+CuteFTP, Getright, ...</p>
+
+  <h4 id="checkwin">Under MS-Windows:</h4>
+  <p>Once the download is complete, you can check the integrity of the ISO file by using the md5 key. Please download <a href="http://www.etree.org/md5com.html">md5sum.exe</a> and the <a href="http://oralux.org/Oralux_0.6-alpha.iso.md5">Oralux md5sum</a> beforehand for this purpose.</p>
+
+  <h4 id="checklin">Under GNU/Linux</h4>
+  <p>The <a href="http://oralux.org/Oralux_0.6-alpha.iso.md5">Oralux md5sum</a> should be placed in the same directory as the iso file.</p>
+  <p>In a shell terminal, type:</p>
+  <kbd>md5sum -c Oralux_0.6-alpha.md5</kbd>
+
+  <h3>Burning the Oralux CD from the downloaded iso file <a href="#note">[1]</a></h3>
+
+  <h4 id="burnwin">Burning the CD under MS-Windows</h4>
+  <p>Any CD-Writing package can burn ISO images directly to a CD-Rom.</p>
+
+  <h5>Easy CD Creator</h5>
+  <ul>
+    <li>Open Easy CD Creator.</li>
+    <li>Go to the &quot;File&quot; menu.</li>
+    <li>Select &quot;Create CD from disc image&quot;.</li>
+    <li>In the file selection dialogue, make sure to change the bottom combo box (&quot;Files of type:&quot;) to &quot;ISO image files&quot;.</li>
+    <li>The programme will do the rest after you browse to the required iso file.</li>
+  </ul>
+  <p>Thanks to Zacheyer.</p>
+
+  <h5>WinOnCD</h5>
+  <p>Click the "New" button and select a "track-image" project. So long
+as you are in track mode, and not file-system mode, dragging a track
+image file onto the CD window should make the programme accept it as a
+raw track. WinOnCD uses .RAW as its own extension.</p>
+  <p>Thanks to Rick Jones.</p>
+
+  <h5>Nero Burning Rom</h5>
+  <ul>
+    <li>Open Nero.</li>
+    <li>Close the wizard if it automatically starts.</li>
+    <li>select "Burn Image...".</li>
+    <li>then to &quot;Burn Image...&quot;.</li>
+    <li>In the next dialog, click on &quot;Image Files (*.nrg)&quot; and select &quot;All files (*.*)&quot;.</li>
+    <li>Browse to the .iso file and accept the selection.</li>
+    <li>In the following dialog, make sure that the following parameters are set as follows:</li>
+    <li><ol>
+      <li>Type of Image is: Data Mode 1</li>
+      <li>Block size: 2048</li>
+      <li>Image header: 0</li>
+      <li>Image trailer: 0</li>
+      <li>All the checkboxes are unchecked.</li>
+    </ol></li>
+    <li>Click &quot;OK&quot;.</li> 
+    <li>In the next dialog, check that the &quot;write&quot; and &quot;finalize&quot; options are active.</li>
+    <li>Click on &quot;Write&quot;.</li>
+  </ul>
+  <p>Thanks Antonio Asensi.</p>
+
+  <h4 id="burnlin">Burning the CD under GNU/Linux</h4>
+  <p>First, determine your cd writer's SCSI target. Type:</p>
+  <kbd>cdrecord -scanbus</kbd>
+
+  <p>If the SCSI target is 0,0,0 and the speed 8x, type:</p>
+  <kbd>cdrecord -v -eject speed=8 -pad dev=0,0,0  oralux.iso</kbd>
+
+  <h3>Starting Oralux</h3>
+  <h4 id="startcd">How do I start Oralux?</h4>
+  <p>Your PC will boot up the CD automatically if the BIOS is set up to
+do so. The BIOS needs to be set so that the CD ROM will be checked for
+a bootable cd before booting from a fixed medium, e.g. the operating
+system on your hard disk.</p>
+  <p>Another option is <a href="#floppyuse">to boot up from a floppy</a> which will start the Oralux CD. Batch files for creating such a floppy are available on the Oralux CD in the /Knoppix directory.</p>
+
+  <h4 id="startboot">Why the 30 second delay before Oralux starts?</h4>
+  <p>When the PC boots up the CD, the following input command line is
+  displayed for a few seconds:</p>
+  <samp>boot:</samp>
+  <p>Using this command line, you may enter a number of boot parameters, including the type of your braille terminal. The expected keywords are known as "cheat codes".</p>
+  <p>If no key is pressed within 30 seconds, Oralux automatically starts. To start Oralux immediately, simply press "enter" at the "boot:" prompt.</p>
+
+  <h4 id="startsound">What will I hear at the very beginning?</h4>
+  <p>If everything works correctly, you will hear the Oralux mascot, Cocoralux, singing.  This is followed by a beep.</p>
+    <p>If there is no sound, there are two possible causes:</p>
+    <ul>
+    <li>Either your sound device detection failed; you might be able to
+fix this by booting again and providing <a href="#soundalsa">the relevant cheat code</a>.</li>
+    <li>or the volume may need to be <a href="#soundplus">increased</a>.</li>
+    </ul>
+
+  <h4 id="desktop">Which are the possible desktops?</h4>
+  <p>Release 0.6 proposes two desktops: Emacspeak or an environment based on YASR.</p>
+  <p>You may want to select the desktop using the audio menu.</p>
+  <p>When Emacspeak starts, a short text is displayed and supply more details about the audio desktop.</p>
+  <p>YASR is a screen reader. Under YASR, you can select a software and launch it using a "mini menu".</p>
+  <p>These softwares are:</p>
+  <ul>
+  <li>ne, a rather intuitive text editor. ne means <span lang="en">Nice Editor</span>.</li>
+  <li>links 2, the web browser with a javascript support and a mode for the vision impaired persons (links numbering,...).</li>
+  <li>a calculator (well, python in fact.)</li>
+  <li>bash, the shell terminal for the command line.</li>
+  </ul>
+  <p>This mini menu will be updated and enhanced in the future.</p>
+
+   <h3>Sound</h3>
+   <h4 id="soundplus">How do I increase the sound volume?</h4>
+   <p>Once the cock stops singing, Oralux beeps. You can then change the sound volume:</p>
+   <ul>
+   <li>To increase the volume, press the Enter key.</li>
+   <li>To decrease the volume, press the Space key.</li>
+   <li>And any other key to go to the next stage.</li>
+   </ul>
+
+   <h4 id="soundalsa">But there is no sound!</h4>
+    <p>Reboot your PC using the alsa cheat code.</p>
+    <p>When no code is supplied, the OSS drivers are used.</p>
+    <p>By supplying the alsa keyword, the ALSA drivers will be loaded, hoping that they will be able to drive your sound device.</p>
+    <p>Type the following command line at boot time:</p>
+    <kbd>
+    knoppix alsa
+    </kbd>
+   <p>By default, as the keyboard is not a French azerty one, I have
+    to press the q key instead of the a key:</p>
+    <kbd>
+    knoppix qlsq
+    </kbd>
+  
+   <h4 id="soundems">How do I change the sound volume under Emacspeak?</h4>
+   <p>There are a number of methods to change the volume.  Here is one:</p>
+   <kbd>ESCAPE ! aumix -v 50</kbd>
+   <p>This means: press the ESCAPE key, then the ! key, then type "aumix -v 50".</p>
+   <p>50 is a middle range value. You may choose any value from 0 (silence) to 100.</p>
+   <p>ESCAPE ! opens an input line, where a command line is expected. This command
+   line could be compared to MSDOS, but this is a shell (more powerful).</p>
+   <p>Here the command line is simply:</p>
+   <kbd>aumix -v 50</kbd>
+   <p>This command calls the aumix mixer and sets the volume to 50.</p>
+
+   <h3>Braille</h3>
+   <h4 id="braillepossible">Is Oralux able to drive a braille terminal?</h4>
+   <p>Yes, thanks to BRLTTY.</p>
+   <p>Since release 0.6, your braille display can be selected using the audio menu.</p>
+   <p>Or at boot time, use the <a href="#cheatcode">"cheat code"</a> brltty.</p>
+   <p>For example:</p>
+   <kbd>brltty=al,/dev/ttyS0,text.german.tbl</kbd>
+
+   <h3 id="cheatcode">Cheat codes</h3>
+   <h4 id="cheatcodedef">What is a "cheat code"?</h4>   
+   <p>This is a keyword (parameter) which is supplied at boot time to help select or set up drivers required by your particular system.</p>
+   <p>With experience, you will discover which cheat codes are required for your PC.</p>
+   <p>These keywords are typed or automatically supplied using <a href="#floppy">a boot floppy</a> configured with the necessary custom settings.</p>
+   <p>At boot time, for 30 seconds, this prompt is displayed: "boot:".
+   You may want to type e.g.</p>
+   <kbd>
+   knoppix alsa 
+   </kbd>
+
+   <h4 id="cheatcodesave">How to save the alsa cheatcode</h4>   
+   <p>How to save the alsa cheatcode:
+</p>
+<p>Oralux can store the alsa code. So, for future boots, it won't be necessary to type it again.</p>
+   <dl>
+     <dt>Here is the sequence:</dt>
+     <dd>Type the alsa cheat code at the boot prompt.</dd>
+     <dd>Once in Emacspeak, run the <a href="#savepref">"saveconfig"</a> command in a shell to save your configuration.</dd>
+     <dd>the alsa cheatcode will then be automatically loaded for subsequent boots.</dd>
+   </dl>
+   <p>To remove the alsa code, type the cheatcode "noalsa" at boot time:</p>
+   <kbd>
+   knoppix noalsa
+   </kbd>
+   <p>Then, once Emacspeak is started, run saveconfig to save the setting.</p>
+
+   <h4 id="cheatcodelist">"cheat code" list</h4>
+   <p>The list is on the CD under /KNOPPIX/oralux-cheatcodes.txt.</p>
+
+   <h3 id="floppy">Boot floppy</h3>
+   <h4 id="floppyuse">When is it a good idea to boot from a boot floppy?</h4>
+   <p>Usually, the PC boots up the Oralux CD automatically.</p>
+   <p>In some cases, a few PC's can't boot up from the CD ROM or setting up the BIOS correctly is a difficult operation for the user.</p>
+   <p>A boot floppy can also be conveniant, since it can be set up to supply Oralux with the required cheat codes automatically, saving the user the effort of having to type them at each boot.</p>
+  
+   <h4 id="floppybuild">How do I create a boot floppy?</h4>
+   <h5>With MS-Windows</h5>
+    <p>knoblind.bat is a batch MS DOS file which can create the boot floppy or update it.</p>
+
+    <h5>With Oralux</h5>
+    <p>Insert a floppy disk and type:</p>
+    <kbd>dd if=/cdrom/KNOPPIX/boot.img of=/dev/fd0 bs=18k</kbd>
+    <p>Then, update the file /mnt/floppy/syslinux.cfg with the necessary cheatcode. The second line of the file concerned, is the APPEND line.</p>
+    <p>This line is limited to 262 characters with Oralux 0.05.</p>
+
+   <h3>Voice synthesis</h3>
+   <h4 id="syntincluded">Which voice synthesizers are included on the CD?</h4>
+    <p>The CD includes a free english Text-To-Speech (TTS) software synthesizer: <a href="http://www.speech.cs.cmu.edu/flite/">Flite</a> (Carnegie Mellon University).</p>
+    <p>It also includes <a href="http://www.pollock-nageoire.net/festival/">EFM</a> from <span lang="fr">Pierre Lorenzon</span> for French and English. EFM is based on <a href="http://www.cstr.ed.ac.uk/projects/festival/">Festival</a> (University of Edinburgh) and <a href="http://tcts.fpms.ac.be/synthesis/mbrola.html">MBROLA</a> (<span lang="fr">Thierry Dutoit, Universite de Mons</span>).</p>
+
+    <p>ParleMax is a speech server in French based on LLiaphon and MBROLA. It comes from the <a href="http://www.culte.org/projets/biglux/">Biglux</a> team.</p>
+    <p>Multispeech is a speech server based for Russian on Ru_tts and for the English on freephone and MBROLA. Multispeech can automatically switch from one synthesis to the other. Igor B. Poretsky is the <a href="ftp://ftp.rakurs.spb.ru/pub/Goga">Multispeech and Ru_tts</a> author.</p>  
+
+   <h4 id="syntdtk1">What is the DECtalk software?</h4>
+     <p>If you bought the <a
+     href="http://www.fonix.com/page.cfm?name=espeech_dectalk" hreflang="en"
+     lang="en">DECtalk software</a> (release 4.61), Oralux will install it from your hard disk.</p>
+     <p>Oralux can also install release 5.0.</p>
+
+     <p>DECtalk is available in several languages and especially in French.</p>
+   <p>Here is the url of their <a href="http://www.fonix.com/page.cfm?name=cart&amp;ID=15&amp;alternative=15">purchase form</a> should you be interested in learning more.</p>
+   <p>Obviously, we have no financial interest in promoting the DECtalk software.</p>
+
+   <h4 id="syntdtk2">How do I install the DECtalk software?</h4>
+
+   <p>In order for Oralux to find your DECtalk package, you will have to create a directory on one of your partitions. An NTFS partition should be avoided, since Oralux currently cannot write to an NTFS partition. If you place the package on a NTFS partition, the DECtalk serial number will be requested at each boot.
+   </p>
+
+   <p>The expected directory name is <em>dtk</em> (all lower cases).</p>
+   <p>This directory must be at the highest level of the tree in the partition.</p>
+   <p>E.g. if /dev/hda1 is mounted on /var, Oralux will succeed to find
+   /var/dtk but will fail with /var/foo/dtk .</p>
+
+   <p>Place your DECtalk package in your dtk directory: its expected name is something like linux...tar.gz</p>
+   <p>If you have a second DECtalk package, please place it there too. Oralux can install the French, Castillan Spanish or German optional package too.</p>
+
+
+   <h4 id="syntext">Can Oralux drive an external synthesizer?</h4>
+   <p>Oralux includes several drivers for the external synthesizers.</p>
+   <p>These drivers come from Emacspeak-ss.</p>
+   <p>If your sound card works under Oralux, you can set your preferences using the audio menu.</p>
+   <p>For example, you will select your external synthesizer in a list.</p>
+
+   <h4 id="syntextcheatcode">My sound card does not work, how to start my external synthesizer ?</h4>
+   <h5>The tts cheatcode</h5>
+   <p>For example, the following line entered at boot time, starts Emacspeak with DoubleTalk LT:</p>
+   <kbd>
+   knoppix tts=doubletalk 
+   </kbd>
+   <p>By default, the synthesizer is supposed to be plugged into the first serial port (ttyS0).</p>
+   <p>To select the second serial port, you may want to enter :</p>
+   <kbd>
+   knoppix tts=doubletalk,ttyS1 
+   </kbd>
+
+   <h5>Available drivers</h5>
+   <p>Here is the list of the included drivers.</p>
+   <p>First, there is the cheatcode keyword for the tts cheatcode, then the synthesizer name.</p>
+   <ul>
+   <li>accent: Accent SA</li>
+   <li>braillenspeak: Braille Lite, Braille 'n Speak, Type 'n Speak</li>
+   <li>ciber: Ciber 232, Ciber 232 Plus</li>
+   <li>dtk-exp: DECtalk Express</li>
+   <li>dtk-mv: DECtalk Multivoice, DECtalk 3</li>
+   <li>apollo: Dolphin Apollo</li>
+   <li>doubletalk: DoubleTalk LT, LiteTalk</li>
+   <li>doubletalkpc: DoubleTalk PC</li>
+   <li>pchablado: PC Hablado notebook</li>
+   </ul>
+
+   <h4 id="syntems">How do I set the speech rate under Emacspeak?</h4>
+   <p>To change the rate of the speech:</p>
+   <kbd>C-e d 1</kbd>
+   <p>1 = very slow rate,</p>
+   <kbd>C-e d 9</kbd>
+   <p>9 = very fast rate.</p>
+   <p>
+   Experiment with numbers between 1 and 9 to find the speech rate that suits you best.
+   </p>
+   <p>Note: C-e means: press and hold the CONTROL key and press the e key. Release both keys. Press the d key, then press 9.</p>
+   <p>All Emacspeak commands start with C-e. d is related to the speech server (the first one was the DECtalk).</p>
+
+   <h3>Permanently saving your preferences and documents</h3> 
+   <h4 id="savepref">How do I save my preferences?</h4>
+   <p>You will probably wish to save the volume, the type of keyboard, and any other preferences set using the introductory menu, as well as other files for example, the Internet parameters....</p>
+   <p>Idem for the other files as for example the Internet parameters.</p>
+   <p>Saveconfig is able to save these files to the hard disk, a floppy disk or a USB key,...</p>
+   <p>During all subsequent boots, these parameters will be automatically searched for and loaded.</p> 
+   <p>Here is the sequence under <a href="#docemacspeak">Emacspeak</a></p>
+   <p>Then, you will be asked to indicate which and where the configuration files will be saved.</p>
+
+   <h4 id="savehome">How do I save my documents?</h4>
+   <p>The directory where you can easily store your documents is /home/knoppix.</p>
+   <p>By default, this directory is in ramdisk. Note: As soon as your computer is turned off, the directory will be lost!</p>
+   <p>In fact, if you want to, the /home/knoppix directory can be stored on your hard disk or a USB key.</p>
+   <p>At the next boot, this directory will be automatically searched.</p>
+   <p>Here is the sequence under <a href="#docemacspeak">Emacspeak</a></p>
+   <p>Start a shell buffer</p>
+   <kbd>M-x shell</kbd>
+   <p>Start the mkpersistenthome script</p>
+   <kbd>mkpersistenthome</kbd>
+   <p>You will then select where your home directory will be stored.</p>
+   <p>Then, quit Emacspeak using C-x C-c or YASR,</p>
+   <p>and reboot your PC.</p>
+   
+   <h3>Halt</h3>
+   <h4 id="halthalt">How do I shutdown my PC?</h4>
+    <p>First, quit Emacspeak using C-x C-c</p>
+    <p>or quit YASR.</p>
+    <p>Then, the audio menu will propose to shutdown the PC</p>
+
+   <h4 id="haltreboot">And about reboot?</h4>
+    <p>First, quit Emacspeak using C-x C-c or quit YASR.</p>
+    <p>Then, using the audio menu, reboot the PC.</p>
+    <p>Or press the three magical keys <kbd>Control Alt
+    Del</kbd></p>
+
+   <h3>Miscellaneous questions</h3>
+   <h4 id="othershd">How do I install Oralux on a hard disk?</h4>
+   <p>The real installation on hard disk is a future feature.</p>
+   <p>However, it is possible to copy the Oralux compressed file from the CD to the hard disk on any vfat or ext2 partition (but not a ntfs one). Less than 700 MBytes will be used. Oralux running from a hard disk will behave just as it did on CD: it won't be possible to add or update new programs. This may also be an advantage.</p>
+   <p>The two distinct stages to this operation are:</p>
+   <ol>
+   <li>Create a KNOPPIX directory. This directory should be at the
+highest level of the partition's tree: e.g. with MS-Windows, C:\KNOPPIX
+is correct, C:\MyFolder\KNOPPIX is not correct.    
+</li>
+   <li>Copy the file KNOPPIX/KNOPPIX from the Oralux CD to the new directory.</li>
+   </ol>
+   <p>The Oralux CD or a boot floppy will be required to boot Oralux from the hard disk.</p>
+
+    <h3 id="othersml">Is there a mailing list for this project?</h3>
+    <p>Yes! Here are 
+    <a href="http://oralux.org/archives-ml.php?L=ml_oralux.org"> our very recent archives</a>.</p>
+<!-- a href="http://listes.lost-oasis.net/?A=LIST&amp;L=ml_oralux.org"--> 
+    <dl>
+    <dt>Just a few words, about the list:</dt>
+    <dd>The main language for discussion is English.</dd>
+    <dd>If you are not quite comfortable with English, please feel free to use French.</dd>
+    </dl>
+    <p>To subscribe, simply send <a href="mailto:contact@oralux.org">an email</a> with "subscribe" as subject.</p>
+
+    <h3 id="otherscocoralux">Why a cock as logo?</h3>
+    <p>That's right, the Oralux logo is a cock singing in front of the
+    sun.</p>
+    <p>The cock's song recalls the word <em>Oral</em> and as the cock sings at
+    rising dawn, it recalls <em>Lux</em> which means Light.</p> 
+      <p>And it's not an anonymous cock: this is Cocoralux!</p>
+
+   <h3>Documentation</h3>
+   <h4 id="docconv">Conventions</h4>
+
+   <p>Just a few words, if you are not yet familiar with the Emacs syntax C-x or
+   M-x.</p>
+    <p>C-x means: hold down the
+    Control key and press x, then release them both.</p>
+    <p>M is the so called META key which is the left ALT key on most keyboards.</p>
+    <p>M is also the Escape key. However, the Escape key is not held down while the following key is pressed.</p>
+
+   <h4 id="docinfo">Info</h4>
+    <p>The Emacs and Emacspeak documentation are mostly in the Info
+    format. This format structures the documentation, and allows the
+    reader to go from node to node. To quickly learn the few Info
+    commands, just press C-h i</p>
+
+   <h4 id="docemacspeak">Emacspeak</h4>
+    <p>Here is how to access the Emacspeak documentation</p>
+    <dl>
+    <dt>C-h i m Emacspeak</dt>
+    <dd>The Emacspeak Info pages.</dd>
+
+    <dt>C-e F</dt>
+    <dd>Emacspeak FAQ.</dd>
+
+    <dt>C-h C-e</dt>
+    <dd>Displays a list of standard Emacspeak commands.</dd>
+
+    <dt>C-e C-h</dt>
+    <dd>Emacspeak learning mode: enters a mode in which the
+     function of every key that you type is spoken; this mode can be
+     terminated with the `C-g' `keyboard-quit' command.</dd>
+
+    <dt>The Emacspeak mailing list</dt>
+    <dd>And particularly its <a href="http://www.cs.vassar.edu/~priestdo/emacspeak/">archives</a>.</dd>
+    </dl>
+ 
+   <h4 id="docemacs">Emacs</h4>
+   <dl>
+   <dt>C-h i m emacs</dt>
+   <dd>The Emacs editor</dd>
+
+   <dt>C-h i m emacs FAQ</dt>
+   <dd>Emacs FAQ</dd>
+
+   <dt>C-h t</dt>
+   <dd>The online tutorial.</dd>
+
+   <dt>C-h a</dt>
+   <dd>A propos: display the Emacs commands which match with the supplied text.</dd>
+
+   <dt>C-h k</dt>
+   <dd>Display documentation of the function invoked by the supplied keys sequence.</dd>
+   </dl>
+
+   <h4 id="docgnulinux">GNU/Linux</h4>
+   <dl>
+   <dt>Carrefour BLinux</dt>
+   <dd>The French pages from the mailing list "Carrefour BLinux", to help
+you get started with GNU/Linux. They are in directory /usr/share/oralux/doc/cblx. Thanks to Osvaldo La Rosa.</dd>
+   <dt>TUX&amp;GNU@school</dt>
+   <dd>The sixth release of TUX&amp;GNU@school is available in English,
+   French, and German (furthermore, an audio ogg vorbis file is available in German). Directory
+   /usr/share/oralux/doc/tgs. Thanks to Mario Fux.</dd>
+   </dl>      
+
+   <h4 id="note">Note 1</h4>
+   <p>The sections "Checking the downloaded iso file" and "Burning the Oralux CD from the downloaded file" come 
+   from <a href="http://www.morphix.org">the Morphix website</a> which gathered them from the <a href="http://mandrakelinux.com/en/">Mandrake</a> Readme (which gathered them from...) and have been slightly edited.</p>
+        
+</div> <!-- answers -->
+
+
+
+
+ <div id="footer">
+  <div class="nav">
+  <ul>
+   <li>[ <a href="#main">Go to content</a> | </li>
+   <li><a href="mailto:contact@oralux.org">Contact us</a> ]</li>
+ </ul>
+ </div> <!-- nav -->
+  <p>Copyright 2004, Oralux Team.</p>
+  <p>Verbatim copying and distribution of this entire article is permitted in any medium, provided this notice is preserved</p>
+ </div> <!-- footer -->
+</body>
+</html>

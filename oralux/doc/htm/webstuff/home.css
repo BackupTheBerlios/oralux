@@ -1,0 +1,12 @@
+/* More styles for the homepage */
+div#sidebar dt {
+ color:#f00;
+ background-color:inherit;
+ font-weight:bold;
+ margin-top:0.5em;
+}
+
+div#sidebar dd {
+ margin-left:1em;
+}
+

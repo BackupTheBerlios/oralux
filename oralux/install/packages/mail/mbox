@@ -1,0 +1,116 @@
+From contact@oralux.org  Tue Jul  6 19:23:59 2004
+X-VM-Summary-Format: "%n %*%a %-17.17F %-3.3m %2d %4l/%-5c %I\"%s\"\n"
+X-VM-Labels: nil
+X-VM-VHeader: ("Resent-" "From:" "Sender:" "To:" "Apparently-To:" "Cc:" "Subject:" "Date:") nil
+X-VM-Last-Modified: (16618 57437 261652)
+X-VM-IMAP-Retrieved: nil
+X-VM-POP-Retrieved: nil
+X-VM-Bookmark: 1
+X-VM-v5-Data: ([nil t nil nil nil nil nil nil nil]
+	["43" "Tuesday" "6" "July" "2004" "19:19:47" "+0200" "contact@oralux.org" "contact@oralux.org" nil "2" "This is the first message" "^From:" nil nil "7" nil nil (number " " mark "U    contact@oralux.or Jul  6    2/43    " thread-indent "\"This is the first message\"\n") nil nil nil nil nil nil]
+	nil)
+Return-Path: <contact@oralux.org>
+X-Original-To: gilles@localhost
+Delivered-To: gilles@localhost
+Received: from localhost (Knoppix [127.0.0.1])
+	by host.local.oralux.org (Postfix) with ESMTP id D0B6614072C
+	for <gilles@localhost>; Tue,  6 Jul 2004 19:23:59 +0200 (CEST)
+Received: from mx1.lost-oasis.net [212.85.153.8]
+	by localhost with POP3 (fetchmail-6.2.4)
+	for gilles@localhost (single-drop); Tue, 06 Jul 2004 19:23:59 +0200 (CEST)
+Received: from [212.85.153.18] (helo=zaphod.lost-oasis.net)
+	by mx1.lost-oasis.net with esmtp (Exim 3.35 #1)
+	id 1Bhtbf-0007Yj-00
+	for contact@oralux.org; Tue, 06 Jul 2004 19:19:47 +0200
+Received: from www-data by zaphod.lost-oasis.net with local (Exim 3.35 #1 (Debian))
+	id 1Bhtbf-0005dS-00
+	for <contact@oralux.org>; Tue, 06 Jul 2004 19:19:47 +0200
+Received: from 82.67.223.79
+        (SquirrelMail authenticated user contact@oralux.org)
+        by panel.lost-oasis.net with HTTP;
+        Tue, 6 Jul 2004 19:19:47 +0200 (CEST)
+Message-ID: <32821.82.67.223.79.1089134387.squirrel@panel.lost-oasis.net>
+User-Agent: SquirrelMail/1.4.2
+MIME-Version: 1.0
+Content-Type: text/plain;charset=iso-8859-1
+Content-Transfer-Encoding: 8bit
+From: contact@oralux.org
+To: contact@oralux.org
+Subject: This is the first message
+Date: Tue, 6 Jul 2004 19:19:47 +0200 (CEST)
+
+Hello,
+You are reading this mail using VM.
+
+From contact@oralux.org  Tue Jul  6 19:24:00 2004
+X-VM-v5-Data: ([nil t nil nil nil nil nil nil nil]
+	["45" "Tuesday" "6" "July" "2004" "19:22:13" "+0200" "contact@oralux.org" "contact@oralux.org" nil "1" "Libre Software meeting" nil nil nil "7" nil nil (number " " mark "U    contact@oralux.or Jul  6    1/45    " thread-indent "\"Libre Software meeting\"\n") nil nil nil nil nil nil]
+	nil)
+Return-Path: <contact@oralux.org>
+X-Original-To: gilles@localhost
+Delivered-To: gilles@localhost
+Received: from localhost (Knoppix [127.0.0.1])
+	by host.local.oralux.org (Postfix) with ESMTP id EC27C14072C
+	for <gilles@localhost>; Tue,  6 Jul 2004 19:23:59 +0200 (CEST)
+Received: from mx1.lost-oasis.net [212.85.153.8]
+	by localhost with POP3 (fetchmail-6.2.4)
+	for gilles@localhost (single-drop); Tue, 06 Jul 2004 19:23:59 +0200 (CEST)
+Received: from [212.85.153.18] (helo=zaphod.lost-oasis.net)
+	by mx1.lost-oasis.net with esmtp (Exim 3.35 #1)
+	id 1Bhte2-0007pG-00
+	for contact@oralux.org; Tue, 06 Jul 2004 19:22:14 +0200
+Received: from www-data by zaphod.lost-oasis.net with local (Exim 3.35 #1 (Debian))
+	id 1Bhte1-0005dq-00
+	for <contact@oralux.org>; Tue, 06 Jul 2004 19:22:13 +0200
+Received: from 82.67.223.79
+        (SquirrelMail authenticated user contact@oralux.org)
+        by panel.lost-oasis.net with HTTP;
+        Tue, 6 Jul 2004 19:22:13 +0200 (CEST)
+Message-ID: <32823.82.67.223.79.1089134533.squirrel@panel.lost-oasis.net>
+Date: Tue, 6 Jul 2004 19:22:13 +0200 (CEST)
+Subject: Libre Software meeting
+From: contact@oralux.org
+To: contact@oralux.org
+User-Agent: SquirrelMail/1.4.2
+MIME-Version: 1.0
+Content-Type: text/plain;charset=iso-8859-1
+Content-Transfer-Encoding: 8bit
+
+Please send me more details about the event.
+
+From contact@oralux.org  Tue Jul  6 19:24:00 2004
+X-VM-v5-Data: ([nil t nil nil nil nil nil nil nil]
+	["35" "Tuesday" "6" "July" "2004" "19:24:28" "+0200" "contact@oralux.org" "contact@oralux.org" nil "1" "Feedback about the last release" nil nil nil "7" nil nil (number " " mark "U    contact@oralux.or Jul  6    1/35    " thread-indent "\"Feedback about the last release\"\n") nil nil nil nil nil nil]
+	nil)
+Return-Path: <contact@oralux.org>
+X-Original-To: gilles@localhost
+Delivered-To: gilles@localhost
+Received: from localhost (Knoppix [127.0.0.1])
+	by host.local.oralux.org (Postfix) with ESMTP id 0F7B914072C
+	for <gilles@localhost>; Tue,  6 Jul 2004 19:24:00 +0200 (CEST)
+Received: from mx1.lost-oasis.net [212.85.153.8]
+	by localhost with POP3 (fetchmail-6.2.4)
+	for gilles@localhost (single-drop); Tue, 06 Jul 2004 19:24:00 +0200 (CEST)
+Received: from [212.85.153.18] (helo=zaphod.lost-oasis.net)
+	by mx1.lost-oasis.net with esmtp (Exim 3.35 #1)
+	id 1BhtgC-0001cI-00
+	for contact@oralux.org; Tue, 06 Jul 2004 19:24:28 +0200
+Received: from www-data by zaphod.lost-oasis.net with local (Exim 3.35 #1 (Debian))
+	id 1BhtgC-0005mq-00
+	for <contact@oralux.org>; Tue, 06 Jul 2004 19:24:28 +0200
+Received: from 82.67.223.79
+        (SquirrelMail authenticated user contact@oralux.org)
+        by panel.lost-oasis.net with HTTP;
+        Tue, 6 Jul 2004 19:24:28 +0200 (CEST)
+Message-ID: <32824.82.67.223.79.1089134668.squirrel@panel.lost-oasis.net>
+Date: Tue, 6 Jul 2004 19:24:28 +0200 (CEST)
+Subject: Feedback about the last release
+From: contact@oralux.org
+To: contact@oralux.org
+User-Agent: SquirrelMail/1.4.2
+MIME-Version: 1.0
+Content-Type: text/plain;charset=iso-8859-1
+Content-Transfer-Encoding: 8bit
+
+I will send the feedback tomorrow.
+

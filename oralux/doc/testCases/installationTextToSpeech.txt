@@ -1,0 +1,148 @@
+* title: Yasr and DoubleTalk LT
+creation: 2004 04 10
+checked by:
+required: 
+** status: not passed
+description:
+At the moment, if an external synthesis is selected with Yasr, then we will force a software synthesis.
+- Start the PC
+- In the installation menu selects desktop = Yasr
+- Checks that only the software synthesis are proposed
+
+* title: Emacspeak and DoubleTalk LT
+creation: 2004 04 10
+checked by:
+required: 
+** status: not passed
+description:
+- Start the PC
+- In the installation menu selects desktop = Emacspeak
+- Select , and DoubleTalk LT
+- Checks that Emacspeak uses DoubleTalk LT
+
+* title: Yasr and ParleMax
+creation: 2004 04 10
+checked by:
+required: 
+** status: not passed
+description:
+- Start the PC
+- In the installation menu selects desktop = Yasr, and ParleMax
+- Checks that Yasr uses ParleMax
+
+* title: Emacspeak and ParleMax
+creation: 2004 04 10
+checked by:
+required: 
+** status: not passed
+description:
+- Start the PC
+- In the installation menu selects desktop = Emacspeak, and Flite
+- Checks that Emacspeak uses Flite
+
+* title: Yasr and Emacspeak Festival Mbrola (EFM)
+creation: 2004 04 10
+checked by:
+required: 
+** status: not passed
+description:
+- Start the PC
+- In the installation menu selects desktop = Yasr, and EFM
+- Checks that Yasr uses EFM
+
+* title: Emacspeak and EFM
+creation: 2004 04 10
+checked by:
+required: 
+** status: not passed
+description:
+- Start the PC
+- In the installation menu selects desktop = Emacspeak, and EFM
+- Checks that Emacspeak uses EFM
+
+* title: Yasr and Flite
+creation: 2004 04 10
+checked by:
+required: 
+** status: not passed
+description:
+- Start the PC
+- In the installation menu selects desktop = Yasr, and Flite
+- Checks that Yasr uses Flite
+
+* title: Emacspeak and Flite
+creation: 2004 04 10
+checked by:
+required: 
+** status: not passed
+description:
+- Start the PC
+- In the installation menu selects desktop = Emacspeak, and Flite
+- Checks that Emacspeak uses Flite
+
+* title: installing DECtalk software 5.0 for a not English language
+creation: 2004 04 18
+checked by:
+required: 2 DECtalk software 5.0 files (for installing French) on a vfat partition in directory dtk
+** status: not passed
+description:
+- Reboot
+- When the installation menu will ask you, choose the DECtalk software
+in french, desktop = emacspeak
+- Jump the other choices and start emacspeak
+
+* title: installing DECtalk software 4.61 for a not English language
+creation: 2004 04 18
+checked by:
+required: 2 DECtalk software 4.61 files (for French) on a vfat partition in directory dtk
+** status: not passed
+description:
+- Reboot
+- When the installation menu will ask you, choose the DECtalk software
+in french, desktop = emacspeak
+- Jump the other choices and start emacspeak
+
+* title: DECtalk software copied from Win98
+creation: 2003 07 06
+checked by:
+required: 2 DECtalk software files (e.g. the french file) on the hard disk, copied from Win98
+** status: not passed
+description:
+- Reboot
+- When the installation menu will ask you, choose the DECtalk software
+in english, desktop = emacspeak
+- Jump the other choices and start emacspeak
+
+* title: DECtalk software copied from DOS
+creation: 2004 02 07
+checked by:
+required: 2 DECtalk software files (e.g. the french file) on the hard disk, copied from DOS
+** status: not passed
+description:
+- Reboot
+- When the installation menu will ask you, choose the DECtalk software
+in english, desktop = emacspeak
+- Jump the other choices and start emacspeak
+
+* title: Yasr and DECtalk
+creation: 2004 04 10
+checked by:
+required: one at least DECtalk software file on the hard disk
+** status: not passed
+description:
+- Reboot
+- When the installation menu will ask you, choose the DECtalk software
+in english, desktop = Yasr
+- Check that Yasr starts DECtalk.
+
+* title: check that entered boot options overrid the current ones
+creation: 2003 07 06
+checked by:
+required: 
+** status: not passed
+description:
+- Reboot
+- When the installation menu will ask you, choose the DECtalk software
+in english
+- Jump the other choices and start emacspeak
+

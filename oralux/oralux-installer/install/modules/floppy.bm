@@ -1,0 +1,27 @@
+#!/bin/bash
+
+#
+#
+
+function make_floppy
+{
+  mke2fs /dev/fd0
+  mkdir -p $TARGET_MNT_POINT/floppy
+  mount /dev/fd0 $TARGET_MNT_POINT/floppy
+  lilo -r $TARGET_MNT_POINT -b /dev/fd0 -i /floppy/boot.b -c -m /floppy/map
+  umount $TARGET_MNT_POINT/floppy
+}
+
+# mepis abstraction layer 
+# Syntax: mbfloppy Root-Device
+
+function mbfloppy_func
+{
+  BOOT_WHERE="partition"
+  HD_CHOICE="$1"
+  HD_FSTYPE="ext3"
+  TR=$TARGET_MNT_POINT
+  cp -f $SHAREPATH/knx_pivot_root /etc
+  add_bootmanager
+  make_floppy
+}

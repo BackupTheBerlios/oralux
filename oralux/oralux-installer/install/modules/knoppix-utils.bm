@@ -1,0 +1,25 @@
+#!/bin/bash
+
+CMDLINE="$(cat /proc/cmdline)"
+# some functions borrowed from knoppix-autoconfig
+
+stringinstring()
+{
+  case "$2" in *$1*) return 0;; esac
+  return 1
+}
+
+getbootparam()
+{
+  stringinstring "$1=" "$CMDLINE" || return 1
+  result="${CMDLINE##*$1=}"
+  result="${result%%[ 	]*}"
+  echo "$result"
+  return 0
+}
+
+checkbootparam()
+{
+  stringinstring "$1" "$CMDLINE"
+  return "$?"
+}
