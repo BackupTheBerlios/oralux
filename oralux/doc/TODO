@@ -136,7 +136,8 @@ Update the F2/F3 cheatcodes page
 
 Message from Edmond.
 --------------------------------------
-dot emacs saved in the persistent home, unfortunately saveconfig was not called again. 
++ Add nano
++ dot emacs saved in the persistent home, unfortunately saveconfig was not called again. 
 Then the old one .emacs is retreived at the next boot.
 
 "Une petite remarque qui m'a coûté bien du temps et que peut-être tu pourras répercuté sur lal liste mieux que moi.

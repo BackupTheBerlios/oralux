@@ -1,11 +1,11 @@
 <?php
 // ----------------------------------------------------------------------------
 // terminal.php
-// $Id: terminal.php,v 1.1 2004/09/27 20:30:29 gcasse Exp $
+// $Id: terminal.php,v 1.2 2004/10/17 21:35:25 gcasse Exp $
 // $Author: gcasse $
 // Description: managing the dumb terminals (emacs) or the others (so called enhanced)  
-// $Date: 2004/09/27 20:30:29 $ |
-// $Revision: 1.1 $ |
+// $Date: 2004/10/17 21:35:25 $ |
+// $Revision: 1.2 $ |
 // Copyright (C) 2004 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -46,6 +46,7 @@ class enhancedTerminal
     }
 
   // {{{ constructor, destructor
+
   function __construct()
     {
       ENTER("enhancedTerminal::__construct",__LINE__);
@@ -66,9 +67,11 @@ class enhancedTerminal
 	   dio_close_stdin();
 	 }
      }
+
    // }}}
    
    // {{{ getChar: return the first typed character
+
    function getChar( & $theChar)
      {
       ENTER("enhancedTerminal::getChar",__LINE__);
@@ -89,14 +92,16 @@ class enhancedTerminal
 	 }
        return $aResult;
      }
+
    // }}}
 
    // {{{ getLine
-   function getLine( & $theLine )
+
+   function getLine( & $theLine, $theLastInput=""  )
      {
       ENTER("enhancedTerminal::getLine",__LINE__);
        $aResult=getCharOK;
-       $theLine=dio_read_line_from_stdin();
+       $theLine=dio_read_line_from_stdin( $theLastInput);
 
        if ($theLine==$this->_myDownArrowKey)
 	 {
@@ -108,6 +113,7 @@ class enhancedTerminal
 	 }
        return $aResult;
      }
+
    // }}}
 
    // {{{ display the message according to the terminal
@@ -134,8 +140,8 @@ class enhancedTerminal
 	   break;
 
 	 case MessageNavigationInputBox:
-	   $theMessage[verbose][] = gettext("Type your answer in this input field\n");
-	   $theMessage[notVerbose][] = gettext("Input\n");
+	   $theMessage[verbose][] = "";  //gettext("Type your answer in this input field\n");
+	   $theMessage[notVerbose][] = ""; //gettext("Input\n");
 	   break;
 
 	 case MessageNavigationInputBoxDefaultButton:
@@ -210,7 +216,8 @@ class dumbTerminal
    // }}}
 
    // {{{ getLine
-   function getLine( & $theLine )
+
+   function getLine( & $theLine, $theLastInput="" )
      {
       ENTER("dumbTerminal::getLine",__LINE__);
        $aResult=getCharOK;
@@ -222,6 +229,7 @@ class dumbTerminal
        SHOW($theLine);
        return $aResult;
      }
+
    // }}}
 
    // {{{ display the message according to the terminal

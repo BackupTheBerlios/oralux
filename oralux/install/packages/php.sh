@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # php.sh
-# $Id: php.sh,v 1.1 2004/09/27 20:30:00 gcasse Exp $
+# $Id: php.sh,v 1.2 2004/10/17 21:35:24 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing PHP
-# $Date: 2004/09/27 20:30:00 $ |
-# $Revision: 1.1 $ |
+# $Date: 2004/10/17 21:35:24 $ |
+# $Revision: 1.2 $ |
 # Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -24,7 +24,7 @@
 # ----------------------------------------------------------------------------
 ####
 source ../oralux.conf
-export OPT_CONF="--with-libxml-dir --disable-cgi --with-gettext --enable-dio"
+export OPT_CONF="--with-libxml-dir --disable-cgi --with-gettext --enable-dio --with-ncurses"
 
 ####
 # Installing the package in the current tree
@@ -36,9 +36,9 @@ InstallPackage()
     apt-get install libxml2-dev
     cd /tmp
     rm -rf /tmp/php-5*
-    wget http://www.php.net/get/php-5.0.0.tar.bz2/from/fr.php.net/mirror
-    tar -jxvf php-5.0.0.tar.bz2
-    cd php-5.0.0
+    wget http://www.php.net/get/php-5.0.2.tar.bz2/from/fr.php.net/mirror
+    tar -jxvf php-5.0.2.tar.bz2
+    cd php-5.0.2
     cp $INSTALL_PACKAGES/php/dio.c ext/dio
     cp $INSTALL_PACKAGES/php/php_dio.h ext/dio
     ./configure $OPT_CONF
@@ -57,16 +57,15 @@ InstallPackage()
 Copy2Oralux()
 {
 #    chroot $BUILD apt-get install php4-cgi
-
     # php5
     cd $BUILD/var/tmp
     rm -rf $BUILD/var/tmp/php-5*
-    wget http://www.php.net/get/php-5.0.0.tar.bz2/from/fr.php.net/mirror
-    tar -jxvf php-5.0.0.tar.bz2
-    cp $INSTALL_PACKAGES/php/dio.c php-5.0.0/ext/dio
-    cp $INSTALL_PACKAGES/php/php_dio.h php-5.0.0/ext/dio
+    wget http://www.php.net/get/php-5.0.2.tar.bz2/from/fr.php.net/mirror
+    tar -jxvf php-5.0.2.tar.bz2
+    cp $INSTALL_PACKAGES/php/dio.c php-5.0.2/ext/dio
+    cp $INSTALL_PACKAGES/php/php_dio.h php-5.0.2/ext/dio
 
-    chroot $BUILD  bash -c "apt-get install libxml2-dev; cd /var/tmp/php-5.0.0;./configure $OPT_CONF;make;make install;cd /usr/bin; ln -s /usr/local/bin/php php5;cd /etc/alternatives;rm -f php;ln -s /usr/bin/php5 php"
+    chroot $BUILD  bash -c "apt-get install libxml2-dev; cd /var/tmp/php-5.0.2;./configure $OPT_CONF;make;make install;cd /usr/bin; ln -s /usr/local/bin/php php5;cd /etc/alternatives;rm -f php;ln -s /usr/bin/php5 php"
     rm -rf $BUILD/var/tmp/php-5*
 }
 

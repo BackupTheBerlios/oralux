@@ -1,11 +1,11 @@
 <?php
 // ----------------------------------------------------------------------------
 // cliDialog.php
-// $Id: cliDialog.php,v 1.1 2004/09/27 20:30:29 gcasse Exp $
+// $Id: cliDialog.php,v 1.2 2004/10/17 21:35:25 gcasse Exp $
 // $Author: gcasse $
 // Description: command line based dialog (menu, yes/no question, dialog box,...)
-// $Date: 2004/09/27 20:30:29 $ |
-// $Revision: 1.1 $ |
+// $Date: 2004/10/17 21:35:25 $ |
+// $Revision: 1.2 $ |
 // Copyright (C) 2004 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -78,6 +78,7 @@ abstract class cliArea
   abstract public function getType(); // list, button
 
   // {{{ announceTypeOfArea
+
   public function announceTypeOfArea()
   {
     ENTER("cliArea::announceTypeOfArea",__LINE__);
@@ -86,6 +87,7 @@ abstract class cliArea
 	echo $aMessage;
       }
   }
+
   // }}}
   // {{{ setVerbosity
   function setVerbosity( $theVerbosity)
@@ -147,7 +149,7 @@ abstract class cliArea
 
   // }}}
   // {{{ getInput
-  function getInput( $theTerminal, & $theInput )
+  function getInput( $theTerminal, & $theInput, $theLastInput )
     {
       ENTER("cliArea::getInput",__LINE__);
       return $theTerminal->getChar( $theInput);
@@ -206,6 +208,7 @@ abstract class cliArea
 class cliAreaManager 
 {
   protected $_myArea=NULL; // array of objects: e.g. a list and a few buttons
+  protected $_myInput;
 
   // {{{ addArea
   function addArea( $theArea)
@@ -297,6 +300,7 @@ class cliAreaManager
       $aCurrentArea->announceTypeOfArea();
       $this->jumpToFirstItemInArea();
       $aKeyPressedValue=EscapePressedValue;
+      $this->_myInput="";
 
       $anInputIsExpected=true;
       while( $anInputIsExpected)
@@ -304,7 +308,8 @@ class cliAreaManager
 	  $this->announceItemInArea();
 	  $anArea=$this->getCurrentArea();
 
-	  $theResult=$anArea->getInput( $theTerminal, $anInput );
+	  $theResult=$anArea->getInput( $theTerminal, $anInput, $this->_myInput );
+	  $this->_myInput=$anInput;
 	  $theResult=$anArea->processInput( $theResult, $anInput, $theTerminal);
 
 	  switch($theResult)
@@ -386,6 +391,7 @@ class cliList extends cliArea
     }
   // }}}
   // {{{ announceItem
+
   function announceItem()
     {
       ENTER("cliList::announceItem",__LINE__);
@@ -395,6 +401,7 @@ class cliList extends cliArea
 	}      
       echo current($this->_myOption)."\n";
     }
+
   // }}}
   // {{{ jumpToFirstItem
   function jumpToFirstItem()
@@ -517,14 +524,32 @@ class cliInputBox extends cliArea
   function getType(){ return areaInputBox;}
 
   // {{{ getInput
-  function getInput( $theTerminal, & $theInput )
+  function getInput( $theTerminal, & $theInput, $theLastInput)
     {
       ENTER("cliInputBox::getInput",__LINE__);
-      return $theTerminal->getLine( $theInput);
+
+      // the previous typed character is included in the string
+      if (!ctype_print( $theLastInput))
+	{
+	  $theLastInput="";
+	}
+
+      $aResult=$theTerminal->getLine( $theInput, $theLastInput);
+
+//       if($aResult==getCharOK)
+// 	{
+// 	  if (($anInput != "\t") && ctype_print( $theLastInput))
+// 	    {
+// 	      // the previous typed character is included in the string
+// 	      $theInput=$theLastInput.$theInput;
+// 	    }
+// 	}
+
+      return $aResult;
     }
   // }}}
   // {{{ processInput
-  function processInput( $theResult, $theInput, $theTerminal)
+  function processInput( $theResult, & $theInput, $theTerminal)
     {
       ENTER("cliInputBox::processInput",__LINE__);
       $aResult=$theResult;
@@ -762,7 +787,7 @@ class cliMessage extends cliArea
   //  function apply(& $theResult){}
 
   // {{{ getInput
-  function getInput( $theTerminal, & $theInput )
+  function getInput( $theTerminal, & $theInput, $theLastInput )
     {
       ENTER("cliMessage::getInput",__LINE__);
       return getCharDownArrowKey;
@@ -776,6 +801,8 @@ class cliMessage extends cliArea
 
 class cliDialog
 {
+  // {{{
+
   protected $_myTerminal=NULL;
   protected $_myDialogIsVerbose=true;
   protected $_myList=NULL;
@@ -911,6 +938,8 @@ class cliDialog
       if ($theText)
 	{
 	  echo "$theText\n";
+
+	  // }}}
 	}
 
       // Setting messages for the checkbox

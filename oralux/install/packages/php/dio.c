@@ -15,7 +15,7 @@
    | Author: Sterling Hughes <sterling@php.net>                           |
    +----------------------------------------------------------------------+
    August 2004: Gilles Casse (gcasse@oralux.org)
-   * Modification: non canonical mode
+   * Modification: non canonical mode without ncurses
    +----------------------------------------------------------------------+
 
  */
@@ -207,7 +207,7 @@ PHP_FUNCTION(dio_open)
 }
 /* }}} */
 
-/* {{{ proto string dio_readd(resource fd[, int n])
+/* {{{ proto string dio_read(resource fd[, int n])
    Read n bytes from fd and return them, if n is not specified, read 1k */
 PHP_FUNCTION(dio_read)
 {
@@ -222,6 +222,11 @@ PHP_FUNCTION(dio_read)
 	}
 
 	ZEND_FETCH_RESOURCE(f, php_fd_t *, &r_fd, -1, le_fd_name, le_fd);
+
+	if (bytes <= 0) {
+		php_error_docref(NULL TSRMLS_CC, E_WARNING, "Length parameter must be greater than 0.");
+		RETURN_FALSE;
+	}
 
 	data = emalloc(bytes + 1);
 	res = read(f->fd, data, bytes);
@@ -250,6 +255,11 @@ PHP_FUNCTION(dio_write)
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "rs|l", &r_fd, &data, &data_len, &trunc_len) == FAILURE) {
 		return;
+	}
+
+	if (trunc_len < 0 || trunc_len > data_len) {
+		php_error_docref(NULL TSRMLS_CC, E_WARNING, "length must be greater or equal to zero and less then the length of the specified string.");
+		RETURN_FALSE;
 	}
 
 	ZEND_FETCH_RESOURCE(f, php_fd_t *, &r_fd, -1, le_fd_name, le_fd);
@@ -675,6 +685,7 @@ PHP_FUNCTION(dio_open_stdin)
 	tattr.c_lflag &= ~(ICANON | ECHO | ECHOCTL | ECHONL | ISIG); /* Clear ICANON, no echo. */
 	tattr.c_iflag &= ~(BRKINT | ICRNL);
 	tattr.c_iflag |= IGNBRK;
+	tattr.c_iflag |= ECHOE;
 
 	tattr.c_cc[VMIN] = 1;
 	tattr.c_cc[VTIME] = 0;
@@ -766,8 +777,11 @@ PHP_FUNCTION(dio_close_stdin)
 
 /* }}} */
 
-/* {{{ proto string dio_read(resource fd[, int n])
-   Read bytes from stdin until /n and return them, the maximum number of characters is 1k */
+/* {{{ proto string dio_read_line_from_stdin( string default_string)
+
+   Read bytes from stdin until /n and return them, the maximum number of characters is 1k 
+   A default string can be suplied.
+*/
 PHP_FUNCTION(dio_read_line_from_stdin)
 {
 	char *data;
@@ -777,7 +791,22 @@ PHP_FUNCTION(dio_read_line_from_stdin)
 	ssize_t res;
 	int aComposedCharacter=0;
 
+	char *default_string;
+	int default_string_length;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &default_string, &default_string_length) == FAILURE) {
+		return;
+	}
+
 	data = emalloc(DATA_LENGTH + 1);
+	if (default_string_length && (default_string_length < DATA_LENGTH))
+		{
+			strncpy( data, default_string, default_string_length);
+			data[default_string_length]=0;
+			index=default_string_length;
+			write(STDOUT_FILENO, data, default_string_length);
+		}
+
 	while( !aEndOfLineFound && (index<DATA_LENGTH))
 		{
 			res = read(STDIN_FILENO, data+index, 1);
@@ -822,7 +851,13 @@ PHP_FUNCTION(dio_read_line_from_stdin)
 						case 0x08: // BS
 							if (index > 0)
 								{
-									write(STDOUT_FILENO, data+index, 1);
+									char a[3];
+									a[0]=0x1B;
+									a[1]='[';
+									a[2]='D';
+									write(STDOUT_FILENO, a, 3);
+									write(STDOUT_FILENO, " ", 1);
+									write(STDOUT_FILENO, a, 3);
 									index--;
 									// say(Delete);
 									// sayChar(aResult[ anIndex ]);
@@ -859,6 +894,7 @@ PHP_FUNCTION(dio_read_line_from_stdin)
 
 	RETURN_STRINGL(data, index, 0);
 }
+
 /* }}} */
 
 

@@ -1,5 +1,6 @@
 <?php
-define("DEBUG",true);
+define("DEBUG",false);
+//define("DEBUG",true);
 // $__Function__ must be updated
 
 function ENTER($theString, $theLine=NULL)
@@ -8,14 +9,15 @@ function ENTER($theString, $theLine=NULL)
     {
       return;
     }
-  echo "> $theString ($theLine)\n";
+  print("> $theString ($theLine)\n");
 }
+
 function SHOW($theString)
 {
   if (!DEBUG)
     {
       return;
     }
-  echo ">>$theString<<\n";
+  printf(">>$theString<<\n");
 }
 ?>
