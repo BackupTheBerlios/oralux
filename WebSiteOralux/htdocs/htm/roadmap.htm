@@ -1,0 +1,125 @@
+<div id="main">
+<h2>Roadmap</h2>
+<p>The following lines describe the main remaining points to reach Oralux 1.00.
+This release will offer a ready to use audio desktop for GNU/Linux users.</p>
+<p>Oralux 2.00 is more futuristic, and will be an intuitive, ready to use audio desktop.</p>
+<p>We wish to follow a humble and pragmatic approach. First with Oralux 1.00, targeting users who know GNU/Linux or who are able to learn it. Release 2.00 will more concern the persons who have no particular skill to use a computer, whereas the computer would be useful for them.</p>
+<p>Only Oralux 1.00 is detailed here.</p>
+
+<p>At the moment, the more urgent points are:</p>
+<ul>
+  <li>Oralux on HD. Two solutions will be proposed: copying the compressed image on the hard disk, or a talking installation. </li>
+  <li>Internet: easy internet connection, mail management.</li>
+  <li>Including Speakup.</li>
+  <li>Graphical environment: Gnome 2 (Metacity) and its assistive technology, Gnopernicus, Gok.</li>
+</ul>
+
+<h2>Todo</h2>
+<ul>
+  <li><a href="#scenario">Scenario.</a></li>
+  <li><a href="#tmenu">Talking Menu.</a></li>
+  <li><a href="#internet">Internet.</a></li>
+  <li><a href="#emacspeak">Emacspeak customizations or related items.</a></li>
+  <li><a href="#tts">Text To Speech (TTS).</a></li>
+  <li><a href="#ttools">Talkable Tools.</a></li>
+  <li><a href="#measures">Measures.</a></li>
+  <li><a href="#gui">Graphical Environment.</a></li>
+  <li><a href="#doc">Documentation.</a></li>
+</ul>
+
+<h3 id="scenario">Scenario</h3>
+<p>Oralux 0.6 alpha assumes that the user has a well detected sound-driver and is interested in a text-based environment.
+Other scenarios will be managed.
+</p>  
+
+<h4>A consistent Text to Speech, Braille solution in a text-based environment.</h4>
+<ul>
+  <li>Software Text to Speech (TTS) required, OSS or ALSA driver found.</li>
+  <li>Software TTS required, no OSS or ALSA driver available: PC speaker.</li>
+  <li>TTS and Braille required.</li>
+  <li>Braille required.</li>
+  <li>Hardware TTS with or without Braille.</li>
+</ul>
+
+<h4>A talking tty2, tty3,...</h4>
+<p>Useful for applications not compliant with Emacspeak or if tty1 is no more available (e.g. a software hangs).</p>
+<p>Console switching and aural feedback.</p>
+
+<h4>Graphical environment.</h4>
+
+<h3 id="tmenu">Talking Menu.</h3>
+<p>To set the preferences (language, type of keyboard,...).</p>
+<ul>
+  <li>Selecting the speech rate.</li>
+  <li>Checking the available RAM.</li>
+  <li>Automatic call to saveconfig.</li>
+  <li>Recalling the menu.</li>
+</ul>
+
+<h3 id="internet">Internet.</h3>
+<h4>Easy internet connection : GPL drivers firmware installer.</h4>
+<ul>
+  <li>Write a talking installer.</li>
+  <li>Eagle driver (Sagem fast 800).</li>
+  <li>Eciadsl.</li>
+  <li>RTC external modem.</li>
+  <li>Ethernet modems.</li>
+</ul>
+
+<h4>Managing Mails</h4>
+<p>Send, Write, Archive.</p>
+<h4>Enhanced browser (key point: javascript...).</h4>
+
+<h3 id="emacspeak">Emacspeak customizations or related items.</h3>
+<ul>
+  <li>Language Switching.</li>
+  <li>Multi languages (A main language per buffer).</li>
+  <li>Check Spelling according the current language.</li>
+  <li>Online translation services (babel).</li>  
+  <li>Customizing a few keys: caps lock as meta key, pause/resume, jumping from word to word, increasing volume, speech rate.</li>
+  <li>.doc reader (antiword, catdoc, wvware), xls reader: xl2html.</li>
+  <li>PDF reader.</li>
+  <li>Test most of the Emacspeak's applications.</li>  
+</ul>
+
+<h3 id="tts">Text To Speech (TTS).</h3>
+<h4>Festival MBROLA (EFM)</h4>
+<ul>
+  <li>How to stop the speech server.</li>
+  <li>Adding others languages (Spanish might be easy)</li>
+</ul>
+<h4>ParleMax and LLiaphon.</h4>
+
+<h3 id="ttools">Talkable Tools.</h3>
+<ul>
+  <li>Copying the CD to the hard disk</li>
+  <li>Hd installation:  non-ncurses-based formatting tool instead of cfdisk. Audio messages: Login is expected, Login correct,...</li>
+  <li>Resizing (ntfs,...) partitions.</li>
+  <li>saveconfig: default choice=last selected partition, a solution for ntfs partitions.</li>
+  <li>Easy mounts.</li>
+  <li>Boot (at least a beep...).</li>
+  <li>Mplayer: automatic installation.</li>
+  <li>Daisy reader: Listen-up (for tty2 e.g.).</li>
+</ul>
+
+<h3 id="measures">Measures.</h3>
+<ul>
+  <li>Optimize the access time to the CD (Festival,...).</li>
+  <li>Measuring the required RAM according to the selected TTS,...</li>
+</ul>
+
+<h3 id="gui">Graphical Environment.</h3>
+<ul>
+  <li>Sawfish.</li>
+  <li>Metacity.</li>
+  <li>Gnome.</li>
+</ul>
+
+<h3 id="doc">Documentation.</h3>
+<ul>
+  <li>Clear and easy to understand Documentation</li>
+  <li>Native language Emacspeak/Emacs tutorials.</li>
+  <li>To be completed.</li>
+</ul>
+
+ </div> <!-- main -->

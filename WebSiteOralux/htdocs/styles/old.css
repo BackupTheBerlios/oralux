@@ -1,0 +1,19 @@
+body {
+ color:#000; 
+ background:#fff;
+}
+
+div#main {
+ margin-left: 10%;
+ margin-right: 10%;
+}
+
+div#sidebar 
+{
+ margin-top: -1em;
+ padding: 1px;
+}
+
+div#footer {
+ font-size: 90%;
+}

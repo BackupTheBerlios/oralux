@@ -1,0 +1,128 @@
+<div id="main">
+<h2>Feuille de route</h2>
+<p>Les lignes suivantes décrivent les principaux points à remplir avant d'atteindre Oralux 1.00.
+Cette version offrira un bureau audio prêt à l'emploi aux utilisateurs GNU/Linux.
+</p>
+<p>Oralux 2.00 est plus futuriste et sera un bureau audio intuitif d'emploi.</p>
+<p>Nous souhaitons suivre une approche modeste et pragmatique. Tout d'abord, avec Oralux 1.00, viser les utilisateurs qui connaissent déjà GNU/Linux ou qui sont à mêmes de l'apprendre. La version 2.00 concernera plus les personnes qui n'ont aucune facilité particulière pour utiliser un ordinateur bien que celui-ci leur serait utile.
+</p>
+<p>Seule la version 1.00 est décrite ci-dessous.</p>
+
+<p>Actuellement, les points les plus urgents sont: </p>
+<ul>
+  <li>Oralux sur le disque dur. Deux solutions seront proposées: copier l'image compressée sur le disque dur, ou une installation vocale.</li>
+  <li>Internet: connexion facilitée, gestion de mails.</li>
+  <li>Intégration de Speakup.</li>
+  <li>Environnement graphique: Gnome 2 (Metacity) et les aides techniques Gnopernicus, Gok.</li>
+</ul>
+
+<h2>Reste A Faire</h2>
+<ul>
+  <li><a href="#scenario">Scénario.</a></li>
+  <li><a href="#tmenu">Menu audio.</a></li>
+  <li><a href="#internet">Internet.</a></li>
+  <li><a href="#emacspeak">Customisations Emacspeak ou points connexes.</a></li>
+  <li><a href="#tts">Synthèse vocale.</a></li>
+  <li><a href="#ttools">Utilitaire parlant.</a></li>
+  <li><a href="#measures">Mesures.</a></li>
+  <li><a href="#gui">Environnement graphique.</a></li>
+  <li><a href="#doc">Documentation.</a></li>
+</ul>
+
+<h3 id="scenario">Scénario</h3>
+<p>Oralux 0.6 alpha suppose que l'utilisateur a une carte son correctement détectée et qu'il est intéressé par un environnement en mode texte. D'autres scénarios seront gérés.
+</p>
+  
+<h4>Une solution cohérente Synthèse vocale / Braille dans un environnement texte.</h4>
+<ul>
+  <li>La synthèse est souhaitée et le pilote OSS ou ALSA est trouvé.</li>
+  <li>La synthèse est souhaitée mais aucun pilote n'est disponible: haut parleur du PC</li>
+  <li>La synthèse vocale et la plage Braille sont souhaitées</li>
+  <li>Juste le Braille</li>
+  <li>Synthèse matérielle (avec ou sans plage braille)</li>
+</ul>
+<h4>Un tty2, tty3 parlant.</h4>
+<p>Utile aux applications non compatibles avec Emacspeak ou bien si la console tty1 n'est plus disponible (plantage).
+</p>
+<p>Commutation de console avec retour audio.</p>
+
+<h4>Environnement graphique.</h4>
+
+<h3 id="tmenu">Menu audio.</h3>
+
+<p>Pour indiquer les préférences (langage, type de clavier,...).</p>
+<ul>
+  <li>Sélection de la vitesse de la voix.</li>
+  <li>Contrôle de la mémoire disponible.</li>
+  <li>Appel automatique a saveconfig.</li>
+  <li>Pouvoir relancer le menu.</li>
+</ul>
+
+<h3 id="internet">Internet.</h3>
+
+<h4>Connexion internet facilitée : pilotes GPL, installeur de firmware.</h4>
+<ul>
+  <li>Ecrire un installeur vocal.</li>
+  <li>Eagle driver (Sagem fast 800).</li>
+  <li>Eciadsl.</li>
+  <li>Modem RTC externe.</li>
+  <li>Modems Ethernet.</li>
+</ul>
+
+<h4>Gestion des Mails</h4>
+<p>Envoi, réception, archive.</p>
+
+<h4>Navigateur avancé (point clé: javascript...).</h4>
+
+<h3 id="emacspeak">Customisations Emacspeak ou points connexes.</h3>
+<ul>
+  <li>Commutation de langue.</li>
+  <li>Solution multilingue (une langue principale par buffer).</li>
+  <li>Correction orthographique en fonction de la langue.</li>
+  <li>Service de traduction en ligne (babel).</li>
+  <li>Customiser quelques touches: caps lock pour la touche meta, pause/resume, sauter de mot en mot, faire varier le volume, la vitesse de la voix.</li>
+  <li>lecteur de .doc (antiword, catdoc, wvware), lecteur xls : xl2html.</li>
+  <li>lecteur de PDF.</li>
+  <li>Tester la plupart des applications Emacspeak.</li>
+</ul>
+
+<h3 id="tts">Synthèse vocale..</h3>
+<h4>Festival MBROLA (EFM)</h4>
+<ul>
+  <li>Comment arrêter la synthèse vocale.</li>
+  <li>Ajouter d'autres langues (L'espagnol devrait être facile),</li>
+</ul>
+<h4>ParleMax et LLiaphon.</h4>
+
+<h3 id="ttools">Utilitaire parlant.</h3>
+<ul>
+  <li>Copier le CD vers le disque dur.</li>
+  <li>Installation sur le disque dur: outil de formatage autre que cfdisk qui repose sur ncurses. Messages Audio: Login attendu,  Login correct,...</li>
+  <li>Réduire la taille de partitions existantes (ntfs,...).</li>
+  <li>saveconfig: choix par défaut= dernière partition sélectionnée. Solution pour le ntfs.</li>
+  <li>Montage facilité.</li>
+  <li>Boot (au moins un beep...).</li>
+  <li>Mplayer: installation automatique.</li>
+  <li>Lecteur Daisy: Listen-up (pour tty2 par exemple).</li>
+</ul>
+
+<h3 id="measures">Mesures.</h3>
+<ul>
+  <li>Optimiser le temps d'accès au CD (Festival,...).</li>
+  <li>Mesurer la RAM nécessaire suivant la synthèse vocale,...</li>
+</ul>
+
+<h3 id="gui">Environnement graphique.</h3>
+<ul>
+  <li>Sawfish.</li>
+  <li>Metacity.</li>
+  <li>Gnome.</li>
+</ul>
+
+<h3 id="doc">Documentation.</h3>
+<ul>
+  <li>Documentation claire, compréhensible.</li>
+  <li>Tutoriels Emacspeak/Emacs en langue maternelle.</li>
+  <li>A compléter.</li>
+</ul>
+ </div> <!-- main -->

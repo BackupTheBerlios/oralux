@@ -1,0 +1,27 @@
+  <div id="main">
+  <h2>Langue préférée</h2>
+  <h3>Configurer son navigateur</h3>
+  <p>Vous devriez lire cette page traduite dans votre langue préférée.</p>
+  <p>Si ce n'est pas le cas
+  peut-être que la traduction n'existe pas encore (les contributions
+  sont les bienvenues) : aujourd'hui, ce site est disponible en anglais
+  ou en français.</p>
+  <p>Ou bien votre navigateur n'est peut-être pas correctement configuré.</p>
+  <p>Pour plus d'information au sujet de la configuration du
+  navigateur et beaucoup d'autres choses encore, lisez svp <a href="http://www.debian.org/intro/cn.fr.html#howtoset">Configurer le choix de langue</a> du site Debian.</p>
+
+  <h3>Choisir une autre langue pour ce site</h3>
+  <p>Solution rapide mais temporaire.</p>
+  <form action="preferences.php" method="post">
+   <fieldset>
+     <legend>Choisissez svp l'une de ces langues</legend>
+     <label for="choice">Langue Préférée
+     <select name="mylang" id="choice">
+     <option value="en" selected="selected">Anglais</option>
+     <option value="fr">Français</option>
+     </select>
+     </label>
+     <input type="submit" value="Go" />
+   </fieldset>
+  </form>
+ </div> <!-- main -->

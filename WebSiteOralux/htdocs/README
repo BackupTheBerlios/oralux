@@ -1,0 +1,86 @@
+# ----------------------------------------------------------------------------
+# README
+# $Id: README,v 1.1 2004/09/28 21:48:39 gcasse Exp $
+# $Author: gcasse $
+# Description: A few info about the website
+# $Date: 2004/09/28 21:48:39 $ |
+# $Revision: 1.1 $ |
+# Copyright (C) 2003 Gilles Casse (gcasse@oralux.org)
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+# ----------------------------------------------------------------------------
+####
+
+Content
+
+1. Accessibility statement
+2. Structure
+2.1 Skeleton
+2.2 Directories
+3. PhpWiki
+
+1. Accessibility statement
+The Oralux site hopes to be accessible.
+For any further update, we'll try to keep in mind the accessibility
+approach: removing the technical barriers so that anyone may get the public
+information on the site. Even if our visitor doesn't rely e.g. on a
+screen, or a mouse.
+
+A nice layout may be appreciated by some of our users, but the layout is just
+a mean not the aim. We are aware that this layout may build a very high barrier for some users. 
+
+Any of the Oralux web pages are tested according our accessibility statement.
+Please, read the file htm/accessibility.htm ,about the
+expected checks.
+
+2. Structure
+2.1 Skeleton
+We rely on php to ease managing the web pages.
+The skeleton of a page is known by the class webpage (file
+webpage.php).
+This will automatically builds the html structure (doctype, head, body,
+header, navigation bars and footer).
+
+To add a new page, just copy and rename skeleton.php.
+You will find more details inside this file.
+
+2.2 Directories
+2.2.1 website
+This is the "document directory": the directory which is reached when
+http://oralux.org is called.
+
+So, index.php is the home page, and you will find too (May 2003), faq.php, download.php.
+The website directory includes the php files which were copied from the skeleton.php file.
+
+2.2.2 website/htm
+These are the shrunks of html code, the content of the web page. They
+do not include the doctype, navbars,... which are automatically added
+by the php file.
+
+2.2.3 website/icons
+These are the icons of the site: images and sounds.
+
+2.2.4 website/styles
+This directory contains the styles sheets.
+
+2.3 Internationalization (i18n)
+As we hope that the Oralux will be shared and improved through the
+web, the original language is english.
+If possible, we want to supply the web page in the visitors' native
+language. 
+
+3. PhpWiki
+The directories prefixed by w_ come from PhpWiki (release 1.2.2).
+A few files have been modified; we hope that the first added comments clearly identify our changes.

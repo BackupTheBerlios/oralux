@@ -1,0 +1,105 @@
+ <div id="main" class="green">
+  <h2>Sommaire</h2>
+  <ol>
+   <li><a href="#layoutinfo">Introduction</a></li>
+   <li><a href="#layout">La présentation</a></li>
+   <li><a href="#info">L'information</a></li>
+   <li><a href="#facilities">Les facilités</a></li>
+   <li><a href="#checks">Vérifications</a></li>
+   <li><a href="#ref">Références</a></li>
+  </ol>
+ </div> <!-- main -->
+ 
+ <div id="answers">
+  <h2>Charte d'accessibilité</h2>
+  <h3 id="layoutinfo">Introduction</h3>
+  <p>L'accessibilité du site est naturellement un point clé pour nous.
+  En fait, nous apprécions la démarche de l'accessibilité.</p>
+  <p>Une responsabilité : supprimer les obstacles techniques afin que
+  nos visiteurs accèdent à l'information du site. Même s'ils utilisent
+  d'autres périphériques que l'écran ou la souris.</p>
+  <p>Nous sommes conscients que certaines présentations peuvent constituer un obstacle infranchissable pour certains de nos
+  visiteurs ou pour nous-mêmes.</p>
+
+  <p>Donc, nous confions la présentation aux feuilles de style en
+  cascade (CSS) et ces feuilles de styles sont stockées dans des
+  fichiers à part. L'information concerne les fichiers xhtml.</p>
+
+  <h3 id="layout">La présentation</h3>
+  <dl>
+   <dt>Voici nos choix :</dt>
+   <dd>Nous n'utilisons pas de frames (cadres).</dd>
+   <dd>Ni de table pour la présentation.</dd>
+   <dd>Et nous comptons sur du <em>pur CSS</em>.</dd>
+  </dl>
+
+  <h3 id="info">L'information</h3>
+  <dl>
+   <dt>L'information reste accessible même si javascript ou les
+  feuilles de styles sont inhibées.</dt>
+   <dt>Utiliser le vocabulaire le plus simple possible</dt>
+   <dt>Proposer si possible les info dans la langue du visiteur</dt>
+   <dt>Concernant la sémantique des balises xhtml</dt>
+   <dd>La balise véhicule une signification et ne concerne pas la
+  présentation. Par exemple, h1 sert à indiquer une entête principale
+  mais pas à mettre en gras les caractères, blockquote sert à mettre
+  entre guillemets mais pas à indenter, et ainsi de suite...
+   </dd>
+   <dt>L'attribut lang </dt>
+   <dd>Si une partie du texte est écrit dans une autre langue, nous
+   l'indiquons grâce à l'attribut lang. Voici, l'exemple, d'une page
+   en français où apparaît un texte en anglais : <samp class="terminal">&lt;span lang="en">Web Accessibility
+   Initiative&lt;/span></samp>. Ces informations sont importantes pour les
+   synthèses vocales.</dd>
+   <dt>L'attribut hreflang</dt>
+   <dd>Si un lien hypertexte pointe sur un document écrit dans une
+  autre langue, nous l'indiquons grâce à l'attribut hreflang. Par
+  exemple, dans le cas d'une page en français, le lien suivant indique un document
+  en anglais : <samp class="terminal">&lt;a href="http://document" hreflang="en"
+   lang="en">Web Accessibility Initiative&lt;/span></samp>.
+   </dd>
+   <dt>Abréviation ou acronyme</dt>
+   <dd>L'abréviation (par exemple HTML) ou l'acronyme (par exemple FAQ) est
+  clairement explicitée dans le texte à sa première apparition dans la
+  page web. Par exemple: Foire Aux Questions (FAQ). Nous ne comptons
+  pas sur les éléments abbr ou acronym.</dd>
+   <dt>La balise &lt;br /></dt>
+   <dd>Nous évitons cette balise. S'il y a besoin d'aller à la ligne,
+  alors un nouveau paragraphe &lt;p> est ajouté.
+   </dd>
+  </dl>
+
+  <h3 id="facilities">Les facilités</h3>
+  <p>Le javascript peut être employé. Le site doit rester utilisable
+  s'il est inhibé.</p>
+
+  <h3 id="checks">Vérifications</h3>
+  <p>A l'ajout ou à la mise à jour d'une page, les tests suivant sont
+  effectués par l'équipe Oralux.</p>
+  <ol>
+   <li>Vérificateur orthographique</li>
+   <li>Test des liens HTML</li>
+   <li>Vérifier l'XHTML 1.0 strict grace au valideur du W3C.</li>
+   <li>Vérifier le CSS grace au valideur CSS du W3C.</li>
+   <li>Test avec Emacspeak et w3m (GNU/Linux)</li>
+   <li>Test avec IE6 (MS-Windows)</li>
+   <li>Test avec Mozilla (GNU/Linux)</li>
+   <li>Test avec Yasr et Links (GNU/Linux)</li>
+   <li>Nous esperons atteindre le niveau de conformité AAA relatif au document WCAG 1.0
+  (grâce à <a href="http://www.cynthiasays.com/" hreflang="en">Cynthia says</a>)</li>
+  </ol>
+
+  <h3 id="ref">Références</h3>
+  <dl>
+   <dt>Voici quelques liens issus du <a href="http://www.w3.org/WAI/"
+   hreflang="en" lang="en">Web Accessibility Initiative</a> (WAI) :
+   </dt>
+   <dd>Les gens pressés pourraient lire ces <a
+   href="http://www.w3.org/WAI/References/QuickTips/" hreflang="en">quelques brèves info</a>.</dd>
+   <dd>Le document de référence <a
+   href="http://www.w3.org/TR/WCAG10/" hreflang="en" lang="en">Web
+   Content Accessibility Guidelines</a> (WCAG 1.0)</dd>
+  </dl>
+
+</div> <!-- answers --> 
+

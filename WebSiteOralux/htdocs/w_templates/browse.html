@@ -1,0 +1,22 @@
+<div id="main">
+  <h2>###PAGETITLE###</h2>
+###IF:ADMIN###
+###IF LOCK###[<a href="###SCRIPTURL###?unlock=###PAGEURL###">Unlock page</a>]
+###IF !LOCK###[<a href="###SCRIPTURL###?lock=###PAGEURL###">Lock page</a>]
+- - 
+[<a href="###SCRIPTURL###?remove=###PAGEURL###">Remove page</A>]
+
+###ENDIF:ADMIN###
+<p>
+###IF ADMIN###<a href="###SCRIPTURL###?edit=###PAGEURL###">Edit</a> |
+###IF:!ADMIN###
+###IF LOCK###Page locked
+###IF !LOCK###<a href="###SCRIPTURL###?edit=###PAGEURL###">Edit</a> |
+###ENDIF:!ADMIN###
+<a href="###SCRIPTURL###?diff=###PAGEURL###">Compare</a> |
+<a href="###SCRIPTURL###?RecentChanges">Recent Changes</a>
+</p>
+###CONTENT###
+<p>Page powered by <a href="http://phpwiki.sourceforge.net">PhpWiki</a>, modified for the Oralux website. PhpWiki is under the <a href="http://www.gnu.org/copyleft/gpl.html">GPL licence</a>.</p>
+</div> <!-- main -->
+

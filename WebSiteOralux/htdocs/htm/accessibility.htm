@@ -1,0 +1,103 @@
+ <div id="main">
+  <h2>Contents</h2>
+  <ol>
+   <li><a href="#layoutinfo">Introduction</a></li>
+   <li><a href="#layout">Layout</a></li>
+   <li><a href="#info">Information</a></li>
+   <li><a href="#facilities">Facilities</a></li>
+   <li><a href="#checks">Checks</a></li>
+   <li><a href="#ref">References</a></li>
+  </ol>
+ </div> <!-- main -->
+ 
+ <div id="answers">
+  <h2>Accessibility statement</h2>
+  <h3 id="layoutinfo">Introduction</h3>
+  <p>The accessibility of  the Oralux website is naturally a key point for us.
+  In fact, we enjoy the accessibility approach.</p>
+  <p>One responsibility: removing the technical
+  barriers so that our visitors may get the information on the
+  site. Even if she relies on other devices than  e.g. a screen or a mouse.</p>
+  <p>We are aware that some layouts may
+  build a very high barrier for some visitors or for ourselves.</p>
+
+  <p>Thus, we rely on cascading style sheets (CSS) for layout and
+  these style sheets are stored in separate files. The information
+  concern the xhtml files.</p>
+
+  <h3 id="layout">Layout</h3>
+  <dl>
+   <dt>Here are our choices:</dt>
+   <dd>We do not use frame.</dd>
+   <dd>We do not use table for layout.</dd>
+   <dd>And we rely on <em>pure CSS</em>.</dd>
+  </dl>
+
+  <h3 id="info">Information</h3>
+  <dl>
+   <dt>Information are reachable even if javascript or styles sheets are disable.</dt>
+   <dt>Use the simplest possible vocabulary</dt>
+   <dt>Propose if possible the information in the visitor's preferred language</dt>
+   <dt>About semantic markup</dt>
+   <dd>The tag has a meaning, and doesn't concern
+   layout. For example, h1 is for indicating a main header and not
+   for displaying bold characters, blockquote is for quoting not
+   for indenting, and so on...
+   </dd>
+   <dt>lang attribute</dt>
+   <dd>If a piece of text is written in another
+   language, we have to indicate it thanks to the lang attribute. For
+   example: in the case where the current text is in French and a few
+   words are in English: <samp class="terminal">&lt;span lang="en">Web Accessibility
+   Initiative&lt;/span></samp>. These are important information for the voice synthesis.</dd>
+   <dt>hreflang attribute</dt>
+   <dd>If a link points to a document written in another language
+   than the current one, we indicate it thanks to the hreflang attribute. For
+   example: in the case where the current text is in French and the
+   link concerns an English document: <samp class="terminal">&lt;a href="http://document" hreflang="en"
+   lang="en">Web Accessibility Initiative&lt;/span></samp>
+   </dd>
+   <dt>Abbreviation or acronym</dt>
+   <dd>The abbreviation (e.g. HTML) or the acronym (e.g. FAQ) is
+  clearly explained in plain text the first time it appears in the
+  page. For example: Frequently Asked Questions (FAQ). We do not rely on the
+  abbr or acronym elements.</dd>
+   <dt>The &lt;br /> tag</dt>
+   <dd>We avoid this tag. If there is a need to
+   create a newline, then a new paragraph &lt;p> is added.
+   </dd>
+  </dl>
+
+  <h3 id="facilities">Facilities</h3>
+  <p>Javascript may be used. The site must be usable without it.</p>
+
+  <h3 id="checks">Checks</h3>
+  <p>When a page is added or updated, the following tests are checked
+  by the Oralux team.</p>
+  <ol>
+   <li>Spell check</li>
+   <li>Test the html links</li>
+   <li>Valid XHTML 1.0 strict thanks to the W3C Validator</li>
+   <li>Valid CSS thanks to the W3C CSS Validator</li>
+   <li>Test with Emacspeak and w3m (GNU/Linux)</li>
+   <li>Test with IE6 (MS-Windows)</li>
+   <li>Test with Yasr and Links (GNU/Linux)</li>
+   <li>Test with Mozilla (GNU/Linux)</li>
+   <li>We hope to reach the level triple A conformance to WCAG 1.0 (with <a href="http://www.cynthiasays.com/" hreflang="en">Cynthia says</a>)</li>
+  </ol>
+
+  <h3 id="ref">References</h3>
+  <dl>
+   <dt>A few links coming from the <a href="http://www.w3.org/WAI/"
+   hreflang="en" lang="en">Web Accessibility Initiative</a> (WAI):
+   </dt>
+   <dd>People in a hurry may want to read the <a
+   href="http://www.w3.org/WAI/References/QuickTips/" hreflang="en">quick
+   tips</a>.</dd>
+   <dd>The reference document <a
+   href="http://www.w3.org/TR/WCAG10/" hreflang="en" lang="en">Web
+   Content Accessibility Guidelines</a> (WCAG 1.0)</dd>
+  </dl>
+
+</div> <!-- answers --> 
+

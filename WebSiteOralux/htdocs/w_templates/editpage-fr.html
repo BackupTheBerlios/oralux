@@ -1,0 +1,18 @@
+<div id="main">
+  <h2>Modifier la page ###PAGETITLE### </h2>
+
+  <form method="post" action="###SCRIPTURL###">
+    <p>
+    <input type="submit" value=" Transmettre " />
+    <textarea name="content" rows="30" cols="80">###CONTENT###</textarea>
+    
+###IF:ADMIN###
+###IF COPY###<br><a href="###SCRIPTURL###?copy=###PAGEURL###">Editer la copie</a> de l'auteur précédant
+###ENDIF:ADMIN###
+
+    <input type="hidden" name="post" value="###PAGE###" />
+    <input type="hidden" name="editversion" value="###VERSION###" />
+    </p>
+  </form>
+<p>Page gérée par <a href="http://phpwiki.sourceforge.net">PhpWiki</a>, modifié pour le site Oralux. PhpWiki est sous <a href="http://www.gnu.org/copyleft/gpl.html" hreflang="en">licence GPL</a>.</p>
+</div> <!-- main -->

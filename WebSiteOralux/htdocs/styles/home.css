@@ -1,0 +1,30 @@
+/* More styles for the homepage */
+div#sidebar dt {
+ color:#f00;
+ background-color:inherit;
+ font-weight:bold;
+ margin-top:0.5em;
+}
+
+div#sidebar dd {
+ margin-left:1em;
+}
+
+p#release {
+/*
+ position: fixed;
+*/
+ position: absolute;
+ width: auto;
+ height:auto;
+ top: 0;
+ right: 2%;
+ bottom: auto;
+ left: auto;
+ padding:0.5em;
+ font-weight: bold;
+ border: solid 2px #f90;
+ background-color:white;
+ color:inherit;
+}
+
