@@ -17,7 +17,7 @@
 # * knoppix.sh: once the files are restored, it installs the symbolic links (/etc/sysconfig/symlinks)
 #
 #set -v 
-export DIALOG="/usr/bin/php5 /usr/share/oralux/main/dialog.php"
+export DIALOG="/usr/bin/php5 /usr/share/oralux/dialog/dialog.php"
 
 PATH="/bin:/sbin:/usr/bin:/usr/sbin"
 export PATH

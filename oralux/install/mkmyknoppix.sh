@@ -179,6 +179,7 @@ chroot $BUILD apt-get update
 ####
 update_index() {
 
+    chroot $BUILD bash -c "depmod -a"
     chroot $BUILD bash -c "dpkg --configure -a"
     chroot $BUILD bash -c "updatedb; update-dlocatedb"
 }
@@ -322,7 +323,7 @@ umount $BUILD/proc
 
 next_step rm_tmp "Remove $BUILD/var/tmp/"
 
-next_step update_index "Updating indexes?"
+next_step update_index "Updating modules dependencies and indexes?"
 next_step create_new_iso "Creating ISO image for new KNOPPIX?"
 next_step cd_info "Scan bus about your CD recorder?"
 next_step cd_erase "Erase CD?"

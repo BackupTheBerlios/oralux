@@ -28,6 +28,7 @@ In the following lines, + means evolution, - bug.
 
 1.1 Priority 1 (Urgent)
 
++ config mc
 + In 0.6 alpha, Emacs tries ispell and the US dictionnary. English
 has to be supplied:
 ;; add for 0.6 alpha

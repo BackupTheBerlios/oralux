@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # oralux.sh
-# $Id: oralux.sh,v 1.6 2005/01/30 21:43:51 gcasse Exp $
+# $Id: oralux.sh,v 1.7 2005/02/07 00:13:57 gcasse Exp $
 # $Author: gcasse $
 # Description: This script is called at init time
-# $Date: 2005/01/30 21:43:51 $ |
-# $Revision: 1.6 $ |
+# $Date: 2005/02/07 00:13:57 $ |
+# $Revision: 1.7 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -64,22 +64,15 @@ if [ "$TTY" == "/dev/tty1" -a ! -e "$FILE" ]
     while  [ "$state" != "STOP" ]; do
 	
 	# dialog-oralux is only used for the menu.
-	# Once more enhanced, it could replace dialog
-	DIALOG_DIR=/usr/bin
-	cd $DIALOG_DIR
-	if [ ! -h dialog ]; then
-	    mv dialog dialog.original
-	    ln -s dialog-oralux dialog
-	fi
+	# Once enhanced, it could replace dialog
+	export DIALOG=/usr/bin/dialog-oralux
 
 	cd /usr/share/oralux/main
 	sudo ./oralux `tty` start
 
-	if [ -h $DIALOG_DIR/dialog ]; then
-	    rm $DIALOG_DIR/dialog
-	    mv $DIALOG_DIR/dialog.original $DIALOG_DIR/dialog
-	fi
-    
+	// Restoring the initial dialog
+	export DIALOG=/usr/bin/dialog
+
 # Taking in account the (perhaps updated) config
 	source /etc/sysconfig/knoppix
 	export LANG
