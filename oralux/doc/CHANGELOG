@@ -20,6 +20,10 @@ Date: xx Month 2004
 
 
 * Enhancements
+
+/ Configuration files in the boot floppy: 
+The very basic configuration files can now be saved in the boot floppy.
+
 / Message: "Do you want to update your preferences?" is more explanatory, so that people know which key they have to press to answer.
 
 ** Russian support

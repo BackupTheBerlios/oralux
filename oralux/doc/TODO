@@ -28,12 +28,10 @@ In the following lines, + means evolution, - bug.
 
 1.1 Priority 1 (Urgent)
 
++ emacs-wget.el
++ Download new patches from IBP
 
-+ Configuration files in the boot floppy: 
-The very basic configuration files can now be saved in the boot floppy.
  
-
-
 + doc update: http://fsfeurope.org/projects/education/tgs/tagatschool7.fr.html
 + check if persistenthome still works
 
@@ -73,6 +71,7 @@ before adding trplayer/realplayer to the system. "
 + the LAME mp3 encoder is actually released under the LGPL.
 + codec RealPlayer 9 + 10
 ---------------------
++ see e.g. w3m and pdf
 
 + saveconfig in the menu
 + menu and new brltty usb drivers
@@ -399,6 +398,7 @@ http://nebuchadnezzar.zion.cz/download/xlhtml-0.5.1-vd2.tgz
 
 1.2 Priority 2
 
++ Propose free voice synthesizers able to change the voice features. 
 + Nath: clipboard (particularly for links2)
 + General default auditory icons player whichever the voice synthesis. At the moment, most of our proposed voice synthesizers, do not manage the auditory icons.
   
@@ -532,6 +532,7 @@ Pressing Page Down will move down a paragraph.
 
 
 1.3 Priority 3
++ Aural style sheets support.
 + Oralux 1.x: clearer messages. E.g. the Emacs question once C-x k is pressed: "Kill buffer" is a question but can be understood as a confirmation. "Which buffer must be killed" would be better.
 + Check that installed binaries are i386 compliant
 + OCR

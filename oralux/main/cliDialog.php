@@ -1,11 +1,11 @@
 <?php
 // ----------------------------------------------------------------------------
 // cliDialog.php
-// $Id: cliDialog.php,v 1.5 2004/10/30 21:11:17 gcasse Exp $
+// $Id: cliDialog.php,v 1.6 2004/10/31 23:37:33 gcasse Exp $
 // $Author: gcasse $
 // Description: command line based dialog (menu, yes/no question, dialog box,...)
-// $Date: 2004/10/30 21:11:17 $ |
-// $Revision: 1.5 $ |
+// $Date: 2004/10/31 23:37:33 $ |
+// $Revision: 1.6 $ |
 // Copyright (C) 2004 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -62,6 +62,7 @@ define ("areaList", 0);
 define ("areaButton", 1);
 define ("areaInputBox", 2);
 define ("areaMessage", 3);
+define ("areaYesNo", 4);
 
 define ("verbose", 0);
 define ("notVerbose", 1);
@@ -78,16 +79,20 @@ abstract class cliArea
   abstract public function getType(); // list, button
 
   // {{{ announceTypeOfArea
-
-  public function announceTypeOfArea()
+  public function announceTypeOfArea(  $theAnnounceIsRepeated)
   {
     ENTER("cliArea::announceTypeOfArea",__LINE__);
-    foreach ($this->myAnnounce[ $this->myVerbosity ] as $aMessage)
+    // By default, we say the announce once.
+    // E.g. we do not want to hear "this is a long list" 
+    // each time we go from the last to the first item of a menu.
+    if ($theAnnounceIsRepeated == false)
       {
-	echo $aMessage;
+	foreach ($this->myAnnounce[ $this->myVerbosity ] as $aMessage)
+	  {
+	    echo $aMessage;
+	  }
       }
   }
-
   // }}}
   // {{{ setVerbosity
   function setVerbosity( $theVerbosity)
@@ -237,6 +242,8 @@ class cliAreaManager
   function gotoNextArea()
     {
       ENTER("cliAreaManager::gotoNextArea",__LINE__);
+      $oldArea=current($this->myArea);
+
       $aCurrentArea=next($this->myArea);
       if ($aCurrentArea==false)
 	{
@@ -246,10 +253,11 @@ class cliAreaManager
 	      $aCurrentArea=current($this->myArea);
 	    }
 	}
-      
+
       if ($aCurrentArea!=false)
 	{
-	  $aCurrentArea->announceTypeOfArea();
+	  $aRepeatedAnnounce = ($aCurrentArea == $oldArea);
+	  $aCurrentArea->announceTypeOfArea( $aRepeatedAnnounce);
 	}
       return ($aCurrentArea != false);
     }
@@ -258,6 +266,7 @@ class cliAreaManager
   function gotoPreviousArea()
     {
       ENTER("cliAreaManager::gotoPreviousArea",__LINE__);
+      $oldArea=current($this->myArea);
       $aCurrentArea=prev($this->myArea);
       if ($aCurrentArea==false)
 	{
@@ -268,7 +277,8 @@ class cliAreaManager
 	}
       if ($aCurrentArea!=false)
 	{
-	  $aCurrentArea->announceTypeOfArea();
+	  $aRepeatedAnnounce = ($aCurrentArea == $oldArea);
+	  $aCurrentArea->announceTypeOfArea( $aRepeatedAnnounce);
 	}
       return ($aCurrentArea != false);
     }
@@ -396,7 +406,6 @@ class cliAreaManager
 }
 
 // }}}
-
 // {{{ cliList
 class cliList extends cliArea
 {
@@ -766,6 +775,7 @@ class cliCheckbox extends cliList
 
 // }}}
 // {{{ cliButton
+
 class cliButton extends cliArea
 {
   protected $myKey; // An integer. For example myKey=0 for myLabel="OK", 1 for "Cancel",...
@@ -806,6 +816,7 @@ class cliButton extends cliArea
     }
   // }}}
 }
+
 // }}}
 // {{{ cliMessage
 class cliMessage extends cliArea
@@ -849,6 +860,8 @@ class cliDialog
   protected $myList=NULL;
   protected $myCheckbox=NULL;
   protected $myInputBox=NULL;
+  protected $myMessage=NULL;
+  protected $myYesNo=NULL;
   protected $myButton=NULL;
   protected $myDefaultValueAcceptationButton=NULL;
   protected $myDialogWithDefaultButton=true; // If true the default buttons (OK and Cancel) are present.
@@ -1045,24 +1058,15 @@ class cliDialog
       // Message
       $aMessage[verbose][]=$theQuestion."\n";
       $aMessage[notVerbose][]=$theQuestion."\n";
-      $this->myMessage=new cliMessage( $aMessage);
 
-      // Buttons
-      unset($aMessage);
-      $aMessage[verbose][]=gettext("This is a button.\n");
-      $aMessage[notVerbose][]=gettext("Button.\n");
+      $aMessage[verbose][]=gettext("Yes or No?\n");
+      $aMessage[notVerbose][]=gettext("Yes or No?\n");
 
-      $this->myButton[]=new cliButton( OkPressedValue, gettext("Yes"), $aMessage);
-      $this->myButton[]=new cliButton( CancelPressedValue, gettext("No"), $aMessage);
+      $this->myYesNo=new cliYesNo( $aMessage);
 
       // Area: list (first entry) + buttons
-      $this->myAreaManager->addArea( $this->myMessage);
-
-      for ($i=0; $i<count($this->myButton); $i++)
-	{
-	  $this->myAreaManager->addArea($this->myButton[ $i]);
-	}
-
+      $this->myAreaManager->addArea( $this->myYesNo);
+      
       return $this->myAreaManager->processKeys( $this->myTerminal, $theResult);
     }
 
@@ -1082,18 +1086,11 @@ class cliDialog
       $aMessage[notVerbose][]=$theQuestion."\n";
       $this->myMessage=new cliMessage( $aMessage);
 
-      //      if ($this->myDialogWithDefaultButton)
-      //	{
       // Buttons
       unset($aMessage);
-//       $aMessage[verbose][]=gettext("This is a button.\n");
-//       $aMessage[notVerbose][]=gettext("Button.\n");
-//      $this->myButton[]=new cliButton( OkPressedValue, gettext("Ok"), $aMessage);
       $aMessage[verbose][]=gettext("Press any key to continue.\n");
-      $aMessage[notVerbose][]=gettext("Press any key to continue.\n");
-      
+      $aMessage[notVerbose][]=gettext("Press any key to continue.\n");      
       $this->myButton[]=new cliButton( OkPressedValue, "", $aMessage);
-	  //	}
 
       $this->myAreaManager->SetWrap( false);
 
@@ -1232,6 +1229,87 @@ class cliDialog
   // }}}
 }
 
+// }}}
+
+// {{{ cliYesNo
+
+class cliYesNo extends cliArea
+{
+  protected $myCurrentValue;
+
+  // {{{ announceTypeOfArea
+  public function announceTypeOfArea(  $theAnnounceIsRepeated)
+  {
+    ENTER("cliArea::announceTypeOfArea",__LINE__);
+    // We say the announce at each try.
+    // So we behave as it was the first announce
+    parent::announceTypeOfArea( false);
+  }
+  // }}}
+
+  // {{{ constructor
+  function __construct( $theAnnounce )
+    {
+      ENTER("cliYesNo::__construct",__LINE__);
+      $this->myAnnounce=$theAnnounce;
+    }
+  // }}}
+
+  function getType(){ return areaYesNo;}
+
+  // {{{ processInput
+  function processInput( $theResult, & $theInput, $theTerminal)
+    {
+      ENTER("cliYesNo::processInput",__LINE__);
+      $aResult=$theResult;
+
+      if ($aResult==getCharOK)
+	{
+	  switch( $theInput)
+	    {
+	    case "\n":
+	    case "\r":
+	      // Note: in a dumb terminal, the return key jumps to the next line.
+	      // Whereas otherwise 'return' means 'apply'.
+	      if ($theTerminal->IsDumbTerminal())
+		{
+		  $aResult=getCharDownArrowKey;
+		}
+	      else
+		{
+		  $aResult=getCharApply;
+		}
+	      break;
+	      
+	    case "\t": 
+	      $aResult=getCharNextArea;
+	      break;
+
+	    default:
+	      if ($this->_isYesOrNo( $theInput, $aYesResult))
+		{
+		  $aResult = getCharApply;
+		  $this->myCurrentValue = $aYesResult ? OkPressedValue:CancelPressedValue;
+		}
+	      else
+		{ // go to next field
+		  $aResult=getCharDownArrowKey;
+		}
+	      break;
+	    }
+	}
+      return $aResult;
+    }
+  // }}}
+
+  // {{{ apply
+  function apply( & $theInput)
+    {
+      ENTER("cliYesNo::apply",__LINE__);
+      return $this->myCurrentValue;
+    }
+  // }}}
+}
 // }}}
 
 
