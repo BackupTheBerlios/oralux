@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // serialPort.c
-// $Id: serialPort.c,v 1.2 2005/01/30 21:43:51 gcasse Exp $
+// $Id: serialPort.c,v 1.3 2005/03/31 09:16:54 gcasse Exp $
 // $Author: gcasse $
 // Description: Serial ports 
-// $Date: 2005/01/30 21:43:51 $ |
-// $Revision: 1.2 $ |
+// $Date: 2005/03/31 09:16:54 $ |
+// $Revision: 1.3 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -98,6 +98,7 @@ void serialPortChoose( enum serialPortIdentifier * thePort)
     }
 
   say(portIs);
+
   say(myPorts[aChoice].myName);
   say(changePort);
   say(PleasePressKey);
@@ -136,6 +137,86 @@ void serialPortChoose( enum serialPortIdentifier * thePort)
     }
   *thePort=aChoice;
 }
+
+
+void serialOrUSBPortChoose( enum serialPortIdentifier * thePort, int* theUSB)
+{
+  ENTER("serialOrUSBPortChoose");
+  int aRequest=0;
+  int aChoice=*thePort;
+  int aQuestion=1;
+
+  static struct serialPortItem myPortsUSB[]=
+    {
+      {"/dev/ttyS0",FirstSerialPort},
+      {"/dev/ttyS1",SecondSerialPort},
+      {"usb",usbPort},
+    };
+
+  enum {MaxPortsUSB=sizeof(myPortsUSB)/sizeof(myPortsUSB[0]),
+	UsbPortIndex=2}; /* index in myPortsUSB */
+
+  if (aChoice >= MaxPortsUSB)
+    {
+      aChoice=0;
+    }
+
+  if (*theUSB)
+    {
+      aChoice=UsbPortIndex;
+    }
+
+  say(portIs);
+  say(myPortsUSB[aChoice].myName);
+  say(changePort);
+  say(PleasePressKey);
+
+  if (MENU_Yes == getAnswer())
+    {
+      aRequest=1;
+      say(whichPort);
+    }
+
+  while(aRequest)
+    {
+      say(myPortsUSB[aChoice].myName);
+
+      if (aQuestion)
+	{
+	  say( PleasePressKey);
+	  aQuestion=0;
+	}
+
+      switch(getAnswer())
+	{
+	case MENU_Yes:
+	  aRequest=0;
+	  if (aChoice != UsbPortIndex)
+	    {
+	      serialPortSetReserved( aChoice);
+	    }
+	  break;
+
+	case MENU_Previous:
+	  aChoice = (aChoice > 0) ? --aChoice : MaxPortsUSB-1;
+	  break;
+
+	default:
+	  aChoice = (aChoice >= MaxPortsUSB-1) ? 0 : ++aChoice;
+	  break;
+	}
+    }
+  if (aChoice==UsbPortIndex)
+    {
+      *theUSB=1;
+    }
+  else
+    {
+      *theUSB=0;
+      *thePort=aChoice;
+    }
+}
+
 
 enum serialPortIdentifier getEnumSerialPort(char* thePort)
 {

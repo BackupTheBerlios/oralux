@@ -3,6 +3,11 @@
 
 #define ORALUX_RELEASE "0.6beta"
 
+#define ORALUXGOLD 1
+#define ORALUXGOLD_DIR "/usr/share/oraluxGold"
+#define IBMECI_DIR "/usr/share/oraluxGold/ibmeci"
+#undef ORALUXGOLD
+
 enum phpStatus {
   PHP_OK,
   PHP_DECTALK_CANT_BE_FOUND,
@@ -53,15 +58,28 @@ enum phpStatus {
 
 enum language {
   // --> 
-  // Do not change this order: the four following values index an array
-  English, 
+  // Attention: the four following values index TheMessages
+  English, /* American English */
   French,
   German,
   Spanish,
   // <--
   Russian, 
-  LanguageMax, //Last value!
+  MenuLanguageMax, //Last possible language for the menu
+
+  BrazilianPortuguese=MenuLanguageMax,
+  British,
+  CanadianFrench,
+  Finnish,
+  Italian, 
+  Japanese, 
+  MandarinChinese, /* Simplified Chinese */
+  MexicanSpanish, 
+  TaiwaneseMandarin, /* Traditional Chinese */
+  SynthesisLanguageMax, //Last value!
 };
+
+
 
 // Debug
 #ifdef DEBUG

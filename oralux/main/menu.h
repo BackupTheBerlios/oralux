@@ -16,7 +16,7 @@ struct menuInfo{
 // menu
 // Start the introductory menu.
 // Update the structure theSelectedInfo
-void menu(struct menuInfo* theSelectedInfo);
+void menu(struct menuInfo* theSelectedInfo, int *theConfHasBeenUpdated);
 
 // getAnswer
 // A short function which asks to the user to accept or not an assertion
@@ -47,5 +47,7 @@ enum ShutdownStatus {
 };
 
 enum ShutdownStatus askIfShutdownIsRequired();
+
+void saveconfig( struct menuInfo* theSelectedInfo);
 
 #endif

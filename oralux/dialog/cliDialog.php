@@ -1,11 +1,11 @@
 <?php
 // ----------------------------------------------------------------------------
 // cliDialog.php
-// $Id: cliDialog.php,v 1.5 2005/02/07 00:13:56 gcasse Exp $
+// $Id: cliDialog.php,v 1.6 2005/03/31 09:16:53 gcasse Exp $
 // $Author: gcasse $
 // Description: command line based dialog (menu, yes/no question, dialog box,...)
-// $Date: 2005/02/07 00:13:56 $ |
-// $Revision: 1.5 $ |
+// $Date: 2005/03/31 09:16:53 $ |
+// $Revision: 1.6 $ |
 // Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -25,6 +25,7 @@
 
 $BASE=dirname(__FILE__);
 require_once("$BASE/../main/helpEmul.php");
+require_once("i18n.php");
 
 // {{{ Constants
 
@@ -442,12 +443,12 @@ class cliList extends cliArea
   protected function displayKey()
     {
       $aKey=key($this->myOption);
-      if (is_numeric($aKey))
-	{
-	  // The numeric key is incremented because 
-	  // the first numeric key is supposed to be zero.
-	  $aKey++;
-	}
+//       if (is_numeric($aKey))
+// 	{
+// 	  // The numeric key is incremented because 
+// 	  // the first numeric key is supposed to be zero.
+// 	  $aKey++;
+// 	}
       echo "$aKey. ";
     }
   // }}}
@@ -1243,12 +1244,12 @@ class cliDialog
 	{
 	  if ($theSentence)
 	    {
-	      echo sprintf("\n".gettext("%d. %s"), $theIndex, $theSentence);
+	      echo sprintf("\n%d. %s", $theIndex, $theSentence);
 	    }
 	}
       else if ($theSentence)
 	{
-	  echo sprintf("\n".gettext("%s"), $theSentence);
+	  echo sprintf("\n%s", $theSentence);
 	}
     }
 

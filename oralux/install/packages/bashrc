@@ -10,4 +10,6 @@ then
  PS1="root # "
 else  
  PS1="$ "
-fi 
+fi
+ 
+#export EDITOR=emacsclient

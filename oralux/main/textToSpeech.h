@@ -13,6 +13,7 @@ enum textToSpeech {
   TTS_EFM,
   TTS_ParleMax,
   TTS_Multispeech,
+  TTS_ViaVoice,
   TTS_AccentSA,
   TTS_BrailleLite,
   TTS_BrailleNSpeak,

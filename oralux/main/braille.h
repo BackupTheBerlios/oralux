@@ -8,12 +8,14 @@
 // must match static arrays in braille.c)
 enum brailleIdentifier
   {
+    ALBATROSS,
     ALVA,
     BRAILLELITE,
     BRAILLENOTE,
     COMBIBRAILLE,
     ECOBRAILLE,
     EUROBRAILLE,
+    FREEDOMSCIENTIFIC,
     HANDYTECH,
     LOGTEXT,
     MULTIBRAILLE,
@@ -31,9 +33,13 @@ enum brailleIdentifier
 
 enum brailleTableIdentifier
   {
+    BRF_TABLE,
+    CZ_TABLE,
     DA_TABLE,
     DE_TABLE,
     ES_TABLE,
+    FI1_TABLE,
+    FI2_TABLE,
     FR_TABLE,
     FR_CBIFS_TABLE,
     IT_TABLE,
@@ -50,10 +56,24 @@ enum brailleTableIdentifier
     MaxBrailleTableIdentifier,
   };
 
+
+enum brailleContractionTableIdentifier
+  {
+    noContraction,
+    big5,
+    compress,
+    en_us_g2,
+    fr_abrege,
+    fr_integral,
+    MaxBrailleContractionTableIdentifier,
+  };
+
 struct brailleInfo {
   enum brailleIdentifier myBrailleIdentifier;
   enum brailleTableIdentifier myBrailleTableIdentifier;
+  enum brailleContractionTableIdentifier myBrailleContractionTableIdentifier;
   enum serialPortIdentifier myPort;
+  int myPortIsUSB;
 };
 
 void getDefaultConf( enum keyboard theKeyboard, struct brailleInfo * theInfo);

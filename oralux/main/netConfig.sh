@@ -3,11 +3,11 @@
 
 # ----------------------------------------------------------------------------
 # netConfig.sh
-# $Id: netConfig.sh,v 1.7 2005/01/30 21:43:51 gcasse Exp $
+# $Id: netConfig.sh,v 1.8 2005/03/31 09:16:54 gcasse Exp $
 # $Author: gcasse $
 # Description: Menu for internet settings
-# $Date: 2005/01/30 21:43:51 $ |
-# $Revision: 1.7 $ |
+# $Date: 2005/03/31 09:16:54 $ |
+# $Revision: 1.8 $ |
 # Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -25,8 +25,8 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 # ----------------------------------------------------------------------------
 
-DIALOG=dialog-oralux
-MINIMENU=/tmp/minimenu.tmp
+export DIALOG=dialog-oralux
+export MINIMENU=/tmp/minimenu.tmp
 tempfile=`tempfile 2>/dev/null` || tempfile=/tmp/test$$
 trap "rm -f $tempfile" 0 1 2 5 15
 
@@ -40,9 +40,10 @@ adslMenu()
     TextWhichUsbADSL="Which is your USB ADSL Modem?"
     $DIALOG --nobutton --menu "$TextWhichUsbADSL" 20 51 4 \
 	"0" "Sagem"\
-	"1" "SpeedTouch"\
-	"2" "E C I"\
+	"1" "E C I"\
     2> $tempfile
+
+#	"2" "SpeedTouch"\
     
     retval=$?
     
@@ -54,9 +55,7 @@ case $choice in
     0)
     ./eagleConfig.sh;;
     1)
-    ;;
-    2)
-    ;;
+    eciadsl-config-text;;
 esac
 ;;
 

@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # multispeech.sh
-# $Id: multispeech.sh,v 1.4 2005/03/13 22:09:54 gcasse Exp $
+# $Id: multispeech.sh,v 1.5 2005/03/31 09:16:53 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing Multispeech.
-# $Date: 2005/03/13 22:09:54 $ |
-# $Revision: 1.4 $ |
+# $Date: 2005/03/31 09:16:53 $ |
+# $Revision: 1.5 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -187,6 +187,7 @@ InstallPackage()
     rm -rf $TMP/rulex-$RULEX_RELEASE
 
     cd /usr/share/emacs/site-lisp/emacspeak/servers
+ echo multispeech >> .servers
     rm -f multispeech
     ln -s /usr/local/lib/multispeech/speech_server multispeech
 }
@@ -340,7 +341,7 @@ Copy2Oralux()
     rm -rf $TMP/multispeech-$MULTISPEECH_RELEASE
     rm -rf $TMP/rulex-$RULEX_RELEASE
 
-    chroot $BUILD bash -c "cd /usr/share/emacs/site-lisp/emacspeak/servers; rm -f multispeech; ln -s /usr/local/lib/multispeech/speech_server multispeech"
+    chroot $BUILD bash -c "cd /usr/share/emacs/site-lisp/emacspeak/servers; echo multispeech >> .servers; rm -f multispeech; ln -s /usr/local/lib/multispeech/speech_server multispeech"
 }
 
 case $1 in

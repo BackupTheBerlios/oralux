@@ -1,11 +1,11 @@
 <?PHP
 // ----------------------------------------------------------------------------
 // Files.php
-// $Id: Files.php,v 1.2 2005/01/30 21:43:51 gcasse Exp $
+// $Id: Files.php,v 1.3 2005/03/31 09:16:54 gcasse Exp $
 // $Author: gcasse $
 // Description: A few tools to manage files or directories. 
-// $Date: 2005/01/30 21:43:51 $ |
-// $Revision: 1.2 $ |
+// $Date: 2005/03/31 09:16:54 $ |
+// $Revision: 1.3 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -221,8 +221,7 @@ function CopyFiles( $theSourcePath, $theDestinationPath, $theDirectoryList)
 
   if (!@is_writable($theDestinationPath))
   {
-    say(sprintf("Sorry, impossible to write in directory %s\n"), $theDestinationPath);
-    exit(1);
+    die("Sorry, impossible to write in directory".$theDestinationPath."\n");
   }
 
   $aCurrentDirectory=getcwd();

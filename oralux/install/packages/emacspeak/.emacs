@@ -105,6 +105,7 @@
 (global-set-key [f9] 'compile)
 (global-set-key [f11] 'bbdb)
 (global-set-key [f12] 'other-window)
+(global-set-key [f13] 'dtk-set-next-language)
 (global-set-key [f15] 'gnus)
 (global-set-key [f16] 'shell)
 (global-set-key [f17] 'find-name-dired)
@@ -177,7 +178,12 @@
 (set-background-color "black")
 (global-font-lock-mode t)
 
-(server-start)
+
+;; (cond (
+;;        (string-match "^us" (getenv "LANGUAGE"))
+;;        (setq ispell-dictionary "english")
+;;        )
+;;       )
 
 ;; (setq-default ispell-program-name "aspell")
 ;; (autoload 'flyspell-mode "flyspell" "On-the-fly spelling checker." t)
@@ -191,7 +197,6 @@
 
 (load-library "folding-prepare")
 
-
 ;;(require 'catdoc)   
 (require 'tramp)
 ;; (setq backup-by-copying t)
@@ -199,21 +204,18 @@
 ;; (setq delete-old-versions t)
 ;; (setq kept-new-versions 6)
 ;; (setq kept-old-versions 2)
-   
 
 ;; bitlbee
 (load-library "erc-init")
 ;;(global-set-key "\C-ceb" 'erc-bitlbee)
 
-
-
-;;(server-start)
 ;; calendar
 (setq european-calendar-style t)
 ;;appointments
 (display-time)
 (add-hook 'diary-hook 'appt-make-list)
-(diary 0)
+(if (file-readable-p diary-file)
+    (diary 0))
 
 ;;newsticker
   (autoload 'w3m-region "w3m"
@@ -227,6 +229,6 @@
 ;; following.
 
 (add-hook 'newsticker-mode-hook 'imenu-add-menubar-index)
+(setq browse-url-browser-function 'w3m-browse-url)
 
- (setq browse-url-browser-function 'w3m-browse-url)
-
+;;(server-start)

@@ -31,29 +31,17 @@ In the following lines, + means evolution, - bug.
 *** Priority 1.1
 
 * Emacspeak in Russian
-+ New patch from Igor B. Poretsky (emacs-w3m)
 
 Feedback from IBP
---------------------------------------
-+ Multispeech and Emacspeak 20.0
---------------------------------------
+Remaining points:
 1) It is something wrong with the pre-generated letters. All letters
    are spoken by one voice though the voice must depend on register
    and some letters are spoken wrongly, for example, the letter "o" is
    spoken as "r".
 
-2) The English pronunciation dictionary
-   /usr/local/share/mbrola/lexicon.en is wrong or is not used.
-
-3) There are some problems in the Emacs russification.
-
 4) The Russian pronunciation dictionary Rulex is not used outside
    Emacspeak.
 
-5) All items in the dired mode are spoken by one voice. This problem
-   had appeared in new versions of Emacspeak. In the old versions (up
-   to 17 anyway) the files, symlinks and directories were spoken by
-   different voices.
 
 Feedback from Sergei
 --------------------------------------
@@ -80,19 +68,8 @@ help you testing whether it is OK or not.
 
 I hope that it will help you better debug the Russian settings.
 
-Another issue i have noticed is a behaviour of the English voice. It
-speaks with strange accent. I suspect, that somewhere perhaps by
-mistake a French pronounciation dictionry is loaded for mbrola?
 
-+ package console-cyrillic
-
-
-* Ispell
-+ In 0.6 alpha, Emacs tries ispell and the US dictionnary. English
-has to be supplied:
-;; add for 0.6 alpha
-(setq ispell-dictionary "english")
-(setq-default ispell-program-name "aspell")
++ test ispell for each possible languages
 
 * Translations
 
@@ -114,6 +91,15 @@ Message from Edmond > (setq vm-forwarding-subject-format "Message retransmis de 
 
 
 + les droits d'acces des fichiers sous /home/knoppix correspondent a root !
+
++ See misc.sh
+#     for i in "fi it pt pt-common de en es fr pt-br ukr"; do 
+# 	apt-get install aspell-$i
+#     done
+    
+#     for i in "fi zh de es fr it pt ru posix posix-dev dev ja"; do 
+# 	apt-get install manpages-$i
+#     done
 
 
 *** Priority 1.2 
@@ -331,7 +317,6 @@ pas su voir non plus. (Nath)
 ------------------------
 * Install
 ------------------------
-+ Brltty
 + edbrowse (0.6 beta or 0.6)
 + emacs-wget.el
 + timidity, freepats
@@ -339,6 +324,7 @@ pas su voir non plus. (Nath)
 + Gnutypist
 
 + undelete (recover)
+
 
 aptitude, zgv, fbi
 + Add for xls: xlhtml (most recent one)
@@ -490,26 +476,6 @@ Archives ML, mailto address, de.tbl instead of text.german.tbl
 + Avoiding the question 'do you want to update your configuration'.
 
 
-+ Notice from Teresa: contraction table
----------------------
-Subject: [Oralux] Saving Braille Preferences
-Date: Thu, 29 Jul 2004 06:31:12 -0700
-
-Or rather, not succeeding at saving them.  [smile]  I found the TTY
-preferences menu and set the Braille contraction table to US Grade 2.  I
-wasn't sure if the "save on exit" menu item was relevant, but I specified
-"yes"
-
-I ran the saveconfig script and said "yes' to all.  Everything is being
-saved on a zip disk, and I've successfully saved my other preferences.  Am I
-missing something?
-
-Just for the record, I have to say that I very much appreciate the Braille
-options in the startup menu.  That has helped quite a lot.
-
----------------------
-
-
 + After this message, DECtalk hangs: "MML Voice Abrev Fill Charac
 auto-saving done" (From Nath).
 
@@ -579,7 +545,8 @@ line.
 "...My motherboard is an Asus P4S8X and my sound card is a creative Labs SB Audigy."
 
 
-
+* Cicero:
+ http://www.cam.org/~nico/cicero/
 
 1.2 Priority 2
 

@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // i18n.c
-// $Id: i18n.c,v 1.2 2005/01/30 21:43:51 gcasse Exp $
+// $Id: i18n.c,v 1.3 2005/03/31 09:16:54 gcasse Exp $
 // $Author: gcasse $
 // Description: Internationalization. 
-// $Date: 2005/01/30 21:43:51 $ |
-// $Revision: 1.2 $ |
+// $Date: 2005/03/31 09:16:54 $ |
+// $Revision: 1.3 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -274,7 +274,7 @@ void buildI18n( enum language theMenuLanguage,
       CHARSET="iso8859-1";
       COUNTRY="us";
       LANG="C";
-      LANGUAGE="us";
+      LANGUAGE="en"; // TBD (en/aspell)
       break;
     }
 

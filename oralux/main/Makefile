@@ -8,6 +8,8 @@ OBJECTS_TEST=main.o constants.o getnchar.o audioUserInterface.o audioFifoFoo.o d
 OBJECTS2=getvoice.o audioUserInterface.o audioFifo.o constants.o 
 LIBS2=-L /ramdisk/dtk/lib -ltts -ltts_us -ltts_fr -ltts_gr -ltts_sp
 
+OBJECTSOG=constants.o getnchar.o audioUserInterface.o audioFifo.o desktop.o i18n.o menu.o textToSpeech.o braille.o serialPort.o yasr.o
+
 oralux: $(OBJECTS)
 	$(CC) $(OBJECTS) -o oralux
 

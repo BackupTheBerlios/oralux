@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // textToSpeech.c
-// $Id: textToSpeech.c,v 1.3 2005/01/30 21:43:51 gcasse Exp $
+// $Id: textToSpeech.c,v 1.4 2005/03/31 09:16:54 gcasse Exp $
 // $Author: gcasse $
 // Description: Ask about the whished TTS and install it. 
-// $Date: 2005/01/30 21:43:51 $ |
-// $Revision: 1.3 $ |
+// $Date: 2005/03/31 09:16:54 $ |
+// $Revision: 1.4 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -25,6 +25,7 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include <stdlib.h>
+#include <sys/stat.h>
 
 #include "audioUserInterface.h"
 #include "constants.h"
@@ -258,32 +259,34 @@ int HasExternalTextToSpeech(struct textToSpeechStruct* theExternalTextToSpeech)
 // Return true if a synth is selected
 // false if  menu must exit
 //
-struct softwareSynthesizerItem
+struct synthItem
 {
   enum textToSpeech myIdentifier;
   enum sentence mySentence;
 };
 
-static struct softwareSynthesizerItem TheAvailableSynthForEmacspeak[]= { 
-  {TTS_Flite, DoYouWantFlite},
-  {TTS_DECtalk, DoYouWantToInstallDECtalk},
-  {TTS_EFM, DoYouWantEFM},
+static struct synthItem TheProposedSynth[]= { 
+  {TTS_ViaVoice, DoYouWantViaVoice}, // index=0
   {TTS_Multispeech, DoYouWantMultispeech},
+  {TTS_Flite, DoYouWantFlite},
+  {TTS_EFM, DoYouWantEFM}, 
   {TTS_ParleMax, DoYouWantParleMax},
-  {TTS_Undefined, selectExternalSynth},
+  {TTS_DECtalk, DoYouWantToInstallDECtalk},
+  {TTS_Undefined, selectExternalSynth}, //last item
 };
 
-static struct softwareSynthesizerItem TheAvailableSynthForYasr[]= { 
-  {TTS_Flite, DoYouWantFlite},
-  {TTS_DECtalk, DoYouWantToInstallDECtalk},
-  {TTS_Multispeech, DoYouWantMultispeech},
-  {TTS_ParleMax, DoYouWantParleMax},
-};
+/* static struct synthItem TheAvailableSynthForYasr[]= {  */
+/*   {TTS_ViaVoice, DoYouWantToInstallViaVoice}, */
+/*   {TTS_Flite, DoYouWantFlite}, */
+/*   {TTS_DECtalk, DoYouWantToInstallDECtalk}, */
+/*   {TTS_Multispeech, DoYouWantMultispeech}, */
+/*   {TTS_ParleMax, DoYouWantParleMax}, */
+/* }; */
 
 // The number of items must be equal to the max number of items of the previous TheSynthQuestionxxx
-typedef struct softwareSynthesizerItem (*typeArrayOfAvailableSynth)[];
+typedef struct synthItem synthItem;
 
-int getIndexInArrayFromIdentifier( typeArrayOfAvailableSynth theArray, int theMaxIndex, enum textToSpeech theIdentifier)
+int getIndexInArrayFromIdentifier( synthItem** theArray, int theMaxIndex, enum textToSpeech theIdentifier)
 {
   int aIndex=0;
   int i=0;
@@ -308,16 +311,41 @@ static int chooseSynt( struct textToSpeechStruct* theTextToSpeech,
   int aMaxTextToSpeech=0;
   int aIndex=0;
   int i=0;
+  int j=0;
   int isFirstRequest=1;
-  typeArrayOfAvailableSynth aArrayOfAvailableSynth=NULL;
+  int aMaxSynth=sizeof(TheProposedSynth)/sizeof(TheProposedSynth[0]);
+
+  synthItem** aArrayOfAvailableSynth=(synthItem**)malloc( aMaxSynth * sizeof(synthItem*));
+
+  // ViaVoice is considered present if it was already installed by OG
+  // or if OG is in use
+  // two conditions for security (hard disk install)
+  struct stat buf;
+  int isViaVoicePresent = ((stat("/usr/lib/ibmeci", &buf)==0)
+			   || (stat("/usr/share/oraluxGold", &buf)==0));
+
+  for( i=0; i<aMaxSynth; i++)
+    {
+      if ((TheProposedSynth[i].myIdentifier == TTS_ViaVoice)
+	  && !isViaVoicePresent)
+	{
+	  continue;
+	}
+      else if ((theDesktop != Emacspeak)
+	       && ( (TheProposedSynth[i].myIdentifier == TTS_EFM)
+		    || (TheProposedSynth[i].myIdentifier == TTS_Undefined)))
+	{
+	  continue;
+	}
+      aArrayOfAvailableSynth[ aMaxTextToSpeech++] = TheProposedSynth+i;
+    }
 
   switch(theDesktop)
     {
     case Emacspeak:
       {
 	enum textToSpeech aIdentifier=isExternalSynth(theTextToSpeech->myIdentifier) ? TTS_Undefined:theTextToSpeech->myIdentifier;
-	aArrayOfAvailableSynth=&TheAvailableSynthForEmacspeak;
-	aMaxTextToSpeech=sizeof(TheAvailableSynthForEmacspeak)/sizeof(TheAvailableSynthForEmacspeak[0]);
+
 	aIndex=getIndexInArrayFromIdentifier(aArrayOfAvailableSynth , aMaxTextToSpeech, aIdentifier);
       }
       break;
@@ -327,15 +355,13 @@ static int chooseSynt( struct textToSpeechStruct* theTextToSpeech,
       {
 	// hardware synth are not yet available using Yasr
 	enum textToSpeech aIdentifier=isExternalSynth(theTextToSpeech->myIdentifier) ? TTS_Flite:theTextToSpeech->myIdentifier;
-	
+
 	// EFM is not yet available using Yasr
 	if (theTextToSpeech->myIdentifier==TTS_EFM)
 	  {
 	    aIdentifier=(thePreferredLanguage==French) ? TTS_ParleMax : TTS_Flite;
 	  }
 
-	aArrayOfAvailableSynth=&TheAvailableSynthForYasr;
-	aMaxTextToSpeech=sizeof(TheAvailableSynthForYasr)/sizeof(TheAvailableSynthForYasr[0]);
 	aIndex=getIndexInArrayFromIdentifier(aArrayOfAvailableSynth , aMaxTextToSpeech, aIdentifier);
       }
       break;
@@ -343,7 +369,7 @@ static int chooseSynt( struct textToSpeechStruct* theTextToSpeech,
 
   while(aRequest)
     {
-      say((*aArrayOfAvailableSynth)[aIndex].mySentence);	
+      say(aArrayOfAvailableSynth[aIndex]->mySentence);
 
       if (isFirstRequest)
 	{
@@ -353,13 +379,13 @@ static int chooseSynt( struct textToSpeechStruct* theTextToSpeech,
       switch(getAnswer())
 	{
 	case MENU_Yes:
-	  if ((*aArrayOfAvailableSynth)[aIndex].mySentence==selectExternalSynth)
+	  if (aArrayOfAvailableSynth[aIndex]->mySentence==selectExternalSynth)
 	    {
 	      setExternalSynth( theTextToSpeech);
 	    }
 	  else
 	    {
-	      theTextToSpeech->myIdentifier = (*aArrayOfAvailableSynth)[aIndex].myIdentifier;
+	      theTextToSpeech->myIdentifier = aArrayOfAvailableSynth[aIndex]->myIdentifier;
 	      switch (theTextToSpeech->myIdentifier)
 	 	{
 		case TTS_EFM:
@@ -371,11 +397,15 @@ static int chooseSynt( struct textToSpeechStruct* theTextToSpeech,
 		  break;
 
 		case TTS_Multispeech:
-		  theTextToSpeech->myLanguage = Russian;
+		  theTextToSpeech->myLanguage = (thePreferredLanguage == Russian) ? Russian : English;
 		  break;
 
 		case TTS_ParleMax:
 		  theTextToSpeech->myLanguage = French;
+		  break;
+
+		case TTS_ViaVoice:
+		  theTextToSpeech->myLanguage = thePreferredLanguage;
 		  break;
 
 		default:
@@ -384,7 +414,7 @@ static int chooseSynt( struct textToSpeechStruct* theTextToSpeech,
 	    }
 	  aRequest=0;
 	  break;
-	  
+
 	case MENU_Previous:
 	  if (isFirstRequest)
 	    {
@@ -418,6 +448,8 @@ static int chooseSynt( struct textToSpeechStruct* theTextToSpeech,
       SHOW3("aRequest=%d, aIndex=%d\n",aRequest, aIndex);
     }
 
+  free(aArrayOfAvailableSynth);
+
   return aStatus;
 }
 
@@ -429,6 +461,7 @@ static int readPHPStatus(enum phpStatus* theStatus, char* theDtkPath, enum langu
 static int BuildingEmacspeakSharedLibrary();
 static int isFileConsistent(char* theFilename);
 static int installDECtalk(enum language* theTextToSpeechLanguage);
+static int installViaVoice();
 
 static char* theOptionalDirectory[]={
   NULL, 
@@ -606,6 +639,26 @@ static void ManageDECtalkInstallation( enum textToSpeech* theTextToSpeech,
     }
 }
 
+// ManageDECtalkInstallation
+static void ManageViaVoiceInstallation( enum textToSpeech* theTextToSpeech,
+					enum language* theTextToSpeechLanguage,
+					int theUserMustBeAskedFor)
+{
+  ENTER("ManageViaVoiceInstallation");
+  *theTextToSpeech=TTS_Flite;
+  *theTextToSpeechLanguage=English;
+
+  if (installViaVoice( theUserMustBeAskedFor))
+    { // Successfull installation
+      *theTextToSpeech=TTS_ViaVoice;  
+    }
+  else
+    {
+      *theTextToSpeech=TTS_Flite;
+      *theTextToSpeechLanguage=English;
+    }
+}
+
 // BuildingEmacspeakSharedLibrary
 // Once the files of the DECtalk software are installed, the emacspeak shared library must be built (tcldtk.so)
 // As the emacspeak original tree from the CD is read-only, the built files (tcldtk.o and tcldtk.so) are 
@@ -753,13 +806,117 @@ static int installDECtalk(enum language* theTextToSpeechLanguage)
 }
 
 /* }}} */
+/* < askIfAnotherViavoiceInstall: return 1 if yes, 0 otherwises */
+
+int askIfAnotherViavoiceInstall( int thePreviousInstallWasOk)
+{ 
+  int anotherInstall=1;
+  if (thePreviousInstallWasOk)
+    {
+      say(InstallAnotherLanguage);
+      say(PleasePressKey);
+      
+      if (MENU_Yes != getAnswer())
+	{
+	  anotherInstall=0;
+	}
+    }
+  else
+    {
+      say(SorryPasswordNotCorrect);
+      say(IfYouWantToTryAgainPress);
+      say(IfYouWantToStopThisStage);
+      anotherInstall = (getAnswer() == MENU_Yes); 
+    }
+  return anotherInstall;
+}
+
+/* > */
+
+/* <*/
+
+// install
+// This function asks for the serial number (with an aural feedback)
+// and then supplies it to the ViaVoice installer
+// Finally, if possible the files are stored in the ibmeci directory for the future boot. 
+// return;
+// 1 if the installation succeeds
+//
+
+static int installViaVoice( int theUserMustBeAskedFor)
+{
+  ENTER("installViaVoice");
+
+  int aPasswordMustBeChecked=1;
+  int aCorrectPassword=0;
+  struct stat buf;
+  const char* aPath="/ramdisk/ibmeci";
+  mkdir( aPath, 0755);
+  chdir("/ramdisk/ibmeci");
+
+  if (stat("libibmeci.so", &buf) == 0)
+    {
+      aCorrectPassword=1;
+      if (theUserMustBeAskedFor)
+	{
+	  aPasswordMustBeChecked = askIfAnotherViavoiceInstall(1);
+	}
+      else
+	{
+	  aPasswordMustBeChecked = 0;
+	}
+    }
+
+  while(aPasswordMustBeChecked)
+    {
+      enum GNC_Answer aStatus=GNC_Ok;
+      char a[4];
+      char *b, *c;
+
+      say(PleaseEnterYourPassword);
+
+      if ((b=getnchar(pf, 40, 0, 1, &aStatus, keyPressedCallback3)) 
+	  && (*b!=0) 
+	  && (c=strchr( b, '-')) 
+	  && (b+4 == c))
+	{
+	  for (c=b;*c;c++)
+	    {
+	      *c = isalpha(*c) ? tolower(*c):*c;
+	    }
+
+	  strncpy(a,b,3);
+	  a[3] = 0;
+	  b[strlen(b)-1] = 0;
+	
+	  sprintf(TheLine, "%s/text2speechinstaller/installibmeci.sh %s '%s' %s/lib", ORALUX_RUNTIME, a, b, IBMECI_DIR);
+	  SHOW(TheLine);
+	  system(TheLine);
+	
+	  // ibmeci.conf exists if the installation succeeded
+
+	  if (stat("/tmp/ibmeci.conf",&buf)==0)
+	    {
+	      aCorrectPassword=1;
+	      sprintf(TheLine, "%s/inigen /usr/lib/ibmeci/%s50.so /etc", IBMECI_DIR, a);
+	      SHOW(TheLine);
+	      system(TheLine);
+	      unlink("/tmp/ibmeci.conf");
+	    }
+	}
+      aPasswordMustBeChecked = askIfAnotherViavoiceInstall( aCorrectPassword);
+    } // while
+  return aCorrectPassword;
+}
+
+/* > */
 
 /* {{{ Installing the required text to speech */
 
 // install
 // return 1: Ok
 // return 0: No possible installation
-static int install(struct textToSpeechStruct* theTextToSpeech, enum language thePreferredLanguage)
+static int install(struct textToSpeechStruct* theTextToSpeech, enum language thePreferredLanguage, int theUserMustBeAskedFor)
 {
   int aStatus=1;
   system("modprobe -r dtlk");
@@ -767,6 +924,18 @@ static int install(struct textToSpeechStruct* theTextToSpeech, enum language the
 
   switch (theTextToSpeech->myIdentifier)
     {
+    case TTS_ViaVoice:
+      ManageViaVoiceInstallation( & theTextToSpeech->myIdentifier, & theTextToSpeech->myLanguage, theUserMustBeAskedFor);
+      if (theTextToSpeech->myIdentifier != TTS_ViaVoice)
+	{ // Ask the synth again, if ViaVoice is not installed
+	  aStatus=0;
+	}
+      else if (thePreferredLanguage == English)
+	{
+	  theTextToSpeech->myLanguage=English;
+	}
+      break;
+
     case TTS_DECtalk:
       ManageDECtalkInstallation( & theTextToSpeech->myIdentifier, & theTextToSpeech->myLanguage);
       if (theTextToSpeech->myIdentifier != TTS_DECtalk)
@@ -815,7 +984,7 @@ void setTextToSpeech(struct textToSpeechStruct* theTextToSpeech,
 	}
  
       //      if (!install(theTextToSpeech, thePreferredLanguage))
-      if (!install(theTextToSpeech, theTextToSpeech->myLanguage))
+      if (!install(theTextToSpeech, theTextToSpeech->myLanguage, theUserMustBeAskedFor))
 	{
 	  aRequest=1;
 	  theUserMustBeAskedFor=1;
@@ -854,6 +1023,7 @@ static struct t_Label myLabels[]={
   {TTS_EFM, "EFM"},
   {TTS_Multispeech, "Multispeech"},
   {TTS_ParleMax, "ParleMax"},
+  {TTS_ViaVoice, "ViaVoice"},
   {TTS_AccentSA,"AccentSA"},
   {TTS_BrailleLite,"BrailleLite"},
   {TTS_BrailleNSpeak,"BrailleNSpeak"},

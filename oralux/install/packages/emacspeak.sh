@@ -1,12 +1,12 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # emacspeak.sh
-# $Id: emacspeak.sh,v 1.4 2005/03/13 22:09:54 gcasse Exp $
+# $Id: emacspeak.sh,v 1.5 2005/03/31 09:16:53 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing emacspeak. Thanks to the Nath's howto: 
 # emacspeak-dtk-soft-debinst-howto.htm
-# $Date: 2005/03/13 22:09:54 $ |
-# $Revision: 1.4 $ |
+# $Date: 2005/03/31 09:16:53 $ |
+# $Revision: 1.5 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -86,7 +86,20 @@ InstallPackage()
     cd /tmp/emacspeak*; 
     
     # Patch by Igor B. Poretsky (multispeech integration, and more)
-    patch -p0 -i emacspeak-$RELEASE.patch
+    patch -p0 -i $INSTALL_PACKAGES/emacspeak/emacspeak-$RELEASE.patch
+
+    cp $INSTALL_PACKAGES/emacspeak/MakefileECI servers/linux-outloud/Makefile
+    cp $INSTALL_PACKAGES/emacspeak/tcleci.cpp servers/linux-outloud
+    cp $INSTALL_PACKAGES/emacspeak/outloud servers
+
+    cp $INSTALL_PACKAGES/emacspeak/*el lisp
+
+    make
+
+    cd ..
+    cp $INSTALL_PACKAGES/vv/outloud .
+
+
     make config; make; make install
 
     EMACSPEAK_DIR="/usr/share/emacs/site-lisp/emacspeak"
@@ -148,8 +161,20 @@ Copy2Oralux()
     # For emacspeak-amphetadesk.el (emacspeak 19.0)
     chroot $BUILD apt-get install w3-el-e21
 
+    rm -f $BUILD/usr/share/emacs/site-lisp/emacspeak/servers/software-dtk/Makefile 
+    rm -f $BUILD/usr/share/emacs/site-lisp/emacspeak/servers/software-dtk/tcldtk.*
+
     # Installing emacspeak
-    chroot $BUILD bash -c "rm -f /usr/share/emacs/site-lisp/emacspeak/servers/software-dtk/Makefile; rm -f /usr/share/emacs/site-lisp/emacspeak/servers/software-dtk/tcldtk.*; cd /var/tmp/emacspeak*; patch -p0 -i emacspeak-$RELEASE.patch;make config; make; make install"
+    cd $BUILD/var/tmp/emacspeak* 
+    patch -p0 -i $INSTALL_PACKAGES/emacspeak/emacspeak-$RELEASE.patch
+
+    cp $INSTALL_PACKAGES/emacspeak/MakefileECI servers/linux-outloud/Makefile
+    cp $INSTALL_PACKAGES/emacspeak/tcleci.cpp servers/linux-outloud
+    cp $INSTALL_PACKAGES/emacspeak/outloud servers
+
+    cp $INSTALL_PACKAGES/emacspeak/*el lisp
+
+    chroot $BUILD bash -c "cd /var/tmp/emacspeak*; make config; make; make install"
 
     cd $BUILD/var/tmp
     rm -rf emacspeak*
@@ -190,6 +215,8 @@ Copy2Oralux()
     # The original file tcldtk.c is replaced to be compliant with the beta french release
     cp $INSTALL_PACKAGES/emacspeak/tcldtk.c .
     cp $INSTALL_PACKAGES/emacspeak/dtk-soft ..
+
+    cp $INSTALL_PACKAGES/emacspeak/outloud ..
 
     # Installing emacspeak.info
     cd

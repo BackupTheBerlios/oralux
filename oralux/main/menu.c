@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // menu.c
-// $Id: menu.c,v 1.6 2005/01/30 21:43:51 gcasse Exp $
+// $Id: menu.c,v 1.7 2005/03/31 09:16:54 gcasse Exp $
 // $Author: gcasse $
 // Description: introductory menu. 
-// $Date: 2005/01/30 21:43:51 $ |
-// $Revision: 1.6 $ |
+// $Date: 2005/03/31 09:16:54 $ |
+// $Revision: 1.7 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -61,9 +61,16 @@ static void keyPressedCallback(char* theKeyPressed)
       &&(theKeyPressed[1]==0x5b)
       &&((theKeyPressed[2]==0x43) || ((theKeyPressed[2]==0x44)))
       &&(theKeyPressed[3]==0))
-    { // Left or right arrow keys: say again the stored sentences 
+    { // Left or right arrow key: say again the stored sentences 
       // Even if the sound is disabled
       sayAgain();
+    }
+  else if ((theKeyPressed[0]==0x1b)
+      &&(theKeyPressed[1]==0x5b)
+      &&((theKeyPressed[2]==0x41) || ((theKeyPressed[2]==0x42)))
+      &&(theKeyPressed[3]==0))
+    { // Up or down arrow key
+      sayForce( (theKeyPressed[2]==0x41) ? SayPrevious:SayNext);
     }
   else
     {
@@ -99,9 +106,16 @@ static void keyPressedCallback2(char* theKeyPressed)
       &&(theKeyPressed[1]==0x5b)
       &&((theKeyPressed[2]==0x43) || ((theKeyPressed[2]==0x44)))
       &&(theKeyPressed[3]==0))
-    { // Left or right arrow keys: say again the stored sentences 
+    { // Left or right arrow key: say again the stored sentences 
       // Even if the sound is disabled
       sayAgain();
+    }
+  else if ((theKeyPressed[0]==0x1b)
+      &&(theKeyPressed[1]==0x5b)
+      &&((theKeyPressed[2]==0x41) || ((theKeyPressed[2]==0x42)))
+      &&(theKeyPressed[3]==0))
+    { // Up or down arrow key
+      sayForce( (theKeyPressed[2]==0x41) ? SayPrevious:SayNext);
     }
   else
     {
@@ -135,9 +149,16 @@ void keyPressedCallback3(char* theKeyPressed)
       &&(theKeyPressed[1]==0x5b)
       &&((theKeyPressed[2]==0x43) || ((theKeyPressed[2]==0x44)))
       &&(theKeyPressed[3]==0))
-    { // Left or right arrow keys: say again the stored sentences 
+    { // Left or right arrow key: say again the stored sentences 
       // Even if the sound is disabled
       sayAgain();
+    }
+  else if ((theKeyPressed[0]==0x1b)
+      &&(theKeyPressed[1]==0x5b)
+      &&((theKeyPressed[2]==0x41) || ((theKeyPressed[2]==0x42)))
+      &&(theKeyPressed[3]==0))
+    { // Up or down arrow key
+      sayForce( (theKeyPressed[2]==0x41) ? SayPrevious:SayNext);
     }
   else
     {
@@ -261,6 +282,7 @@ static enum language setMenuLanguage(enum language theDefaultLanguage)
 		       }; // Index= enum language
   enum language aLanguage=theDefaultLanguage;
   int aLanguageRequest=1;
+  int aLanguageMax=sizeof(aMenu)/sizeof(aMenu[0]);
 
   setLanguage( aLanguage);
   say( aMenu[ aLanguage]);
@@ -274,14 +296,14 @@ static enum language setMenuLanguage(enum language theDefaultLanguage)
     }
   else
     {
-      aLanguage = (aLanguage >= LanguageMax-1) ? 0 : aLanguage+1;
+      aLanguage = (aLanguage >= aLanguageMax-1) ? 0 : aLanguage+1;
     }
 
   while(aLanguageRequest)
   {
     setLanguage( aLanguage);
     say( aMenu[ aLanguage]);
-    if (aQuestion<LanguageMax)
+    if (aQuestion<aLanguageMax)
       {
 	aQuestion++;
 	say( PleasePressKey);
@@ -294,11 +316,11 @@ static enum language setMenuLanguage(enum language theDefaultLanguage)
 	  break;
 
 	case MENU_Previous:
-	  aLanguage = (aLanguage > 0) ? aLanguage-1 : LanguageMax-1;
+	  aLanguage = (aLanguage > 0) ? aLanguage-1 : aLanguageMax-1;
 	  break;
 
 	default:
-	  aLanguage = (aLanguage >= LanguageMax-1) ? 0 : aLanguage+1;
+	  aLanguage = (aLanguage >= aLanguageMax-1) ? 0 : aLanguage+1;
 	  break;
       }
   }
@@ -322,8 +344,12 @@ void setInternet( struct menuInfo* theSelectedInfo)
   // This menu requires yasr
   buildConfigurationYasr(&(theSelectedInfo->myTextToSpeech));
   
+  // Set the expected LANG
+  char* aLang=getStringLanguage( theSelectedInfo->myTextToSpeech.myLanguage);
+
   char* aCommand=TheLine;
-  sprintf(aCommand, "%s/main/netConfig.sh", ORALUX_RUNTIME);
+  sprintf(aCommand, "%s/main/netConfig.sh", 
+	  ORALUX_RUNTIME);
 	    
   stopAUI(1);
   
@@ -352,7 +378,7 @@ void setInternet( struct menuInfo* theSelectedInfo)
 
 // TheKeyboards: an array useful to sort the keybord labels in alphabetical order (depends on the current language).
 static enum keyboard TheKeyboards[MaxKeyboard];
-static enum language TheLanguageForSorting=LanguageMax;
+static enum language TheLanguageForSorting=MenuLanguageMax;
 
 int sortKeyboardMessages( const void* theKeyboard_A, const void* theKeyboard_B)
 {
@@ -610,6 +636,50 @@ enum ShutdownStatus askIfShutdownIsRequired()
 
 /* > */
 
+/* < saveconfig */
+void saveconfig( struct menuInfo* theSelectedInfo)
+{
+  if (isInstalled())
+    {
+      return;
+    }
+  say( Saysaveconfig);
+  say( PleasePressKey);
+
+  if (getAnswer() != MENU_Yes)
+    {
+      return;
+    }
+
+  // This menu requires yasr
+  buildConfigurationYasr(&(theSelectedInfo->myTextToSpeech));
+  
+  char* aCommand=TheLine;
+  sprintf(aCommand, "/usr/sbin/saveconfig");
+	    
+  stopAUI(1);
+  
+  // At Yasr init, the speech synthesizer could crash.
+  // So we check if the menu exited in the expected way: the MINIMENU file must be created.
+  // Otherwise, yasr is started again.
+  const char* MINIMENU="/tmp/minimenu.tmp";
+  unlink(MINIMENU);
+
+  struct stat buf;
+  int i;
+  for (i=0; (i<3) && (stat(MINIMENU, &buf)==-1); i++)
+    {
+      if (i>0)
+	{
+	  printf("%d\n",i+1); 
+	}
+      runYasr( theSelectedInfo->myTextToSpeech.myIdentifier, theSelectedInfo->myMenuLanguage, aCommand);
+    }
+
+  restartAUI();
+}
+/* > */
+
 
 /* < menu */
 enum MENU_State {
@@ -624,18 +694,26 @@ enum MENU_State {
   MENU_End,
 };
 
-void menu(struct menuInfo* theSelectedInfo)
+
+void menu(struct menuInfo* theSelectedInfo, int *theConfHasBeenUpdated)
 {
   ENTER("menu");
   enum MENU_State aMenuState=MENU_Volume;
+  struct menuInfo aOldInfo;
+  memcpy( &aOldInfo, theSelectedInfo, sizeof(struct menuInfo));
 
-  if (!mustSetPreferences())
+  if (mustSetPreferences())
+    {
+      *theConfHasBeenUpdated=1;
+    }
+  else
     {
       setTextToSpeech( &(theSelectedInfo->myTextToSpeech), 
 		       //theSelectedInfo->myLanguage,
 		       theSelectedInfo->myDesktop,
 		       0);
       aMenuState=MENU_End;
+      *theConfHasBeenUpdated=0;
     }
 
   serialPortInit();
@@ -708,6 +786,20 @@ void menu(struct menuInfo* theSelectedInfo)
 	}
     }
   clearStoredSentences();
+
+  if (!*theConfHasBeenUpdated)
+    {
+      *theConfHasBeenUpdated=(0!=memcmp( &aOldInfo, theSelectedInfo, sizeof(struct menuInfo)));
+
+/* 	((aOldInfo.myMenuLanguage != theSelectedInfo->myMenuLanguage) */
+/* 	 || (aOldInfo.myKeyboard != theSelectedInfo->myKeyboard) */
+/* 	 || (aOldInfo.myKeyboardFeatures.myStickyKeysAreAvailable != theSelectedInfo->myKeyboardFeatures.myStickyKeysAreAvailable) */
+/* 	 || (aOldInfo.myKeyboardFeatures.myRepeatKeysAreAvailable != theSelectedInfo->myKeyboardFeatures.myRepeatKeysAreAvailable) */
+/* 	 || (aOldInfo.myTextToSpeech.myIdentifier != theSelectedInfo->myTextToSpeech.myIdentifier) */
+/* 	 || (aOldInfo.myTextToSpeech.myLanguage != theSelectedInfo->myTextToSpeech.myLanguage) */
+/* 	 || (aOldInfo.myTextToSpeech.myPort != theSelectedInfo->myTextToSpeech.myPort) */
+/* 	 || (aOldInfo.myDesktop != theSelectedInfo->myDesktop)); */
+    }
 }
 
 /* > */

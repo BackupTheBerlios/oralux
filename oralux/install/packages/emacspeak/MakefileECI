@@ -1,18 +1,22 @@
-#$Id: Makefile,v 1.1 2004/12/16 23:14:43 gcasse Exp $
+#$Id: MakefileECI,v 1.1 2005/03/31 09:16:53 gcasse Exp $
+# This is not the original file
+# Gilles Casse (15 March 2005): modified for Oralux 
 CC=g++
+# g++-3.2
 INSTALL = install
 PREFIX = /usr
 libparentdir = ${PREFIX}/share/emacs/site-lisp
 libdir =$(libparentdir)/emacspeak/linux-outloud
-CFLAGS=-g -fpic  -pedantic -ansi -Wall -I /opt/IBM/ibmtts/inc 
+CFLAGS=-g -fpic  -pedantic -ansi -Wall 
 TTS=tcleci.so eci.ini VIAVOICE
 
 all: tcleci.so 
 
 CPPFLAGS=  -DUNIX -fpic  -g -I/usr/include/tcl8.3 -I/usr/include/tclX8.3
+LIBS=-L /usr/lib/ibmeci -ltclx8.3 -ldl
 
 tcleci.so: tcleci.o
-	$(CC) $(CFLAGS) -g -o $@ tcleci.o -ltclx8.3 -ldl -shared
+	$(CC) $(CFLAGS) -g -o $@ tcleci.o $(LIBS) -shared
 
 clean:
 	rm -f tcleci.so tcleci.o

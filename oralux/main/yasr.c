@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // yasr.c
-// $Id: yasr.c,v 1.3 2005/01/30 21:43:51 gcasse Exp $
+// $Id: yasr.c,v 1.4 2005/03/31 09:16:54 gcasse Exp $
 // $Author: gcasse $
 // Description: Yasr configuration file. 
-// $Date: 2005/01/30 21:43:51 $ |
-// $Revision: 1.3 $ |
+// $Date: 2005/03/31 09:16:54 $ |
+// $Revision: 1.4 $ |
 // Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -89,7 +89,13 @@ static char* getNewSynthesizer(enum textToSpeech theTextToSpeech)
     case TTS_Multispeech:
       aSynthesizer="synthesizer=emacspeak server\nsynthesizer port=|/usr/local/lib/multispeech/speech_server";
       break;
-	      
+
+#ifdef ORALUXGOLD
+    case TTS_ViaVoice:
+      aSynthesizer="synthesizer=emacspeak server\nsynthesizer port=|/usr/bin/tcl /usr/share/emacs/site-lisp/emacspeak/servers/outloud";
+      break;
+#endif
+
     default :
     case TTS_Flite:
       aSynthesizer="synthesizer=emacspeak server\nsynthesizer port=|/usr/bin/eflite";
@@ -194,6 +200,9 @@ void runYasr( enum textToSpeech theTextToSpeech, enum language theMenuLanguage, 
     case TTS_DECtalk:
     case TTS_ParleMax:
     case TTS_Multispeech:
+#ifdef ORALUXGOLD
+    case TTS_ViaVoice:
+#endif
       aYasrSynthesizer=theTextToSpeech;
       break;
 
@@ -221,6 +230,11 @@ void runYasr( enum textToSpeech theTextToSpeech, enum language theMenuLanguage, 
     case TTS_DECtalk:
       aParam="|/usr/bin/tcl /usr/share/emacs/site-lisp/emacspeak/servers/dtk-soft";
       break;
+#ifdef ORALUXGOLD
+    case TTS_ViaVoice:
+      aParam="|/usr/bin/tcl /usr/share/emacs/site-lisp/emacspeak/servers/outloud";
+      break;
+#endif
     case TTS_ParleMax:
       aParam="|/usr/local/bin/maxlect";
       break;
@@ -233,10 +247,11 @@ void runYasr( enum textToSpeech theTextToSpeech, enum language theMenuLanguage, 
       break;
     }
 
-  char* aLine=(char *)malloc(BUFSIZE);
+    char* aLine=(char *)malloc(BUFSIZE);
+    //static char aLine[BUFSIZE];
   snprintf(aLine, BUFSIZE, "yasr -s \"emacspeak server\" -p \"%s\" %s", aParam, theCommand);
   system(aLine);
-  free( aLine);
+    free( aLine);
 }
 
 /* > */

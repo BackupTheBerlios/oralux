@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // getvoice.c
-// $Id: getvoice.c,v 1.3 2005/03/13 22:09:54 gcasse Exp $
+// $Id: getvoice.c,v 1.4 2005/03/31 09:16:54 gcasse Exp $
 // $Author: gcasse $
 // Description: Used at installation time to build the "voices" used by oralux
-// $Date: 2005/03/13 22:09:54 $ |
-// $Revision: 1.3 $ |
+// $Date: 2005/03/31 09:16:54 $ |
+// $Revision: 1.4 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -65,7 +65,7 @@ void initDECtalk(char* theLanguageId)
     int i;
     for(i=0;i<languageINFO->Languages;i++)
     {
-      printf("Code: %s, %s\n",languageINFO->Entries[i].lang_code,languageINFO->Entries[i].lang_name);
+      printf("DECtalk Code: %s, %s\n",languageINFO->Entries[i].lang_code,languageINFO->Entries[i].lang_name);
     }
   }
 

@@ -1,15 +1,21 @@
 ;;; emacspeak-setup.el --- Setup Emacspeak environment --loaded to start Emacspeak
+;;; $Id: emacspeak-setup.el,v 1.4 2005/03/31 09:16:53 gcasse Exp $
+;;; $Author: gcasse $ 
 ;;; Description:  File for setting up and starting Emacspeak
 ;;; Keywords: Emacspeak, Setup, Spoken Output
 ;;{{{  LCD Archive entry: 
 ;;; LCD Archive Entry:
 ;;; emacspeak| T. V. Raman |raman@cs.cornell.edu 
 ;;; A speech interface to Emacs |
+;;; $Date: 2005/03/31 09:16:53 $ |
+;;;  $Revision: 1.4 $ | 
 ;;; Location undetermined
 ;;;
+
 ;;}}}
 ;;{{{  Copyright:
-;;;Copyright (C) 1995 -- 2003, T. V. Raman 
+
+;;;Copyright (C) 1995 -- 2004, T. V. Raman 
 ;;; Copyright (c) 1994, 1995 by Digital Equipment Corporation.
 ;;; All Rights Reserved. 
 ;;;
@@ -28,21 +34,27 @@
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with GNU Emacs; see the file COPYING.  If not, write to
 ;;; the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
-;;;
-;;; WARNING:
-;;; This file is not the original one: modified for Oralux
-;;;
-;;; G.Casse 2004/05/15 : fst-set-language (temporary function)
-;;; Igor B. Poretsky 2004/10/10 : Multispeech default speech rate, 
-;;;  multibyte mode,  No emacs -q $INIT_CL.
-;;;
+
 ;;}}}
+;;{{{ Introduction
+
+;;; Commentary:
+;;; Entry point for Emacspeak.
+
+;;; Code:
+
+;;}}}
+;;{{{ Required Modules 
 
 (eval-when-compile (require 'cl))
 (declaim  (optimize  (safety 0) (speed 3)))
 (require 'custom)
 (eval-when (compile)
-  (require 'emacspeak-speak))
+  (require 'emacspeak-preamble))
+
+;;}}}
+;;{{{  Define locations 
+
 (defvar emacspeak-unibyte nil
   "Emacspeak will force emacs to unibyte unless this
 variable is set to nil.
@@ -80,7 +92,10 @@ emacspeak is compiled or started.")
   "Directory where Emacspeak resource files such as
 pronunciation dictionaries are stored. ")
 
-(defcustom outloud-default-speech-rate 50
+;;}}}
+;;{{{ speec rate 
+
+(defcustom outloud-default-speech-rate 75
   "Default speech rate for outloud."
   :group 'tts
   :type 'integer)
@@ -97,6 +112,9 @@ pronunciation dictionaries are stored. ")
 
 (defvar tts-default-speech-rate dectalk-default-speech-rate
   "Setup on a per engine basis.")
+
+;;}}}
+;;{{{ Hooks
 
 (unless (featurep 'emacspeak)
   (setq load-path
@@ -116,10 +134,6 @@ pronunciation dictionaries are stored. ")
   (dtk-set-rate tts-default-speech-rate t)
   (dtk-interp-sync))
 
-(defun fst-set-language (language &optional prefix)
-  ;; Temporary function
-  t)
-
 (add-hook 'dtk-startup-hook 
           'emacspeak-tts-startup-hook)
 
@@ -127,6 +141,9 @@ pronunciation dictionaries are stored. ")
 
 ;;; Use (add-hook 'emacspeak-startup-hook ...)
 ;;; to add your personal settings. 
+
+;;}}}
+
 (emacspeak)
 (provide 'emacspeak-setup)
 ;;{{{  emacs local variables 

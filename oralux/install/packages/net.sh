@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # net.sh
-# $Id: net.sh,v 1.3 2005/01/30 21:43:51 gcasse Exp $
+# $Id: net.sh,v 1.4 2005/03/31 09:16:53 gcasse Exp $
 # $Author: gcasse $
 # Description: ppp configuration tool, adsl drivers,...
-# $Date: 2005/01/30 21:43:51 $ |
-# $Revision: 1.3 $ |
+# $Date: 2005/03/31 09:16:53 $ |
+# $Revision: 1.4 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -74,6 +74,13 @@ Copy2Oralux()
 	cd /usr/lib/hotplug;ln -s /etc/eagle-usb/hotplug eagle-usb;"
 
     cp $INSTALL_PACKAGES/net/eagleconfig $BUILD/usr/local/eagle-usb/sbin
+
+
+# ECI adsl
+    cp $ARCH/eciadsl-usermode_0.10-1_i386.deb /var/tmp
+    chroot $BUILD bash -c "cd /var/tmp;\
+dpkg -i eciadsl-usermode_0.10-1_i386.deb"
+
 }
 
 case $1 in

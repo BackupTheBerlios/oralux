@@ -1,11 +1,11 @@
 <?php
 // ----------------------------------------------------------------------------
 // terminal.php
-// $Id: terminal.php,v 1.4 2005/02/07 00:13:56 gcasse Exp $
+// $Id: terminal.php,v 1.5 2005/03/31 09:16:53 gcasse Exp $
 // $Author: gcasse $
 // Description: managing the dumb terminals (emacs) or the others (so called enhanced)  
-// $Date: 2005/02/07 00:13:56 $ |
-// $Revision: 1.4 $ |
+// $Date: 2005/03/31 09:16:53 $ |
+// $Revision: 1.5 $ |
 // Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -27,6 +27,7 @@
 
 $BASE=dirname(__FILE__);
 require_once("$BASE/../main/helpEmul.php");
+require_once("i18n.php");
 
 // {{{ class enhancedTerminal
 

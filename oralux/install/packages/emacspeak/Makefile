@@ -1,6 +1,6 @@
 # ATTENTION
 # This is not the original emacspeak file. Changed for Oralux. 
-#$Id: Makefile,v 1.2 2005/03/10 18:37:59 gcasse Exp $
+#$Id: Makefile,v 1.3 2005/03/31 09:16:53 gcasse Exp $
 #
 LABEL=1.1
 DIST=software-dtk-$(LABEL)
@@ -17,7 +17,7 @@ SERVER_DIR=/usr/share/emacs/site-lisp/emacspeak/servers/software-dtk
 FILES=tcldtk.c tcldtk.so tcldtk.o Makefile
 
 tcldtk.so: tcldtk.o
-	$(CC) $< $(LIBS)  -shared -o $@
+	$(CC) $< $(LIBS) -shared -o $@
 
 dist: software-dtk.tar.gz
 

@@ -1,5 +1,5 @@
 ;;; dtk-interp.el --- Language specific (e.g. TCL) interface to speech server
-;;; $Id: dtk-interp.el,v 1.1 2004/09/27 20:30:04 gcasse Exp $
+;;; $Id: dtk-interp.el,v 1.2 2005/03/31 09:16:53 gcasse Exp $
 ;;; $Author: gcasse $ 
 ;;; Description:  Interfacing to the speech server
 ;;; Keywords: TTS, Dectalk, Speech Server
@@ -8,22 +8,16 @@
 ;;; LCD Archive Entry:
 ;;; emacspeak| T. V. Raman |raman@cs.cornell.edu 
 ;;; A speech interface to Emacs |
-;;; $Date: 2004/09/27 20:30:04 $ |
-;;;  $Revision: 1.1 $ | 
+;;; $Date: 2005/03/31 09:16:53 $ |
+;;;  $Revision: 1.2 $ | 
 ;;; Location undetermined
 ;;;
 
 ;;}}}
 ;;{{{  Copyright:
 
-;;;Copyright (C) 1995 -- 2003, T. V. Raman 
+;;;Copyright (C) 1995 -- 2004, T. V. Raman 
 ;;; All Rights Reserved. 
-;;;;;;
-;;; From: Gilles Casse 20 July 2003
-;;; ATTENTION
-;;; This file is not the original one. 
-;;; The original file is changed to add a language selection (french, us,...)
-;;;;;;
 ;;;
 ;;; This file is not part of GNU Emacs, but the same permissions apply.
 ;;;
@@ -59,7 +53,7 @@
 
 ;;;Code:
 
-(eval-when-compile (require 'cl))
+(require 'cl)
 (declaim  (optimize  (safety 0) (speed 3)))
 
 ;;}}}
@@ -119,7 +113,7 @@
                                       &optional target step force)
   (declare (special dtk-speaker-process))
   (process-send-string dtk-speaker-process
-                       (format "n %s %s %s %s %s%s\n"
+                       (format "n %s %s %s %s %s %s\n"
                                instrument pitch duration
                                (or target 0)
                                (or step 5)
@@ -138,13 +132,6 @@
   (declare (special dtk-speaker-process))
   (process-send-string dtk-speaker-process
                        (format "r {%s}\n" rate)))
-
-;<oralux
-(defsubst dtk-interp-queue-set-language(language)
-  (declare (special dtk-speaker-process))
-  (process-send-string dtk-speaker-process
-                       (format "lang {%s}\n" language)))
-;/>
 
 ;;}}}
 ;;{{{  speak
@@ -181,7 +168,7 @@
   (process-send-string dtk-speaker-process "s\n" ))
 
 ;;}}}
-;;{{{ sync (+ language for oralux)
+;;{{{ sync
 
 (defsubst dtk-interp-sync()
   (declare (special dtk-speaker-process
@@ -189,13 +176,12 @@
                     dtk-capitalize dtk-split-caps
                     dtk-allcaps-beep))
   (process-send-string dtk-speaker-process
-                       (format "tts_sync_state %s %s %s %s %s %s \n"
+                       (format "tts_sync_state %s %s %s %s %s \n"
                                dtk-punctuation-mode 
                                (if dtk-capitalize 1  0 )
                                (if dtk-allcaps-beep 1  0 )
                                (if dtk-split-caps 1 0 )
-                               dtk-speech-rate
-			       dtk-language)))
+                               dtk-speech-rate)))
 
 ;;}}}
 ;;{{{  letter
@@ -206,22 +192,46 @@
                        (format "l {%s}\n" letter )))
 
 ;;}}}
+;;{{{  language
+
+(defsubst dtk-interp-next-language (&optional say_it)
+  (declare (special dtk-speaker-process))
+  (process-send-string dtk-speaker-process
+                       (format "set_next_lang %s\n" say_it)))
+
+(defsubst dtk-interp-previous-language (&optional say_it)
+  (declare (special dtk-speaker-process))
+  (process-send-string dtk-speaker-process
+                       (format "set_previous_lang %s\n" say_it )))
+
+(defsubst dtk-interp-language (language say_it)
+  (declare (special dtk-speaker-process))
+  (process-send-string dtk-speaker-process
+                       (format "set_lang %s %s \n" language say_it)))
+
+(defsubst dtk-interp-preferred-language (alias language)
+  (declare (special dtk-speaker-process))
+  (process-send-string dtk-speaker-process
+                       (format "set_preferred_lang %s %s \n" alias language )))
+
+(defsubst dtk-interp-list-language ()
+  (declare (special dtk-speaker-process))
+  (process-send-string dtk-speaker-process
+                       (format "list_lang\n" )))
+
+;;}}}
 ;;{{{  rate
+
+(defsubst dtk-interp-say-version ()
+  "Speak version."
+  (declare (special dtk-speaker-process))
+  (process-send-string dtk-speaker-process "version\n"))
 
 (defsubst dtk-interp-set-rate (rate)
   (declare (special dtk-speaker-process))
   (process-send-string dtk-speaker-process
                        (format "tts_set_speech_rate %s\n"
                                rate)))
-
-;;}}}
-;;{{{  language ;oralux
-
-(defsubst dtk-interp-set-language (language)
-  (declare (special dtk-speaker-process))
-  (process-send-string dtk-speaker-process
-                       (format "tts_set_language %s\n"
-                               language)))
 
 ;;}}}
 ;;{{{ character scale
@@ -300,7 +310,6 @@
 ;;; local variables:
 ;;; folded-file: t
 ;;; byte-compile-dynamic: t
-;;; byte-compile-dynamic: nil
 ;;; end: 
 
 ;;}}}

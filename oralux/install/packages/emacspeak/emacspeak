@@ -16,7 +16,7 @@ fi
 CL_ALL=""
 for CL in $* ; do
     if [ "$CL" = "-o" ]; then
-	DTK_PROGRAM=stereo-outloud
+	DTK_PROGRAM=outloud
 	export DTK_PROGRAM
     elif [ "$CL" = "-m" ]; then
 	DTK_PROGRAM=multispeech

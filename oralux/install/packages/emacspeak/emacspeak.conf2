@@ -23,6 +23,10 @@ ParleMax )
   export DTK_PROGRAM=/usr/local/bin/maxlect
   unset DTK_PORT;;
 
+ViaVoice )
+  export DTK_PROGRAM=outloud
+  unset DTK_PORT;;
+
 AccentSA )
   export DTK_PROGRAM=accent;;
 

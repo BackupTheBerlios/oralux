@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # oralux.sh
-# $Id: oralux.sh,v 1.7 2005/02/07 00:13:57 gcasse Exp $
+# $Id: oralux.sh,v 1.8 2005/03/31 09:16:54 gcasse Exp $
 # $Author: gcasse $
 # Description: This script is called at init time
-# $Date: 2005/02/07 00:13:57 $ |
-# $Revision: 1.7 $ |
+# $Date: 2005/03/31 09:16:54 $ |
+# $Revision: 1.8 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -70,7 +70,7 @@ if [ "$TTY" == "/dev/tty1" -a ! -e "$FILE" ]
 	cd /usr/share/oralux/main
 	sudo ./oralux `tty` start
 
-	// Restoring the initial dialog
+	# Restoring the initial dialog
 	export DIALOG=/usr/bin/dialog
 
 # Taking in account the (perhaps updated) config

@@ -19,6 +19,10 @@
 #set -v 
 export DIALOG="/usr/bin/php5 /usr/share/oralux/dialog/dialog.php"
 
+# At Yasr init, the speech synthesizer could crash.
+# A minimenu.tmp file must be created.
+touch /tmp/minimenu.tmp
+
 PATH="/bin:/sbin:/usr/bin:/usr/sbin"
 export PATH
 
@@ -232,7 +236,7 @@ MESSAGE1="¿Desea guardar los archivos de configuración ?"
 MESSAGE1="Souhaitez-vous sauvegarder les fichiers de configuration ?"
 MESSAGE1="Do you want to save the configuration files?"
 
-$DIALOG --yesno "$MESSAGE1" 8 65 || bailout
+#$DIALOG --yesno "$MESSAGE1" 8 65 || bailout
 
 # Compare the new list of configuration files and the previous one 
 

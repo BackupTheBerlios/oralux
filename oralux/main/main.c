@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // main.c
-// $Id: main.c,v 1.5 2005/01/30 21:43:51 gcasse Exp $
+// $Id: main.c,v 1.6 2005/03/31 09:16:54 gcasse Exp $
 // $Author: gcasse $
 // Description: entry point. 
-// $Date: 2005/01/30 21:43:51 $ |
-// $Revision: 1.5 $ |
+// $Date: 2005/03/31 09:16:54 $ |
+// $Revision: 1.6 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -221,6 +221,11 @@ int main(int argc, char *argv[])
   // Which is the default synthesis for emacspeak
   char* aStringSynthesis=getConf("EMACSPEAKTTS", "/etc/sysconfig/knoppix");
   enum textToSpeech aEnumSynthesis=TTS_Flite;
+
+#ifdef ORALUXGOLD
+  aEnumSynthesis=TTS_ViaVoice;
+#endif
+
   if (aStringSynthesis!=NULL)
     {
       aEnumSynthesis=getEnumSynthesis(aStringSynthesis);
@@ -262,6 +267,7 @@ int main(int argc, char *argv[])
   // If an external synthesizer is forced, the sound card is not used (useful when the auto detection failed)
 
   struct textToSpeechStruct aExternalTextToSpeech;
+  int aConfHasBeenUpdated=0;
 
   int aExternalSynthesizerIsForced=HasExternalTextToSpeech( & (aSelectedInfo.myTextToSpeech));
 
@@ -289,7 +295,9 @@ int main(int argc, char *argv[])
 	case ORALUX_Stop:
 	  {
 	    initAUI(TheLine, aEnumMenuLanguage, portname);
-	    //
+
+	    saveconfig( &aSelectedInfo);
+
 	    enum ShutdownStatus aStatus=askIfShutdownIsRequired();
 	    stopAUI(1);
 
@@ -318,8 +326,7 @@ int main(int argc, char *argv[])
 	default:
 	  break;
 	}
-
-	menu( &aSelectedInfo);
+	menu( &aSelectedInfo, &aConfHasBeenUpdated);
     }
   else
     {
@@ -341,16 +348,7 @@ int main(int argc, char *argv[])
 	}
     }
 
-  int aNewConf = ((aSelectedInfo.myMenuLanguage != aEnumMenuLanguage)
-		  || (aSelectedInfo.myKeyboard != aEnumKeytable)
-		  || (aSelectedInfo.myKeyboardFeatures.myStickyKeysAreAvailable != aStickyKey)
-		  || (aSelectedInfo.myKeyboardFeatures.myRepeatKeysAreAvailable != aRepeatKey)
-		  || (aSelectedInfo.myTextToSpeech.myIdentifier != aEnumSynthesis)
-		  || (aSelectedInfo.myTextToSpeech.myLanguage != aEnumLanguage)
-		  || (aSelectedInfo.myTextToSpeech.myPort != aEnumPort)
-		  || (aSelectedInfo.myDesktop != aEnumDesktop));
-
-  if (aNewConf)
+  if (aConfHasBeenUpdated)
     {
       // Building the new configuration files
       buildConfiguration(&aSelectedInfo);
@@ -361,7 +359,12 @@ int main(int argc, char *argv[])
       if (aState == ORALUX_Start)
 	{
 	  // Welcome to Oralux + release
+
+#ifdef ORALUXGOLD
+	  sayForce(WelcomeToOraluxGold);
+#else
 	  sayForce(WelcomeToOralux);
+#endif
 	  sayForce(oraluxRelease);
 	}
       stopAUI(1);

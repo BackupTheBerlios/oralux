@@ -1,10 +1,10 @@
 # ----------------------------------------------------------------------------
 # README
-# $Id: README,v 1.5 2005/03/13 22:09:54 gcasse Exp $
+# $Id: README,v 1.6 2005/03/31 09:16:53 gcasse Exp $
 # $Author: gcasse $
 # Description: This file describes how to build Oralux from Knoppix.
-# $Date: 2005/03/13 22:09:54 $ |
-# $Revision: 1.5 $ |
+# $Date: 2005/03/31 09:16:53 $ |
+# $Revision: 1.6 $ |
 # Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -66,6 +66,18 @@ http://atrey.karlin.mff.cuni.cz/~clock/twibright/links/download/links-2.1pre15.t
 
 rawrite.exe comes from:
 http://download.fedora.redhat.com/pub/fedora/linux/core/1/i386/os/dosutils/rawrite.exe
+
+ADSL driver
+ECI ADSL
+http://eciadsl.flashtux.org/download.php
+
+RUF: Speedtouch
+http://speedtouchconf.sourceforge.net/
+http://ovh.dl.sourceforge.net/sourceforge/speedtouchconf/speedtouchconf-2.0-beta1_12-Mar-2005.tar.gz
+
+BRLTTY:
+http://www.mielke.cc/brltty/releases/brltty-3.6.1.tar.gz
+
 
 If you already have the KNOPPIX iso file (e.g. for Oralux 0.06: KNOPPIX_V3.3-2004-02-16-EN.iso), 
 renames it $HOME/oralux/factory/iso/knoppixCD.iso

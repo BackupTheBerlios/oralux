@@ -2,11 +2,11 @@
 
 // ----------------------------------------------------------------------------
 // Constants.php
-// $Id: Constants.php,v 1.1 2004/09/27 20:30:24 gcasse Exp $
+// $Id: Constants.php,v 1.2 2005/03/31 09:16:53 gcasse Exp $
 // $Author: gcasse $
 // Description: Defining the common constants. 
-// $Date: 2004/09/27 20:30:24 $ |
-// $Revision: 1.1 $ |
+// $Date: 2005/03/31 09:16:53 $ |
+// $Revision: 1.2 $ |
 // Copyright (C) 2003 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -36,8 +36,9 @@ define ("ORALUX_RUNTIME","/usr/share/oralux");
 define ("ORALUX_RUNTIME_EMACSPEAK",ORALUX_RUNTIME."/install/packages/emacspeak");
 
 // Directory reserved to mount the yet unmounted file system e.g. for the partition 
-// where an non free TTS is stored
+// where a proprietary TTS is stored
 define ("DIR_MOUNT", "/mnt/oralux_guest"); 
+define ("DIR_TMP", "/mnt/test"); 
 
 // Name of the known text to speech
 define("FLITE_TTS", "flite");

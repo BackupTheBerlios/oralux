@@ -1,0 +1,183 @@
+# Oralux: French translations.
+# Copyright (C) 2005 Oralux.org Association
+# Gilles Casse <gcasse@oralux.org>, 2005.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Oralux \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-03-28 22:35+0200\n"
+"PO-Revision-Date: 2005-03-30 08:33+0200\n"
+"Last-Translator: Gilles Casse <gcasse@oralux.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../dialog/cliDialog.php:1034
+msgid ""
+"\n"
+"A few checkboxes."
+msgstr "\nQuelques cases à cocher."
+
+#: ../dialog/cliDialog.php:960 ../dialog/cliDialog.php:1039
+msgid ""
+"\n"
+"Button."
+msgstr "\nBouton."
+
+#: ../dialog/cliDialog.php:950
+msgid ""
+"\n"
+"Long list."
+msgstr "\nUne longue liste."
+
+#: ../dialog/cliDialog.php:1029
+msgid ""
+"\n"
+"Several checkboxes."
+msgstr "\nPlusieurs cases à cocher ."
+
+#: ../dialog/cliDialog.php:955
+msgid ""
+"\n"
+"Short list."
+msgstr "\nUne courte liste."
+
+#: ../dialog/cliDialog.php:1033
+msgid ""
+"\n"
+"There are just a few checkboxes."
+msgstr "\nIl n'y a que quelques cases à cocher."
+
+#: ../dialog/cliDialog.php:1028
+msgid ""
+"\n"
+"There are several checkboxes."
+msgstr "\nIl y a plusieurs cases à cocher."
+
+#: ../dialog/cliDialog.php:959 ../dialog/cliDialog.php:1038
+msgid ""
+"\n"
+"This is a button."
+msgstr "\nC'est un bouton."
+
+#: ../dialog/cliDialog.php:949
+msgid ""
+"\n"
+"This is a long list."
+msgstr "\nC'est une longue liste."
+
+#: ../dialog/cliDialog.php:954
+msgid ""
+"\n"
+"This is a short list."
+msgstr "\nC'est une courte liste."
+
+#: ../dialog/terminal.php:195
+msgid "And type return to select your preferred item.\n"
+msgstr "Et appuyez sur Entrée pour sélectionner votre préférence.\n"
+
+#: ../dialog/terminal.php:200
+msgid "And type return to select your preferred option.\n"
+msgstr "Et tapez sur Entrée pour sélectionner votre préférence.\n"
+
+#: ../dialog/terminal.php:205 ../dialog/terminal.php:327
+msgid "And type yes to select an option, or type no to unselect it.\n"
+msgstr "Et tapez oui pour sélectionner votre préférence, ou tapez non pour la désélectionner.\n"
+
+#: ../dialog/terminal.php:317
+msgid "And type yes to select your preferred item.\n"
+msgstr "Et tapez oui pour sélectionner votre préférence.\n"
+
+#: ../dialog/terminal.php:322
+msgid "And type yes to select your preferred option.\n"
+msgstr "Et tapez oui pour sélectionner votre préférence.\n"
+
+#: ../dialog/cliDialog.php:1172
+msgid "Button."
+msgstr "Bouton."
+
+#: ../dialog/cliDialog.php:970 ../dialog/cliDialog.php:980
+#: ../dialog/cliDialog.php:1045 ../dialog/cliDialog.php:1175
+msgid "Cancel"
+msgstr "Annuler"
+
+#: ../dialog/terminal.php:333
+msgid "Input\n"
+msgstr "Champ de saisie\n"
+
+#: ../dialog/terminal.php:215
+#, php-format
+msgid "Just press return if you accept this proposal: %s\n"
+msgstr "Appuyez juste sur Entrée si vous acceptez cette proposition : %s\n"
+
+#: ../dialog/terminal.php:337
+#, php-format
+msgid "Just type yes if you accept this proposal: %s\n"
+msgstr "Tapez oui si vous acceptez cette proposition : %s\n"
+
+#: ../dialog/terminal.php:206 ../dialog/terminal.php:328
+msgid "Note that you can select several options.\n"
+msgstr "Notez que vous pouvez sélectionner plusieurs choix.\n"
+
+#: ../dialog/cliDialog.php:969 ../dialog/cliDialog.php:1044
+#: ../dialog/cliDialog.php:1174
+msgid "OK"
+msgstr "OK"
+
+#: ../dialog/cliDialog.php:1118 ../dialog/cliDialog.php:1119
+msgid "Press any key to continue."
+msgstr "Appuyez sur n'importe quelle touche pour continuer."
+
+#: ../dialog/terminal.php:316
+msgid "Press return to read the next item.\n"
+msgstr "Appuyez sur Entrée pour lire le prochain choix.\n"
+
+#: ../dialog/terminal.php:321 ../dialog/terminal.php:326
+msgid "Press return to read the next option.\n"
+msgstr "Appuyez sur Entrée pour passer au prochain choix.\n"
+
+#: ../dialog/terminal.php:194
+msgid "Press the up or down arrow key to read another item.\n"
+msgstr "Appuyer sur les touches flèche en haut ou flèche en bas, pour passer à un autre choix.\n"
+
+#: ../dialog/terminal.php:199 ../dialog/terminal.php:204
+msgid "Press the up or down arrow key to read another option.\n"
+msgstr "Appuyer sur les touches flèche en haut ou flèche en bas, pour passer à un autre choix.\n"
+
+#: ../dialog/terminal.php:216 ../dialog/terminal.php:338
+#, php-format
+msgid "Proposal: %s\n"
+msgstr "Proposition : %s\n"
+
+#: ../dialog/cliDialog.php:557 ../dialog/cliDialog.php:741
+msgid "Selected. "
+msgstr "Sélectionné. "
+
+#: ../dialog/cliDialog.php:1171
+msgid "This is a button."
+msgstr "C'est un bouton."
+
+#: ../dialog/terminal.php:332
+msgid "Type your answer in this input field\n"
+msgstr "Tapez votre réponse dans ce champ de saisie\n"
+
+#: ../dialog/cliDialog.php:1089 ../dialog/cliDialog.php:1090
+msgid "Yes or No?"
+msgstr "Oui ou non ?"
+
+#: ../dialog/cliDialog.php:151
+msgid "n"
+msgstr "n"
+
+#: ../dialog/cliDialog.php:150
+msgid "no"
+msgstr "non"
+
+#: ../dialog/cliDialog.php:145
+msgid "y"
+msgstr "o"
+
+#: ../dialog/cliDialog.php:144
+msgid "yes"
+msgstr "oui"

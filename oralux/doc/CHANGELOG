@@ -12,6 +12,12 @@ Date: xx Month 2004
 * New packages
 
 
+* Major updates
+
+
+* Major updates
++ Emacspeak 21
++ Brltty 3.6-1
 
 
 
@@ -22,9 +28,14 @@ Date: xx Month 2004
 
 * Bug fixes
 + Clearly say that RETURN must be pressed once the CD is ejected.
++ preferences menu: setting BRLTTY: the contraction table item is added
 
 
 * Enhancements
+
+* Emacspeak
+/ Release 21
+/ Patch by Igor B. Poretsky (multispeech, emacs-w3m, and more)
 
 / Configuration files in the boot floppy: 
 The very basic configuration files can now be saved in the boot floppy.
@@ -34,11 +45,21 @@ The very basic configuration files can now be saved in the boot floppy.
 
 / Message: "Do you want to update your preferences?" is more explanatory, so that people know which key they have to press to answer.
 
+* Multispeech by Igor B. Poretsky
+Multispeech supplies using Emacspeak 21 several voices (voice lock mode).
+
+/ Freespeech English pronunciation dictionary
+/ Enhanced Russian lexicon
+
 ** Russian support
+
 Thanks to Sergei V. Fleytin  
-- Russian.el is modified to include support for windows-1251 character set.
-- The .gnus and .vm files have been updated for Russian.
-- The "ru4" keymap is loaded for Russian keyboard settings (instead of "ru" before).
+/ Russian.el is modified to include support for windows-1251 character set.
+/ The .gnus and .vm files have been updated for Russian.
+/ The "ru4" keymap is loaded for Russian keyboard settings (instead of "ru" before).
+
+/ package console-cyrillic
+
 
 + Yasr: in standard mode, alt+ctrl+m is no more reserved to read the next line (since ctrl-m is interpreted as enter).
 
@@ -76,6 +97,10 @@ This release is still based on Knoppix 3.3 (2004-02-16).
 He also translated the remaining sentences of the FAQ.
 
 * Bug fixes
+* Spell checker
+/ Emacs uses aspell instead of ispell.
+/ LANGUAGE = 'en' instead of 'us'. 
+
 - DECtalk 5.0 speech server is much more usable, the dtk-soft changes were forgotten in the previous release. Tim Cross posts to the Emacspeak mailing list have been taken in account. 
 - Entering the serial number for DECtalk: the keyboard must be updated according to the last choice.
 - Shutdown: the PC is correctly turned off. 

@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // audiouserinterface.c
-// $Id: audioUserInterface.c,v 1.5 2005/01/30 21:43:51 gcasse Exp $
+// $Id: audioUserInterface.c,v 1.6 2005/03/31 09:16:53 gcasse Exp $
 // $Author: gcasse $
 // Description: Managing and playing the pre-recorded messages.
-// $Date: 2005/01/30 21:43:51 $ |
-// $Revision: 1.5 $ |
+// $Date: 2005/03/31 09:16:53 $ |
+// $Revision: 1.6 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 // September 2003: 
 // German translations by Guenther Harrasser.
@@ -39,7 +39,8 @@ struct t_translation {
 static char TheOggDirectory[BUFSIZE];
 static char* ThePortName=NULL;
 
-static enum language TheCurrentLanguage;
+static enum language TheCurrentLanguage; /* menu language (so a speech synthesizer and the translations are available for this language) */
+
 static char* TheLanguageSuffix[]={
   "", //English
   "-fr", //French
@@ -67,7 +68,7 @@ static int pf=0;
 /*   japaneseSaid, */
 /*   netherlandSaid, */
 
-char * TheMessages[][LanguageMax]={
+char * TheMessages[][4]={
   {"American",
    "Américain",
    "Americanische", 
@@ -184,7 +185,7 @@ char * TheMessages[][LanguageMax]={
    "Bienvenido a Oralux !",
   },
   {"Do you want to install the DECtalk software (English, French, German, Spanish)?",
-   "Voulez vous installer le logiciel DECtalk (allemand, anglais, espagnol, français) ?",
+   "Voulez-vous installer le logiciel DECtalk (allemand, anglais, espagnol, français) ?",
    "Wollen Sie die DECtalk software installieren (Deutsche, Englische, Französische, Spanische)?",
    "¿Quiere instalar el programa DECtalk (Alemán, Español, Francés, Inglés)",
   },
@@ -250,12 +251,12 @@ char * TheMessages[][LanguageMax]={
    "Si quiere parar en este paso, presione cualquier otra tecla",
   },
   {"Do you want this menu in English ?",
-   "Voulez vous ce menu en anglais ?",
+   "Voulez-vous ce menu en anglais ?",
    "Wollen Sie dieses Menü in Englisch ?",
    "¿Quiere este menú en Inglés ?",
   },
   {"Do you want this menu in French ?",
-   "Voulez vous ce menu en français ?",
+   "Voulez-vous ce menu en français ?",
    "Wollen Sie dieses Menü in Französisch ?",
    "¿Quiere este menú en Francés ?",
   },
@@ -315,7 +316,7 @@ char * TheMessages[][LanguageMax]={
    "Pulsar enter para subir el volumen, o sobre la barra espaciadora para bajar el volumen, o sobre cualquier teclar para salir",
   },
   {"Do you want to change the type of keyboard ?",
-   "Voulez vous modifier le type de clavier ?",
+   "Voulez-vous modifier le type de clavier ?",
    "Wollen Sie den Typ der Tastatur ändern ?",
    "¿Desea modificar el tipo de teclado ?",
   },
@@ -325,12 +326,12 @@ char * TheMessages[][LanguageMax]={
    "Su teclado debe ser",
   },
   {"Do you want to update your preferences ?",
-   "Voulez vous modifier vos préférences ?",
+   "Voulez-vous modifier vos préférences ?",
    "Wollen Sie Ihre Einstellungen aktualisieren ?",
    "¿Desea actualizar sus preferencias ?",
   },
   {"Do you want to eject the CD ROM ?",
-   "Voulez vous éjecter le CD ROM ?",
+   "Voulez-vous éjecter le CD ROM ?",
    "Wollen Sie der CD ROM auswerfen ?",
    "¿Quiere salga el CD ROM ?",
   },
@@ -340,23 +341,23 @@ char * TheMessages[][LanguageMax]={
    "Una vez retirado el CD, pulsar enter",
   },
   {"Do you want this menu in German ?",
-   "Voulez vous ce menu en allemand ?",
+   "Voulez-vous ce menu en allemand ?",
    "Wollen Sie dieses Menü in Deutsch ?",
    "¿Quiere este menú en Alemán ?",
   },
   {"Do you want this menu in Spanish ?",
-   "Voulez vous ce menu en espagnol ?",
+   "Voulez-vous ce menu en espagnol ?",
    "Wollen Sie dieses Menü in Spanisch ?",
    "¿Quiere este menú en Español ?",
   },
   {"Do you want Emacspeak Festival M Brola (English and French)?",
-   "Voulez vous Emacspik Festival M Brola (anglais et français)?",
+   "Voulez-vous Emacspik Festival M Brola (anglais et français)?",
    "Wollen Sie Emacspik Festival M Brola (Englische und Französische)?",
    "¿Quiere Emacspik Festival M Brola (Inglés y Francés)?",
   },
 
   {"Do you want Flite (English) ?",
-   "Voulez vous Flite (anglais) ?",
+   "Voulez-vous Flite (anglais) ?",
    "Wollen Sie Flite (Englische)?",
    "¿Quiere Flite (Inglés)?",
   },
@@ -502,7 +503,7 @@ char * TheMessages[][LanguageMax]={
   },
 
   {"Do you want to select a braille display ?",
-   "Voulez vous sélectionner un afficheur braille ?",
+   "Voulez-vous sélectionner un afficheur braille ?",
    "Wollen Sie eine Blindenschriftanzeige auswählen ?",
    "¿Quiéres seleccionar un dispositivo de braille?",
   },
@@ -526,7 +527,7 @@ char * TheMessages[][LanguageMax]={
   },
 
   {"Which table do you want ?",
-   "Quelle table voulez vous ?",
+   "Quelle table voulez-vous ?",
    "Welche Tabelle wünschen Sie ?",
    "¿Qué tabla quieres?",
   },
@@ -538,7 +539,7 @@ char * TheMessages[][LanguageMax]={
   },
 
   {"Do you want to change the type of braille display ?",
-   "Voulez vous modifier le type d'afficheur braille ?",
+   "Voulez-vous modifier le type d'afficheur braille ?",
    "Möchten Sie die Art der Blindenschriftanzeige ändern ?",
    "¿Quiéres cambiar el tipo de pantalla de braille ?",
   },
@@ -550,7 +551,7 @@ char * TheMessages[][LanguageMax]={
   },
 
   {"Do you want to change the table ?",
-   "Voulez vous modifier la table ?",
+   "Voulez-vous modifier la table ?",
    "Möchten Sie die Tabelle ändern ?",
    "¿Quiéres cambiar la tabla ?",
   },
@@ -562,7 +563,7 @@ char * TheMessages[][LanguageMax]={
   },
 
   {"Do you want to change the port ?",
-   "Voulez vous modifier le port ?",
+   "Voulez-vous modifier le port ?",
    "Möchten Sie die Schnittstelle ändern ?",
    "¿Quiéres cambiar el puerto ?",
   },
@@ -574,7 +575,7 @@ char * TheMessages[][LanguageMax]={
   },
 
   {"Do you want to start your braille display ?",
-   "Voulez vous démarrez votre afficheur braille ?",
+   "Voulez-vous démarrez votre afficheur braille ?",
    "Möchten Sie Ihre Blindenschriftanzeige beginnen ?",
    "¿Quiéres iniciar tu pantalla de braille?",
   },
@@ -700,7 +701,7 @@ char * TheMessages[][LanguageMax]={
 
   // 6C
   {"What kind of synthesizer do you have ?",
-   "Quelle type de synthèse avez vous ?",
+   "Quelle type de synthèse avez-vous ?",
    "Was für einen Sprachsynthesizer haben Sie?",
    "¿Qué tipo de sintetizador tienes?",
   },
@@ -714,7 +715,7 @@ char * TheMessages[][LanguageMax]={
 
   // 6E
   {"Do you want to change the type of external synthesizer ?",
-   "Voulez vous modifier le type de synthèse externe ?",
+   "Voulez-vous modifier le type de synthèse externe ?",
    "Wollen Sie einen anderen externen Sprachsynthesizer auswählen?",
    "¿Quieres cambiar el tipo de sintetizador externo?",
   },
@@ -744,7 +745,7 @@ char * TheMessages[][LanguageMax]={
 
   // 72
   {"Do you want to change the kind of desktop ?",
-   "Voulez vous modifier le type de bureau ?",
+   "Voulez-vous modifier le type de bureau ?",
    "Wollen Sie einen anderen Desktop auswählen?",
    "¿Quieres cambiar el tipo de escritorio?",
   },
@@ -758,42 +759,42 @@ char * TheMessages[][LanguageMax]={
 
   // 74
   {"Do you want ParleMax (French) ?",
-   "Voulez vous ParleMax (Français) ?",
+   "Voulez-vous ParleMax (Français) ?",
    "Wollen Sie ParleMax (Französische)?",
    "¿Quieres ParleMax (Francés)?",
   },
 
   // 75
   {"Do you want to reboot your PC?",
-   "Voulez vous redémarrez votre PC ?",
+   "Voulez-vous redémarrez votre PC ?",
    "Wollen Sie den Computer neu starten?",
    "¿Quieres reiniciar tu PC?",
   },
 
   // 76
   {"Do you want to shutdown your PC?",
-   "Voulez vous arrêtez votre PC ?",
+   "Voulez-vous arrêtez votre PC ?",
    "Wollen Sie den Computer herunterfahren?",
    "¿Quieres apagar tu PC?",
   },
 
   // 77
   {"Do you want MultiSpeech (English and Russian) ?",
-   "Voulez vous MultiSpeech (anglais et russe) ?",
+   "Voulez-vous MultiSpeech (anglais et russe) ?",
    "Wollen Sie MultiSpeech (Englische und Russische) ?",
    "¿Quieres MultiSpeech (Inglés y Ruso) ?",
   },
 
   // 78
   {"Do you really want to stop the Braille driver ?",
-   "Voulez vous vraiment arrêtez le pilote Braille ?",
+   "Voulez-vous vraiment arrêtez le pilote Braille ?",
    "Wollen Sie wirklich den Braille-Treiber beenden?",
    "¿Quieres realmente parar el driver del Braille?",
   },
 
   // 79
   {"Do you want this menu in Russian ?",
-   "Voulez vous ce menu en russe ?",
+   "Voulez-vous ce menu en russe ?",
    "Wollen Sie dieses Menü in Russische ?",
    "¿Quiere este menú en Ruso ?",
   },
@@ -807,14 +808,14 @@ char * TheMessages[][LanguageMax]={
 
   // 7B
   {"Do you want to change the keyboard features?",
-   "Voulez vous changer les caractéristiques du clavier ?",
+   "Voulez-vous changer les caractéristiques du clavier ?",
    NULL,
    NULL,
   },
 
   // 7C
   {"You can hold three keys at a time; for example Control Alt Del",
-   "Pouvez vous appuyées sur trois touches en même temps, par exemple Control Alt Del",
+   "Pouvez-vous appuyées sur trois touches en même temps, par exemple Control Alt Del",
    NULL,
    NULL,
   },
@@ -868,6 +869,155 @@ char * TheMessages[][LanguageMax]={
    NULL,
   },
 
+  {"Do you want ViaVoice?",
+   "Voulez-vous ViaVoice ?",
+   "Wollen Sie ViaVoice?",
+   "¿Quiere ViaVoice?",
+  },
+
+  {"The ViaVoice package can't be found",
+   "Le fichier ViaVoice est introuvable",
+   "Das ViaVoice Paket wird nicht gefunden",
+   "El paquete ViaVoice no puede ser encontrado",
+  },
+
+  {"The IBMECI directory is not found",
+   "Le répertoire IBMECI est introuvable",
+   "Das IBMECI Verzeichnis wird nicht gefunden",
+   "El directorio IBMECI no se encuentra",
+  },
+
+  {"Please enter your password, and press Return",
+   "Entrez s'il vous plait votre mot de passe, et appuyer sur Entrée",
+   "Bitte Passwort eingeben, und die Eingabetaste drücken",
+   "Por favor, introduzca su contraseña, y presione la tecla Enter",
+  },
+
+  {"Do you want to install another language?",
+   "Voulez-vous installer une autre langue ?",
+   NULL,
+   NULL,
+  },
+
+  {"Sorry, your password is not correct",
+   "Désolé, votre mot de passe est incorrect",
+   "Ihr Passwort ist nicht korrekt",
+   "Lo sentimos, su contraseña no es correcto",
+  },
+
+  {"Previous",
+   "Précédant",
+   NULL,
+   NULL,
+  },
+
+  {"Next",
+   "Suivant",
+   NULL,
+   NULL,
+  },
+
+  {"Welcome To OraluxGold!",
+   "Bienvenue sur oraluxGold!",
+   "Willkommen bei OraluxGold!",
+   "Bienvenido a OraluxGold !",
+  },
+
+  {"Do you want to save the configuration files?",
+   "Souhaitez-vous sauvegarder les fichiers de configuration ?",
+   "Wollen Sie Konfigurationsdateien speichern?",
+   "¿Desea guardar los archivos de configuración ?",
+  },
+
+  {"Albatross",
+   "Albatross",
+   "Albatross",
+   "Albatross",
+  },
+
+  {"FreedomScientific",
+   "FreedomScientific",
+   "FreedomScientific",
+   "FreedomScientific",
+  },
+
+  {"B R F",
+   "B R F",
+   "B R F",
+   "B R F",
+  },
+
+  {"Finnish 2",
+   "Finlandais 2",
+   "Finnische 2",
+   "Finlandés 2",
+  },
+
+  {"U S B",
+   "U S B",
+   "U S B",
+   "U S B",
+  },
+
+  {"Which contraction table do you want ?",
+   "Quelle table abrégée voulez-vous ?",
+   NULL,
+   "¿Qué tabla de contracción quieres?",
+  },
+
+  {"No contraction table",
+   "Pas de table abrégée",
+   "No contraction table",
+   "No contraction table",
+  },
+
+  {"big 5",
+   "big 5",
+   "big 5",
+   "big 5",
+  },
+
+  {"compress",
+   "compress",
+   "compress",
+   "compress",
+  },
+
+  {"Grade 2 US English",
+   "Grade 2 US English",
+   "Grade 2 US English",
+   "Grade 2 US English",
+  },
+
+  {"FR abrege",
+   "Français abrégé",
+   "FR abrege",
+   "FR abrege",
+  },
+
+  {"FR integral",
+   "Français intégral",
+   "FR integral",
+   "FR integral",
+  },
+
+  {"The contraction braille table is supposed to be",
+   "La table abrégée braille est supposée de type",
+   NULL,
+   "La tabla de contracción de braille debe ser del tipo",
+  },
+
+  {"Do you want to change the contraction table ?",
+   "Voulez-vous modifier la table abrégée ?",
+   NULL,
+   "¿Quiéres cambiar la tabla de contracción?",
+  },
+
+  {"Which contraction table do you want ?",
+   "Quelle table abrégée voulez-vous ?",
+   NULL,
+   "¿Qué tabla de contracción quieres?",
+  },
 
 };
 

@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # misc.sh
-# $Id: misc.sh,v 1.8 2005/01/30 21:43:51 gcasse Exp $
+# $Id: misc.sh,v 1.9 2005/03/31 09:16:53 gcasse Exp $
 # $Author: gcasse $
 # Description: Miscellaneous packages
-# $Date: 2005/01/30 21:43:51 $ |
-# $Revision: 1.8 $ |
+# $Date: 2005/03/31 09:16:53 $ |
+# $Revision: 1.9 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -31,8 +31,22 @@ InstallPackage()
 {
     apt-get install aumix
 #RAF    apt-get install sndconfig
-    apt-get install brltty
+#    apt-get install brltty
+
+    apt-get --purge remove brltty
+    cd tmp
+    rm -rf brltty*
+    cp $ARCH/brltty-3.6.1.tar.gz .
+    tar -zxvf brltty*
+    cd brltty*
+    ./configure
+    make 
+    make install
+
     rm -f /etc/brltty.conf
+
+    apt-get install tcsh
+
     apt-get install elinks
     apt-get install links-ssl
     apt-get install lynx-ssl
@@ -50,14 +64,18 @@ InstallPackage()
     apt-get install tnt
     apt-get install erc
     apt-get install xsltproc
-    apt-get install aspell-fr
-    apt-get install aspell-de
-    apt-get install aspell-es
-    apt-get install aspell-en
+
+#     for i in "fi it pt pt-common de en es fr pt-br ukr"; do 
+# 	apt-get install aspell-$i
+#     done
     
-    cd /usr/bin; ln -s aspell ispell
+#     for i in "fi zh de es fr it pt ru posix posix-dev dev ja"; do 
+# 	apt-get install manpages-$i
+#     done
+
+#    cd /usr/bin; ln -s aspell ispell
     
-#RUF    apt-get install console-cyrillic
+    apt-get install console-cyrillic
 
 cd /tmp; rm -rf aspell-ru-*; wget ftp://ftp.gnu.org/gnu/aspell/dict/ru/aspell-ru-0.50-2.tar.bz2; tar -jxvf aspell-ru-*; cd aspell-ru-*; ./configure; make; make install; cd /tmp; rm -rf  aspell-ru-*
 
@@ -98,6 +116,19 @@ cd /tmp; rm -rf aspell-ru-*; wget ftp://ftp.gnu.org/gnu/aspell/dict/ru/aspell-ru
 # Adding the package to the new Oralux tree
 Copy2Oralux()
 {
+    chroot $BUILD bash -c "apt-get --purge remove brltty"
+    cd $BUILD/var/tmp
+    rm -rf brltty*
+    cp $ARCH/brltty-3.6.1.tar.gz .
+    tar -zxvf brltty*
+    chroot $BUILD bash -c "cd /var/tmp/brltty*;\
+    ./configure;\
+    make;\
+    make install;\
+    rm -f /etc/brltty.conf"
+
+    chroot $BUILD apt-get install tcsh
+
     chroot $BUILD apt-get install aumix
     chroot $BUILD apt-get install sndconfig
     chroot $BUILD bash -c "apt-get install brltty; rm -f /etc/brltty.conf"
@@ -125,9 +156,15 @@ Copy2Oralux()
     chroot $BUILD apt-get install aspell-es
     chroot $BUILD apt-get install aspell-en
 
-    chroot $BUILD bash -c "cd /usr/bin; ln -s aspell ispell"
+#    chroot $BUILD bash -c "cd /usr/bin; ln -s aspell ispell"
 
-#RUF    chroot $BUILD apt-get install console-cyrillic
+# default options: 
+# - Russian keyboard, 
+# - Scroll lock (switch latin/cyrillic), 
+# - font: Terminus slave normal (font name: french translation)
+# - font size: 16
+# - The cyrillic mode is not started by default (console-data must be used to set up the console)
+    chroot $BUILD apt-get install console-cyrillic
 
     cd $BUILD/var/tmp; rm -rf aspell-ru-*; wget ftp://ftp.gnu.org/gnu/aspell/dict/ru/aspell-ru-0.50-2.tar.bz2; tar -jxvf aspell-ru-*;
     chroot $BUILD bash -c "cd /var/tmp/aspell-ru-*; ./configure; make; make install; cd /var/tmp; rm -rf  aspell-ru-*"

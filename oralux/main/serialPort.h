@@ -15,4 +15,6 @@ enum serialPortIdentifier getEnumSerialPort(char* thePort);
 char* serialPortGetString( enum serialPortIdentifier theValue);
 enum sentence serialPortGetSentence( enum serialPortIdentifier theValue);
 
+void serialOrUSBPortChoose( enum serialPortIdentifier * thePort, int* theUSB);
+
 #endif

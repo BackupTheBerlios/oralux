@@ -11,6 +11,7 @@
 0x1b03:say character
 0x1b04:say word
 0x1b05:read cursor to bottom
+#0x1b06:nextlang:1
 0x1b0b:say line:-1
 0x1b0c:say line
 0x1b0d:say line:1
