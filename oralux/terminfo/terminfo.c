@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 terminfo.c
-$Id: terminfo.c,v 1.2 2004/12/18 22:29:05 gcasse Exp $
+$Id: terminfo.c,v 1.3 2004/12/19 23:05:53 gcasse Exp $
 $Author: gcasse $
-Description: stores the layout using the supplied terminfo commands. 
-$Date: 2004/12/18 22:29:05 $ |
-$Revision: 1.2 $ |
+Description: store the layout using the supplied terminfo commands. 
+$Date: 2004/12/19 23:05:53 $ |
+$Revision: 1.3 $ |
 Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -54,9 +54,7 @@ struct t_cursor
 {
   int myLine;
   int myCol;
-  enum terminalColor myBackgroundColor;
-  enum terminalColor myForegroundColor;
-  uint_least16_t myModes; /* Each bit is described in escape2terminfo.h (enum terminalMode) */
+  struct t_style myStyle;
 };
 
 /* > */
@@ -462,20 +460,21 @@ char* myStringCapacity[]={
 };
 
 /* > */
+/* < createBuffer */
+
+void createBuffer( char** theDataBuffer, struct t_style** theStyleBuffer, int theNumberOfCell)
+{
+  *theDataBuffer=(char*)malloc( theNumberOfCell * sizeof(char));
+  *theStyleBuffer=(struct t_style*)malloc( theNumberOfCell * sizeof(struct t_style));
+}
+
+/* > */
 /* < clearBuffer */
 
-void clearBuffer( char *theBuffer, int theMaxLine, int theMaxCol)
+void clearBuffer( char* theDataBuffer, struct t_style* theStyleBuffer, int theNumberOfCell)
 {
-  /* Init */
-  int i=0;
-  for (i=0;i<theMaxLine;i++)
-    {
-      int j=0;
-      for (j=0;j<theMaxCol;j++)
-	{
-	  theBuffer[ theMaxCol*i + j]=0x20;
-	}
-    }
+  memset(theDataBuffer, 0x20, theNumberOfCell*sizeof(char));
+  memset(theStyleBuffer, 0, theNumberOfCell*sizeof(struct t_style));
 }
 
 /* > */
@@ -511,43 +510,43 @@ void displayCapacity( enum StringCapacity theCapacity)
 
 /* > */
 /* < displayModes */
-void displayModes(int theModes)
+void displayModes(struct t_style* theModes)
 {
   printf("|");
-  if (theModes & MODE_STANDOUT)
+  if (theModes->isStandout)
     {
       printf("STANDOUT ");
     }
-  if (theModes & MODE_UNDERLINE)
+  if (theModes->isUnderline)
     {
       printf("UNDERLINE ");
     }
-  if (theModes & MODE_REVERSE)
+  if (theModes->isReverse)
     {
       printf("REVERSE ");
     }
-  if (theModes & MODE_BLINK)
+  if (theModes->isBlink)
     {
       printf("BLINK ");
     }
-  if (theModes & MODE_DIM)
+  if (theModes->isDim)
     {
       printf("DIM ");
     }
-  if (theModes & MODE_BOLD)
+  if (theModes->isBold)
     {
       printf("BOLD ");
     }
-  if (theModes & MODE_BLANK)
+  if (theModes->isBlank)
     {
       printf("BLANK ");
     }
-  if (theModes & MODE_PROTECT)
+  if (theModes->isProtect)
     {
       printf("PROTECT ");
     }
 
-  if (theModes & MODE_ALTERNATE_CHARSET)
+  if (theModes->isAlternate)
     {
       printf("ALTERNATE_CHARSET ");
     }
@@ -555,7 +554,7 @@ void displayModes(int theModes)
 }
 
 /* > */
-/* <*/
+/* < displayColor */
 void displayColor( int theColor)
 {
   static char* aColorArray[]=
@@ -575,25 +574,92 @@ void displayColor( int theColor)
     }
 }
 /* > */
-
 /* < initCursor */
 /*
-theFirstCell indicate the value of the first line and the first column.
+theFirstCell indicates the value of the first line and the first column.
 This can be 0 or 1 according to the terminal.
 */
 void initCursor(struct t_cursor* theCursor, int theFirstCell)
 {
   theCursor->myLine=theFirstCell;
   theCursor->myCol=theFirstCell;
-  theCursor->myBackgroundColor=TERM_COLOR_BLACK;
-  theCursor->myForegroundColor=TERM_COLOR_WHITE;
-  theCursor->myModes=0;
+  memset (& (theCursor->myStyle), 0, sizeof(struct t_style));
+  theCursor->myStyle.myBackgroundColor=TERM_COLOR_BLACK;
+  theCursor->myStyle.myForegroundColor=TERM_COLOR_WHITE;
 }
 /* > */
 /* < copyCursor */
 void copyCursor( struct t_cursor* theDestination, struct t_cursor* theSource)
 {
   memcpy( theDestination, theSource, sizeof(struct t_cursor));
+}
+
+/* > */
+/* < storeChar */
+
+/* Store the char and its style (color, bold,...) return the possible changes (char or style) */
+enum t_storeChar { 
+  SAME_CHAR, /* the char and its style equal the previously ones displayed  */
+  NEW_CHAR, /* the char has changed */
+  NEW_STYLE /* the style has changed */
+};
+ 
+enum t_storeChar storeChar(struct t_cursor* theCursor, char theChar, char* theDataBuffer, struct t_style* theStyleBuffer, int theNumberOfCol)
+{
+  enum t_storeChar aStatus=SAME_CHAR;
+  int aCell=theCursor->myLine * theNumberOfCol + theCursor->myCol;
+  
+  /* Check if the character has changed */
+  if (theDataBuffer[ aCell] != theChar)
+    {
+      aStatus=NEW_CHAR;
+      theDataBuffer[ aCell] = theChar;
+    }
+
+  /* If this is still the same text, test if the style has changed */
+  if (0 != memcmp( &(theStyleBuffer[ aCell]), &(theCursor->myStyle), sizeof(struct t_style) ))
+    {
+      aStatus=NEW_STYLE;
+      memcpy( &(theStyleBuffer[ aCell]), &(theCursor->myStyle), sizeof(struct t_style));
+    }
+  return aStatus;
+}
+
+/* > */
+/* < isNewWord, processWord */
+
+int isNewWord( struct t_cursor* theCursor, char theChar)
+{
+/*   static int aLastCol=-1; */
+/*   static int aLastLine=-1; */
+/*   static int aNewWord=((aLastLine != theCursor->myLine)  */
+/* 		       || (abs( aLastCol - theCursor->myCol) != 1 ) */
+/* 		       || (*yytext==0x20)); */
+/*   static int aSameText=1; /\* true if the written text is the same than the previous one *\/ */
+/*   static int aSameStyle=1; */
+  return 1;
+}
+
+char* processWord( struct t_cursor* theLastWord, enum t_storeChar theStatus)
+{
+  return NULL;
+}
+
+/* > */
+/* < copyNodes */
+
+void copyModes( struct t_style* theDestination, struct t_style* theSource)
+{
+  /* First save the colors fields */
+  int aForegroundColor=theDestination->myForegroundColor;
+  int aBackgroundColor=theDestination->myBackgroundColor;
+
+  /* then raw copy */
+  memcpy( theDestination, theSource, sizeof(struct t_style));
+
+  /* and restore colors */
+  theDestination->myForegroundColor=aForegroundColor;
+  theDestination->myBackgroundColor=aBackgroundColor;
 }
 
 /* > */
@@ -626,9 +692,11 @@ int main()
   struct t_cursor aCursor;
   struct t_cursor aSavedCursor;
   enum terminalColor aBackgroundColor=TERM_COLOR_BLUE; /* RAF determine the main area background */
-  char* aBuffer=NULL;
-  int aMaxLine=30;
-  int aMaxCol=30;
+  char* aDataBuffer=NULL;
+  struct t_style* aStyleBuffer=NULL;
+  int aNumberOfLine=30;
+  int aNumberOfCol=30;
+  int aNumberOfCell = aNumberOfLine * aNumberOfCol;
 
 #ifdef DEBUG
   /* RAF GC: debug */
@@ -638,8 +706,9 @@ int main()
 
   initCursor( &aCursor, 0);
   copyCursor( &aSavedCursor, &aCursor);
-  aBuffer=(char*)malloc(aMaxLine * aMaxCol * sizeof(char*));
-  clearBuffer(aBuffer, aMaxLine, aMaxCol);
+
+  createBuffer( &aDataBuffer, &aStyleBuffer, aNumberOfCell);
+  clearBuffer( aDataBuffer, aStyleBuffer, aNumberOfCell);
 
   while((aCapacity=yylex()))
     {
@@ -653,7 +722,7 @@ int main()
 	case CLEAR:
 	  aCursor.myCol=0;
 	  aCursor.myLine=0;
-	  clearBuffer(aBuffer, aMaxLine, aMaxCol);
+	  clearBuffer( aDataBuffer, aStyleBuffer, aNumberOfCell);
 	  break;
 	case CUB1:
 	  if (aCursor.myCol!=0)
@@ -682,13 +751,13 @@ int main()
 	case DCH: /* delete characters */
 	  {
 	    int aShift=myParameters[0]; /* number of characters to delete, the following chars shift to the left */
-	    deleteCharacter(&(aBuffer[aCursor.myLine*aMaxCol+aCursor.myCol]), aShift, aMaxCol-aShift);
+	    deleteCharacter(&(aDataBuffer[aCursor.myLine*aNumberOfCol+aCursor.myCol]), aShift, aNumberOfCol-aShift);
 	  }
 	  break;
 	case DCH1:
 	  {
 	    int aShift=1;
-	    deleteCharacter(&(aBuffer[aCursor.myLine*aMaxCol+aCursor.myCol]), aShift, aMaxCol-aShift);
+	    deleteCharacter(&(aDataBuffer[aCursor.myLine*aNumberOfCol+aCursor.myCol]), aShift, aNumberOfCol-aShift);
 	  }
 	  break;
 	case DL: /* delete lines */
@@ -698,7 +767,7 @@ int main()
 	case ECH: /* Erase characters */
 	  {
 	    int aErasedLength=myParameters[0];
-	    eraseLine(&(aBuffer[aCursor.myLine*aMaxCol+aCursor.myCol]), aErasedLength);
+	    eraseLine(&(aDataBuffer[aCursor.myLine*aNumberOfCol+aCursor.myCol]), aErasedLength);
 	  }
 	  break;
 	case ED: /* Clear the display after the cursor */
@@ -727,41 +796,70 @@ int main()
 	case OP:
 	  break;
 	case SETB:
-	  aCursor.myBackgroundColor=myParameters[0];
+	  aCursor.myStyle.myBackgroundColor=myParameters[0];
 	  if (TheDebugIsOn)
 	    {
 	      displayColor( myParameters[0]);
 	    }
 	  break;
 	case SETF:
-	  aCursor.myForegroundColor=myParameters[0];
+	  aCursor.myStyle.myForegroundColor=myParameters[0];
 	  if (TheDebugIsOn)
 	    {
 	      displayColor( myParameters[0]);
 	    }
 	  break;
 	case SGR:
-	  aCursor.myModes=myParameters[0];
+	  copyModes(& aCursor.myStyle, (struct t_style*)myParameters);
 	  if (TheDebugIsOn)
 	    {
-	      displayModes(aCursor.myModes);
+	      displayModes((struct t_style*)myParameters);
 	    }
 	  break;
 	case VPA:
 	  aCursor.myLine=myParameters[0];
 	  break;
 	default:
-	  aBuffer[aCursor.myLine*aMaxCol+aCursor.myCol]=*yytext;
-	  aCursor.myCol++;
+	  {
+	    /* TBD: init,...*/
+	    static struct t_cursor aLastWord;
+	    static struct t_cursor aLastChar;
+	    enum t_storeChar aStatus=NEW_CHAR;
+
+	    if (isNewWord(&aCursor, *yytext))
+	      {
+		char* aString=processWord( &aLastWord, aStatus);
+		if (aString)
+		  {
+		    printf(">>>Word: %s<<<\n", aString);
+		    free( aString);
+		  }
+		copyCursor( &aLastWord, &aCursor);
+	      }
+	    copyCursor( &aLastChar, &aCursor);
+
+	    aStatus=storeChar(&aCursor, *yytext, aDataBuffer, aStyleBuffer, aNumberOfCol);
+	    switch (aStatus)
+	      {
+	      case SAME_CHAR:
+		break;
+	      case NEW_CHAR:
+		break;
+	      case NEW_STYLE:
+		break;
+	      }
+	    aCursor.myCol++;
+	  }
 	}
     }
 
   if (TheDebugIsOn)
     {
-      displayBuffer(aBuffer, aMaxLine, aMaxCol);
+      displayBuffer(aDataBuffer, aNumberOfLine, aNumberOfCol);
     }
 
-  free(aBuffer);
+  free(aDataBuffer);
+  free(aStyleBuffer);
   return 0;
 }
 

@@ -2,24 +2,8 @@
 #define MAXPARAM 20
 extern int myParameters[MAXPARAM];
 extern int myNumberOfParameters;
-/* < terminalMode */
 
-enum terminalMode
-  {
-    MODE_STANDOUT=1,
-    MODE_UNDERLINE=2,
-    MODE_REVERSE=4,
-    MODE_BLINK=8,
-    MODE_DIM=16,
-    MODE_BOLD=32,
-    MODE_BLANK=64,
-    MODE_PROTECT=128,
-    MODE_ALTERNATE_CHARSET=256
-  };
-
-/* > */
 /* < terminalColor */
-
 enum terminalColor 
   {
     TERM_COLOR_BLACK=0,
@@ -31,8 +15,25 @@ enum terminalColor
     TERM_COLOR_CYAN=6,
     TERM_COLOR_WHITE=7
   };
-
 /* > */
+
+/* < style */
+struct t_style 
+{
+  unsigned int myBackgroundColor : 3;
+  unsigned int myForegroundColor : 4;
+  unsigned int isStandout : 1;
+  unsigned int isUnderline : 1;
+  unsigned int isReverse : 1;
+  unsigned int isBlink : 1;
+  unsigned int isDim : 1;
+  unsigned int isBold : 1;
+  unsigned int isBlank : 1;
+  unsigned int isProtect : 1;
+  unsigned int isAlternate : 1;
+};
+/* > */
+
 /* < enum StringCapacity */
 
 /* From Man page terminfo(5) 

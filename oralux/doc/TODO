@@ -34,6 +34,7 @@ aptitude, zgv, fbi
 Archives ML, mailto address, de.tbl instead of text.german.tbl
 
 + dialog + apt
++ dialog: doc
 + dialog: backtitle word 1 word2
 + Fix: At boot time the saved configuration was not correctly restored if the choices were audio menu in English and Multispeech.
 + Fix: if the /etc files are not selected in saveconfig, at boot time we can't retreive the main user preferences.

@@ -11,15 +11,16 @@
 	}
 
 	/* Each integer is extracted from the SGR string and converted in the related bit */
-	static int getModes()
+	static void getModes( struct t_style* theStyle)
 	{
-	  int aMode=0;
 	  char* aString = NULL;
 	  char* aToken = NULL;
 
+	  memset (theStyle, 0, sizeof(struct t_style));
+	  
 	  if (yyleng < sizeof("[0;10;")-1)
 	  {
-	    return aMode;
+	    return;
 	  }
 
 	  aString = strdup(yytext + sizeof("[0;10;") - 1);
@@ -30,25 +31,25 @@
 	    switch( atoi(aToken))
 	    {
 	      case 1:
-	        aMode |= MODE_BOLD;
+	        theStyle->isBold=1;
 		break;
 	      case 2:
-	        aMode |= MODE_DIM;
+	        theStyle->isDim=1;
 		break;
 	      case 4:
-	        aMode |= MODE_UNDERLINE;
+	        theStyle->isUnderline=1;
 		break;
 	      case 5:
-	        aMode |= MODE_BLINK;
+	        theStyle->isBlink=1;
 		break;
 	      case 7:
-	        aMode |= MODE_REVERSE;
+	        theStyle->isReverse=1;
 		break;
 	      case 8:
-	        aMode |= MODE_BLANK;
+	        theStyle->isBlank=1;
 		break;
 	      case 11:
-	        aMode |= MODE_ALTERNATE_CHARSET;
+	        theStyle->isAlternate=1;
 		break;
 	      default: 
 	        /* MODE_PROTECT: not defined */
@@ -57,7 +58,6 @@
 	    aToken=strtok( NULL,";m");
 	  }
 	  free( aString);
-	  return aMode;
 	}
 
 	int myParameters[MAXPARAM];
@@ -132,7 +132,7 @@ DIGIT	[0-9]
 				}
 
 {ESC}\[0;10(;7)?(;4)?(;7)?(;5)?(;2)?(;1)?(;8)?(;11)?m	{
-							myParameters[0]=getModes();
+							getModes( (struct t_style*)myParameters);
 		       					return SGR;
 			       				}
 
