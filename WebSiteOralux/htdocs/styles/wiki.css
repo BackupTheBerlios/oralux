@@ -10,23 +10,31 @@ div#wikiformat p {
 }
 
 p.wikichange {
+/*
  background-color:#fff;
  color:inherit;
+*/
 }
 
 p.wikiadd {
+/*
  background-color:#fcc;
  color:inherit;
+*/
 }
 
 p.wikidelete {
+/*
  background-color:#cfc;
  color:inherit;
+*/
 }
 
 div#main dt {
+/*
  background-color:inherit;
  color:red;
+*/
  font-weight:bold;
 }
 
@@ -37,11 +45,15 @@ div#wikiformat span {
 }
 
 div#wikiformat span.plus {
+/*
  background-color:white;
  color:red;
+*/
 }
 
 div#wikiformat span.minus {
+/*
  background-color:white;
  color:green;
+*/
 }
