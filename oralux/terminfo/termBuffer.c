@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 termBuffer.c
-$Id: termBuffer.c,v 1.1 2004/12/28 22:24:49 gcasse Exp $
+$Id: termBuffer.c,v 1.2 2004/12/29 23:49:30 gcasse Exp $
 $Author: gcasse $
 Description: manage the terminal layout in a buffer.
-$Date: 2004/12/28 22:24:49 $ |
-$Revision: 1.1 $ |
+$Date: 2004/12/29 23:49:30 $ |
+$Revision: 1.2 $ |
 Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -33,6 +33,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "termBuffer.h"
 #include "debug.h"
 
+/* Misc */
+#define SUP(a,b) (a > b) ? a : b;
+
 /* > */
 /* < flex definitions */
 int yywrap ()
@@ -40,66 +43,49 @@ int yywrap ()
    return 1; 
 }
 /* > */
-/* < linePortion */
-
-/* 
-A line portion describes an horizontal area in the screen.
-When a menu is browsed, the selected item and the previously ones are displayed with distinct styles (for example distinct backgrounds).
-These two line portions must be particularly managed to distinguish the selected one.
-*/
-struct t_linePortion
-{
-  int myLine; /* Line number */
-  int myFirstCol; /* First column of the portion */
-  int myLastCol; /* Last column of the portion */
-  int myContentIsModified; /* equals 1 if at least one char has been modified */
-  int myStyleIsModified; /* equals 1 if one of the style has been modified */
-};
-
-enum {MAX_LINE_PORTION=2}; /* 2 line portions are expected to distinguish the selected item */
-
-/* > */
 /* < createBuffer */
-
 void createBuffer( char** theDataBuffer, struct t_style** theStyleBuffer, int theNumberOfCell)
 {
   ENTER("createBuffer");
   *theDataBuffer=(char*)malloc( theNumberOfCell * sizeof(char));
   *theStyleBuffer=(struct t_style*)malloc( theNumberOfCell * sizeof(struct t_style));
 }
-
 /* > */
 /* < clearBuffer */
+#define clearBuffer(theDataBuffer, theNumberOfCell) memset(theDataBuffer, 0x20, theNumberOfCell*sizeof(char))
+/* > */
+/* < setStyleBuffer */
 
-void clearBuffer( char* theDataBuffer, struct t_style* theStyleBuffer, int theNumberOfCell)
+void setStyleBuffer( struct t_style* theStyleBuffer, int theNumberOfCell, struct t_style* theDefaultStyle)
 {
-  ENTER("clearBuffer");
-  memset(theDataBuffer, 0x20, theNumberOfCell*sizeof(char));
-  memset(theStyleBuffer, 0, theNumberOfCell*sizeof(struct t_style));
+  int i=0;
+  for (i=0; i<theNumberOfCell; i++)
+    {
+      copyStyle(theStyleBuffer+i, theDefaultStyle);
+    }
 }
 
 /* > */
 /* < initCursor */
-
 /*
 theFirstCell indicates the value of the first line and the first column.
 This can be 0 or 1 according to the termBuffer.
 */
-void initCursor(struct t_cursor* theCursor, int theFirstCell)
+void initCursor(struct t_cursor* theCursor, int theFirstCell, struct t_style* theStyle)
 {
   ENTER("initCursor");
   theCursor->myLine=theFirstCell;
   theCursor->myCol=theFirstCell;
-  memset (& (theCursor->myStyle), 0, sizeof(struct t_style));
-  theCursor->myStyle.myBackgroundColor=TERM_COLOR_BLACK;
-  theCursor->myStyle.myForegroundColor=TERM_COLOR_WHITE;
+  copyStyle (& (theCursor->myStyle), theStyle);
 }
-
 /* > */
 /* < getCell*/
-#define getCell( theLine, theCol, theNumberOfCol) (theLine * theNumberOfCol + theCol)
+//TBD #define getCell( theLine, theCol, theNumberOfCol) (theLine * theNumberOfCol + theCol)
+int getCell( int theLine, int theCol, int theNumberOfCol) 
+{return theLine * theNumberOfCol + theCol;}
 /* > */
 /* < compareAndSetStyle */
+
 /* 
 search if the style of the cell equals one of the two supplied styles (in the ListOfStyle).
 If yes, this style is copied in theFoundStyle and 1 is returned. 
@@ -262,6 +248,7 @@ void eraseCharWithThisStyle( char* theDataBuffer, struct t_style* theStyleBuffer
   int i=0;
 
   ENTER("eraseCharWithThisStyle");
+  
   for(i=0; i<theLength; i++)
     {
       if (compareStyle( theStyle, theStyleBuffer+i)==0)
@@ -324,36 +311,36 @@ The returned value is:
 * 1: theLinePortion[1] is the highlighted style.
 * -1: no highlighted item found.
 */
-int lookForHighlightedMenuItem( struct t_linePortion* theLinePortion, struct t_style* theStyleBuffer, int theNumberOfLine, int theNumberOfCol)
+int lookForHighlightedMenuItem( struct t_termBuffer* this)
 {
   /* Distinguish the top and bottom portions */
-  struct t_linePortion* aTopPortion=theLinePortion;
-  struct t_linePortion* aBottomPortion=theLinePortion;
+  struct t_linePortion* aTopPortion=this->myLinePortion;
+  struct t_linePortion* aBottomPortion=this->myLinePortion;
   int aStatus=0;
   struct t_style aSurroundingBackgroundStyle;
   struct t_style aTopPortionBackgroundStyle;
   struct t_style aBottomPortionBackgroundStyle;
-  int aLength=theLinePortion->myLastCol + 1 - theLinePortion->myFirstCol;
+  int aLength=this->myLinePortion->myLastCol + 1 - this->myLinePortion->myFirstCol;
 
   ENTER("lookForHighlightedMenuItem");
 
-  if (theLinePortion[0].myLine < theLinePortion[1].myLine)
+  if (this->myLinePortion[0].myLine < this->myLinePortion[1].myLine)
     {
-      aBottomPortion++; /* points to theLinePortion+1 */
+      aBottomPortion++; /* points to this->myLinePortion+1 */
     }
   else
     {
-      aTopPortion++;  /* points to theLinePortion+1 */
+      aTopPortion++;  /* points to this->myLinePortion+1 */
     }
 
   /* Look for the background style of the top and bottom line portions */
-  if(!getBackgroundStyle( aTopPortion->myLine, aTopPortion->myFirstCol, theStyleBuffer, aLength, theNumberOfLine, theNumberOfCol, &aTopPortionBackgroundStyle))
+  if(!getBackgroundStyle( aTopPortion->myLine, aTopPortion->myFirstCol, this->myStyleBuffer, aLength, this->myNumberOfLine, this->myNumberOfCol, &aTopPortionBackgroundStyle))
     {
       SHOW("Top portion: no background found");
       return -1;
     }
 
-  if(!getBackgroundStyle( aBottomPortion->myLine, aBottomPortion->myFirstCol, theStyleBuffer, aLength, theNumberOfLine, theNumberOfCol, &aBottomPortionBackgroundStyle))
+  if(!getBackgroundStyle( aBottomPortion->myLine, aBottomPortion->myFirstCol, this->myStyleBuffer, aLength, this->myNumberOfLine, this->myNumberOfCol, &aBottomPortionBackgroundStyle))
     {
       SHOW("Bottom portion: no background found");
       return -1;
@@ -365,20 +352,20 @@ int lookForHighlightedMenuItem( struct t_linePortion* theLinePortion, struct t_s
      - Not contiguous: check the line lower than aTopPortion
   */
   /* Check if the lines are contiguous */
-  if ( abs( aTopPortion->myLine - aTopPortion->myLine)==1)
+  if ( abs( aTopPortion->myLine - aBottomPortion->myLine)==1)
     { /* yes, contiguous */
       if (aTopPortion->myLine > 0)
 	{ /* Check the upper line */
-	  aStatus=getBackgroundStyle( aTopPortion->myLine - 1, aTopPortion->myFirstCol, theStyleBuffer, aLength, theNumberOfLine, theNumberOfCol, &aSurroundingBackgroundStyle);
+	  aStatus=getBackgroundStyle( aTopPortion->myLine - 1, aTopPortion->myFirstCol, this->myStyleBuffer, aLength, this->myNumberOfLine, this->myNumberOfCol, &aSurroundingBackgroundStyle);
 	}
-      if (!aStatus && (aBottomPortion->myLine + 1 < theNumberOfLine))
+      if (!aStatus && (aBottomPortion->myLine + 1 < this->myNumberOfLine))
 	{ /* Check the lower line */
-	  aStatus=getBackgroundStyle( aBottomPortion->myLine - 1, aBottomPortion->myFirstCol, theStyleBuffer, aLength, theNumberOfLine, theNumberOfCol, &aSurroundingBackgroundStyle);
+	  aStatus=getBackgroundStyle( aBottomPortion->myLine - 1, aBottomPortion->myFirstCol, this->myStyleBuffer, aLength, this->myNumberOfLine, this->myNumberOfCol, &aSurroundingBackgroundStyle);
 	}
     }
   else
     { /* Not contiguous: check the line lower than aTopPortion */
-      aStatus=getBackgroundStyle( aTopPortion->myLine + 1, aTopPortion->myFirstCol, theStyleBuffer, aLength, theNumberOfLine, theNumberOfCol, &aSurroundingBackgroundStyle);
+      aStatus=getBackgroundStyle( aTopPortion->myLine + 1, aTopPortion->myFirstCol, this->myStyleBuffer, aLength, this->myNumberOfLine, this->myNumberOfCol, &aSurroundingBackgroundStyle);
     }
 
   /* If the surrounding background has been found, compare it to the style of the bottom and top line portion */
@@ -389,13 +376,13 @@ int lookForHighlightedMenuItem( struct t_linePortion* theLinePortion, struct t_s
 	{
 	  if (0!=compareStyle( &aBottomPortionBackgroundStyle, &aSurroundingBackgroundStyle))
 	    { /* Return the index of the bottom portion */
-	      aStatus=(aBottomPortion==theLinePortion) ? 0 : 1;
+	      aStatus=(aBottomPortion==this->myLinePortion) ? 0 : 1;
 	      SHOW("Bottom portion is highlighted");
 	    }
 	}
       else if (0==compareStyle( &aBottomPortionBackgroundStyle, &aSurroundingBackgroundStyle))
 	{ /* return the index of the top portion */
-	  aStatus=(aTopPortion==theLinePortion) ? 0 : 1;
+	  aStatus=(aTopPortion==this->myLinePortion) ? 0 : 1;
 	  SHOW("Top portion is highlighted");
 	}
     }
@@ -408,16 +395,17 @@ int lookForHighlightedMenuItem( struct t_linePortion* theLinePortion, struct t_s
 }
 
 /* > */
-/* < initPortion */
-void initPortion( struct t_linePortion* thePortion, struct t_cursor* theCursor)
+/* < initCurrentLinePortion */
+void initCurrentLinePortion( struct t_termBuffer* this)
 {
-  ENTER("initPortion");
-  SHOW3("myLine=%d, myCol=%d\n", theCursor->myLine, theCursor->myCol);
-  thePortion->myLine=theCursor->myLine;
-  thePortion->myFirstCol=theCursor->myCol;
-  thePortion->myLastCol=0;
-  thePortion->myContentIsModified=0;
-  thePortion->myStyleIsModified=0;
+  struct t_linePortion* aPortion = this->myLinePortion + this->myLinePortionIndex;
+  ENTER("initCurrentLinePortion");
+  SHOW3("myLine=%d, myCol=%d\n", this->myCursor.myLine, this->myCursor.myCol);
+  aPortion->myLine = this->myCursor.myLine;
+  aPortion->myFirstCol = this->myCursor.myCol;
+  aPortion->myLastCol = 0;
+  aPortion->myContentIsModified = 0;
+  aPortion->myStyleIsModified = 0;
 }
 
 /* > */
@@ -433,30 +421,29 @@ If there are 1 or 2 line portions without any content modification but with styl
 The current background style around the line portion is determined.
 
 */
-void flushPortion( struct t_linePortion* theLinePortion, int* theLinePortionIndex, char* theDataBuffer, int theNumberOfLine, int theNumberOfCol, struct t_style* theStyleBuffer, char** theOutputBuffer)
+void flushPortion( struct t_termBuffer* this, char** theOutputBuffer)
 {
   ENTER("flushPortion");
 
-
   /* Firstly, look for menu items: 2 lines without any content modification but style change */ 
-  if ((*theLinePortionIndex==1)
-      && testIfPortionsAreMenuItems(theLinePortion, theLinePortion+1))
+  if ((this->myLinePortionIndex==1)
+      && testIfPortionsAreMenuItems(this->myLinePortion, this->myLinePortion+1))
     {
       int i;
       int aCell;
-      switch( i=lookForHighlightedMenuItem( theLinePortion, theStyleBuffer, theNumberOfLine, theNumberOfCol))
+      switch( i=lookForHighlightedMenuItem( this))
 	{
 	case 0:
 	case 1:
-	  aCell=getCell( theLinePortion[i].myLine, theLinePortion[i].myFirstCol, theNumberOfCol);	    
-	  flushText( theDataBuffer + aCell, NULL, theLinePortion[i].myLastCol - theLinePortion[i].myFirstCol, theOutputBuffer);
+	  aCell=getCell( this->myLinePortion[i].myLine, this->myLinePortion[i].myFirstCol, this->myNumberOfCol);
+	  flushText( this->myDataBuffer + aCell, NULL, this->myLinePortion[i].myLastCol - this->myLinePortion[i].myFirstCol, theOutputBuffer);
 	  break;
 	case -1:
 	default:
 	  for (i=0; i<2; i++)
 	    {
-	      aCell=getCell( theLinePortion[i].myLine, theLinePortion[i].myFirstCol, theNumberOfCol);	    
-	      flushText( theDataBuffer + aCell, NULL, theLinePortion[i].myLastCol - theLinePortion[i].myFirstCol, theOutputBuffer);
+	      aCell=getCell( this->myLinePortion[i].myLine, this->myLinePortion[i].myFirstCol, this->myNumberOfCol);	    
+	      flushText( this->myDataBuffer + aCell, NULL, this->myLinePortion[i].myLastCol - this->myLinePortion[i].myFirstCol, theOutputBuffer);
 	    }
 	  break;
 	}
@@ -468,126 +455,121 @@ void flushPortion( struct t_linePortion* theLinePortion, int* theLinePortionInde
       int aLastCell=0;
       int i=0;
 
-      for (i=0; i<=*theLinePortionIndex; i++)
+      for (i=0; i<=this->myLinePortionIndex; i++)
 	{
 	  struct t_style aStyle;
 	  int aLength=0;
-	  aPortion=theLinePortion+i;
-	  aFirstCell=getCell(aPortion->myLine, aPortion->myFirstCol, theNumberOfCol);
-	  aLastCell=getCell(aPortion->myLine, aPortion->myLastCol, theNumberOfCol);
+	  aPortion=this->myLinePortion+i;
+	  aFirstCell=getCell(aPortion->myLine, aPortion->myFirstCol, this->myNumberOfCol);
+	  aLastCell=getCell(aPortion->myLine, aPortion->myLastCol, this->myNumberOfCol);
 
 	  aLength=aLastCell + 1 - aFirstCell;
 
 	  if (aPortion->myContentIsModified)
 	    {
-	      struct t_style* x=NULL;
-	      flushText( (char*)(theDataBuffer + aFirstCell), x, aLength, (char**)theOutputBuffer);
+	      flushText( (char*)(this->myDataBuffer + aFirstCell), NULL, aLength, (char**)theOutputBuffer);
 	    }
 	  else if (aPortion->myStyleIsModified)
 	    {
-	      int aStatus=getBackgroundStyle( aPortion->myLine, aPortion->myFirstCol, theStyleBuffer, aLength, theNumberOfLine, theNumberOfCol, &aStyle);
+	      int aStatus=getBackgroundStyle( aPortion->myLine, aPortion->myFirstCol, this->myStyleBuffer, aLength, this->myNumberOfLine, this->myNumberOfCol, &aStyle);
 
 	      /* The characters associated with the background style are not displayed */
 	      if (aStatus)
 		{
-		  eraseCharWithThisStyle( theDataBuffer + aFirstCell, theStyleBuffer + aFirstCell, aLength, &aStyle);
+		  eraseCharWithThisStyle( this->myDataBuffer + aFirstCell, this->myStyleBuffer + aFirstCell, aLength, &aStyle);
 		}
-	      flushText( theDataBuffer + aFirstCell, NULL, aLength, theOutputBuffer);
+	      flushText( this->myDataBuffer + aFirstCell, NULL, aLength, theOutputBuffer);
 	    }
 	}
     }
 
-/*   for (i=0; i<=*theLinePortionIndex; i++) */
-/*     { */
-/*       char c; */
-
-/*       aPortion=theLinePortion + i; */
-/*       aFirstCell=aPortion->myLine * theNumberOfCol + aPortion->myFirstCol; */
-/*       aLastCell=aPortion->myLine * theNumberOfCol + aPortion->myLastCol; */
-/*       c=theDataBuffer[ aLastCell+1]; */
-/*       theDataBuffer[ aLastCell+1]=0; */
-/*       SHOW3("portion %d=>>>%s<<<\n",i,theDataBuffer+aFirstCell); */
-/*       SHOW2("myLine=%d\n",aPortion->myLine); */
-/*       SHOW3("myFirstCol=%d, myLastCol=%d\n",aPortion->myFirstCol, aPortion->myLastCol); */
-/*       theDataBuffer[ aLastCell+1]=c; */
-/*     } */
-  *theLinePortionIndex=-1;
+  this->myLinePortionIndex=-1;
 }
 /* > */
+/* < getLinePortion */
+
+/* Get the index of the current line portion. 
+If the line number has been changed, the next line portion is used.
+If the max is reached, the previous line portions are flushed (theOutput).
+*/
+int getLinePortion( struct t_termBuffer* this, char** theOutput)
+{
+  int* aIndex = &(this->myLinePortionIndex);
+
+  if (*aIndex==-1) 
+    { /* First portion */
+      *aIndex=0;
+      initCurrentLinePortion( this);
+      SHOW("FIRST PORTION");
+    }
+  else if (this->myLinePortion[ *aIndex].myLine != this->myCursor.myLine)
+    { /* New portion */
+      if (1 + *aIndex >= MAX_LINE_PORTION)
+	{
+	  flushPortion(this, theOutput);
+	}
+
+      ++ *aIndex;
+
+      initCurrentLinePortion( this);
+      SHOW2("NEW PORTION: %d\n", *aIndex);
+    }
+  return *aIndex;
+}
+
+/* > */
 /* < setPortion */
+
 /* 
-Check if a new line portion is supplied.
-If yes, try to store its features.
-If no, update the current portion (column)
-OUTPUT: theLinePortionIndex is the current line portion.
+Update the column number of the current line portion.
 */ 
 
-enum t_linePortionStatus 
+void setLinePortionCol( struct t_termBuffer* this, int theCol)
 {
-  SAME_PORTION,
-  MAX_PORTION_REACHED,
-  NEW_PORTION
-};
+  struct t_linePortion* aLinePortion = this->myLinePortion + this->myLinePortionIndex;
+  ENTER("setLinePortionCol");
 
-enum t_linePortionStatus setPortion( struct t_cursor* theCursor, struct t_linePortion* theLinePortion, int* theLinePortionIndex)
-{
-  enum t_linePortionStatus aStatus=SAME_PORTION;
-  ENTER("setPortion");
-
-  if ((*theLinePortionIndex==-1) /* first portion */
-      || (theLinePortion[ *theLinePortionIndex].myLine != theCursor->myLine))
-    { /* a new portion */
-      if (++*theLinePortionIndex >= MAX_LINE_PORTION)
-	{
-	  --*theLinePortionIndex;
-	  aStatus=MAX_PORTION_REACHED;
-	  SHOW("MAX_PORTION_REACHED");
-	}
-      else
-	{ /* add a new portion */
-	  initPortion( theLinePortion + *theLinePortionIndex, theCursor);
-	  aStatus=NEW_PORTION;
-	  SHOW("NEW_PORTION");
-	}
-    }
-  else
+  if (aLinePortion->myLastCol < theCol)
     {
-      theLinePortion[ *theLinePortionIndex].myLastCol=theCursor->myCol;
+      aLinePortion->myLastCol=theCol;
     }
-  return aStatus;
+  else if (aLinePortion->myFirstCol > theCol)
+    {
+      aLinePortion->myFirstCol=theCol;
+    }
 }
 
 /* > */
 /* < storeChar, storeStyle */
 
-/* Store the style (color, bold,...); return 1 if the style is new (the style of the cell has been changed) */
-int storeStyle(int theCell, struct t_style* theStyle, struct t_style* theStyleBuffer)
+/* Store the style (color, bold,...); return 1 if the style of the cell has been changed */
+int storeStyle( struct t_style* theStyleBuffer, struct t_style* theStyle)
 {
   int aNewStyle=0;
   ENTER("storeStyle");
   
   /* Test if the style has changed */
-  if (0 != compareStyle( theStyleBuffer+theCell, theStyle))
+  if (0 != compareStyle( theStyleBuffer, theStyle))
     {
       aNewStyle=1;
-      copyStyle( theStyleBuffer+theCell, theStyle);
+      copyStyle( theStyleBuffer, theStyle);
       SHOW("New Style!");
     }
 
   return aNewStyle;
 }
 
-/* Store the char; return 1 if the char is new (the cell content has been changed) */
-int storeChar(int theCell, char theChar, char* theDataBuffer, int theNumberOfCol)
+/* Store the char; return 1 if the cell content has been changed */
+int storeChar(char* theDataBuffer, char theChar)
 {
   int aNewChar=0;
   ENTER("storeChar");
 
   /* Check if the character has changed */
-  if (theDataBuffer[ theCell] != theChar)
+  if (*theDataBuffer != theChar)
     {
       aNewChar=1;
-      theDataBuffer[ theCell] = theChar;
+      *theDataBuffer = theChar;
       SHOW("New Char!");
     }
 
@@ -608,68 +590,152 @@ void copyModes( struct t_style* theDestination, struct t_style* theSource)
 
   /* and restore colors */
   theDestination->myForegroundColor=aForegroundColor;
+  DISPLAY_COLOR("Foreground",aForegroundColor);
+
   theDestination->myBackgroundColor=aBackgroundColor;
+  DISPLAY_COLOR("BackgroundColor",aBackgroundColor);
 }
 
 /* > */
 /* < eraseLine */
-void eraseLine( char* theLine, int theLength)
+void eraseLine( struct t_termBuffer* this, int theNumberOfErasedChar, char** theOutput)
 {
   int i=0;
+  int aContentIsModified=0;
+  int aStyleIsModified=0;
+  int aCell=getCell( this->myCursor.myLine, this->myCursor.myCol, this->myNumberOfCol);
+  char* aChar=this->myDataBuffer + aCell;
+  struct t_style* aStyle=this->myStyleBuffer+aCell;
+  int aLinePortionIndex=getLinePortion( this, theOutput);
+  struct t_linePortion* aLinePortion = this->myLinePortion;
+
   ENTER("eraseLine");
-  for (i=0;i<theLength;i++)
+
+  for (i=0;i<theNumberOfErasedChar;i++)
     {
-      theLine[i]=0x20;
+      if (storeChar( aChar+i, 0x20))
+	{ 
+	  aContentIsModified=1;
+	}
+      if (storeStyle( aStyle+i, &(this->myDefaultStyle)))
+	{
+	  aStyleIsModified=1;
+	}  
+    }
+
+  if (aContentIsModified)
+    {
+      aLinePortion[ aLinePortionIndex].myContentIsModified = 1;
+    }
+  if (aStyleIsModified)
+    {
+      aLinePortion[ aLinePortionIndex].myStyleIsModified = 1;
     }
 }
 /* > */
 /* < deleteCharacter */
-void deleteCharacter(char* theLine, int theErasedLength, int theTotalLength)
+void deleteCharacter( struct t_termBuffer* this, int theNumberOfDeletedChar, char** theOutput)
 {
+  int aCurrentCell=getCell( this->myCursor.myLine, this->myCursor.myCol, this->myNumberOfCol);
+  int aLastCell= this->myNumberOfCol - theNumberOfDeletedChar;
+  struct t_linePortion* aLinePortion = this->myLinePortion;
+  int aLinePortionIndex=getLinePortion( this, theOutput);
+
   ENTER("deleteCharacter");
-  memmove(theLine, theLine+theErasedLength, theErasedLength);
-  eraseLine(&(theLine[theTotalLength-theErasedLength]), theErasedLength);
+
+  memmove( this->myDataBuffer + aCurrentCell, this->myDataBuffer + aCurrentCell + theNumberOfDeletedChar, theNumberOfDeletedChar);
+
+  /* Clear the remaining cells */
+  clearBuffer( this->myDataBuffer + aLastCell, theNumberOfDeletedChar);
+  setStyleBuffer( this->myStyleBuffer + aLastCell, theNumberOfDeletedChar, &(this->myDefaultStyle));
+
+  /* Update the line portion */
+
+  /* Modifications are expected */
+  aLinePortion[ aLinePortionIndex].myContentIsModified = 1;
+  aLinePortion[ aLinePortionIndex].myStyleIsModified = 1;
+  
+  if (aLinePortion[ aLinePortionIndex].myLastCol > this->myCursor.myCol)
+    {
+      aLinePortion[ aLinePortionIndex].myLastCol= SUP(this->myCursor.myCol, aLinePortion[ aLinePortionIndex].myLastCol - theNumberOfDeletedChar);
+    }
 }
+/* > */
+/* < setChar*/
+void setChar( struct t_termBuffer* this, char theNewChar, char** theOutput)
+{
+  int aCell=0;
+  int aLinePortionIndex=0;
+  struct t_linePortion* aLinePortion = NULL;
+
+  ENTER("setChar");
+
+  aLinePortion = this->myLinePortion;
+  aCell=getCell( this->myCursor.myLine, this->myCursor.myCol, this->myNumberOfCol);
+  aLinePortionIndex=getLinePortion( this, theOutput);
+
+
+  if (storeChar( this->myDataBuffer + aCell, theNewChar))
+    { /* the content has been modified */
+      aLinePortion[ aLinePortionIndex].myContentIsModified=1;
+    }
+  if (storeStyle( this->myStyleBuffer + aCell, &(this->myCursor.myStyle)))
+    { /* the style has been modified */
+      aLinePortion[ aLinePortionIndex].myStyleIsModified=1;
+    }
+  
+  setLinePortionCol( this, this->myCursor.myCol);
+  ++this->myCursor.myCol;
+}    
 /* > */
 /* < createTermBuffer, deleteTermBuffer */
 /* Create a termBuffer and returns */
 struct t_termBuffer* createTermBuffer( enum termBufferName theName, int theNumberOfLine, int theNumberOfCol)
 {
-  struct t_termBuffer* aTermBuffer = (struct t_termBuffer *) malloc(sizeof(struct t_termBuffer));
+  int i=0;
+  struct t_termBuffer* this = (struct t_termBuffer *) malloc(sizeof(struct t_termBuffer));
   int aNumberOfCell = theNumberOfLine * theNumberOfCol;
-  createBuffer( &(aTermBuffer->myDataBuffer), &(aTermBuffer->myStyleBuffer), aNumberOfCell);
-  clearBuffer( aTermBuffer->myDataBuffer, aTermBuffer->myStyleBuffer, aNumberOfCell);
+  createBuffer( &(this->myDataBuffer), &(this->myStyleBuffer), aNumberOfCell);
+  clearBuffer(this->myDataBuffer, aNumberOfCell);
 
-  aTermBuffer->myNumberOfLine=theNumberOfLine;
-  aTermBuffer->myNumberOfCol=theNumberOfCol;
+  /* default style: black and white */
+  clearStyle( &(this->myDefaultStyle));
+  this->myDefaultStyle.myBackgroundColor=TERM_COLOR_BLACK;
+  this->myDefaultStyle.myForegroundColor=TERM_COLOR_WHITE;
 
-  initCursor( &(aTermBuffer->myCursor), 0);
-  initCursor( &(aTermBuffer->mySavedCursor), 0);
+  /* init style buffer */
+  for (i=0;i<aNumberOfCell;i++)
+    {
+      copyStyle(this->myStyleBuffer+i, &(this->myDefaultStyle));
+    }
+  this->myNumberOfLine=theNumberOfLine;
+  this->myNumberOfCol=theNumberOfCol;
 
-  return aTermBuffer;
+  initCursor( &(this->myCursor), 0, &(this->myDefaultStyle));
+  initCursor( &(this->mySavedCursor), 0, &(this->myDefaultStyle));
+
+  return this;
 }
 
-void deleteTermBuffer( struct t_termBuffer* theTermBuffer)
+void deleteTermBuffer( struct t_termBuffer* this)
 {
-  free(theTermBuffer->myDataBuffer);
-  free(theTermBuffer->myStyleBuffer);
-  free(theTermBuffer);
+  free(this->myDataBuffer);
+  free(this->myStyleBuffer);
+  free(this);
 }
 
 /* > */
 /* < interpretEscapeSequence */
 
-char* interpretEscapeSequence( struct t_termBuffer* theTermBuffer, FILE* theStream, char** theOutput)
+char* interpretEscapeSequence( struct t_termBuffer* this, FILE* theStream, char** theOutput)
 {
   enum StringCapacity aCapacity;
-  struct t_linePortion aLinePortion[ MAX_LINE_PORTION];
-  int aLinePortionIndex=-1;
-  struct t_cursor* aCursor=&(theTermBuffer->myCursor);
-  int aNumberOfCell=theTermBuffer->myNumberOfLine * theTermBuffer->myNumberOfCol;
+  struct t_cursor* aCursor=&(this->myCursor);
+  int aNumberOfCell=this->myNumberOfLine * this->myNumberOfCol;
 
   ENTER("interpretEscapeSequence");
 
-  theTermBuffer=(struct t_termBuffer*)theTermBuffer;
+  this->myLinePortionIndex=-1;
 
   yyin=theStream;
 
@@ -680,9 +746,11 @@ char* interpretEscapeSequence( struct t_termBuffer* theTermBuffer, FILE* theStre
       switch(aCapacity)
 	{
 	case CLEAR:
+	  this->myLinePortionIndex=-1;
 	  aCursor->myCol=0;
 	  aCursor->myLine=0;
-	  clearBuffer( theTermBuffer->myDataBuffer, theTermBuffer->myStyleBuffer, aNumberOfCell);
+	  clearBuffer(this->myDataBuffer, aNumberOfCell);
+	  setStyleBuffer(this->myStyleBuffer, aNumberOfCell, &(this->myDefaultStyle));
 	  break;
 	case CUB1:
 	  if (aCursor->myCol!=0)
@@ -708,29 +776,19 @@ char* interpretEscapeSequence( struct t_termBuffer* theTermBuffer, FILE* theStre
 	case CUU:
 	  aCursor->myLine-=myParameters[0];
 	  break;
-	case DCH: /* delete characters */
-	  {
-	    int aShift=myParameters[0]; /* number of characters to delete, the following chars shift to the left */
-	    int aCell=getCell(aCursor->myLine, aCursor->myCol, theTermBuffer->myNumberOfCol);
-	    deleteCharacter(&(theTermBuffer->myDataBuffer[ aCell]), aShift, theTermBuffer->myNumberOfCol-aShift);
-	  }
-	  break;
+	case DCH: /* delete characters (shorter line) */
 	case DCH1:
-	  {
-	    int aShift=1;
-	    int aCell=getCell(aCursor->myLine, aCursor->myCol, theTermBuffer->myNumberOfCol);
-	    deleteCharacter(&(theTermBuffer->myDataBuffer[ aCell]), aShift, theTermBuffer->myNumberOfCol-aShift);
-	  }
+	    /* myParameters[0] gives the number of characters to delete */
+	    deleteCharacter( this, myParameters[0], theOutput);
 	  break;
 	case DL: /* delete lines */
 	  break;
 	case DL1:
 	  break;
-	case ECH: /* Erase characters */
+	case ECH: /* Erase characters (same line length) */
 	  {
-	    int aErasedLength=myParameters[0];
-	    int aCell=getCell(aCursor->myLine, aCursor->myCol, theTermBuffer->myNumberOfCol);
-	    eraseLine(&(theTermBuffer->myDataBuffer[ aCell]), aErasedLength);
+	    /* myParameters[0] gives the number of characters to erase */
+	    eraseLine( this, myParameters[0], theOutput);
 	  }
 	  break;
 	case ED: /* Clear the display after the cursor */
@@ -749,12 +807,12 @@ char* interpretEscapeSequence( struct t_termBuffer* theTermBuffer, FILE* theStre
 	case IL1:
 	  break;
 	case RC:
-	  aCursor->myCol=theTermBuffer->mySavedCursor.myCol;
-	  aCursor->myLine=theTermBuffer->mySavedCursor.myLine;
+	  aCursor->myCol=this->mySavedCursor.myCol;
+	  aCursor->myLine=this->mySavedCursor.myLine;
 	  break;
 	case SC:
-	  theTermBuffer->mySavedCursor.myCol=aCursor->myCol;
-	  theTermBuffer->mySavedCursor.myLine=aCursor->myLine;
+	  this->mySavedCursor.myCol=aCursor->myCol;
+	  this->mySavedCursor.myLine=aCursor->myLine;
 	  break;
 	case OP:
 	  break;
@@ -774,35 +832,16 @@ char* interpretEscapeSequence( struct t_termBuffer* theTermBuffer, FILE* theStre
 	  aCursor->myLine=myParameters[0];
 	  break;
 	case TEXTFIELD:
-	  {
-	    int aCell=getCell(aCursor->myLine, aCursor->myCol, theTermBuffer->myNumberOfCol);
-	    if (storeChar( aCell, *yytext, theTermBuffer->myDataBuffer, theTermBuffer->myNumberOfCol))
-	      { /* the content has been modified */
-		aLinePortion[ aLinePortionIndex].myContentIsModified=1;
-	      }
-	    if (storeStyle( aCell, &(aCursor->myStyle), theTermBuffer->myStyleBuffer))
-	      { /* the style has been modified */
-		aLinePortion[ aLinePortionIndex].myStyleIsModified=1;
-	      }  
-	    aCursor->myCol++;
-	  }
+	    setChar( this, (char)*yytext, theOutput);
 	  break;
 	default:
 	  break;
 	}
-
-      if( setPortion( &(theTermBuffer->myCursor), aLinePortion, &aLinePortionIndex) == MAX_PORTION_REACHED)
-	{
-	  flushPortion( aLinePortion, &aLinePortionIndex, theTermBuffer->myDataBuffer, theTermBuffer->myNumberOfLine, theTermBuffer->myNumberOfCol, theTermBuffer->myStyleBuffer, theOutput);
-
-	  /* and build the new portion */ 
-	  setPortion( &theTermBuffer->myCursor, aLinePortion, &aLinePortionIndex);	  
-	}
     }
 
-  flushPortion( aLinePortion, &aLinePortionIndex, theTermBuffer->myDataBuffer, theTermBuffer->myNumberOfLine, theTermBuffer->myNumberOfCol, theTermBuffer->myStyleBuffer, theOutput);
+  flushPortion( this, theOutput);
 
-  DISPLAY_BUFFER(theTermBuffer->myDataBuffer, theTermBuffer->myNumberOfLine, theTermBuffer->myNumberOfCol);
+  DISPLAY_BUFFER(this->myDataBuffer, this->myNumberOfLine, this->myNumberOfCol);
 
   return 0;
 }

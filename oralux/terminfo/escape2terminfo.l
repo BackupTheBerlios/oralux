@@ -16,7 +16,7 @@
 	  char* aString = NULL;
 	  char* aToken = NULL;
 
-	  memset (theStyle, 0, sizeof(struct t_style));
+	  clearStyle(theStyle);
 	  
 	  if (yyleng < sizeof("[0;10;")-1)
 	  {
@@ -88,7 +88,10 @@ DIGIT	[0-9]
 {ESC}\[L		return IL1;
 {ESC}\[H{ESC}\[2?J	return CLEAR;
 {ESC}\[J		return ED;
-{ESC}\[P		return DCH1;
+{ESC}\[P		{
+			myParameters[0]=1;
+			return DCH1;
+			}
 {ESC}\[1K		return EL1;
 {ESC}\[H		return HOME;
 {ESC}\[{DIGIT}+L	{ 
