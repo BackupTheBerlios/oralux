@@ -95,7 +95,7 @@ if (isset($_REQUEST["my_destination"]))
   $aSubject=$_REQUEST["my_subject"];
   $aMessage=wordwrap(stripSlashes($_REQUEST["my_body"]),72);
 
-  $aMailIsSend=mail($aDestination, $aSubject, $aMessage, $a_header);
+  //  $aMailIsSend=mail($aDestination, $aSubject, $aMessage, $a_header);
 }
 
 ?>

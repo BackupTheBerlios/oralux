@@ -36,11 +36,14 @@ samp, kbd {
  font-size:100%;
  font-family:monospace;
  font-weight:bold;
+ padding: 0.1em 0;
+ background-color:#000;
+ color:#fff;
 /*
  background-color:#ccc;
  color:inherit;
-*/
  padding: 0.1em 1em;
+*/
 }
 
 div {
@@ -149,33 +152,32 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 h3,h4,h5,h6 {
- font-style:normal;
- font-weight:bold;
  font-family:Arial, Helvetica, sans-serif;
- padding:0;
- margin:0;
 }
 
 h2 {
-/* border-width:8px 2px;*/
- border-width:0 0 2px 0;
- border-style:dotted solid;
-/* border-color: #fff;*/
- border-color: #c30; /*#000;*/
-/* background-color:#ffc;*/
+ border-width:0;
  background-color:#000;
  color:#fc3;
+ padding:0.2em 0 0 0;
+/* 
+ border-width:8px 2px;
+ border-color: #fff;
+ border-color: #000;
+ background-color:#ffc;
  padding:0.2em 0;
+*/
 }
 
 h3 {
  border-width:0 0 1px 0;
- border-style:dashed;
- border-color: #faa;
+ border-style:dotted;
+ border-color:#ff0;
 }
 
 h3,h4,h5,h6 {
- margin-top:1em;
+/* margin-top:1em;*/
+  margin:0.8em 0 0.2em 0;
 }
 
 p, blockquote, ul, ol {
@@ -252,11 +254,11 @@ div#sidebar {
  margin: 0 0 0 70%;
  margin-top:1em;
  text-align:left;
- padding:0;
+ padding:0 13px;
 /*
  border-left:solid 2px #fdffba;
 */
- border-left:solid 2px #c30;
+ border-left:solid 1px #c30;
 }
 
 div#sidebar h2 {

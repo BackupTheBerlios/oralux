@@ -26,25 +26,27 @@ h2 {
  margin-bottom:0.2em;
 }
 
+/*
 div#answers h3 {
  padding:0.2em;
- border:solid 1em #f90;
- border-width:0 0 0.1em 0.6em;
+ border:solid 1px #f90;
+ border-width:0 0 1px 0;
 }
+*/
 
 div#answers h4 {
  padding-left:0.2em;
  border:solid 1em #f90;
 /*
  border-width:0.2em 0 0.2em 0.5em;
- border-color:#fff #f90 #ffc #f90;
+ border-color:#fff #fff #ffc #f90;
 */
  border-width:0.2em 0 0.2em 0.5em;
- border-color:#000 #f90 #000 #f90;
+ border-color:#000 #000 #000 #f90;
 }
 
 div#main h2 {
- border-bottom:2px dotted #f90;
+/* border-bottom:2px dotted #f90;*/
 }
 
 div#main ul, div#main ol {
