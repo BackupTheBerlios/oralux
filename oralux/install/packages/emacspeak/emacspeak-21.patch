@@ -1,0 +1,2271 @@
+cvs diff: Diffing .
+cvs diff: Diffing etc
+Index: etc/emacspeak.sh.def
+===================================================================
+RCS file: /var/lib/cvs/speech/emacspeak/etc/emacspeak.sh.def,v
+retrieving revision 1.1.1.6
+retrieving revision 1.6
+diff -u -r1.1.1.6 -r1.6
+--- etc/emacspeak.sh.def	28 Nov 2004 06:09:07 -0000	1.1.1.6
++++ etc/emacspeak.sh.def	28 Nov 2004 07:23:51 -0000	1.6
+@@ -1,14 +1,9 @@
+ #!/bin/sh
+ # emacspeak - execute emacs with speech enhancements
+ #$Id: emacspeak-21.patch,v 1.1 2005/03/10 17:34:48 gcasse Exp $
+-    if [ -f /etc/emacspeak.conf ]
+-    then
+-    . /etc/emacspeak.conf
+-fi
+-
+-if [ -f $HOME/.emacs ]
++if [ -f /etc/emacspeak.conf ]
+ then
+-	INITSTR="-l $HOME/.emacs"
++    . /etc/emacspeak.conf
+ fi
+ 
+ CL_ALL=""
+@@ -16,17 +11,16 @@
+ 	if [ "$CL" = "-o" ]; then
+ 		DTK_PROGRAM=stereo-outloud
+ 		export DTK_PROGRAM
+-                elif [ "$CL" = "-d" ]; then
++	elif [ "$CL" = "-m" ]; then
++		DTK_PROGRAM=multispeech
++		export DTK_PROGRAM
++	elif [ "$CL" = "-d" ]; then
+ 		DTK_PROGRAM=dtk-soft
+ 		export DTK_PROGRAM
+-	elif [ "$CL" = "-q" ]; then
+-		INITSTR=""
+ 	else
+ 		CL_ALL="$CL_ALL $CL"
+ 	fi
+ done
+ 
+ 
+-EMACS_UNIBYTE=1
+-export EMACS_UNIBYTE
+-exec emacs -q -l <emacspeak-dir>/emacspeak-setup.el $INITSTR $CL_ALL
++exec emacs -l <emacspeak-dir>/emacspeak-setup.el $CL_ALL
+cvs diff: Diffing etc/forms
+cvs diff: Diffing etc/tables
+cvs diff: Diffing info
+cvs diff: Diffing install-guide
+cvs diff: Diffing lisp
+Index: lisp/Makefile
+===================================================================
+RCS file: /var/lib/cvs/speech/emacspeak/lisp/Makefile,v
+retrieving revision 1.1.1.6
+retrieving revision 1.5
+diff -u -r1.1.1.6 -r1.5
+--- lisp/Makefile	28 Nov 2004 06:09:02 -0000	1.1.1.6
++++ lisp/Makefile	28 Nov 2004 07:23:51 -0000	1.5
+@@ -55,7 +55,7 @@
+ #The various modules:
+ DTK_OBJECTS = acss-structure.elc \
+ dtk-speak.elc		dectalk-voices.elc\
+-outloud-voices.elc  \
++outloud-voices.elc multispeech-voices.elc \
+ dtk-interp.elc		
+ 
+ SPEAK_OBJECTS =   \
+@@ -259,6 +259,7 @@
+ acss-structure.elc: acss-structure.el
+ dectalk-voices.elc: dectalk-voices.el voice-setup.elc
+ outloud-voices.elc: outloud-voices.el voice-setup.elc
++multispeech-voices.elc: multispeech-voices.el
+ voice-setup.elc: voice-setup.el acss-structure.elc
+ html-outline.elc: html-outline.el
+ emacspeak-amphetadesk.elc: emacspeak-amphetadesk.el
+Index: lisp/Russian-spelling.el
+===================================================================
+RCS file: lisp/Russian-spelling.el
+diff -N lisp/Russian-spelling.el
+--- /dev/null	1 Jan 1970 00:00:00 -0000
++++ lisp/Russian-spelling.el	9 Oct 2004 20:26:49 -0000	1.1
+@@ -0,0 +1,70 @@
++;;; Russian spelling data
++(nconc emacspeak-char-to-phonetic-table
++       '(
++	 ("а" . "анна")
++	 ("б" . "борис")
++	 ("в" . "вася")
++	 ("г" . "гоша")
++	 ("д" . "дима")
++	 ("е" . "елена")
++	 ("\243" . "\243лка")
++	 ("ж" . "жора")
++	 ("з" . "зяма")
++	 ("и" . "иван")
++	 ("й" . "иван краткий")
++	 ("к" . "киловатт")
++	 ("л" . "лев")
++	 ("м" . "маша")
++	 ("н" . "нина")
++	 ("о" . "ольга")
++	 ("п" . "павел")
++	 ("р" . "рома")
++	 ("с" . "соня")
++	 ("т" . "таня")
++	 ("у" . "ульяна")
++	 ("ф" . "федя")
++	 ("х" . "хрен")
++	 ("ц" . "центр")
++	 ("ч" . "чаша")
++	 ("ш" . "шура")
++	 ("щ" . "щука")
++	 ("ъ" . "твердый знак")
++	 ("ы" . "ы")
++	 ("ь" . "мягкий знак")
++	 ("э" . "эдик")
++	 ("ю" . "юра")
++	 ("я" . "яша")
++	 ("А" . "анна большая")
++	 ("Б" . "борис большой")
++	 ("В" . "вася большой")
++	 ("Г" . "гоша большой")
++	 ("Д" . "дима большой")
++	 ("Е" . "елена большая")
++	 ("\263" . "\243лка большая")
++	 ("Ж" . "жора большой")
++	 ("З" . "зяма большой")
++	 ("И" . "иван большой")
++	 ("Й" . "иван краткий большой")
++	 ("К" . "киловатт большой")
++	 ("Л" . "лев большой")
++	 ("М" . "маша большая")
++	 ("Н" . "нина большая")
++	 ("О" . "ольга большая")
++	 ("П" . "павел большой")
++	 ("Р" . "рома большой")
++	 ("С" . "соня большая")
++	 ("Т" . "таня большая")
++	 ("У" . "ульяна большая")
++	 ("Ф" . "федя большой")
++	 ("Х" . "хрен большой")
++	 ("Ц" . "центр большой")
++	 ("Ч" . "чаша большая")
++	 ("Ш" . "шура большой")
++	 ("Щ" . "щука большая")
++	 ("Ъ" . "твердый знак большой")
++	 ("Ы" . "ы большая")
++	 ("Ь" . "мягкий знак большой")
++	 ("Э" . "эдик большой")
++	 ("Ю" . "юра большой")
++	 ("Я" . "яша большой")
++	 ))
+Index: lisp/dectalk-voices.el
+===================================================================
+RCS file: /var/lib/cvs/speech/emacspeak/lisp/dectalk-voices.el,v
+retrieving revision 1.1.1.3
+retrieving revision 1.4
+diff -u -r1.1.1.3 -r1.4
+--- lisp/dectalk-voices.el	28 Nov 2004 06:08:51 -0000	1.1.1.3
++++ lisp/dectalk-voices.el	28 Nov 2004 07:23:51 -0000	1.4
+@@ -604,6 +604,7 @@
+   (fset 'tts-get-voice-command 'dectalk-get-voice-command)
+   (fset 'tts-voice-defined-p 'dectalk-voice-defined-p)
+   (fset 'tts-define-voice-from-speech-style 'dectalk-define-voice-from-speech-style)
++  (setq tts-default-voice 'paul)
+   (setq tts-default-speech-rate dectalk-default-speech-rate)
+   (set-default 'tts-default-speech-rate dectalk-default-speech-rate))
+ 
+Index: lisp/dtk-speak.el
+===================================================================
+RCS file: /var/lib/cvs/speech/emacspeak/lisp/dtk-speak.el,v
+retrieving revision 1.1.1.6
+retrieving revision 1.7
+diff -u -r1.1.1.6 -r1.7
+--- lisp/dtk-speak.el	28 Nov 2004 06:08:52 -0000	1.1.1.6
++++ lisp/dtk-speak.el	28 Nov 2004 07:23:51 -0000	1.7
+@@ -58,6 +58,7 @@
+ (require 'dtk-interp)
+ (require 'dectalk-voices)
+ (require 'outloud-voices)
++(require 'multispeech-voices)
+ 
+ ;;}}}
+ ;;{{{  user customizations:
+@@ -102,6 +103,7 @@
+ dtk-exp     For the Dectalk Express.
+ dtk-mv      for the Multivoice and older Dectalks.
+ outloud     For IBM ViaVoice Outloud
++multispeech For Multilingual speech server
+ The default is dtk-exp.")
+ 
+ (defvar dtk-quiet nil
+@@ -1383,6 +1385,8 @@
+   (cond
+    ((string-match "outloud" tts-name)
+     (outloud-configure-tts))
++   ((string-match "multispeech" tts-name)
++    (multispeech-configure-tts))
+    (t (dectalk-configure-tts)))
+   (load-library "voice-setup")
+   (setq tts-voice-reset-code (tts-get-voice-command tts-default-voice)))
+@@ -1433,7 +1437,9 @@
+                     dtk-speak-server-initialized
+                     dtk-startup-hook emacspeak-servers-directory))
+   (let ((new-process nil)
+-        (process-connection-type  dtk-speak-process-connection-type))
++        (process-connection-type  dtk-speak-process-connection-type)
++	(dtk-program (expand-file-name dtk-program
++				       emacspeak-servers-directory)))
+     (setq new-process
+           (start-process
+            "speaker"
+@@ -1517,7 +1523,7 @@
+ (defun dtk-speak (text &optional ignore-skim)
+   "Speak the TEXT string on the  tts.
+ This is achieved by sending the text to the speech server.
+-No-op if variable `dtk-quiet' is set to nil.
++No-op if variable `dtk-quiet' is set to t.
+ If option `outline-minor-mode' is on and selective display is in effect,
+ only speak upto the first ctrl-m."
+   (declare (special dtk-speaker-process dtk-stop-immediately
+Index: lisp/emacspeak-advice.el
+===================================================================
+RCS file: /var/lib/cvs/speech/emacspeak/lisp/emacspeak-advice.el,v
+retrieving revision 1.1.1.6
+retrieving revision 1.9
+diff -u -r1.1.1.6 -r1.9
+--- lisp/emacspeak-advice.el	28 Nov 2004 06:08:52 -0000	1.1.1.6
++++ lisp/emacspeak-advice.el	28 Nov 2004 07:23:51 -0000	1.9
+@@ -257,27 +257,31 @@
+ 
+ (defadvice forward-page (after emacspeak pre act)
+   "Provide auditory feedback."
+-  (when (interactive-p)
+-    (emacspeak-auditory-icon 'scroll)
+-    (emacspeak-speak-page )))
++  (let ((deactivate-mark nil))
++    (when (interactive-p)
++      (emacspeak-auditory-icon 'scroll)
++      (emacspeak-speak-page ))))
+ 
+ (defadvice backward-page (after emacspeak pre act)
+   "Provide auditory feedback."
+-  (when (interactive-p)
+-    (emacspeak-auditory-icon 'scroll)
+-    (emacspeak-speak-page )))
++  (let ((deactivate-mark nil))
++    (when (interactive-p)
++      (emacspeak-auditory-icon 'scroll)
++      (emacspeak-speak-page ))))
+ 
+ (defadvice scroll-up (after emacspeak pre act comp)
+   "Speak the next screenful."
+-  (when (interactive-p)
+-    (emacspeak-auditory-icon 'scroll)
+-    (dtk-speak (emacspeak-get-window-contents))))
++  (let ((deactivate-mark nil))
++    (when (interactive-p)
++      (emacspeak-auditory-icon 'scroll)
++      (dtk-speak (emacspeak-get-window-contents)))))
+ 
+ (defadvice scroll-down (after emacspeak pre act comp)
+   "Speak the screenful."
+-  (when (interactive-p)
+-    (emacspeak-auditory-icon 'scroll)
+-    (dtk-speak (emacspeak-get-window-contents))))
++  (let ((deactivate-mark nil))
++    (when (interactive-p)
++      (emacspeak-auditory-icon 'scroll)
++      (dtk-speak (emacspeak-get-window-contents)))))
+ 
+ (defadvice  beginning-of-defun (after emacspeak pre act)
+   "Speak the line."
+@@ -707,7 +711,8 @@
+ 
+ (defadvice read-from-minibuffer (around emacspeak pre act)
+   "Prompt using speech as well."
+-  (let((prompt (ad-get-arg 0))
++  (let((deactivate-mark nil)
++       (prompt (ad-get-arg 0))
+        (initial (ad-get-arg 1 ))
+        (default (ad-get-arg 5)))
+     (tts-with-punctuations "all"
+@@ -727,7 +732,8 @@
+ 
+ (defadvice read-no-blanks-input (around emacspeak pre act)
+   "Prompt using speech as well."
+-  (let ((prompt (ad-get-arg 0))
++  (let ((deactivate-mark nil)
++	(prompt (ad-get-arg 0))
+         (default  (ad-get-arg 1 )))
+     (tts-with-punctuations "all"
+                            (dtk-speak
+@@ -743,7 +749,8 @@
+ 
+ (defadvice read-minibuffer (around emacspeak pre act)
+   "Prompt using speech as well."
+-  (let ((prompt (ad-get-arg 0))
++  (let ((deactivate-mark nil)
++	(prompt (ad-get-arg 0))
+         (default  (ad-get-arg 1 )))
+     (tts-with-punctuations "all"
+                            (dtk-speak
+@@ -760,42 +767,45 @@
+ (defadvice y-or-n-p (around emacspeak pre act )
+   "Use speech when prompting.
+ Produce an auditory icon if possible."
+-  (emacspeak-auditory-icon 'ask-short-question )
+-  (when emacspeak-speak-messages-should-pause-ongoing-speech
+-    (dtk-pause))
+-  (tts-with-punctuations "all"
+-                         (dtk-speak (format "%s  y or n" (ad-get-arg  0 ))))
+-  ad-do-it
+-  (cond
+-   (ad-return-value
+-    (emacspeak-auditory-icon 'y-answer )
+-    (dtk-say "y"))
+-   (t (emacspeak-auditory-icon  'n-answer )
+-      (dtk-say "n" )))
+-  ad-return-value )
++  (let ((deactivate-mark nil))
++    (emacspeak-auditory-icon 'ask-short-question )
++    (when emacspeak-speak-messages-should-pause-ongoing-speech
++      (dtk-pause))
++    (tts-with-punctuations "all"
++			   (dtk-speak (format "%s  y or n" (ad-get-arg  0 ))))
++    ad-do-it
++    (cond
++     (ad-return-value
++      (emacspeak-auditory-icon 'y-answer )
++      (dtk-say "y"))
++     (t (emacspeak-auditory-icon  'n-answer )
++	(dtk-say "n" )))
++    ad-return-value ))
+ 
+ (defadvice yes-or-no-p (around emacspeak pre act )
+   "Use speech when prompting.
+ Produce an auditory icon as well."
+-  (emacspeak-auditory-icon 'ask-question)
+-  (when emacspeak-speak-messages-should-pause-ongoing-speech
+-    (dtk-pause))
+-  (tts-with-punctuations "all"
+-                         (dtk-speak (format "%s  yes or no" (ad-get-arg  0 ))))
+-  ad-do-it
+-  (cond
+-   (ad-return-value
+-    (emacspeak-auditory-icon 'yes-answer )
+-    (dtk-say "yes"))
+-   (t (emacspeak-auditory-icon  'no-answer )
+-      (dtk-say "no" )))
+-  ad-return-value )
++  (let ((deactivate-mark nil))
++    (emacspeak-auditory-icon 'ask-question)
++    (when emacspeak-speak-messages-should-pause-ongoing-speech
++      (dtk-pause))
++    (tts-with-punctuations "all"
++			   (dtk-speak (format "%s  yes or no" (ad-get-arg  0 ))))
++    ad-do-it
++    (cond
++     (ad-return-value
++      (emacspeak-auditory-icon 'yes-answer )
++      (dtk-say "yes"))
++     (t (emacspeak-auditory-icon  'no-answer )
++	(dtk-say "no" )))
++    ad-return-value ))
+ 
+ ;;}}}
+ ;;{{{  advice various input functions to speak:
+ (defadvice read-key-sequence(around emacspeak pre act )
+   "Prompt using speech as well. "
+-  (let ((prompt (ad-get-arg 0)))
++  (let ((deactivate-mark nil)
++	(prompt (ad-get-arg 0)))
+     (when prompt
+       (tts-with-punctuations "all"
+                              (dtk-speak prompt)))
+@@ -808,6 +818,7 @@
+   (defadvice completing-read (around emacspeak pre act )
+     "Prompt using speech."
+     (let ((dtk-stop-immediately t )
++	  (deactivate-mark nil)
+ 	  (prompt (ad-get-arg 0))
+ 	  (initial (ad-get-arg 4 ))
+ 	  (default (ad-get-arg 6)))
+@@ -822,7 +833,8 @@
+ 
+   (defadvice read-buffer(around emacspeak pre act )
+     "Prompt using speech as well. "
+-    (let ((prompt (ad-get-arg 0))
++    (let ((deactivate-mark nil)
++	  (prompt (ad-get-arg 0))
+           (default (ad-get-arg 1 )))
+       (tts-with-punctuations "all"
+                              (dtk-speak
+@@ -836,20 +848,23 @@
+ 
+   (defadvice read-char (before emacspeak pre act comp)
+     "Speak the prompt"
+-    (tts-with-punctuations "all"
+-                           (let ((prompt  (ad-get-arg 0)))
+-                             (and prompt (dtk-speak prompt)))))
++    (let ((deactivate-mark nil))
++      (tts-with-punctuations "all"
++			     (let ((prompt  (ad-get-arg 0)))
++			       (and prompt (dtk-speak prompt))))))
+ 
+   (defadvice read-char-exclusive (before emacspeak pre act comp)
+     "Speak the prompt"
+-    (let ((prompt  (ad-get-arg 0)))
++    (let ((deactivate-mark nil)
++	  (prompt  (ad-get-arg 0)))
+       (if  prompt
+ 	  (tts-with-punctuations "all"
+ 				 (dtk-speak prompt)))))
+ 
+   (defadvice read-command(around emacspeak pre act )
+     "Prompt using speech as well. "
+-    (let ((prompt (ad-get-arg 0)))
++    (let ((deactivate-mark nil)
++	  (prompt (ad-get-arg 0)))
+       (when prompt
+         (tts-with-punctuations "all"
+                                (dtk-speak prompt)))
+@@ -862,7 +877,8 @@
+ 
+   (defadvice read-string(around emacspeak pre act )
+     "Prompt using speech as well. "
+-    (let ((prompt (ad-get-arg 0 ))
++    (let ((deactivate-mark nil)
++	  (prompt (ad-get-arg 0 ))
+           (default (ad-get-arg 1 )))
+       (tts-with-punctuations "all"
+                              (dtk-speak
+@@ -876,7 +892,8 @@
+ 
+   (defadvice read-variable(around emacspeak pre act )
+     "Prompt using speech as well. "
+-    (let ((prompt (ad-get-arg 0)))
++    (let ((deactivate-mark nil)
++	  (prompt (ad-get-arg 0)))
+       (when prompt
+         (tts-with-punctuations "all"
+                                (dtk-speak prompt)))
+@@ -887,7 +904,8 @@
+ 
+   (defadvice read-file-name (around emacspeak pre act )
+     "Prompt using speech as well."
+-    (let ((directory (or
++    (let ((deactivate-mark nil)
++	  (directory (or
+                       (ad-get-arg 1)
+                       default-directory))
+           (default (ad-get-arg 2 )))
+@@ -912,18 +930,21 @@
+   "Setup completion buffer.
+ Emacspeak splits chunks based on both white space and punctuations
+ in completion buffers"
+-  (dtk-chunk-on-white-space-and-punctuations))
++  (let ((deactivate-mark nil))
++    (dtk-chunk-on-white-space-and-punctuations)))
+ 
+ (defadvice dabbrev-expand (after emacspeak pre act)
+   "Say what you completed."
+-  (when (interactive-p)
+-    (tts-with-punctuations "all"
+-                           (dtk-speak
+-                            dabbrev--last-expansion))))
++  (let ((deactivate-mark nil))
++    (when (interactive-p)
++      (tts-with-punctuations "all"
++			     (dtk-speak
++			      dabbrev--last-expansion)))))
+ 
+ (defadvice complete-symbol (around emacspeak pre act)
+   "Say what you completed."
+-  (let ((prior (save-excursion
++  (let ((deactivate-mark nil)
++	(prior (save-excursion
+                  (backward-word 1)
+                  (point )))
+         (dtk-stop-immediately t))
+@@ -942,7 +963,8 @@
+ 
+ (defadvice minibuffer-complete-word (around emacspeak pre act)
+   "Say what you completed."
+-  (let ((prior (point ))
++  (let ((deactivate-mark nil)
++	(prior (point ))
+         (dtk-stop-immediately t))
+     (emacspeak-kill-buffer-carefully "*Completions*")
+     ad-do-it
+@@ -960,7 +982,8 @@
+ 
+ (defadvice minibuffer-complete (around emacspeak pre act)
+   "Say what you completed."
+-  (let ((prior (point ))
++  (let ((deactivate-mark nil)
++	(prior (point ))
+         (dtk-stop-immediately t))
+     (emacspeak-kill-buffer-carefully "*Completions*")
+     ad-do-it
+@@ -979,7 +1002,8 @@
+ 
+ (defadvice lisp-complete-symbol (around emacspeak pre act)
+   "Say what you completed."
+-  (let ((prior (point ))
++  (let ((deactivate-mark nil)
++	(prior (point ))
+         (dtk-stop-immediately dtk-stop-immediately))
+     (when dtk-stop-immediately (dtk-stop))
+     ad-do-it
+@@ -992,6 +1016,7 @@
+ (defadvice complete (around emacspeak pre act)
+   "Say what you completed."
+   (let ((emacspeak-speak-messages nil)
++	(deactivate-mark nil)
+         (emacspeak-last-message nil))
+     ad-do-it
+     (when  (interactive-p)
+@@ -1004,30 +1029,34 @@
+ 
+ (defadvice  next-completion (after emacspeak  pre act comp)
+   "Provide auditory feedback."
+-  (when (interactive-p)
+-    (emacspeak-auditory-icon 'select-object)
+-    (tts-with-punctuations "all"
+-                           (dtk-speak (emacspeak-get-current-completion-from-completions)))))
++  (let ((deactivate-mark nil))
++    (when (interactive-p)
++      (emacspeak-auditory-icon 'select-object)
++      (tts-with-punctuations "all"
++			     (dtk-speak (emacspeak-get-current-completion-from-completions))))))
+ 
+ (defadvice  previous-completion (after emacspeak  pre act comp)
+   "Provide auditory feedback."
+-  (when (interactive-p)
+-    (emacspeak-auditory-icon 'select-object)
+-    (tts-with-punctuations "all"
+-                           (dtk-speak
+-                            (emacspeak-get-current-completion-from-completions )))))
++  (let ((deactivate-mark nil))
++    (when (interactive-p)
++      (emacspeak-auditory-icon 'select-object)
++      (tts-with-punctuations "all"
++			     (dtk-speak
++			      (emacspeak-get-current-completion-from-completions ))))))
+ 
+ (defadvice choose-completion (after emacspeak pre act )
+   "Provide auditory feedback."
+-  (when (interactive-p)
+-    (emacspeak-auditory-icon 'close-object)
+-    (emacspeak-speak-line)))
++  (let ((deactivate-mark nil))
++    (when (interactive-p)
++      (emacspeak-auditory-icon 'close-object)
++      (emacspeak-speak-line))))
+ 
+ (defadvice minibuffer-message (around emacspeak pre act comp)
+   "Speak the message if appropriate."
+   (declare (special emacspeak-last-message
+                     emacspeak-speak-messages emacspeak-lazy-message-time))
+-  (let ((dtk-stop-immediately t ))
++  (let ((deactivate-mark nil)
++	(dtk-stop-immediately t ))
+     ad-do-it
+     (setq emacspeak-last-message ad-return-value )
+     (when (and   emacspeak-speak-messages ; speaking messages
+@@ -1895,9 +1924,9 @@
+ Auditory highlight indicates position of point."
+   (when (interactive-p)
+     (emacspeak-auditory-icon 'large-movement )
+-    (ems-set-personality-temporarily  (point) (1+ (point))
+-                                      voice-animate
+-                                      (emacspeak-speak-line))))
++    (unless transient-mark-mode (ems-set-personality-temporarily  (point) (1+ (point))
++								  voice-animate
++								  (emacspeak-speak-line)))))
+ 
+ (defadvice newline (before emacspeak pre act)
+   "Speak the previous line if line echo is on.
+@@ -2371,6 +2400,9 @@
+ (defvar emacspeak-isearch-save-syntax-table  nil
+   "Saved syntax table before we enter isearch mode.")
+ 
++(defvar emacspeak-isearch-save-speak-messages  nil
++  "Saved emacspeak-speak-messages before we enter isearch mode.")
++
+ (make-variable-buffer-local
+  'emacspeak-isearch-save-syntax-table)
+ 
+@@ -2378,18 +2410,21 @@
+           (function
+            (lambda ()
+              (declare (special
++		       emacspeak-isearch-save-speak-messages
+                        emacspeak-isearch-save-syntax-table))
+              (setq emacspeak-isearch-save-syntax-table (syntax-table))
++	     (setq emacspeak-isearch-save-speak-messages emacspeak-speak-messages)
+              (setq emacspeak-speak-messages nil))))
+ 
+ (add-hook 'isearch-mode-end-hook
+           (function
+            (lambda ()
+              (declare (special
++		       emacspeak-isearch-save-speak-messages
+                        emacspeak-isearch-save-syntax-table))
+              (and emacspeak-isearch-save-syntax-table
+                   (set-syntax-table emacspeak-isearch-save-syntax-table))
+-             (setq emacspeak-speak-messages t ))))
++             (setq emacspeak-speak-messages emacspeak-isearch-save-speak-messages ))))
+ 
+ ;;}}}
+ ;;{{{  Advice isearch-search to speak
+@@ -2587,9 +2622,9 @@
+   "Produce an auditory icon if possible."
+   (when (interactive-p )
+     (emacspeak-auditory-icon 'mark-object )
+-    (ems-set-personality-temporarily (point) (1+ (point))
+-                                     voice-animate
+-                                     (emacspeak-speak-line ))))
++    (unless transient-mark-mode (ems-set-personality-temporarily (point) (1+ (point))
++								 voice-animate
++								 (emacspeak-speak-line )))))
+ 
+ (defadvice pop-global-mark (after emacspeak pre act)
+   "Produce an auditory icon if possible."
+Index: lisp/emacspeak-bbdb.el
+===================================================================
+RCS file: /var/lib/cvs/speech/emacspeak/lisp/emacspeak-bbdb.el,v
+retrieving revision 1.1.1.6
+retrieving revision 1.2
+diff -u -r1.1.1.6 -r1.2
+--- lisp/emacspeak-bbdb.el	28 Nov 2004 06:08:53 -0000	1.1.1.6
++++ lisp/emacspeak-bbdb.el	24 Dec 2004 02:02:32 -0000	1.2
+@@ -123,6 +123,11 @@
+     (emacspeak-auditory-icon 'close-object)
+     (emacspeak-speak-mode-line )))
+ 
++(defadvice bbdb-save-db (after emacspeak pre act )
++  "Produce an auditory icon if possible"
++  (when (interactive-p)
++    (emacspeak-auditory-icon 'save-object)))
++
+ (defadvice bbdb-elide-record (after emacspeak pre act )
+   "Provide auditory feedback"
+   (when (interactive-p)
+Index: lisp/emacspeak-dired.el
+===================================================================
+RCS file: /var/lib/cvs/speech/emacspeak/lisp/emacspeak-dired.el,v
+retrieving revision 1.1.1.6
+retrieving revision 1.3
+diff -u -r1.1.1.6 -r1.3
+--- lisp/emacspeak-dired.el	28 Nov 2004 06:08:54 -0000	1.1.1.6
++++ lisp/emacspeak-dired.el	28 Nov 2004 07:23:51 -0000	1.3
+@@ -358,16 +358,19 @@
+ options passed to command `file'."
+   (interactive (list (dired-get-filename t) current-prefix-arg))
+   (declare (special emacspeak-dired-file-cmd-options))
+-  (with-temp-buffer 
+-    (if deref-symlinks
+-	(call-process "file" nil t t  "-l"
+-                      emacspeak-dired-file-cmd-options  file)
+-      (call-process "file" nil t t
+-                    emacspeak-dired-file-cmd-options file))
+-    (when (bolp)
+-      (backward-delete-char 1))
+-    (message (buffer-string))))
+-    
++  (let ((speak-immediately emacspeak-speak-messages))
++    (with-temp-buffer
++      (make-local-variable 'emacspeak-speak-messages)
++      (setq emacspeak-speak-messages speak-immediately)
++      (if deref-symlinks
++	  (call-process "file" nil t t  "-l"
++			emacspeak-dired-file-cmd-options  file)
++	(call-process "file" nil t t
++		      emacspeak-dired-file-cmd-options file))
++      (when (bolp)
++	(backward-delete-char 1))
++      (emacspeak-auditory-icon 'select-object)
++      (message (buffer-string)))))
+ 
+ (defun emacspeak-dired-speak-header-line()
+   "Speak the header line of the dired buffer. "
+@@ -394,7 +397,8 @@
+                                         ; check for ange-ftp
+       (when (= size -1)
+         (setq size
+-              (nth  4
++              (nth  (if (= (char-after (line-beginning-position)) ?\ )
++			4 5)
+                     (split-string (thing-at-point 'line)))))
+       (emacspeak-auditory-icon 'select-object)
+       (message "File size %s"
+@@ -447,7 +451,12 @@
+      (filename
+       (emacspeak-auditory-icon 'select-object)
+       (message "Permissions %s"
+-               (nth 8 (file-attributes filename ))))
++               (let ((permissions (nth 8 (file-attributes filename ))))
++		 (if (string-match "^.[?]+$" permissions)
++		     (nth  (if (= (char-after (line-beginning-position)) ?\ )
++			       0 1)
++			   (split-string (thing-at-point 'line)))
++		   permissions))))
+      (t (message "No file on current line")))))
+ 
+ ;;}}}
+Index: lisp/emacspeak-erc.el
+===================================================================
+RCS file: /var/lib/cvs/speech/emacspeak/lisp/emacspeak-erc.el,v
+retrieving revision 1.1.1.6
+retrieving revision 1.2
+diff -u -r1.1.1.6 -r1.2
+--- lisp/emacspeak-erc.el	28 Nov 2004 06:08:55 -0000	1.1.1.6
++++ lisp/emacspeak-erc.el	24 Dec 2004 02:02:32 -0000	1.2
+@@ -68,7 +68,7 @@
+   "Set to T if you dont want to see notification  messages from the
+ server."
+   :type 'boolean
+-  :group 'eamcspeak-erc)
++  :group 'emacspeak-erc)
+ 
+ (def-voice-font emacspeak-erc-direct-msg-personality
+   voice-animate
+Index: lisp/emacspeak-finder-inf.el
+===================================================================
+RCS file: /var/lib/cvs/speech/emacspeak/lisp/emacspeak-finder-inf.el,v
+retrieving revision 1.1.1.6
+retrieving revision 1.5
+diff -u -r1.1.1.6 -r1.5
+--- lisp/emacspeak-finder-inf.el	28 Nov 2004 06:08:55 -0000	1.1.1.6
++++ lisp/emacspeak-finder-inf.el	28 Nov 2004 07:23:51 -0000	1.5
+@@ -488,6 +488,9 @@
+ 				      ("html-outline.el"
+ 				       "Extends html-helper-mode to provide outline and imenu support"
+ 				       nil)
++				      ("multispeech-voices.el"
++				       "Define various device independent voices in terms of Multispeech codes."
++				       (voice  personality  multispeech))
+ 				      ("outloud-voices.el"
+ 				       "Define various device independent voices in terms of OutLoud tags"
+ 				       (voice  personality  ibm viavoice outloud))
+Index: lisp/emacspeak-gnus.el
+===================================================================
+RCS file: /var/lib/cvs/speech/emacspeak/lisp/emacspeak-gnus.el,v
+retrieving revision 1.1.1.6
+retrieving revision 1.9
+diff -u -r1.1.1.6 -r1.9
+--- lisp/emacspeak-gnus.el	28 Nov 2004 06:08:56 -0000	1.1.1.6
++++ lisp/emacspeak-gnus.el	24 Dec 2004 02:02:32 -0000	1.9
+@@ -50,73 +50,19 @@
+ ;;}}}
+ ;;{{{  Customizations:
+ 
+-;;; These customizations to gnus make it convenient to listen to news:
+-;;; You can read news mostly by using the four arrow keys.
+-;;; By default all article headers are hidden, so you hear the real news.
+-;;; You can expose some of the headers with "T" in summary mode.
+-
+-;;; Keybindings 
+-(defun emacspeak-gnus-setup-keys ()
+-  "Setup Emacspeak keys."
+-  (declare (special gnus-summary-mode-map
+-                    gnus-group-mode-map
+-                    gnus-article-mode-map))
+-  (when (boundp 'gnus-summary-mode-map)
+-    (emacspeak-keymap-remove-emacspeak-edit-commands gnus-summary-mode-map))
+-  (when (boundp 'gnus-article-mode-map)
+-    (emacspeak-keymap-remove-emacspeak-edit-commands gnus-article-mode-map))
+-  (when (boundp 'gnus-group-mode-map)
+-    (emacspeak-keymap-remove-emacspeak-edit-commands gnus-group-mode-map))
+-  (define-key gnus-summary-mode-map "\C-t" 'gnus-summary-toggle-header)
+-  (define-key gnus-summary-mode-map "T" 'gnus-summary-hide-all-headers )
+-  (define-key gnus-summary-mode-map "t"
+-    'gnus-summary-show-some-headers)
+-  (define-key gnus-summary-mode-map '[left] 'emacspeak-gnus-summary-catchup-quietly-and-exit)
+-  (define-key gnus-summary-mode-map '[right] 'gnus-summary-show-article)
+-  (define-key gnus-group-mode-map '[right]
+-    'gnus-group-read-group))
+ 
+-(add-hook 'gnus-started-hook 'emacspeak-gnus-setup-keys)
+-
+-;;}}}
+-;;{{{  Hiding headers
+-
+-(defvar  gnus-ignored-most-headers
+-  (concat
+-   "^Path:\\|^Posting-Version:\\|^Article-I.D.:\\|^Expires:"
+-   "\\|^Date-Received:\\|^References:\\|^Control:\\|^Xref:"
+-   "\\|^Lines:\\|^Posted:\\|^Relay-Version:\\|^Message-ID:\\|^Nf-ID:"
+-   "\\|^Nf-From:\\|^Approved:\\|^Sender:"
+-   "\\|^Organization:\\|^Approved:\\|^Distribution:\\|^Apparently-To:"
+-   "\\|^Keywords:\\|^Copyright:\\|^X-Supersedes:\\|^ACategory: \\|^Slugword:"
+-   "\\|^Priority:\\|^ANPA:\\|^Codes:"
+-   "\\|^Originator:\\|^Comment:\\|^NNTP-Posting-Host:\\|Original-To:"
+-   "\\|^Followup-To:\\|^Original-Cc:\\|^Reply-To:")
+-  "Article headers to ignore when only important article headers are to be
+-spoken.
+-See command \\[gnus-summary-show-some-headers].")
+-(declaim (special gnus-ignored-headers))
+-(setq gnus-ignored-headers "^.*:")
+-(declaim (special gnus-visible-headers))
+-(setq gnus-visible-headers "^Subject:")
+-
+-(defun gnus-summary-show-some-headers ()
+-  "Show only the important article headers,
+-i.e. sender name, and subject."
+-  (interactive)
+-  (declare (special gnus-ignored-most-headers )) 
+-  (let ((gnus-ignored-headers gnus-ignored-most-headers ))
+-    (gnus-summary-toggle-header 1)
+-    (gnus-summary-toggle-header -1)))
+-
+-(defun gnus-summary-hide-all-headers()
+-  "Hide all headers in the article.
+-Use this command if you don't want to listen to any article headers when
+-reading news."
+-  (interactive)
+-  (let ((gnus-ignored-headers "^.*:"))
+-    (gnus-summary-toggle-header 1 )
+-    (gnus-summary-toggle-header -1)))
++;;; Keybindings for summary mode:
++(and (boundp 'gnus-summary-mode-map)
++     (emacspeak-keymap-remove-emacspeak-edit-commands
++      gnus-summary-mode-map))
++
++(and (boundp 'gnus-article-mode-map)
++     (emacspeak-keymap-remove-emacspeak-edit-commands
++      gnus-article-mode-map))
++
++(and (boundp 'gnus-group-mode-map)
++     (emacspeak-keymap-remove-emacspeak-edit-commands
++      gnus-group-mode-map))
+ 
+ ;;}}}
+ ;;{{{  helper functions
+@@ -131,13 +77,21 @@
+ ;;; emacs can hang if too many message sfly by as gnus starts
+ (defadvice gnus (around emacspeak pre act )
+   "Temporarily deactivate advice on message"
+-  (dtk-speak  "Starting gnus")
+-  (let ((emacspeak-speak-messages nil))
+-    ad-do-it)
+-  (emacspeak-auditory-icon 'news)
+-  (message "Gnus is ready "))
++  (let ((startup (not (gnus-alive-p))))
++    (cond
++     ((and startup (interactive-p))
++      (dtk-speak  "Starting gnus")
++      (let ((emacspeak-speak-messages nil))
++	ad-do-it)
++      (emacspeak-auditory-icon 'news)
++      (message "Gnus is ready "))
++     (t				; gnus alive or non-interactive call
++      ad-do-it
++      (when (interactive-p)
++	(emacspeak-auditory-icon 'select-object)
++	(emacspeak-speak-line))))))
+ 
+-(defadvice gnus-group-suspend (after emacspeak pre act com)
++(defadvice gnus-group-suspend (after emacspeak pre act)
+   "Provide auditory contextual feedback."
+   (when (interactive-p)
+     (emacspeak-speak-mode-line)
+@@ -154,15 +108,23 @@
+ 
+ (defadvice gnus-group-get-new-news (around emacspeak pre act )
+   "Temporarily deactivate advice on message"
+-  (dtk-speak  "Getting new  gnus")
++  (when (interactive-p)
++    (dtk-speak  "Getting news"))
+   (let ((emacspeak-speak-messages nil ))
+     ad-do-it)
+-  (message "Gnus is ready ")
+-  (emacspeak-auditory-icon 'news))
++  (when (interactive-p)
++    (emacspeak-auditory-icon 'task-done)
++    (message "Done ")))
+ 
+ ;;}}}
+ ;;{{{  Newsgroup selection
+ 
++(defadvice gnus-group-select-group (after emacspeak pre act comp)
++  "Read line after entering into group."
++  (when (interactive-p)
++    (emacspeak-speak-line)
++    (emacspeak-auditory-icon 'select-object)))
++
+ (defadvice gnus-group-read-group  (after  emacspeak pre act)
+   "Speak the first article line.
+  Produce an auditory icon indicating 
+@@ -221,6 +183,23 @@
+           (dtk-speak "No more newsgroups")
+         (emacspeak-speak-line)))))
+ 
++(defadvice gnus-group-best-unread-group (after emacspeak pre act comp)
++  "Provide spoken feedback."
++  (when (interactive-p)
++    (emacspeak-auditory-icon 'select-object)
++    (emacspeak-speak-line)))
++
++(defadvice gnus-group-first-unread-group (after emacspeak pre act comp)
++  "Provide spoken feedback."
++  (when (interactive-p)
++    (emacspeak-auditory-icon 'select-object)
++    (emacspeak-speak-line)))
++
++(defadvice gnus-group-jump-to-group (after emacspeak pre act comp)
++  (when (interactive-p)
++    (emacspeak-auditory-icon 'select-object)
++    (emacspeak-speak-line)))
++
+ (defadvice gnus-group-unsubscribe-current-group (after emacspeak pre act)
+   "Produce an auditory icon indicating
+ this group is being deselected."
+@@ -304,7 +283,18 @@
+     (emacspeak-auditory-icon 'close-object)
+     (emacspeak-speak-line )))
+ 
+-  
++(defadvice gnus-summary-exit (after emacspeak pre act comp)
++  "Speak the line in group buffer."
++  (when (interactive-p)
++    (emacspeak-auditory-icon 'select-object)
++    (emacspeak-speak-line)))
++
++(defadvice gnus-summary-clear-mark-forward (after emacspeak pre act comp)
++  "Speak the line.
++ Produce an auditory icon if possible."
++  (when (interactive-p)
++    (emacspeak-auditory-icon 'deselect-object)
++    (emacspeak-gnus-summary-speak-subject)))
+ 
+ (defadvice gnus-summary-mark-as-unread-forward (after emacspeak pre act)
+   "Speak the line.
+@@ -317,7 +307,7 @@
+   "Speak the line.
+  Produce an auditory icon if possible."
+   (when (interactive-p) 
+-    (emacspeak-auditory-icon'mark-object)
++    (emacspeak-auditory-icon 'mark-object)
+     (emacspeak-gnus-summary-speak-subject )))
+ 
+ (defadvice gnus-summary-mark-as-unread-backward (after emacspeak pre act)
+@@ -334,6 +324,20 @@
+     (emacspeak-auditory-icon 'mark-object)
+     (emacspeak-gnus-summary-speak-subject )))
+ 
++(defadvice gnus-summary-mark-as-processable (after emacspeak pre act)
++  "Speak the line.
++ Produce an auditory icon if possible."
++  (when (interactive-p) 
++    (emacspeak-auditory-icon 'mark-object)
++    (emacspeak-gnus-summary-speak-subject )))
++
++(defadvice gnus-summary-unmark-as-processable (after emacspeak pre act)
++  "Speak the line.
++ Produce an auditory icon if possible."
++  (when (interactive-p) 
++    (emacspeak-auditory-icon 'deselect-object)
++    (emacspeak-gnus-summary-speak-subject )))
++
+ (defadvice gnus-summary-kill-same-subject-and-select (after emacspeak pre act)
+   "Speak the subject and speak the first screenful.
+ Produce an auditory icon
+@@ -375,7 +379,7 @@
+   "Speak the line.
+  Produce an auditory icon if possible."
+   (when (interactive-p) 
+-    (emacspeak-auditory-icon'select-object)
++    (emacspeak-auditory-icon 'select-object)
+     (emacspeak-gnus-summary-speak-subject )))
+ 
+ (defadvice gnus-summary-down-thread (after emacspeak pre act)
+@@ -425,8 +429,38 @@
+           (move-to-window-line -1)
+           (end-of-line)
+           (emacspeak-speak-region start (point)))))))
+-           
+-           
++
++(defadvice gnus-article-describe-key-briefly (around emacspeak pre act comp)
++  "Speak what you displayed"
++  (cond
++   ((interactive-p)
++    (let ((emacspeak-advice-advice-princ t))
++      ad-do-it))
++   (t ad-do-it)))
++
++(defadvice gnus-article-next-button (after emacspeak pre act comp)
++  "Provide auditory feedback"
++  (when (interactive-p)
++    (let ((end (next-single-property-change
++                (point) 'gnus-callback)))
++      (emacspeak-auditory-icon 'large-movement)
++      (message (buffer-substring
++                (point)end)))))
++
++(defadvice gnus-article-press-button (before emacspeak pre act comp)
++  "Provide auditory feedback"
++  (when (interactive-p)
++    (emacspeak-auditory-icon 'button)))
++
++(defadvice gnus-article-edit-exit (after emacspeak pre act comp)
++  (when (interactive-p)
++    (emacspeak-auditory-icon 'close-object)
++    (emacspeak-speak-line)))
++
++(defadvice gnus-article-edit-done (after emacspeak pre act comp)
++  (when (interactive-p)
++    (emacspeak-auditory-icon 'close-object)
++    (emacspeak-speak-line)))
+ 
+ (defadvice gnus-summary-show-article (after emacspeak pre act)
+   "Start speaking the article. "
+Index: lisp/emacspeak-personality.el
+===================================================================
+RCS file: /var/lib/cvs/speech/emacspeak/lisp/emacspeak-personality.el,v
+retrieving revision 1.1.1.4
+retrieving revision 1.5
+diff -u -r1.1.1.4 -r1.5
+Index: lisp/emacspeak-setup.el
+===================================================================
+RCS file: /var/lib/cvs/speech/emacspeak/lisp/emacspeak-setup.el,v
+retrieving revision 1.1.1.6
+retrieving revision 1.8
+diff -u -r1.1.1.6 -r1.8
+--- lisp/emacspeak-setup.el	28 Nov 2004 06:08:59 -0000	1.1.1.6
++++ lisp/emacspeak-setup.el	28 Nov 2004 07:23:51 -0000	1.8
+@@ -55,11 +55,11 @@
+ ;;}}}
+ ;;{{{  Define locations 
+ 
+-(defvar emacspeak-unibyte t
++(defvar emacspeak-unibyte nil
+   "Emacspeak will force emacs to unibyte unless this
+ variable is set to nil.
+-To use emacspeak with emacs running in multibyte mode, this
+-variable should be set to nil *before* 
++To use emacspeak with emacs running in unibyte mode, this
++variable should be set to t *before* 
+ emacspeak is compiled or started.")
+ ;;;###autoload
+ (defvar emacspeak-directory
+@@ -97,6 +97,11 @@
+ 
+ (defcustom outloud-default-speech-rate 50
+   "Default speech rate for outloud."
++  :group 'tts
++  :type 'integer)
++
++(defcustom multispeech-default-speech-rate 225
++  "Default speech rate for multispeech."
+   :group 'tts
+   :type 'integer)
+ 
+Index: lisp/emacspeak-speak.el
+===================================================================
+RCS file: /var/lib/cvs/speech/emacspeak/lisp/emacspeak-speak.el,v
+retrieving revision 1.1.1.6
+retrieving revision 1.9
+diff -u -r1.1.1.6 -r1.9
+--- lisp/emacspeak-speak.el	28 Nov 2004 06:08:59 -0000	1.1.1.6
++++ lisp/emacspeak-speak.el	28 Nov 2004 07:23:51 -0000	1.9
+@@ -171,14 +171,15 @@
+   "Set property auditory-icon at front of all paragraphs."
+   (interactive )
+   (save-excursion
+-    (goto-char (point-max))
+-    (ems-modify-buffer-safely
+-     (let ((sound-cue 'paragraph))
+-       (while (not (bobp))
+-         (backward-paragraph)
+-         (put-text-property  (1+ (point))
+-                             (+ 2    (point ))
+-                             'auditory-icon sound-cue ))))))
++    (let ((deactivate-mark nil))
++      (goto-char (point-max))
++      (ems-modify-buffer-safely
++       (let ((sound-cue 'paragraph))
++	 (while (not (bobp))
++	   (backward-paragraph)
++	   (put-text-property  (1+ (point))
++			       (+ 2    (point ))
++			       'auditory-icon sound-cue )))))))
+ 
+ (defcustom  emacspeak-speak-paragraph-personality voice-animate
+   "*Personality used to mark start of paragraph."
+@@ -201,7 +202,8 @@
+     (save-excursion
+       (goto-char (point-min))
+       (condition-case nil
+-	  (let ((start nil)
++	  (let ((deactivate-mark nil)
++		(start nil)
+ 		(blank-line "\n[ \t\n\r]*\n")
+ 		(inhibit-point-motion-hooks t))
+ 	    (ems-modify-buffer-safely
+@@ -513,7 +515,7 @@
+      "sEnterregular expression to match lines that are decorative ASCII: ")
+ 
+ (defcustom emacspeak-unspeakable-rule
+-  "^[^0-9a-zA-Z]+$"
++  "^\\W+$"
+   "*Pattern to match lines of special chars.
+ This is a regular expression that matches lines containing only
+ non-alphanumeric characters.  emacspeak will generate a tone
+@@ -719,6 +721,7 @@
+   (when (listp arg) (setq arg (car arg )))
+   (save-excursion
+     (let ((inhibit-field-text-motion t)
++	  (deactivate-mark nil)
+           (start  nil)
+           (end nil )
+           (inhibit-point-motion-hooks t)
+@@ -1044,7 +1047,8 @@
+   (interactive "P" )
+   (when (listp arg) (setq arg (car arg )))
+   (save-excursion
+-    (let ((orig (point))
++    (let ((deactivate-mark nil)
++	  (orig (point))
+           (inhibit-point-motion-hooks t)
+           (start nil)
+           (end nil))
+@@ -1067,7 +1071,8 @@
+   (interactive "P" )
+   (when (listp arg) (setq arg (car arg )))
+   (save-excursion
+-    (let ((orig (point))
++    (let ((deactivate-mark nil)
++	  (orig (point))
+           (inhibit-point-motion-hooks t)
+           (start nil)
+           (end nil))
+@@ -1094,7 +1099,8 @@
+   (interactive "P")
+   (when (listp arg) (setq arg (car arg )))
+   (save-excursion
+-    (let ((orig (point))
++    (let ((deactivate-mark nil)
++	  (orig (point))
+           (inhibit-point-motion-hooks t)
+           (start nil)
+           (end nil))
+@@ -1116,7 +1122,8 @@
+   (interactive "P")
+   (when (listp arg) (setq arg (car arg )))
+   (save-excursion
+-    (let ((orig (point))
++    (let ((deactivate-mark nil)
++	  (orig (point))
+           (inhibit-point-motion-hooks t)
+           (start nil)
+           (end nil))
+@@ -1144,7 +1151,8 @@
+   (declare (special emacspeak-speak-voice-annotated-paragraphs
+                     inhibit-point-motion-hooks
+                     voice-lock-mode))
+-  (let ((inhibit-point-motion-hooks t))
++  (let ((deactivate-mark nil)
++	(inhibit-point-motion-hooks t))
+     (when (and voice-lock-mode
+ 	       (not emacspeak-speak-voice-annotated-paragraphs))
+       (emacspeak-speak-voice-annotate-paragraphs))
+@@ -1191,7 +1199,8 @@
+   (interactive "P")
+   (declare (special voice-lock-mode
+                     help-buffer-list))
+-  (let ((help-buffer
++  (let ((deactivate-mark nil)
++	(help-buffer
+          (if (boundp 'help-buffer-list)
+              (car help-buffer-list)
+            (get-buffer "*Help*"))))
+@@ -1206,7 +1215,8 @@
+ (defun emacspeak-speak-completions()
+   "Speak completions  buffer if one present."
+   (interactive )
+-  (let ((completions-buffer (get-buffer "*Completions*"))
++  (let ((deactivate-mark nil)
++	(completions-buffer (get-buffer "*Completions*"))
+         (start nil)
+         (end nil )
+         (continue t))
+@@ -1237,7 +1247,8 @@
+  With prefix arg, speaks the rest of the buffer from point.
+ Negative prefix arg speaks from start of buffer to point."
+   (interactive "P" )
+-  (let ((minibuff (window-buffer (minibuffer-window ))))
++  (let ((deactivate-mark nil)
++	(minibuff (window-buffer (minibuffer-window ))))
+     (save-excursion
+       (set-buffer minibuff)
+       (emacspeak-speak-buffer arg))))
+@@ -1248,7 +1259,8 @@
+ WIth prefix argument N, move N items (negative N means move backward)."
+       (interactive "p")
+       (while (and (> n 0) (not (eobp)))
+-        (let ((prop (get-text-property (point) 'mouse-face))
++        (let ((deactivate-mark nil)
++	      (prop (get-text-property (point) 'mouse-face))
+               (end (point-max)))
+           ;; If in a completion, move to the end of it.
+           (if prop
+@@ -1263,7 +1275,8 @@
+       (interactive "p")
+       (setq n (- n ))
+       (while (and (< n 0) (not (bobp)))
+-        (let ((prop (get-text-property (1- (point)) 'mouse-face))
++        (let ((deactivate-mark nil)
++	      (prop (get-text-property (1- (point)) 'mouse-face))
+               (end (point-min)))
+           ;; If in a completion, move to the start of it.
+           (if prop
+@@ -1284,7 +1297,7 @@
+ 
+ (defun emacspeak-get-current-completion-from-completions  ()
+   "Return the completion string under point in the *Completions* buffer."
+-  (let (beg end)
++  (let (deactivate-mark beg end)
+     (if (and (not (eobp)) (get-text-property (point) 'mouse-face))
+ 	(setq end (point) beg (1+ (point))))
+     (if (and (not (bobp)) (get-text-property (1- (point)) 'mouse-face))
+@@ -1505,6 +1518,7 @@
+   (force-mode-line-update)
+   (emacspeak-dtk-sync)
+   (let ((dtk-stop-immediately nil )
++	(deactivate-mark nil)
+         (global-info (ems-process-mode-line-format global-mode-string))
+         (frame-info nil)
+         (recursion-depth (recursion-depth))
+@@ -1605,36 +1619,37 @@
+   (declare (special minor-mode-alist
+                     emacspeak-minor-mode-prefix 
+                     voice-lock-mode))
+-  (force-mode-line-update)
+-  (let ((voice-lock-mode t)
+-        (info
+-         (mapcar
+-          #'(lambda(item)
+-              (let ((var (car item))
+-                    (value (cadr item )))
+-                (cond
+-                 ((and (boundp var) (eval var ))
+-                  (if (symbolp value) (eval value) value))
+-                 (t nil))))
+-          minor-mode-alist)))
+-    (setq info
+-          (mapcar
+-           #'(lambda (form)
+-               (cond
+-                ((and form
+-                      (listp form)
+-                      (eq :eval (car form)))
+-                 (eval (cadr form)))
+-                (t form)))
+-           info))
+-    (setq info (delete nil info))
+-    (setq info (delete "" info))
+-    (tts-with-punctuations "some"
+-                           (dtk-speak
+-                            (concat
+-                             emacspeak-minor-mode-prefix
+-                             (mapconcat #'identity info ", ")
+-                             (emacspeak-speak-buffer-coding-system-info))))))
++  (let ((deactivate-mark nil))
++    (force-mode-line-update)
++    (let ((voice-lock-mode t)
++	  (info
++	   (mapcar
++	    #'(lambda(item)
++		(let ((var (car item))
++		      (value (cadr item )))
++		  (cond
++		   ((and (boundp var) (eval var ))
++		    (if (symbolp value) (eval value) value))
++		   (t nil))))
++	    minor-mode-alist)))
++      (setq info
++	    (mapcar
++	     #'(lambda (form)
++		 (cond
++		  ((and form
++			(listp form)
++			(eq :eval (car form)))
++		   (eval (cadr form)))
++		  (t form)))
++	     info))
++      (setq info (delete nil info))
++      (setq info (delete "" info))
++      (tts-with-punctuations "some"
++			     (dtk-speak
++			      (concat
++			       emacspeak-minor-mode-prefix
++			       (mapconcat #'identity info ", ")
++			       (emacspeak-speak-buffer-coding-system-info)))))))
+   
+ ;;; obseleted by what-line in simple.el
+ 
+@@ -1654,7 +1669,8 @@
+ component.
+ The result is put in the kill ring for convenience."
+   (interactive "P")
+-  (let ((location (or (buffer-file-name)
++  (let ((deactivate-mark nil)
++	(location (or (buffer-file-name)
+ 		      default-directory)))
+     (when filename
+       (setq location
+@@ -1766,18 +1782,19 @@
+ Second interactive prefix sets clock to new timezone."
+   (interactive "P")
+   (declare (special emacspeak-speak-time-format-string))
+-  (cond
+-   (world
+-    (call-interactively 'emacspeak-speak-world-clock))
+-   (t
+-    (tts-with-punctuations "some"
+-                           (dtk-speak
+-                            (propertize 
+-			     (format-time-string
+-			      emacspeak-speak-time-format-string)
+-			     'personality voice-punctuations-some))))))
+-                            
+- 
++  (let ((deactivate-mark nil))
++    (cond
++     (world
++      (call-interactively 'emacspeak-speak-world-clock))
++     (t
++      (tts-with-punctuations "some"
++			     (dtk-speak
++			      (propertize 
++			       (format-time-string
++				emacspeak-speak-time-format-string)
++			       'personality voice-punctuations-some)))))))
++
++
+ (defconst emacspeak-codename
+   "PlayDog"
+   "Code name of present release.")
+@@ -1819,6 +1836,7 @@
+ to command yank."
+   (interactive "p")
+   (let ((voice-lock-mode t)
++	(deactivate-mark nil)
+         (context
+          (format "kill %s "
+                  (if current-prefix-arg (+ 1 count)  1 ))))
+@@ -1906,6 +1924,7 @@
+              (> count (length mark-ring)))
+     (error "Not that many marks in this buffer"))
+   (let ((voice-lock-mode t)
++	(deactivate-mark nil)
+         (line nil)
+         (position nil)
+         (context
+@@ -2181,7 +2200,7 @@
+ ;;}}}
+ ;;{{{   quiten messages
+ 
+-(defcustom emacspeak-speak-messages t
++(defcustom emacspeak-speak-messages nil
+   "*Option indicating if messages are spoken.  If nil,
+ emacspeak will not speak messages as they are echoed to the
+ message area.  You can use command
+@@ -2306,7 +2325,7 @@
+    (t (save-excursion
+         (set-buffer "*Messages*")
+         (goto-char (point-max))
+-        (skip-syntax-backward " ")
++        (skip-chars-backward " \n\t")
+         (emacspeak-speak-line)
+         (when (and (interactive-p)
+                    emacspeak-speak-message-again-should-copy-to-kill-ring)
+Index: lisp/emacspeak-w3.el
+===================================================================
+RCS file: /var/lib/cvs/speech/emacspeak/lisp/emacspeak-w3.el,v
+retrieving revision 1.1.1.6
+retrieving revision 1.6
+diff -u -r1.1.1.6 -r1.6
+Index: lisp/emacspeak-w3m.el
+===================================================================
+RCS file: /var/lib/cvs/speech/emacspeak/lisp/emacspeak-w3m.el,v
+retrieving revision 1.1.1.6
+retrieving revision 1.10
+diff -u -r1.1.1.6 -r1.10
+--- lisp/emacspeak-w3m.el	28 Nov 2004 06:09:01 -0000	1.1.1.6
++++ lisp/emacspeak-w3m.el	24 Dec 2004 02:02:33 -0000	1.10
+@@ -34,7 +34,9 @@
+ ;;{{{  required modules
+ 
+ (require 'emacspeak-preamble)
++(require 'emacspeak-w3)
+ (require 'w3m nil t)
++(require 'w3m-form nil t)
+ ;;}}}
+ ;;{{{ keybindings 
+ (declaim (special w3m-mode-map
+@@ -58,14 +60,22 @@
+ (fset 'emacspeak-w3m-anchor
+       (byte-compile '(lambda () (w3m-anchor))))
+ 
+-(defun emacspeak-w3m-action ())
+-(fset 'emacspeak-w3m-action
++(defun emacspeak-w3m-get-action ())
++(fset 'emacspeak-w3m-get-action
+       (byte-compile '(lambda () (w3m-action))))
+ 
++(defun emacspeak-w3m-action ()
++  (let ((act (emacspeak-w3m-get-action)))
++    (if (numberp (nth 2 act))
++	(append (list (car act) (cadr act)) (nthcdr 3 act))
++      act)))
++
+ (defun emacspeak-w3m-form-get (form name))
+ (fset 'emacspeak-w3m-form-get
+-      (byte-compile '(lambda (form name)
+-		       (w3m-form-get form name))))
++      (if (functionp 'w3m-form-get-by-name)
++	  'w3m-form-get-by-name
++	(byte-compile '(lambda (form name)
++			 (w3m-form-get-by-name form name)))))
+ 
+ (defsubst emacspeak-w3m-personalize-string (string personality)
+   (let ((newstring (copy-sequence string)))
+@@ -79,6 +89,7 @@
+ 
+ (defvar emacspeak-w3m-speak-action-alist
+   '((w3m-form-input . emacspeak-w3m-speak-form-input)
++    (w3m-form-input-checkbox . emacspeak-w3m-speak-form-input-checkbox)
+     (w3m-form-input-radio . emacspeak-w3m-speak-form-input-radio)
+     (w3m-form-input-select . emacspeak-w3m-speak-form-input-select)
+     (w3m-form-input-textarea . emacspeak-w3m-speak-form-input-textarea)
+@@ -89,11 +100,13 @@
+ 
+ (defun emacspeak-w3m-anchor-text (&optional default)
+   "Return string containing text of anchor under point."
+-  (save-excursion
+-    (forward-char 1)
+-    (if (get-text-property (point) 'w3m-anchor-sequence)
+-	(message(emacspeak-speak-get-text-range 'w3m-anchor-sequence))
+-      (message (or default "")))))
++  (if (get-text-property (point) 'w3m-anchor-sequence)
++      (buffer-substring
++       (previous-single-property-change
++	(1+ (point)) 'w3m-anchor-sequence nil (point-min))
++       (next-single-property-change
++	(point) 'w3m-anchor-sequence nil (point-max)))
++    (or default "")))
+ 
+ (defun emacspeak-w3m-speak-cursor-anchor ()
+   (dtk-speak (emacspeak-w3m-anchor-text "Not found")))
+@@ -127,6 +140,18 @@
+ 	    (or (emacspeak-w3m-form-get form name) value)
+ 	    emacspeak-w3m-form-personality))))
+ 
++(defun emacspeak-w3m-speak-form-input-checkbox (form name value)
++  "Speak checkbox"
++  (declare (special emacspeak-w3m-form-personality))
++  (dtk-speak
++   (format "checkbox %s is %s"
++	   name
++	   (emacspeak-w3m-personalize-string
++	    (if (emacspeak-w3m-form-get form name)
++		"on"
++	      "off")
++	    emacspeak-w3m-form-personality))))
++
+ (defun emacspeak-w3m-speak-form-input-password (form name)
+   "Speech-enable password form element."
+   (declare (special emacspeak-w3m-form-personality))
+@@ -269,6 +294,7 @@
+                  (memq (car act)
+                        '(w3m-form-input
+                          w3m-form-input-radio
++                         w3m-form-input-checkbox
+                          w3m-form-input-password)))
+         (emacspeak-w3m-speak-this-anchor))
+       (emacspeak-auditory-icon 'select-object)))
+@@ -334,7 +360,7 @@
+ 	    (emacspeak-speak-line)))
+ 
+ (defadvice w3m-form-input-select-set (after emacspeak pre act comp)
+-  (when (and (interactive-p) (w3m-cursor-anchor))
++  (when (and (interactive-p) (w3m-anchor-sequence))
+     (emacspeak-w3m-speak-this-anchor)))
+ 
+ (defadvice w3m-form-input-select-exit (after emacspeak pre act comp)
+@@ -363,7 +389,6 @@
+ 
+ (defadvice  w3m-w3m-dump-head-source (after emacspeak pre act comp)
+   "Apply requested transform if any after grabbing the HTML. "
+-  (require 'emacspeak-w3)
+   (when (and emacspeak-w3-xsl-p emacspeak-w3-xsl-transform)
+     (emacspeak-xslt-region
+      emacspeak-w3-xsl-transform
+Index: lisp/emacspeak.el
+===================================================================
+RCS file: /var/lib/cvs/speech/emacspeak/lisp/emacspeak.el,v
+retrieving revision 1.1.1.6
+retrieving revision 1.7
+diff -u -r1.1.1.6 -r1.7
+--- lisp/emacspeak.el	28 Nov 2004 06:08:54 -0000	1.1.1.6
++++ lisp/emacspeak.el	28 Nov 2004 23:29:36 -0000	1.7
+@@ -382,13 +382,10 @@
+ ;;}}}
+ ;;{{{ Emacspeak:
+ 
+-(defcustom emacspeak-play-emacspeak-startup-icon nil
++(defcustom emacspeak-play-emacspeak-startup-icon t
+   "If set to T, emacspeak plays its icon as it launches."
+   :type 'boolean
+   :group 'emacspeak)
+-(defvar emacspeak-unibyte t
+-  "Set this to nil before starting  emacspeak 
+-if you are running in a multibyte enabled environment.")
+ 
+ (defun emacspeak()
+   "Starts the Emacspeak speech subsystem.  Use emacs as you
+@@ -434,6 +431,7 @@
+   (emacspeak-export-environment)
+   (dtk-initialize)
+   (require 'emacspeak-redefine)
++  (require 'emacspeak-personality)
+   (require 'emacspeak-fix-interactive)
+   (require 'emacspeak-keymap)
+   (require 'emacspeak-advice)
+Index: lisp/multispeech-voices.el
+===================================================================
+RCS file: lisp/multispeech-voices.el
+diff -N lisp/multispeech-voices.el
+--- /dev/null	1 Jan 1970 00:00:00 -0000
++++ lisp/multispeech-voices.el	25 Nov 2004 07:02:50 -0000	1.7
+@@ -0,0 +1,491 @@
++;;; multispeech-voices.el --- Define various device independent voices in terms of Multispeech tags
++;;; Description:  Module to set up Multispeech voices and personalities
++;;; Keywords: Voice, Personality, Multispeech
++;;{{{  LCD Archive entry:
++
++;;}}}
++;;{{{  Copyright:
++
++;;; Initial version: Author: Igor B. Poretsky <root@goga.energo.ru>
++;;;
++;;; This file is not part of GNU Emacs, but the same permissions apply.
++;;;
++;;; GNU Emacs is free software; you can redistribute it and/or modify
++;;; it under the terms of the GNU General Public License as published by
++;;; the Free Software Foundation; either version 2, or (at your option)
++;;; any later version.
++;;;
++;;; GNU Emacs is distributed in the hope that it will be useful,
++;;; but WITHOUT ANY WARRANTY; without even the implied warranty of
++;;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++;;; GNU General Public License for more details.
++;;;
++;;; You should have received a copy of the GNU General Public License
++;;; along with GNU Emacs; see the file COPYING.  If not, write to
++;;; the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
++
++;;}}}
++;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
++
++
++;;; Commentary:
++;;{{{  Introduction:
++
++;;; This module defines the various voices used in voice-lock mode.
++;;; This module is Multispeech specific.
++
++;;}}}
++;;{{{ Required modules
++
++;;; Code:
++(require 'cl)
++(declaim  (optimize  (safety 0) (speed 3)))
++(require 'acss-structure)
++
++;;}}}
++;;{{{  voice table
++
++(defvar tts-default-voice nil
++  "Default voice used. ")
++
++(defvar multispeech-default-voice-string ""
++  "Default Multispeech tag for  default voice.")
++
++(defvar multispeech-voice-table (make-hash-table)
++  "Association between symbols and strings to set Multispeech  voices.
++The string can set any voice parameter.")
++
++(defsubst multispeech-define-voice (name command-string)
++  "Define a Multispeech  voice named NAME.
++This voice will be set   by sending the string
++COMMAND-STRING to the TTS engine."
++  (declare (special multispeech-voice-table ))
++  (puthash name command-string multispeech-voice-table))
++
++(defsubst multispeech-get-voice-command  (name)
++  "Retrieve command string for  voice NAME."
++  (declare (special multispeech-voice-table))
++  (cond
++   ((listp name)
++    (mapconcat #'multispeech-get-voice-command name " "))
++   (t (or  (gethash name multispeech-voice-table)
++           multispeech-default-voice-string))))
++
++(defsubst multispeech-voice-defined-p (name)
++  "Check if there is a voice named NAME defined."
++  (declare (special multispeech-voice-table ))
++  (gethash name multispeech-voice-table ))
++
++;;}}}
++;;{{{ voice definitions
++
++;;; the nine predefined voices:
++(multispeech-define-voice 'paul "[_: pi:1 fr:16000 ]")
++(multispeech-define-voice 'harry "[_: pi:0.5 fr:16000 ]")
++(multispeech-define-voice 'dennis "[_: pi:0.7 fr:14000 ]")
++(multispeech-define-voice 'frank "[_: pi:0.7 fr:12000 ]")
++(multispeech-define-voice 'betty "[_: pi:1.4 fr:17000 ]")
++(multispeech-define-voice 'ursula "[_: pi:1.3 fr:16000 ]")
++(multispeech-define-voice 'rita "[_: pi:1.4 fr:18000 ]")
++(multispeech-define-voice 'wendy "[_: pi:1.5 fr:17000 ]")
++(multispeech-define-voice 'kit "[_: pi:2 fr:20000 ]")
++
++;;; Modified voices:
++
++;;}}}
++;;{{{  the inaudible voice
++;;; no special code needed --handled by Emacspeak engine.
++
++(multispeech-define-voice 'inaudible "")
++
++;;}}}
++;;{{{  Mapping css parameters to tts codes
++
++;;{{{ voice family codes
++
++(defsubst multispeech-get-family-code (name)
++  "Get control code for voice family NAME."
++  "")
++
++;;}}}
++;;{{{  hash table for mapping families to their dimensions
++
++(defvar multispeech-css-code-tables (make-hash-table)
++  "Hash table holding vectors of multispeech codes.
++Keys are symbols of the form <FamilyName-Dimension>.
++Values are vectors holding the control codes for the 10 settings.")
++
++(defsubst multispeech-css-set-code-table (family dimension table)
++  "Set up voice FAMILY.
++Argument DIMENSION is the dimension being set,
++and TABLE gives the values along that dimension."
++  (declare (special multispeech-css-code-tables))
++  (let ((key (intern (format "%s-%s" family dimension))))
++    (puthash key table multispeech-css-code-tables )))
++
++(defsubst multispeech-css-get-code-table (family dimension)
++  "Retrieve table of values for specified FAMILY and DIMENSION."
++  (declare (special multispeech-css-code-tables))
++  (let ((key (intern (format "%s-%s" family dimension))))
++    (gethash key multispeech-css-code-tables)))
++
++;;}}}
++;;{{{ volume
++
++;;; Note: volume settings not implemented for Multispeech.
++(defvar multispeech-gain-table (make-vector  10 "")
++  "Maps CSS volume settings to actual synthesizer codes.")
++
++;;}}}
++;;{{{  average pitch
++
++;;; Average pitch for standard male voice is 122hz --this is mapped to
++;;; a setting of 5.
++;;; Average pitch varies inversely with speaker head size --a child
++;;; has a small head and a higher pitched voice.
++;;; We change parameter head-size in conjunction with average pitch to
++;;; produce a more natural change on the TTS engine.
++
++;;{{{  paul average pitch
++
++(let ((table (make-vector 10 "")))
++  (mapcar
++   (function
++    (lambda (setting)
++      (aset table
++            (first setting)
++	    (format " pi:%s "
++		    (second setting)))))
++   '(
++     (0 0.5)
++     (1 0.6)
++     (2 0.7)
++     (3 0.8)
++     (4 0.9 )
++     (5 1)
++     (6 1.1)
++     (7 1.2)
++     (8 1.3)
++     (9 1.4)))
++  (multispeech-css-set-code-table 'paul 'average-pitch table ))
++
++;;}}}
++;;{{{  harry average pitch
++
++(let ((table (make-vector 10 "")))
++  (mapcar
++   (function
++    (lambda (setting)
++      (aset table
++            (first setting)
++	    (format " pi:%s "
++		    (second setting)))))
++   '(
++     (0 0.4)
++     (1 0.5)
++     (2 0.6)
++     (3 0.7)
++     (4 0.8 )
++     (5 0.9)
++     (6 1)
++     (7 1.1)
++     (8 1.2)
++     (9 1.3)))
++  (multispeech-css-set-code-table 'harry 'average-pitch table ))
++
++;;}}}
++;;{{{  betty average pitch
++
++(let ((table (make-vector 10 "")))
++  (mapcar
++   (function
++    (lambda (setting)
++      (aset table
++	    (first setting)
++	    (format " pi:%s "
++		    (second setting)))))
++   '(
++     (0 0.9)
++     (1 1)
++     (2 1.1)
++     (3 1.2)
++     (4 1.3 )
++     (5 1.4)
++     (6 1.5)
++     (7 1.6)
++     (8 1.7)
++     (9 1.8)))
++  (multispeech-css-set-code-table 'betty 'average-pitch table ))
++
++;;}}}
++
++(defsubst multispeech-get-average-pitch-code (value family)
++  "Get  AVERAGE-PITCH for specified VALUE and  FAMILY."
++  (or family (setq family 'paul))
++  (if value
++      (aref (multispeech-css-get-code-table family 'average-pitch)
++	    value)
++    ""))
++
++;;}}}
++;;{{{  pitch range
++
++;;;  This parameter is modelled by an abstract sampling frequency.
++
++;;;  Standard value is 16000 and is  mapped to
++;;; a setting of 5.
++;;; A value of 15000 refers to a flat monotone voice --maximum value of 16800
++;;; refers to a highly animated voice.
++
++;;{{{  paul pitch range
++
++(let ((table (make-vector 10 "")))
++  (mapcar
++   (function
++    (lambda (setting)
++      (aset table
++	    (first setting)
++	    (format " fr:%s "
++		    (second setting)))))
++   '(
++     (0 15000)
++     (1 15200)
++     (2 15400)
++     (3 15600)
++     (4 15800 )
++     (5 16000 )
++     (6 16200)
++     (7 16400)
++     (8 16600)
++     (9 16800)))
++  (multispeech-css-set-code-table 'paul 'pitch-range table ))
++
++;;}}}
++;;{{{  harry pitch range
++
++(let ((table (make-vector 10 "")))
++  (mapcar
++   (function
++    (lambda (setting)
++      (aset table
++	    (first setting)
++	    (format " fr:%s "
++		    (second setting)))))
++   '(
++     (0 14000)
++     (1 14200)
++     (2 14400)
++     (3 14600)
++     (4 14800)
++     (5 15000)
++     (6 15200)
++     (7 15400)
++     (8 15600)
++     (9 15800)))
++  (multispeech-css-set-code-table 'harry 'pitch-range table ))
++
++;;}}}
++;;{{{  betty pitch range
++
++(let ((table (make-vector 10 "")))
++  (mapcar
++   (function
++    (lambda (setting)
++      (aset table
++            (first setting)
++	    (format " fr:%s "
++		    (second setting)))))
++   '(
++     (0 17000)
++     (1 17200)
++     (2 17400)
++     (3 17600)
++     (4 17800 )
++     (5 18000)
++     (6 18200)
++     (7 18400)
++     (8 18600)
++     (9 18800)))
++  (multispeech-css-set-code-table 'betty 'pitch-range table ))
++
++;;}}}
++(defsubst multispeech-get-pitch-range-code (value family)
++  "Get pitch-range code for specified VALUE and FAMILY."
++  (or family (setq family 'paul))
++  (if value
++      (aref (multispeech-css-get-code-table family 'pitch-range)
++	    value)
++    ""))
++
++;;}}}
++;;{{{  stress
++
++;;;  Not implemented fo Multispeech now.
++
++(defsubst multispeech-get-stress-code (value family)
++  "Just a dummy."
++  "")
++
++;;}}}
++;;{{{  richness
++
++;;; Smoothness and richness vary inversely.
++
++;;{{{  paul richness
++
++(let ((table (make-vector 10 "")))
++  (mapcar
++   (function
++    (lambda (setting)
++      (aset table
++            (first setting)
++	    (format " ri:%s sm:%s "
++		    (second setting)
++		    (third setting)))))
++   '(
++     (0 0 100)
++     (1 14 80)
++     (2 28 60)
++     (3 42 40 )
++     (4 56 20)
++     (5 70  3 )
++     (6 60 24 )
++     (7 70 16)
++     (8 80 20)
++     (9 100  0)))
++  (multispeech-css-set-code-table 'paul 'richness table))
++
++;;}}}
++;;{{{  harry richness
++
++(let ((table (make-vector 10 "")))
++  (mapcar
++   (function
++    (lambda (setting)
++      (aset table (first setting)
++	    (format " ri:%s sm:%s "
++		    (second setting)
++		    (third setting)))))
++   '(
++     (0 100 0)
++     (1 96 3)
++     (2 93 6)
++     (3 90 9)
++     (4 88 11)
++     (5 86 12)
++     (6 60 24 )
++     (7 40 44)
++     (8 20 65)
++     (9 0 70)
++     ))
++  (multispeech-css-set-code-table 'harry 'richness table))
++
++;;}}}
++;;{{{  betty richness
++
++(let ((table (make-vector 10 "")))
++  (mapcar
++   (function
++    (lambda (setting)
++      (aset table (first setting)
++	    (format " ri:%s sm:%s "
++		    (second setting)
++		    (third setting)))))
++   '(
++     (0 0 100)
++     (1 8 76)
++     (2 16 52)
++     (3 24  28)
++     (4 32 10)
++     (5 40 4)
++     (6 50 3)
++     (7 65 3)
++     (8 80 2)
++     (9 100  0)))
++  (multispeech-css-set-code-table 'betty 'richness table))
++
++;;}}}
++
++(defsubst multispeech-get-richness-code (value family)
++  (or family (setq family 'paul))
++  (if value 
++      (aref (multispeech-css-get-code-table family 'richness)
++	    value)
++    ""))
++
++;;}}}
++;;{{{  punctuations
++
++(defsubst multispeech-get-punctuations-code (value)
++  "Return string needed to set specified punctuations mode."
++  "")
++
++;;}}}
++;;}}}
++;;{{{  multispeech-define-voice-from-speech-style
++
++(defun multispeech-define-voice-from-speech-style (name style)
++  "Define NAME to be a multispeech voice as specified by settings in STYLE."
++  (let* ((family(acss-family style))
++	 (command
++	  (concat "[_:"
++	   (multispeech-get-family-code family)
++	   " "
++           (multispeech-get-punctuations-code (acss-punctuations style))
++	   (multispeech-get-average-pitch-code (acss-average-pitch style) family)
++	   (multispeech-get-pitch-range-code (acss-pitch-range style) family)
++	   (multispeech-get-stress-code (acss-stress style ) family)
++	   (multispeech-get-richness-code (acss-richness style) family)
++	   "]")))
++    (multispeech-define-voice name command)))
++
++;;}}}
++;;{{{ list voices 
++
++(defun multispeech-list-voices ()
++  "List defined voices."
++  (declare (special multispeech-voice-table))
++  (loop for k being the hash-keys of multispeech-voice-table 
++	collect   k))
++
++;;}}}
++;;{{{ Configurater 
++
++(defvar russian-spelling-data-loaded-p nil
++  "Indicates whether Russian spelling data have already been loaded.")
++
++(defun multispeech-configure-tts ()
++  "Configure TTS environment to use multilingual speech server."
++  (declare (special tts-default-speech-rate
++                    multispeech-default-speech-rate
++		    dtk-speaker-process
++		    emacspeak-unspeakable-rule
++		    emacspeak-speak-default-os-coding-system))
++  (fset 'tts-list-voices'multispeech-list-voices)
++  (fset 'tts-voice-defined-p 'multispeech-voice-defined-p)
++  (fset 'tts-get-voice-command 'multispeech-get-voice-command)
++  (fset 'tts-define-voice-from-speech-style 'multispeech-define-voice-from-speech-style)
++  (setq tts-default-voice nil)
++  (setq tts-default-speech-rate multispeech-default-speech-rate)
++  (set-default 'tts-default-speech-rate multispeech-default-speech-rate)
++  (setq emacspeak-speak-default-os-coding-system 'cyrillic-koi8)
++  (set-process-coding-system dtk-speaker-process 'cyrillic-koi8 'cyrillic-koi8)
++  (setq-default dtk-speak-nonprinting-chars nil)
++  (unless russian-spelling-data-loaded-p
++    (let ((coding-system-for-read 'raw-text))
++      (load-library "Russian-spelling"))
++    (let ((coding-system-for-read 'cyrillic-koi8))
++      (load-library "Russian-spelling"))
++    (setq russian-spelling-data-loaded-p t)))
++
++;;}}}
++(provide 'multispeech-voices)
++;;{{{  emacs local variables
++
++;;; local variables:
++;;; folded-file: t
++;;; byte-compile-dynamic: t
++;;; byte-compile-dynamic: t
++;;; end:
++
++;;}}}
+Index: lisp/outloud-voices.el
+===================================================================
+RCS file: /var/lib/cvs/speech/emacspeak/lisp/outloud-voices.el,v
+retrieving revision 1.1.1.6
+retrieving revision 1.6
+diff -u -r1.1.1.6 -r1.6
+--- lisp/outloud-voices.el	28 Nov 2004 06:09:02 -0000	1.1.1.6
++++ lisp/outloud-voices.el	28 Nov 2004 07:23:51 -0000	1.6
+@@ -112,8 +112,9 @@
+ 
+ ;;}}}
+ ;;{{{  the inaudible voice
++;;; no special code needed --handled by Emacspeak engine.
+ 
+-(outloud-define-voice 'inaudible " `vv0 ")
++(outloud-define-voice 'inaudible "")
+ 
+ ;;}}}
+ ;;{{{  Mapping css parameters to tts codes
+@@ -460,6 +461,7 @@
+   (fset 'tts-get-voice-command 'outloud-get-voice-command)
+   (fset 'tts-voice-defined-p 'outloud-voice-defined-p)
+   (fset 'tts-define-voice-from-speech-style 'outloud-define-voice-from-speech-style)
++  (setq tts-default-voice 'paul)
+   (setq tts-default-speech-rate outloud-default-speech-rate)
+   (set-default 'tts-default-speech-rate outloud-default-speech-rate)
+   (when (and emacspeak-use-auditory-icons
+Index: lisp/voice-setup.el
+===================================================================
+RCS file: /var/lib/cvs/speech/emacspeak/lisp/voice-setup.el,v
+retrieving revision 1.1.1.6
+retrieving revision 1.5
+diff -u -r1.1.1.6 -r1.5
+--- lisp/voice-setup.el	28 Nov 2004 06:09:02 -0000	1.1.1.6
++++ lisp/voice-setup.el	28 Nov 2004 07:23:51 -0000	1.5
+@@ -91,6 +91,7 @@
+ (require 'backquote)
+ (require 'acss-structure)
+ (require 'outloud-voices)
++(require 'multispeech-voices)
+ (require 'dectalk-voices)
+ ;;}}}
+ ;;{{{ customization group 
+cvs diff: Diffing lisp/xml-forms
+cvs diff: Diffing realaudio
+cvs diff: Diffing realaudio/douglas-adams
+cvs diff: Diffing realaudio/interviews
+cvs diff: Diffing realaudio/old-time-radio
+cvs diff: Diffing realaudio/old-time-radio/comedy
+cvs diff: Diffing realaudio/old-time-radio/mysteries
+cvs diff: Diffing realaudio/old-time-radio/sci-fi-horror
+cvs diff: Diffing realaudio/old-time-radio/suspense
+cvs diff: Diffing realaudio/old-time-radio/westerns
+cvs diff: Diffing realaudio/radio
+Index: realaudio/radio/comedy-bbc.ram
+===================================================================
+RCS file: realaudio/radio/comedy-bbc.ram
+diff -N realaudio/radio/comedy-bbc.ram
+--- /dev/null	1 Jan 1970 00:00:00 -0000
++++ realaudio/radio/comedy-bbc.ram	7 Oct 2004 19:09:18 -0000	1.1.1.1
+@@ -0,0 +1 @@
++pnm://rm.bbc.co.uk/worldservice/lightentertainment.ra
+Index: realaudio/radio/german-info-radio.ram
+===================================================================
+RCS file: realaudio/radio/german-info-radio.ram
+diff -N realaudio/radio/german-info-radio.ram
+--- /dev/null	1 Jan 1970 00:00:00 -0000
++++ realaudio/radio/german-info-radio.ram	7 Oct 2004 18:52:34 -0000	1.1.1.1
+@@ -0,0 +1 @@
++pnm://62.220.2.22/inforadio.ra
+cvs diff: Diffing realaudio/sports
+cvs diff: Diffing realaudio/talks
+cvs diff: Diffing sawfish
+cvs diff: Diffing servers
+Index: servers/.servers
+===================================================================
+RCS file: /var/lib/cvs/speech/emacspeak/servers/.servers,v
+retrieving revision 1.1.1.6
+retrieving revision 1.5
+diff -u -r1.1.1.6 -r1.5
+--- servers/.servers	28 Nov 2004 06:09:09 -0000	1.1.1.6
++++ servers/.servers	28 Nov 2004 07:23:51 -0000	1.5
+@@ -6,3 +6,4 @@
+ ssh-outloud
+ ssh-dtk-exp
+ dsp-outloud
++multispeech
+Index: servers/multispeech-notes
+===================================================================
+RCS file: servers/multispeech-notes
+diff -N servers/multispeech-notes
+--- /dev/null	1 Jan 1970 00:00:00 -0000
++++ servers/multispeech-notes	12 Oct 2004 16:49:24 -0000	1.1
+@@ -0,0 +1,78 @@
++
++Notes On Using Multilingual Speech Server with Emacspeak:
++
++Multispeech is a multilingual speech server. Now it supports English
++and Russian. Natively it uses Mbrola and Freephone for English and
++Ru_tts for Russian speech synthesis, but can be tuned for using other
++TTS engines.
++
++* Pre-requisites:
++
++You need to obtain  and install the Multispeech itself and
++accompanying TTS engines. All this stuff is not distributed with this
++package and can be downloaded freely from
++http://www.mr-blind.hopto.org/blinux/ or
++ftp://ftp.rakurs.spb.ru/pub/Goga/.
++
++ * Installation:
++
++**  Have You Installed Emacspeak?
++
++Before attempting to build and install Multispeech
++support for Emacspeak you should first install Emacspeak the
++normal way.  See the Emacspeak Makefile for instructions.
++
++** Multispeech installation notes:
++
++At first, note that Multispeech is a stand-alone application and it
++doesn't need TCL. To use this server with Emacspeak you should make
++symlink named "multispeech" pointing to it's executable in the
++directory where Emacspeak's speech servers normally live.
++
++You need not to use elisp stuff shipped with the Multispeech. Now it
++is incorporated in this package.
++
++* Testing:
++
++To test multispeech, start it from shell and type:
++
++tts_say { some text from your choice }
++
++If the text in braces is spoken then all is ok.
++
++* Using Multispeech  With Emacspeak:
++
++Proceed to this step *only*
++after successfully completing all of the previous steps.
++You can either make the Multispeech your default
++speech server by setting environment variable 
++DTK_PROGRAM as follows befoer launching Emacs:
++export DTK_PROGRAM=multispeech
++
++Alternatively,  you can switch to the multispeech while
++emacspeak is running by 
++invoking command dtk-select-server --type
++C-e d d ret multispeech ret 
++
++
++Alternatively start emacspeak with the "-m" option.
++
++
++* Using dtk-soft as the default synthesizer:
++
++Once you've confirmed that everything is working with the
++Multispeech and Emacspeak, you can make multispeech your
++default synthesizer by:
++** If you have emacspeak launched from inside your .emacs:
++
++set variable dtk-program to "dtk-soft" 
++before you load emacspeak-setup.el
++
++
++* Known Problems:
++
++
++Local variables: 
++mode: outline 
++paragraph-separate: "[ ]*$"
++end:
+cvs diff: Diffing servers/linux-outloud
+cvs diff: Diffing servers/software-dtk
+Index: servers/software-dtk/DTK
+===================================================================
+RCS file: /var/lib/cvs/speech/emacspeak/servers/software-dtk/DTK,v
+retrieving revision 1.1.1.5
+retrieving revision 1.5
+diff -u -r1.1.1.5 -r1.5
+--- servers/software-dtk/DTK	28 Nov 2004 06:09:09 -0000	1.1.1.5
++++ servers/software-dtk/DTK	28 Nov 2004 07:23:51 -0000	1.5
+@@ -35,7 +35,7 @@
+ * Testing:
+ 
+ Next, test that your installation of the Emacspeak Software Dectalk 
+-support works.  The Dectalk  Outloud speech server is called
++support works.  The Dectalk  Software speech server is called
+ dtk-soft  and is installed in the emacspeak/servers  directory along
+ with other speech servers.
+ 
+@@ -66,7 +66,7 @@
+ * Using dtk-soft as the default synthesizer:
+ 
+ Once you've confirmed that everything is working with the
+-Outloud engine and Emacspeak, you can make dtk-soft your
++Dectalk engine and Emacspeak, you can make dtk-soft your
+ default synthesizer by:
+ ** If you have emacspeak launched from inside your .emacs:
+ 
+cvs diff: Diffing shoutcast
+cvs diff: Diffing shoutcast/classical
+cvs diff: Diffing shoutcast/comedy
+cvs diff: Diffing shoutcast/misc
+cvs diff: Diffing shoutcast/pop
+cvs diff: Diffing shoutcast/talk
+cvs diff: Diffing sounds
+cvs diff: Diffing sounds/default-8k
+Index: sounds/default-8k/delete-object.au
+===================================================================
+RCS file: /var/lib/cvs/speech/emacspeak/sounds/default-8k/delete-object.au,v
+retrieving revision 1.1.1.1
+retrieving revision 1.2
+diff -u -r1.1.1.1 -r1.2
+Binary files /tmp/cvsjTIgT3 and /tmp/cvsa3nj28 differ
+Index: sounds/default-8k/fill-object.au
+===================================================================
+RCS file: /var/lib/cvs/speech/emacspeak/sounds/default-8k/fill-object.au,v
+retrieving revision 1.1.1.1
+retrieving revision 1.2
+diff -u -r1.1.1.1 -r1.2
+Binary files /tmp/cvs50dZGe and /tmp/cvsaefEXm differ
+Index: sounds/default-8k/news.au
+===================================================================
+RCS file: /var/lib/cvs/speech/emacspeak/sounds/default-8k/news.au,v
+retrieving revision 1.1.1.1
+retrieving revision 1.2
+diff -u -r1.1.1.1 -r1.2
+Binary files /tmp/cvsT9sl1v and /tmp/cvs8naHmD differ
+Index: sounds/default-8k/task-done.au
+===================================================================
+RCS file: /var/lib/cvs/speech/emacspeak/sounds/default-8k/task-done.au,v
+retrieving revision 1.1.1.1
+retrieving revision 1.2
+diff -u -r1.1.1.1 -r1.2
+Binary files /tmp/cvsrOYviO and /tmp/cvswdEmCZ differ
+cvs diff: Diffing user-guide
+cvs diff: Diffing xsl
