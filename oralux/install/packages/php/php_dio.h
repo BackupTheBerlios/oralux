@@ -50,7 +50,6 @@ PHP_FUNCTION(dio_tcsetattr);
 PHP_FUNCTION(dio_open_stdin);
 PHP_FUNCTION(dio_read_stdin);
 PHP_FUNCTION(dio_close_stdin);
-PHP_FUNCTION(dio_read_line_from_stdin);
 // <--
 
 typedef struct {

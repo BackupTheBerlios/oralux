@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # php.sh
-# $Id: php.sh,v 1.5 2004/11/10 09:58:13 gcasse Exp $
+# $Id: php.sh,v 1.6 2004/11/25 22:51:53 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing PHP
-# $Date: 2004/11/10 09:58:13 $ |
-# $Revision: 1.5 $ |
+# $Date: 2004/11/25 22:51:53 $ |
+# $Revision: 1.6 $ |
 # Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -24,7 +24,7 @@
 # ----------------------------------------------------------------------------
 ####
 source ../oralux.conf
-export OPT_CONF="--prefix=/usr --program-suffix=-oralux --with-libxml-dir --disable-cgi --with-gettext --enable-dio --with-ncurses"
+export OPT_CONF="--prefix=/usr --program-suffix=-oralux --with-libxml-dir --disable-cgi --with-gettext --enable-dio --with-ncurses --with-curl --with-tidy"
 
 ####
 # Installing the package in the current tree
@@ -34,6 +34,8 @@ InstallPackage()
     
     # php5
     apt-get install libxml2-dev
+    apt-get install libcurl3-dev
+    apt-get install libtidy-dev
     cd /tmp
     rm -rf /tmp/php-5*
     wget http://www.php.net/get/php-5.0.2.tar.bz2/from/fr.php.net/mirror
@@ -63,8 +65,17 @@ Copy2Oralux()
     cp $INSTALL_PACKAGES/php/dio.c php-5.0.2/ext/dio
     cp $INSTALL_PACKAGES/php/php_dio.h php-5.0.2/ext/dio
 
-    chroot $BUILD  bash -c "apt-get install libxml2-dev; cd /var/tmp/php-5.0.2;./configure $OPT_CONF;make;make install;cd /usr/bin; rm -f php5;ln -s /usr/bin/php-oralux php5;cd /etc/alternatives;rm -f php;ln -s /usr/bin/php5 php"
-
+    chroot $BUILD bash -c "apt-get install libxml2-dev;\
+	apt-get install libcurl3-dev;\
+	apt-get install libtidy-dev;\
+	cd /var/tmp/php-5.0.2;\
+	./configure $OPT_CONF;make;make install;\
+	cd /usr/bin;\
+	rm -f php5;\
+	ln -s /usr/bin/php-oralux php5;\
+	cd /etc/alternatives;\
+	rm -f php;\
+	ln -s /usr/bin/php5 php"
 }
 
 case $1 in

@@ -71,7 +71,6 @@ function_entry dio_functions[] = {
 	PHP_FE(dio_open_stdin, NULL)
 	PHP_FE(dio_read_stdin, NULL)
 	PHP_FE(dio_close_stdin, NULL)
-	PHP_FE(dio_read_line_from_stdin, NULL)
 #endif
 	{NULL, NULL, NULL}
 };
@@ -776,128 +775,6 @@ PHP_FUNCTION(dio_close_stdin)
 }
 
 /* }}} */
-
-/* {{{ proto string dio_read_line_from_stdin( string default_string)
-
-   Read bytes from stdin until /n and return them, the maximum number of characters is 1k 
-   A default string can be suplied.
-*/
-PHP_FUNCTION(dio_read_line_from_stdin)
-{
-	char *data;
-	enum {DATA_LENGTH=1024};
-	long index=0;
-	int aEndOfLineFound=0;
-	ssize_t res;
-	int aComposedCharacter=0;
-
-	char *default_string;
-	int default_string_length;
-
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &default_string, &default_string_length) == FAILURE) {
-		return;
-	}
-
-	data = emalloc(DATA_LENGTH + 1);
-	if (default_string_length && (default_string_length < DATA_LENGTH))
-		{
-			strncpy( data, default_string, default_string_length);
-			data[default_string_length]=0;
-			index=default_string_length;
-			write(STDOUT_FILENO, data, default_string_length);
-		}
-
-	while( !aEndOfLineFound && (index<DATA_LENGTH))
-		{
-			res = read(STDIN_FILENO, data+index, 1);
-			if (res <= 0) 
-				{
-					efree(data);
-					RETURN_NULL();
-				}
-
-			if (aComposedCharacter==1)
-				{
-					if (data[index]==0x5b)
-						{
-							aComposedCharacter=2;
-							continue;
-						}
-					else
-						{
-							aComposedCharacter=0;
-						}
-				}
-			else if (aComposedCharacter==2)
-				{
-					if ((data[index]==0x41) // Up arrow key
-						||(data[index]==0x42)) // Down arrow key
-						{
-							char c=data[index];
-							data[0]=0x1B;
-							data[1]=0x5b;
-							data[2]=c;
-							index=3;
-							data[3]=0;
-							aEndOfLineFound=1;
-						}
-					aComposedCharacter=0;
-				}
-			else
-				{
-					switch(data[index])
-						{
-						case 0x7F: // DEL
-						case 0x08: // BS
-							if (index > 0)
-								{
-									char a[3];
-									a[0]=0x1B;
-									a[1]='[';
-									a[2]='D';
-									write(STDOUT_FILENO, a, 3);
-									write(STDOUT_FILENO, " ", 1);
-									write(STDOUT_FILENO, a, 3);
-									index--;
-									// say(Delete);
-									// sayChar(aResult[ anIndex ]);
-								}
-							break;
-
-						case 0x03: // ^C
-						case 0x04: // ^D
-							write(STDOUT_FILENO, "\n", 1);
-							/* restore original terminal settings */
-							exit(0);
-							break;
-
-						case '\r':
-						case '\n':
-							write(STDOUT_FILENO, data+index, 1);
-							data[index] = 0;
-							aEndOfLineFound=1;
-
-							break;
-
-						case 0x1B:
-							aComposedCharacter=1;
-							break;
-
-						default:
-							write(STDOUT_FILENO, data+index, 1);
-							index++;
-						}
-				}
-		}
-
-	data = erealloc(data, index + 1);
-
-	RETURN_STRINGL(data, index, 0);
-}
-
-/* }}} */
-
-
 
 
 #endif
