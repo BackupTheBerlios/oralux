@@ -136,3 +136,5 @@
 ;; SES
 (add-to-list 'load-path "/usr/share/emacs/site-lisp/ses")
 (autoload 'ses-mode "ses.el" "Spreadsheet mode" t)
+
+(setq-default ispell-program-name "aspell")

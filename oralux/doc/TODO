@@ -30,6 +30,7 @@ In the following lines, + means evolution, - bug.
 
 + check if persistenthome still works
 
++ see fix http://www.knoppix.net/forum/viewtopic.php?t=12960&highlight=
 + update main.c DESKTOP = shell, the oralux.sh proposes then to start zsh.
 main.c must indicate that CTRL-D will be rquired to come back to the menu (ther e must be a more direct way in the future).
 + zsh and "sudo su"
@@ -212,7 +213,7 @@ Feedback from Barak
 knoppix alsa
 Cheatcode not needed after preferences are saved.
 
-2. Long wait time caused by Oralux searching for config file on non-existing 
+/ 2. Long wait time caused by Oralux searching for config file on non-existing 
 floppy - no longer happens after saveconfig to hard-drive.
 
 3. Missing ADSL (ALE070) support.

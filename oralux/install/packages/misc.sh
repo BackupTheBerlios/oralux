@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # misc.sh
-# $Id: misc.sh,v 1.1 2004/09/27 20:29:59 gcasse Exp $
+# $Id: misc.sh,v 1.2 2004/10/03 22:22:57 gcasse Exp $
 # $Author: gcasse $
 # Description: Miscellaneous packages
-# $Date: 2004/09/27 20:29:59 $ |
-# $Revision: 1.1 $ |
+# $Date: 2004/10/03 22:22:57 $ |
+# $Revision: 1.2 $ |
 # Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -54,6 +54,9 @@ InstallPackage()
     apt-get install aspell-de
     apt-get install aspell-es
     apt-get install aspell-en
+    
+    cd /usr/bin; ln -s aspell ispell
+    
 #RUF    apt-get install console-cyrillic
 
 cd /tmp; rm -rf aspell-ru-*; wget ftp://ftp.gnu.org/gnu/aspell/dict/ru/aspell-ru-0.50-2.tar.bz2; tar -jxvf aspell-ru-*; cd aspell-ru-*; ./configure; make; make install; cd /tmp; rm -rf  aspell-ru-*
@@ -108,6 +111,9 @@ Copy2Oralux()
     chroot $BUILD apt-get install aspell-de
     chroot $BUILD apt-get install aspell-es
     chroot $BUILD apt-get install aspell-en
+
+    chroot $BUILD bash -c "cd /usr/bin; ln -s aspell ispell"
+
 #RUF    chroot $BUILD apt-get install console-cyrillic
 
     cd $BUILD/var/tmp; rm -rf aspell-ru-*; wget ftp://ftp.gnu.org/gnu/aspell/dict/ru/aspell-ru-0.50-2.tar.bz2; tar -jxvf aspell-ru-*;
