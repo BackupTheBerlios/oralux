@@ -3,11 +3,11 @@
 
 # ----------------------------------------------------------------------------
 # netConfig.sh
-# $Id: netConfig.sh,v 1.3 2004/11/10 18:24:25 gcasse Exp $
+# $Id: netConfig.sh,v 1.4 2004/11/14 20:32:56 gcasse Exp $
 # $Author: gcasse $
 # Description: Menu for internet settings
-# $Date: 2004/11/10 18:24:25 $ |
-# $Revision: 1.3 $ |
+# $Date: 2004/11/14 20:32:56 $ |
+# $Revision: 1.4 $ |
 # Copyright (C) 2004 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -26,19 +26,22 @@
 # ----------------------------------------------------------------------------
 
 DIALOG=${DIALOG=dialog}
+MINIMENU=/tmp/minimenu.tmp
 tempfile=`tempfile 2>/dev/null` || tempfile=/tmp/test$$
 trap "rm -f $tempfile" 0 1 2 5 15
 
 TextCancelPressed="Cancel pressed."
 TextEscPressed="ESC pressed."
 
+rm -f $MINIMENU 2>/dev/null
+
 adslMenu()
 {
     TextWhichUsbADSL="Which is your USB ADSL Modem?"
     $DIALOG --nobutton --menu "$TextWhichUsbADSL" 20 51 4 --nobutton \
-	"1" "Sagem"\
-	"2" "SpeedTouch"\
-	"3" "E C I"\
+	"0" "Sagem"\
+	"1" "SpeedTouch"\
+	"2" "E C I"\
     2> $tempfile
     
     retval=$?
@@ -68,11 +71,13 @@ TextSettingUp="Setting up the internet connection"
 TextSerialModem="Serial Modem"
 TextAdslUsb="Adsl USB Modem"
 TextMail=Mail
+TextQuit=Quit
 
 $DIALOG --nobutton --menu "$TextSettingUp" 20 51 4 \
-    "1" "$TextSerialModem" \
-    "2" "$TextAdslUsb" \
-    "3" "$TextMail" \
+    "0" "$TextSerialModem" \
+    "1" "$TextAdslUsb" \
+    "2" "$TextMail" \
+    "3" "$TextQuit" \
     2> $tempfile
 
 #"IM" => "ICQ"
@@ -91,6 +96,7 @@ case $retval in
 	3)
 	php mailMenu.php;;
 	4)
+	touch $MINIMENU;;
     esac
     ;;
     1)

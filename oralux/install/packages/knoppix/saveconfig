@@ -100,7 +100,6 @@ getNewList(){
 # }
 
 writescript(){
-echo writescript $1 $2
 CONFIGSFILE=$2
 cat >"$1" <<EOT
 #!/bin/sh

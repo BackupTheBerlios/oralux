@@ -1,7 +1,7 @@
 #ifndef CONSTANTS
 #define CONSTANTS 1
 
-#define ORALUX_RELEASE "0.6"
+#define ORALUX_RELEASE "0.6beta"
 
 enum phpStatus {
   PHP_OK,

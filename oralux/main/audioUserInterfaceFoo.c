@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // audioUserInterfaceFoo.c
-// $Id: audioUserInterfaceFoo.c,v 1.1 2004/09/27 20:30:28 gcasse Exp $
+// $Id: audioUserInterfaceFoo.c,v 1.2 2004/11/14 20:32:56 gcasse Exp $
 // $Author: gcasse $
 // Description: just for compilation
-// $Date: 2004/09/27 20:30:28 $ |
-// $Revision: 1.1 $ |
+// $Date: 2004/11/14 20:32:56 $ |
+// $Revision: 1.2 $ |
 // Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -62,8 +62,13 @@ int getTTY()
   return pf;
 }
 
+static char* ThePortName=NULL;
+
 int initAUI(char* theOggDirectory, int theLanguage, char* thePortName)
 {
+
+  ThePortName=thePortName;
+
   int pf = open(thePortName, O_RDWR);
   if (pf < 0)
     {
@@ -73,6 +78,11 @@ int initAUI(char* theOggDirectory, int theLanguage, char* thePortName)
 
   setTTY(pf);
   return 1;
+}
+
+int restartAUI()
+{
+  initAUI( NULL, 0, ThePortName);
 }
 
 void stopAUI(int theSoundMustBeFinished)

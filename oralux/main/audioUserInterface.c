@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // audiouserinterface.c
-// $Id: audioUserInterface.c,v 1.3 2004/10/26 21:21:04 gcasse Exp $
+// $Id: audioUserInterface.c,v 1.4 2004/11/14 20:32:56 gcasse Exp $
 // $Author: gcasse $
 // Description: Managing and playing the pre-recorded messages.
-// $Date: 2004/10/26 21:21:04 $ |
-// $Revision: 1.3 $ |
+// $Date: 2004/11/14 20:32:56 $ |
+// $Revision: 1.4 $ |
 // Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
 // September 2003: 
 // German translations by Guenther Harrasser.
@@ -28,6 +28,8 @@
 #include <fcntl.h>
 #include "audioUserInterface.h"
 
+/* < General variables */
+
 struct t_translation {
   char* myEnglishSentence;
   char* myTranslatedSentence;
@@ -46,6 +48,12 @@ static char* TheLanguageSuffix[]={
   "-ru", //Russian
 };
 static int TheSoundIsEnable=1;
+
+// Storing the current tty file descriptor
+static int pf=0;
+
+/* > */
+/* < TheMessages */
 
 // TheMessages: is an array of the possible said messages.
 //The index of this array must match with the enum sequence 
@@ -863,17 +871,17 @@ char * TheMessages[][LanguageMax]={
 
 };
 
-// Storing the current tty file descriptor
-static int pf=0;
-/* void setTTY(int the_port) */
-/* { */
-/*   pf=the_port; */
-/* } */
+/* > */
+
+/* < getTTY */
 
 int getTTY()
 {
   return pf;
 }
+
+/* > */
+/* < initAUI */
 
 int initAUI(char* theOggDirectory, enum language theLanguage, char* thePortName)
 {
@@ -899,6 +907,9 @@ int initAUI(char* theOggDirectory, enum language theLanguage, char* thePortName)
   return 1;
 }
 
+/* > */
+/* < stopAUI */
+
 void stopAUI(int theSoundMustBeFinished)
 {
   ENTER("stopAUI");
@@ -910,11 +921,17 @@ void stopAUI(int theSoundMustBeFinished)
     }
 }
 
-void restartAUI()
+/* > */
+/* < restartAUI */
+
+int restartAUI()
 {
   ENTER("restartAUI");
   initAUI( TheOggDirectory, TheCurrentLanguage, ThePortName);
 }
+
+/* > */
+/* < beep */
 
 void beep()
 {
@@ -929,11 +946,17 @@ void beep()
   playOggVorbisFile(buf,1,0);
 }
 
+/* > */
+/* < enableSound */
+
 void enableSound(int the_sound_is_enable)
 {
   ENTER("enableSOUND");
   TheSoundIsEnable=the_sound_is_enable;
 }
+
+/* > */
+/* < getTextForThisLanguage */
 
 char* getTextForThisLanguage(enum sentence theSentence, enum language theLanguage)
 {
@@ -950,11 +973,17 @@ char* getTextForThisLanguage(enum sentence theSentence, enum language theLanguag
   return aText;
 }
 
+/* > */
+/* < getText */
+
 char* getText(enum sentence theSentence)
 {
   ENTER("getText");  
   return getTextForThisLanguage(theSentence, TheCurrentLanguage);
 }
+
+/* > */
+/* < saySentence */
 
 static void saySentence(enum sentence theSentence, int theCallIsSynchronous)
 {
@@ -974,6 +1003,9 @@ static void saySentence(enum sentence theSentence, int theCallIsSynchronous)
   fprintf(stdout, "%s\n", aText);
   playOggVorbisFile(getOggFilename(theSentence),0,theCallIsSynchronous);
 }
+
+/* > */
+/* < sayChar */
 
 void sayChar(char c)
 {
@@ -1018,11 +1050,17 @@ void sayChar(char c)
   }
 }
 
+/* > */
+/* < say */
+
 void say(enum sentence theSentence)
 {
   ENTER("say");
   saySentence(theSentence,0);
 }
+
+/* > */
+/* < sayForce */
 
 void sayForce(enum sentence theSentence)
 {
@@ -1035,11 +1073,17 @@ void sayForce(enum sentence theSentence)
   TheSoundIsEnable=aFlag;
 }
 
+/* > */
+/* < sayAgain */
+
 void sayAgain()
 {
   ENTER("sayAgain");
   resayAll();
 }
+
+/* > */
+/* < clearStoredSentences */
 
 void clearStoredSentences()
 {
@@ -1047,12 +1091,18 @@ void clearStoredSentences()
   clearAll();
 }
 
+/* > */
+/* < setLanguage */
+
 void setLanguage( enum language theLanguage)
 {
   ENTER("setLanguage");
   TheCurrentLanguage=theLanguage;
   setConsoleFont(theLanguage);
 }
+
+/* > */
+/* < getOggFilename */
 
 char* getOggFilename(enum sentence theSentence)
 {
@@ -1063,6 +1113,9 @@ char* getOggFilename(enum sentence theSentence)
   return buf;
 }
 
+/* > */
+/* < getOggFilenameForThisLanguage */
+
 char* getOggFilenameForThisLanguage(enum sentence theSentence, enum language theLanguage)
 {
   ENTER("getOggFilenameForThisLanguage");
@@ -1072,11 +1125,17 @@ char* getOggFilenameForThisLanguage(enum sentence theSentence, enum language the
   return buf;
 }
 
+/* > */
+/* < getOggFilenameBeep */
+
 char* getOggFilenameBeep()
 {
   ENTER("getOggFilenameBeep");
   return NULL;
 }
+
+/* > */
+/* < getOggFilenameChar */
 
 char* getOggFilenameChar(char c)
 {
@@ -1108,6 +1167,9 @@ char* getOggFilenameChar(char c)
   return buf;
 }
 
+/* > */
+/* < playOGG */
+
 void playOGG(char *theFilename)
 {
   ENTER("playOGG");
@@ -1116,10 +1178,13 @@ void playOGG(char *theFilename)
   playOggVorbisFile(buf,0,0);
 }
 
+/* > */
+/* < beepLoudSpeaker */
+
 void beepLoudSpeaker()
 {
   ENTER("beepLoudSpeaker");
   system("echo -e \"\007\"");
 }
 
- 
+/* > */

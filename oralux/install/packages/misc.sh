@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # misc.sh
-# $Id: misc.sh,v 1.5 2004/11/10 09:58:13 gcasse Exp $
+# $Id: misc.sh,v 1.6 2004/11/14 20:32:56 gcasse Exp $
 # $Author: gcasse $
 # Description: Miscellaneous packages
-# $Date: 2004/11/10 09:58:13 $ |
-# $Revision: 1.5 $ |
+# $Date: 2004/11/14 20:32:56 $ |
+# $Revision: 1.6 $ |
 # Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -33,7 +33,6 @@ InstallPackage()
 #RAF    apt-get install sndconfig
     apt-get install brltty
     rm -f /etc/brltty.conf
-    apt-get install -t unstable yasr
     apt-get install elinks
     apt-get install links-ssl
     apt-get install lynx-ssl
@@ -96,7 +95,6 @@ Copy2Oralux()
     chroot $BUILD apt-get install aumix
     chroot $BUILD apt-get install sndconfig
     chroot $BUILD bash -c "apt-get install brltty; rm -f /etc/brltty.conf"
-    chroot $BUILD apt-get install -t unstable yasr
     chroot $BUILD apt-get install elinks
     chroot $BUILD apt-get install links-ssl
     chroot $BUILD apt-get install lynx-ssl

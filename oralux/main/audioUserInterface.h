@@ -150,6 +150,8 @@ enum sentence {
 // return 1 if ok
 int initAUI(char* theOggDirectory, enum language theLanguage, char* thePortName);
 
+int restartAUI();
+
 void stopAUI(int theSoundMustBeFinished);
 
 // 1 enable, 0: disable

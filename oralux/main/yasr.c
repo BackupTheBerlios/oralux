@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // yasr.c
-// $Id: yasr.c,v 1.1 2004/09/27 20:30:28 gcasse Exp $
+// $Id: yasr.c,v 1.2 2004/11/14 20:32:56 gcasse Exp $
 // $Author: gcasse $
 // Description: Yasr configuration file. 
-// $Date: 2004/09/27 20:30:28 $ |
-// $Revision: 1.1 $ |
+// $Date: 2004/11/14 20:32:56 $ |
+// $Revision: 1.2 $ |
 // Copyright (C) 2004 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -28,16 +28,18 @@
 #include "textToSpeech.h"
 #include "yasr.h"
 
+/* < Constants */
+
 #define CONF_FILENAME "/home/knoppix/.yasr.conf" // RAF (GC): take in account another user.
 #define USERNAME "knoppix" // RAF (GC): take in account another user.
-
 //#define CONF_FILENAME "/tmp/.yasr.conf" // RAF (GC): take in account another user.
 #define TEMP_FILENAME "/tmp/.yasr.tmp"
-
 #define SECTION "[options]"
 #define FILTERED_LINE "synthesizer"
-
 #define MAXBUF 1000
+
+/* > */
+/* < createConf */
 
 // createConf
 // Copy the configuration file to /home/knoppix/.yasr.conf
@@ -67,6 +69,9 @@ static void createConf(char* theFilename, enum language theLanguage)
   free(aBuffer);
 }
 
+/* > */
+/* < getNewSynthesizer */
+
 static char* getNewSynthesizer(enum textToSpeech theTextToSpeech)
 {
   ENTER("getNewSynthesizer");
@@ -92,6 +97,9 @@ static char* getNewSynthesizer(enum textToSpeech theTextToSpeech)
     }
   return aSynthesizer;
 }
+
+/* > */
+/* < buildConfigurationYasr */
 
 // buildConfigurationYasr
 // create or update the Yasr configuration file (/home/knoppix/.yasr.conf)
@@ -174,3 +182,61 @@ void buildConfigurationYasr(struct textToSpeechStruct* theTextToSpeech)
   free(aBuffer);
 }
 
+/* > */
+/* < runYasr */
+void runYasr( enum textToSpeech theTextToSpeech, enum language theMenuLanguage, char* theCommand)
+{
+  // Select a software synthesizer possibly compliant with the user preferences.
+  enum textToSpeech aYasrSynthesizer=TTS_Flite;
+  switch (theTextToSpeech)
+    {
+    case TTS_Flite:
+    case TTS_DECtalk:
+    case TTS_ParleMax:
+    case TTS_Multispeech:
+      aYasrSynthesizer=theTextToSpeech;
+      break;
+
+    default:
+      // We select the nearest possible synthesizer according to the language
+      switch (theMenuLanguage)
+	{
+	case French:
+	  aYasrSynthesizer=TTS_ParleMax;
+	  break;
+	case English:
+	case German:
+	case Spanish:
+	default:
+	  aYasrSynthesizer=TTS_Flite;
+	  break;
+	}
+      break;
+    }
+
+  // synthesizer port parameter
+  char* aParam=NULL;
+  switch( aYasrSynthesizer)
+    {
+    case TTS_DECtalk:
+      aParam="|/usr/bin/tcl /usr/share/emacs/site-lisp/emacspeak/servers/dtk-soft";
+      break;
+    case TTS_ParleMax:
+      aParam="|/usr/local/bin/maxlect";
+      break;
+    case TTS_Multispeech:
+      aParam="|/usr/local/lib/multispeech/speech_server";
+      break;
+    case TTS_Flite:
+    default:
+      aParam="|/usr/bin/eflite";
+      break;
+    }
+
+  char* aLine=(char *)malloc(BUFSIZE);
+  snprintf(aLine, BUFSIZE, "yasr -s \"emacspeak server\" -p \"%s\" %s", aParam, theCommand);
+  system(aLine);
+  free( aLine);
+}
+
+/* > */

@@ -11,37 +11,3 @@ then
 else  
  PS1="$ "
 fi 
-
-a=`pidof yasr`
-b=`pidof minimenu`
-if [ -n "$a" -a -z "$b" ]; then
-#export EDITOR=ne
-
-    /usr/share/oralux/main/minimenu `tty`
-
-    # killing the YASR remaining processes
-    yasr=$(pidof yasr)
-
-    list=$(pgrep -P $yasr | xargs echo -n)
-    
-    myPid=$(pgrep -P $yasr -x bash)
-    
-    for i in $list; do
-	list1=$(echo $list1; pgrep -P $i | xargs echo -n)
-    done;
-    
-    for i in $list1; do
-	list2=$(echo $list2; pgrep -P $i | xargs echo -n)
-    done;
-    
-    for i in $list2; do
-	list3=$(echo $list3; pgrep -P $i | xargs echo -n)
-    done;
-    
-    list=$(echo $list $list1 $list2 $list3 $yasr| sed "s/$myPid//")
-
-    kill -9 $list 2>/dev/null
-    # some eflite processes are not YASR children 
-    pkill eflite  2>/dev/null
-    kill -9 $myPid  2>/dev/null
-fi

@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // main.c
-// $Id: main.c,v 1.3 2004/11/10 18:24:25 gcasse Exp $
+// $Id: main.c,v 1.4 2004/11/14 20:32:56 gcasse Exp $
 // $Author: gcasse $
 // Description: entry point. 
-// $Date: 2004/11/10 18:24:25 $ |
-// $Revision: 1.3 $ |
+// $Date: 2004/11/14 20:32:56 $ |
+// $Revision: 1.4 $ |
 // Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -83,7 +83,10 @@ void buildConfiguration(struct menuInfo* theSelectedInfo)
   ENTER("buildConfiguration");
 
   buildConfigurationEmacspeak(&(theSelectedInfo->myTextToSpeech));
-  buildConfigurationYasr(&(theSelectedInfo->myTextToSpeech));
+
+  // RAF: cleaner
+  // The yasr configuration already built by the menu
+  ////  buildConfigurationYasr(&(theSelectedInfo->myTextToSpeech));
 
   buildI18n( theSelectedInfo->myMenuLanguage, 
 	     theSelectedInfo->myTextToSpeech, 

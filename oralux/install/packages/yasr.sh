@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
-# brltty.sh
-# $Id: brltty.sh,v 1.2 2004/11/14 20:32:56 gcasse Exp $
+# yasr.sh
+# $Id: yasr.sh,v 1.1 2004/11/14 20:32:56 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing BRLTTY
 # $Date: 2004/11/14 20:32:56 $ |
-# $Revision: 1.2 $ |
+# $Revision: 1.1 $ |
 # Copyright (C) 2004 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -24,56 +24,57 @@
 # ----------------------------------------------------------------------------
 ####
 source ../oralux.conf
-export OPT_CONF="--with-libxml-dir --disable-cgi --with-gettext"
+export YASR_RELEASE=0.6.5
 
 ####
 # Installing the package in the current tree
 InstallPackage()
 {
-    apt-get remove --purge brltty
-    apt-get remove --purge brlapi
-    rm -rf /etc/brltty
-
+    apt-get --purge remove yasr
+    rm -rf /etc/yasr
     cd /tmp
-    rm -rf /tmp/brl*
-    wget http://www.mielke.cc/brltty/releases/brlapi-0.3.0-1.i386.rpm
-    alien brltty-3.6-1.i386.rpm 
-    dpkg -i brltty*.deb
+    rm -rf yasr*
+    wget http://ovh.dl.sourceforge.net/sourceforge/yasr/yasr-$YASR_RELEASE.tar.gz
+    tar -zxvf yasr*
+    cd yasr*
+    patch -p0 yasr/main.c < $INSTALL_PACKAGES/yasr/main.c.patch
+    ./configure --prefix=/usr
+    make
+    make install
 
-    wget http://www.mielke.cc/brltty/releases/brltty-3.6-1.i386.rpm
-    alien brlapi-0.3.0-1.i386.rpm
-    dpkg -i brlapi*.deb
-
-    rm -rf /tmp/brl*
+    rm -rf /tmp/yasr*
 }
 
 ####
 # Adding the package to the new Oralux tree
 Copy2Oralux()
 {
-#    chroot $BUILD apt-get install php4-cgi
+    export INSTALL_PACKAGES=/usr/share/oralux/install/packages
 
-    # php5
-    cd $BUILD/var/tmp
-    rm -rf $BUILD/var/tmp/php-5*
-    wget http://www.php.net/get/php-5.0.0.tar.bz2/from/fr.php.net/mirror
-    tar -jxvf php-5.0.0.tar.bz2
-    cp $INSTALL_PACKAGES/php/dio.c php-5.0.0/ext/dio
-
-    chroot $BUILD  bash -c "apt-get install libxml2-dev; cd /var/tmp/php-5.0.0;./configure $OPT_CONF;make;make install;cd /usr/bin; ln -s /usr/local/bin/php php5;cd /etc/alternatives;rm -f php;ln -s /usr/bin/php5 php"
-    rm -rf $BUILD/var/tmp/php-5*
+    chroot $BUILD  bash -c "\
+    apt-get --purge remove yasr;\
+    rm -rf /etc/yasr;\
+    cd /tmp;\
+    rm -rf yasr*;\
+    wget http://ovh.dl.sourceforge.net/sourceforge/yasr/yasr-$YASR_RELEASE.tar.gz;\
+    tar -zxvf yasr*;\
+    cd yasr*;\
+    patch -p0 yasr/main.c < $INSTALL_PACKAGES/yasr/main.c.patch;\
+    ./configure --prefix=/usr;\
+    make;\
+    make install"
 }
 
 case $1 in
     i|I)
-        InstallPackage
-        ;;
+    InstallPackage
+    ;;
     b|B)
-        Copy2Oralux
-        ;;
+    Copy2Oralux
+    ;;
     *)
-        echo "I (install) or B(new tree) is expected"
-        ;;
+    echo "I (install) or B(new tree) is expected"
+    ;;
 esac
 
 exit 0

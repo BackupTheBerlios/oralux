@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // menu.c
-// $Id: menu.c,v 1.4 2004/11/12 21:46:13 gcasse Exp $
+// $Id: menu.c,v 1.5 2004/11/14 20:32:56 gcasse Exp $
 // $Author: gcasse $
 // Description: introductory menu. 
-// $Date: 2004/11/12 21:46:13 $ |
-// $Revision: 1.4 $ |
+// $Date: 2004/11/14 20:32:56 $ |
+// $Revision: 1.5 $ |
 // Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -306,6 +306,48 @@ static enum language setMenuLanguage(enum language theDefaultLanguage)
 }
 
 /* > */
+/* < setInternet */
+void setInternet( struct menuInfo* theSelectedInfo)
+{
+
+  say( setUpInternet);
+  say( PleasePressKey);
+
+  if (getAnswer() != MENU_Yes)
+    {
+      return;
+    }
+
+
+  // This menu requires yasr
+  buildConfigurationYasr(&(theSelectedInfo->myTextToSpeech));
+  
+  char* aCommand=TheLine;
+  sprintf(aCommand, "%s/main/netConfig.sh", ORALUX_RUNTIME);
+	    
+  stopAUI(1);
+  
+  // At Yasr init, the speech synthesizer could crash.
+  // So we check if the menu exited in the expected way: the MINIMENU file must be created.
+  // Otherwise, yasr is started again.
+  const char* MINIMENU="/tmp/minimenu.tmp";
+  unlink(MINIMENU);
+
+  struct stat buf;
+  int i;
+  for (i=0; (i<3) && (stat(MINIMENU, &buf)==-1); i++)
+    {
+      if (i>0)
+	{
+	  printf("%d\n",i+1); 
+	}
+      runYasr( theSelectedInfo->myTextToSpeech.myIdentifier, theSelectedInfo->myMenuLanguage, aCommand);
+    }
+
+  restartAUI();
+}
+/* > */
+
 /* < setKeyborad, +... */
 
 // TheKeyboards: an array useful to sort the keybord labels in alphabetical order (depends on the current language).
@@ -567,65 +609,8 @@ enum ShutdownStatus askIfShutdownIsRequired()
 }
 
 /* > */
-/* < setYasr */
 
-// Start Yasr
-void setYasr( enum textToSpeech theTextToSpeech, enum language theMenuLanguage)
-{
-  // The end of the configuration relies on Yasr.
-  // We select a software synthesizer possibly compliant with the user preferences.
 
-  enum textToSpeech aYasrSynthesizer=TTS_Flite;
-  switch (theTextToSpeech)
-    {
-    case TTS_Flite:
-    case TTS_DECtalk:
-    case TTS_ParleMax:
-    case TTS_Multispeech:
-      aYasrSynthesizer=theTextToSpeech;
-      break;
-
-    default:
-      // We select the nearest possible synthesizer according to the language
-      switch (theMenuLanguage)
-	{
-	case French:
-	  aYasrSynthesizer=TTS_ParleMax;
-	  break;
-	case English:
-	case German:
-	case Spanish:
-	default:
-	  aYasrSynthesizer=TTS_Flite;
-	  break;
-	}
-      break;
-    }
-
-  // synthesizer port parameter
-  char* aParam=NULL;
-  switch( aYasrSynthesizer)
-    {
-    case TTS_DECtalk:
-      aParam="|/usr/bin/tcl /usr/share/emacs/site-lisp/emacspeak/servers/dtk-soft";
-      break;
-    case TTS_ParleMax:
-      aParam="|/usr/local/bin/maxlect";
-      break;
-    case TTS_Multispeech:
-      aParam="|/usr/local/lib/multispeech/speech_server";
-      break;
-    case TTS_Flite:
-    default:
-      aParam="|/usr/bin/eflite";
-      break;
-    }
-
-  sprintf(TheLine, "yasr -s \"emacspeak server\" -p \"%s\" /usr/share/oralux/main/mailMenu.php", aParam);
-  system(TheLine);
-}
-
-/* > */
 /* < menu */
 enum MENU_State {
   MENU_Volume,
@@ -661,7 +646,7 @@ void menu(struct menuInfo* theSelectedInfo)
 	{
 	case MENU_Volume:
 	  setVolume();
-	  aMenuState = (GNC_UpArrowKey == getLastKeyPressed()) ? MENU_TTS : MENU_Language;
+	  aMenuState = (GNC_UpArrowKey == getLastKeyPressed()) ? MENU_Internet : MENU_Language;
 	  break;
 
 	case MENU_Language:
@@ -711,8 +696,10 @@ void menu(struct menuInfo* theSelectedInfo)
 	  break;
 
 	case MENU_Internet:
-	  setYasr( theSelectedInfo->myTextToSpeech.myIdentifier, theSelectedInfo->myMenuLanguage);
-	  aMenuState = (GNC_UpArrowKey == getLastKeyPressed()) ? MENU_TTS : MENU_End;
+	  {
+	    setInternet( theSelectedInfo);
+	    aMenuState = (GNC_UpArrowKey == getLastKeyPressed()) ? MENU_TTS : MENU_End;
+	  }
 	  break;
 
 	default:
