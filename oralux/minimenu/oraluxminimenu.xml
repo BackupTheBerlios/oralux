@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<minimenu version="1.0">
+<category name="web">
+<program>
+<name>Links, web browser with javascript capabilities</name>
+<command>links /usr/share/oralux/doc/htm/faq.htm</command>
+<comment></comment>
+</program>
+
+<program hidden="1">
+<name>Lynx the cat</name>
+<command>lynx</command>
+<comment></comment>
+</program>
+
+<program hidden="1">
+<name>w3m</name>
+<command>w3m</command>
+<comment></comment>
+</program>
+</category>
+
+<category name="mail">
+<program hidden="1">
+<name>mutt</name>
+<command>mutt</command>
+<comment></comment>
+</program>
+
+<program>
+<name>pine</name>
+<command>pine</command>
+<comment></comment>
+</program>
+</category>
+
+<category name="editor">
+<program>
+<name>N E, the nice editor</name>
+<command>ne</command>
+<comment></comment>
+</program>
+<program hidden="1">
+<name>nano</name>
+<command></command>
+<comment></comment>
+</program>
+</category>
+
+<category name="shell">
+<program>
+<name>zsh, the Z shell</name>
+<command>zsh</command>
+<comment></comment>
+</program>
+</category>
+
+<category name="tools">
+<program>
+<name>Calculator</name>
+<command>python</command>
+<comment></comment>
+</program>
+</category>
+
+<category name="spreadsheet">
+<program hidden="1">
+<name>sc</name>
+<command></command>
+<comment></comment>
+</program>
+
+<program>
+<name>tsiag</name>
+<command></command>
+<comment></comment>
+</program>
+</category>
+
+<category name="file manager">
+<program hidden="1">
+<name>Midnight commander</name>
+<command>mc</command>
+<comment></comment>
+</program>
+</category>
+
+<document>
+<name>YASR documentation</name>
+<uri>/usr/share/oralux/doc/README.yasr</uri>
+</document>
+
+<document>
+<name>Help</name>
+<uri>help.htm</uri>
+<comment>Help about minimenu</comment>
+</document>
+
+</minimenu>

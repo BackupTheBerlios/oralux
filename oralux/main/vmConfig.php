@@ -1,11 +1,11 @@
 <?php
 // ----------------------------------------------------------------------------
 // vmConfig.php
-// $Id: vmConfig.php,v 1.3 2004/11/10 18:24:25 gcasse Exp $
+// $Id: vmConfig.php,v 1.4 2004/11/28 21:21:00 gcasse Exp $
 // $Author: gcasse $
 // Description: VM settings (php5)
-// $Date: 2004/11/10 18:24:25 $ |
-// $Revision: 1.3 $ |
+// $Date: 2004/11/28 21:21:00 $ |
+// $Revision: 1.4 $ |
 // Copyright (C) 2004 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -45,25 +45,25 @@ class vmConfig
       if (touch($this->_myTempFilename)==FALSE)
 	{
 	  $aError=sprintf("Error concerning file: %s\n", $this->_myTempFilename);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.3 $');
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.4 $');
 	  return;
 	}
       if (chmod ( $this->_myTempFilename, 0600)==FALSE)
 	{
 	  $aError=sprintf("Error concerning file: %s\n", $this->_myTempFilename);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.3 $');
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.4 $');
 	  return;
 	}
       if (chown ( $this->_myTempFilename, $this->_myMailConfig->getUser())==FALSE)
 	{
 	  $aError=sprintf("Error concerning file: %s\n", $this->_myTempFilename);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.3 $');
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.4 $');
 	  return;
 	}
       if (chgrp ( $this->_myTempFilename, $this->_myMailConfig->getUser())==FALSE)
 	{
 	  $aError=sprintf("Error concerning file: %s\n", $this->_myTempFilename);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.3 $');
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.4 $');
 	  return;
 	}
     }
@@ -145,36 +145,46 @@ class vmConfig
 	}
 
       // Russian stuff
-      fprintf($theFileDescriptor, "(cond ((string-match \"ru\" (getenv \"LANGUAGE\"))\n");
-      fprintf($theFileDescriptor, "(print \"Russian environment\")\n");
-      fprintf($theFileDescriptor, ";; Begin Vm Russian stuff\n");
-      fprintf($theFileDescriptor, "(setq vm-mime-8bit-text-transfer-encoding '8bit)\n");
-      fprintf($theFileDescriptor, "(setq vm-mime-8bit-composition-charset \"koi8-r\")\n");
-      fprintf($theFileDescriptor, ";; Map the MULE charset to MIME charset\n");
-      fprintf($theFileDescriptor, "(add-to-list 'vm-mime-mule-charset-to-charset-alist\n");
-      fprintf($theFileDescriptor, "'(cyrillic-iso8859-5 \"koi8-r\"))\n");
-      fprintf($theFileDescriptor, "(add-to-list 'vm-mime-mule-charset-to-coding-alist\n");
-      fprintf($theFileDescriptor, "'(\"koi8-r\" cyrillic-koi8))\n");
-      fprintf($theFileDescriptor, "(add-to-list 'vm-mime-mule-charset-to-coding-alist\n");
-      fprintf($theFileDescriptor, "'(\"windows-1251\" cp1251))\n");
-      fprintf($theFileDescriptor, "(add-to-list 'vm-mime-mule-coding-to-charset-alist\n");
-      fprintf($theFileDescriptor, "'(cyrillic-koi8 \"koi8-r\"))\n");
-      fprintf($theFileDescriptor, "(add-to-list 'vm-mime-mule-coding-to-charset-alist\n");
-      fprintf($theFileDescriptor, "'(cp1251 \"windows-1251\"))\n");
-      fprintf($theFileDescriptor, "(add-to-list 'vm-mime-mule-coding-to-charset-alist\n");
-      fprintf($theFileDescriptor, "'(windows-1251 \"windows-1251\"))\n");
-      fprintf($theFileDescriptor, ";; end of Vm Russian stuff.\n");
-      fprintf($theFileDescriptor, "))\n");
+      $aText = "           
+(cond ((string-match \"ru\" (getenv \"LANGUAGE\"))
+(print \"Russian environment\")
+
+;; Begin Vm Russian stuff
+(setq vm-mime-8bit-text-transfer-encoding '8bit)
+(setq vm-mime-8bit-composition-charset \"koi8-r\")
+
+;; Map the MULE charset to MIME charset
+(add-to-list 'vm-mime-mule-charset-to-charset-alist
+'(cyrillic-iso8859-5 \"koi8-r\"))
+(add-to-list 'vm-mime-mule-charset-to-coding-alist
+'(\"koi8-r\" cyrillic-koi8))
+(add-to-list 'vm-mime-mule-charset-to-coding-alist
+'(\"windows-1251\" cp1251))
+(add-to-list 'vm-mime-mule-coding-to-charset-alist
+'(cyrillic-koi8 \"koi8-r\"))
+(add-to-list 'vm-mime-mule-coding-to-charset-alist
+'(cp1251 \"windows-1251\"))
+(add-to-list 'vm-mime-mule-coding-to-charset-alist
+'(windows-1251 \"windows-1251\"))
+;; end of Vm Russian stuff.
+))\n";
+
+      fprintf($theFileDescriptor, $aText);
 
       // Personal crisis
       //      fprintf($theFileDescriptor, "(load \"vm-pcrisis\")\n");
 
       //(bbdb-insinuate-vm) 
 
-      fprintf($theFileDescriptor, "(setq vm-mime-internal-content-types t)\n");
-      fprintf($theFileDescriptor, ";;Converting html to text\n");
-      fprintf($theFileDescriptor, "(add-to-list 'vm-mime-internal-content-type-exceptions \"text/html\")\n");
-      fprintf($theFileDescriptor, "(add-to-list 'vm-mime-type-converter-alist '(\"text/html\" \"text/plain\" \"lynx -force_html -dump /dev/stdin\"))\n");
+      $aText = "
+(setq vm-mime-internal-content-types t)
+
+;;Converting html to text
+(add-to-list 'vm-mime-internal-content-type-exceptions \"text/html\")
+(add-to-list 'vm-mime-type-converter-alist '(\"text/html\" \"text/plain\" \"lynx -force_html -dump /dev/stdin\"))
+\n";
+      fprintf($theFileDescriptor, $aText);
+
     }
 
   protected function _putMark( $theFileDescriptor, $theMark)
@@ -195,7 +205,7 @@ class vmConfig
 	  if (touch($this->_myFilename)==FALSE)
 	    {
 	      $aError=sprintf("Error concerning file: %s\n", $this->_myFilename);
-	      ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.3 $');
+	      ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.4 $');
 	      return;
 	    }
 	}
@@ -204,7 +214,7 @@ class vmConfig
       if ($aSource==NULL)
 	{
 	  $aError=sprintf("Error: can't open file: %s\n", $this->_myFilename);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.3 $');
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.4 $');
 	  return;
 	}
 
@@ -213,7 +223,7 @@ class vmConfig
       if ($aDestination==NULL)
 	{
 	  $aError=sprintf("Error: can't open file: %s\n", $this->_myTempFilename);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.3 $');
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.4 $');
 	  return;
 	}
 
@@ -236,28 +246,28 @@ class vmConfig
       if (rename($this->_myTempFilename, $this->_myFilename)==FALSE)
 	{
 	  $aError=sprintf("Error concerning file: %s\n", $this->_myFilename);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.3 $');
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.4 $');
 	  return;
 	}
 
       if (chmod ( $this->_myFilename, 0600)==FALSE)
 	{
 	  $aError=sprintf("Error concerning file: %s\n", $this->_myFilename);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.3 $');
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.4 $');
 	  return;
 	}
 
       if (chown ( $this->_myFilename, $this->_myMailConfig->getUser())==FALSE)
 	{
 	  $aError=sprintf("Error concerning file: %s\n", $this->_myFilename);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.3 $');
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.4 $');
 	  return;
 	}
 
       if (chgrp ( $this->_myFilename, $this->_myMailConfig->getUser())==FALSE)
 	{
 	  $aError=sprintf("Error concerning file: %s\n", $this->_myFilename);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.3 $');
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.4 $');
 	  return;
 	}
     }
