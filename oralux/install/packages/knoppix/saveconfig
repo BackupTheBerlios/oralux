@@ -20,12 +20,11 @@ export PATH
 # Get root
 [ "`id -u`" != "0" ] && exec sudo "$0" "$@"
 
-oldList=`tempfile 2>/dev/null`
 newList=`tempfile 2>/dev/null`
 TMP=`tempfile 2>/dev/null`
 
 bailout(){
-rm -f "$oldList" "$newList" "$TMP" "$TMP.err" "/tmp/configs.tbz"
+rm -f "$newList" "$TMP" "$TMP.err" "/tmp/configs.tbz"
 exit 0
 }
 
@@ -78,22 +77,22 @@ getNewList(){
     fi
 }
 
-getOldList(){
-    source /etc/sysconfig/knoppix
-#RAF
-    MYCONFDEVICE=/dev/sda1
-    MYCONFMOUNTPOINT=/mnt/sda1
-    MYCONFDIR=/mnt/sda1
+# getOldList(){
+#     source /etc/sysconfig/knoppix
+#
+#     MYCONFDEVICE=/dev/sda1
+#     MYCONFMOUNTPOINT=/mnt/sda1
+#     MYCONFDIR=/mnt/sda1
 
-    if [ -n "$MYCONFDEVICE" ]; then
-	if trymount "$MYCONFDEVICE" "$MYCONFMOUNTPOINT"; then
-	    MYCONFIG="$(ls -1d $MYCONFDIR/[Cc][Oo][Nn][Ff][Ii][Gg][Ss].[Tt][Bb][Zz] 2>/dev/null)"
-	    if [ -n "$MYCONFIG" -a -f "$MYCONFIG" ]; then
-		tar -jpPtf "$MYCONFIG" > $oldList
-	    fi
-	fi
-    fi
-}
+#     if [ -n "$MYCONFDEVICE" ]; then
+# 	if trymount "$MYCONFDEVICE" "$MYCONFMOUNTPOINT"; then
+# 	    MYCONFIG="$(ls -1d $MYCONFDIR/[Cc][Oo][Nn][Ff][Ii][Gg][Ss].[Tt][Bb][Zz] 2>/dev/null)"
+# 	    if [ -n "$MYCONFIG" -a -f "$MYCONFIG" ]; then
+# 		tar -jpPtf "$MYCONFIG" > $oldList
+# 	    fi
+# 	fi
+#     fi
+# }
 
 writescript(){
 echo writescript $1 $2
@@ -215,12 +214,6 @@ MESSAGE1="Do you want to save the configuration files?"
 $DIALOG --yesno "$MESSAGE1" 8 65 || bailout
 
 # Compare the new list of configuration files and the previous one 
-#RAF
-#getOldList
-oldSum=$(md5sum /mnt/sda1/configs.tbz | awk '{printf $1}' )
-
-#RAF
-#tar -jtvf /mnt/sda1/configs.tbz > /tmp/oldlist
 
 SAVEHOME=""
 if [ "/home/knoppix" == "$(find /home/knoppix -maxdepth 0 -fstype tmpfs)" ]
@@ -234,17 +227,9 @@ rm -f "$TMP.err"
 BZIP2=-9 tar -T - -cpPjf "/tmp/configs.tbz" <"$newList" 2>"$TMP.err"
 newSum=$(md5sum /tmp/configs.tbz | awk '{printf $1}' )
 
-#RAF
-#echo $newSum
-#tar -jtvf /tmp/configs.tbz > /tmp/newlist
-
-if [ "$newSum" == "$oldSum" ]; then
-#RAF
-echo idem
-else
-#RAF
-echo different
-saveNewList "/tmp/configs.tbz"
+source /etc/sysconfig/knoppix
+if [ "$newSum" != "$CONFIGMD5" ]; then
+    saveNewList "/tmp/configs.tbz"
 fi
 
 bailout

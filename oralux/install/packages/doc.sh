@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # doc.sh
-# $Id: doc.sh,v 1.1 2004/09/27 20:30:00 gcasse Exp $
+# $Id: doc.sh,v 1.2 2004/10/10 21:46:36 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing the documentation
-# $Date: 2004/09/27 20:30:00 $ |
-# $Revision: 1.1 $ |
+# $Date: 2004/10/10 21:46:36 $ |
+# $Revision: 1.2 $ |
 # Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -50,10 +50,6 @@ rm -rf $URL
 
 # Emacspeak introduction
 cp $ORALUX/doc/intro*.txt $BUILDDOC
-
-# Html files
-cd $ORALUX/doc/htm
-tar --dereference --exclude CVS --exclude "*.sav" --exclude "*~" -cf - * | tar -C $NEW_ORALUX/KNOPPIX -xf -
 
 # Emacspeak's tutorials: under /usr/share/oralux/doc/tutorials and are installed - by side effect - when the oralux files are copied.
 

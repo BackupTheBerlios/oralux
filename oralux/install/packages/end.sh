@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # end.sh
-# $Id: end.sh,v 1.1 2004/09/27 20:29:59 gcasse Exp $
+# $Id: end.sh,v 1.2 2004/10/10 21:46:36 gcasse Exp $
 # $Author: gcasse $
 # Description: This script must be the last one to call
-# $Date: 2004/09/27 20:29:59 $ |
-# $Revision: 1.1 $ |
+# $Date: 2004/10/10 21:46:36 $ |
+# $Revision: 1.2 $ |
 # Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -38,7 +38,7 @@ Copy2Oralux()
 {
     rm $NEW_ORALUX/KNOPPIX/rawrite*
     
-    cp $INSTALL_PACKAGES/fdimage/fdimage.exe $NEW_ORALUX/KNOPPIX/
+#    cp $INSTALL_PACKAGES/fdimage/fdimage.exe $NEW_ORALUX/KNOPPIX/
     cp $INSTALL_PACKAGES/knoppix/mkfloppy.bat $NEW_ORALUX/KNOPPIX/
 
     cp $INSTALL_PACKAGES/knoblind/knoblind.bat $NEW_ORALUX/KNOPPIX/
@@ -132,6 +132,11 @@ Copy2Oralux()
 
     cd $INSTALL_PACKAGES/cdrom
     tar --dereference --exclude CVS --exclude "*.sav" --exclude "*~" -cf - * | tar -C $NEW_ORALUX/KNOPPIX -xf -
+
+    # Html files
+    cd $ORALUX/doc/htm
+    tar --dereference --exclude CVS --exclude "*.sav" --exclude "*~" -cf - * | tar -C $NEW_ORALUX/KNOPPIX -xf -
+
 }
 
 case $1 in

@@ -1089,6 +1089,10 @@ echo " ${GREEN}Found, now executing ${MAGENTA}$MYCONFIG${GREEN}.${NORMAL}"
 echo "6" > /proc/sys/kernel/printk
 . "$MYCONFIG" "$MYCONFDIR" || true
 echo "0" > /proc/sys/kernel/printk
+
+# Storing the md5sum of configs.tbz
+CONFIGMD5=$(md5sum $MYCONFDIR/configs.tbz | awk '{printf $1}' )
+echo "CONFIGMD5=\"$CONFIGMD5\"" >> /etc/sysconfig/knoppix
 fi
 
 [ -n $MYCONFDEVICE ] || umount "$MYCONFMOUNTPOINT" 2>/dev/null
