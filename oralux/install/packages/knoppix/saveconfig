@@ -13,7 +13,7 @@
 # * The new config is compared to the old one (via their md5sum)
 # * /etc/fstab is not stored
 # * If the (basic) configuration files are saved to the boot floppy, 
-#   cheatcode floppyconfig is added in syslinux.cfg instaed of myconf=...
+#   cheatcode floppyconfig is added in syslinux.cfg instead of myconf=...
 # * knoppix.sh: once the files are restored, it installs the symbolic links (/etc/sysconfig/symlinks)
 #
 #set -v 
@@ -188,8 +188,6 @@ for i in `awk '/^\/dev\/[hs]d[a-z].*\/mnt\/[hs]d[a-z]/{if(!/ntfs/){print $2}}' /
 do
 PARTITIONS="$PARTITIONS ${i} [Disk/Partition] off"
 done
-
-echo "PARTITIONS=$PARTITIONS"
 
 rm -f "$TMP"
 $DIALOG --clear --radiolist "$MESSAGE4" 18 75 9 $PARTITIONS 2>"$TMP" || bailout

@@ -11,10 +11,9 @@
 ;; w3m
 (setq w3m-key-binding 'info)
 
-;; Babel 
-(setq load-path (cons "/usr/share/oralux/install/packages/misc" load-path)) 
+(setq load-path (cons "/usr/share/oralux/lisp" load-path)) 
 
-;; and load what we need 
+;; Babel 
 (autoload 'babel "babel" 
 "Use a web translation service to translate the message MSG." t) 
 (autoload 'babel-region "babel" 
@@ -138,3 +137,8 @@
 (autoload 'ses-mode "ses.el" "Spreadsheet mode" t)
 
 (setq-default ispell-program-name "aspell")
+(autoload 'flyspell-mode "flyspell" "On-the-fly spelling checker." t)                                        
+
+(autoload 'flyspell-delay-command "flyspell" "Delay on command." t)
+(autoload 'tex-mode-flyspell-verify "flyspell" "" t)
+

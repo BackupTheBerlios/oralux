@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # mail.sh
-# $Id: mail.sh,v 1.1 2004/09/27 20:29:59 gcasse Exp $
+# $Id: mail.sh,v 1.2 2004/11/10 09:58:13 gcasse Exp $
 # $Author: gcasse $
 # Description: Mail
-# $Date: 2004/09/27 20:29:59 $ |
-# $Revision: 1.1 $ |
+# $Date: 2004/11/10 09:58:13 $ |
+# $Revision: 1.2 $ |
 # Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -51,6 +51,7 @@ InstallPackage()
     apt-get install fetchmail
     apt-get install procmail
     apt-get install bbdb
+    apt-get install mew
 
 #     cd /tmp
 #     rm -rf vm-pcrisis*
@@ -76,6 +77,7 @@ Copy2Oralux()
     chroot $BUILD apt-get install fetchmail
     chroot $BUILD apt-get install procmail
     chroot $BUILD apt-get install bbdb
+    chroot $BUILD apt-get install mew
 
 #     cd /tmp
 #     rm -rf vm-pcrisis*

@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # php.sh
-# $Id: php.sh,v 1.4 2004/10/30 19:40:46 gcasse Exp $
+# $Id: php.sh,v 1.5 2004/11/10 09:58:13 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing PHP
-# $Date: 2004/10/30 19:40:46 $ |
-# $Revision: 1.4 $ |
+# $Date: 2004/11/10 09:58:13 $ |
+# $Revision: 1.5 $ |
 # Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -48,9 +48,6 @@ InstallPackage()
     rm -f php5
     ln -s ln -s /usr/bin/php-oralux php5
     cd /etc/alternatives;rm -f php;ln -s /usr/bin/php5 php
-
-    # php-mode
-    cp $INSTALL_PACKAGES/php/php-mode.el /usr/share/emacs/site-lisp/
 }
 
 ####
@@ -68,8 +65,6 @@ Copy2Oralux()
 
     chroot $BUILD  bash -c "apt-get install libxml2-dev; cd /var/tmp/php-5.0.2;./configure $OPT_CONF;make;make install;cd /usr/bin; rm -f php5;ln -s /usr/bin/php-oralux php5;cd /etc/alternatives;rm -f php;ln -s /usr/bin/php5 php"
 
-    # php-mode
-    cp $INSTALL_PACKAGES/php/php-mode.el $BUILD/usr/share/emacs/site-lisp/
 }
 
 case $1 in

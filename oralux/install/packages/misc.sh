@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # misc.sh
-# $Id: misc.sh,v 1.4 2004/11/03 20:21:53 gcasse Exp $
+# $Id: misc.sh,v 1.5 2004/11/10 09:58:13 gcasse Exp $
 # $Author: gcasse $
 # Description: Miscellaneous packages
-# $Date: 2004/11/03 20:21:53 $ |
-# $Revision: 1.4 $ |
+# $Date: 2004/11/10 09:58:13 $ |
+# $Revision: 1.5 $ |
 # Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -65,6 +65,7 @@ cd /tmp; rm -rf aspell-ru-*; wget ftp://ftp.gnu.org/gnu/aspell/dict/ru/aspell-ru
     apt-get install ecasound
     apt-get install vsound
     apt-get install ne
+    apt-get install nano
 
     apt-get install nethack
     apt-get install nethack-console
@@ -83,7 +84,7 @@ cd /tmp; rm -rf aspell-ru-*; wget ftp://ftp.gnu.org/gnu/aspell/dict/ru/aspell-ru
     apt-get install zinf-extras
     apt-get install zinf-plugin-alsa
     apt-get install zinf-plugin-esound
-    
+    apt-get install toolame    
 
   #    apt-get install sawfish
 }
@@ -133,6 +134,7 @@ Copy2Oralux()
 #    chroot $BUILD apt-get install sawfish
 
     chroot $BUILD apt-get install ne
+    chroot $BUILD apt-get install nano
 
     chroot $BUILD apt-get install nethack
     chroot $BUILD apt-get install nethack-console
@@ -143,6 +145,8 @@ Copy2Oralux()
     chroot $BUILD apt-get install pdftohtml
     chroot $BUILD apt-get install wv
     chroot $BUILD apt-get install xlhtml
+
+    chroot $BUILD apt-get install toolame    
 
     # Doc
     cp -pR $DOC/* $BUILD/usr/share/oralux/doc
