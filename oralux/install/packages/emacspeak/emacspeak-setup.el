@@ -1,17 +1,12 @@
 ;;; emacspeak-setup.el --- Setup Emacspeak environment --loaded to start Emacspeak
-;;; $Id: emacspeak-setup.el,v 1.2 2005/03/10 18:35:04 gcasse Exp $
-;;; $Author: gcasse $ 
 ;;; Description:  File for setting up and starting Emacspeak
 ;;; Keywords: Emacspeak, Setup, Spoken Output
 ;;{{{  LCD Archive entry: 
 ;;; LCD Archive Entry:
 ;;; emacspeak| T. V. Raman |raman@cs.cornell.edu 
 ;;; A speech interface to Emacs |
-;;; $Date: 2005/03/10 18:35:04 $ |
-;;;  $Revision: 1.2 $ | 
 ;;; Location undetermined
 ;;;
-
 ;;}}}
 ;;{{{  Copyright:
 ;;;Copyright (C) 1995 -- 2003, T. V. Raman 
@@ -33,7 +28,14 @@
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with GNU Emacs; see the file COPYING.  If not, write to
 ;;; the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
-
+;;;
+;;; WARNING:
+;;; This file is not the original one: modified for Oralux
+;;;
+;;; G.Casse 2004/05/15 : fst-set-language (temporary function)
+;;; Igor B. Poretsky 2004/10/10 : Multispeech default speech rate, 
+;;;  multibyte mode,  No emacs -q $INIT_CL.
+;;;
 ;;}}}
 
 (eval-when-compile (require 'cl))
@@ -114,7 +116,6 @@ pronunciation dictionaries are stored. ")
   (dtk-set-rate tts-default-speech-rate t)
   (dtk-interp-sync))
 
-;; G.Casse 2004/05/15 Updated for Oralux
 (defun fst-set-language (language &optional prefix)
   ;; Temporary function
   t)

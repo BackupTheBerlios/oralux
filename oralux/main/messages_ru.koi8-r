@@ -69,11 +69,11 @@ struct t_translation TheRussianMessages[]=
   },
 
   {"Welcome To Oralux!",
-   "Добро пожаловать в Оралукс!",
+   "Добро пожаловать в Oralux!",
   },
 
   {"Do you want to install the DECtalk software ?",
-   "Вы хотите установить DECtalk",
+   "Хотите ли Вы установить DECtalk?",
   },
 
   {"Please press the Return key if you agree, or any other key if you disagree",
@@ -109,7 +109,7 @@ struct t_translation TheRussianMessages[]=
   },
 
   {"Please enter your serial number, and press Return",
-   "пожалуйста введите серийный номер и нажмите Enter",
+   "пожалуйста введите серийный номер и нажмите Ввод",
   },
 
   {"Sorry, your serial number is not correct",
@@ -117,7 +117,7 @@ struct t_translation TheRussianMessages[]=
   },
 
   {"If you want to try again, press Return",
-   "Если хотите попробовать ещё раз, нажмите Enter",
+   "Если хотите попробовать ещё раз, нажмите Ввод",
   },
 
   {"If you want to stop this stage, press any other key",
@@ -125,11 +125,11 @@ struct t_translation TheRussianMessages[]=
   },
 
   {"Do you want this menu in English ?",
-   "Хотите читать это меню на английском?",
+   "Хотите ли Вы это меню по-английски?",
   },
 
   {"Do you want this menu in French ?",
-   "Хотите читать это меню на французском",
+   "Хотите ли Вы это меню по-французски?",
   },
 
   {"y",
@@ -169,15 +169,15 @@ struct t_translation TheRussianMessages[]=
   },
 
   {"What kind of keyboard is used ?",
-   "Какой тип клавиатуры Вы используете",
+   "Какой тип клавиатуры Вы используете?",
   },
 
   {"Press Enter to increase the volume, or Space to decrease the volume, or any other key to accept it",
-   "Нажмите Enter для увеличения громкости, Пробел для уменьшения громкости, или любую другую клавишу для принятия",
+   "Нажмите Ввод для увеличения громкости, Пробел для уменьшения громкости, или любую другую клавишу для принятия",
   },
 
   {"Do you want to change the type of keyboard ?",
-   "Вы хотите изменить тип клавиатуры",
+   "Хотите ли Вы изменить тип клавиатуры?",
   },
 
   {"Your keyboard is supposed to be",
@@ -185,27 +185,27 @@ struct t_translation TheRussianMessages[]=
   },
 
   {"Do you want to update your preferences ?",
-   "Вы хотите обновить Ваши настройки?",
+   "Хотите ли Вы обновить Ваши настройки?",
   },
 
   {"Do you want to eject the CD ROM ?",
-   "Вы хотите извлечь CD ROM?",
+   "Хотите ли Вы извлечь диск?",
   },
 
   {"Once the CD is taken, out, press Return",
-   "Как только диск извлечен нажмите Enter",
+   "Когда диск будет извлечен нажмите Ввод",
   },
 
   {"Do you want this menu in German ?",
-   "Вы хотите видеть это меню на немецком?",
+   "Хотите ли Вы это меню по-немецки?",
   },
 
   {"Do you want this menu in Spanish ?",
-   "Вы хотите видеть это меню на испанском?",
+   "Хотите ли Вы это меню по-испански?",
   },
 
   {"Do you want Emacspeak Festival M Brola ?",
-   "Вам нужен Emacspeak Festival M Brola ?",
+   "Вам нужен Emacspeak Festival M Brola?",
   },
 
   {"Do you want Flite ?",
@@ -221,75 +221,75 @@ struct t_translation TheRussianMessages[]=
   },
 
   {"Alva",
-   "Alva",
+   NULL,
   },
 
   {"BrailleLite",
-   "BrailleLite",
+   NULL,
   },
 
   {"BrailleNote",
-   "BrailleNote",
+   NULL,
   },
 
   {"CombiBraille",
-   "CombiBraille",
+   NULL,
   },
 
   {"EcoBraille",
-   "EcoBraille",
+   NULL,
   },
 
   {"EuroBraille",
-   "EuroBraille",
+   NULL,
   },
 
   {"HandyTech",
-   "HandyTech",
+   NULL,
   },
 
   {"Log Text",
-   "Log Text",
+   NULL,
   },
 
   {"MultiBraille",
-   "MultiBraille",
+   NULL,
   },
 
   {"MDV",
-   "MDV",
+   NULL,
   },
 
   {"MiniBraille",
-   "MiniBraille",
+   NULL,
   },
 
   {"Papen meier",
-   "Papen meier",
+   NULL,
   },
 
   {"Telesensory Systems Inc.",
-   "Telesensory Systems Inc.",
+   NULL,
   },
 
   {"Vario, R B T (emulation 1)",
-   "Vario, R B T (emulation 1)",
+   NULL,
   },
 
   {"VideoBraille",
-   "VideoBraille",
+   NULL,
   },
 
   {"Vario, R B T (emulation 2)",
-   "Vario, R B T (emulation 2)",
+   NULL,
   },
 
   {"Voyager",
-   "Voyager",
+   NULL,
   },
 
   {"VisioBraille",
-   "VisioBraille",
+   NULL,
   },
 
   {"French c b i f s",
@@ -337,7 +337,7 @@ struct t_translation TheRussianMessages[]=
   },
 
   {"Which table do you want ?",
-   "Какую таблицу Вы выбираете ?",
+   "Какую таблицу Вы хотите?",
   },
 
 
@@ -347,7 +347,7 @@ struct t_translation TheRussianMessages[]=
 
 
   {"Do you want to change the type of braille display ?",
-   "Вы хотите изменить тип брайлевского дисплея?",
+   "Хотите ли Вы изменить тип брайлевского дисплея?",
   },
 
   {"Your braille display is supposed to be",
@@ -355,7 +355,7 @@ struct t_translation TheRussianMessages[]=
   },
 
   {"Do you want to change the table ?",
-   "Вы хотите изменить таблицу?",
+   "Хотите ли Вы сменить таблицу?",
   },
 
   {"The braille table is supposed to be",
@@ -363,7 +363,7 @@ struct t_translation TheRussianMessages[]=
   },
 
   {"Do you want to change the port ?",
-   "Вы хотите изменить порт?",
+   "Хотите ли Вы сменить порт?",
   },
 
   {"The communication port is supposed to be",
@@ -376,72 +376,72 @@ struct t_translation TheRussianMessages[]=
 
   {
     "Accent S A",
-    "Accent S A",
+    NULL,
   },
 
   {
     "Braille Lite",
-    "Braille Lite",
+    NULL,
   },
 
   {
     "Braille 'n Speak",
-    "Braille 'n Speak",
+    NULL,
   },
 
   {
     "Ciber 232",
-    "Ciber 232",
+    NULL,
   },
 
   {
     "Ciber 232 Plus",
-    "Ciber 232 Plus",
+    NULL,
   },
 
   {
     "DECtalk Express",
-    "DECtalk Express",
+    NULL,
   },
 
   {
     "DECtalk Multivoice",
-    "DECtalk Multivoice",
+    NULL,
   },
 
   {
     "DECtalk 3",
-    "DECtalk 3",
+    NULL,
   },
 
   {
     "Dolphin Apollo",
-    "Dolphin Apollo",
+    NULL,
   },
 
   {
     "DoubleTalk LT",
-    "DoubleTalk LT",
+    NULL,
   },
 
   {
     "DoubleTalk PC",
-    "DoubleTalk PC",
+    NULL,
   },
 
   {
     "LiteTalk",
-    "LiteTalk",
+    NULL,
   },
 
   {
     "PC Hablado notebook",
-    "PC Hablado notebook",
+    NULL,
   },
 
   {
     "Type 'n Speak",
-    "Type 'n Speak",
+    NULL,
   },
 
   {"Do you want to select an external voice synthesizer ?",
@@ -457,17 +457,17 @@ struct t_translation TheRussianMessages[]=
   },
 
   {"Do you want to change the type of external synthesizer ?",
-   "Вы хотите изменить тип внешнего синтезатора?",
+   "Хотите ли Вы изменить тип внешнего синтезатора?",
   },
 
   {
     "Emacspeak",
-    "Emacspeak",
+    NULL,
   },
 
   {
     "Yasr",
-    "Yasr",
+    NULL,
   },
 
   {"Your desktop is supposed to be",
@@ -475,35 +475,35 @@ struct t_translation TheRussianMessages[]=
   },
 
   {"Do you want to change the kind of desktop ?",
-   "Вы хотите изменить тип рабочего стола?",
+   "Хотите ли Вы изменить тип рабочего стола?",
   },
 
   {"Which desktop do you want ?",
-   "Какой рабочий стол Вы выбираете ?"
+   "Какой рабочий стол Вы хотите? "
   },
 
   {"Do you want ParleMax ?",
-   "Вы выбираете ParleMax?",
+   "Хотите ли Вы ParleMax?",
   },
 
   {"Do you want to reboot your PC?",
-   "Вы хотите перезагрузить свой компьютер?",
+   "Хотите ли Вы перезагрузить компьютер?",
   },
 
   {"Do you want to shutdown your PC?",
-   "Вы хотите выключить свой компьютер?",
+   "Вы хотите выключить компьютер?",
   },
 
   {"Do you want MultiSpeech (English and Russian) ?",
-   "Вы хотите Мультиспич, Русский и Английский языки?",
+   "Вам нужен русско-английский речевой сервер?",
   },
 
   {"Do you really want to stop the Braille driver ?",
-   "Вы действительно хотите остановить брайлевский драйвер?",
+   "Вы действительно хотите остановить драйвер брайлевского дисплея?",
   },
 
   {"Do you want this menu in Russian ?",
-   "Хотите читать это меню на Русском?",
+   "Хотите ли Вы это меню по-русски?",
   },
 
   {"0.6 beta",
@@ -553,7 +553,6 @@ struct t_translation TheRussianMessages[]=
   // 83
   {"Set up mail",
    NULL,
-  },
-
+  }
 
 };

@@ -139,7 +139,12 @@
  '(ediff-forward-word-function (quote ediff-forward-word) t)
  '(ediff-ignore-similar-regions nil t)
  '(ediff-quit-widened t t)
- '(tmm-mid-prompt ":"))
+ '(emacspeak-ispell-max-choices 40 t)
+ '(ispell-program-name "aspell")
+ '(newsticker-html-renderer (quote w3m-region))
+ '(newsticker-url-list (quote (("New York Times" "http://www.nytimes.com/services/xml/rss/nyt/HomePage.xml" nil nil nil))))
+ '(tmm-mid-prompt #(":" 0 1 (personality inaudible)))
+ '(w3m-after-cursor-move-hook (quote (w3m-highlight-current-anchor w3m-auto-show))))
 (custom-set-faces
   ;; custom-set-faces was added by Custom -- don't edit or cut/paste it!
   ;; Your init file should contain only one such instance.
@@ -158,6 +163,10 @@
  (t
   (require 'erc)))
 
+;; SES
+(add-to-list 'load-path "~/SPREADSHEET/ses21-031130/")
+(autoload 'ses-mode "ses.el" "Spreadsheet mode" t)
+
 ;; Unbind C-z to shell instead of suspend-emacs (it is too easy to press C-z and hence suspending Emacspeak).
 ;; Rather use C-z C-z to suspend emacs
 (global-unset-key "\C-z")
@@ -166,17 +175,14 @@
 
 (set-foreground-color "white")
 (set-background-color "black")
-
-;; SES
-(add-to-list 'load-path "/usr/share/emacs/site-lisp/ses")
-(autoload 'ses-mode "ses.el" "Spreadsheet mode" t)
+(global-font-lock-mode t)
 
 (server-start)
 
-(setq-default ispell-program-name "aspell")
-(autoload 'flyspell-mode "flyspell" "On-the-fly spelling checker." t)
-(autoload 'flyspell-delay-command "flyspell" "Delay on command." t)
-(autoload 'tex-mode-flyspell-verify "flyspell" "" t)
+;; (setq-default ispell-program-name "aspell")
+;; (autoload 'flyspell-mode "flyspell" "On-the-fly spelling checker." t)
+;; (autoload 'flyspell-delay-command "flyspell" "Delay on command." t)
+;; (autoload 'tex-mode-flyspell-verify "flyspell" "" t)
 
 ;;(load-library "functions-keys")
 (load-library "vm-prepare")
@@ -197,3 +203,30 @@
 
 ;; bitlbee
 (load-library "erc-init")
+;;(global-set-key "\C-ceb" 'erc-bitlbee)
+
+
+
+;;(server-start)
+;; calendar
+(setq european-calendar-style t)
+;;appointments
+(display-time)
+(add-hook 'diary-hook 'appt-make-list)
+(diary 0)
+
+;;newsticker
+  (autoload 'w3m-region "w3m"
+    "Render region in current buffer and replace with result." t)
+;;(add-to-list 'load-path "~/.emacs.d")
+(autoload 'newsticker-start "newsticker" "Emacs Newsticker" t)
+(autoload 'newsticker-show-news "newsticker" "Emacs Newsticker" t)
+
+;; Newsticker-mode supports imenu. It allows for navigating with the help
+;; of a menu. In order to use this feature you should also add the
+;; following.
+
+(add-hook 'newsticker-mode-hook 'imenu-add-menubar-index)
+
+ (setq browse-url-browser-function 'w3m-browse-url)
+

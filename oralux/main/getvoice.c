@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // getvoice.c
-// $Id: getvoice.c,v 1.2 2005/01/30 21:43:51 gcasse Exp $
+// $Id: getvoice.c,v 1.3 2005/03/13 22:09:54 gcasse Exp $
 // $Author: gcasse $
 // Description: Used at installation time to build the "voices" used by oralux
-// $Date: 2005/01/30 21:43:51 $ |
-// $Revision: 1.2 $ |
+// $Date: 2005/03/13 22:09:54 $ |
+// $Revision: 1.3 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -211,7 +211,7 @@ void getvoiceRussian(char* theSentence, char* theOggFilename)
     }
   aSentence[i]=0;
 
-  sprintf(buf,"echo \"%s\" | ru_tts -s /usr/local/lib/ru_tts/lexicon -r 0.14 -p 0.19 | exec sox -t raw -s -b -r 10000 -c 1 -v 0.70 - -c 1 -w %s", aSentence, TheWav);
+  sprintf(buf,"echo \"%s\" | ru_tts -s /usr/local/lib/ru_tts/lexicon -r 0.14 -p 0.19 | exec sox -t raw -s -b -r 10000 -c 1 -v 0.70 - -c 1 -w %s", aSentence, TheWav);  
 
   system(buf);
   SHOW(buf);

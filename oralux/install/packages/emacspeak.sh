@@ -1,12 +1,12 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # emacspeak.sh
-# $Id: emacspeak.sh,v 1.3 2005/03/10 17:36:11 gcasse Exp $
+# $Id: emacspeak.sh,v 1.4 2005/03/13 22:09:54 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing emacspeak. Thanks to the Nath's howto: 
 # emacspeak-dtk-soft-debinst-howto.htm
-# $Date: 2005/03/10 17:36:11 $ |
-# $Revision: 1.3 $ |
+# $Date: 2005/03/13 22:09:54 $ |
+# $Revision: 1.4 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -86,7 +86,6 @@ InstallPackage()
     cd /tmp/emacspeak*; 
     
     # Patch by Igor B. Poretsky (multispeech integration, and more)
-    cp $INSTALL_PACKAGES/emacspeak/emacspeak-$RELEASE.patch .
     patch -p0 -i emacspeak-$RELEASE.patch
     make config; make; make install
 
@@ -150,7 +149,7 @@ Copy2Oralux()
     chroot $BUILD apt-get install w3-el-e21
 
     # Installing emacspeak
-    chroot $BUILD bash -c "rm -f /usr/share/emacs/site-lisp/emacspeak/servers/software-dtk/Makefile; rm -f /usr/share/emacs/site-lisp/emacspeak/servers/software-dtk/tcldtk.*; cd /var/tmp/emacspeak*; cp $INSTALL_PACKAGES/emacspeak/emacspeak-$RELEASE.patch .; patch -p0 -i emacspeak-$RELEASE.patchsh;make config; make; make install"
+    chroot $BUILD bash -c "rm -f /usr/share/emacs/site-lisp/emacspeak/servers/software-dtk/Makefile; rm -f /usr/share/emacs/site-lisp/emacspeak/servers/software-dtk/tcldtk.*; cd /var/tmp/emacspeak*; patch -p0 -i emacspeak-$RELEASE.patch;make config; make; make install"
 
     cd $BUILD/var/tmp
     rm -rf emacspeak*
@@ -197,8 +196,10 @@ Copy2Oralux()
     chroot $BUILD install-info /usr/share/info/emacspeak.info
 
     # Installing the customized emacspeak scripts
-    substituteFile emacspeak $BUILD/usr/bin
-    substituteFile emacspeak-setup.el $BUILD/usr/bin
+#     substituteFile emacspeak $BUILD/usr/bin
+#     substituteFile emacspeak-setup.el $BUILD/usr/bin
+    cp $INSTALL_PACKAGES/emacspeak/emacspeak $BUILD/usr/bin
+    cp $INSTALL_PACKAGES/emacspeak/emacspeak-setup.el $BUILD/usr/bin
 }
 
 if [ ! -e $ARCH_EMACSPEAK ]

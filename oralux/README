@@ -1,10 +1,10 @@
 # ----------------------------------------------------------------------------
 # README
-# $Id: README,v 1.4 2005/03/10 18:37:59 gcasse Exp $
+# $Id: README,v 1.5 2005/03/13 22:09:54 gcasse Exp $
 # $Author: gcasse $
 # Description: This file describes how to build Oralux from Knoppix.
-# $Date: 2005/03/10 18:37:59 $ |
-# $Revision: 1.4 $ |
+# $Date: 2005/03/13 22:09:54 $ |
+# $Revision: 1.5 $ |
 # Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -48,16 +48,20 @@ Today, you need around 9.5 Gb shared in 3 partitions:
 The following files will be downloaded and stored in $HOME/oralux/install/arch
 
 Softwares:
-http://switch.dl.sourceforge.net/sourceforge/emacspeak/emacspeak-20.tar.bz2
 http://switch.dl.sourceforge.net/sourceforge/emacspeak/emacspeak-21.tar.bz2
 http://fr.rpmfind.net/linux/blinux/emacspeak/blinux/emacspeak-ss-1.9.1.tar.gz
 http://www.pollock-nageoire.net/patches/efm-install-util.tgz
 
-multispeech
+Emacpeak-21 Patch by Igor B. Poretsky (Multispeech and more):
+ftp://ftp.rakurs.spb.ru/pub/Goga/projects/speech-interface/patches/emacspeak
+
+Multispeech
 ftp://ftp.rakurs.spb.ru/pub/Goga 
 under projects/speech-interface/multispeech-1.2.2.tar.bz2
 and slackware-packages/8.1/speach-interface/multispeech-1.2-i586-1.tgz 
-http://leb.net/pub/blinux/mbrola/blinux/RPMS/mbrola-tts-English-a9m_d-3.i386.rpm
+English lexicon from:
+ftp://ftp.nluug.nl/pub/os/Linux/distr/altlinux/Sisyphus/files/i586/RPMS/freespeech-10.0-alt2.i586.rpm
+
 http://atrey.karlin.mff.cuni.cz/~clock/twibright/links/download/links-2.1pre15.tar.gz
 
 rawrite.exe comes from:

@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # multispeech.sh
-# $Id: multispeech.sh,v 1.3 2005/03/10 18:37:59 gcasse Exp $
+# $Id: multispeech.sh,v 1.4 2005/03/13 22:09:54 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing Multispeech.
-# $Date: 2005/03/10 18:37:59 $ |
-# $Revision: 1.3 $ |
+# $Date: 2005/03/13 22:09:54 $ |
+# $Revision: 1.4 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -25,13 +25,13 @@
 ####
 source ../oralux.conf
 
-$RULEX_RELEASE=0.9.21
-$MULTISPEECH_RELEASE=1.2.2
+RULEX_RELEASE=0.9.22
+MULTISPEECH_RELEASE=1.2.2
 ARCH_RULEX=$ARCH/rulex-$RULEX_RELEASE.tar.gz 
 ARCH_MULTISPEECH_BIN=$ARCH/multispeech-1.2-i586-1.tgz
 ARCH_MULTISPEECH_SRC=$ARCH/multispeech-$MULTISPEECH_RELEASE.tar.bz2
 ARCH_RU_TTS=$ARCH/ru_tts-0.4-i586-1.tgz
-ARCH_MBROLA_ENGLISH_RPM="$ARCH/mbrola-tts-English-a9m_d-3.i386.rpm"
+ARCH_LEXICON=$ARCH/freespeech-10.0-alt2.i586.rpm
 
 echo "Previously compiled with g++-3.2"
 
@@ -44,18 +44,7 @@ InstallPackage()
     rm -rf rulex*
     tar -zxvf $ARCH_RULEX
     cd rulex*
-
-    comp=`diff $INSTALL_PACKAGES/multispeech/rulexMakefile.sav Makefile |wc -l|awk '{print $1}'`
-# we have to compare it with the previously saved Oralux file
-# If they are distinct, we will are to rewrite the following script
-# 
-    if [ "$comp" != "0" ]; then
-	echo "the new multispeech file rulex/Makefile is different from our original one in $INSTALL_PACKAGES/multispeech"
-	echo "--> Please, update the oralux multispeech script and its relevant files"
-	exit 1
-    fi
-    cp $INSTALL_PACKAGES/multispeech/rulexMakefile Makefile
-    make all
+    make lexicon
     mkdir -p /usr/local/lib/ru_tts
     make install
 
@@ -72,18 +61,21 @@ InstallPackage()
 ### ru_tts
     cd /tmp
     mkdir ru_tts
-    cd ru_tts
+     cd ru_tts
     tar -zxvf $ARCH_RU_TTS
     cp usr/local/bin/* /usr/local/bin
 
-### For English synthesis: lexicon for mbrola
-    cd /tmp
-    rm -rf mbrola-tts-English-*
-    alien -g $ARCH_MBROLA_ENGLISH_RPM
-    mkdir -p /usr/local/share/mbrola
-    cp mbrola-tts-English-*.orig/usr/lib/mbrola/tts-English/lib/lexicon.dir /usr/local/share/mbrola/lexicon.en
     mkdir -p /usr/share/oralux/doc/license/mbrola
-    cp mbrola-tts-English-*.orig/usr/lib/mbrola/tts-English/Copying /usr/share/oralux/doc/license/mbrola/Copying_mbrola-tts-English.txt
+    mkdir -p /usr/local/share/mbrola
+
+### Lexicon for English synthesis
+    cd /tmp
+    rm -rf freespeech*
+    alien -g $ARCH_LEXICON
+    cp freespeech-10.0.orig/usr/share/freespeech/lexicon.dir /usr/local/share/mbrola/lexicon.en.dir
+    cp freespeech-10.0.orig/usr/share/freespeech/lexicon.dir /usr/local/share/mbrola/lexicon.en.pag
+    mkdir -p /usr/share/oralux/doc/license/freespeech
+    cp freespeech-10.0.orig/usr/share/doc/freespeech-10.0/Copying /usr/share/oralux/doc/license/freespeech
 
 ### Multispeech
     cd /tmp
@@ -144,16 +136,6 @@ InstallPackage()
     fi  
     cp -f $INSTALL_PACKAGES/multispeech/Makefile $TMP/src/freephone/Makefile
 
-    comp=`diff $INSTALL_PACKAGES/multispeech/LispMakefile.sav $TMP/lisp/Makefile |wc -l|awk '{print $1}'`
-    if [ "$comp" != "0" ]; then
-	echo "the new multispeech file lisp/Makefile is different from our original one in $INSTALL_PACKAGES/multispeech"
-	echo "--> Please, update the oralux multispeech script and its relevant files"
-	exit 1
-    fi  
-    cp $INSTALL_PACKAGES/multispeech/LispMakefile $TMP/lisp/Makefile
-    cp $INSTALL_PACKAGES/multispeech/dtk-voices.el $TMP/lisp
-    cp $INSTALL_PACKAGES/multispeech/dtk-css-speech.el $TMP/lisp
-
 ### Updating the ru script to use rulex the Russian lexicon
     comp=`diff $INSTALL_PACKAGES/multispeech/ru.sav $TMP/scripts/tts/ru |wc -l|awk '{print $1}'`
     if [ "$comp" != "0" ]; then
@@ -179,16 +161,7 @@ InstallPackage()
     make
 
 ### Installing the elisp files
-    cd /usr/share/emacs/site-lisp/emacspeak/lisp
-    cp -f $TMP/lisp/dtk-voices.el .
-    cp -f $TMP/lisp/dtk-css-speech.el .
-    cp -f $TMP/lisp/dtk-voices.elc .
-    cp -f $TMP/lisp/dtk-css-speech.elc .
-    cp -f $TMP/lisp/mbrola-css-speech.el .
-    cp -f $TMP/lisp/mbrola-css-speech.elc .
-    cp -f $TMP/lisp/mbrola-voices.el .
-    cp -f $TMP/lisp/mbrola-voices.elc .
-    cp -f $TMP/lisp/multilingual-server.el .
+     cd /usr/share/emacs/site-lisp/emacspeak/lisp
 
 # Note from Sergei:
 # Important! Make sure that file `Russian-spelling.el' used by
@@ -211,8 +184,11 @@ InstallPackage()
 
 # Clear temporary files
     rm -rf $TMP/multispeech-$MULTISPEECH_RELEASE
-    rm -rf $TMP/mbrola-tts-English-*
     rm -rf $TMP/rulex-$RULEX_RELEASE
+
+    cd /usr/share/emacs/site-lisp/emacspeak/servers
+    rm -f multispeech
+    ln -s /usr/local/lib/multispeech/speech_server multispeech
 }
 
 ####
@@ -223,20 +199,8 @@ Copy2Oralux()
     cd $BUILD/var/tmp
     rm -rf rulex*
     tar -zxvf $ARCH_RULEX
-    cd rulex*
-
-    comp=`diff $INSTALL_PACKAGES/multispeech/rulexMakefile.sav Makefile |wc -l|awk '{print $1}'`
-# we have to compare it with the previously saved Oralux file
-# If they are distinct, we will are to rewrite the following script
-# 
-    if [ "$comp" != "0" ]; then
-	echo "the new multispeech file rulex/Makefile is different from our original one in $INSTALL_PACKAGES/multispeech"
-	echo "--> Please, update the oralux multispeech script and its relevant files"
-	exit 1
-    fi
-    cp $INSTALL_PACKAGES/multispeech/rulexMakefile Makefile
     
-    chroot $BUILD bash -c "cd /var/tmp/rulex*; make all; mkdir -p /usr/local/lib/ru_tts; make install"
+    chroot $BUILD bash -c "cd /var/tmp/rulex*; make lexicon; mkdir -p /usr/local/lib/ru_tts; make install"
 
 ### letters
 # multispeech-1.2.2.tar.bz2 does not include letters
@@ -255,14 +219,17 @@ Copy2Oralux()
     tar -zxvf $ARCH_RU_TTS
     cp usr/local/bin/* $BUILD/usr/local/bin
 
-### For English synthesis: lexicon for mbrola
-    cd $BUILD/var/tmp
-    rm -rf mbrola-tts-English-*
-    alien -g $ARCH_MBROLA_ENGLISH_RPM
-    mkdir -p $BUILD/usr/local/share/mbrola
-    cp mbrola-tts-English-*.orig/usr/lib/mbrola/tts-English/lib/lexicon.dir $BUILD/usr/local/share/mbrola/lexicon.en
     mkdir -p $BUILD/usr/share/oralux/doc/license/mbrola
-    cp mbrola-tts-English-*.orig/usr/lib/mbrola/tts-English/Copying $BUILD/usr/share/oralux/doc/license/mbrola/Copying_mbrola-tts-English.txt
+    mkdir -p $BUILD/usr/local/share/mbrola
+
+### Lexicon for English synthesis
+    cd $BUILD/var/tmp
+    rm -rf freespeech*
+    alien -g $ARCH_LEXICON
+    cp freespeech-10.0.orig/usr/share/freespeech/lexicon.dir $BUILD/usr/local/share/mbrola/lexicon.en.dir
+    cp freespeech-10.0.orig/usr/share/freespeech/lexicon.dir $BUILD/usr/local/share/mbrola/lexicon.en.pag
+    mkdir -p $BUILD/usr/share/oralux/doc/license/freespeech
+    cp freespeech-10.0.orig/usr/share/doc/freespeech-10.0/Copying $BUILD/usr/share/oralux/doc/license/freespeech
 
 ### Multispeech
     cd $BUILD/var/tmp
@@ -323,16 +290,6 @@ Copy2Oralux()
     fi  
     cp -f $INSTALL_PACKAGES/multispeech/Makefile $TMP/src/freephone/Makefile
 
-    comp=`diff $INSTALL_PACKAGES/multispeech/LispMakefile.sav $TMP/lisp/Makefile |wc -l|awk '{print $1}'`
-    if [ "$comp" != "0" ]; then
-	echo "the new multispeech file lisp/Makefile is different from our original one in $INSTALL_PACKAGES/multispeech"
-	echo "--> Please, update the oralux multispeech script and its relevant files"
-	exit 1
-    fi  
-    cp $INSTALL_PACKAGES/multispeech/LispMakefile $TMP/lisp/Makefile
-    cp $INSTALL_PACKAGES/multispeech/dtk-voices.el $TMP/lisp
-    cp $INSTALL_PACKAGES/multispeech/dtk-css-speech.el $TMP/lisp
-
 ### Updating the ru script to use rulex the Russian lexicon
     comp=`diff $INSTALL_PACKAGES/multispeech/ru.sav $TMP/scripts/tts/ru |wc -l|awk '{print $1}'`
     if [ "$comp" != "0" ]; then
@@ -359,15 +316,6 @@ Copy2Oralux()
 
 ### Installing the elisp files
     cd $BUILD/usr/share/emacs/site-lisp/emacspeak/lisp
-    cp -f $TMP/lisp/dtk-voices.el .
-    cp -f $TMP/lisp/dtk-css-speech.el .
-    cp -f $TMP/lisp/dtk-voices.elc .
-    cp -f $TMP/lisp/dtk-css-speech.elc .
-    cp -f $TMP/lisp/mbrola-css-speech.el .
-    cp -f $TMP/lisp/mbrola-css-speech.elc .
-    cp -f $TMP/lisp/mbrola-voices.el .
-    cp -f $TMP/lisp/mbrola-voices.elc .
-    cp -f $TMP/lisp/multilingual-server.el .
 
 # Note from Sergei:
 # Important! Make sure that file `Russian-spelling.el' used by
@@ -390,8 +338,9 @@ Copy2Oralux()
 
 # Clear temporary files
     rm -rf $TMP/multispeech-$MULTISPEECH_RELEASE
-    rm -rf $TMP/mbrola-tts-English-*
     rm -rf $TMP/rulex-$RULEX_RELEASE
+
+    chroot $BUILD bash -c "cd /usr/share/emacs/site-lisp/emacspeak/servers; rm -f multispeech; ln -s /usr/local/lib/multispeech/speech_server multispeech"
 }
 
 case $1 in
