@@ -1,4 +1,4 @@
-<?php rcs_id('$Id: stdlib.php,v 1.1 2004/09/28 21:48:48 gcasse Exp $');
+<?php rcs_id('$Id: stdlib.php,v 1.2 2004/12/30 00:14:16 gcasse Exp $');
 
    /*
       Standard functions for Wiki functionality
@@ -524,6 +524,17 @@
       }
 
       _dotoken('CONTENT', $content, $page);
+
+      // Filter (external links,...) because of wiki abuse
+//        $page=preg_replace ("/<a href=\"http:\/\/(?!oralux.org)[^>]*>[^<]*<\/a>/i", "", $page);
+//        $page=preg_replace ("/http:\/\/(?!(oralux.org)(php)[^ ]*/i", " ", $page);
+       
+      $page=preg_replace ("/<a href=\"http:\/\/(?!oralux.org|phpwiki|www.gnu.org)[^>]*>[^<]*<\/a>/i", "", $page);
+      $page=preg_replace ("/\[?http:\/\/(?!oralux.org|phpwiki|www.gnu.org)[^\]]*\]?/i", "", $page);
+      $page=preg_replace ("/[0-9]{4} [0-9a-zA-Z]*&[^ ]*[ ]/i", "", $page);
+      $page=preg_replace ("/BAD URL -- remove all of &lt;, &gt;, &quot;/i", "", $page);
+      $page=preg_replace ("/[ ]+/", " ", $page);
+
       print $page;
    }
 ?>
