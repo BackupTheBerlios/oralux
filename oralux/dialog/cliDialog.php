@@ -1,11 +1,11 @@
 <?php
 // ----------------------------------------------------------------------------
 // cliDialog.php
-// $Id: cliDialog.php,v 1.1 2004/12/03 19:13:43 gcasse Exp $
+// $Id: cliDialog.php,v 1.2 2004/12/03 22:59:28 gcasse Exp $
 // $Author: gcasse $
 // Description: command line based dialog (menu, yes/no question, dialog box,...)
-// $Date: 2004/12/03 19:13:43 $ |
-// $Revision: 1.1 $ |
+// $Date: 2004/12/03 22:59:28 $ |
+// $Revision: 1.2 $ |
 // Copyright (C) 2004 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -23,7 +23,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // ----------------------------------------------------------------------------
 
-require_once("helpEmul.php");
+require_once("../main/helpEmul.php");
 
 // {{{ Constants
 

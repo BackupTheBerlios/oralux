@@ -1,11 +1,11 @@
 <?php
 // ----------------------------------------------------------------------------
 // minimenu.php
-// $Id: minimenu.php,v 1.1 2004/11/28 21:21:00 gcasse Exp $
+// $Id: minimenu.php,v 1.2 2004/12/03 22:59:28 gcasse Exp $
 // $Author: gcasse $
 // Description: menu to easily launch and manage text-based programs.
-// $Date: 2004/11/28 21:21:00 $ |
-// $Revision: 1.1 $ |
+// $Date: 2004/12/03 22:59:28 $ |
+// $Revision: 1.2 $ |
 // Copyright (C) 2004 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -24,8 +24,8 @@
 // ----------------------------------------------------------------------------
 
 require_once("../main/helpEmul.php");
-require_once("../main/cliDialog.php");
-require_once("../main/terminal.php");
+require_once("../dialog/cliDialog.php");
+require_once("../dialog/terminal.php");
 require_once("config.php");
 
 // {{{ class element
@@ -63,7 +63,14 @@ class minimenu
 
       $this->myDialog=new cliDialog($this->_myTerminal, false);
       $aTitle="";
-      $this->myDialog->menu($aTitle, $anOption, & $aResult);
+      $theText=NULL; 
+      $theSelectedOption=NULL; 
+      $theKeyIsDisplayed=false;
+      $this->myDialog->menu($aTitle, $anOption, & $aResult, 
+			    NULL, // no text
+			    NULL, // no selected option
+			    false // the keys are not displayed (no number for example before the label).
+			    );
     }
 };
 // }}}

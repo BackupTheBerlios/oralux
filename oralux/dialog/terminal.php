@@ -1,11 +1,11 @@
 <?php
 // ----------------------------------------------------------------------------
 // terminal.php
-// $Id: terminal.php,v 1.1 2004/12/03 19:13:43 gcasse Exp $
+// $Id: terminal.php,v 1.2 2004/12/03 22:59:28 gcasse Exp $
 // $Author: gcasse $
 // Description: managing the dumb terminals (emacs) or the others (so called enhanced)  
-// $Date: 2004/12/03 19:13:43 $ |
-// $Revision: 1.1 $ |
+// $Date: 2004/12/03 22:59:28 $ |
+// $Revision: 1.2 $ |
 // Copyright (C) 2004 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -25,7 +25,7 @@
 
 // Notice: php5 is customized to have a non canonical input mode (concerned file: ext/dio/dio.c)
 
-require_once("helpEmul.php");
+require_once("../main/helpEmul.php");
 
 // {{{ class enhancedTerminal
 

@@ -3,11 +3,11 @@
 
 # ----------------------------------------------------------------------------
 # netConfig.sh
-# $Id: netConfig.sh,v 1.5 2004/11/15 23:29:32 gcasse Exp $
+# $Id: netConfig.sh,v 1.6 2004/12/03 22:59:28 gcasse Exp $
 # $Author: gcasse $
 # Description: Menu for internet settings
-# $Date: 2004/11/15 23:29:32 $ |
-# $Revision: 1.5 $ |
+# $Date: 2004/12/03 22:59:28 $ |
+# $Revision: 1.6 $ |
 # Copyright (C) 2004 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -38,7 +38,7 @@ rm -f $MINIMENU 2>/dev/null
 adslMenu()
 {
     TextWhichUsbADSL="Which is your USB ADSL Modem?"
-    $DIALOG --nobutton --menu "$TextWhichUsbADSL" 20 51 4 --nobutton \
+    $DIALOG --nobutton --menu "$TextWhichUsbADSL" 20 51 4 \
 	"0" "Sagem"\
 	"1" "SpeedTouch"\
 	"2" "E C I"\
@@ -51,11 +51,11 @@ adslMenu()
     case $retval in
 	0)
 case $choice in
-    1)
+    0)
     ./eagleConfig.sh;;
-    2)
+    1)
     ;;
-    3)
+    2)
     ;;
 esac
 ;;
@@ -89,13 +89,13 @@ choice=`cat $tempfile`
 case $retval in
     0)
     case $choice in
-	1)
+	0)
 	pppconfig --dialog-oralux;;
-	2)
+	1)
 	adslMenu;;
-	3)
+	2)
 	php mailMenu.php;;
-	4)
+	3)
 	touch $MINIMENU;;
     esac
     ;;

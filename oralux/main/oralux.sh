@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # oralux.sh
-# $Id: oralux.sh,v 1.4 2004/11/15 23:29:32 gcasse Exp $
+# $Id: oralux.sh,v 1.5 2004/12/03 22:59:28 gcasse Exp $
 # $Author: gcasse $
 # Description: This script is called at init time
-# $Date: 2004/11/15 23:29:32 $ |
-# $Revision: 1.4 $ |
+# $Date: 2004/12/03 22:59:28 $ |
+# $Revision: 1.5 $ |
 # Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -31,16 +31,16 @@ MINIMENU=/tmp/minimenu.tmp
 callYasr()
 {
     rm -f $MINIMENU
-    killall -9 minimenu 2>/dev/null
-
-    yasr ./minimenu
-
-#    sleep 1
-
-# TBD
-#    stty icanon icrnl isig echo iexten opost 
-#    clear
 #    killall -9 minimenu 2>/dev/null
+
+    yasr -p ./minimenu
+
+# #    sleep 1
+
+# # TBD
+# #    stty icanon icrnl isig echo iexten opost 
+# #    clear
+# #    killall -9 minimenu 2>/dev/null
 
     result=0
     [ -e $MINIMENU ] && result=1

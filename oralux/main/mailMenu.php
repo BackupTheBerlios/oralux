@@ -5,11 +5,11 @@
 
 // ----------------------------------------------------------------------------
 // mailMenu.php
-// $Id: mailMenu.php,v 1.5 2004/11/12 21:46:13 gcasse Exp $
+// $Id: mailMenu.php,v 1.6 2004/12/03 22:59:28 gcasse Exp $
 // $Author: gcasse $
 // Description: Menu for mail settings (php5)
-// $Date: 2004/11/12 21:46:13 $ |
-// $Revision: 1.5 $ |
+// $Date: 2004/12/03 22:59:28 $ |
+// $Revision: 1.6 $ |
 // Copyright (C) 2004 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -26,11 +26,11 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // ----------------------------------------------------------------------------
-require_once("cliDialog.php");
+require_once("../dialog/cliDialog.php");
 require_once("mailConfig.php");
 require_once("emacsConfig.php");
 require_once("vmConfig.php");
-require_once("terminal.php");
+require_once("../dialog/terminal.php");
 require_once("helpEmul.php");
 
 class mailMenu
