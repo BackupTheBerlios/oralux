@@ -3,11 +3,11 @@
 
 # ----------------------------------------------------------------------------
 # netConfig.sh
-# $Id: netConfig.sh,v 1.2 2004/11/07 21:19:14 gcasse Exp $
+# $Id: netConfig.sh,v 1.3 2004/11/10 18:24:25 gcasse Exp $
 # $Author: gcasse $
 # Description: Menu for internet settings
-# $Date: 2004/11/07 21:19:14 $ |
-# $Revision: 1.2 $ |
+# $Date: 2004/11/10 18:24:25 $ |
+# $Revision: 1.3 $ |
 # Copyright (C) 2004 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -89,7 +89,8 @@ case $retval in
 	2)
 	adslMenu;;
 	3)
-	./mailMenu.php;;
+	php mailMenu.php;;
+	4)
     esac
     ;;
     1)

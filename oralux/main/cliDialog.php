@@ -1,11 +1,11 @@
 <?php
 // ----------------------------------------------------------------------------
 // cliDialog.php
-// $Id: cliDialog.php,v 1.8 2004/11/07 21:19:14 gcasse Exp $
+// $Id: cliDialog.php,v 1.9 2004/11/10 18:24:25 gcasse Exp $
 // $Author: gcasse $
 // Description: command line based dialog (menu, yes/no question, dialog box,...)
-// $Date: 2004/11/07 21:19:14 $ |
-// $Revision: 1.8 $ |
+// $Date: 2004/11/10 18:24:25 $ |
+// $Revision: 1.9 $ |
 // Copyright (C) 2004 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -87,7 +87,7 @@ abstract class cliArea
     // each time we go from the last to the first item of a menu.
     // So if the current announce is said once again (a repetition) then we forget it.
 
-    if ($theAnnounceIsRepeated == false)
+    if (($theAnnounceIsRepeated == false) && isset($this->myAnnounce))
       {
 	foreach ($this->myAnnounce[ $this->myVerbosity ] as $aMessage)
 	  {
@@ -1169,13 +1169,14 @@ class cliDialog
 
 	  $this->myTerminal->getMessage( MessageNavigationInputBoxDefaultButton, $aMessage, $theDefaultValue);
 	  $this->myDefaultValueAcceptationButton=new cliButton( OkPressedValue, " ", $aMessage);
+	  unset($aMessage);
 	}
       else
 	{
 	  $aMessage[verbose][]="$theQuestion\n";
 	  $aMessage[notVerbose][]="$theQuestion\n";
 	}
-
+      
       $this->myTerminal->getMessage( MessageNavigationInputBox, $aMessage);
       $this->myInputBox=new cliInputBox( $aMessage, $theDefaultValue);
 

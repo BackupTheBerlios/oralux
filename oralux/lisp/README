@@ -1,0 +1,18 @@
+* folding.el
+ftp://ftp.csd.uu.se/pub/users/andersl/emacs/folding.el
+
+* php-mode.el
+http://belnet.dl.sourceforge.net/sourceforge/php-mode/php-mode.el
+
+* bbdb-prepare.el
+From the Emacspeak CVS:
+http://cvs.sourceforge.net/viewcvs.py/emacspeak/emacspeak/tvr/bbdb-prepare.el?rev=1.2&view=auto
+
+* vm-prepare.el
+http://cvs.sourceforge.net/viewcvs.py/emacspeak/emacspeak/tvr/vm-prepare.el?rev=1.2&view=auto 
+
+* folding-prepare.el
+http://cvs.sourceforge.net/viewcvs.py/*checkout*/emacspeak/emacspeak/tvr/folding-prepare.el?rev=1.1
+
+* function-keys.el
+http://cvs.sourceforge.net/viewcvs.py/*checkout*/emacspeak/emacspeak/tvr/function-keys.el?rev=1.2

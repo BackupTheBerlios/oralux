@@ -29,9 +29,12 @@ In the following lines, + means evolution, - bug.
 1.1 Priority 1 (Urgent)
 
 + Fix: At boot time the saved configuration was not correctly restored if the choices were audio menu in English and Multispeech.
++ Fix: if the /etc files are not selected in saveconfig, at boot time we can't retreive the main user preferences.
 + Ukrainian keyboard (ua?)
-+ Add mew
+
++ saveconfig: Do not include the absolute path to the home directory 
 + emacs-wget.el
+
 + Download new patches from IBP
  
 + doc update: http://fsfeurope.org/projects/education/tgs/tagatschool7.fr.html
@@ -41,10 +44,8 @@ In the following lines, + means evolution, - bug.
 + see fix http://www.knoppix.net/forum/viewtopic.php?t=12960&highlight=
 + update main.c DESKTOP = shell, the oralux.sh proposes then to start zsh.
 main.c must indicate that CTRL-D will be rquired to come back to the menu (ther e must be a more direct way in the future).
-+ zsh and "sudo su"
 
 + oralux.sh c can start zsh (DESKTOP)
-+ minimenu proposes zsh instead of bash
 + HardDiskInstall: do not ask any more to take the CD
 
 + edbrowse (0.6 beta or 0.6)
@@ -70,8 +71,8 @@ to make other programs work.  This little package, which, at the time
 I had it, came in a tarball, made it possible to just click on
 something and it would play.  You will need to track this down as well
 before adding trplayer/realplayer to the system. "
+
 ---------------------
-+ the LAME mp3 encoder is actually released under the LGPL.
 + codec RealPlayer 9 + 10
 ---------------------
 + see e.g. w3m and pdf
@@ -117,11 +118,8 @@ one name per mailbox ?
 
 + At the end of the menu, asks if the preferences must be saved (except for hdinstal...).
 + When a new release is available, ask if the .emacs, .vm,... files must be removed.
-+ Clearly say that RETURN must be pressed once the CD is ejected.
 + New messages without translation.
 + dialog: --extra-label --extra-button (return 3) --cancel-label (1) --ok-label (0)  --help-button --help-label (2)
-
-+ D'ou vient le .bashrc obsolete sous /root ?
 
 + After this message, DECtalk hangs: "MML Voice Abrev Fill Charac auto-saving done" (From Nath).
 
@@ -140,7 +138,6 @@ Notices from Doug
 
 Message from Edmond.
 --------------------------------------
-+ Add nano
 + dot emacs saved in the persistent home, unfortunately saveconfig was not called again. 
 Then the old one .emacs is retreived at the next boot.
 
@@ -151,12 +148,6 @@ J'avais modifié le fichier .emacs soigneusement comme tu l'as indiqué dans un me
 + .muttrc avec l'option set pager =nano 
 --------------------------------------
 + Voir les encodages MIME, l'enregistrement des pj.
-
-- je reçois une lettre d'information qui doit être au format html. Je 
-n'ai donc que les entêtes du message et une ligne du style : 
-html us ascii, press return to save. 
-Lorsque je fais cela, le corps du message se transforme en une page de 
-code html, avec balises etc. Donc inutilisable. Y aurait-il un remède ? 
 
 - certains titres de message (peut-être trop long) affichent des choses 
 du genre : iso8859.1  etc... Désagréable. Là aussi, y a-t-il une 

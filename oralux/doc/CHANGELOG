@@ -13,16 +13,24 @@ Date: xx Month 2004
 
 
 
+
+
 * Doc
 / the F2/F3 cheatcodes pages are updated
 / Calendar in Spanish has been updated by Miguel Paolino. 
 / Calendar in German has been translated by Peter Piechutzky
+
+* Bug fixes
++ Clearly say that RETURN must be pressed once the CD is ejected.
 
 
 * Enhancements
 
 / Configuration files in the boot floppy: 
 The very basic configuration files can now be saved in the boot floppy.
+
++ The user personal information are stored in an XML file. Useful to create or update the configuration files (.emacs, .vm).
++ VM is configured to automatically read the mail in html format. 
 
 / Message: "Do you want to update your preferences?" is more explanatory, so that people know which key they have to press to answer.
 
@@ -37,7 +45,16 @@ Thanks to Sergei V. Fleytin
 * New packages
 / The listen-up digital talking book player is included.
 / File conversion: the xpdf-utils (pdftotext) and catdoc (.doc to text) packages have been added 
-- bsdgames
++ bsdgames
++ nano
++ mew
++ toolame
++ tramp
+
++ minimenu proposes zsh instead of bash
+
+
+
 
 
 

@@ -1,11 +1,11 @@
 <?php
 // ----------------------------------------------------------------------------
 // terminal.php
-// $Id: terminal.php,v 1.4 2004/11/06 22:49:33 gcasse Exp $
+// $Id: terminal.php,v 1.5 2004/11/10 18:24:25 gcasse Exp $
 // $Author: gcasse $
 // Description: managing the dumb terminals (emacs) or the others (so called enhanced)  
-// $Date: 2004/11/06 22:49:33 $ |
-// $Revision: 1.4 $ |
+// $Date: 2004/11/10 18:24:25 $ |
+// $Revision: 1.5 $ |
 // Copyright (C) 2004 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -141,8 +141,8 @@ class enhancedTerminal
 	   break;
 
 	 case MessageNavigationInputBox:
-	   $theMessage[verbose][] = "";  //gettext("Type your answer in this input field\n");
-	   $theMessage[notVerbose][] = ""; //gettext("Input\n");
+// 	   $theMessage[verbose][] = "";  //gettext("Type your answer in this input field\n");
+// 	   $theMessage[notVerbose][] = ""; //gettext("Input\n");
 	   break;
 
 	 case MessageNavigationInputBoxDefaultButton:

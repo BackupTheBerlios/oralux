@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # oralux.sh
-# $Id: oralux.sh,v 1.1 2004/09/27 20:30:26 gcasse Exp $
+# $Id: oralux.sh,v 1.2 2004/11/10 18:24:25 gcasse Exp $
 # $Author: gcasse $
 # Description: This script is called at init time
-# $Date: 2004/09/27 20:30:26 $ |
-# $Revision: 1.1 $ |
+# $Date: 2004/11/10 18:24:25 $ |
+# $Revision: 1.2 $ |
 # Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -99,7 +99,6 @@ if [ "$TTY" == "/dev/tty1" -a ! -e "$FILE" ]
 	fi
 	
 # Starting the audio desktop
-echo "desktop="$DESKTOP"="
 	cd /home/knoppix
 	if [ $EMACSPEAKTTS == "EFM" ]
 	    then

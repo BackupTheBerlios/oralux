@@ -1,11 +1,11 @@
 <?php
 // ----------------------------------------------------------------------------
 // vmConfig.php
-// $Id: vmConfig.php,v 1.2 2004/11/07 21:19:14 gcasse Exp $
+// $Id: vmConfig.php,v 1.3 2004/11/10 18:24:25 gcasse Exp $
 // $Author: gcasse $
 // Description: VM settings (php5)
-// $Date: 2004/11/07 21:19:14 $ |
-// $Revision: 1.2 $ |
+// $Date: 2004/11/10 18:24:25 $ |
+// $Revision: 1.3 $ |
 // Copyright (C) 2004 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -45,25 +45,25 @@ class vmConfig
       if (touch($this->_myTempFilename)==FALSE)
 	{
 	  $aError=sprintf("Error concerning file: %s\n", $this->_myTempFilename);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.2 $');
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.3 $');
 	  return;
 	}
       if (chmod ( $this->_myTempFilename, 0600)==FALSE)
 	{
 	  $aError=sprintf("Error concerning file: %s\n", $this->_myTempFilename);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.2 $');
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.3 $');
 	  return;
 	}
       if (chown ( $this->_myTempFilename, $this->_myMailConfig->getUser())==FALSE)
 	{
 	  $aError=sprintf("Error concerning file: %s\n", $this->_myTempFilename);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.2 $');
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.3 $');
 	  return;
 	}
       if (chgrp ( $this->_myTempFilename, $this->_myMailConfig->getUser())==FALSE)
 	{
 	  $aError=sprintf("Error concerning file: %s\n", $this->_myTempFilename);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.2 $');
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.3 $');
 	  return;
 	}
     }
@@ -167,7 +167,14 @@ class vmConfig
       fprintf($theFileDescriptor, "))\n");
 
       // Personal crisis
-      fprintf($theFileDescriptor, "(load \"vm-pcrisis\")\n");
+      //      fprintf($theFileDescriptor, "(load \"vm-pcrisis\")\n");
+
+      //(bbdb-insinuate-vm) 
+
+      fprintf($theFileDescriptor, "(setq vm-mime-internal-content-types t)\n");
+      fprintf($theFileDescriptor, ";;Converting html to text\n");
+      fprintf($theFileDescriptor, "(add-to-list 'vm-mime-internal-content-type-exceptions \"text/html\")\n");
+      fprintf($theFileDescriptor, "(add-to-list 'vm-mime-type-converter-alist '(\"text/html\" \"text/plain\" \"lynx -force_html -dump /dev/stdin\"))\n");
     }
 
   protected function _putMark( $theFileDescriptor, $theMark)
@@ -188,7 +195,7 @@ class vmConfig
 	  if (touch($this->_myFilename)==FALSE)
 	    {
 	      $aError=sprintf("Error concerning file: %s\n", $this->_myFilename);
-	      ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.2 $');
+	      ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.3 $');
 	      return;
 	    }
 	}
@@ -197,7 +204,7 @@ class vmConfig
       if ($aSource==NULL)
 	{
 	  $aError=sprintf("Error: can't open file: %s\n", $this->_myFilename);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.2 $');
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.3 $');
 	  return;
 	}
 
@@ -206,7 +213,7 @@ class vmConfig
       if ($aDestination==NULL)
 	{
 	  $aError=sprintf("Error: can't open file: %s\n", $this->_myTempFilename);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.2 $');
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.3 $');
 	  return;
 	}
 
@@ -229,28 +236,28 @@ class vmConfig
       if (rename($this->_myTempFilename, $this->_myFilename)==FALSE)
 	{
 	  $aError=sprintf("Error concerning file: %s\n", $this->_myFilename);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.2 $');
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.3 $');
 	  return;
 	}
 
       if (chmod ( $this->_myFilename, 0600)==FALSE)
 	{
 	  $aError=sprintf("Error concerning file: %s\n", $this->_myFilename);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.2 $');
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.3 $');
 	  return;
 	}
 
       if (chown ( $this->_myFilename, $this->_myMailConfig->getUser())==FALSE)
 	{
 	  $aError=sprintf("Error concerning file: %s\n", $this->_myFilename);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.2 $');
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.3 $');
 	  return;
 	}
 
       if (chgrp ( $this->_myFilename, $this->_myMailConfig->getUser())==FALSE)
 	{
 	  $aError=sprintf("Error concerning file: %s\n", $this->_myFilename);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.2 $');
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.3 $');
 	  return;
 	}
     }

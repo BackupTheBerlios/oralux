@@ -5,11 +5,11 @@
 
 // ----------------------------------------------------------------------------
 // mailMenu.php
-// $Id: mailMenu.php,v 1.3 2004/11/07 21:19:14 gcasse Exp $
+// $Id: mailMenu.php,v 1.4 2004/11/10 18:24:25 gcasse Exp $
 // $Author: gcasse $
 // Description: Menu for mail settings (php5)
-// $Date: 2004/11/07 21:19:14 $ |
-// $Revision: 1.3 $ |
+// $Date: 2004/11/10 18:24:25 $ |
+// $Revision: 1.4 $ |
 // Copyright (C) 2004 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -55,6 +55,12 @@ class mailMenu
   function start()
     {
       ENTER("mailMenu::start",__LINE__);
+
+      if (!$this->_myConf->isBuild())
+	{
+	  return;
+	}
+
       $this->_generalProperties();
 
       do {

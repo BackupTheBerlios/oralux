@@ -1,17 +1,13 @@
 ;; dot emacs
 ;; 2003, 2004, Oralux Team (contact@oralux.org)
 
-;; w3 
-;; set load-path 
-;;(setq load-path (cons "/usr/local/src/w3" load-path)) 
+(setq load-path (cons "/usr/share/oralux/lisp" load-path)) 
 
-;; and loat it 
+;; w3 
 (require 'w3-auto) 
 
 ;; w3m
-(setq w3m-key-binding 'info)
-
-(setq load-path (cons "/usr/share/oralux/lisp" load-path)) 
+(load-library emacs-w3m-prepare)
 
 ;; Babel 
 (autoload 'babel "babel" 
@@ -79,7 +75,6 @@
 
 (setq load-path (cons "~/.emacs.d" load-path)) 
 ;;(require 'php-mode)
-;; (folding-add-to-marks-list 'php-mode "// {{{" "// }}}")
 
 (cond (
        (string-match "ru" (getenv "LANGUAGE"))
@@ -87,6 +82,8 @@
        (print "Russian environment")
        )
       (t 
+       (set-language-environment 'latin-1)
+       (set-terminal-coding-system 'latin-1)
        (set-keyboard-coding-system 'iso-latin-1)
        (setq default-buffer-file-coding-system 'iso-latin-1)
        (print "Latin-1 environment")
@@ -114,11 +111,6 @@
  '(ediff-odd-diff-face-A ((((class color)) (:background "Grey" :foreground "black"))))
  '(ediff-odd-diff-face-C ((((class color)) (:background "Grey" :foreground "black")))))
 
-;; keyboard
-(set-language-environment 'latin-1)
-(set-terminal-coding-system 'latin-1)
-(set-keyboard-coding-system 'latin-1) 
-
 ;;erc
 (cond
  ((featurep 'emacspeak)
@@ -132,13 +124,34 @@
 (global-unset-key "\C-x\C-z")
 (global-set-key "\C-z\C-z" 'suspend-emacs)
 
+(set-foreground-color "white")
+(set-background-color "black")
+
 ;; SES
 (add-to-list 'load-path "/usr/share/emacs/site-lisp/ses")
 (autoload 'ses-mode "ses.el" "Spreadsheet mode" t)
 
 (setq-default ispell-program-name "aspell")
-(autoload 'flyspell-mode "flyspell" "On-the-fly spelling checker." t)                                        
-
+(autoload 'flyspell-mode "flyspell" "On-the-fly spelling checker." t)
 (autoload 'flyspell-delay-command "flyspell" "Delay on command." t)
 (autoload 'tex-mode-flyspell-verify "flyspell" "" t)
 
+;;(load-library "functions-keys")
+(load-library "vm-prepare")
+(load-library "bbdb-prepare")
+(bbdb-insinuate-vm)
+
+(load-library "folding-prepare")
+
+
+;;(require 'catdoc)   
+(require 'tramp)
+;; (setq backup-by-copying t)
+;; (setq backup-directory-alist '(("." . "~/.backups/")))
+;; (setq delete-old-versions t)
+;; (setq kept-new-versions 6)
+;; (setq kept-old-versions 2)
+   
+
+;; bitlbee
+(load-library "erc-init")
