@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // audiouserinterface.c
-// $Id: audioUserInterface.c,v 1.2 2004/10/25 22:12:02 gcasse Exp $
+// $Id: audioUserInterface.c,v 1.3 2004/10/26 21:21:04 gcasse Exp $
 // $Author: gcasse $
 // Description: Managing and playing the pre-recorded messages.
-// $Date: 2004/10/25 22:12:02 $ |
-// $Revision: 1.2 $ |
+// $Date: 2004/10/26 21:21:04 $ |
+// $Revision: 1.3 $ |
 // Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
 // September 2003: 
 // German translations by Guenther Harrasser.
@@ -791,10 +791,10 @@ char * TheMessages[][LanguageMax]={
   },
 
   // 7A
-  {"[:pu all] 0.6 beta", // "[:pu all] 0.6 beta",
-   "[:pu all] 0.6 béta",
-   "[:pu all] 0.6 beta",
-   "[:pu all] 0.6 beta",
+  {"0.6 beta", // "[:pu all] 0.6 beta",
+   "0.6 beta",
+   "0.6 beta",
+   "0.6 beta",
   },
 
   // 7B

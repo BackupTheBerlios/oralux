@@ -1,0 +1,23 @@
+0eCheatcodes For Oralux 0.6 (hit F3 for next page)
+
+These options (or combinations) work from the boot prompt:
+* To specify an external synthesizer on the first serial port (ttyS0):
+knoppix tts=doubletalk
+or 
+knoppix tts=doubletalk,ttyS0
+
+the tts expected values are:
+accent: Accent SA
+braillenspeak: Braille Lite, Braille 'n Speak, Type 'n Speak
+ciber: Ciber 232, Ciber 232 Plus
+dtk-exp: DECtalk Express
+dtk-mv: DECtalk Multivoice, DECtalk 3
+apollo: Dolphin Apollo
+doubletalk: DoubleTalk LT, LiteTalk
+doubletalkpc: DoubleTalk PC
+pchablado: PC Hablado notebook
+
+Possible serial ports: ttyS0 for the first one, ttyS1 for the second one 
+
+* To select a braille driver
+knoppix brltty=type,port,table

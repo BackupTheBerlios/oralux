@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # end.sh
-# $Id: end.sh,v 1.3 2004/10/23 22:19:18 gcasse Exp $
+# $Id: end.sh,v 1.4 2004/10/26 21:21:04 gcasse Exp $
 # $Author: gcasse $
 # Description: This script must be the last one to call
-# $Date: 2004/10/23 22:19:18 $ |
-# $Revision: 1.3 $ |
+# $Date: 2004/10/26 21:21:04 $ |
+# $Revision: 1.4 $ |
 # Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -62,7 +62,9 @@ Copy2Oralux()
     # vga=normal (instead of vga=791)
     cp /mnt/guest/syslinux.cfg /tmp
     replace "lang=us" "myconfig=scan home=scan lang=us" "vga=791" "screen=800x600 vga=normal" -- /tmp/syslinux.cfg
-    cp /tmp/syslinux.cfg /mnt/guest/
+    sed "s;F2.*$;F2 f2\nF3 f3;g" /tmp/syslinux.cfg > /tmp/syslinux2.cfg
+    cp /tmp/syslinux2.cfg /mnt/guest/
+    rm /tmp/syslinux*.cfg
     umount /mnt/guest
 
     echo "unalias -a" >> $BUILD/etc/profile
