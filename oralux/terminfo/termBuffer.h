@@ -42,7 +42,7 @@ struct t_termBuffer
 {
   char* myDataBuffer;
   struct t_style* myStyleBuffer;
-  struct t_style myDefaultStyle;
+  struct t_style myDefaultStyle; /* used if car are deleted */
   struct t_cursor myCursor;
   struct t_cursor mySavedCursor;
   int myNumberOfLine;

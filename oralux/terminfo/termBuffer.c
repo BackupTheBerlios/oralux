@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 termBuffer.c
-$Id: termBuffer.c,v 1.2 2004/12/29 23:49:30 gcasse Exp $
+$Id: termBuffer.c,v 1.3 2004/12/30 23:35:34 gcasse Exp $
 $Author: gcasse $
 Description: manage the terminal layout in a buffer.
-$Date: 2004/12/29 23:49:30 $ |
-$Revision: 1.2 $ |
+$Date: 2004/12/30 23:35:34 $ |
+$Revision: 1.3 $ |
 Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -29,6 +29,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <stdint.h>
 #include <string.h>
 #include <stdlib.h>
+#include <assert.h>
 #include "escape2terminfo.h"
 #include "termBuffer.h"
 #include "debug.h"
@@ -80,9 +81,15 @@ void initCursor(struct t_cursor* theCursor, int theFirstCell, struct t_style* th
 }
 /* > */
 /* < getCell*/
-//TBD #define getCell( theLine, theCol, theNumberOfCol) (theLine * theNumberOfCol + theCol)
+#ifdef DEBUG
 int getCell( int theLine, int theCol, int theNumberOfCol) 
-{return theLine * theNumberOfCol + theCol;}
+{
+  assert((theCol<theNumberOfCol) && (theLine<30));
+  return theLine * theNumberOfCol + theCol;
+  }
+#else
+#define getCell( theLine, theCol, theNumberOfCol) (theLine * theNumberOfCol + theCol)
+#endif
 /* > */
 /* < compareAndSetStyle */
 
@@ -303,6 +310,7 @@ int testIfPortionsAreMenuItems( struct t_linePortion* theLinePortion1, struct t_
 }
 /* > */
 /* < lookForHighlightedMenuItem */
+
 /* Among theLinePortion - array of two menu items - retreives the index of the highlighted one.
 It guessed the background style and comapres it to the menu item style.
 
@@ -403,7 +411,7 @@ void initCurrentLinePortion( struct t_termBuffer* this)
   SHOW3("myLine=%d, myCol=%d\n", this->myCursor.myLine, this->myCursor.myCol);
   aPortion->myLine = this->myCursor.myLine;
   aPortion->myFirstCol = this->myCursor.myCol;
-  aPortion->myLastCol = 0;
+  aPortion->myLastCol = this->myCursor.myCol;
   aPortion->myContentIsModified = 0;
   aPortion->myStyleIsModified = 0;
 }
@@ -473,12 +481,29 @@ void flushPortion( struct t_termBuffer* this, char** theOutputBuffer)
 	    {
 	      int aStatus=getBackgroundStyle( aPortion->myLine, aPortion->myFirstCol, this->myStyleBuffer, aLength, this->myNumberOfLine, this->myNumberOfCol, &aStyle);
 
-	      /* The characters associated with the background style are not displayed */
+	      
 	      if (aStatus)
-		{
-		  eraseCharWithThisStyle( this->myDataBuffer + aFirstCell, this->myStyleBuffer + aFirstCell, aLength, &aStyle);
+		{ 
+		  /* The characters associated with the background style are not displayed */
+		  /* First duplicate the current string */
+		  char* aFilteredString=NULL;
+		  char c = this->myDataBuffer[ aFirstCell + aLength];
+		  this->myDataBuffer[ aFirstCell + aLength] = 0;
+		  aFilteredString = strdup(this->myDataBuffer + aFirstCell);
+		  this->myDataBuffer[ aFirstCell + aLength] = c;
+
+		  /* Erase the characters */
+		  eraseCharWithThisStyle( aFilteredString, this->myStyleBuffer + aFirstCell, aLength, &aStyle);
+		  
+		  /* And display the remaining characters */
+		  flushText( aFilteredString, NULL, aLength, theOutputBuffer);
+
+		  free( aFilteredString);
 		}
-	      flushText( this->myDataBuffer + aFirstCell, NULL, aLength, theOutputBuffer);
+	      else
+		{
+		  flushText( this->myDataBuffer + aFirstCell, NULL, aLength, theOutputBuffer);
+		}
 	    }
 	}
     }
@@ -597,8 +622,8 @@ void copyModes( struct t_style* theDestination, struct t_style* theSource)
 }
 
 /* > */
-/* < eraseLine */
-void eraseLine( struct t_termBuffer* this, int theNumberOfErasedChar, char** theOutput)
+/* < eraseCharacter */
+void eraseCharacter( struct t_termBuffer* this, int theNumberOfCharToErase, char** theOutput)
 {
   int i=0;
   int aContentIsModified=0;
@@ -608,10 +633,16 @@ void eraseLine( struct t_termBuffer* this, int theNumberOfErasedChar, char** the
   struct t_style* aStyle=this->myStyleBuffer+aCell;
   int aLinePortionIndex=getLinePortion( this, theOutput);
   struct t_linePortion* aLinePortion = this->myLinePortion;
+  int aNumberOfCharToErase=theNumberOfCharToErase;
 
-  ENTER("eraseLine");
+  ENTER("eraseCharacter");
 
-  for (i=0;i<theNumberOfErasedChar;i++)
+  if (aNumberOfCharToErase + this->myCursor.myCol > this->myNumberOfCol)
+    {
+      aNumberOfCharToErase = this->myNumberOfCol - this->myCursor.myCol;
+    }
+
+  for (i=0; i<aNumberOfCharToErase; i++)
     {
       if (storeChar( aChar+i, 0x20))
 	{ 
@@ -633,21 +664,76 @@ void eraseLine( struct t_termBuffer* this, int theNumberOfErasedChar, char** the
     }
 }
 /* > */
-/* < deleteCharacter */
-void deleteCharacter( struct t_termBuffer* this, int theNumberOfDeletedChar, char** theOutput)
+/* < eraseLine */
+/* Erase n lines from the cursor */
+void eraseLine( struct t_termBuffer* this, char** theOutput)
 {
+  int i=0;
+  int aContentIsModified=0;
+  int aStyleIsModified=0;
+  int aCell=getCell( this->myCursor.myLine, this->myCursor.myCol, this->myNumberOfCol);
+  char* aChar=this->myDataBuffer + aCell;
+  struct t_style* aStyle=this->myStyleBuffer+aCell;
+  int aLinePortionIndex=getLinePortion( this, theOutput);
+  struct t_linePortion* aLinePortion = this->myLinePortion;
+  int aNumberOfCellToErase = this->myNumberOfCol * (this->myNumberOfLine - this->myCursor.myLine - 1) 
+    + (this->myNumberOfCol - this->myCursor.myCol);
+
+  ENTER("eraseLine");
+
+  for (i=0; i<aNumberOfCellToErase; i++)
+    {
+      if (storeChar( aChar+i, 0x20))
+	{ 
+	  aContentIsModified=1;
+	}
+      if (storeStyle( aStyle+i, & (this->myCursor.myStyle)))
+	{
+	  aStyleIsModified=1;
+	}  
+    }
+
+  if (aContentIsModified)
+    {
+      aLinePortion[ aLinePortionIndex].myContentIsModified = 1;
+    }
+  if (aStyleIsModified)
+    {
+      aLinePortion[ aLinePortionIndex].myStyleIsModified = 1;
+    }
+}
+/* > */
+/* < deleteCharacter */
+void deleteCharacter( struct t_termBuffer* this, int theNumberOfCharToDelete, char** theOutput)
+{
+  int aNumberOfCharToDelete=theNumberOfCharToDelete;
   int aCurrentCell=getCell( this->myCursor.myLine, this->myCursor.myCol, this->myNumberOfCol);
-  int aLastCell= this->myNumberOfCol - theNumberOfDeletedChar;
   struct t_linePortion* aLinePortion = this->myLinePortion;
   int aLinePortionIndex=getLinePortion( this, theOutput);
-
+  int aNumberOfCharToMove=0;
+  int aLastCell= 0;
+      
   ENTER("deleteCharacter");
 
-  memmove( this->myDataBuffer + aCurrentCell, this->myDataBuffer + aCurrentCell + theNumberOfDeletedChar, theNumberOfDeletedChar);
+  if (aNumberOfCharToDelete + this->myCursor.myCol > this->myNumberOfCol)
+    {
+      aNumberOfCharToDelete = this->myNumberOfCol - this->myCursor.myCol;
+    }
+  if (aNumberOfCharToDelete <= 0)
+    {
+      return;
+    }
+
+  aNumberOfCharToMove = this->myNumberOfCol - (this->myCursor.myCol + aNumberOfCharToDelete);
+  if (aNumberOfCharToMove > 0)
+    {
+      memmove( this->myDataBuffer + aCurrentCell, this->myDataBuffer + aCurrentCell + aNumberOfCharToDelete, aNumberOfCharToMove);
+    }
 
   /* Clear the remaining cells */
-  clearBuffer( this->myDataBuffer + aLastCell, theNumberOfDeletedChar);
-  setStyleBuffer( this->myStyleBuffer + aLastCell, theNumberOfDeletedChar, &(this->myDefaultStyle));
+  aLastCell = getCell( this->myCursor.myLine, this->myNumberOfCol - aNumberOfCharToDelete, this->myNumberOfCol);
+  clearBuffer( this->myDataBuffer + aLastCell, aNumberOfCharToDelete);
+  setStyleBuffer( this->myStyleBuffer + aLastCell, aNumberOfCharToDelete, &(this->myDefaultStyle));
 
   /* Update the line portion */
 
@@ -657,9 +743,54 @@ void deleteCharacter( struct t_termBuffer* this, int theNumberOfDeletedChar, cha
   
   if (aLinePortion[ aLinePortionIndex].myLastCol > this->myCursor.myCol)
     {
-      aLinePortion[ aLinePortionIndex].myLastCol= SUP(this->myCursor.myCol, aLinePortion[ aLinePortionIndex].myLastCol - theNumberOfDeletedChar);
+      aLinePortion[ aLinePortionIndex].myLastCol= SUP(this->myCursor.myCol, aLinePortion[ aLinePortionIndex].myLastCol - aNumberOfCharToDelete);
+    }
+  if (aLinePortion[ aLinePortionIndex].myFirstCol > this->myCursor.myCol)
+    {
+      aLinePortion[ aLinePortionIndex].myFirstCol= SUP(this->myCursor.myCol, aLinePortion[ aLinePortionIndex].myFirstCol - aNumberOfCharToDelete);
     }
 }
+/* > */
+/* < deleteLine */
+void deleteLine( struct t_termBuffer* this, int theNumberOfLineToDelete, char** theOutput)
+{
+  int aNumberOfLineToDelete=theNumberOfLineToDelete;
+  int aFirstCell=getCell( this->myCursor.myLine, 0, this->myNumberOfCol);
+  int aLastCell= 0;
+  struct t_linePortion* aLinePortion = this->myLinePortion;
+  int aLinePortionIndex=getLinePortion( this, theOutput);
+  int aNumberOfLineToMove=0;
+  int aNumberOfColToDelete = 0;
+
+  ENTER("deleteLineacter");
+
+  if (aNumberOfLineToDelete + this->myCursor.myLine > this->myNumberOfLine)
+    {
+      aNumberOfLineToDelete = this->myNumberOfLine - this->myCursor.myLine;
+    }
+  if (aNumberOfLineToDelete <= 0)
+    {
+      return;
+    }
+
+  aNumberOfColToDelete = aNumberOfLineToDelete * this->myNumberOfCol;
+  aNumberOfLineToMove = this->myNumberOfLine - (this->myCursor.myLine + aNumberOfLineToDelete);
+  if (aNumberOfLineToMove > 0)
+    {
+      memmove( this->myDataBuffer + aFirstCell, this->myDataBuffer + aFirstCell + aNumberOfColToDelete, aNumberOfLineToMove * this->myNumberOfCol);
+    }
+
+  /* Clear the remaining lines */
+  aLastCell= getCell( this->myNumberOfLine - aNumberOfLineToDelete, 0, this->myNumberOfCol);
+  clearBuffer( this->myDataBuffer + aLastCell, aNumberOfColToDelete);
+  setStyleBuffer( this->myStyleBuffer + aLastCell, aNumberOfColToDelete, &(this->myDefaultStyle));
+
+  /* Update the line portion */
+
+  /* Modifications are expected */
+  aLinePortion[ aLinePortionIndex].myContentIsModified = 1;
+  aLinePortion[ aLinePortionIndex].myStyleIsModified = 1;
+  }
 /* > */
 /* < setChar*/
 void setChar( struct t_termBuffer* this, char theNewChar, char** theOutput)
@@ -760,6 +891,8 @@ char* interpretEscapeSequence( struct t_termBuffer* this, FILE* theStream, char*
 	  break;
 	case CUD1:
 	  aCursor->myLine++;
+	  break;
+	case CR:
 	  aCursor->myCol=0;
 	  break;
 	case NEL:
@@ -770,8 +903,8 @@ char* interpretEscapeSequence( struct t_termBuffer* this, FILE* theStream, char*
 	  aCursor->myCol++;
 	  break;
 	case CUP:
-	  aCursor->myCol=myParameters[0];
-	  aCursor->myLine=myParameters[1];
+	  aCursor->myLine = (myParameters[0] > 0) ? myParameters[0] - 1 : myParameters[0];
+	  aCursor->myCol = (myParameters[1] > 0) ? myParameters[1] - 1 : myParameters[1];
 	  break;
 	case CUU:
 	  aCursor->myLine-=myParameters[0];
@@ -782,16 +915,18 @@ char* interpretEscapeSequence( struct t_termBuffer* this, FILE* theStream, char*
 	    deleteCharacter( this, myParameters[0], theOutput);
 	  break;
 	case DL: /* delete lines */
-	  break;
 	case DL1:
+	    /* myParameters[0] gives the number of lines to delete */
+	    deleteLine( this, myParameters[0], theOutput);
 	  break;
 	case ECH: /* Erase characters (same line length) */
 	  {
 	    /* myParameters[0] gives the number of characters to erase */
-	    eraseLine( this, myParameters[0], theOutput);
+	    eraseCharacter( this, myParameters[0], theOutput);
 	  }
 	  break;
 	case ED: /* Clear the display after the cursor */
+	  eraseLine( this, theOutput);
 	  break;
 	case EL1:
 	  break;
@@ -841,7 +976,7 @@ char* interpretEscapeSequence( struct t_termBuffer* this, FILE* theStream, char*
 
   flushPortion( this, theOutput);
 
-  DISPLAY_BUFFER(this->myDataBuffer, this->myNumberOfLine, this->myNumberOfCol);
+  DISPLAY_BUFFER(this->myDataBuffer, this->myStyleBuffer, this->myNumberOfLine, this->myNumberOfCol);
 
   return 0;
 }

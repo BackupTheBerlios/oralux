@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 debug.c
-$Id: debug.c,v 1.1 2004/12/27 22:19:59 gcasse Exp $
+$Id: debug.c,v 1.2 2004/12/30 23:35:33 gcasse Exp $
 $Author: gcasse $
 Description: for applicative trace.
-$Date: 2004/12/27 22:19:59 $ |
-$Revision: 1.1 $ |
+$Date: 2004/12/30 23:35:33 $ |
+$Revision: 1.2 $ |
 Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -434,19 +434,89 @@ char* myStringCapacity[]={
 /* > */
 /* < displayBuffer */
 
-void displayBuffer( char *theBuffer, int theMaxLine, int theMaxCol)
+static char* TheHtmlStart="\
+<title>termBuffer</title>\n\
+<html>\n\
+<head>\n\
+<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\" />\n\
+<style>\n\
+body {\n\
+ margin:0;\n\
+ padding:0;\n\
+ background-color:black;\n\
+ color:white;\n\
+ font-size:100%;\n\
+ font-family:monospace;\n\
+ font-weight:normal;\n\
+}\n\
+\n\
+p {\n\
+ margin:0;\n\
+ padding:0;\n\
+ border-bottom:1px red solid;\n\
+}\n\
+</style>\n\
+\n\
+</head>\n\
+<body>\n";
+
+static char* TheHtmlEnd="</body></html>";
+
+static char* TheHtmlColorArray[]=
+  {
+    "black",
+    "red",
+    "green",
+    "yellow",
+    "blue",
+    "fuchsia",
+    "aqua",
+    "white"
+  };
+
+void displayBuffer( char *theDataBuffer, struct t_style* theStyleBuffer, int theMaxLine, int theMaxCol)
 {
-  /* Init */
   int i=0;
+  int j=0;
+  int aBgColor=TERM_COLOR_BLACK;
+  int aFgColor=TERM_COLOR_WHITE;
+  FILE* fd=fopen("termBuffer.htm","w");
+
   ENTER("displayBuffer");
+
+  fprintf(fd,"%s",TheHtmlStart);
   for (i=0;i<theMaxLine;i++)
     {
-      char* aLine=theBuffer + theMaxCol*i;
-      char c=aLine[theMaxCol-1];
-      aLine[theMaxCol-1]=0;
-      printf("%2d#%s%c\n", i, aLine, c);
-      aLine[theMaxCol-1]=c;
+      char c[sizeof("&nbsp;")+1];
+      fprintf(fd, "<p>");
+      fprintf(fd, "<span style=\"background-color:%s; color:%s\">", TheHtmlColorArray[ aBgColor], TheHtmlColorArray[ aFgColor]);
+      for (j=i*theMaxCol; j < (i+1)*theMaxCol; j++)
+	{
+	  if ((theStyleBuffer[j].myForegroundColor != aFgColor)
+	      ||(theStyleBuffer[j].myBackgroundColor != aBgColor))
+	    {
+	      aBgColor=theStyleBuffer[j].myBackgroundColor;
+	      aFgColor=theStyleBuffer[j].myForegroundColor;
+	      fprintf(fd, "</span>");
+	      fprintf(fd, "<span style=\"background-color:%s; color:%s\">", TheHtmlColorArray[ aBgColor], TheHtmlColorArray[ aFgColor]);
+	    }
+
+	  *c=theDataBuffer[j];
+	  *(c+1)=0;
+	  switch(*c)
+	    {
+	    case ' ':strcpy(c,"&nbsp;");break;
+	    case '<':strcpy(c,"&lt;");break;
+	    case '>':strcpy(c,"&gt;");break;
+	    default:break;
+	    }
+	  fprintf(fd, "%s", c);
+	}
+      fprintf(fd, "</span></p>\n");
     }
+  fprintf(fd,"%s",TheHtmlEnd);
+
+  fclose(fd);
 }
 
 /* > */

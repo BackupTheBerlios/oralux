@@ -24,12 +24,12 @@ printf("== ENTER %s (%d)\n",a,__LINE__)
 void displayColor( char* theLabel, int theColor);
 void displayStyle(struct t_style* theStyle);
 void displayCapacity( enum StringCapacity theCapacity);
-void displayBuffer( char *theBuffer, int theMaxLine, int theMaxCol);
+void displayBuffer( char *theDataBuffer, struct t_style* theStyleBuffer, int theMaxLine, int theMaxCol);
 
 #define DISPLAY_COLOR(a,b) displayColor(a,b)
 #define DISPLAY_STYLE(a) displayStyle(a)
 #define DISPLAY_CAPACITY(a) displayCapacity(a)
-#define DISPLAY_BUFFER(a,b,c) displayBuffer(a,b,c)
+#define DISPLAY_BUFFER(a,b,c,d) displayBuffer(a,b,c,d)
 
 #else /* DEBUG */
 

@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
 #include "termBuffer.h"
 
 int main(int argc, char *argv[])
@@ -7,37 +9,57 @@ int main(int argc, char *argv[])
   FILE* fd=NULL;
   struct t_termBuffer* aTermBuffer=createTermBuffer( LINUX, 30, 30);
   char* aOutput=NULL;
+  enum {MAX_LINE=400};
+  char* aTest=(char*)malloc(MAX_LINE);
+  char* aAbsolutePath=malloc(MAX_LINE);
+  int aLength=0;
 
-  fd=fopen("test/highlightedItem/1.txt","r");
-  interpretEscapeSequence( aTermBuffer, fd, &aOutput);
-  if (aOutput)
-    {
-      printf(">>>Output=%s<<<\n", aOutput);
-      free(aOutput);
-      aOutput=NULL;
-    }
-  fclose(fd);
+  getcwd (aAbsolutePath, MAX_LINE);
+  aLength=strlen(aAbsolutePath);
 
-  fd=fopen("test/highlightedItem/2.txt","r");
-  interpretEscapeSequence( aTermBuffer, fd, &aOutput);
-  if (aOutput)
+  fd=fopen(argv[1],"r");
+  if (fd==NULL)
     {
-      printf(">>>Output=%s<<<\n", aOutput);
-      free(aOutput);
-      aOutput=NULL;
+      printf("File not found: %s\n",argv[1]);
+      return 1;
     }
-  fclose(fd);
+  
+  while (fgets(aTest, MAX_LINE, fd))
+    {
+      FILE* fdtest=NULL;
+      if ((*aTest=='#')||(*aTest=='\n'))
+	{
+	  continue;
+	}
 
-  fd=fopen("test/highlightedItem/3.txt","r");
-  interpretEscapeSequence( aTermBuffer, fd, &aOutput);
-  if (aOutput)
-    {
-      printf(">>>Output=%s<<<\n", aOutput);
-      free(aOutput);
-      aOutput=NULL;
+      sprintf(aAbsolutePath+aLength, "/test/%s", aTest);
+      aAbsolutePath[ strlen(aAbsolutePath)-1]=0; /* no final \n */
+
+      fdtest=fopen(aAbsolutePath,"r");
+      if (fdtest==NULL)
+	{
+	  printf("File not found: %s\n",aTest);
+	  return 1;
+	}
+      else
+	{
+	  printf("*** Test: %s\n",aTest);
+	}
+
+      interpretEscapeSequence( aTermBuffer, fdtest, &aOutput);
+
+      fclose(fdtest);
+      if (aOutput)
+	{
+	  printf(">>>Output=%s<<<\n", aOutput);
+	  free(aOutput);
+	  aOutput=NULL;
+	}
     }
-  fclose(fd);
 
   deleteTermBuffer( aTermBuffer);
+  fclose(fd);
+  free(aTest);
+  free(aAbsolutePath);
   return 0;
 }

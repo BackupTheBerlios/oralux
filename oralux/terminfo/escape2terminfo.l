@@ -80,11 +80,15 @@ DIGIT	[0-9]
 				}
 {M}{J}			return NEL;
 {J}			return CUD1;
+{M}			return CR;
 {H}			return CUB1;
 {ESC}8			return RC;
 {ESC}7			return SC;
 {ESC}\[C		return CUF1;
-{ESC}\[M		return DL1;
+{ESC}\[M		{
+			myParameters[0]=1;
+			return DL1;
+			}
 {ESC}\[L		return IL1;
 {ESC}\[H{ESC}\[2?J	return CLEAR;
 {ESC}\[J		return ED;
@@ -115,8 +119,12 @@ DIGIT	[0-9]
 			myParameters[0]=getDigit(yytext+2, yyleng-1-2);
 			return DL;
 			}
-{ESC}\[{DIGIT}+X	{
+{ESC}\[{DIGIT}*X	{
 			myParameters[0]=getDigit(yytext+2, yyleng-1-2);
+			if (myParameters[0]==0)
+			{
+			  myParameters[0]=1;
+			}
 			return ECH;
 			}
 {ESC}\[{DIGIT}+A	{
@@ -128,7 +136,10 @@ DIGIT	[0-9]
 				for (i=2;i<yyleng;i++)
 				{
 				  if (yytext[i]==';')
-				  myParameters[0]=getDigit(yytext+2, i-2);
+				  {
+				    myParameters[0]=getDigit(yytext+2,i-2);
+				    break;
+				  }
 				}
 				myParameters[1]=getDigit(yytext+i+1, yyleng-1-i-1);	
 				return CUP;
@@ -138,7 +149,6 @@ DIGIT	[0-9]
 							getModes( (struct t_style*)myParameters);
 		       					return SGR;
 			       				}
-
 
 .			return TEXTFIELD;
 
