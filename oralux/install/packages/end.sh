@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # end.sh
-# $Id: end.sh,v 1.2 2004/10/10 21:46:36 gcasse Exp $
+# $Id: end.sh,v 1.3 2004/10/23 22:19:18 gcasse Exp $
 # $Author: gcasse $
 # Description: This script must be the last one to call
-# $Date: 2004/10/10 21:46:36 $ |
-# $Revision: 1.2 $ |
+# $Date: 2004/10/23 22:19:18 $ |
+# $Revision: 1.3 $ |
 # Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -52,8 +52,11 @@ Copy2Oralux()
     # Customizing the boot stage
     # To be done juste once!
     mkdir /mnt/guest 2>/dev/null
-    mount $NEW_ORALUX/KNOPPIX/boot.img /mnt/guest -o loop
+    mount -o loop $NEW_ORALUX/KNOPPIX/boot.img /mnt/guest
     cp $INSTALL_PACKAGES/knoppix/boot.msg /mnt/guest
+    cp $INSTALL_PACKAGES/knoppix/f2 /mnt/guest
+    cp $INSTALL_PACKAGES/knoppix/f3 /mnt/guest
+    rm /mnt/guest/logo.16
 
     # The persistent home and the saved config will be searched
     # vga=normal (instead of vga=791)
@@ -78,11 +81,6 @@ Copy2Oralux()
     echo "if [ ! -d \$HOME/.emacs.d ]; then" >> $BUILD/etc/profile
     echo "mkdir \$HOME/.emacs.d" >> $BUILD/etc/profile
     echo "chmod 700 \$HOME/.emacs.d" >> $BUILD/etc/profile
-    echo "fi" >> $BUILD/etc/profile
-
-    echo "if [ ! -f \$HOME/.emacs.d/php-mode.el ]; then" >> $BUILD/etc/profile
-    echo "cp /usr/share/oralux/install/packages/misc/php-mode.el \$HOME/.emacs.d" >> $BUILD/etc/profile
-    echo "chmod 644 \$HOME/.emacs.d/php-mode.el" >> $BUILD/etc/profile
     echo "fi" >> $BUILD/etc/profile
 
     echo "if [ ! -f \$HOME/.emacs.d/Russian.el ]; then" >> $BUILD/etc/profile

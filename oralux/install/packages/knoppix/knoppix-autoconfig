@@ -3,9 +3,19 @@
 # Basic system configuration and hardware setup
 # (C) Klaus Knopper <knopper@knopper.net> 2001
 #
-# Oralux
-# Gilles Casse, January 2004
-# see diff with <filename.sav>
+# Oralux changes
+# Gilles Casse, 2003, 2004
+# - No AES256 at the moment
+# - Oralux conf file
+# - Floppy disk and knoppix.sh
+# - No persistent home if HD install
+# - Configs.tbz: its md5sum is saved in sysconfig/knoppix
+# - BRLTTY init
+# - Audio desktop options: Emacspeak or YASR based. 
+# - No GUI Option at the moment. 
+# - tts cheatcode (external speech synthesizer).
+# - alsa cheatcode (stored in conf). no alsa cheatcode.
+# For more details, see diff with knoppix-autoconfig.sav
 #
 PATH="/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin"
 export PATH
@@ -1066,6 +1076,14 @@ echo "${CRE}${RED}Option ignored.${NORMAL}"
 FOUND_CONFIG="invalid"
 ;;
 esac
+fi
+
+# If /dev/fd0 is selected, /mnt/floppy is temporarily created 
+if [ "$MYCONFDEVICE" == "/dev/fd0" ] || [ "$MYCONFDIR" == "/mnt/floppy" ]; then
+    mkdir /mnt/floppy 2>/dev/null
+    MYCONFDEVICE="/dev/fd0"
+    MYCONFMOUNTPOINT="/mnt/floppy"
+    MYCONFDIR="/mnt/floppy"
 fi
 
 # Notice: if nothing is found, we do not force floppy search (too long if no floppy drive)

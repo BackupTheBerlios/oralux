@@ -11,6 +11,9 @@ description:
 * Under emacspeak, change the speech rate to 123
 * Configure your internet connection.
 * Select the sound volume to 71
+
+* start saveconfig (as knoppix user)
+
 * Reboot (no cheat code might be typed)
 * Jump the menu
 * Check that the french keyboard is installed

@@ -28,6 +28,12 @@ In the following lines, + means evolution, - bug.
 
 1.1 Priority 1 (Urgent)
 
+
++ Configuration files in the boot floppy: 
+The very basic configuration files can now be saved in the boot floppy.
+ 
+
+
 + doc update: http://fsfeurope.org/projects/education/tgs/tagatschool7.fr.html
 + check if persistenthome still works
 
@@ -130,11 +136,6 @@ Notices from Doug
 --------------------------------------
 
 
-Feedback from Eric
---------------------------------------
-Update the F2/F3 cheatcodes page 
---------------------------------------
-
 Message from Edmond.
 --------------------------------------
 + Add nano
@@ -155,6 +156,8 @@ Feedback from Nigel
 * End of file missing at DECtalk installation ?
 
 Feedback from IBP
+--------------------------------------
++ Multispeech and Emacspeak 20.0
 --------------------------------------
 1) It is something wrong with the pre-generated letters. All letters
    are spoken by one voice though the voice must depend on register

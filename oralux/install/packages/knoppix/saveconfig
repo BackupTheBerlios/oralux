@@ -2,14 +2,18 @@
 # saveconfig - create KNOPPIX configuration floppy
 # (C) Klaus Knopper Mar 2002
 # Spanish translation by Luis Llorente, luis.llorente@hispalinux.es
-# 2003, 2004 Gilles Casse: Changes for Oralux
-# * French translation
-# * The new config is compared to the old one (via their md5sum)
-# * /etc/fstab is not stored
 #
+# Changes for Oralux
 # Sep 2003: 
 # German translations by Guenther Harrasser.
 # Spanish translations by Fernando Pinto da Silva.
+#
+# 2003, 2004 Gilles Casse
+# * French translation
+# * The new config is compared to the old one (via their md5sum)
+# * /etc/fstab is not stored
+# * If the (basic) configuration files are saved to the boot floppy, 
+#   cheatcode floppyconfig is added in syslinux.cfg instaed of myconf=...
 #
 set -v 
 export DIALOG="/usr/bin/php5 /usr/share/oralux/main/dialog.php"
@@ -144,9 +148,20 @@ cp "$CONFIGSFILE" "$DIRECTORY/configs.tbz"
 RC="$?"
 
 if [ "$DIRECTORY" = "$FLOPPYDIR" ]; then
+
+if [ -e "$DIRECTORY/syslinux.cfg" ]; then
+# We use the floppyconfig cheatcode
+sed "s;[^ ]*conf[^=]*=[^ ]*/[^ ]*;floppyconfig;g" "$DIRECTORY/syslinux.cfg"
+fi
+
 umountfloppy
-else
+else 
+# Not saved on floppy
 umount "$DIRECTORY" 2>/dev/null
+
+# RAF (GC): if there is a boot floppy, force the cheatcode to myconf=scan
+# sed "s;floppyconf[^ ]*;myconf=scan;g"
+
 fi
 }
 

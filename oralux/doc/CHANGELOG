@@ -12,13 +12,15 @@ Date: xx Month 2004
 * New packages
 
 
-/ File conversion: the xpdf-utils (pdftotext) and catdoc (.doc to text) packages have been added 
-/ Message: "Do you want to update your preferences?" is more explanatory, so that people know which key they have to press to answer.
-/ Calendar in Spanish has been updated by Miguel Paolino. 
-/ The listen-up digital talking book player is included.
 
-* New packages:
-- bsdgames
+* Doc
+/ the F2/F3 cheatcodes pages are updated
+/ Calendar in Spanish has been updated by Miguel Paolino. 
+/ Calendar in German has been translated by Peter Piechutzky
+
+
+* Enhancements
+/ Message: "Do you want to update your preferences?" is more explanatory, so that people know which key they have to press to answer.
 
 ** Russian support
 Thanks to Sergei V. Fleytin  
@@ -27,6 +29,11 @@ Thanks to Sergei V. Fleytin
 - The "ru4" keymap is loaded for Russian keyboard settings (instead of "ru" before).
 
 + Yasr: in standard mode, alt+ctrl+m is no more reserved to read the next line (since ctrl-m is interpreted as enter).
+
+* New packages
+/ The listen-up digital talking book player is included.
+/ File conversion: the xpdf-utils (pdftotext) and catdoc (.doc to text) packages have been added 
+- bsdgames
 
 
 
