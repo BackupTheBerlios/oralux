@@ -1,0 +1,23 @@
+* title: apt-get via Emacspeak
+creation: 2004 11 16
+checked by:
+required: Oralux installed on hard disk.
+** status: not passed
+description:
+check under emacspeak:
+apt-get update
+apt-get remove lirc
+apt-get install lirc
+
+* title: apt-get via Yasr
+creation: 2004 11 16
+checked by:
+required: Oralux installed on hard disk.
+** status: not passed
+description:
+check under yasr:
+apt-get update
+apt-get remove lirc
+apt-get install lirc
+
+
