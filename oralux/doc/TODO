@@ -28,6 +28,8 @@ In the following lines, + means evolution, - bug.
 
 1.1 Priority 1 (Urgent)
 
++ dialog + apt
++ dialog: backtitle word 1 word2
 + Fix: At boot time the saved configuration was not correctly restored if the choices were audio menu in English and Multispeech.
 + Fix: if the /etc files are not selected in saveconfig, at boot time we can't retreive the main user preferences.
 + Ukrainian keyboard (ua?)
@@ -138,13 +140,15 @@ Notices from Doug
 
 Message from Edmond.
 --------------------------------------
++ minimenu: Tableur
++ minimenu: Graveur CD
 + dot emacs saved in the persistent home, unfortunately saveconfig was not called again. 
 Then the old one .emacs is retreived at the next boot.
 
 "Une petite remarque qui m'a coûté bien du temps et que peut-être tu pourras répercuté sur lal liste mieux que moi.
 J'avais modifié le fichier .emacs soigneusement comme tu l'as indiqué dans un message mais quelle ne fut pas ma surprise de voir que malgré la modification, rien ne partait. Je te rappelle ma config : démarrage sur le cd, une partition créée avec mkpersistenthome et une disquette sur laquelle je sauvegardais les paramètres. "
 + Add bbdb (see .emacs + .vm)
-+ mutt avec yasr: reception de messages (Exim, fetchmail).
++ mutt avec yasr: reception de messages (Exim4, fetchmail).
 + .muttrc avec l'option set pager =nano 
 --------------------------------------
 + Voir les encodages MIME, l'enregistrement des pj.
@@ -467,6 +471,7 @@ http://nebuchadnezzar.zion.cz/download/xlhtml-0.5.1-vd2.tgz
 
 1.2 Priority 2
 
++ dialog-oralux once stable will possibly replace dialog 
 + Easying the spell checker use.
 + Automatic summary.
 + Propose free voice synthesizers able to change the voice features. 

@@ -46,10 +46,11 @@ Thanks to Sergei V. Fleytin
 / The listen-up digital talking book player is included.
 / File conversion: the xpdf-utils (pdftotext) and catdoc (.doc to text) packages have been added 
 + bsdgames
-+ nano
++ lirc (+liblircclient0)
 + mew
-+ toolame
++ nano
 + tramp
++ toolame
 
 + minimenu proposes zsh instead of bash
 
