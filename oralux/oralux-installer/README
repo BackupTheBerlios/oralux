@@ -2,6 +2,9 @@ Here is a very alpha release of the oralux installer:
 * based on knoppix-installer (no change) from KNOPPIX 3.3 (2004 02 16)
 * dialog has been rewritten (no graphical layout). 
 In most cases, you will just have to select an option in a numbered list: type the wished number and then press return.
++ 2 partitions are required: one for the system (around 3GB) and one for the swap (512MB).
+ 
+The swap partition must be formatted (using mkswap) before calling the installer.
  
 * fdisk is used instead of cfdisk
 

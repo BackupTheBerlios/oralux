@@ -1,11 +1,11 @@
 <?php
 // ----------------------------------------------------------------------------
 // terminal.php
-// $Id: terminal.php,v 1.3 2004/10/30 19:40:46 gcasse Exp $
+// $Id: terminal.php,v 1.4 2004/11/06 22:49:33 gcasse Exp $
 // $Author: gcasse $
 // Description: managing the dumb terminals (emacs) or the others (so called enhanced)  
-// $Date: 2004/10/30 19:40:46 $ |
-// $Revision: 1.3 $ |
+// $Date: 2004/11/06 22:49:33 $ |
+// $Revision: 1.4 $ |
 // Copyright (C) 2004 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -97,6 +97,7 @@ class enhancedTerminal
 
    // {{{ getLine
 
+
    function getLine( & $theLine, $theLastInput=""  )
      {
       ENTER("enhancedTerminal::getLine",__LINE__);
@@ -104,13 +105,13 @@ class enhancedTerminal
        $theLine=dio_read_line_from_stdin( $theLastInput);
 
        if ($theLine==$this->_myDownArrowKey)
-	 {
-	   $aResult=getCharDownArrowKey;
-	 }
+         {
+           $aResult=getCharDownArrowKey;
+         }
        else if ($theLine==$this->_myUpArrowKey)
-	 {
-	   $aResult=getCharUpArrowKey;
-	 }
+         {
+           $aResult=getCharUpArrowKey;
+         }
        return $aResult;
      }
 

@@ -1,14 +1,15 @@
+#!/usr/bin/php
 <?php
 
 // raf: utf8
 
 // ----------------------------------------------------------------------------
 // mailMenu.php
-// $Id: mailMenu.php,v 1.1 2004/09/27 20:30:27 gcasse Exp $
+// $Id: mailMenu.php,v 1.2 2004/11/06 22:49:33 gcasse Exp $
 // $Author: gcasse $
 // Description: Menu for mail settings (php5)
-// $Date: 2004/09/27 20:30:27 $ |
-// $Revision: 1.1 $ |
+// $Date: 2004/11/06 22:49:33 $ |
+// $Revision: 1.2 $ |
 // Copyright (C) 2004 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -29,6 +30,7 @@ require_once("cliDialog.php");
 require_once("mailConfig.php");
 require_once("emacsConfig.php");
 require_once("vmConfig.php");
+require_once("terminal.php");
 require_once("helpEmul.php");
 
 class mailMenu
@@ -68,7 +70,7 @@ class mailMenu
 
 	$aMenu["QUIT"]=gettext("Return to main menu");
 
-	$aDialog= new cliDialog($this->_myTerminal);
+	$aDialog= new cliDialog($this->_myTerminal, false);
 	$aKeyPressed=$aDialog->menu(gettext("About mail boxes"), $aMenu, $aResult);
 	unset($aDialog);
 
@@ -109,7 +111,7 @@ class mailMenu
 		$this->_selectMailbox( gettext("Which mailbox do you want to delete?\n"), $aMailbox, $aMailboxIdentifier);
 	      }
 	    
-	    $aDialog= new cliDialog($this->_myTerminal);
+	    $aDialog= new cliDialog($this->_myTerminal, false);
 	    $aCorrectData = !$aDialog->yesNo(sprintf(gettext("Do you really want to delete %s?"), $aMailbox["label"]));
 	    unset($aDialog);
 	    
@@ -127,7 +129,7 @@ class mailMenu
       } while($aKeyPressed==OkPressedValue);
 
 
-      $aDialog= new cliDialog($this->_myTerminal);
+      $aDialog= new cliDialog($this->_myTerminal, false);
       $aCorrectData = !$aDialog->yesNo(gettext("Do you want to save your changes"));
       unset($aDialog);
    
@@ -162,7 +164,7 @@ class mailMenu
 
       if ($i)
 	{	  
-	  $aDialog= new cliDialog($this->_myTerminal);
+	  $aDialog= new cliDialog($this->_myTerminal, false);
 	  $aResult=$aDialog->menu($theTitle, $aMenu);
 	  unset($aDialog);
 
@@ -198,7 +200,7 @@ class mailMenu
 	  switch($aState)
 	    {
 	    case "name":
-	      $aDialog= new cliDialog($this->_myTerminal);
+	      $aDialog= new cliDialog($this->_myTerminal, false);
 	      $aKeyPressed=$aDialog->inputBox(gettext("Enter your full name, for example: Victor Hugo"), 
 						 $this->_myConf->getValue($aState),
 						 $aValue);
@@ -207,7 +209,7 @@ class mailMenu
 	      break;
 
 	    case "email":
-	      $aDialog= new cliDialog($this->_myTerminal);
+	      $aDialog= new cliDialog($this->_myTerminal, false);
 	      $aKeyPressed=$aDialog->inputBox(gettext("Enter your full mailing address, for example: vhugo@pantheon.org"), 
 						      $this->_myConf->getValue($aState),
 						      $aValue);
@@ -217,7 +219,7 @@ class mailMenu
 	      break;
 
 	    case "delay":
-	      $aDialog= new cliDialog($this->_myTerminal);
+	      $aDialog= new cliDialog($this->_myTerminal, false);
 	      $aKeyPressed=$aDialog->inputBox(gettext("Enter how often your mailboxes must be checked. For example, 20 means 20 minutes"), 
 						      $this->_myConf->getValue($aState),
 						      $aValue);
@@ -276,7 +278,7 @@ class mailMenu
 	  switch($aState)
 	    {
 	    case "label":
-	      $aDialog= new cliDialog($this->_myTerminal);
+	      $aDialog= new cliDialog($this->_myTerminal, false);
 	      $aKeyPressed=$aDialog->inputBox(gettext("Enter the name of this mailbox, for example: My Mailbox"),
 						      $theArray[$aState], $aValue);
 	      unset($aDialog);
@@ -284,7 +286,7 @@ class mailMenu
 	      break;
 	      
 	    case "host":
-	      $aDialog= new cliDialog($this->_myTerminal);
+	      $aDialog= new cliDialog($this->_myTerminal, false);
 	      $aKeyPressed=$aDialog->inputBox(gettext("Enter the hostname of your ISP, for example: pop.pantheon.org"),
 						      $theArray[$aState], $aValue);
 	      unset($aDialog);
@@ -297,28 +299,28 @@ class mailMenu
 		{
 		  $aPort="110";
 		}
-	      $aDialog= new cliDialog($this->_myTerminal);
+	      $aDialog= new cliDialog($this->_myTerminal, false);
 	      $aKeyPressed=$aDialog->inputBox(gettext("Enter the port or press return"), $aPort, $aValue);
 	      unset($aDialog);
 	      $theArray[ $aState]=$aValue;
 	      break;
 
 	    case "login":
-	      $aDialog= new cliDialog($this->_myTerminal);
+	      $aDialog= new cliDialog($this->_myTerminal, false);
 	      $aKeyPressed=$aDialog->inputBox(gettext("Enter the login"), $theArray[$aState], $aValue);
 	      unset($aDialog);
 	      $theArray[ $aState]=$aValue;
 	      break;
 
 	    case "password":
-	      $aDialog= new cliDialog($this->_myTerminal);
+	      $aDialog= new cliDialog($this->_myTerminal, false);
 	      $aKeyPressed=$aDialog->inputBox(gettext("Enter the password"), $theArray[$aState], $aValue);
 	      unset($aDialog);
 	      $theArray[ $aState]=$aValue;
 	      break;
 
 	    case "keep":
-	      $aDialog= new cliDialog($this->_myTerminal);
+	      $aDialog= new cliDialog($this->_myTerminal, false);
 	      $aKeyPressed= (!$aDialog->yesNo(gettext("Do you want to keep the messages in the server once they have been fetched?"), $aValue)) ? 1:0;
 	      unset($aDialog);
 	      $theArray[ $aState]=$aValue;
@@ -334,5 +336,15 @@ class mailMenu
 
   // }}}
 }
+
+$aTerminal=new enhancedTerminal();
+if (!$aTerminal->isBuild())
+{
+  $aTerminal=new dumbTerminal();
+}
+
+$aMailMenu=new mailMenu( $aTerminal, "knoppix");
+$aMailMenu->start();
+
 
 ?>

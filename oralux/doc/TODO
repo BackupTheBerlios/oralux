@@ -28,6 +28,7 @@ In the following lines, + means evolution, - bug.
 
 1.1 Priority 1 (Urgent)
 
++ Add mew
 + emacs-wget.el
 + Download new patches from IBP
 
@@ -144,7 +145,80 @@ Then the old one .emacs is retreived at the next boot.
 "Une petite remarque qui m'a coûté bien du temps et que peut-être tu pourras répercuté sur lal liste mieux que moi.
 J'avais modifié le fichier .emacs soigneusement comme tu l'as indiqué dans un message mais quelle ne fut pas ma surprise de voir que malgré la modification, rien ne partait. Je te rappelle ma config : démarrage sur le cd, une partition créée avec mkpersistenthome et une disquette sur laquelle je sauvegardais les paramètres. "
 + Add bbdb (see .emacs + .vm)
++ mutt avec yasr: reception de messages (Exim, fetchmail).
++ .muttrc avec l'option set pager =nano 
 --------------------------------------
++ Voir les encodages MIME, l'enregistrement des pj.
+
+- je reçois une lettre d'information qui doit être au format html. Je 
+n'ai donc que les entêtes du message et une ligne du style : 
+html us ascii, press return to save. 
+Lorsque je fais cela, le corps du message se transforme en une page de 
+code html, avec balises etc. Donc inutilisable. Y aurait-il un remède ? 
+
+- certains titres de message (peut-être trop long) affichent des choses 
+du genre : iso8859.1  etc... Désagréable. Là aussi, y a-t-il une 
+solution ? 
+--------------------------------------
+.vm 
+--------------------------------------
+(add-hook 'message-mode-hook
+(lambda ()
+(setq fill-column 72)
+(turn-on-auto-fill)))
+
+;; Nettoie les courriels à détruire en sortant
+(add-hook 'vm-quit-hook 'vm-expunge-folder)
+
+;; signature automatique
+(setq mail-signature t mail-signature-file "~/.signature")
+
+;; décodage du type mime automatique
+(setq vm-auto-decode-mime-messages t)
+(setq vm-auto-displayed-mime-content-types t)
+(setq vm-display-using-mime t)
+(setq vm-auto-displayed-mime-content-types '("text" "multipart" "message/rfc822" ))
+
+;; archivage automatique dans les vm-folder-alist
+;; destruction après archivage
+(setq vm-auto-archive-message t)
+(setq vm-delete-after-archiving t)
+
+(setq vm-reply-subject-prefix "Re: ")
+;; francisation
+(setq vm-forwarding-subject-format "Message retransmis de %F à %h le %w %d %m %y")
+(setq vm-included-text-attribution-format "%F a écrit :\n")
+
+(setq vm-url-browser 'w3m-browse-url)
+
+(setq vm-folder-directory "~/mail/")
+
+(setq vm-primary-inbox "laposte")
+
+;; recherche automatique des messages, en secondes  
+(setq vm-auto-get-new-mail 500)
+
+(setq vm-spool-files
+      '(
+	("laposte" "pop:pop.laposte.net:110:pass:myUsername:myPassword" "inbox.crash")
+	))
+
+(setq vm-pop-auto-expunge-alist
+      '(
+	("pop.laposte.net:110:pass:myUsername:*" . t)
+ 	))
+;; ci-dessus mettre nil si l'on veut conserver les messages sur le serveur
+
+;; archivage des messages sortant 
+(setq mail-archive-file-name "~/mail/outbox")
+
+;; envoyer les headers des messages forwardes
+;;(setq vm-forwarded-headers '(".") )
+
+;;(setq vm-mime-internal-content-types t)
+--------------------------------------
+
+
 
 Feedback from Nigel
 --------------------------------------
@@ -394,10 +468,14 @@ http://nebuchadnezzar.zion.cz/download/xlhtml-0.5.1-vd2.tgz
 
 + Oralux-installer: remove in the .sh the copy of the knoppix-install file. Was only useful for 0.6 alpha. 
 + Knoblind: translations
-
++ Yasr: issues with the menus: the previous and the new items are said.
++ Yasr/ne: the shortcuts must be said explicitly (instead of caret x, say Control x)
++ increase APT::Cache-Limit (24Mb?).
 
 1.2 Priority 2
 
++ Easying the spell checker use.
++ Automatic summary.
 + Propose free voice synthesizers able to change the voice features. 
 + Nath: clipboard (particularly for links2)
 + General default auditory icons player whichever the voice synthesis. At the moment, most of our proposed voice synthesizers, do not manage the auditory icons.

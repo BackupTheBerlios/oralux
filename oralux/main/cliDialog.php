@@ -1,11 +1,11 @@
 <?php
 // ----------------------------------------------------------------------------
 // cliDialog.php
-// $Id: cliDialog.php,v 1.6 2004/10/31 23:37:33 gcasse Exp $
+// $Id: cliDialog.php,v 1.7 2004/11/06 22:49:33 gcasse Exp $
 // $Author: gcasse $
 // Description: command line based dialog (menu, yes/no question, dialog box,...)
-// $Date: 2004/10/31 23:37:33 $ |
-// $Revision: 1.6 $ |
+// $Date: 2004/11/06 22:49:33 $ |
+// $Revision: 1.7 $ |
 // Copyright (C) 2004 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -329,7 +329,7 @@ class cliAreaManager
     {
       ENTER("cliAreaManager::processKeys",__LINE__);
       $aCurrentArea=$this->jumpToFirstArea(); // first element (list)
-      $aCurrentArea->announceTypeOfArea();
+      $aCurrentArea->announceTypeOfArea(true);
       $this->jumpToFirstItemInArea();
       $aKeyPressedValue=EscapePressedValue;
       $this->myInput="";
@@ -1133,10 +1133,9 @@ class cliDialog
   function inputBox($theQuestion, $theDefaultValue=NULL, & $theResult, $theTitle=NULL)
     {
       ENTER("cliDialog::inputBox",__LINE__);
-      echo "$theTitle\n";
-      if ($theText)
+      if ($theTitle)
 	{
-	  echo "$theText\n";
+	  echo "$theTitle\n";
 	}
 
       if ($this->myDialogWithDefaultButton)

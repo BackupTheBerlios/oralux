@@ -2,11 +2,11 @@
 <?php
 // ----------------------------------------------------------------------------
 // dialog.php
-// $Id: dialog.php,v 1.2 2004/10/30 19:40:46 gcasse Exp $
+// $Id: dialog.php,v 1.3 2004/11/06 22:49:33 gcasse Exp $
 // $Author: gcasse $
 // Description: command line based dialog (menu, yes/no question, dialog box,...)
-// $Date: 2004/10/30 19:40:46 $ |
-// $Revision: 1.2 $ |
+// $Date: 2004/11/06 22:49:33 $ |
+// $Revision: 1.3 $ |
 // Copyright (C) 2004 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -230,7 +230,8 @@ class dialog
 	  $aState=BACKTITLE;
 	  break;
 	case "--nobutton":
-	  $aState=NOBUTTON; // Added for Oralux: no default button
+	  $this->myDialogWithDefaultButton=false;
+	  $aState=UNDEFINED; // Added for Oralux: no default button
 	  break;
 	case "--menu":
 	  $aState=MENU_TEXT;
@@ -283,11 +284,6 @@ class dialog
 
 	    case TITLE:
 	      $this->myTitle=$arg;
-	      $aState=UNDEFINED;
-	      break;
-
-	    case NOBUTTON:
-	      $this->myDialogWithDefaultButton=false;
 	      $aState=UNDEFINED;
 	      break;
 
