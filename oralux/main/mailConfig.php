@@ -2,11 +2,11 @@
 // raf: utf8
 // ----------------------------------------------------------------------------
 // mailConfig.php
-// $Id: mailConfig.php,v 1.1 2004/09/27 20:30:29 gcasse Exp $
+// $Id: mailConfig.php,v 1.2 2004/11/07 21:19:14 gcasse Exp $
 // $Author: gcasse $
 // Description: Mail settings (php5)
-// $Date: 2004/09/27 20:30:29 $ |
-// $Revision: 1.1 $ |
+// $Date: 2004/11/07 21:19:14 $ |
+// $Revision: 1.2 $ |
 // Copyright (C) 2004 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -51,6 +51,12 @@ class mailConfig extends DomDocument
       if (!is_file ( $this->_myFilename))
 	{
 	  $fd=fopen( $this->_myFilename, "w");
+	  if ($fd==NULL)
+	    {
+	      $aError=sprintf("Error: can't open file: %s\n", $this->_myFilename);
+	      ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.2 $');
+	      return;
+	    }
 	  fwrite ( $fd, $this->_myInitialFile);
 	  fclose( $fd);
 	}
@@ -163,9 +169,25 @@ class mailConfig extends DomDocument
   // Save the configuration file
   function save()
     {
-      unlink($this->_myFilename);
-      touch($this->_myFilename);
-      chmod ( $this->_myFilename, 0600);
+      if (unlink($this->_myFilename)==FALSE)
+	{
+	  $aError=sprintf("Error concerning file: %s\n", $this->_myFilename);
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.2 $');
+	  return;
+	}
+      if (touch($this->_myFilename)==FALSE)
+	{
+	  $aError=sprintf("Error concerning file: %s\n", $this->_myFilename);
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.2 $');
+	  return;
+	}
+      if (chmod ( $this->_myFilename, 0600)==FALSE)
+	{
+	  $aError=sprintf("Error concerning file: %s\n", $this->_myFilename);
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.2 $');
+	  return;
+	}
+
       parent::save($this->_myFilename);
     }
 

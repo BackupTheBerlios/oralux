@@ -3,11 +3,11 @@
 
 # ----------------------------------------------------------------------------
 # netConfig.sh
-# $Id: netConfig.sh,v 1.1 2004/11/06 22:49:33 gcasse Exp $
+# $Id: netConfig.sh,v 1.2 2004/11/07 21:19:14 gcasse Exp $
 # $Author: gcasse $
 # Description: Menu for internet settings
-# $Date: 2004/11/06 22:49:33 $ |
-# $Revision: 1.1 $ |
+# $Date: 2004/11/07 21:19:14 $ |
+# $Revision: 1.2 $ |
 # Copyright (C) 2004 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -80,8 +80,6 @@ $DIALOG --nobutton --menu "$TextSettingUp" 20 51 4 \
 retval=$?
 
 choice=`cat $tempfile`
-
-echo "RAF:$choice"
 
 case $retval in
     0)

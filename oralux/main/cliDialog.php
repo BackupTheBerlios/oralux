@@ -1,11 +1,11 @@
 <?php
 // ----------------------------------------------------------------------------
 // cliDialog.php
-// $Id: cliDialog.php,v 1.7 2004/11/06 22:49:33 gcasse Exp $
+// $Id: cliDialog.php,v 1.8 2004/11/07 21:19:14 gcasse Exp $
 // $Author: gcasse $
 // Description: command line based dialog (menu, yes/no question, dialog box,...)
-// $Date: 2004/11/06 22:49:33 $ |
-// $Revision: 1.7 $ |
+// $Date: 2004/11/07 21:19:14 $ |
+// $Revision: 1.8 $ |
 // Copyright (C) 2004 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -85,6 +85,8 @@ abstract class cliArea
     // By default, we say the announce once.
     // E.g. we do not want to hear "this is a long list" 
     // each time we go from the last to the first item of a menu.
+    // So if the current announce is said once again (a repetition) then we forget it.
+
     if ($theAnnounceIsRepeated == false)
       {
 	foreach ($this->myAnnounce[ $this->myVerbosity ] as $aMessage)
@@ -329,7 +331,7 @@ class cliAreaManager
     {
       ENTER("cliAreaManager::processKeys",__LINE__);
       $aCurrentArea=$this->jumpToFirstArea(); // first element (list)
-      $aCurrentArea->announceTypeOfArea(true);
+      $aCurrentArea->announceTypeOfArea( false);
       $this->jumpToFirstItemInArea();
       $aKeyPressedValue=EscapePressedValue;
       $this->myInput="";
@@ -558,6 +560,7 @@ class cliInputBox extends cliArea
   protected $myCurrentValue;
 
   // {{{ constructor
+
   function __construct( $theAnnounce, $theDefaultValue)
     {
       ENTER("cliInputBox::__construct",__LINE__);
@@ -566,11 +569,13 @@ class cliInputBox extends cliArea
       $this->myCurrentValue=$theDefaultValue;
       $this->myAnnounce=$theAnnounce;
     }
+
   // }}}
 
   function getType(){ return areaInputBox;}
 
   // {{{ getInput
+
   function getInput( $theTerminal, & $theInput, $theLastInput)
     {
       ENTER("cliInputBox::getInput",__LINE__);
@@ -594,8 +599,10 @@ class cliInputBox extends cliArea
 
       return $aResult;
     }
+
   // }}}
   // {{{ processInput
+
   function processInput( $theResult, & $theInput, $theTerminal)
     {
       ENTER("cliInputBox::processInput",__LINE__);
@@ -623,6 +630,7 @@ class cliInputBox extends cliArea
 	}
       return $aResult;
     }
+
   // }}}
   // {{{ apply
 
@@ -782,6 +790,7 @@ class cliButton extends cliArea
   protected $myLabel;
 
   // {{{ constructor
+
   function __construct( $theKey, $theValue, $theAnnounce)
     {
       ENTER("cliButton::__construct",__LINE__);
@@ -789,6 +798,7 @@ class cliButton extends cliArea
       $this->myValue=$theValue;
       $this->myAnnounce=$theAnnounce;
     }
+
   // }}}
   // {{{ getType
   function getType()
@@ -1148,20 +1158,19 @@ class cliDialog
 	  $this->myButton[]=new cliButton( CancelPressedValue, gettext("Cancel"), $aMessage);
 	}
 
+      // Input box
+      unset($aMessage);
+      
       // Default Value Acceptation button: useful to accept the default value of the input field
       if ($theDefaultValue != NULL)
 	{
-	  unset($aMessage);
 	  $aMessage[verbose][]="$theQuestion\n";
 	  $aMessage[notVerbose][]="$theQuestion\n";
 
 	  $this->myTerminal->getMessage( MessageNavigationInputBoxDefaultButton, $aMessage, $theDefaultValue);
 	  $this->myDefaultValueAcceptationButton=new cliButton( OkPressedValue, " ", $aMessage);
 	}
-
-      // Input box
-      unset($aMessage);
-      if ($theDefaultValue == NULL)
+      else
 	{
 	  $aMessage[verbose][]="$theQuestion\n";
 	  $aMessage[notVerbose][]="$theQuestion\n";

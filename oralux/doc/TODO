@@ -28,12 +28,13 @@ In the following lines, + means evolution, - bug.
 
 1.1 Priority 1 (Urgent)
 
++ Ukrainian keyboard (ua?)
 + Add mew
 + emacs-wget.el
 + Download new patches from IBP
-
  
 + doc update: http://fsfeurope.org/projects/education/tgs/tagatschool7.fr.html
++ upgrade
 + check if persistenthome still works
 
 + see fix http://www.knoppix.net/forum/viewtopic.php?t=12960&highlight=

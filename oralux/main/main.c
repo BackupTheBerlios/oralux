@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // main.c
-// $Id: main.c,v 1.1 2004/09/27 20:30:26 gcasse Exp $
+// $Id: main.c,v 1.2 2004/11/07 21:19:14 gcasse Exp $
 // $Author: gcasse $
 // Description: entry point. 
-// $Date: 2004/09/27 20:30:26 $ |
-// $Revision: 1.1 $ |
+// $Date: 2004/11/07 21:19:14 $ |
+// $Revision: 1.2 $ |
 // Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -261,7 +261,7 @@ int main(int argc, char *argv[])
     }
 
   // Which is the current LANGUAGE
-  char* aStringLanguage=getenv("LANGUAGE");
+  char* aStringLanguage=getConf("LANGUAGE", "/etc/sysconfig/knoppix");
   enum language aEnumLanguage=English;
   if (aStringLanguage!=NULL)
     {
@@ -273,6 +273,7 @@ int main(int argc, char *argv[])
   enum desktopIdentifier aEnumDesktop=getEnumDesktop(aStringDesktop);
 
   struct menuInfo aSelectedInfo;
+
   aSelectedInfo.myMenuLanguage=aEnumMenuLanguage;
   aSelectedInfo.myKeyboard=aEnumKeytable;
 

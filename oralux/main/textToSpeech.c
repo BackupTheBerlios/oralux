@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // textToSpeech.c
-// $Id: textToSpeech.c,v 1.1 2004/09/27 20:30:27 gcasse Exp $
+// $Id: textToSpeech.c,v 1.2 2004/11/07 21:19:14 gcasse Exp $
 // $Author: gcasse $
 // Description: Ask about the whished TTS and install it. 
-// $Date: 2004/09/27 20:30:27 $ |
-// $Revision: 1.1 $ |
+// $Date: 2004/11/07 21:19:14 $ |
+// $Revision: 1.2 $ |
 // Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -793,7 +793,7 @@ static int install(struct textToSpeechStruct* theTextToSpeech, enum language the
 
 // setTextToSpeech
 void setTextToSpeech(struct textToSpeechStruct* theTextToSpeech,
-		     enum language thePreferredLanguage,
+		     //enum language thePreferredLanguage,
 		     enum desktopIdentifier theDesktop,
 		     int theUserMustBeAskedFor)
 {
@@ -804,16 +804,18 @@ void setTextToSpeech(struct textToSpeechStruct* theTextToSpeech,
   while(aRequest)
     {
       aRequest=0;
-      theTextToSpeech->myLanguage = thePreferredLanguage;
+      //theTextToSpeech->myLanguage = thePreferredLanguage;
       if (theUserMustBeAskedFor)
 	{
-	  if (!chooseSynt( theTextToSpeech, thePreferredLanguage, theDesktop))
+	  //	  if (!chooseSynt( theTextToSpeech, thePreferredLanguage, theDesktop))
+	  if (!chooseSynt( theTextToSpeech, theTextToSpeech->myLanguage, theDesktop))
 	    {
 	      return;
 	    }
 	}
  
-      if (!install(theTextToSpeech, thePreferredLanguage))
+      //      if (!install(theTextToSpeech, thePreferredLanguage))
+      if (!install(theTextToSpeech, theTextToSpeech->myLanguage))
 	{
 	  aRequest=1;
 	  theUserMustBeAskedFor=1;

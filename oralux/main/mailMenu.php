@@ -5,11 +5,11 @@
 
 // ----------------------------------------------------------------------------
 // mailMenu.php
-// $Id: mailMenu.php,v 1.2 2004/11/06 22:49:33 gcasse Exp $
+// $Id: mailMenu.php,v 1.3 2004/11/07 21:19:14 gcasse Exp $
 // $Author: gcasse $
 // Description: Menu for mail settings (php5)
-// $Date: 2004/11/06 22:49:33 $ |
-// $Revision: 1.2 $ |
+// $Date: 2004/11/07 21:19:14 $ |
+// $Revision: 1.3 $ |
 // Copyright (C) 2004 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -140,8 +140,10 @@ class mailMenu
 	  $a->save();
 
 	  $a=new emacsConfig( $this->_myConf);
-	  $a->save();
-	  echo gettext("Your changes have been saved\n");
+	  if ($a->save() == TRUE)
+	    {
+	      echo gettext("Your changes have been saved\n");
+	    }
 	}
     }
 

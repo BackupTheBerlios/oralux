@@ -1,11 +1,11 @@
 <?php
 // ----------------------------------------------------------------------------
 // emacsConfig.php
-// $Id: emacsConfig.php,v 1.1 2004/09/27 20:30:30 gcasse Exp $
+// $Id: emacsConfig.php,v 1.2 2004/11/07 21:19:14 gcasse Exp $
 // $Author: gcasse $
 // Description: Emacs settings (php5)
-// $Date: 2004/09/27 20:30:30 $ |
-// $Revision: 1.1 $ |
+// $Date: 2004/11/07 21:19:14 $ |
+// $Revision: 1.2 $ |
 // Copyright (C) 2004 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -43,34 +43,87 @@ class emacsConfig
   function save()
     {
       $aSource=fopen($this->_myFilename,"r");
+      if ($aSource==NULL)
+	{
+	  $aError=sprintf("Error: can't open file: %s\n", $this->_myFilename);
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.2 $');
+	  return;
+	}
+
       $aDestination=fopen($this->_myTempFilename,"w");
+      if ($aDestination==NULL)
+	{
+	  $aError=sprintf("Error: can't open file: %s\n", $this->_myTempFilename);
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.2 $');
+	  return;
+	}
       
       while ($aLine=fgets($aSource))
 	{
 	  $aTemplatePattern="/[ \t]*\([ \t]*setq[ \t]+%s[ \t]+\"[^\"]*\"[ \t]*\)[ \t]*/";
 	  $aTemplateReplacement="(setq %s \"%s\")";
-
+	  
 	  $aPattern[0]=sprintf( $aTemplatePattern, "user-mail-address");
-	  $aReplacement[0]=sprintf( $aTemplateReplacement,  "user-mail-address", $this->_myMailConfig->getValue( "email"));
-
+	  $aReplacement[0]=sprintf( $aTemplateReplacement, "user-mail-address", $this->_myMailConfig->getValue( "email"));
+	  
 	  $aPattern[1]=sprintf($aTemplatePattern, "user-full-name");
 	  $aReplacement[1]=sprintf($aTemplateReplacement,  "user-full-name", $this->_myMailConfig->getValue( "name"));
-
-  	  $aResult=preg_replace($aPattern, $aReplacement, $aLine);
+	  
+	  $aResult=preg_replace($aPattern, $aReplacement, $aLine);
 	  fprintf($aDestination, $aResult);
 	}
 
-      fclose($aSource);
       fclose($aDestination);
-      chown ( $this->_myTempFilename, $this->_myMailConfig->getUser());
-      chgrp ( $this->_myTempFilename, $this->_myMailConfig->getUser());
-      chmod ( $this->_myTempFilename, 0600);
+      fclose($aSource);
+      
+      if (chown ( $this->_myTempFilename, $this->_myMailConfig->getUser())==FALSE)
+	{
+	  $aError=sprintf("Error concerning file: %s\n", $this->_myTempFilename);
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.2 $');
+	  return;
+	}
 
-      rename($this->_myTempFilename, $this->_myFilename);
-      chmod ( $this->_myFilename, 0600);
-      chown ( $this->_myFilename, $this->_myMailConfig->getUser());
-      chgrp ( $this->_myFilename, $this->_myMailConfig->getUser());
+      if (chgrp ( $this->_myTempFilename, $this->_myMailConfig->getUser())==FALSE)
+	{
+	  $aError=sprintf("Error concerning file: %s\n", $this->_myTempFilename);
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.2 $');
+	  return;
+	}
+	
+      if (chmod ( $this->_myTempFilename, 0600)==FALSE)
+	{
+	  $aError=sprintf("Error concerning file: %s\n", $this->_myTempFilename);
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.2 $');
+	  return;
+	}
 
+      if (rename($this->_myTempFilename, $this->_myFilename)==FALSE)
+	{
+	  $aError=sprintf("Error concerning file: %s\n", $this->_myTempFilename);
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.2 $');
+	  return;
+	}
+
+      if (chmod ( $this->_myFilename, 0600)==FALSE)
+	{
+	  $aError=sprintf("Error concerning file: %s\n", $this->_myFilename);
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.2 $');
+	  return;
+	}
+
+      if (chown ( $this->_myFilename, $this->_myMailConfig->getUser())==FALSE)
+	{
+	  $aError=sprintf("Error concerning file: %s\n", $this->_myFilename);
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.2 $');
+	  return;
+	}
+
+      if (chgrp ( $this->_myFilename, $this->_myMailConfig->getUser())==FALSE)
+	{
+	  $aError=sprintf("Error concerning file: %s\n", $this->_myFilename);
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.2 $');
+	  return;
+	}
     }
 }
 
