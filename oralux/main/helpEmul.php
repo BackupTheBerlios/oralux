@@ -1,6 +1,6 @@
 <?php
-//define("DEBUG",false);
-define("DEBUG",true);
+define("DEBUG",false);
+//define("DEBUG",true);
 // $__Function__ must be updated
 
 function ENTER($theString, $theLine=NULL)

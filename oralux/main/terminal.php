@@ -1,11 +1,11 @@
 <?php
 // ----------------------------------------------------------------------------
 // terminal.php
-// $Id: terminal.php,v 1.5 2004/11/10 18:24:25 gcasse Exp $
+// $Id: terminal.php,v 1.6 2004/11/10 23:02:46 gcasse Exp $
 // $Author: gcasse $
 // Description: managing the dumb terminals (emacs) or the others (so called enhanced)  
-// $Date: 2004/11/10 18:24:25 $ |
-// $Revision: 1.5 $ |
+// $Date: 2004/11/10 23:02:46 $ |
+// $Revision: 1.6 $ |
 // Copyright (C) 2004 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -55,7 +55,11 @@ class enhancedTerminal
 	  $this->_myObjectIsBuilt=dio_open_stdin();
 	  $this->_myUpArrowKey=sprintf("%c[A",0x1b);
 	  $this->_myDownArrowKey=sprintf("%c[B",0x1b);
+	  $this->_myRightArrowKey=sprintf("%c[C",0x1b);
+	  $this->_myLeftArrowKey=sprintf("%c[D",0x1b);
 	  $this->_myEscapeKey=sprintf("%c",0x1b);
+	  $this->_myDelKey=sprintf("%c",0x7f);
+	  $this->_myBackspaceKey=sprintf("%c",0x08);
 	}
     }
 
@@ -102,16 +106,77 @@ class enhancedTerminal
      {
       ENTER("enhancedTerminal::getLine",__LINE__);
        $aResult=getCharOK;
-       $theLine=dio_read_line_from_stdin( $theLastInput);
 
-       if ($theLine==$this->_myDownArrowKey)
-         {
-           $aResult=getCharDownArrowKey;
-         }
-       else if ($theLine==$this->_myUpArrowKey)
-         {
-           $aResult=getCharUpArrowKey;
-         }
+       define("DATA_LENGTH", 1024);
+       $aEndOfLineFound=false;
+       
+       if ($theLastInput!="")
+	 {
+	    $theLine=$theLastInput;
+	    $aIndex=strlen( $theLastInput);
+	    echo $theLine;
+	 }
+       else
+	 {
+	   $theLine="";
+	   $aIndex=0;
+	 }
+
+       while( !$aEndOfLineFound && ($aIndex < DATA_LENGTH))
+	 {
+	   $aChar=dio_read_stdin();
+	
+	    
+	   switch($aChar)
+	     {
+	      case $this->_myEscapeKey:
+		$aResult=getCharEscape;
+		$aEndOfLineFound=true;
+		break;
+		
+	     case $this->_myDownArrowKey:
+		$aResult=getCharDownArrowKey;
+		$aEndOfLineFound=true;
+		break;
+		
+	      case $this->_myUpArrowKey:
+		$aResult=getCharUpArrowKey;
+		$aEndOfLineFound=true;
+		break;
+		
+	      case $this->_myDelKey:
+	      case $this->_myBackspaceKey:
+		if ($aIndex>0)
+		  {
+		    $aIndex--;
+		    $aChar=$theLine{$aIndex};
+		    //say($aChar); // Pronounce the erased character
+
+		    $theLine=substr ( $theLine, 0, $aIndex);
+		    echo( $this->_myLeftArrowKey);
+		    echo " ";
+		    echo( $this->_myLeftArrowKey);
+		  }
+		break;
+
+	      default:
+		$aValue=ord($aChar);
+		if (($aValue==0x0A) || ($aValue==0x0D))
+		  {
+		    echo $aChar;
+		    $aResult=getCharOK;
+		    $aEndOfLineFound=true;
+		  }
+		else
+		  {
+		    echo $aChar;
+		    $aIndex++;
+		    $theLine .= $aChar;
+		    break;
+		  }
+	      }
+	  }
+	
        return $aResult;
      }
 
