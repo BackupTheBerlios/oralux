@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # php.sh
-# $Id: php.sh,v 1.6 2004/11/25 22:51:53 gcasse Exp $
+# $Id: php.sh,v 1.7 2004/12/03 19:13:43 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing PHP
-# $Date: 2004/11/25 22:51:53 $ |
-# $Revision: 1.6 $ |
+# $Date: 2004/12/03 19:13:43 $ |
+# $Revision: 1.7 $ |
 # Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -48,7 +48,7 @@ InstallPackage()
     make install
     cd /usr/bin 
     rm -f php5
-    ln -s ln -s /usr/bin/php-oralux php5
+    ln -s /usr/bin/php-oralux php5
     cd /etc/alternatives;rm -f php;ln -s /usr/bin/php5 php
 }
 

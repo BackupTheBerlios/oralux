@@ -1,11 +1,11 @@
 <?php
 // ----------------------------------------------------------------------------
 // terminal.php
-// $Id: terminal.php,v 1.7 2004/11/28 21:21:00 gcasse Exp $
+// $Id: terminal.php,v 1.1 2004/12/03 19:13:43 gcasse Exp $
 // $Author: gcasse $
 // Description: managing the dumb terminals (emacs) or the others (so called enhanced)  
-// $Date: 2004/11/28 21:21:00 $ |
-// $Revision: 1.7 $ |
+// $Date: 2004/12/03 19:13:43 $ |
+// $Revision: 1.1 $ |
 // Copyright (C) 2004 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or

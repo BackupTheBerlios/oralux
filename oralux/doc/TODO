@@ -609,6 +609,13 @@ Pressing control End will move to the end of the buffer.
 Pressing Page Up will move up a paragraph.
 Pressing Page Down will move down a paragraph.
 
+left and right cursor keys would move by letter.  
+Control left and right would move by word.  
+Control up arrow would read the current line and Control down arrow
+would read from the current line to the end of the buffer.
+
+
+
 
 1.3 Priority 3
 + Aural style sheets support.

@@ -2,11 +2,11 @@
 <?php
 // ----------------------------------------------------------------------------
 // dialog.php
-// $Id: dialog.php,v 1.4 2004/11/12 21:46:13 gcasse Exp $
+// $Id: dialog.php,v 1.1 2004/12/03 19:13:43 gcasse Exp $
 // $Author: gcasse $
 // Description: command line based dialog (menu, yes/no question, dialog box,...)
-// $Date: 2004/11/12 21:46:13 $ |
-// $Revision: 1.4 $ |
+// $Date: 2004/12/03 19:13:43 $ |
+// $Revision: 1.1 $ |
 // Copyright (C) 2004 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
