@@ -1,10 +1,10 @@
 # ----------------------------------------------------------------------------
 # README
-# $Id: README,v 1.1 2004/09/27 20:29:50 gcasse Exp $
+# $Id: README,v 1.2 2004/09/27 20:34:58 gcasse Exp $
 # $Author: gcasse $
 # Description: This file describes how to build Oralux from Knoppix.
-# $Date: 2004/09/27 20:29:50 $ |
-# $Revision: 1.1 $ |
+# $Date: 2004/09/27 20:34:58 $ |
+# $Revision: 1.2 $ |
 # Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -24,6 +24,7 @@
 ####
 
 Content
+
 
 1. Introduction
 1.1 Required Hardware
