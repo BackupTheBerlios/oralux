@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # misc.sh
-# $Id: misc.sh,v 1.3 2004/10/30 19:40:45 gcasse Exp $
+# $Id: misc.sh,v 1.4 2004/11/03 20:21:53 gcasse Exp $
 # $Author: gcasse $
 # Description: Miscellaneous packages
-# $Date: 2004/10/30 19:40:45 $ |
-# $Revision: 1.3 $ |
+# $Date: 2004/11/03 20:21:53 $ |
+# $Revision: 1.4 $ |
 # Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -50,6 +50,7 @@ InstallPackage()
     apt-get install cdtool; cd /usr/bin; ln -s ./cdtool cdstart
     apt-get install tnt
     apt-get install erc
+    apt-get install xsltproc
     apt-get install aspell-fr
     apt-get install aspell-de
     apt-get install aspell-es
@@ -73,6 +74,10 @@ cd /tmp; rm -rf aspell-ru-*; wget ftp://ftp.gnu.org/gnu/aspell/dict/ru/aspell-ru
 
     apt-get install xpdf-utils
     apt-get install catdoc
+    apt-get install pdftohtml
+    apt-get install wv
+    apt-get install xlhtml
+    apt-get install ppthtml
 
     apt-get install zinf
     apt-get install zinf-extras
@@ -107,6 +112,9 @@ Copy2Oralux()
     chroot $BUILD bash -c "apt-get install cdtool; cd /usr/bin; ln -s ../lib/cdtool/cdtool cdstart"
     chroot $BUILD apt-get install tnt
     chroot $BUILD apt-get install erc
+    chroot $BUILD apt-get install xsltproc
+    chroot $BUILD apt-get install ppthtml
+
     chroot $BUILD apt-get install aspell-fr
     chroot $BUILD apt-get install aspell-de
     chroot $BUILD apt-get install aspell-es
@@ -132,6 +140,9 @@ Copy2Oralux()
 
     chroot $BUILD apt-get install xpdf-utils
     chroot $BUILD apt-get install catdoc
+    chroot $BUILD apt-get install pdftohtml
+    chroot $BUILD apt-get install wv
+    chroot $BUILD apt-get install xlhtml
 
     # Doc
     cp -pR $DOC/* $BUILD/usr/share/oralux/doc
