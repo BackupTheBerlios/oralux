@@ -383,7 +383,7 @@ the cd has ejected shut down the machine fine.
 + Adding a sentence in intro-xx.txt to explain how to reach the doc.
 
 + A general way to increase the speech rate 
-+ set speech rate in the menu (soundtouch)
++ set speech rate in the menu (wsola, soundtouch)
 + A programmable speech rate ?
 + speech rate: how to easily store it (.emacs dtk-set-rate + saveconfig).
 
