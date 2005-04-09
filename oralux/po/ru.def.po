@@ -1,0 +1,246 @@
+# Oralux: Russian translations.
+# Copyright (C) 2005 Oralux.org Association
+# Gilles Casse <gcasse@oralux.org>, 2005.
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Oralux.\n"
+"PO-Revision-Date: 2005-04-08 22:05+0200\n"
+"Last-Translator: Studennikov Sergey <std.serg@gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=koi8-r\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid ""
+"\n"
+"A few checkboxes."
+msgstr "\nНесколько флажков."
+
+msgid ""
+"\n"
+"And type return to select your preferred item. "
+msgstr "\nИ нажмите ввод, чтобы выбрать желаемый пункт. "
+
+msgid ""
+"\n"
+"And type return to select your preferred option."
+msgstr "\nИ нажмите enter, чтобы выбрать желаемый параметр."
+
+msgid ""
+"\n"
+"And type yes to select an option, or type no to unselect it. "
+msgstr "\nИ введите да (yes), чтобы выбрать параметр, или введите нет (no), чтобы отменить выбор. "
+
+msgid ""
+"\n"
+"And type yes to select your preferred item. "
+msgstr "\nИ введите да (yes), чтобы выбрать желаемый пункт. "
+
+msgid ""
+"\n"
+"And type yes to select your preferred option. "
+msgstr "\nИ введите да (yes), чтобы выбрать желаемый параметр. "
+
+msgid ""
+"\n"
+"Button."
+msgstr "\nКнопка."
+
+msgid ""
+"\n"
+"Input. "
+msgstr "\nВвод. "
+
+#, php-format
+msgid ""
+"\n"
+"Just press return if you accept this proposal: %s. "
+msgstr "\nНажмите ввод, если вы принимаете это предложение: %s. "
+
+#, php-format
+msgid ""
+"\n"
+"Just type yes if you accept this proposal: %s. "
+msgstr "\nВведите да (yes), если вы принимаете это предложение: %s. "
+
+msgid ""
+"\n"
+"Long list."
+msgstr "\nДлинный список."
+
+msgid ""
+"\n"
+"Note that you can select several options. "
+msgstr "\nОбратите внимание, вы можете выбирать несколько параметров. "
+
+msgid ""
+"\n"
+"Press return to read the next item. "
+msgstr "\nНажмите ввод, чтобы прочитать следующий пункт. "
+
+msgid ""
+"\n"
+"Press return to read the next option. "
+msgstr "\nНажмите ввод, чтобы прочитать следующий параметр. "
+
+msgid ""
+"\n"
+"Press the up or down arrow key to read another item. "
+msgstr "\nИспользуйте курсорную стрелку вверх или вниз, чтобы прочитать другие пункты. "
+
+msgid ""
+"\n"
+"Press the up or down arrow key to read another option. "
+msgstr "\nИспользуйте курсорную стрелку вверх или вниз, чтобы прочитать другие параметры. "
+
+#, php-format
+msgid ""
+"\n"
+"Proposal: %s. "
+msgstr "\nПредложение: %s. "
+
+msgid ""
+"\n"
+"Several checkboxes."
+msgstr "\nНекоторое количество флажков."
+
+msgid ""
+"\n"
+"Short list."
+msgstr "\nКороткий список."
+
+msgid ""
+"\n"
+"There are just a few checkboxes."
+msgstr "\nЗдесь находятся несколько флажков."
+
+msgid ""
+"\n"
+"There are several checkboxes."
+msgstr "\nЗдесь находится некоторое количество флажков."
+
+msgid ""
+"\n"
+"This is a button."
+msgstr "\nЭто кнопка."
+
+msgid ""
+"\n"
+"This is a long list."
+msgstr "\nЭто длинный список."
+
+msgid ""
+"\n"
+"This is a short list."
+msgstr "\nЭто короткий список."
+
+msgid ""
+"\n"
+"Type your answer in this input field. "
+msgstr "\nВведите ваш ответ в этом поле ввода. "
+
+msgid ""
+"\n"
+"Which mailbox do you want to delete?"
+msgstr ""
+
+msgid ""
+"\n"
+"Which mailbox do you want to modify?"
+msgstr ""
+
+msgid ""
+"\n"
+"Your changes have been saved"
+msgstr ""
+
+msgid "About mail boxes"
+msgstr ""
+
+msgid "Add a mailbox"
+msgstr ""
+
+msgid "Button."
+msgstr "Кнопка."
+
+msgid "Cancel"
+msgstr "Отмена"
+
+msgid "Delete a mailbox"
+msgstr ""
+
+#, php-format
+msgid "Do you really want to delete %s?"
+msgstr ""
+
+msgid ""
+"Do you want to keep the messages in the server once they have been fetched?"
+msgstr ""
+
+msgid "Do you want to save your changes"
+msgstr ""
+
+msgid ""
+"Enter how often your mailboxes must be checked. For example, 20 means 20 "
+"minutes"
+msgstr ""
+
+msgid "Enter the login"
+msgstr ""
+
+msgid "Enter the name of the POP server, for example: pop.smith.com"
+msgstr ""
+
+msgid "Enter the name of the S M T P server, for example: smtp.smith.com"
+msgstr ""
+
+msgid "Enter the name of this mailbox, for example: My Mailbox"
+msgstr ""
+
+msgid "Enter the password"
+msgstr ""
+
+msgid "Enter the port or press return"
+msgstr ""
+
+msgid "Enter your full mailing address, for example: paul@smith.com"
+msgstr ""
+
+msgid "Enter your full name, for example: Paul Smith"
+msgstr ""
+
+msgid "Modify a mailbox"
+msgstr ""
+
+msgid "OK"
+msgstr "OK"
+
+msgid "Press any key to continue."
+msgstr "Нажмите любую клавишу, чтобы продолжить."
+
+msgid "Return to main menu"
+msgstr ""
+
+msgid "Selected. "
+msgstr "Отмечено. "
+
+msgid "Thanks to report this error to contact@oralux.org\n"
+msgstr ""
+
+msgid "This is a button."
+msgstr "Это кнопка."
+
+msgid "Yes or No?"
+msgstr "Да (yes) или нет (no)?"
+
+msgid "n"
+msgstr "n"
+
+msgid "no"
+msgstr "no"
+
+msgid "y"
+msgstr "y"
+
+msgid "yes"
+msgstr "yes"
