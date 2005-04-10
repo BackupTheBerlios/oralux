@@ -30,12 +30,43 @@ Date: xx Month 2004
 + Clearly say that RETURN must be pressed once the CD is ejected.
 + preferences menu: setting BRLTTY: the contraction table item is added
 
-
 * Enhancements
 
 * Emacspeak
 / Release 21
 / Patch by Igor B. Poretsky (multispeech, emacs-w3m, and more)
+The Function keys are bound to the following functions:
+f1 help-for-help
+f2 save-buffer
+f3 find-file
+f4 switch-to-buffer
+f5 delete-other-windows
+f6 delete-window
+f7 grep
+f8 kill-buffer
+f9 compile
+f11 bbdb
+f12 other-window
+f13 or Shift f1 dtk-set-next-language
+f15 or Shift f3 gnus
+f16 or Shift f4 shell
+f17 or Shift f5 find-name-dired
+f18 or Shift f6 w3m
+f19 or Shift f7 find-grep-dired
+f20 or Shift f8 server-start
+
++ Emacspeak Key binding: from suggestions by Nigel Stoppard.
+
+Pressing the Home key moves to the beginning of a line.
+Pressing Escape Home moves to the beginning of the buffer.
+Pressing the End key moves to the end of the line.
+Pressing Escape End moves to the end of the buffer.
+Pressing Page Up says the start of the paragraph.
+Pressing Page Down says the rest of the paragraph.
+Left and right cursor keys move by letter.  
+Escape left and right move by word.  
+Escape up arrow reads the current line and Escape down arrow reads from the current line to the end of the buffer.
+
 
 / Configuration files in the boot floppy: 
 The very basic configuration files can now be saved in the boot floppy.

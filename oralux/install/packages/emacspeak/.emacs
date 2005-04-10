@@ -7,7 +7,7 @@
 (auto-compression-mode t)
 (setq-default transient-mark-mode t)
 (setq-default save-place t)
-(setq make-backup-files nil)
+;(setq make-backup-files nil)
 
 ; Compilation process
 (setq compilation-ask-about-save nil)
@@ -62,9 +62,6 @@
    )
 )
 
-;; vm
-(setq load-path (cons "/usr/share/emacs/site-lisp/vm" load-path))
-(require 'vm)
 
 ;; Useful for Mail too
 (display-time)
@@ -94,6 +91,31 @@
 (global-set-key [end] 'end-of-line)
 (global-set-key [?\e home] 'beginning-of-buffer)
 (global-set-key [?\e end] 'end-of-buffer)
+
+(global-set-key [?\e left] 'backward-word)
+(global-set-key [?\e right] 'forward-word)
+
+(when (featurep 'emacspeak)
+  (defun emacspeak-speak-rest-of-page ()
+    (interactive)
+    (emacspeak-speak-page '1)
+    )
+  (global-set-key [?\e up] 'emacspeak-speak-line)
+  (global-set-key [?\e down] 'emacspeak-speak-rest-of-page)
+
+  (defun emacspeak-speak-start-of-paragraph ()
+    (interactive)
+    (emacspeak-speak-paragraph '-1)
+    )
+  (defun emacspeak-speak-rest-of-paragraph ()
+    (interactive)
+    (emacspeak-speak-paragraph '1)
+    )
+  (global-set-key [prior] 'emacspeak-speak-start-of-paragraph)
+  (global-set-key [next] 'emacspeak-speak-rest-of-paragraph)
+)
+
+
 (global-set-key [f1] 'help-for-help)
 (global-set-key [f2] 'save-buffer)
 (global-set-key [f3] 'find-file)
@@ -144,6 +166,7 @@
  '(ispell-program-name "aspell")
  '(newsticker-html-renderer (quote w3m-region))
  '(newsticker-url-list (quote (("New York Times" "http://www.nytimes.com/services/xml/rss/nyt/HomePage.xml" nil nil nil))))
+ '(ps-lpr-command "lp")
  '(tmm-mid-prompt #(":" 0 1 (personality inaudible)))
  '(w3m-after-cursor-move-hook (quote (w3m-highlight-current-anchor w3m-auto-show))))
 (custom-set-faces
@@ -198,7 +221,7 @@
 (load-library "folding-prepare")
 
 ;;(require 'catdoc)   
-(require 'tramp)
+;;(require 'tramp)
 ;; (setq backup-by-copying t)
 ;; (setq backup-directory-alist '(("." . "~/.backups/")))
 ;; (setq delete-old-versions t)
@@ -208,6 +231,10 @@
 ;; bitlbee
 (load-library "erc-init")
 ;;(global-set-key "\C-ceb" 'erc-bitlbee)
+
+;; (setq fill-column '70)
+;; (setq text-mode-hook 'turn-on-auto-fill)
+
 
 ;; calendar
 (setq european-calendar-style t)

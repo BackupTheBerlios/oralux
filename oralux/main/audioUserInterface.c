@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // audiouserinterface.c
-// $Id: audioUserInterface.c,v 1.6 2005/03/31 09:16:53 gcasse Exp $
+// $Id: audioUserInterface.c,v 1.7 2005/04/10 22:17:35 gcasse Exp $
 // $Author: gcasse $
 // Description: Managing and playing the pre-recorded messages.
-// $Date: 2005/03/31 09:16:53 $ |
-// $Revision: 1.6 $ |
+// $Date: 2005/04/10 22:17:35 $ |
+// $Revision: 1.7 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 // September 2003: 
 // German translations by Guenther Harrasser.
@@ -809,7 +809,7 @@ char * TheMessages[][4]={
   // 7B
   {"Do you want to change the keyboard features?",
    "Voulez-vous changer les caractéristiques du clavier ?",
-   NULL,
+   "Möchten sie die Tastatureinstellungen ändern?",
    NULL,
   },
 
@@ -843,29 +843,29 @@ char * TheMessages[][4]={
 
   // 80
   {"Do you want to set up your internet connection",
-   NULL,
-   NULL,
+   "Voulez-vous configurer votre connexion internet ?",
+   "Möchten sie den Internetzugang konfigurieren?",
    NULL,
   },
 
   // 81
   {"Configure an external serial modem",
-   NULL,
-   NULL,
+   "Configurer un modem externe série ",
+   "Konfigurieren eines externen Modems an der seriellen Schnittschnelle.",
    NULL,
   },
 
   // 82
-  {"Install an ADSL USB Modem",
-   NULL,
-   NULL,
+  {"Install an A D S L  U S B Modem",
+   "Installer un MODEM A D S L  U S B",
+   "Ein ADSL-Modem mit USB-Schnittstelle einrichten.",
    NULL,
   },
 
   // 83
   {"Set up mail",
-   NULL,
-   NULL,
+   "Configurer le courriel",
+   "E-Mail einrichten",
    NULL,
   },
 
@@ -895,7 +895,7 @@ char * TheMessages[][4]={
 
   {"Do you want to install another language?",
    "Voulez-vous installer une autre langue ?",
-   NULL,
+   "Möchten Sie eine weitere Sprache installieren?",
    NULL,
   },
 
@@ -907,13 +907,13 @@ char * TheMessages[][4]={
 
   {"Previous",
    "Précédant",
-   NULL,
+   "Zurück/vorherige Seite",
    NULL,
   },
 
   {"Next",
    "Suivant",
-   NULL,
+   "Weiter/nächste Seite",
    NULL,
   },
 
@@ -961,13 +961,13 @@ char * TheMessages[][4]={
 
   {"Which contraction table do you want ?",
    "Quelle table abrégée voulez-vous ?",
-   NULL,
+   "Welche Kurzschrifttabelle möchten Sie nutzen?",
    "¿Qué tabla de contracción quieres?",
   },
 
   {"No contraction table",
    "Pas de table abrégée",
-   "No contraction table",
+   "Keine Kurzschrifttabelle",
    "No contraction table",
   },
 

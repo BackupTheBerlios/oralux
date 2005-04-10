@@ -69,8 +69,14 @@ help you testing whether it is OK or not.
 
 I hope that it will help you better debug the Russian settings.
 
-
++ elinks: update (+ in the menu?).
++ cups
++ emacspeak + yasr
++ audio menu + shortcut
 + test ispell for each possible languages
+
++ emacs : current dir = /home/knoppix
+
 
 * Translations
 
@@ -348,6 +354,7 @@ gobjc package.
 Debian Ada packages (-gtk +cryptography support as well
 as many of the libraries including the text one).  
 ---------------------
++ USB install.
 
 + codec RealPlayer 9 + 10
 
@@ -637,9 +644,6 @@ Under Windows, my soundcard can handle various outputs, e.g. a speech synth talk
 Is it a driver issue, or an issue with my card?  Is there a way to resolve this problem?  I have tried the alsa drivers, but it makes no difference.
 ---
 
-+ Including Yasr. When the user quit Emacspeak, could we be under
-Yasr?
-
 + Easy mounts
 + Console switching and aural feedback
 - Initial Logo issue ? See Georges' answer
@@ -652,13 +656,10 @@ http://oralux.org/archives-ml.php?A=READ&L=ml_oralux.org/2003/7/15/0
 started. The shell must be usable.
 
 + Check calendar and todo mode. 
-+ Test babel.el 
 
 + Check the size of the ramdisk when the external tts is installed
 + Check the size of the user's partition
 + See how a root term may be used with Emacspeak without supplying any password 
-+ HOWTO English/French (reachable from Emacspeak).
-
 
 + Suggestions from Mario Fux and Alireza Darvishy
 
@@ -678,19 +679,21 @@ Options" and in the menu File: "Open File   Open Directory".
 
 + Suggestions from Nigel for Emacs and YASR.
 
-Pressing the Home key will move to the beginning of a line.
-Pressing control Home will move to the beginning of the buffer.
+We use the esc key instead of the mentioned Control key
 
-Pressing the End key will move to the end of the line.
-Pressing control End will move to the end of the buffer.
+/ Pressing the Home key will move to the beginning of a line.
+/ Pressing esc Home will move to the beginning of the buffer.
+/ Pressing the End key will move to the end of the line.
+/ Pressing esc End will move to the end of the buffer.
 
 Pressing Page Up will move up a paragraph.
 Pressing Page Down will move down a paragraph.
 
 left and right cursor keys would move by letter.  
-Control left and right would move by word.  
-Control up arrow would read the current line and Control down arrow
-would read from the current line to the end of the buffer.
+
+/ esc left and right will move by word.  
+/ esc up arrow will read the current line and esc down arrow
+will read from the current line to the end of the buffer.
 
 A key to repeat a last spoken object.  So if the 
 last thing read was the sentence then pressing a key would read it again.
