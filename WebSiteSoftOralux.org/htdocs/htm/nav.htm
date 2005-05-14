@@ -1,0 +1,12 @@
+ <div class="nav">
+  <ul>
+   <li>[ <a href="#main">Go to content</a> | </li>
+   <?php 
+   foreach($TheTitleTranslation as $label=>$translation)
+   {
+   echo("<li>".$this->printEntry($label,$translation)." | </li>\n");   
+   }
+   ?>
+	 <li><a href="mailto:contact@oralux.org">Contact us</a> ]</li>
+	</ul>
+ </div> <!-- nav -->

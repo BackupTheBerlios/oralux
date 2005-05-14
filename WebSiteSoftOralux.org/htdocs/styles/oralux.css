@@ -1,0 +1,299 @@
+html, body {
+ margin: 0;
+ padding: 0;
+}
+
+body {
+ margin:0% 2%;
+/* background-color:#fff;*/
+ background-color:#000;
+/* color:#000;*/
+ color:#ff0;
+ font-size:100%;
+ font-family:Arial, Helvetica, sans-serif;
+ font-weight:normal;
+}
+
+em {
+ font-weight:bold;
+ font-style:normal;
+}
+
+.terminal {
+/*
+ background-color:#ededed;
+ color:black;
+*/
+ display:block;
+/*
+ width:20em; 
+*/
+ padding:0.2em;
+ margin:0.2em;
+}
+
+samp, kbd {
+ font-size:100%;
+ font-family:monospace;
+ font-weight:bold;
+/*
+ background-color:#ccc;
+ color:inherit;
+*/
+ padding: 0.1em 1em;
+}
+
+div {
+ margin:0;
+ padding:0;
+}
+
+a {
+  text-decoration:underline;
+  /* New */
+  color:#f00;
+  background-color:#000;
+}
+
+a.link {
+/*  color:#0000c8;*/
+  color:#f00;
+  background-color:inherit;
+  text-decoration:underline;
+}
+
+a.visited {
+/*  color:#7000aa;*/
+  color:#f90;
+  background-color:inherit;
+  text-decoration:underline;
+}
+
+a:hover, button:hover, div#header a:hover span#firstspan {
+/*
+  background-color:#ff0;
+*/
+  background-color:#f00;
+  color:#000;
+  border:none;
+}
+
+.sep {
+  display:none;
+}
+
+div#header {
+ width:100%;
+ margin-bottom:1em;
+}
+
+div#header h1 {
+  font-size:1em;
+  text-align:left;
+  font-weight:normal;
+  margin:0;
+  padding:0;
+  text-transform:capitalize;
+}
+
+/* Adding the firstspan id instead of first-child (Opera 6) */
+
+div#header span#firstspan {
+  color:#f90;
+  background-color:inherit;
+  display:block;
+  font-size:3em;
+  font-style:normal;
+  font-weight:bold;
+  letter-spacing:0.1em;
+  padding:0;
+  margin:0;
+}
+
+div#header span#firstspan img {
+  vertical-align:middle;
+  margin: 2px 2px 0 0;
+  padding:0;
+  border:0;
+}
+
+/* Adding the id "secondspan" instead of span+span+span for IE 5.5 */
+
+div#header span#secondspan {
+  paddi ng:0.2em 0 0 0;
+  margin:0;
+/*
+  color:black;
+  background-color:white;
+*/
+  font-size:0.9em;
+  font-style:normal;
+  border:1px solid #f90;
+  border-width:2px 0 0 0;
+}
+
+div#header a {
+ text-decoration:none;
+}
+
+div.nav {
+ padding: 0.5em 0; 
+}
+
+h1,h2,h3,h4,h5,h6 {
+ font-style:normal;
+ font-weight:bold;
+ font-family:Garamond,Times,serif;
+ padding:0;
+ margin:0;
+}
+
+h3,h4,h5,h6 {
+ font-style:normal;
+ font-weight:bold;
+ font-family:Arial, Helvetica, sans-serif;
+ padding:0;
+ margin:0;
+}
+
+h2 {
+/* border-width:8px 2px;*/
+ border-width:0 0 2px 0;
+ border-style:dotted solid;
+/* border-color: #fff;*/
+ border-color: #c30; /*#000;*/
+/* background-color:#ffc;*/
+ background-color:#000;
+ color:#fc3;
+ padding:0.2em 0;
+}
+
+h3 {
+ border-width:0 0 1px 0;
+ border-style:dashed;
+ border-color: #faa;
+}
+
+h3,h4,h5,h6 {
+ margin-top:1em;
+}
+
+p, blockquote, ul, ol {
+ margin:0.4em 0 0.5em 0;
+ padding:0;
+}
+/*
+p, blockquote, dt, ul, ol {
+ margin:0.4em 0 1.5em 0;
+ padding:0;
+}
+*/
+
+/*
+p {
+ margin-bottom:1.5em;
+}
+*/
+
+ul, ol {
+ margin-left:0.5em;
+}
+
+li, dd {
+ margin:0 0 0.5em 1em;
+ padding:0;
+}
+
+dl, div.nav ul {
+ margin:0;
+ padding:0;
+}
+
+div.nav li{
+ margin:0;
+ list-style-type:none;
+ display:inline;
+}
+
+div#footer {
+ clear:both;
+ font-size: 90%; 
+ padding: 0.5em 0; 
+ text-align: left; 
+ line-height: 1em;
+ color:inherit;
+ width:100%;
+/* border-top:1em solid #fff;*/
+ border-top:1em solid #000;
+/* background-color:#fff8e0; */
+ background-color:inherit;
+}
+
+div#footer p {
+ margin: 0.25em 0;
+}
+
+div#footer img {
+ height:1.8em;
+ border:none;
+ padding-left:0.5em;
+ vertical-align:middle;
+}
+
+div#main {
+ clear:both;
+ float:left;
+ width:68%;
+ margin:0;
+ margin-top:1em;
+}
+
+div#sidebar {
+ margin: 0 0 0 70%;
+ margin-top:1em;
+ text-align:left;
+ padding:0;
+/*
+ border-left:solid 2px #fdffba;
+*/
+ border-left:solid 2px #c30;
+}
+
+div#sidebar h2 {
+ border-bottom:2px dotted #f90;
+}
+
+fieldset, select, input, textarea, button {
+ background-color:#000;
+ color:#ff0;
+ border:1px solid #f00;
+}
+
+button:hover {
+ border:1px solid #f00;
+}
+
+fieldset {
+ margin:1em 0;
+ border:2px solid #f00;
+}
+
+textarea {
+ display: block;
+}
+
+label {
+ display: block;
+ padding:0.5em 0;
+}
+
+legend, label {
+ background-color:#000;
+ color:#fc3;
+ font-weight:bold;
+}
+
+.inline {
+ display:inline;
+}
+
