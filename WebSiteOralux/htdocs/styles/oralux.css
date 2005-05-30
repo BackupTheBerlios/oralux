@@ -54,20 +54,20 @@ div {
 a {
   text-decoration:underline;
   /* New */
-  color:#f00;
+  color:#fff;
   background-color:#000;
 }
 
 a.link {
 /*  color:#0000c8;*/
-  color:#f00;
+  color:#fff;
   background-color:inherit;
   text-decoration:underline;
 }
 
 a.visited {
 /*  color:#7000aa;*/
-  color:#f90;
+  color:#ffc;
   background-color:inherit;
   text-decoration:underline;
 }
@@ -76,7 +76,7 @@ a:hover, div#header a:hover span#firstspan {
 /*
   background-color:#ff0;
 */
-  background-color:#f00;
+  background-color:#fff;
   color:#000;
   border:none;
 }

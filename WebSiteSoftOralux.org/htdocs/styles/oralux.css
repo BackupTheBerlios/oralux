@@ -5,9 +5,7 @@ html, body {
 
 body {
  margin:0% 2%;
-/* background-color:#fff;*/
  background-color:#000;
-/* color:#000;*/
  color:#ff0;
  font-size:100%;
  font-family:Arial, Helvetica, sans-serif;
@@ -20,14 +18,7 @@ em {
 }
 
 .terminal {
-/*
- background-color:#ededed;
- color:black;
-*/
  display:block;
-/*
- width:20em; 
-*/
  padding:0.2em;
  margin:0.2em;
 }
@@ -36,11 +27,10 @@ samp, kbd {
  font-size:100%;
  font-family:monospace;
  font-weight:bold;
-/*
- background-color:#ccc;
- color:inherit;
-*/
- padding: 0.1em 1em;
+ padding: 0.1em 0;
+ background-color:#000;
+ color:#fff;
+ display:block;
 }
 
 div {
@@ -51,29 +41,25 @@ div {
 a {
   text-decoration:underline;
   /* New */
-  color:#f00;
+  color:#fff;
   background-color:#000;
 }
 
 a.link {
 /*  color:#0000c8;*/
-  color:#f00;
+  color:#fff;
   background-color:inherit;
   text-decoration:underline;
 }
 
 a.visited {
-/*  color:#7000aa;*/
   color:#f90;
   background-color:inherit;
   text-decoration:underline;
 }
 
 a:hover, button:hover, div#header a:hover span#firstspan {
-/*
-  background-color:#ff0;
-*/
-  background-color:#f00;
+  background-color:#fff;
   color:#000;
   border:none;
 }
@@ -122,10 +108,6 @@ div#header span#firstspan img {
 div#header span#secondspan {
   paddi ng:0.2em 0 0 0;
   margin:0;
-/*
-  color:black;
-  background-color:white;
-*/
   font-size:0.9em;
   font-style:normal;
   border:1px solid #f90;
@@ -157,12 +139,9 @@ h3,h4,h5,h6 {
 }
 
 h2 {
-/* border-width:8px 2px;*/
  border-width:0 0 2px 0;
  border-style:dotted solid;
-/* border-color: #fff;*/
  border-color: #c30; /*#000;*/
-/* background-color:#ffc;*/
  background-color:#000;
  color:#fc3;
  padding:0.2em 0;
@@ -182,18 +161,6 @@ p, blockquote, ul, ol {
  margin:0.4em 0 0.5em 0;
  padding:0;
 }
-/*
-p, blockquote, dt, ul, ol {
- margin:0.4em 0 1.5em 0;
- padding:0;
-}
-*/
-
-/*
-p {
- margin-bottom:1.5em;
-}
-*/
 
 ul, ol {
  margin-left:0.5em;
@@ -223,9 +190,7 @@ div#footer {
  line-height: 1em;
  color:inherit;
  width:100%;
-/* border-top:1em solid #fff;*/
  border-top:1em solid #000;
-/* background-color:#fff8e0; */
  background-color:inherit;
 }
 
@@ -253,9 +218,6 @@ div#sidebar {
  margin-top:1em;
  text-align:left;
  padding:0;
-/*
- border-left:solid 2px #fdffba;
-*/
  border-left:solid 2px #c30;
 }
 
@@ -297,3 +259,13 @@ legend, label {
  display:inline;
 }
 
+dt {
+ color:#fc3;
+ background-color:inherit;
+ font-weight:bold;
+ margin-top:2em;
+}
+
+dd {
+ margin-left:1em;
+}
