@@ -1,0 +1,311 @@
+diff -ur --exclude-from=nopatch.txt yasr-0.6.7/README yasr-0.6.7.new+init+word/README
+--- yasr-0.6.7/README	2002-12-02 05:00:19.000000000 +0100
++++ yasr-0.6.7.new+init+word/README	2005-05-12 00:50:39.000000000 +0200
+@@ -58,7 +58,6 @@
+ [n]right arrow: move ahead one character and read the character.
+ (: go to previous paragraph
+ ): go to next paragraph
+-alt-i: reinitialize the synthesizer
+ `: read the ASCII value of the current character
+ 
+ ** standard mode ** (these keys also work in review mode)
+@@ -71,6 +70,7 @@
+ alt-c: say character
+ alt-d: say word
+ alt-e: read cursor to bottom of screen
++alt-i: reinitialize the synthesizer
+ alt-k: say previous line
+ alt-l: read line
+ alt-m: read next line
+diff -ur --exclude-from=nopatch.txt yasr-0.6.7/yasr/config.c yasr-0.6.7.new+init+word/yasr/config.c
+--- yasr-0.6.7/yasr/config.c	2003-12-07 22:30:49.000000000 +0100
++++ yasr-0.6.7.new+init+word/yasr/config.c	2005-05-12 21:56:49.000000000 +0200
+@@ -42,7 +42,7 @@
+   {&ui_opt_set, "set option"},	/* 17 */
+   {&ui_bol, "beginning of line"},	/* 18 */
+   {&ui_eol, "end of line"},	/* 19 */
+-  {&tts_initsynth, "reinitialize"},	/* 20 */
++  {&tts_reinit, "reinitialize"},	/* 20 */
+   {&ui_detachtog, "toggle cursor detachment"},	/* 21 */
+   {&rev_toline, "Move review cursor to line"},	/* 22 */
+   {&rev_tocol, "move review cursor to column"},	/* 23 */
+@@ -190,7 +190,7 @@
+ 	}
+ 	if (!strcasecmp((char *) buf, "synthesizer port"))
+ 	{
+-	  (void) tts_init();
++	  (void) tts_init(1);
+ 	}
+ 	break;
+       }
+diff -ur --exclude-from=nopatch.txt yasr-0.6.7/yasr/main.c yasr-0.6.7.new+init+word/yasr/main.c
+--- yasr-0.6.7/yasr/main.c	2005-01-28 00:32:30.000000000 +0100
++++ yasr-0.6.7.new+init+word/yasr/main.c	2005-05-15 16:51:25.000000000 +0200
+@@ -232,10 +232,17 @@
+ 
+ /*ARGSUSED*/ static void child_finish(int sig)
+ {
+-  int status;
++  int pid=0;
+ 
+   (void) signal(SIGCHLD, &child_finish);
+-  if (waitpid(-1, &status, WNOHANG) == cpid)
++  pid=waitpid(-1, NULL, WNOHANG);
++
++
++  if ((pid == tts.pid)  && tts.reinit)
++  {
++    tts_reinit2();
++  }
++  else if (pid == cpid)
+   {
+     finish(0);
+   }
+@@ -253,6 +260,27 @@
+ #endif
+ }
+ 
++static int is_separator(int ch)
++{
++  int result=0;
++  if ((ch != ch % 0xFF) || isspace(ch))
++  {
++    result=1;
++  }
++  else if (((ch >= 0x21) && (ch <= 0x2F))
++	   || ((ch >= 0x3A) && (ch <= 0x40))
++	   || ((ch >= 0x5B) && (ch <= 0x60))
++	   || ((ch >= 0x7B) && (ch <= 0x7E))
++	   )
++  {
++    result=1;
++  }
++  return result;
++}
++
++
++
++
+ static void getinput()
+ {
+   int key;
+@@ -318,7 +346,7 @@
+     ui.meta = 0;
+     return;
+   }
+-  if (ui.kbsay == 2 && is_char(key))
++  if (ui.kbsay == 2 && is_separator(key))
+   {
+     tts_out(okbuf, okbuflen);
+     okbuflen = tts.oflag = 0;
+@@ -460,6 +488,12 @@
+   if (!ui.kbsay) return;
+   if (buf[0] == 8 || kbuf[0] == 127)
+   {
++    if ((ui.kbsay == 2) 
++	&& (okbuflen!=0))
++    {
++      okbuf[--okbuflen] = 0;
++    }
++
+     /*tts_say(_("back")); */
+     return;
+   }
+@@ -1032,7 +1066,7 @@
+ 	}
+       }
+ #endif
+-      if (ch == kbuf[0] && win->cr == oldcr && win->cc == oldcc && kbuflen)
++      if (ch == (char)kbuf[0] && win->cr == oldcr && win->cc == oldcc && kbuflen)
+       {
+ /* this character was (probably) echoed as a result of a keystroke */
+ 	kbsay();
+@@ -1100,7 +1134,9 @@
+       {
+ 	break;
+       }
+-      if (kbuf[0] == 0x1b5b43 || ui.curtrack == 2)
++      if (kbuf[0] == 0x1b5b43 || 
++	  ((ui.curtrack == 2) 
++	   && (ui.kbsay != 2 || is_separator(kbuf[0]))))
+       {
+ 	ui_saychar(win->cr, win->cc);
+       }
+diff -ur --exclude-from=nopatch.txt yasr-0.6.7/yasr/tts.c yasr-0.6.7.new+init+word/yasr/tts.c
+--- yasr-0.6.7/yasr/tts.c	2005-01-25 18:55:29.000000000 +0100
++++ yasr-0.6.7.new+init+word/yasr/tts.c	2005-06-04 21:50:37.000000000 +0200
+@@ -457,7 +457,7 @@
+   return fd;
+ }
+ 
+-int tts_init()
++int tts_init( int first_call)
+ {
+   struct termios t;
+   char *arg[8];
+@@ -468,6 +468,8 @@
+ 
+   portname = getfn(tts.port);
+   tts.pid = 0;
++  tts.reinit = !first_call; 
++
+   (void) memset(dict, 0, sizeof(dict));
+   (void) signal(SIGALRM, &tts_obufout);
+ 
+@@ -478,7 +480,7 @@
+     perror("open");
+   }
+ #endif
+-  if (tts.port[0] != '|' && strstr(tts.port, ":"))
++  if (first_call && tts.port[0] != '|' && strstr(tts.port, ":"))
+   {
+     tts.fd = open_tcp(tts.port);
+   } else if (tts.port[0] != '|')
+@@ -490,7 +492,10 @@
+     {
+       mode = O_WRONLY;
+     }
+-    tts.fd = open(portname, mode);
++    if (first_call)
++    {
++      tts.fd = open(portname, mode);
++    }
+     if (tts.fd == -1)
+     {
+       perror("tts");
+@@ -513,7 +518,25 @@
+ 	break;
+       }
+     }
+-    if (!(tts.pid = forkpty(&tts.fd, NULL, NULL, NULL)))
++
++    if (first_call)
++    {
++      if (openpty(&tts.fd, &tts.fd_slave, NULL, NULL, NULL) == -1)
++      {
++	perror("openpty");
++	exit(1);
++      }
++    } 
++
++    if (!(tts.pid = fork()))
++    {
++      /* child -- set up tty */
++      (void) dup2(tts.fd_slave, 0);
++      (void) dup2(tts.fd_slave, 1);
++      (void) dup2(tts.fd_slave, 2);
++      /* tts.fd_slave is not closed */
++    }
++    if (!tts.pid)
+     {
+       (void) execvp(arg[0], arg);
+       perror("execpv");
+@@ -524,11 +547,23 @@
+       perror("forkpty");
+     }
+   }
+-  tts_send(synth[tts.synth].init, strlen(synth[tts.synth].init));
+ 
++/* GC: avoid Yasr crash at init time
++  tts_send(synth[tts.synth].init, strlen(synth[tts.synth].init)); 
++*/
++
++  /* init is now finished */
++  tts.reinit = 0;
++  
+   return (0);
+ }
+ 
++int tts_reinit2()
++{
++  tts_init(0);
++  tts_initsynth(NULL);
++  return (0);
++}
+ 
+ void tts_addchr(char ch)
+ {
+@@ -560,6 +595,41 @@
+ }
+ 
+ 
++
++ /*ARGSUSED*/ void tts_reinit(int *argp)
++{
++  int pid=tts.pid;
++
++  if (pid==0)
++  {
++      return;
++  }
++  
++  tts.reinit=1; /* Start reinit */
++
++  tts_silence();
++  usleep(500000);
++
++  if (kill (pid, SIGTERM)!=0)
++  {
++    if (errno==ESRCH)
++    {
++      tts_reinit2();
++    }
++    else
++    {
++      kill (pid, SIGKILL);
++    }
++  }
++
++  /* wait init completion (tts.fd must be available) */
++  while(tts.reinit)
++  {
++      usleep(100000);
++  }
++}
++
++
+ void tts_charon()
+ {
+   ttssend(synth[tts.synth].charon);
+diff -ur --exclude-from=nopatch.txt yasr-0.6.7/yasr/yasr.h yasr-0.6.7.new+init+word/yasr/yasr.h
+--- yasr-0.6.7/yasr/yasr.h	2005-01-28 00:29:58.000000000 +0100
++++ yasr-0.6.7.new+init+word/yasr/yasr.h	2005-05-12 21:57:25.000000000 +0200
+@@ -130,6 +130,8 @@
+     int synth;
+     pid_t pid;
+     char port[OPT_STR_SIZE];
++    int reinit; /* 1 if tts is being reinitialized */
++    int fd_slave;
+ };
+ 
+ typedef struct Uirev Uirev;
+@@ -261,7 +263,9 @@
+ extern void tts_flush();
+ extern void tts_silence();
+ extern void tts_end();
+-extern int tts_init();
++extern int tts_init(int first_call);
++extern void tts_reinit(int *argp);
++extern int tts_reinit2();
+ extern void tts_say_printf(char *fmt, ...);
+ extern void tts_initsynth(int *argp);
+ extern int dict_read(char *buf);
+diff -ur --exclude-from=nopatch.txt yasr-0.6.7/yasr.conf yasr-0.6.7.new+init+word/yasr.conf
+--- yasr-0.6.7/yasr.conf	2004-11-18 13:02:03.000000000 +0100
++++ yasr-0.6.7.new+init+word/yasr.conf	2005-05-12 00:51:40.000000000 +0200
+@@ -11,6 +11,7 @@
+ 0x1b63:say character
+ 0x1b64:say word
+ 0x1b65:read cursor to bottom
++0x1b69:reinitialize
+ 0x1b6b:say line:-1
+ 0x1b6c:say line
+ 0x1b6d:say line:1
+@@ -42,7 +43,6 @@
+ 0x78:say word:1
+ 0x7a:say word:-1
+ 0x1b73:set option:5
+-0x1b69:reinitialize
+ 0x1b5b41:say line:-1:1
+ 0x1b5b42:say line:1:1
+ 0x1b5b44:say character:-1
