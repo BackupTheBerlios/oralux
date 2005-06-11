@@ -1,6 +1,6 @@
 ;;; dtk-speak.el --- Provides Emacs Lisp interface to speech server
-;;;$Id: dtk-speak.el,v 1.2 2005/03/31 09:16:53 gcasse Exp $
-;;; $Author: gcasse $
+;;;Id: dtk-speak.el,v 22.0 2005/04/30 16:39:49 raman Exp 
+;;; Author: raman 
 ;;; Description:  Emacs interface to TTS
 ;;; Keywords: Dectalk Emacs Elisp
 ;;{{{  LCD Archive entry:
@@ -8,8 +8,8 @@
 ;;; LCD Archive Entry:
 ;;; emacspeak| T. V. Raman |raman@cs.cornell.edu
 ;;; A speech interface to Emacs |
-;;; $Date: 2005/03/31 09:16:53 $ |
-;;;  $Revision: 1.2 $ |
+;;; Date: 2005/04/30 16:39:49  |
+;;;  Revision: 22.0  |
 ;;; Location undetermined
 ;;;
 
@@ -42,7 +42,11 @@
 
 ;;; Commentary:
 ;;;Defines the TTS interface.
-
+;;;
+;;; Change:
+;;; * Language switching.
+;;; 14 May 2005, Gilles Casse <gcasse@oralux.org>
+;;;
 ;;; Code:
 ;; 
 
@@ -355,7 +359,7 @@ Argument MODE  specifies the current pronunciation mode."
   (let ((inhibit-read-only t))
     (goto-char (point-min))
     (cond
-     ((string=  "all"  mode )
+     ((eq 'all mode)
       (let ((start nil)
 	    (personality nil))
 	(while (re-search-forward dtk-bracket-regexp  nil t )
@@ -446,11 +450,11 @@ Argument MODE  specifies the current pronunciation mode."
       (setq personality
             (get-text-property (point) 'personality))
       (setq replacement
-            (if  (string= "all" mode)
+            (if  (eq 'all  mode)
                 (format " aw %s %s"
                         (/ (- (match-end 0 ) (match-beginning 0))
                            len)
-                        (if (string= " " pattern)
+                        (if (string-equal " " pattern)
                             " space " string))
               ""))
       (replace-match replacement)
@@ -489,7 +493,7 @@ Argument MODE  specifies the current pronunciation mode."
     (insert string)
     (goto-char (point-min))
 ;;; dtk will think it's processing a command otherwise:
-    (dtk-fix-brackets "all")
+    (dtk-fix-brackets 'all)
     (dtk-fix-backslash)
 ;;; fix control chars
     (dtk-fix-control-chars)))
@@ -683,7 +687,6 @@ Argument OUTPUT is the newly arrived output."
 
 ;;}}}
 ;;{{{ helper --generate state switcher:
-
 ;;;###autoload
 (defun ems-generate-switcher (command switch documentation )
   "Generate desired command to switch the specified state."
@@ -846,10 +849,11 @@ Interactive PREFIX arg means set   the global default value, and then set the
 current local  value to the result."
   (interactive
    (list
-    (completing-read  "Enter punctuation mode: "
-                      dtk-punctuation-mode-alist
-                      nil
-                      t)
+    (intern
+     (completing-read  "Enter punctuation mode: "
+                       dtk-punctuation-mode-alist
+                       nil
+                       t))
     current-prefix-arg))
   (declare (special dtk-punctuation-mode dtk-speaker-process
                     dtk-speak-server-initialized
@@ -871,13 +875,13 @@ current local  value to the result."
   "Set punctuation  mode to all.
 Interactive PREFIX arg sets punctuation mode globally."
   (interactive "P")
-  (dtk-set-punctuations "all" prefix))
+  (dtk-set-punctuations 'all prefix))
 
 (defun dtk-set-punctuations-to-some (&optional prefix )
   "Set punctuation  mode to some.
 Interactive PREFIX arg sets punctuation mode globally."
   (interactive "P")
-  (dtk-set-punctuations "some" prefix))
+  (dtk-set-punctuations 'some prefix))
   
 
 (defun dtk-toggle-punctuation-mode (&optional prefix)
@@ -886,9 +890,9 @@ Interactive PREFIX arg makes the new setting global."
   (interactive "P")
   (declare (special dtk-punctuation-mode))
   (cond
-   ((string= "all" dtk-punctuation-mode)
+   ((eq 'all  dtk-punctuation-mode)
     (dtk-set-punctuations-to-some prefix ))
-   ((string= "some" dtk-punctuation-mode )
+   ((eq 'some  dtk-punctuation-mode )
     (dtk-set-punctuations-to-all prefix )))
   (when (interactive-p)
     (message "set punctuation mode to %s %s"
@@ -975,7 +979,7 @@ important to be interrupted.")
 (defvar dtk-speaker-process nil
   "Speaker process handle.")
 ;;;###autoload
-(defvar dtk-punctuation-mode  "all"
+(defvar dtk-punctuation-mode  'all
   "Current setting of punctuation state.
 Possible values are some, all or none.
 You should not modify this variable;
@@ -1430,7 +1434,7 @@ available TTS servers.")
 This is setup on a per engine basis.")
 
 ;;; will be reset on a per TTS engine basis.
-(defalias 'tts-get-voice-command 'dectalk-get-voice-command)
+;(defalias 'tts-get-voice-command 'dectalk-get-voice-command)
   
 (defun tts-configure-synthesis-setup (&optional tts-name)
   "Setup synthesis environment. "
@@ -1442,7 +1446,10 @@ This is setup on a per engine basis.")
     (outloud-configure-tts))
    ((string-match "multispeech" tts-name)
     (multispeech-configure-tts))
-   (t (dectalk-configure-tts)))
+   ((string-match "dtk-" tts-name) ;all dectalks
+    (dectalk-configure-tts))
+   (t (dectalk-configure-tts); will become generic-configure
+      ))
   (load-library "voice-setup")
   (setq tts-voice-reset-code (tts-get-voice-command tts-default-voice)))
 

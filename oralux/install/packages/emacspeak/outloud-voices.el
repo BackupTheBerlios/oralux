@@ -1,6 +1,6 @@
 ;;; outloud-voices.el --- Define various device independent voices in terms of OutLoud tags
-;;; $Id: outloud-voices.el,v 1.1 2005/03/31 09:16:53 gcasse Exp $
-;;; $Author: gcasse $
+;;; Id: outloud-voices.el,v 22.0 2005/04/30 16:40:03 raman Exp 
+;;; Author: raman 
 ;;; Description:  Module to set up Eloquent voices and personalities
 ;;; Keywords: Voice, Personality, IBM ViaVoice Outloud
 ;;{{{  LCD Archive entry:
@@ -8,8 +8,8 @@
 ;;; LCD Archive Entry:
 ;;; emacspeak| T. V. Raman |raman@cs.cornell.edu
 ;;; A speech interface to Emacs |
-;;; $Date: 2005/03/31 09:16:53 $ |
-;;;  $Revision: 1.1 $ |
+;;; Date: 2005/04/30 16:40:03  |
+;;;  Revision: 22.0  |
 ;;; Location undetermined
 ;;;
 
@@ -56,9 +56,6 @@
 ;;}}}
 ;;{{{  voice table
 
-(defvar tts-default-voice 'paul 
-  "Default voice used. ")
-
 (defvar outloud-default-voice-string "`v1"
   "Default Outloud tag for  default voice --set to be a no-op.")
 
@@ -88,7 +85,6 @@ COMMAND-STRING to the TTS engine."
   (concat 
    (outloud-get-voice-command-internal name)
    (format " `vs%s " dtk-speech-rate )))
-
 
 (defsubst outloud-voice-defined-p (name)
   "Check if there is a voice named NAME defined."
@@ -422,7 +418,6 @@ and TABLE gives the values along that dimension."
   "")
 
 ;;}}}
-
 ;;}}}
 ;;{{{  outloud-define-voice-from-speech-style
 
@@ -454,23 +449,15 @@ and TABLE gives the values along that dimension."
 (defun outloud-configure-tts ()
   "Configure TTS environment to use ViaVoice  family of synthesizers."
   (declare (special tts-default-speech-rate
-                    outloud-default-speech-rate
-                    emacspeak-use-auditory-icons
-                    emacspeak-aumix-midi-available-p
-                    emacspeak-aumix-multichannel-capable-p))
+                    outloud-default-speech-rate))
   (fset 'tts-list-voices'outloud-list-voices)
   (fset 'tts-voice-defined-p 'outloud-voice-defined-p)
   (fset 'tts-get-voice-command 'outloud-get-voice-command)
-  (fset 'tts-voice-defined-p 'outloud-voice-defined-p)
   (fset 'tts-define-voice-from-speech-style 'outloud-define-voice-from-speech-style)
   (setq tts-default-voice 'paul)
   (setq tts-default-speech-rate outloud-default-speech-rate)
-  (set-default 'tts-default-speech-rate outloud-default-speech-rate)
-  (when (and emacspeak-use-auditory-icons
-             (not emacspeak-aumix-multichannel-capable-p)
-             (not (emacspeak-using-midi-p))
-             emacspeak-aumix-midi-available-p)
-    (emacspeak-set-auditory-icon-player 'emacspeak-play-midi-icon)))
+  (set-default 'tts-default-speech-rate
+	       outloud-default-speech-rate))
 
 ;;}}}
 (provide 'outloud-voices)

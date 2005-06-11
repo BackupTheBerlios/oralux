@@ -1,12 +1,12 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # emacspeak.sh
-# $Id: emacspeak.sh,v 1.5 2005/03/31 09:16:53 gcasse Exp $
+# $Id: emacspeak.sh,v 1.6 2005/06/11 22:48:37 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing emacspeak. Thanks to the Nath's howto: 
 # emacspeak-dtk-soft-debinst-howto.htm
-# $Date: 2005/03/31 09:16:53 $ |
-# $Revision: 1.5 $ |
+# $Date: 2005/06/11 22:48:37 $ |
+# $Revision: 1.6 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -25,9 +25,9 @@
 # ----------------------------------------------------------------------------
 ####
 source ../oralux.conf
-EMACSPEAK=emacspeak-21.tar.bz2
+EMACSPEAK=emacspeak-22.tar.bz2
 ARCH_EMACSPEAK=$ARCH/$EMACSPEAK
-RELEASE=21
+RELEASE=22
 
 ####
 # Replacing the original EMACSPEAK file from a customized one
@@ -88,16 +88,18 @@ InstallPackage()
     # Patch by Igor B. Poretsky (multispeech integration, and more)
     patch -p0 -i $INSTALL_PACKAGES/emacspeak/emacspeak-$RELEASE.patch
 
-    cp $INSTALL_PACKAGES/emacspeak/MakefileECI servers/linux-outloud/Makefile
-    cp $INSTALL_PACKAGES/emacspeak/tcleci.cpp servers/linux-outloud
-    cp $INSTALL_PACKAGES/emacspeak/outloud servers
+#Comment for 0.6b
+#     cp $INSTALL_PACKAGES/emacspeak/MakefileECI servers/linux-outloud/Makefile
+#     cp $INSTALL_PACKAGES/emacspeak/tcleci.cpp servers/linux-outloud
+#     cp $INSTALL_PACKAGES/emacspeak/outloud servers
 
     cp $INSTALL_PACKAGES/emacspeak/*el lisp
 
     make
 
-    cd ..
-    cp $INSTALL_PACKAGES/vv/outloud .
+#Comment for 0.6b
+#     cd ..
+#     cp $INSTALL_PACKAGES/vv/outloud .
 
 
     make config; make; make install
@@ -168,9 +170,10 @@ Copy2Oralux()
     cd $BUILD/var/tmp/emacspeak* 
     patch -p0 -i $INSTALL_PACKAGES/emacspeak/emacspeak-$RELEASE.patch
 
-    cp $INSTALL_PACKAGES/emacspeak/MakefileECI servers/linux-outloud/Makefile
-    cp $INSTALL_PACKAGES/emacspeak/tcleci.cpp servers/linux-outloud
-    cp $INSTALL_PACKAGES/emacspeak/outloud servers
+#Comment for 0.6b
+#     cp $INSTALL_PACKAGES/emacspeak/MakefileECI servers/linux-outloud/Makefile
+#     cp $INSTALL_PACKAGES/emacspeak/tcleci.cpp servers/linux-outloud
+#     cp $INSTALL_PACKAGES/emacspeak/outloud servers
 
     cp $INSTALL_PACKAGES/emacspeak/*el lisp
 
@@ -216,7 +219,8 @@ Copy2Oralux()
     cp $INSTALL_PACKAGES/emacspeak/tcldtk.c .
     cp $INSTALL_PACKAGES/emacspeak/dtk-soft ..
 
-    cp $INSTALL_PACKAGES/emacspeak/outloud ..
+#Comment for 0.6b
+#     cp $INSTALL_PACKAGES/emacspeak/outloud ..
 
     # Installing emacspeak.info
     cd

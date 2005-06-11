@@ -1,0 +1,9 @@
+*.o
+*.so
+*.log
+*.status
+.deps
+TAGS
+Makefile
+keytest
+log

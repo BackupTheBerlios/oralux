@@ -1,6 +1,7 @@
---- main-cvs.c	2004-12-06 23:25:58.000000000 +0100
-+++ main.c	2004-12-06 23:31:12.000000000 +0100
-@@ -1242,6 +1242,9 @@
+diff -ur --exclude-from=nopatch.txt yasr-0.6.7/yasr/main.c yasr-0.6.7.arg/yasr/main.c
+--- yasr-0.6.7/yasr/main.c	2005-06-11 18:10:21.000000000 +0200
++++ yasr-0.6.7.arg/yasr/main.c	2005-06-11 18:10:56.000000000 +0200
+@@ -1291,6 +1291,9 @@
  {
    struct winsize winsz = { 0, 0 };
    int flag = 1;
@@ -10,7 +11,7 @@
  
    /* initialize gettext */
  #ifdef ENABLE_NLS
-@@ -1268,36 +1271,84 @@
+@@ -1317,36 +1320,84 @@
    (void) memset(&tts, 0, sizeof(Tts));
    opt_init();
    (void) memset(voices, 0, 128);

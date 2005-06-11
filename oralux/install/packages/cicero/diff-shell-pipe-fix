@@ -1,0 +1,51 @@
+Index: app_shell.py
+===================================================================
+--- app_shell.py	(revision 192)
++++ app_shell.py	(revision 193)
+@@ -69,3 +69,5 @@
+                 return 'M',None
+         self.processedTxt += input
+         return 'S',input
++    def gotMore(self):
++        return not not self.pendingTxt
+Index: app_brltty_es.py
+===================================================================
+--- app_brltty_es.py	(revision 192)
++++ app_brltty_es.py	(revision 193)
+@@ -76,3 +76,5 @@
+             return 'T',expand
+         else:
+             raise ProtoError('Unrecognized command code %d' % code)
++    def gotMore(self):
++        return 0
+Index: main.py
+===================================================================
+--- main.py	(revision 192)
++++ main.py	(revision 193)
+@@ -43,7 +43,7 @@
+             fds = [self.appfeed.selectfd()]
+             if self.phozer:
+                 wait = min(wait, 0.15)
+-                m = ProfMonitor('main.delibWait')
++            m = ProfMonitor('main.delibWait')
+             r,w,x = select(fds, [], fds, wait)
+             ~m
+         else:
+@@ -59,7 +59,7 @@
+             self.mbrola.selectfd(): 'mbrola'}
+         trace('selected: [%s]'
+               % ','.join([fds_desc[f] for f in r+x]))
+-        if self.appfeed.selectfd() in r+x:
++        while self.appfeed.selectfd() in r+x:
+             action,input = self.appfeed.handle()
+             if action is 'M':
+                 trace('resetting')
+@@ -75,6 +75,8 @@
+                 wait = 0
+             elif action is 'T':
+                 self.expand = input
++            if not self.appfeed.gotMore():
++                break
+         if self.phozer:
+             spokenSamples = self.sndoutput.spokenPos()
+             inx, finished = self.phozer.index(spokenSamples)

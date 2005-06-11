@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # mbrola.sh
-# $Id: mbrola.sh,v 1.2 2005/01/30 21:43:51 gcasse Exp $
+# $Id: mbrola.sh,v 1.3 2005/06/11 22:48:37 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing mbrola
-# $Date: 2005/01/30 21:43:51 $ |
-# $Revision: 1.2 $ |
+# $Date: 2005/06/11 22:48:37 $ |
+# $Revision: 1.3 $ |
 # Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -53,6 +53,14 @@ InstallPackage()
     mv $MBROLA/fr3/fr3.txt $BUILD/usr/share/oralux/doc/license/mbrola
     mv $MBROLA/fr3/license.txt $BUILD/usr/share/oralux/doc/license/mbrola/license_fr3.txt
 
+    # fr4 (Cicero)
+    cd $MBROLA
+    wget http://www.tcts.fpms.ac.be/synthesis/mbrola/dba/fr4/fr4-990521.zip
+    unzip fr4*zip
+    mv $MBROLA/fr4 $VOICES/fr4
+    mv $MBROLA/fr4.txt $BUILD/usr/share/oralux/doc/license/mbrola
+    mv $MBROLA/license.txt $BUILD/usr/share/oralux/doc/license/mbrola/license_fr4.txt
+
     # en1 (multispeech)
     cd $MBROLA
     wget http://tcts.fpms.ac.be/synthesis/mbrola/dba/en1/en1-980910.zip
@@ -90,6 +98,14 @@ Copy2Oralux()
     mv $MBROLA/fr3/fr3 $VOICES/fr3
     mv $MBROLA/fr3/fr3.txt $BUILD/usr/share/oralux/doc/license/mbrola
     mv $MBROLA/fr3/license.txt $BUILD/usr/share/oralux/doc/license/mbrola/license_fr3.txt
+
+    # fr4 (Cicero)
+    cd $MBROLA
+    wget http://www.tcts.fpms.ac.be/synthesis/mbrola/dba/fr4/fr4-990521.zip
+    unzip fr4*zip
+    mv $MBROLA/fr4 $VOICES/fr4
+    mv $MBROLA/fr4.txt $BUILD/usr/share/oralux/doc/license/mbrola
+    mv $MBROLA/license.txt $BUILD/usr/share/oralux/doc/license/mbrola/license_fr4.txt
 
     # en1 (multispeech)
     cd $MBROLA

@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
-# yasr.sh
-# $Id: yasr.sh,v 1.3 2005/06/11 22:48:37 gcasse Exp $
+# mcvox.sh
+# $Id: mcvox.sh,v 1.1 2005/06/11 22:48:37 gcasse Exp $
 # $Author: gcasse $
-# Description: Installing Yasr
+# Description: Installing mcvox
 # $Date: 2005/06/11 22:48:37 $ |
-# $Revision: 1.3 $ |
+# $Revision: 1.1 $ |
 # Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -24,32 +24,23 @@
 # ----------------------------------------------------------------------------
 ####
 source ../oralux.conf
-export YASR_RELEASE=0.6.7
+export MCVOX_RELEASE=0.4
 
 ####
 # Installing the package in the current tree
 InstallPackage()
 {
-    apt-get --purge remove yasr
-    rm -rf /etc/yasr
+#    apt-get remove --purge mc
     cd /tmp
-    rm -rf yasr*
-    wget http://ovh.dl.sourceforge.net/sourceforge/yasr/yasr-$YASR_RELEASE.tar.gz
-    tar -zxvf yasr-$YASR_RELEASE.tar.gz
-
-#     cd yasr*
-#     patch -p0 yasr/main.c < $INSTALL_PACKAGES/yasr/main.c.patch
-
-    # avoid crash at launch time, speech server reinit, say word
-    patch -p0 < $INSTALL_PACKAGES/yasr/yasr.patch
-    patch -p0 < $INSTALL_PACKAGES/yasr/arg.patch
-
-    cd yasr-$YASR_RELEASE
-    ./configure --prefix=/usr
+    rm -rf mcvox*
+    wget http://soft.oralux.org/download/mcvox-$MCVOX_RELEASE.tgz
+    tar -zxvf mcvox*
+    cd mcvox*
+    ./configure --prefix=/usr --with-screen=ncurses
     make
     make install
     cd /tmp
-    rm -rf yasr*
+    rm -rf /tmp/mcvox*
 }
 
 ####
@@ -59,18 +50,15 @@ Copy2Oralux()
     export INSTALL_PACKAGES=/usr/share/oralux/install/packages
 
     chroot $BUILD  bash -c "\
-    apt-get --purge remove yasr;\
-    rm -rf /etc/yasr;\
     cd /tmp;\
-    rm -rf yasr*;\
-    wget http://ovh.dl.sourceforge.net/sourceforge/yasr/yasr-$YASR_RELEASE.tar.gz;\
-    tar -zxvf yasr-$YASR_RELEASE.tar.gz;\
-    patch -p0 < $INSTALL_PACKAGES/yasr/yasr.patch;\
-    patch -p0 < $INSTALL_PACKAGES/yasr/arg.patch;\
-    cd yasr-$YASR_RELEASE;\
-    ./configure --prefix=/usr;\
+    rm -rf mcvox*;\
+    wget http://soft.oralux.org/download/mcvox-$MCVOX_RELEASE.tgz;\
+    tar -zxvf mcvox*;\
+    cd mcvox*;\
+    ./configure --prefix=/usr --with-screen=ncurses;\
     make;\
-    make install"
+    make install;\
+    cd /tmp;rm -rf /tmp/mcvox*"
 }
 
 case $1 in

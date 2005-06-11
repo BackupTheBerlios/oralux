@@ -1,0 +1,23 @@
+--- config.py.old	2005-06-11 22:13:33.000000000 +0200
++++ config.py	2005-06-11 22:30:43.000000000 +0200
+@@ -3,15 +3,15 @@
+ # users edit code.
+ 
+ # Language phonetic rules and filters.
+-rulefile = "/home/foo/cicero/rules.fr"
++rulefile = "/usr/local/share/cicero-0.6/rules.fr"
+ # List of known good phonetic translations for regression check
+-testfile = "/home/foo/cicero/checklist.fr"
++testfile = "/usr/local/share/cicero-0.6/checklist.fr"
+ # MBROLA executable
+-mbrola_prog_path = '/usr/bin/mbrola'
++mbrola_prog_path = '/usr/local/bin/mbrola'
+ # MBROLA voice file
+-mbrola_voice = '/usr/lib/mbrola/fr1/fr1'
++mbrola_voice = '/usr/local/share/mbrola/voices/fr4'
+ # pitch factor
+-mbrola_f = 0.95
++mbrola_f = 1.80
+ # default time factor (smaller talks faster)
+ # note: BRLTTY for example might override this with its own value
+ mbrola_t = 0.9

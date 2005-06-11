@@ -12,6 +12,7 @@
 0x1b04:say word
 0x1b05:read cursor to bottom
 #0x1b06:nextlang:1
+0x1b09:reinitialize
 0x1b0b:say line:-1
 0x1b0c:say line
 0x1b0d:say line:1
@@ -43,7 +44,6 @@
 0x78:say word:1
 0x7a:say word:-1
 #0x1b13:set option:5
-0x1b09:reinitialize
 0x1b5b41:say line:-1:1
 0x1b5b42:say line:1:1
 0x1b5b44:say character:-1

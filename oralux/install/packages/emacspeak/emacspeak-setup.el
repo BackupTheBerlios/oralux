@@ -1,14 +1,14 @@
 ;;; emacspeak-setup.el --- Setup Emacspeak environment --loaded to start Emacspeak
-;;; $Id: emacspeak-setup.el,v 1.4 2005/03/31 09:16:53 gcasse Exp $
-;;; $Author: gcasse $ 
+;;; Id: emacspeak-setup.el,v 22.0 2005/04/30 16:40:00 raman Exp 
+;;; Author: raman 
 ;;; Description:  File for setting up and starting Emacspeak
 ;;; Keywords: Emacspeak, Setup, Spoken Output
 ;;{{{  LCD Archive entry: 
 ;;; LCD Archive Entry:
 ;;; emacspeak| T. V. Raman |raman@cs.cornell.edu 
 ;;; A speech interface to Emacs |
-;;; $Date: 2005/03/31 09:16:53 $ |
-;;;  $Revision: 1.4 $ | 
+;;; Date: 2005/04/30 16:40:00  |
+;;;  Revision: 22.0  | 
 ;;; Location undetermined
 ;;;
 
@@ -95,7 +95,7 @@ pronunciation dictionaries are stored. ")
 ;;}}}
 ;;{{{ speec rate 
 
-(defcustom outloud-default-speech-rate 75
+(defcustom outloud-default-speech-rate 50
   "Default speech rate for outloud."
   :group 'tts
   :type 'integer)

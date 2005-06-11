@@ -9,7 +9,7 @@
 #  visit Russian document. No emacs -q $INIT_CL.
 #
 if [ -f /etc/emacspeak.conf ]
-    then
+then
     . /etc/emacspeak.conf
 fi
 
@@ -20,25 +20,26 @@ fi
 
 CL_ALL=""
 for CL in $* ; do
-    if [ "$CL" = "-o" ]; then
-	DTK_PROGRAM=outloud
-	export DTK_PROGRAM
-    elif [ "$CL" = "-m" ]; then
-	DTK_PROGRAM=multispeech
-	export DTK_PROGRAM
-    elif [ "$CL" = "-d" ]; then
-	DTK_PROGRAM=dtk-soft
-	export DTK_PROGRAM
-    else
-	CL_ALL="$CL_ALL $CL"
-    fi
+	if [ "$CL" = "-o" ]; then
+		DTK_PROGRAM=stereo-outloud
+#		DTK_PROGRAM=outloud
+		export DTK_PROGRAM
+	elif [ "$CL" = "-m" ]; then
+		DTK_PROGRAM=multispeech
+		export DTK_PROGRAM
+	elif [ "$CL" = "-d" ]; then
+		DTK_PROGRAM=dtk-soft
+		export DTK_PROGRAM
+	else
+		CL_ALL="$CL_ALL $CL"
+	fi
 done
 
 # Once we use Emacs as an all-purpose shell:
-EDITOR="emacsclient --alternate-editor vi"
-VISUAL=$EDITOR
-export EDITOR
-export VISUAL
+# EDITOR="emacsclient --alternate-editor vi"
+# VISUAL=$EDITOR
+# export EDITOR
+# export VISUAL
 
 case $LANGUAGE in
     fr)
@@ -51,3 +52,4 @@ esac
 
 exec emacs -l /usr/share/emacs/site-lisp/emacspeak/lisp/emacspeak-setup.el $INITSTR $CL_ALL --visit=/usr/share/oralux/doc/intro-$TheLanguage.txt
 
+#exec emacs -l /usr/share/emacs/site-lisp/emacspeak/lisp/emacspeak-setup.el $CL_ALL

@@ -265,10 +265,9 @@
 
 
 ;; same window for help buffer,...
-(setq same-window-buffer-names
-      (append '("*Help*" "*grep*" "*compilation*" "*Occur*")
-              same-window-buffer-names))
-
+;; (setq same-window-buffer-names
+;;       (append '("*Help*" "*grep*" "*compilation*" "*Occur*")
+;;               same-window-buffer-names))
 
 ;;(setq smtpmail-debug-info nil)
 

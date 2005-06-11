@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
-# yasr.sh
-# $Id: yasr.sh,v 1.3 2005/06/11 22:48:37 gcasse Exp $
+# screen.sh
+# $Id: screen.sh,v 1.1 2005/06/11 22:48:37 gcasse Exp $
 # $Author: gcasse $
-# Description: Installing Yasr
+# Description: Installing Screen
 # $Date: 2005/06/11 22:48:37 $ |
-# $Revision: 1.3 $ |
+# $Revision: 1.1 $ |
 # Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -24,32 +24,32 @@
 # ----------------------------------------------------------------------------
 ####
 source ../oralux.conf
-export YASR_RELEASE=0.6.7
+export SCREEN_RELEASE=0.4.2
 
 ####
 # Installing the package in the current tree
 InstallPackage()
 {
-    apt-get --purge remove yasr
-    rm -rf /etc/yasr
+    apt-get --purge remove screen
     cd /tmp
-    rm -rf yasr*
-    wget http://ovh.dl.sourceforge.net/sourceforge/yasr/yasr-$YASR_RELEASE.tar.gz
-    tar -zxvf yasr-$YASR_RELEASE.tar.gz
+    rm -rf screen*
+    wget ftp://ftp.cs.univ-paris8.fr/mirrors/ftp.gnu.org/screen/screen-$SCREEN_RELEASE.tar.gz
+    tar -zxvf screen-$SCREEN_RELEASE.tar.gz
 
-#     cd yasr*
-#     patch -p0 yasr/main.c < $INSTALL_PACKAGES/yasr/main.c.patch
+#     cd screen*
+#     patch -p0 screen/main.c < $INSTALL_PACKAGES/screen/main.c.patch
 
     # avoid crash at launch time, speech server reinit, say word
-    patch -p0 < $INSTALL_PACKAGES/yasr/yasr.patch
-    patch -p0 < $INSTALL_PACKAGES/yasr/arg.patch
+    patch -p0 < $INSTALL_PACKAGES/screen/screen.patch
 
-    cd yasr-$YASR_RELEASE
+    cd screen-$SCREEN_RELEASE
     ./configure --prefix=/usr
     make
     make install
+    echo "autodetach on" >> /etc/screenrc
+
     cd /tmp
-    rm -rf yasr*
+    rm -rf screen*
 }
 
 ####
@@ -59,18 +59,17 @@ Copy2Oralux()
     export INSTALL_PACKAGES=/usr/share/oralux/install/packages
 
     chroot $BUILD  bash -c "\
-    apt-get --purge remove yasr;\
-    rm -rf /etc/yasr;\
+    apt-get --purge remove screen;\
     cd /tmp;\
-    rm -rf yasr*;\
-    wget http://ovh.dl.sourceforge.net/sourceforge/yasr/yasr-$YASR_RELEASE.tar.gz;\
-    tar -zxvf yasr-$YASR_RELEASE.tar.gz;\
-    patch -p0 < $INSTALL_PACKAGES/yasr/yasr.patch;\
-    patch -p0 < $INSTALL_PACKAGES/yasr/arg.patch;\
-    cd yasr-$YASR_RELEASE;\
+    rm -rf screen*;\
+    wget ftp://ftp.cs.univ-paris8.fr/mirrors/ftp.gnu.org/screen/screen-$SCREEN_RELEASE.tar.gz\
+    tar -zxvf screen-$SCREEN_RELEASE.tar.gz;\
+    patch -p0 < $INSTALL_PACKAGES/screen/screen.patch
+    cd screen-$SCREEN_RELEASE;\
     ./configure --prefix=/usr;\
     make;\
-    make install"
+    make install;\
+    echo \"autodetach on\" >> /etc/screenrc"
 }
 
 case $1 in

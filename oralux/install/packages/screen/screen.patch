@@ -1,0 +1,78 @@
+diff -ur --exclude-from=nopatch.txt screen-4.0.2/help.c screen-4.0.2.patch/help.c
+--- screen-4.0.2/help.c	2003-09-08 16:25:33.000000000 +0200
++++ screen-4.0.2.patch/help.c	2005-06-11 10:21:16.000000000 +0200
+@@ -891,7 +891,11 @@
+   wlistdata->numwin = he - 3;
+   if (wlistdata->ypos >= wlistdata->numwin)
+     wlistdata->ypos = wlistdata->numwin - 1;
++#ifdef CARET_MODE
++  flayer->l_y = 2; /* single line */ 
++#else
+   flayer->l_y = he - 1;
++#endif
+   return 0;
+ }
+ 
+@@ -1010,7 +1014,12 @@
+   if (i != pos && isblank)
+     while (n && str[n - 1] == ' ')
+       n--;
++#ifdef CARET_MODE
++  LPutWinMsg(flayer, str, (i == pos || !isblank) ? flayer->l_width : n, i == pos ? &mchar_so : &mchar_blank, 0, 2); /* single line */
++#else
+   LPutWinMsg(flayer, str, (i == pos || !isblank) ? flayer->l_width : n, i == pos ? &mchar_so : &mchar_blank, 0, y + 2);
++#endif
++
+ #if 0
+   LPutStr(flayer, str, n, i == pos ? &mchar_so : &mchar_blank, 0, y + 2);
+   if (i == pos || !isblank)
+@@ -1155,6 +1164,7 @@
+   wlistdata->pos = pos;
+   ypos = WListNormalize();
+   up = wlistdata->npos - ypos - (oldnpos - oldypos);
++#ifndef CARET_MODE
+   if (up)
+     {
+       LScrollV(flayer, up, 2, 2 + wlistdata->numwin - 1, 0);
+@@ -1162,10 +1172,15 @@
+       LaySetCursor();
+       return;
+     }
++#endif
+   if (pos == oldpos)
+     return;
++#ifdef CARET_MODE
++  WListLine(ypos, pos, pos, 0);
++#else
+   WListLine(oldypos, oldpos, pos, 0);
+   WListLine(ypos, pos, pos, 1);
++#endif
+   LaySetCursor();
+ }
+ 
+@@ -1222,7 +1237,11 @@
+     return;
+   wlistdata = (struct wlistdata *)flayer->l_data;
+   flayer->l_x = 0;
++#ifdef CARET_MODE
++  flayer->l_y = 2; /* single line */
++#else
+   flayer->l_y = flayer->l_height - 1;
++#endif
+   wlistdata->start = onblank && p ? p->w_number : -1;
+   wlistdata->order = order;
+   wlistdata->pos = p ? p->w_number : WListNext(wlistdata, -1, 0);
+@@ -1267,7 +1286,13 @@
+   str = MakeWinMsgEv(wlisttit, (struct win *)0, '%', flayer->l_width, (struct event *)0, 0);
+   LPutWinMsg(flayer, str, strlen(str), &mchar_blank, 0, 0);
+   WListNormalize();
++#ifdef CARET_MODE
++  /* single line */
++  WListLine(wlistdata->ypos, pos, pos, 0);
++  flayer->l_y = 2;
++#else
+   WListLines(wlistdata->numwin, -1);
++#endif
+   LaySetCursor();
+ }
+ 
