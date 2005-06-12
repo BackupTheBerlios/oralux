@@ -30,8 +30,27 @@ In the following lines, + means evolution, - bug.
 
 *** Priority 1.1
 
+menu global et mc
+w3m et mc
+
+Remarques Nath:
++ mcvox : 
+- mime: links pour html
+ne : verif
+- désactiver la barre d'état du fond de l'écran
+
+
++ doc d'intro pour Screen + mcvox + yasr
+
++ check the installer
+
++ remove smail (postfix).
++ see the yes/no answer for other languages than english.
+
 * Emacspeak in Russian
 + Emacspeak + Russian dictionary updates
+
++ brltty: check the fr table 
 
 Feedback from IBP
 Remaining points:
@@ -558,6 +577,8 @@ line.
 
 1.2 Priority 2
 
+Oralux 0.7: 2.6.x kernel. See boot floppy issue.
+
 + swftools
 + dialog-oralux once stable will possibly replace dialog 
 + Easying the spell checker use.
@@ -679,7 +700,8 @@ Options" and in the menu File: "Open File   Open Directory".
 
 + Suggestions from Nigel for Emacs and YASR.
 
-We use the esc key instead of the mentioned Control key
+We use the esc key instead of the mentioned Control key.
+Available for Emacspeak in 0.6b.
 
 / Pressing the Home key will move to the beginning of a line.
 / Pressing esc Home will move to the beginning of the buffer.
@@ -689,7 +711,7 @@ We use the esc key instead of the mentioned Control key
 Pressing Page Up will move up a paragraph.
 Pressing Page Down will move down a paragraph.
 
-left and right cursor keys would move by letter.  
+/ left and right cursor keys would move by letter.  
 
 / esc left and right will move by word.  
 / esc up arrow will read the current line and esc down arrow

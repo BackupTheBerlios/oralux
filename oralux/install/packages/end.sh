@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # end.sh
-# $Id: end.sh,v 1.5 2005/01/30 21:43:51 gcasse Exp $
+# $Id: end.sh,v 1.6 2005/06/12 20:54:01 gcasse Exp $
 # $Author: gcasse $
 # Description: This script must be the last one to call
-# $Date: 2005/01/30 21:43:51 $ |
-# $Revision: 1.5 $ |
+# $Date: 2005/06/12 20:54:01 $ |
+# $Revision: 1.6 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -115,6 +115,9 @@ Copy2Oralux()
 
     echo "This is very KNOPPIX-specific" >> $BUILD/etc/profile
     echo "alias su='sudo su'"  >> $BUILD/etc/profile
+
+    echo "export EDITOR=ne"  >> $BUILD/etc/profile
+    echo "export PAGER=w3m"  >> $BUILD/etc/profile
 
     echo "/usr/bin/oralux.sh" >> $BUILD/etc/profile
     rm -rf $BUILD/tmp/*

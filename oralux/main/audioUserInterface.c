@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // audiouserinterface.c
-// $Id: audioUserInterface.c,v 1.7 2005/04/10 22:17:35 gcasse Exp $
+// $Id: audioUserInterface.c,v 1.8 2005/06/12 20:54:01 gcasse Exp $
 // $Author: gcasse $
 // Description: Managing and playing the pre-recorded messages.
-// $Date: 2005/04/10 22:17:35 $ |
-// $Revision: 1.7 $ |
+// $Date: 2005/06/12 20:54:01 $ |
+// $Revision: 1.8 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 // September 2003: 
 // German translations by Guenther Harrasser.
@@ -118,6 +118,11 @@ char * TheMessages[][4]={
    "Français",
    "Französische",
    "Francés",
+  },
+  {"French Canadian",
+   "Français Canadien",
+   NULL,
+   NULL,
   },
   {"German",
    "Allemand",
@@ -580,7 +585,6 @@ char * TheMessages[][4]={
    "¿Quiéres iniciar tu pantalla de braille?",
   },
 
-  // 5D
   {
     "Accent S A",
     "Accent S A",
@@ -588,7 +592,6 @@ char * TheMessages[][4]={
     "Accent S A",
   },
 
-  // 5E
   {
     "Braille Lite",
     "Braille Lite",
@@ -596,7 +599,6 @@ char * TheMessages[][4]={
     "Braille Lite",
   },
 
-  // 5F
   {
     "Braille 'n Speak",
     "Braille 'n Spik",
@@ -604,7 +606,6 @@ char * TheMessages[][4]={
     "Braille 'n Spik",
   },
 
-  // 60
   {
     "Ciber 232",
     "Ciber 232",
@@ -612,7 +613,6 @@ char * TheMessages[][4]={
     "Ciber 232",
   },
 
-  // 61
   {
     "Ciber 232 Plus",
     "Ciber 232 Plus",
@@ -620,7 +620,6 @@ char * TheMessages[][4]={
     "Ciber 232 Plus",
   },
 
-  // 62
   {
     "DECtalk Express",
     "DECtalk Express",
@@ -628,7 +627,6 @@ char * TheMessages[][4]={
     "DECtalk Express",
   },
 
-  // 63
   {
     "DECtalk Multivoice",
     "DECtalk Multivoice",
@@ -636,7 +634,6 @@ char * TheMessages[][4]={
     "DECtalk Multivoice",
   },
 
-  // 64
   {
     "DECtalk 3",
     "DECtalk 3",
@@ -644,7 +641,6 @@ char * TheMessages[][4]={
     "DECtalk 3",
   },
 
-  // 65
   {
     "Dolphin Apollo",
     "Dolphin Apollo",
@@ -652,7 +648,6 @@ char * TheMessages[][4]={
     "Dolphin Apollo",
   },
 
-  // 66
   {
     "DoubleTalk LT",
     "DoubleTalk LT",
@@ -660,7 +655,6 @@ char * TheMessages[][4]={
     "DoubleTalk LT",
   },
 
-  // 67
   {
     "DoubleTalk PC",
     "DoubleTalk PC",
@@ -668,7 +662,6 @@ char * TheMessages[][4]={
     "DoubleTalk PC",
   },
 
-  // 68
   {
     "LiteTalk",
     "LiteTalk",
@@ -676,7 +669,6 @@ char * TheMessages[][4]={
     "LiteTalk",
   },
 
-  // 69
   {
     "PC Hablado notebook",
     "PC Hablado notebook",
@@ -684,7 +676,6 @@ char * TheMessages[][4]={
     "PC Hablado notebook",
   },
 
-  // 6A
   {
     "Type 'n Speak",
     "Type 'n Spik",
@@ -692,35 +683,30 @@ char * TheMessages[][4]={
     "Type 'n Spik",
   },
 
-  // 6B
   {"Do you want to select an external voice synthesizer ?",
    "Voulez-vous sélectionner une synthèse vocale externe ?",
    "Wollen Sie einen externen Sprachsynthesizer auswählen?",
    "¿Quieres seleccionar un sintetizador de voz externo?",
   },
 
-  // 6C
   {"What kind of synthesizer do you have ?",
    "Quelle type de synthèse avez-vous ?",
    "Was für einen Sprachsynthesizer haben Sie?",
    "¿Qué tipo de sintetizador tienes?",
   },
 
-  // 6D
   {"Your external synthesizer is supposed to be",
    "Votre synthèse externe est supposé de type",
    "Ihr externer Sprachsynthesizer sollte sein:",
    "Se supone que tu sintetizador externo es",
   },
 
-  // 6E
   {"Do you want to change the type of external synthesizer ?",
    "Voulez-vous modifier le type de synthèse externe ?",
    "Wollen Sie einen anderen externen Sprachsynthesizer auswählen?",
    "¿Quieres cambiar el tipo de sintetizador externo?",
   },
 
-  // 6F
   {
     "Emacspeak",
     "Emacspik",
@@ -728,7 +714,6 @@ char * TheMessages[][4]={
     "Emacspik",
   },
 
-  // 70
   {
     "Yasr",
     "Yasse R",
@@ -736,137 +721,118 @@ char * TheMessages[][4]={
     "Yasr",
   },
 
-  // 71
   {"Your desktop is supposed to be",
    "Votre bureau est supposé être",
    "Ihr Desktop sollte sein:",
    "Se supone que tu escritorio es",
   },
 
-  // 72
   {"Do you want to change the kind of desktop ?",
    "Voulez-vous modifier le type de bureau ?",
    "Wollen Sie einen anderen Desktop auswählen?",
    "¿Quieres cambiar el tipo de escritorio?",
   },
 
-  // 73
   {"Which desktop do you want ?",
    "Quel bureau voulez-vous ?",
    "Was für einen Desktop wollen Sie?",
    "¿Qué escritorio quieres?",
   },
 
-  // 74
   {"Do you want ParleMax (French) ?",
    "Voulez-vous ParleMax (Français) ?",
    "Wollen Sie ParleMax (Französische)?",
    "¿Quieres ParleMax (Francés)?",
   },
 
-  // 75
   {"Do you want to reboot your PC?",
    "Voulez-vous redémarrez votre PC ?",
    "Wollen Sie den Computer neu starten?",
    "¿Quieres reiniciar tu PC?",
   },
 
-  // 76
   {"Do you want to shutdown your PC?",
    "Voulez-vous arrêtez votre PC ?",
    "Wollen Sie den Computer herunterfahren?",
    "¿Quieres apagar tu PC?",
   },
 
-  // 77
   {"Do you want MultiSpeech (English and Russian) ?",
    "Voulez-vous MultiSpeech (anglais et russe) ?",
    "Wollen Sie MultiSpeech (Englische und Russische) ?",
    "¿Quieres MultiSpeech (Inglés y Ruso) ?",
   },
 
-  // 78
   {"Do you really want to stop the Braille driver ?",
    "Voulez-vous vraiment arrêtez le pilote Braille ?",
    "Wollen Sie wirklich den Braille-Treiber beenden?",
    "¿Quieres realmente parar el driver del Braille?",
   },
 
-  // 79
   {"Do you want this menu in Russian ?",
    "Voulez-vous ce menu en russe ?",
    "Wollen Sie dieses Menü in Russische ?",
    "¿Quiere este menú en Ruso ?",
   },
 
-  // 7A
   {"0.6 beta", // "[:pu all] 0.6 beta",
    "0.6 beta",
    "0.6 beta",
    "0.6 beta",
   },
 
-  // 7B
   {"Do you want to change the keyboard features?",
    "Voulez-vous changer les caractéristiques du clavier ?",
    "Möchten sie die Tastatureinstellungen ändern?",
-   NULL,
+   "¿Quiere cambiar la configuración del teclado?",
   },
 
-  // 7C
-  {"You can hold three keys at a time; for example Control Alt Del",
+  {"You can hold three keys at a time, for example Control Alt Del",
    "Pouvez-vous appuyées sur trois touches en même temps, par exemple Control Alt Del",
-   NULL,
-   NULL,
+   "Sie können drei Tasten gleichzeitig halten; zum Beispiel Strg Alt Entf",
+   "Puede pulsar tres teclas a la vez, por ejemplo Control Alt Supr.",
   },
 
-  // 7D
-  {"You prefer to hold one key at a time",
+  {"You may prefer to hold one key at a time",
    "Vous préférez appuyer sur une touche à la fois",
-   NULL,
-   NULL,
+   "Sie wollen nur ein punkt gedrückt halten",
+   "Prefiere pulsar una tecla cada vez",
   },
 
-  // 7E
   {"Automatically repeat the pressed key",
    "Répéter automatiquement la touche appuyée",
-   NULL,
-   NULL,
+   "Automatisch den gedrückten punkt wiederholen",
+   "Repetir Automáticamente la tecla pulsada",
   },
 
-  // 7F
   {"Do not automatically repeat the pressed key",
    "Ne pas répéter automatiquement la touche appuyée",
-   NULL,
-   NULL,
+   "Den punkt nicht automatisch wiederholen",
+   "No Repetir Automáticamente la tecla pulsada",
   },
 
-  // 80
-  {"Do you want to set up your internet connection",
+  {"Do you want to configure your internet connection?",
    "Voulez-vous configurer votre connexion internet ?",
    "Möchten sie den Internetzugang konfigurieren?",
-   NULL,
+   "¿Desea configurar su conexión a Internet?",
   },
 
-  // 81
   {"Configure an external serial modem",
    "Configurer un modem externe série ",
    "Konfigurieren eines externen Modems an der seriellen Schnittschnelle.",
-   NULL,
+   "Configurar un modem externo en un puerto serie",
   },
 
-  // 82
   {"Install an A D S L  U S B Modem",
    "Installer un MODEM A D S L  U S B",
    "Ein ADSL-Modem mit USB-Schnittstelle einrichten.",
-   NULL,
+   "Instalar un Modem A D S L  U S B",
   },
 
-  // 83
-  {"Set up mail",
+  {"Set up e-mail",
    "Configurer le courriel",
    "E-Mail einrichten",
-   NULL,
+   "Configurar Correo",
   },
 
   {"Do you want ViaVoice?",
@@ -896,7 +862,7 @@ char * TheMessages[][4]={
   {"Do you want to install another language?",
    "Voulez-vous installer une autre langue ?",
    "Möchten Sie eine weitere Sprache installieren?",
-   NULL,
+   "¿Desea instalar otro idioma?",
   },
 
   {"Sorry, your password is not correct",
@@ -908,13 +874,13 @@ char * TheMessages[][4]={
   {"Previous",
    "Précédant",
    "Zurück/vorherige Seite",
-   NULL,
+   "Anterior",
   },
 
   {"Next",
    "Suivant",
    "Weiter/nächste Seite",
-   NULL,
+   "Siguiente",
   },
 
   {"Welcome To OraluxGold!",
@@ -959,7 +925,7 @@ char * TheMessages[][4]={
    "U S B",
   },
 
-  {"Which contraction table do you want ?",
+  {"Which contraction table do you want?",
    "Quelle table abrégée voulez-vous ?",
    "Welche Kurzschrifttabelle möchten Sie nutzen?",
    "¿Qué tabla de contracción quieres?",
@@ -1003,22 +969,27 @@ char * TheMessages[][4]={
 
   {"The contraction braille table is supposed to be",
    "La table abrégée braille est supposée de type",
-   NULL,
+   "Die Kontraktionsbrailletabelle ist bestimmt für",
    "La tabla de contracción de braille debe ser del tipo",
   },
 
-  {"Do you want to change the contraction table ?",
+  {"Do you want to change the contraction table?",
    "Voulez-vous modifier la table abrégée ?",
-   NULL,
+   "Wollen sie die Kontraktionstabelle ändern?",
    "¿Quiéres cambiar la tabla de contracción?",
   },
 
-  {"Which contraction table do you want ?",
+  {"Which contraction table do you want?",
    "Quelle table abrégée voulez-vous ?",
-   NULL,
+   "Welche KontraktionTabelle wollen sie?",
    "¿Qué tabla de contracción quieres?",
   },
 
+  {"Do you want Cicero T T S (French)?",
+   "Voulez-vous Cicéro T T S (français) ?",
+   "Wollen Sie Cicero T T S (Französische)?",
+   "¿Quieres Cicero T T S (Francés)?",
+  },
 };
 
 /* > */

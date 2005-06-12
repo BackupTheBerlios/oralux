@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # mcvox.sh
-# $Id: mcvox.sh,v 1.1 2005/06/11 22:48:37 gcasse Exp $
+# $Id: mcvox.sh,v 1.2 2005/06/12 20:54:01 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing mcvox
-# $Date: 2005/06/11 22:48:37 $ |
-# $Revision: 1.1 $ |
+# $Date: 2005/06/12 20:54:01 $ |
+# $Revision: 1.2 $ |
 # Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -24,7 +24,7 @@
 # ----------------------------------------------------------------------------
 ####
 source ../oralux.conf
-export MCVOX_RELEASE=0.4
+export MCVOX_RELEASE=0.5
 
 ####
 # Installing the package in the current tree
@@ -39,6 +39,7 @@ InstallPackage()
     ./configure --prefix=/usr --with-screen=ncurses
     make
     make install
+    cp $INSTALL_PACKAGES/mcvox/menu /etc/mc/mc.menu 
     cd /tmp
     rm -rf /tmp/mcvox*
 }
@@ -58,6 +59,7 @@ Copy2Oralux()
     ./configure --prefix=/usr --with-screen=ncurses;\
     make;\
     make install;\
+    cp $INSTALL_PACKAGES/mcvox/menu /etc/mc/mc.menu;\
     cd /tmp;rm -rf /tmp/mcvox*"
 }
 

@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // braille.c
-// $Id: braille.c,v 1.3 2005/03/31 09:16:53 gcasse Exp $
+// $Id: braille.c,v 1.4 2005/06/12 20:54:01 gcasse Exp $
 // $Author: gcasse $
 // Description: setting for BRLTTY
-// $Date: 2005/03/31 09:16:53 $ |
-// $Revision: 1.3 $ |
+// $Date: 2005/06/12 20:54:01 $ |
+// $Revision: 1.4 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -317,6 +317,10 @@ void getDefaultConf( enum keyboard theKeyboard, struct brailleInfo * theInfo)
 
 	case frenchSaid:
 	  theInfo->myBrailleTableIdentifier=FR_CBIFS_TABLE;	  
+	  break;
+
+	case frenchcanadianSaid:
+	  theInfo->myBrailleTableIdentifier=FR_TABLE;	  
 	  break;
 
 	case germanSaid:

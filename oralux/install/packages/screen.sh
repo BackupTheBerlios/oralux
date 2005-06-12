@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # screen.sh
-# $Id: screen.sh,v 1.1 2005/06/11 22:48:37 gcasse Exp $
+# $Id: screen.sh,v 1.2 2005/06/12 20:54:01 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing Screen
-# $Date: 2005/06/11 22:48:37 $ |
-# $Revision: 1.1 $ |
+# $Date: 2005/06/12 20:54:01 $ |
+# $Revision: 1.2 $ |
 # Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -24,7 +24,7 @@
 # ----------------------------------------------------------------------------
 ####
 source ../oralux.conf
-export SCREEN_RELEASE=0.4.2
+export SCREEN_RELEASE=4.0.2
 
 ####
 # Installing the package in the current tree
@@ -44,6 +44,9 @@ InstallPackage()
 
     cd screen-$SCREEN_RELEASE
     ./configure --prefix=/usr
+    mv Makefile Makefile.tmp
+    cat Makefile.tmp | sed -s "s+OPTIONS=+OPTIONS= -DCARET_MODE+g" > Makefile
+    rm Makefile.tmp
     make
     make install
     echo "autodetach on" >> /etc/screenrc
@@ -62,11 +65,14 @@ Copy2Oralux()
     apt-get --purge remove screen;\
     cd /tmp;\
     rm -rf screen*;\
-    wget ftp://ftp.cs.univ-paris8.fr/mirrors/ftp.gnu.org/screen/screen-$SCREEN_RELEASE.tar.gz\
+    wget ftp://ftp.cs.univ-paris8.fr/mirrors/ftp.gnu.org/screen/screen-$SCREEN_RELEASE.tar.gz;\
     tar -zxvf screen-$SCREEN_RELEASE.tar.gz;\
-    patch -p0 < $INSTALL_PACKAGES/screen/screen.patch
+    patch -p0 < $INSTALL_PACKAGES/screen/screen.patch;\
     cd screen-$SCREEN_RELEASE;\
     ./configure --prefix=/usr;\
+    mv Makefile Makefile.tmp;\
+    cat Makefile.tmp | sed -s \"s+OPTIONS=+OPTIONS= -DCARET_MODE+g\" > Makefile;\
+    rm Makefile.tmp;\
     make;\
     make install;\
     echo \"autodetach on\" >> /etc/screenrc"

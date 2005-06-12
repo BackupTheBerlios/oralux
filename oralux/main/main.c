@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // main.c
-// $Id: main.c,v 1.7 2005/04/03 00:36:28 gcasse Exp $
+// $Id: main.c,v 1.8 2005/06/12 20:54:01 gcasse Exp $
 // $Author: gcasse $
 // Description: entry point. 
-// $Date: 2005/04/03 00:36:28 $ |
-// $Revision: 1.7 $ |
+// $Date: 2005/06/12 20:54:01 $ |
+// $Revision: 1.8 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -78,15 +78,15 @@ void buildConfigurationEmacspeak(struct textToSpeechStruct* theTextToSpeech)
   system(TheLine);
 }
 
-void buildConfiguration(struct menuInfo* theSelectedInfo)
+void buildConfiguration(struct menuInfo* theSelectedInfo, int theConfHasBeenUpdated)
 {
   ENTER("buildConfiguration");
 
-  buildConfigurationEmacspeak(&(theSelectedInfo->myTextToSpeech));
-
-  // RAF: cleaner
-  // The yasr configuration already built by the menu
-  ////  buildConfigurationYasr(&(theSelectedInfo->myTextToSpeech));
+  if (theConfHasBeenUpdated)
+    {
+      buildConfigurationEmacspeak(&(theSelectedInfo->myTextToSpeech));
+    }
+  buildConfigurationYasr(&(theSelectedInfo->myTextToSpeech), theConfHasBeenUpdated);
 
   buildI18n( theSelectedInfo->myMenuLanguage, 
 	     theSelectedInfo->myTextToSpeech, 
@@ -348,11 +348,8 @@ int main(int argc, char *argv[])
 	}
     }
 
-  if (aConfHasBeenUpdated)
-    {
-      // Building the new configuration files
-      buildConfiguration(&aSelectedInfo);
-    }
+  // Building the new configuration files
+  buildConfiguration(&aSelectedInfo, aConfHasBeenUpdated);
 
   if (!aExternalSynthesizerIsForced)
     {

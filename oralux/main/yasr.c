@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // yasr.c
-// $Id: yasr.c,v 1.5 2005/04/03 00:36:28 gcasse Exp $
+// $Id: yasr.c,v 1.6 2005/06/12 20:54:01 gcasse Exp $
 // $Author: gcasse $
 // Description: Yasr configuration file. 
-// $Date: 2005/04/03 00:36:28 $ |
-// $Revision: 1.5 $ |
+// $Date: 2005/06/12 20:54:01 $ |
+// $Revision: 1.6 $ |
 // Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -82,6 +82,10 @@ static char* getNewSynthesizer(enum textToSpeech theTextToSpeech)
       aSynthesizer="synthesizer=emacspeak server\nsynthesizer port=|/usr/bin/tcl /usr/share/emacs/site-lisp/emacspeak/servers/dtk-soft";
       break;
       
+    case TTS_Cicero:
+      aSynthesizer="synthesizer=emacspeak server\nsynthesizer port=|/usr/bin/tcl /usr/share/emacs/site-lisp/emacspeak/servers/cicero";
+      break;
+
     case TTS_ParleMax:
       aSynthesizer="synthesizer=emacspeak server\nsynthesizer port=|maxlect";
       break;
@@ -113,7 +117,7 @@ static char* getNewSynthesizer(enum textToSpeech theTextToSpeech)
 // - the expected synthesizer
 // - the language (for the final dictionnary)
 //
-void buildConfigurationYasr(struct textToSpeechStruct* theTextToSpeech)
+void buildConfigurationYasr(struct textToSpeechStruct* theTextToSpeech, int theConfHasBeenUpdated)
 {
   ENTER("buildConfigurationYasr");
 
@@ -123,6 +127,10 @@ void buildConfigurationYasr(struct textToSpeechStruct* theTextToSpeech)
     {
       createConf(CONF_FILENAME, theTextToSpeech->myLanguage);
       fconf=fopen(CONF_FILENAME,"r");      
+    }
+  else if (!theConfHasBeenUpdated)
+    {
+      return;
     }
 
   FILE* ftmp=fopen(TEMP_FILENAME,"w+");
@@ -201,6 +209,7 @@ void runYasr( struct textToSpeechStruct* theTextToSpeech,
     {
     case TTS_Flite:
     case TTS_DECtalk:
+    case TTS_Cicero:
     case TTS_ParleMax:
     case TTS_Multispeech:
 #ifdef ORALUXGOLD
@@ -215,7 +224,7 @@ void runYasr( struct textToSpeechStruct* theTextToSpeech,
       switch (theMenuLanguage)
 	{
 	case French:
-	  aYasrSynthesizer=TTS_ParleMax;
+	  aYasrSynthesizer=TTS_Cicero;
 	  break;
 	case English:
 	case German:
@@ -240,6 +249,9 @@ void runYasr( struct textToSpeechStruct* theTextToSpeech,
   char* aParam=NULL;
   switch( aYasrSynthesizer)
     {
+    case TTS_Cicero:
+      aParam="|/usr/bin/tcl /usr/share/emacs/site-lisp/emacspeak/servers/cicero";
+      break;
     case TTS_DECtalk:
       aParam="|/usr/bin/tcl /usr/share/emacs/site-lisp/emacspeak/servers/dtk-soft";
       break;

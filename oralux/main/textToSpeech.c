@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // textToSpeech.c
-// $Id: textToSpeech.c,v 1.4 2005/03/31 09:16:54 gcasse Exp $
+// $Id: textToSpeech.c,v 1.5 2005/06/12 20:54:01 gcasse Exp $
 // $Author: gcasse $
 // Description: Ask about the whished TTS and install it. 
-// $Date: 2005/03/31 09:16:54 $ |
-// $Revision: 1.4 $ |
+// $Date: 2005/06/12 20:54:01 $ |
+// $Revision: 1.5 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -269,6 +269,7 @@ static struct synthItem TheProposedSynth[]= {
   {TTS_ViaVoice, DoYouWantViaVoice}, // index=0
   {TTS_Multispeech, DoYouWantMultispeech},
   {TTS_Flite, DoYouWantFlite},
+  {TTS_Cicero, DoYouWantCicero},
   {TTS_EFM, DoYouWantEFM}, 
   {TTS_ParleMax, DoYouWantParleMax},
   {TTS_DECtalk, DoYouWantToInstallDECtalk},
@@ -359,7 +360,7 @@ static int chooseSynt( struct textToSpeechStruct* theTextToSpeech,
 	// EFM is not yet available using Yasr
 	if (theTextToSpeech->myIdentifier==TTS_EFM)
 	  {
-	    aIdentifier=(thePreferredLanguage==French) ? TTS_ParleMax : TTS_Flite;
+	    aIdentifier=(thePreferredLanguage==French) ? TTS_Cicero : TTS_Flite;
 	  }
 
 	aIndex=getIndexInArrayFromIdentifier(aArrayOfAvailableSynth , aMaxTextToSpeech, aIdentifier);
@@ -400,6 +401,7 @@ static int chooseSynt( struct textToSpeechStruct* theTextToSpeech,
 		  theTextToSpeech->myLanguage = (thePreferredLanguage == Russian) ? Russian : English;
 		  break;
 
+		case TTS_Cicero:
 		case TTS_ParleMax:
 		  theTextToSpeech->myLanguage = French;
 		  break;
@@ -1022,6 +1024,7 @@ static struct t_Label myLabels[]={
   {TTS_DECtalk, "DECtalk"},
   {TTS_EFM, "EFM"},
   {TTS_Multispeech, "Multispeech"},
+  {TTS_Cicero, "Cicero"},
   {TTS_ParleMax, "ParleMax"},
   {TTS_ViaVoice, "ViaVoice"},
   {TTS_AccentSA,"AccentSA"},

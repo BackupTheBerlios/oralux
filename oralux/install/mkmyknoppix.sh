@@ -49,6 +49,9 @@ add_soft() {
     next_script net.sh "net"
     next_script menu.sh "menu"
     next_script yasr.sh "yasr"
+    next_script mcvox.sh "mcvox"
+    next_script screen.sh "screen"
+    next_script cicero.sh "cicero"
     next_script doc.sh "doc"
 
 # The following script must be the last one

@@ -32,6 +32,10 @@ struct t_translation TheRussianMessages[]=
    "Французский",
   },
 
+  {"French Canadian",
+   NULL,
+  },
+
   {"German",
    "Немецкий",
   },
@@ -510,174 +514,145 @@ struct t_translation TheRussianMessages[]=
    "0.6 beta",
   },
 
-  // 7B
   {"Do you want to change the keyboard features?",
   "Хотите изменить функциональные особенности клавиатуры?",
   },
 
-  // 7C
   {"You can hold three keys at a time; for example Control Alt Del",
   "Вы можете удерживать три клавиши одновременно; например: контрол альт дэл",
   },
 
-  // 7D
   {"You prefer to hold one key at a time",
   "Вы предпочитаете удерживать по одной клавише за  раз",
   },
 
-  // 7E
   {"Automatically repeat the pressed key",
   "Автоматически повторять нажатую клавишу",
   },
 
-  // 7F
   {"Do not automatically repeat the pressed key",
   "Автоматически не повторять нажатую клавишу",
   },
 
-  // 80
+  // 81
   {"Do you want to set up your internet connection",
   "Хотите настроить ваше интернет соединение?",
   },
 
-  // 81
   {"Configure an external serial modem",
   "Сконфигурировать внешний модем для последовательного порта",
   },
 
-  // 82
   {"Install an ADSL USB Modem",
   "Установить ADSL модем для USB порта",
   },
 
-  // 83
   {"Set up mail",
   "Настроить почту",
   },
 
-  // 84
   {"Do you want to install ViaVoice?",
   "Хотите установить ViaVoice?",
   },
 
-  // 85
   {"The ViaVoice package can't be found",
   "Невозможно найти пакет ViaVoice",
   },
 
-  // 86
   {"The IBMECI directory is not found",
   "Директория IBMECI не найдена",
   },
 
-  // 87
   {"Please enter your password, and press Return",
   "Пожалуйста, введите ваш пароль и нажмите Ввод",
   },
 
-  // 88
   {"Do you want to install another language?",
   "Хотите установить ещё один язык?",
   },
 
-  // 89
   {"Sorry, your password is not correct",
   "К сожалению, ваш пароль неправильный",
   },
 
-  // 8A
   {"Previous",
   "Предыдущий",
   },
 
-  // 8B
   {"Next",
   "Следующий",
   },
 
-  // 8C
   {"Welcome To OraluxGold!",
   "Добро пожаловать в OraluxGold!",
   },
 
-  // 8D
   {"Do you want to save the configuration files?",
   "Хотите сохранить файлы конфигурации?",
   },
 
-  // 8E
   {"Albatross",
   NULL,
   },
 
-  // 8F
   {"FreedomScientific",
   NULL,
   },
 
-  // 90
   {"B R F",
   NULL,
   },
 
-  // 91
   {"Finnish 2",
    "Финский 2",
   },
 
-  // 92
   {"U S B",
   NULL,
   },
 
-  // 93
   {"Which contraction table do you want ?",
   "Какую таблицу сокращения вы хотите?",
   },
 
-  // 94
   {"No contraction table",
   "Таблица сокращения отсутствует",
   },
 
-  // 95
   {"big 5",
    NULL,
   },
 
-  // 96
   {"compress",
    NULL,
   },
 
-  // 97
   {"Grade 2 US English",
    NULL,
   },
 
-  // 98
   {"FR abrege",
    NULL,
   },
 
-  // 99
   {"FR integral",
    NULL,
   },
 
-  // 9A
   {"The contraction braille table is supposed to be",
   "Брайлевская таблица сокращения предположительно",
   },
 
-  // 9B
   {"Do you want to change the contraction table ?",
   "Хотите изменить таблицу сокращения?",
   },
 
-  // 9C
   {"Which contraction table do you want ?",
   "Какую таблицу сокращения вы хотите?",
+  },
+
+  {"Do you want Cicero T T S ?",
+   "Хотите ли Вы ParleMax?",
   },
 
 };

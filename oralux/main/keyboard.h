@@ -15,6 +15,7 @@ enum keyboard {
   danskKeyboard,
   finnishKeyboard,
   frenchKeyboard,
+  frenchcanadianKeyboard,
   germanKeyboard,
 /*   hebrewKeyboard, */
   italianKeyboard, 

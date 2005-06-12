@@ -6,13 +6,13 @@
 #include "serialPort.h"
 #include "desktop.h"
 
-// The order is important (textToSpeech.c)
 enum textToSpeech { 
   TTS_Flite,
   TTS_DECtalk,
   TTS_EFM,
   TTS_ParleMax,
   TTS_Multispeech,
+  TTS_Cicero,
   TTS_ViaVoice,
   TTS_AccentSA,
   TTS_BrailleLite,

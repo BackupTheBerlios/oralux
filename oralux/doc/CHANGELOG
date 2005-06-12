@@ -1,4 +1,4 @@
-###
+s###
 
 ###
 Release 0.6 beta
@@ -13,12 +13,9 @@ Date: xx Month 2004
 
 
 * Major updates
-
-
-* Major updates
-+ Emacspeak 21
 + Brltty 3.6-1
-
++ Emacspeak 21
++ Yasr 0.6.7
 
 
 * Doc
@@ -28,13 +25,47 @@ Date: xx Month 2004
 
 * Bug fixes
 + Clearly say that RETURN must be pressed once the CD is ejected.
-+ preferences menu: setting BRLTTY: the contraction table item is added
++ Preferences menu: setting BRLTTY: the contraction table item is added
++ A fix has been supplied to avoid the Yasr crash at launch time
+(yasr:tts.c, tts_init).
 
 * Enhancements
 
-* Emacspeak
-/ Release 21
-/ Patch by Igor B. Poretsky (multispeech, emacs-w3m, and more)
+** audio menu
+- The French Canadian keyboard has been added.
+- The internet preferences can be configured.
+
+
+
+
+** Yasr now calls GNU Screen which starts Midnight Commander (mcvox).
+The previous 0.6 alpha minimenu is now based on the Midnight Commander user menu.
+
+** mcvox
+mcvox is a Midnight Commander derivative which aims to supply a simple
+user interface for rendering by a voice synthesis or via tiny displays.
+We have started mcvox to enhance the previous minimenu in 0.6 alpha. 
+
+Notice in /etc/profile:
+EDITOR=ne, PAGER=w3m
+
+
+** Yasr
+Yasr-0.6.7 + the following patches:
+
+* Reinitialize the speech server (using Control Alt i).
+Helpful if the speech server hangs or crashs. Reinitialization is
+available in standard or review mode.
+* Avoid crash at init time.
+* the command line switches are better managed.
+* say word: each entered word is said.
+
+** Screen 4.0.2 + patch (a more accessible windows list).
+
+** Emacspeak 22.0 + patches by Igor B. Poretsky (multispeech, emacs-w3m, and more). 
+See the Changelog at:
+ftp://ftp.rakurs.spb.ru/pub/Goga/projects/speech-interface/patches/emacspeak/ChangeLog
+
 The Function keys are bound to the following functions:
 f1 help-for-help
 f2 save-buffer
@@ -76,8 +107,11 @@ The very basic configuration files can now be saved in the boot floppy.
 
 / Message: "Do you want to update your preferences?" is more explanatory, so that people know which key they have to press to answer.
 
-* Multispeech by Igor B. Poretsky
+** Multispeech by Igor B. Poretsky
 Multispeech supplies using Emacspeak 21 several voices (voice lock mode).
+
+** Cicero TTS 0.6 (+ patch from Stephane Doyon)
+French TTS by Nicholas Pitre and Stephane Doyon. Cicero is a responsive and lightweight TTS written in Python and using MBROLA.
 
 / Freespeech English pronunciation dictionary
 / Enhanced Russian lexicon
@@ -103,9 +137,6 @@ Thanks to Sergei V. Fleytin
 + nano
 + tramp
 + toolame
-
-+ minimenu proposes zsh instead of bash
-
 
 
 

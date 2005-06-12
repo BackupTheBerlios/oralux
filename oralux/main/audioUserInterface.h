@@ -19,6 +19,7 @@ enum sentence {
   danskSaid,
   finnishSaid,
   frenchSaid,
+  frenchcanadianSaid,
   germanSaid,
   italianSaid, 
   polishSaid,
@@ -168,6 +169,7 @@ enum sentence {
   contractionTableIs,
   changeContractionTable,
   whichContractionTable,
+  DoYouWantCicero,
   MaxSentence, // the last enum! Place any new enum before it, please.
 };
 
