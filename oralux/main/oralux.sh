@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # oralux.sh
-# $Id: oralux.sh,v 1.9 2005/06/12 20:54:01 gcasse Exp $
+# $Id: oralux.sh,v 1.10 2005/06/15 21:52:06 gcasse Exp $
 # $Author: gcasse $
 # Description: This script is called at init time
-# $Date: 2005/06/12 20:54:01 $ |
-# $Revision: 1.9 $ |
+# $Date: 2005/06/15 21:52:06 $ |
+# $Revision: 1.10 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -26,7 +26,6 @@
 
 TTY=`tty`
 FILE=/tmp/oralux.tmp
-MINIMENU=/tmp/minimenu.tmp
 
 getStickyString()
 {
@@ -101,7 +100,7 @@ echo "lancement zsh"
 	else	    
 # TBD
 	    sudo chown knoppix:knoppix /home/knoppix/.yasr.conf
-	    yasr /usr/bin/screen -c ~/oralux/install/packages/screen/.screenrc.work
+	    yasr /usr/bin/screen -c /usr/share/oralux/install/packages/screen/.screenrc.work
 	fi
 	echo -e '\007'	
 	cd /usr/share/oralux/main
