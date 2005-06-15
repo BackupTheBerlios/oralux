@@ -3,11 +3,11 @@
 
 # ----------------------------------------------------------------------------
 # netConfig.sh
-# $Id: netConfig.sh,v 1.9 2005/04/03 00:36:28 gcasse Exp $
+# $Id: netConfig.sh,v 1.10 2005/06/15 21:55:45 gcasse Exp $
 # $Author: gcasse $
 # Description: Menu for internet settings
-# $Date: 2005/04/03 00:36:28 $ |
-# $Revision: 1.9 $ |
+# $Date: 2005/06/15 21:55:45 $ |
+# $Revision: 1.10 $ |
 # Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -26,10 +26,8 @@
 # ----------------------------------------------------------------------------
 
 export DIALOG=dialog-oralux
-export MINIMENU=/tmp/minimenu.tmp
 tempfile=`tempfile 2>/dev/null` || tempfile=/tmp/test$$
 trap "rm -f $tempfile" 0 1 2 5 15
-
 
 case "$LANGUAGE" in
 fr)
@@ -43,7 +41,6 @@ TextEscPressed="ESC pressed."
 esac
 
 
-rm -f $MINIMENU 2>/dev/null
 
 adslMenu()
 {
@@ -124,8 +121,7 @@ case $retval in
 	adslMenu;;
 	3)
 	php mailMenu.php;;
-	4)
-	touch $MINIMENU;;
+#	4);;
     esac
     ;;
     1)
