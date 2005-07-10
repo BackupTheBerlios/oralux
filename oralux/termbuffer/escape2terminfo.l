@@ -47,17 +47,17 @@ ALT	[\x80-\xff]
 				}
 {NUL}			/* filtered */
 {BEL}			return BEL;
-{M}{J}			return NEL;
-{J}			return CUD1;
-{M}			return CR;
-{H}			return CUB1;
+{M}{J}			return NEL; /* cr lf */
+{J}			return CUD1; /* down one line */
+{M}			return CR; /* cr... */ 
+{H}			return CUB1; /* move left */
 {ESC}8			return RC;
 {ESC}7			return SC;
-{ESC}\[C		return CUF1;
+{ESC}\[C		return CUF1; /* move right */
 {ESC}\[H{ESC}\[2?J	return CLEAR;
 {ESC}\[[12]?J		{
 			TheParameter[0]=(yyleng==3) ? 0 : yytext[2]-'0';
-			return ED;
+			return ED; /* clear to end */
 			}
 {ESC}\[[12]?K		{
 			TheParameter[0]=(yyleng==3) ? 0 : yytext[2]-'0';
@@ -66,35 +66,35 @@ ALT	[\x80-\xff]
 {ESC}\[H		return HOME;
 {ESC}\[{DIGIT}*@	{
 			TheParameter[0]=(yyleng==3) ? 1 : getDigit(yytext+2, yyleng-1-2);
-			return ICH;
+			return ICH; /* insert char */
 			}
 {ESC}\[{DIGIT}*L	{
 			TheParameter[0]=(yyleng==3) ? 1 : getDigit(yytext+2, yyleng-1-2);
-			return IL;
+			return IL; /* insert line */
 			}
 {ESC}\[{DIGIT}*G	{
 			TheParameter[0]=(yyleng==3) ? 1 : getDigit(yytext+2, yyleng-1-2);
-			return HPA;
+			return HPA; /* horisontal pos */
 			}
 {ESC}\[{DIGIT}*d	{ /* Line number */
 			TheParameter[0]=(yyleng==3) ? 1 : getDigit(yytext+2, yyleng-1-2);
-			return VPA;
+			return VPA; /* vertical pos */
 			}
 {ESC}\[{DIGIT}*P	{
 			TheParameter[0]=(yyleng==3) ? 1 : getDigit(yytext+2, yyleng-1-2);
-			return DCH;
+			return DCH; /* delete one char */
 			}
 {ESC}\[{DIGIT}*M	{
 			TheParameter[0]=(yyleng==3) ? 1 : getDigit(yytext+2, yyleng-1-2);
-			return DL;
+			return DL; /* delete line */
 			}
 {ESC}\[{DIGIT}*X	{
 			TheParameter[0]=(yyleng==3) ? 1 : getDigit(yytext+2, yyleng-1-2);
-			return ECH;
+			return ECH; /* erase char */
 			}
 {ESC}\[{DIGIT}*A	{
 			TheParameter[0]=(yyleng==3) ? 1 : getDigit(yytext+2, yyleng-1-2);
-			return CUU;
+			return CUU; /* up */
 			}
 {ESC}\[\?{DIGIT}*{LETTER}	/* filtered */ 
 {ESC}\[{DIGIT}+;{DIGIT}+H	{
@@ -108,7 +108,7 @@ ALT	[\x80-\xff]
 				  }
 				}
 				TheParameter[1]=getDigit(yytext+i+1, yyleng-1-i-1);	
-				return CUP;
+				return CUP; /* move to row/col */
 				}
 .			return TEXTFIELD;
 

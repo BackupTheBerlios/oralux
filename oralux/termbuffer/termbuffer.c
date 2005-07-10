@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 termbuffer.c
-$Id: termbuffer.c,v 1.4 2005/01/30 21:43:51 gcasse Exp $
+$Id: termbuffer.c,v 1.5 2005/07/10 20:33:57 gcasse Exp $
 $Author: gcasse $
 Description: manage the terminal layout in a buffer.
-$Date: 2005/01/30 21:43:51 $ |
-$Revision: 1.4 $ |
+$Date: 2005/07/10 20:33:57 $ |
+$Revision: 1.5 $ |
 Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -329,7 +329,7 @@ int testIfPortionsAreMenuItems( struct t_linePortion* theLinePortion1, struct t_
 /* < lookForHighlightedMenuItem */
 
 /* Among theLinePortion - array of two menu items - retreives the index of the highlighted one.
-It guessed the background style and comapres it to the menu item style.
+It guessed the background style and compares it to the menu item style.
 
 The returned value is:
 * 0: theLinePortion[0] is the highlighted style.
