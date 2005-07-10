@@ -170,6 +170,8 @@ enum sentence {
   changeContractionTable,
   whichContractionTable,
   DoYouWantCicero,
+  yasrIsStarted,
+  yasrResetKeys,
   MaxSentence, // the last enum! Place any new enum before it, please.
 };
 

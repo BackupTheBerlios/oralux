@@ -3,11 +3,11 @@
 
 # ----------------------------------------------------------------------------
 # netConfig.sh
-# $Id: netConfig.sh,v 1.10 2005/06/15 21:55:45 gcasse Exp $
+# $Id: netConfig.sh,v 1.11 2005/07/10 20:41:20 gcasse Exp $
 # $Author: gcasse $
 # Description: Menu for internet settings
-# $Date: 2005/06/15 21:55:45 $ |
-# $Revision: 1.10 $ |
+# $Date: 2005/07/10 20:41:20 $ |
+# $Revision: 1.11 $ |
 # Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -88,6 +88,8 @@ TextSerialModem="Modem série"
 TextAdslUsb="Modem U S B, A D S L"
 TextMail="Courriel"
 TextQuit="Quitter"
+Textpon="Pour démarrer la connection, vous taperez dans un shell la commande pon, qui s'écrit P O N."
+Textpoff="La commande poff, P O F F, arrête la connexion."
 ;;
 *)
 TextSettingUp="Setting up the internet connection"
@@ -95,6 +97,8 @@ TextSerialModem="Serial Modem"
 TextAdslUsb="Adsl USB Modem"
 TextMail="Mail"
 TextQuit="Quit"
+Textpon="You will want to type in a shell the pon command, P O N, to start the connection"
+Textpoff="The poff command, P O F F, stops the connection"
 ;;
 esac
 
@@ -116,7 +120,10 @@ case $retval in
     0)
     case $choice in
 	1)
-	pppconfig --dialog;;
+	pppconfig --dialog
+	echo Textpon
+	echo Textpoff
+	;;
 	2)
 	adslMenu;;
 	3)

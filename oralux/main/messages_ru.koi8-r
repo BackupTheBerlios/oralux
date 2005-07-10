@@ -652,7 +652,15 @@ struct t_translation TheRussianMessages[]=
   },
 
   {"Do you want Cicero T T S ?",
-   "Хотите ли Вы ParleMax?",
+   "Хотите ли Вы Cicero T T S?",
+  },
+
+  {"The audio menu is going to start Yasr",
+   NULL,
+  },
+
+  {"If the voice synthesizer stops, please press Control Alt i to start it again",
+   NULL,
   },
 
 };

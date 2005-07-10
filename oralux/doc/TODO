@@ -30,14 +30,18 @@ In the following lines, + means evolution, - bug.
 
 *** Priority 1.1
 
-menu global et mc
-w3m et mc
+dosemu dosemu-freedos
 
-Remarques Nath:
-+ mcvox : 
-- mime: links pour html
-ne : verif
-- désactiver la barre d'état du fond de l'écran
+- Using C-M-i in the audio menu with one finger
+
+test avec NCURSES_NO_PADDING
+
+- links2: update the character set
+- The bottom status line must be removed
+- The top menu is not said under Yasr.
+
+- le menu 'Gauche' n'est plus dit
+- apres l'affichage de l'aide (pour Shell link par exemple), l'écran n'est pas completement effacé.
 
 
 + doc d'intro pour Screen + mcvox + yasr
@@ -420,6 +424,7 @@ the cd has ejected shut down the machine fine.
 + Festival: keybinding for language switching (From French to English: twice M-x fst-set-language)
 + lliaphon: suppression no comprendo et softspeech.log
 
++ festival: in spanish
 + Today, in French, punctuation is said in English.
 
 + use caps-lock as the control key, see a solution whichever the current keymap (fr, qwerty,...).

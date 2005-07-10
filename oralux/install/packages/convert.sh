@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # convert.sh
-# $Id: convert.sh,v 1.1 2005/06/19 22:04:12 gcasse Exp $
+# $Id: convert.sh,v 1.2 2005/07/10 20:41:19 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing format converters
-# $Date: 2005/06/19 22:04:12 $ |
-# $Revision: 1.1 $ |
+# $Date: 2005/07/10 20:41:19 $ |
+# $Revision: 1.2 $ |
 # Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -24,6 +24,7 @@
 # ----------------------------------------------------------------------------
 ####
 source ../oralux.conf
+set -vx
 
 export INSTALL_PACKAGES=/usr/share/oralux/install/packages
 
@@ -43,12 +44,12 @@ InstallPackage()
 # Adding the package to the new Oralux tree
 Copy2Oralux()
 {
-    chroot $BUILD  bash -c "\
+    chroot $BUILD  bash -c '\
     apt-get install pstotext;\
     cd /usr/bin;\
-    for i in `ls $INSTALL_PACKAGES/convert/*.sh`; do ;\
-	ln -s $i .;\
-    done"
+    for i in `ls $INSTALL_PACKAGES/convert/*.sh`; do \
+	ln -s $i . ;\
+    done'
 }
 
 case $1 in

@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // audiouserinterface.c
-// $Id: audioUserInterface.c,v 1.8 2005/06/12 20:54:01 gcasse Exp $
+// $Id: audioUserInterface.c,v 1.9 2005/07/10 20:41:19 gcasse Exp $
 // $Author: gcasse $
 // Description: Managing and playing the pre-recorded messages.
-// $Date: 2005/06/12 20:54:01 $ |
-// $Revision: 1.8 $ |
+// $Date: 2005/07/10 20:41:19 $ |
+// $Revision: 1.9 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 // September 2003: 
 // German translations by Guenther Harrasser.
@@ -795,7 +795,7 @@ char * TheMessages[][4]={
 
   {"You may prefer to hold one key at a time",
    "Vous préférez appuyer sur une touche à la fois",
-   "Sie wollen nur ein punkt gedrückt halten",
+   "Sie wollen nur eine Taste gedrückt halten",
    "Prefiere pulsar una tecla cada vez",
   },
 
@@ -990,6 +990,19 @@ char * TheMessages[][4]={
    "Wollen Sie Cicero T T S (Französische)?",
    "¿Quieres Cicero T T S (Francés)?",
   },
+
+  {"The audio menu is going to start Yasr",
+   "Le menu audio va lancer Yasr",
+   "The audio menu is going to start Yasr",
+   "The audio menu is going to start Yasr",
+  },
+
+  {"If the voice synthesizer stops, please press Control Alt i to start it again",
+   "Si la synthèse vocale s'arrête, appuyez s'il vous plait sur Control Alt i pour la relancer",
+   "If the voice synthesizer stops, please press Control Alt i to start it again",
+   "If the voice synthesizer stops, please press Control Alt i to start it again",
+  },
+
 };
 
 /* > */

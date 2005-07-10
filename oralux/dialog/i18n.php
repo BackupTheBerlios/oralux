@@ -2,11 +2,11 @@
 <?php
 // ----------------------------------------------------------------------------
 // dialog.php
-// $Id: i18n.php,v 1.1 2005/03/31 09:16:53 gcasse Exp $
+// $Id: i18n.php,v 1.2 2005/07/10 20:41:19 gcasse Exp $
 // $Author: gcasse $
 // Description: command line based dialog (menu, yes/no question, dialog box,...)
-// $Date: 2005/03/31 09:16:53 $ |
-// $Revision: 1.1 $ |
+// $Date: 2005/07/10 20:41:19 $ |
+// $Revision: 1.2 $ |
 // Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -24,7 +24,8 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // ----------------------------------------------------------------------------
 
-setlocale(LC_MESSAGES, getenv("LANG")); 
+setlocale(LC_MESSAGES, getenv("ORALUXTTSLANG")); 
+// setlocale(LC_MESSAGES, getenv("LANG"));
 bindtextdomain('oralux', '/usr/share/oralux/locale');
 textdomain('oralux');                           
 

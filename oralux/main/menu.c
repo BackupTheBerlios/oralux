@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // menu.c
-// $Id: menu.c,v 1.9 2005/06/15 21:55:45 gcasse Exp $
+// $Id: menu.c,v 1.10 2005/07/10 20:41:19 gcasse Exp $
 // $Author: gcasse $
 // Description: introductory menu. 
-// $Date: 2005/06/15 21:55:45 $ |
-// $Revision: 1.9 $ |
+// $Date: 2005/07/10 20:41:19 $ |
+// $Revision: 1.10 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -350,11 +350,9 @@ void setInternet( struct menuInfo* theSelectedInfo)
   sprintf(aCommand, "%s/main/netConfig.sh", 
 	  ORALUX_RUNTIME);
 	    
-  stopAUI(1);  
   runYasr( & (theSelectedInfo->myTextToSpeech), 
 	   theSelectedInfo->myMenuLanguage, 
 	   aCommand);
-  restartAUI();
 }
 /* > */
 
@@ -641,11 +639,9 @@ void saveconfig( struct menuInfo* theSelectedInfo)
   char* aCommand=TheLine;
   sprintf(aCommand, "/usr/sbin/saveconfig");
 	    
-  stopAUI(1);
   runYasr( &(theSelectedInfo->myTextToSpeech), 
 	   theSelectedInfo->myMenuLanguage, 
 	   aCommand);
-  restartAUI();
 }
 /* > */
 
