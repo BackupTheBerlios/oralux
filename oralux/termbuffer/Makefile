@@ -8,8 +8,9 @@ prefix=/usr/local
 
 LEX = flex
 #CFLAGS = -g -DDEBUG -pedantic -fPIC -Wall
-CFLAGS = -g -pedantic -fPIC -Wall
-LDFLAGS=-L. -Wl,-rpath,. -ltermbuffer
+CFLAGS = -g -pedantic -fPIC -Wall -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include
+#LDFLAGS=-L. -Wl,-rpath,. -ltermbuffer
+LDFLAGS=-lglib-2.0
 
 TBMAJ = 0
 TBMIN = 1
@@ -19,9 +20,15 @@ INCPATH=$(prefix)/include
 LIBPATH=$(prefix)/lib
 
 OBJS = termbuffer.o escape2terminfo.o linuxconsole.o debug.o test-tb.o
+OBJS2 = terminfo2list.o escape2terminfo.o linuxconsole.o debug.o test-t2l.o
 
-all: libtermbuffer.so test-tb
+all: terminfo2list
+#all: libtermbuffer.so test-tb
 
+terminfo2list: $(OBJS2)
+	$(CC) -o terminfo2list $(CFLAGS) $(OBJS2) $(LDFLAGS)
+
+# RAF
 libtermbuffer.so: libtermbuffer.so.$(TBMAJ)
 	ln -sf libtermbuffer.so.$(TBMAJ) libtermbuffer.so
 
@@ -49,9 +56,12 @@ install: libtermbuffer.so.$(TBVER)
 	ln -sf libtermbuffer.so.$(TBMAJ) libtermbuffer.so; ldconfig -n .)
 
 clean:
-	/bin/rm -f *.o libtermbuffer.so libtermbuffer.so.$(TBMAJ)* test-tb
+	/bin/rm -f *.o terminfo2list
+#	/bin/rm -f *.o libtermbuffer.so libtermbuffer.so.$(TBMAJ)* test-tb
 
 # dependencies
+terminfo2list: escape2terminfo.h debug.h terminfo2list.h Makefile
+
 termbuffer.o: escape2terminfo.h debug.h termbuffer.h Makefile
 escape2terminfo.o: escape2terminfo.l escape2terminfo.h debug.h
 linuxconsole.o: escape2terminfo.h

@@ -2,6 +2,7 @@
 #define TERMINFO2LIST_H
 
 #include <glib.h>
+#include "termapi.h"
 
 /* < terminfoEntry */
 
@@ -17,5 +18,6 @@ typedef struct t_terminfoEntry terminfoEntry;
 /* > */
 
 GList* convertTerminfo2List( FILE* theStream);
+void deleteList(GList* theList);
 
 #endif

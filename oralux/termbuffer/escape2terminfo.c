@@ -828,23 +828,23 @@ case 9:
 /* rule 9 can match eol */
 YY_RULE_SETUP
 #line 50 "escape2terminfo.l"
-return NEL;
+return NEL; /* cr lf */
 	YY_BREAK
 case 10:
 /* rule 10 can match eol */
 YY_RULE_SETUP
 #line 51 "escape2terminfo.l"
-return CUD1;
+return CUD1; /* down one line */
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
 #line 52 "escape2terminfo.l"
-return CR;
+return CR; /* cr... */ 
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
 #line 53 "escape2terminfo.l"
-return CUB1;
+return CUB1; /* move left */
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
@@ -859,7 +859,7 @@ return SC;
 case 15:
 YY_RULE_SETUP
 #line 56 "escape2terminfo.l"
-return CUF1;
+return CUF1; /* move right */
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
@@ -871,7 +871,7 @@ YY_RULE_SETUP
 #line 58 "escape2terminfo.l"
 {
 			TheParameter[0]=(yyleng==3) ? 0 : yytext[2]-'0';
-			return ED;
+			return ED; /* clear to end */
 			}
 	YY_BREAK
 case 18:
@@ -892,7 +892,7 @@ YY_RULE_SETUP
 #line 67 "escape2terminfo.l"
 {
 			TheParameter[0]=(yyleng==3) ? 1 : getDigit(yytext+2, yyleng-1-2);
-			return ICH;
+			return ICH; /* insert char */
 			}
 	YY_BREAK
 case 21:
@@ -900,7 +900,7 @@ YY_RULE_SETUP
 #line 71 "escape2terminfo.l"
 {
 			TheParameter[0]=(yyleng==3) ? 1 : getDigit(yytext+2, yyleng-1-2);
-			return IL;
+			return IL; /* insert line */
 			}
 	YY_BREAK
 case 22:
@@ -908,7 +908,7 @@ YY_RULE_SETUP
 #line 75 "escape2terminfo.l"
 {
 			TheParameter[0]=(yyleng==3) ? 1 : getDigit(yytext+2, yyleng-1-2);
-			return HPA;
+			return HPA; /* horisontal pos */
 			}
 	YY_BREAK
 case 23:
@@ -916,7 +916,7 @@ YY_RULE_SETUP
 #line 79 "escape2terminfo.l"
 { /* Line number */
 			TheParameter[0]=(yyleng==3) ? 1 : getDigit(yytext+2, yyleng-1-2);
-			return VPA;
+			return VPA; /* vertical pos */
 			}
 	YY_BREAK
 case 24:
@@ -924,7 +924,7 @@ YY_RULE_SETUP
 #line 83 "escape2terminfo.l"
 {
 			TheParameter[0]=(yyleng==3) ? 1 : getDigit(yytext+2, yyleng-1-2);
-			return DCH;
+			return DCH; /* delete one char */
 			}
 	YY_BREAK
 case 25:
@@ -932,7 +932,7 @@ YY_RULE_SETUP
 #line 87 "escape2terminfo.l"
 {
 			TheParameter[0]=(yyleng==3) ? 1 : getDigit(yytext+2, yyleng-1-2);
-			return DL;
+			return DL; /* delete line */
 			}
 	YY_BREAK
 case 26:
@@ -940,7 +940,7 @@ YY_RULE_SETUP
 #line 91 "escape2terminfo.l"
 {
 			TheParameter[0]=(yyleng==3) ? 1 : getDigit(yytext+2, yyleng-1-2);
-			return ECH;
+			return ECH; /* erase char */
 			}
 	YY_BREAK
 case 27:
@@ -948,7 +948,7 @@ YY_RULE_SETUP
 #line 95 "escape2terminfo.l"
 {
 			TheParameter[0]=(yyleng==3) ? 1 : getDigit(yytext+2, yyleng-1-2);
-			return CUU;
+			return CUU; /* up */
 			}
 	YY_BREAK
 case 28:
@@ -970,7 +970,7 @@ YY_RULE_SETUP
 				  }
 				}
 				TheParameter[1]=getDigit(yytext+i+1, yyleng-1-i-1);	
-				return CUP;
+				return CUP; /* move to row/col */
 				}
 	YY_BREAK
 case 30:

@@ -1,6 +1,8 @@
 #ifndef ESCAPE2TERMINALINFO_H
 #define ESCAPE2TERMINALINFO_H
 
+#include <stdio.h>
+
 /* < flex declarations, ++ */
 extern int yylex (void);
 extern char *yytext;
@@ -42,6 +44,7 @@ struct t_style
   unsigned int isProtect : 1;
   unsigned int isAlternate : 1;
 };
+typedef struct t_style style; 
 
 #define copyStyle( theDestination, theSource) memcpy( theDestination, theSource, sizeof(struct t_style))
 #define compareStyle( theStyle1, theStyle2) memcmp( theStyle1, theStyle2, sizeof(struct t_style))

@@ -44,7 +44,6 @@ void displayBuffer( char *theDataBuffer, struct t_style* theStyleBuffer, int the
 #define DISPLAY_STYLE(a)
 #define DISPLAY_CAPACITY(a)
 #define DISPLAY_BUFFER(a,b,c,d)
-#define DISPLAY_BUFFER(a,b,c,d) displayBuffer(a,b,c,d)
 #endif /* DEBUG */
 
 
