@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 test-tb.c
-$Id: test-t2l.c,v 1.1 2005/07/14 13:32:46 gcasse Exp $
+$Id: test-t2l.c,v 1.2 2005/07/14 17:38:51 gcasse Exp $
 $Author: gcasse $
 Description: test terminfo2list.
-$Date: 2005/07/14 13:32:46 $ |
-$Revision: 1.1 $ |
+$Date: 2005/07/14 17:38:51 $ |
+$Revision: 1.2 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -28,6 +28,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <unistd.h>
 #include <string.h>
 #include "terminfo2list.h"
+#include "debug.h"
+
+
+
+static void displayList(gpointer theEntry, gpointer userData)
+{
+  DISPLAY_CAPACITY( ((terminfoEntry*)theEntry)->myCapacity);
+}
 
 int main(int argc, char *argv[])
 {
@@ -76,6 +84,7 @@ int main(int argc, char *argv[])
       fclose(fdtest);
 
       /* process the list */
+      g_list_foreach(aList, (GFunc)displayList, NULL);
       /* ... */
 
       deleteList( aList);

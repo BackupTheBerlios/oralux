@@ -8,7 +8,7 @@ prefix=/usr/local
 
 LEX = flex
 #CFLAGS = -g -DDEBUG -pedantic -fPIC -Wall
-CFLAGS = -g -pedantic -fPIC -Wall -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include
+CFLAGS = -g -DDEBUG -pedantic -fPIC -Wall -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include
 #LDFLAGS=-L. -Wl,-rpath,. -ltermbuffer
 LDFLAGS=-lglib-2.0
 

@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 terminfo2list.c
-$Id: terminfo2list.c,v 1.2 2005/07/14 13:31:52 gcasse Exp $
+$Id: terminfo2list.c,v 1.3 2005/07/14 17:38:51 gcasse Exp $
 $Author: gcasse $
 Description: convert the terminfo entries to a list of commands.
-$Date: 2005/07/14 13:31:52 $ |
-$Revision: 1.2 $ |
+$Date: 2005/07/14 17:38:51 $ |
+$Revision: 1.3 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -33,7 +33,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 /* < global variables */
 
-static enum StringCapacity myCapacity=ACSC; /* init: anything but textfield.*/
+static enum StringCapacity myPreviousCapacity=ACSC;
 static GList* myList=NULL;
 
 /* > */
@@ -125,7 +125,7 @@ static terminfoEntry* createText(enum StringCapacity theCapacity, void* theData1
   static terminfoEntry* anEntry=NULL;
   ENTER("createText");
 
-  if (myCapacity==TEXTFIELD)
+  if (myPreviousCapacity==TEXTFIELD)
     {
       /* Add another char to the current gstring */
       g_string_append( aString, yytext);
@@ -136,7 +136,6 @@ static terminfoEntry* createText(enum StringCapacity theCapacity, void* theData1
 
       /* add the new list element */
       anEntry=createEntry(theCapacity, (void*)aString, NULL);
-      myList=g_list_append(myList, (gpointer)anEntry);	      
     }
 
   return anEntry;
@@ -164,6 +163,7 @@ typedef struct t_entryCommands entryCommands;
 
 entryCommands TheEntryCommands[]=
 {
+  {NULL, NULL, NULL, NULL, ACSC}, /* Undefined */ 
   {NULL, NULL, NULL, NULL, ACSC}, 
   {NULL, NULL, NULL, NULL, CBT}, 
   {createEntry, NULL, NULL, deleteEntry, BEL}, 
@@ -558,7 +558,6 @@ entryCommands TheEntryCommands[]=
   {NULL, NULL, NULL, NULL, EVHLM}, 
   {NULL, NULL, NULL, NULL, SGR1}, 
   {NULL, NULL, NULL, NULL, SLENGTH}, 
-  {NULL, NULL, NULL, NULL, LASTENUM}, 
   {createText, NULL, NULL, deleteText, TEXTFIELD}, 
 };
 /* > */
@@ -566,30 +565,36 @@ entryCommands TheEntryCommands[]=
 
 GList* convertTerminfo2List( FILE* theStream)
 {
+  enum StringCapacity aCapacity;
+
   ENTER("convertTerminfo2List");
 
   yyin=theStream;
 
-  while((myCapacity=yylex()))
+  myList=NULL;
+  myPreviousCapacity=ACSC; /* init: anything but textfield.*/
+
+  while((aCapacity=yylex()))
     {
       entryCommands* aCommand=NULL;
-      terminfoEntry* anEntry=NULL;
 
-      DISPLAY_CAPACITY( myCapacity);
+      DISPLAY_CAPACITY( aCapacity);
       
-      aCommand=TheEntryCommands+myCapacity;
+      aCommand=TheEntryCommands+aCapacity;
       
       /* check consistency */
-      if ((myCapacity > LASTENUM)
+      if ((aCapacity > LASTENUM)
 	  || (aCommand->myCreateEntryHandler == NULL)
 	  || (aCommand->myDeleteEntryHandler == NULL)
-	  || (aCommand->myCapacity != myCapacity)
+	  || (aCommand->myCapacity != aCapacity)
 	  )
 	{
+	  SHOW("Exit");
 	  exit(0);
 	}
       
-      aCommand->myCreateEntryHandler( myCapacity, aCommand->myData1, aCommand->myData2);
+      aCommand->myCreateEntryHandler( aCapacity, aCommand->myData1, aCommand->myData2);
+      myPreviousCapacity=aCapacity;
     }
 
   return myList;
