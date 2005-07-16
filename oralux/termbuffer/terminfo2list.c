@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 terminfo2list.c
-$Id: terminfo2list.c,v 1.3 2005/07/14 17:38:51 gcasse Exp $
+$Id: terminfo2list.c,v 1.4 2005/07/16 17:38:29 gcasse Exp $
 $Author: gcasse $
 Description: convert the terminfo entries to a list of commands.
-$Date: 2005/07/14 17:38:51 $ |
-$Revision: 1.3 $ |
+$Date: 2005/07/16 17:38:29 $ |
+$Revision: 1.4 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -78,6 +78,7 @@ static void deleteEntry(terminfoEntry* theEntry)
   free(theEntry->myEscapeSequence);
   free(theEntry);
 }
+
 /* > */
 /* < create_SGR_Entry */
 
@@ -100,25 +101,7 @@ static void delete_SGR_Entry(terminfoEntry* theEntry)
   deleteEntry(theEntry);
 }
 /* > */
-/* < create_CUP_Entry */
-
-static terminfoEntry* create_CUP_Entry(enum StringCapacity theCapacity, void* theData1, void* theData2)
-{
-  int aLine=(int)theData1;
-  int aCol=(int)theData2;
-  ENTER("create_CUP_Entry");
-
-  aLine = (aLine > 0) ? aLine - 1 : aLine;
-  aCol = (aCol > 0) ? aCol - 1 : aCol;
-  
-  return createEntry(theCapacity, (void*)aLine, (void*)aCol);
-}
-
-#define delete_CUP_Entry deleteEntry
-
-/* > */
 /* < createText */
-
 static terminfoEntry* createText(enum StringCapacity theCapacity, void* theData1, void* theData2)
 {
   static GString* aString=NULL;
@@ -147,6 +130,7 @@ static void deleteText(terminfoEntry* theEntry)
   g_string_free( (GString*)theEntry->myData1, 1);
   deleteEntry(theEntry);
 }
+
 /* > */
 /* < array of entries */
 struct t_entryCommands
@@ -183,7 +167,7 @@ entryCommands TheEntryCommands[]=
   {createEntry, PARAM0, NULL, deleteEntry, HPA}, 
   {NULL, NULL, NULL, NULL, CMDCH}, 
   {NULL, NULL, NULL, NULL, CWIN}, 
-  {create_CUP_Entry, PARAM0, PARAM1, delete_CUP_Entry, CUP}, 
+  {createEntry, PARAM0, PARAM1, deleteEntry, CUP}, 
   {createEntry, NULL, NULL, deleteEntry, CUD1}, 
   {createEntry, NULL, NULL, deleteEntry, HOME}, 
   {NULL, NULL, NULL, NULL, CIVIS}, 
@@ -629,5 +613,4 @@ void deleteList(GList* theList)
   g_list_foreach(theList, (GFunc)deleteListEntry, NULL);
   g_list_free(theList);
 }
-
 /* > */

@@ -4,6 +4,10 @@
 #include "escape2terminfo.h"
 
 #ifdef DEBUG
+#include <stdio.h>
+#include <string.h>
+#include <sys/time.h>
+#include <time.h>
 static char* TheENTERFilename="  ";
 
 #define ENTER(a) \
@@ -31,6 +35,13 @@ void displayBuffer( char *theDataBuffer, struct t_style* theStyleBuffer, int the
 #define DISPLAY_CAPACITY(a) displayCapacity(a)
 #define DISPLAY_BUFFER(a,b,c,d) displayBuffer(a,b,c,d)
 
+#define SHOW_TIME(a) \
+{\
+  struct timeval tv;\
+  gettimeofday( &tv, NULL);\
+  printf("%s > time: %d.%d\n", a, (int)(tv.tv_sec)%10, (int)tv.tv_usec);\
+}
+
 #else /* DEBUG */
 
 #define ENTER(a)
@@ -44,7 +55,8 @@ void displayBuffer( char *theDataBuffer, struct t_style* theStyleBuffer, int the
 #define DISPLAY_STYLE(a)
 #define DISPLAY_CAPACITY(a)
 #define DISPLAY_BUFFER(a,b,c,d)
-#endif /* DEBUG */
+#define SHOW_TIME(a)
 
+#endif /* DEBUG */
 
 #endif /* DEBUG_H */

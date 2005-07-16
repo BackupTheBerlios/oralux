@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 tifilter2l.c
-$Id: tifilter2l.c,v 1.1 2005/07/10 20:33:57 gcasse Exp $
+$Id: tifilter2l.c,v 1.2 2005/07/16 17:38:29 gcasse Exp $
 $Author: gcasse $
 Description: terminfo filter, two lines.
-$Date: 2005/07/10 20:33:57 $ |
-$Revision: 1.1 $ |
+$Date: 2005/07/16 17:38:29 $ |
+$Revision: 1.2 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -23,192 +23,160 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ----------------------------------------------------------------------------
 */
+#include <glib.h>
+#include "escape2terminfo.h"
+/*#include "terminfo2list.h"*/
+#include "debug.h"
 #include "tifilter.h"
 
-/* < terminfofilter2lines */
-void terminfofilter2lines (termapi* theTermAPI, chartype* theInputTerminfo, chartype* theOutputTerminfo)
+/* < Global definitions */
+
+#define EG_STYLE_C (EG_STYLE+'0')
+#define EG_POSITION_C (EG_POSITION+'0')
+#define EG_TEXT_C (EG_TEXT+'0')
+#define EG_OTHER_C (EG_OTHER+'0')
+
+#define MAX_SUMMARY 100
+static char myEntrySummary[MAX_SUMMARY+1];
+static int myIndex=0;
+
+/* > */
+/* < context */
+/* A menu entry can include up to 3 line portions if a car is highlighted */
+#define MAX_LINE_PORTION 6 
+struct t_context
 {
-  theOutputTerminfo=NULL;
+  cursor myCursor;
+  cursor mySavedCursor;
+  int myNumberOfLine;
+  int myNumberOfCol;
+  linePortion myLinePortion[ MAX_LINE_PORTION];
+  int myLinePortionIndex;
+};
+typedef struct t_context context;
+
+static context myContext;
+
+void initContext(termapi* theTermAPI)
+{
+  theTermAPI->getCursor( &(myContext.myCursor));
+  theTermAPI->getDim( &(myContext.myNumberOfLine), &(myContext.myNumberOfCol));
+  myContext.myLinePortionIndex=0;
 }
 /* > */
-
-/* < interpretEscapeSequence */
-
-void interpretEscapeSequence( struct t_termbuffer* this, FILE* theStream, chartype** theOutput)
+/* < summarizeList */
+static void summarizeList(gpointer theEntry, gpointer theResult)
 {
+  char aGroup;
   enum StringCapacity aCapacity;
-  struct t_cursor* aCursor=&(this->myCursor);
 
-  ENTER("interpretEscapeSequence");
+  ENTER("summarizeList");
 
-  this->myLinePortionIndex=-1;
-
-  yyin=theStream;
-
-  while((aCapacity=yylex()))
+  if ((theEntry == NULL) || (myIndex >= MAX_SUMMARY))
     {
-      DISPLAY_CAPACITY( aCapacity);
+      return;
+    }
 
-      switch(aCapacity)
+  aCapacity=((terminfoEntry*)theEntry)->myCapacity;
+
+  DISPLAY_CAPACITY(aCapacity);
+
+  switch( aCapacity)
+    {
+    case SGR:
+      aGroup=EG_STYLE_C;
+      break;
+      
+    case TEXTFIELD:
+      {
+	GString* aText=((terminfoEntry*)theEntry)->myData1;
+	if(aText 
+	   && aText->str 
+	   && strcspn (aText->str, " \t\n,.;!?"))
+	  {
+	    aGroup=EG_TEXT_C;
+	  }
+	else
+	  {
+	    aGroup=EG_OTHER_C;
+	  }
+      }
+      break;
+      
+    case CR:
+    case CLEAR:
+    case HPA:
+    case CUP:
+    case CUD1:
+    case HOME:
+    case CUB1:
+    case CUF1:
+    case NEL:
+    case CUU:
+    case VPA:
+      aGroup=EG_POSITION_C;
+      break;
+      
+    default:
+      aGroup=EG_OTHER_C;
+      break;
+    }
+
+  if ((myIndex==0) || (myEntrySummary[myIndex-1] != aGroup))
+    {
+      myEntrySummary[myIndex] = aGroup;
+      myEntrySummary[++myIndex] = 0;
+      SHOW(myEntrySummary);
+    }
+}
+/* > */
+/* < processMenuItemsInSingleLine */
+GList* processMenuItemsInSingleLine( GList* theList, termapi* theTermAPI)
+{
+  return theList;
+}
+/* > */
+/* < processMenuItemsInTwoLines */
+
+GList* processMenuItemsInTwoLines( GList* theList, termapi* theTermAPI)
+{
+  return theList;
+}
+
+/* > */
+/* < terminfofilter2lines */
+GList* terminfofilter2lines(GList* theTerminfoList, termapi* theTermAPI)
+{
+  char* s=NULL;
+  char* s1=NULL;
+  ENTER("terminfofilter2lines");
+
+  myIndex=0;
+  initContext( theTermAPI);
+
+  g_list_foreach( theTerminfoList, (GFunc)summarizeList, NULL);
+
+  /* Expected pattern: <Text> ... <Style> ... <Text> 
+     In this first implementation, no more than two texts are looked for
+   */
+  if ((s1=strchr (myEntrySummary, EG_TEXT_C))
+       && (s=strchr (s1, EG_STYLE_C))
+       && (s=strchr (s, EG_TEXT_C))
+       && (0==strchr (s, EG_TEXT_C)))
+    {
+      /* Texts upon one or two lines ? */
+      if ((s=strchr (s1, EG_POSITION_C))
+	  && (strchr (s, EG_TEXT_C)))
 	{
-	case CLEAR:
-	  this->myLinePortionIndex=-1;
-	  aCursor->myCol=0;
-	  aCursor->myLine=0;
-	  { /* Erase the lines */ 
-	    char* aOutput=NULL;
-	    struct t_cursor aFirstCursor;
-	    struct t_cursor aLastCursor;
-	    
-	    aFirstCursor.myLine=0;
-	    aFirstCursor.myCol=0;
-	    
-	    aLastCursor.myLine=this->myNumberOfLine - 1;
-	    aLastCursor.myCol=0;
-	    
-	    eraseLine( this, & aFirstCursor, & aLastCursor, &(this->myDefaultStyle), & aOutput);
-	    if (aOutput != NULL)
-	      {
-		free(aOutput);
-	      }
-	  }
-	  break;
-	case CUB1:
-	  if (aCursor->myCol!=0)
-	    {
-	      aCursor->myCol--;
-	    }
-	  break;
-	case CUD1:
-	  aCursor->myLine++;
-	  break;
-	case CR:
-	  aCursor->myCol=0;
-	  break;
-	case NEL:
-	  aCursor->myLine++;
-	  aCursor->myCol=0;
-	  break;
-	case CUF1:
-	  aCursor->myCol++;
-	  break;
-	case CUP:
-	  aCursor->myLine = (TheParameter[0] > 0) ? TheParameter[0] - 1 : TheParameter[0];
-	  aCursor->myCol = (TheParameter[1] > 0) ? TheParameter[1] - 1 : TheParameter[1];
-	  break;
-	case CUU:
-	  aCursor->myLine-=TheParameter[0];
-	  break;
-	case DCH: /* delete characters (shorter line) */
-	    /* TheParameter[0] gives the number of characters to delete */
-	    deleteCharacter( this, & this->myCursor, TheParameter[0], theOutput);
-	  break;
-	case DL: /* delete lines */
-	    /* TheParameter[0] gives the number of lines to delete */
-	    deleteLine( this, TheParameter[0], theOutput);
-	  break;
-	case ECH: /* Erase characters (same line length) */
-	    /* TheParameter[0] gives the number of characters to erase */
-	    eraseCharacter( this, & this->myCursor, TheParameter[0], & this->myCursor.myStyle, theOutput);
-	  break;
-	case ED: /* Clear the display after the cursor */
-	  {
-	    struct t_cursor aFirstCursor;
-	    struct t_cursor aLastCursor;
-
-	    switch( TheParameter[0])
-	      {
-	      case 1: /* erase from start to cursor */
-		aFirstCursor.myLine=0;
-		aFirstCursor.myCol=0;
-		aLastCursor.myLine = this->myCursor.myLine;
-		aLastCursor.myCol = this->myCursor.myCol;
-		break;
-	      case 2: /* whole display */
-		aFirstCursor.myLine=0;
-		aFirstCursor.myCol=0;
-		aLastCursor.myLine=this->myNumberOfLine - 1;
-		aLastCursor.myCol=this->myNumberOfCol - 1;
-		break;
-	      case 0: /* from cursor to end of display */
-	      default:
-		aFirstCursor.myLine = this->myCursor.myLine;
-		aFirstCursor.myCol = this->myCursor.myCol;
-		aLastCursor.myLine=this->myNumberOfLine - 1;
-		aLastCursor.myCol=this->myNumberOfCol - 1;
-		break;
-	      }
-	    eraseLine( this, &aFirstCursor, &aLastCursor, &(this->myCursor.myStyle), theOutput);
-	  }
-	  break;
-	case EL:
-	  {
-	    struct t_cursor aFirstCursor;
-	    struct t_cursor aLastCursor;
-
-	    aFirstCursor.myLine = this->myCursor.myLine;
-	    aFirstCursor.myCol = this->myCursor.myCol;
-	    aLastCursor.myLine = aFirstCursor.myLine;
-
-	    switch( TheParameter[0])
-	      {
-	      case 1: /* erase from start of line to cursor */
-		aLastCursor.myCol=0;
-		break;
-	      case 2: /* whole line */
-		aFirstCursor.myCol=0;
-		aLastCursor.myCol=this->myNumberOfCol - 1;
-		break;
-	      case 0: /* from cursor to end of line */
-	      default:
-		aLastCursor.myCol=this->myNumberOfCol - 1;
-		break;
-	      }
-	    eraseLine( this, &aFirstCursor, &aLastCursor, &(this->myCursor.myStyle), theOutput);
-	  }
-	  break;
-	case HOME:
-	  aCursor->myCol=0;
-	  aCursor->myLine=0;
-	  break;
-	case HPA:
-	  aCursor->myCol=TheParameter[0] - 1;
-	  break;
-	case ICH: /* insert n characters */
-	    insertCol( this, this->myCursor.myCol + TheParameter[0] - 1, &(this->myCursor.myStyle), theOutput);
-	  break;
-	case IL: /* several lines are added (the content is shifted to the bottom of the screen) */
-	  break;
-	case RC:
-	  aCursor->myCol=this->mySavedCursor.myCol;
-	  aCursor->myLine=this->mySavedCursor.myLine;
-	  break;
-	case SC:
-	  this->mySavedCursor.myCol=aCursor->myCol;
-	  this->mySavedCursor.myLine=aCursor->myLine;
-	  break;
-	case SGR:
-	  copyStyle(& aCursor->myStyle, &TheCurrentStyle);
-	  DISPLAY_STYLE( &TheCurrentStyle);
-	  break;
-	case VPA:
-	  aCursor->myLine=(TheParameter[0] > 0) ? TheParameter[0] - 1 : TheParameter[0];
-	  break;
-	case TEXTFIELD:
-	    setChar( this, (char)*yytext, theOutput);
-	  break;
-	default:
-	case RMACS:
-	case BEL:
-	  break;
+	  theTerminfoList = processMenuItemsInSingleLine( theTerminfoList, theTermAPI);
+	}
+      else
+	{
+	  theTerminfoList = processMenuItemsInTwoLines( theTerminfoList, theTermAPI);
 	}
     }
 
-  flushPortion( this, theOutput);
-
-  DISPLAY_BUFFER(this->myDataBuffer, this->myStyleBuffer, this->myNumberOfLine, this->myNumberOfCol);
-
-  checkString( theOutput);
+  return theTerminfoList;
 }
-
 /* > */
+

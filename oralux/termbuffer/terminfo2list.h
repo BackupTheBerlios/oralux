@@ -12,6 +12,8 @@ struct t_terminfoEntry
   void* myData1; /* data depend on capacity */
   void* myData2; 
   chartype* myEscapeSequence; /* the original escape sequence */
+  cursor myStartingPosition;
+  style myStyle;
 };
 typedef struct t_terminfoEntry terminfoEntry;
 

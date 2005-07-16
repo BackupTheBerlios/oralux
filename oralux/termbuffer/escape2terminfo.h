@@ -2,6 +2,7 @@
 #define ESCAPE2TERMINALINFO_H
 
 #include <stdio.h>
+#include <string.h>
 
 /* < flex declarations, ++ */
 extern int yylex (void);
@@ -457,5 +458,15 @@ enum StringCapacity
     TEXTFIELD=LASTENUM /* Used to identify text, this is not a capacity */
 };
 
+/* > */
+/* < enum entryGroup */
+enum entryGroup
+  {
+    EG_STYLE=1,
+    EG_POSITION=2,
+    EG_TEXT=4,
+    EG_OTHER=8,
+    EG_LASTENUM=EG_OTHER
+  };
 /* > */
 #endif

@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 test-tb.c
-$Id: test-t2l.c,v 1.2 2005/07/14 17:38:51 gcasse Exp $
+$Id: test-t2l.c,v 1.3 2005/07/16 17:38:29 gcasse Exp $
 $Author: gcasse $
 Description: test terminfo2list.
-$Date: 2005/07/14 17:38:51 $ |
-$Revision: 1.2 $ |
+$Date: 2005/07/16 17:38:29 $ |
+$Revision: 1.3 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -28,8 +28,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <unistd.h>
 #include <string.h>
 #include "terminfo2list.h"
+#include "tifilter2l.h"
+#include "termapiSimu.h"
 #include "debug.h"
-
 
 
 static void displayList(gpointer theEntry, gpointer userData)
@@ -44,8 +45,11 @@ int main(int argc, char *argv[])
   char* aTest=(char*)malloc(MAX_LINE);
   char* aAbsolutePath=malloc(MAX_LINE);
   int aLength=0;
-
+  
+  termapi aTermAPI;
   GList* aList=NULL;
+
+  getTermapiSimu( &aTermAPI);
 
   getcwd (aAbsolutePath, MAX_LINE);
   aLength=strlen(aAbsolutePath);
@@ -60,6 +64,7 @@ int main(int argc, char *argv[])
   while (fgets(aTest, MAX_LINE, fd))
     {
       FILE* fdtest=NULL;
+
       if ((*aTest=='#')||(*aTest=='\n'))
 	{
 	  continue;
@@ -79,15 +84,17 @@ int main(int argc, char *argv[])
 	  printf("*** Test: %s\n",aTest);
 	}
 
+      SHOW_TIME("convertTerminfo2List");
       aList=convertTerminfo2List( fdtest);
-
       fclose(fdtest);
 
-      /* process the list */
-      g_list_foreach(aList, (GFunc)displayList, NULL);
-      /* ... */
+      SHOW_TIME("terminfofilter2lines");
+      aList = terminfofilter2lines( aList, &aTermAPI);
 
+      SHOW_TIME("deleteList");
       deleteList( aList);
+
+      SHOW_TIME("The end");
     }
 
   fclose(fd);

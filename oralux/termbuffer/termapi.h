@@ -16,19 +16,35 @@ struct t_linePortion
   int myLine; /* Line number */
   int myFirstCol; /* First column of the portion */
   int myLastCol; /* Last column of the portion */
+  style myStyle;
 };
 typedef struct t_linePortion linePortion;
 /* > */
+/* < cursor */
+struct t_cursor
+{
+  int myLine;
+  int myCol;
+  style myStyle;
+};
+typedef struct t_cursor cursor;
 
-typedef int (*isLineContentModifiedHandler)( linePortion theLinePortion, const chartype* theNewData);
-typedef int (*isLineStyleModifiedHandler)( linePortion theLinePortion, const style* theNewStyle);
-typedef int (*getBackgroundStyleHandler)( linePortion theLinePortion, style* theStyle);
+#define copyCursor( theDestination, theSource) memcpy( theDestination, theSource, sizeof(struct t_cursor))
+/* > */
+
+typedef int (*IS_LINE_CONTENT_MODIFIED_HANDLER)( linePortion theLinePortion, const chartype* theNewData);
+typedef int (*IS_LINE_STYLE_MODIFIED_HANDLER)( linePortion theLinePortion, const style* theNewStyle);
+typedef int (*GET_BACKGROUND_STYLE_HANDLER)( linePortion theLinePortion, style* theStyle);
+typedef int (*GET_CURSOR_HANDLER)( cursor* theCursor);
+typedef int (*GET_DIM_HANDLER)( int* theNumberOfLine, int* theNumberOfCol);
 
 struct t_termapi
 {
-  isLineContentModifiedHandler isLineContentModified;
-  isLineStyleModifiedHandler isLineStyleModified;
-  getBackgroundStyleHandler getBackgroundStyle;
+  IS_LINE_CONTENT_MODIFIED_HANDLER isLineContentModified;
+  IS_LINE_STYLE_MODIFIED_HANDLER isLineStyleModified;
+  GET_BACKGROUND_STYLE_HANDLER getBackgroundStyle;
+  GET_CURSOR_HANDLER getCursor;
+  GET_DIM_HANDLER getDim;
 };
 typedef struct t_termapi termapi;
 
