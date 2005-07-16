@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 test-tb.c
-$Id: test-t2l.c,v 1.3 2005/07/16 17:38:29 gcasse Exp $
+$Id: test-t2l.c,v 1.4 2005/07/16 21:43:31 gcasse Exp $
 $Author: gcasse $
 Description: test terminfo2list.
-$Date: 2005/07/16 17:38:29 $ |
-$Revision: 1.3 $ |
+$Date: 2005/07/16 21:43:31 $ |
+$Revision: 1.4 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -28,6 +28,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <unistd.h>
 #include <string.h>
 #include "terminfo2list.h"
+#include "terminfointerpreter.h"
 #include "tifilter2l.h"
 #include "termapiSimu.h"
 #include "debug.h"
@@ -45,11 +46,14 @@ int main(int argc, char *argv[])
   char* aTest=(char*)malloc(MAX_LINE);
   char* aAbsolutePath=malloc(MAX_LINE);
   int aLength=0;
+  cursor aCursor;
   
   termapi aTermAPI;
   GList* aList=NULL;
 
   getTermapiSimu( &aTermAPI);
+
+  aTermAPI.getCursor( &aCursor);
 
   getcwd (aAbsolutePath, MAX_LINE);
   aLength=strlen(aAbsolutePath);
@@ -61,6 +65,8 @@ int main(int argc, char *argv[])
       return 1;
     }
   
+  terminfointerpreter_init( &aCursor);
+
   while (fgets(aTest, MAX_LINE, fd))
     {
       FILE* fdtest=NULL;
@@ -85,8 +91,11 @@ int main(int argc, char *argv[])
 	}
 
       SHOW_TIME("convertTerminfo2List");
-      aList=convertTerminfo2List( fdtest);
+      aList = convertTerminfo2List( fdtest);
       fclose(fdtest);
+
+      SHOW_TIME("terminfointerpreter");
+      g_list_foreach(aList, (GFunc)terminfointerpreter, NULL);
 
       SHOW_TIME("terminfofilter2lines");
       aList = terminfofilter2lines( aList, &aTermAPI);

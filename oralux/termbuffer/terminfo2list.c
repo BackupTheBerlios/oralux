@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 terminfo2list.c
-$Id: terminfo2list.c,v 1.4 2005/07/16 17:38:29 gcasse Exp $
+$Id: terminfo2list.c,v 1.5 2005/07/16 21:43:31 gcasse Exp $
 $Author: gcasse $
 Description: convert the terminfo entries to a list of commands.
-$Date: 2005/07/16 17:38:29 $ |
-$Revision: 1.4 $ |
+$Date: 2005/07/16 21:43:31 $ |
+$Revision: 1.5 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -59,10 +59,11 @@ static terminfoEntry* createEntry(enum StringCapacity theCapacity, void* theData
 
   if (anEntry)
     {
-      anEntry->myCapacity=theCapacity;
-      anEntry->myData1=theData1;
-      anEntry->myData2=theData2;
-      anEntry->myEscapeSequence=strdup(yytext);
+      anEntry->myCapacity = theCapacity;
+      /* if theData1 is a non NULL pointer, copy its data to myData1 */
+      anEntry->myData1 = theData1 ? (void*)(*((int*)theData1)) : NULL;
+      anEntry->myData2 = theData2 ? (void*)(*((int*)theData2)) : NULL;
+      anEntry->myEscapeSequence = strdup(yytext);
     }
 
   myList = g_list_append(myList, (gpointer)anEntry);
@@ -118,7 +119,8 @@ static terminfoEntry* createText(enum StringCapacity theCapacity, void* theData1
       aString=g_string_new (yytext);
 
       /* add the new list element */
-      anEntry=createEntry(theCapacity, (void*)aString, NULL);
+      anEntry = createEntry(theCapacity, NULL, NULL);
+      anEntry->myData1 = (void*)aString;
     }
 
   return anEntry;

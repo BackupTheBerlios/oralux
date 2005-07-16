@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 terminfointerpreter.c
-$Id: terminfointerpreter.c,v 1.1 2005/07/16 17:38:29 gcasse Exp $
+$Id: terminfointerpreter.c,v 1.2 2005/07/16 21:43:31 gcasse Exp $
 $Author: gcasse $
 Description: an alpha stage terminfo interpreter
-$Date: 2005/07/16 17:38:29 $ |
-$Revision: 1.1 $ |
+$Date: 2005/07/16 21:43:31 $ |
+$Revision: 1.2 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -27,19 +27,45 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "terminfo2list.h"
 #include "debug.h"
 
-/* < terminfointerpreter */
-void terminfointerpreter( terminfoEntry* theEntry, cursor* theSavedCursor)
-{
-  cursor* aCursor=&(theEntry->myStartingPosition);
-  int aData1=(int)(theEntry->myData1);
-  int aData2=(int)(theEntry->myData2);
+/* < globals */
+static cursor mySavedCursor;
+static cursor myCursor;
+/* > */
 
-  switch(theEntry->myCapacity)
+/* < terminfointerpreter_init */
+void terminfointerpreter_init( cursor* theCursor)
+{
+  ENTER("terminfointerpreter_init");
+  copyCursor(&myCursor, theCursor);
+  copyCursor(&mySavedCursor, theCursor);
+}
+/* > */
+/* < terminfointerpreter_init */
+cursor* terminfointerpreter_getCursor()
+{
+  ENTER("terminfointerpreter_getCursor");
+  return &myCursor;
+}
+/* > */
+/* < terminfointerpreter */
+void terminfointerpreter(gpointer theEntry, gpointer userData)
+{
+  terminfoEntry* anEntry = (terminfoEntry*)theEntry;
+  int aData1 = (int)(anEntry->myData1);
+  int aData2 = (int)(anEntry->myData2);
+
+  ENTER("terminfointerpreter");
+
+  DISPLAY_CAPACITY(anEntry->myCapacity);
+
+  copyCursor(&(anEntry->myStartingPosition), &myCursor);
+
+  switch(anEntry->myCapacity)
     {
     case CLEAR:
 /*       myContext.myLinePortionIndex=-1; */
-      aCursor->myCol=0;
-      aCursor->myLine=0;
+      myCursor.myCol=0;
+      myCursor.myLine=0;
 /*       { /\* Erase the lines *\/  */
 /* 	char* aOutput=NULL; */
 /* 	struct t_cursor aFirstCursor; */
@@ -59,30 +85,30 @@ void terminfointerpreter( terminfoEntry* theEntry, cursor* theSavedCursor)
 /*       } */
       break;
     case CUB1:
-      if (aCursor->myCol!=0)
+      if (myCursor.myCol!=0)
 	{
-	  aCursor->myCol--;
+	  myCursor.myCol--;
 	}
       break;
     case CUD1:
-      aCursor->myLine++;
+      myCursor.myLine++;
       break;
     case CR:
-      aCursor->myCol=0;
+      myCursor.myCol=0;
       break;
     case NEL:
-      aCursor->myLine++;
-      aCursor->myCol=0;
+      myCursor.myLine++;
+      myCursor.myCol=0;
       break;
     case CUF1:
-      aCursor->myCol++;
+      myCursor.myCol++;
       break;
     case CUP:
-      aCursor->myLine = (aData1 > 0) ? aData1 - 1 : aData1;
-      aCursor->myCol = (aData2 > 0) ? aData2 - 1 : aData2;
+      myCursor.myLine = (aData1 > 0) ? aData1 - 1 : aData1;
+      myCursor.myCol = (aData2 > 0) ? aData2 - 1 : aData2;
       break;
     case CUU:
-      aCursor->myLine-=aData1;
+      myCursor.myLine-=aData1;
       break;
     case DCH: /* delete characters (shorter line) */
       /* aData1 gives the number of characters to delete */
@@ -153,11 +179,11 @@ void terminfointerpreter( terminfoEntry* theEntry, cursor* theSavedCursor)
       }
       break;
     case HOME:
-      aCursor->myCol=0;
-      aCursor->myLine=0;
+      myCursor.myCol=0;
+      myCursor.myLine=0;
       break;
     case HPA:
-      aCursor->myCol=aData1 - 1;
+      myCursor.myCol=aData1 - 1;
       break;
     case ICH: /* insert n characters */
 /* 	    insertCol( this, myContext.myCursor.myCol + aData1 - 1, &(myContext.myCursor.myStyle), theOutput); */
@@ -165,25 +191,32 @@ void terminfointerpreter( terminfoEntry* theEntry, cursor* theSavedCursor)
     case IL: /* several lines are added (the content is shifted to the bottom of the screen) */
       break;
     case RC:
-      aCursor->myCol=theSavedCursor->myCol;
-      aCursor->myLine=theSavedCursor->myLine;
+      myCursor.myCol=mySavedCursor.myCol;
+      myCursor.myLine=mySavedCursor.myLine;
       break;
-    case SC:
-      theSavedCursor->myCol=aCursor->myCol;
-      theSavedCursor->myLine=aCursor->myLine;
+     case SC:
+      mySavedCursor.myCol=myCursor.myCol;
+      mySavedCursor.myLine=myCursor.myLine;
       break;
     case SGR:
-      copyStyle( &(theEntry->myStyle), (style*)(theEntry->myData1));
+      copyStyle( &(myCursor.myStyle), (style*)(anEntry->myData1));
       break;
     case VPA:
-      aCursor->myLine=(aData1 > 0) ? aData1 - 1 : aData1;
+      myCursor.myLine=(aData1 > 0) ? aData1 - 1 : aData1;
       break;
     case TEXTFIELD:
+      {
+	GString* aString = anEntry->myData1;
+	myCursor.myCol += strlen(aString->str);
+      }
       break;
     default:
     case RMACS:
     case BEL:
       break;
     }
+  SHOW3("myLine=%d, myCol=%d\n",
+	myCursor.myLine, 
+	myCursor.myCol);
 }
 /* > */
