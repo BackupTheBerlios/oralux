@@ -1,0 +1,664 @@
+struct t_translation TheBrazilianPortugueseMessages[]=
+{
+  {"American",
+  "Americano",	
+  },
+
+  {"Belgian",
+  "Belga",	
+  },
+
+  {"British",
+  "Britânico",	
+  },
+
+  {"Bulgarian",
+  "Búlgaro",	
+  },
+
+  {"Czech",
+  "Tcheco",	
+  },
+
+  {"Danish",
+  "Húngaro", /* ? */	
+  },
+
+  {"Finnish",
+  "Finlandês",	
+  },
+
+  {"French",
+  "Francês",	
+  },
+
+  {"French Canadian",
+  "Francês Canadense",	   
+  },
+
+  {"German",
+  "Alemão",	
+  },
+
+  {"Italian",
+  "Italiano",	
+  },
+
+  {"Polish",
+  "Polonês",	
+  },
+
+  {"Russian",
+  "Russo",	
+  },
+
+  {"Slovaq",
+  "Eslovaco",	
+  },
+
+  {"Spanish",
+  "Espanhol",	
+  },
+
+  {"Swiss",
+  "Suíço",	
+  },
+
+  {"Turkish",
+  "Turco",	
+  },
+
+  {"Delete",
+  "Excluir",	
+  },
+
+  {"Welcome To Oralux!",
+  "Bem-vindo ao Oralux!",	    
+  },
+
+  {"Do you want to install the DECtalk software ?",
+  "Você deseja instalar o Software DECtalk (Inglês, Francês, Alemão e Espanhol)?",	   
+  },
+
+  {"Please press the Return key if you agree, or any other key if you disagree",
+  "Por favor, Pressione Enter para aceitar, ou qualquer outra tecla para descordar",	   
+  },
+
+  {"Problem with the file PHP status",
+  "Problema com o status do arquivo file PHP",	    
+  },
+
+  {"The DECtalk package can't be found",
+  "O pacote com o DECtalk não foi encontrado",	
+  },
+
+  {"The Makefile can't be found",
+  "O Makefile não foi encontrado",	
+  },
+
+  {"The shared library is not built",
+  "A biblioteca compartilhada não foi complilada ",	
+  },
+
+  {"The Emacspeak variable is not defined",
+  "A variável do Emacspeak não foi definida",	
+  },
+
+  {"The software-dtk directory is not found",
+  "O diretório software-dtk não foi encontrado",	
+  },
+
+  {"The dtk directory is not found",
+  "O diretório dtk não foi encontrado",	
+  },
+
+  {"Please enter your serial number, and press Return",
+  "Por favor digite seu número de série e depois tecle enter ",	   
+  },
+
+  {"Sorry, your serial number is not correct",
+  "Desculpe, mas o número de série fornecido é inválido",	   
+  },
+
+  {"If you want to try again, press Return",
+  "Se desejar tentar novamente, tecle enter",	   
+  },
+
+  {"If you want to stop this stage, press any other key",
+  "Se desejar ignorar esta etapa, pressione qualquer outra tecla",	   
+  },
+
+  {"Do you want this menu in English ?",
+  "Você deseja que este menu fique em Inglês?",	   
+  },
+
+  {"Do you want this menu in French ?",
+  "Você deseja que este menu fique em Francês?",	   
+  },
+
+  {"y",
+  "y",	
+  },
+
+  {"left angle bracket",
+  "Fecha colchete",	 /* ? */
+  },
+
+  {"left curly bracket",
+  "Abre colchete",	/* ? */
+  },
+
+  {"left parenthesis",
+  "Abre parênteses", /* ? */	 
+  },
+
+  {"left square bracket",
+  "fecha parênteses", /* ? */	 
+  },
+
+  {"vertical line",
+  "Linha Vertical",  
+  },
+
+  {"space",
+  "espaço",	
+  },
+
+  {"at",
+  "arrôba",	
+  },
+
+  {"right curly bracket",
+  "Fecha Parênteses", /* ?  */	  
+  },
+
+  {"What kind of keyboard is used ?",
+  "Qual o tipo do teclado em uso?",	 
+  },
+
+  {"Press Enter to increase the volume, or Space to decrease the volume, or any other key to accept it",
+  "Pressione Enter para aumentar o volume, espaço para diminuir, ou qualquer
+outra tecla para continuar",	  
+  },
+
+  {"Do you want to change the type of keyboard ?",
+  "Você deseja selecionar o tipo de teclado?",	   
+  },
+
+  {"Your keyboard is supposed to be",
+  "Seu teclado é ",	 
+  },
+
+  {"Do you want to update your preferences ?",
+  "Deseja alterar suas configurações?",	   
+  },
+
+  {"Do you want to eject the CD ROM ?",
+  "Deseja ejetar o CD ROM?",	   
+  },
+
+  {"Once the CD is taken, out, press Return",
+  "Retire o cd, feche a gaveta do CD ROM, e tecle enter",	 
+  },
+
+  {"Do you want this menu in German ?",
+  "Você deseja que este menu fique em Alemão?",	   
+  },
+
+  {"Do you want this menu in Spanish ?",
+  "Você deseja que este menu fique em Espanhol?",	   
+  },
+
+  {"Do you want Emacspeak Festival M Brola ?",
+  "Você deseja o Emacspeak com o Festival M Brola (Inglês e Francês)?",	   
+  },
+
+  {"Do you want Flite ?",
+  "Deseja o Flite (Inglês) ?",	   
+  },
+
+  {"Yes",
+  "Sim",	
+  },
+
+  {"No",
+  "Não",	
+  },
+
+  {"Alva",
+  NULL,	
+  },
+
+  {"BrailleLite",
+  NULL,	
+  },
+
+  {"BrailleNote",
+  NULL,	
+  },
+
+  {"CombiBraille",
+  NULL,	
+  },
+
+  {"EcoBraille",
+  NULL,	
+  },
+
+  {"EuroBraille",
+  NULL,	
+  },
+
+  {"HandyTech",
+  NULL,	
+  },
+
+  {"Log Text",
+  NULL,	
+  },
+
+  {"MultiBraille",
+  NULL,	
+  },
+
+  {"MDV",
+  NULL,	
+  },
+
+  {"MiniBraille",
+  NULL,	
+  },
+
+  {"Papen meier",
+  NULL,	  
+  },
+
+  {"Telesensory Systems Inc.",
+  NULL,		
+  },
+
+  {"Vario, R B T (emulation 1)",
+  NULL,	   
+  },
+
+  {"VideoBraille",
+  NULL,	
+  },
+
+  {"Vario, R B T (emulation 2)",
+  NULL,	   
+  },
+
+  {"Voyager",
+  NULL,	
+  },
+
+  {"VisioBraille",
+  NULL,	
+  },
+
+  {"French c b i f s",
+  "Francês c b i f s",	   
+  },
+
+  {"American N A B C C",
+  "Americano N A B C C",	     
+  },
+
+  {"Norwegian and German",
+  "Norueguês e Alemão",	      
+  },
+
+  {"Norwegian",
+  "Norueguês",	
+  },
+
+  {"Swedish",
+  "Suéco",	
+  },
+
+  {"Swedish 2",
+  "Suéco 2",	    
+  },
+
+  {"Vietnamese",
+  "Vietnamita",	
+  },
+
+  {"Do you want to select a braille display ?",
+  "Deseja selecionar um dispositivo Braille?",	   
+  },
+
+  {"What kind of braille display do you have ?",
+  "Qual é o modelo do seu Dispositivo Braille?",	 
+  },
+
+  {"First serial port",
+  "Primeira porta serial",	  
+  },
+
+  {"Second serial port",
+  "Segunda porta serial",	   
+  },
+
+  {"Which table do you want ?",
+  "Qual tabela você deseja utilizar?",	  
+  },
+
+  {"Which is the port ?",
+  "Qual porta será usada?",	  
+  },
+
+  {"Do you want to change the type of braille display ?",
+  "Deseja alterar o Dispositivo Braille?",	   
+  },
+
+  {"Your braille display is supposed to be",
+  "Seu Dispositivo Braille é baseado em:",	 
+  },
+
+  {"Do you want to change the table ?",
+  "Você deseja alterar a tabela usada?",	   
+  },
+
+  {"The braille table is supposed to be",
+  "Sua Tabela Braille é baseada em:",	
+  },
+
+  {"Do you want to change the port ?",
+  "Deseja alterar a porta?",	   
+  },
+
+  {"The communication port is supposed to be",
+  "A porta de comunicação é baseada em:",	
+  },
+
+  {"Do you want to start your braille display ?",
+  "Deseja iniciar o Dispositivo Braille Agora?",	   
+  },
+
+  {
+    "Accent S A",
+    NULL,
+  },
+
+  {
+    "Braille Lite",
+    NULL,    
+  },
+
+  {
+    "Braille 'n Speak",
+    NULL,    
+  },
+
+  {
+    "Ciber 232",
+    NULL,  
+  },
+
+  {
+    "Ciber 232 Plus",
+    NULL,  
+  },
+
+  {
+    "DECtalk Express",
+    NULL,    
+  },
+
+  {
+    "DECtalk Multivoice",
+    NULL,    
+  },
+
+  {
+    "DECtalk 3",
+    NULL,    
+  },
+
+  {
+    "Dolphin Apollo",
+    NULL,    
+  },
+
+  {
+    "DoubleTalk LT",
+    NULL,	
+  },
+
+  {
+    "DoubleTalk PC",
+    NULL,	
+  },
+
+  {
+    "LiteTalk",
+    NULL,	
+  },
+
+  {
+    "PC Hablado notebook",
+    NULL,	
+  },
+
+  {
+    "Type 'n Speak",
+    NULL, 
+  },
+
+  {"Do you want to select an external voice synthesizer ?",
+    "Deseja selecionar um sintetizador de voz externo?",   
+  },
+
+  {"What kind of synthesizer do you have ?",
+  "Qual é o seu sintetizador?",	 
+  },
+
+  {"Your external synthesizer is supposed to be",
+  "Seu sintetizador é baseado em:",	 
+  },
+
+  {"Do you want to change the type of external synthesizer ?",
+  "Deseja alterar o tipo do sintetizador?",	   
+  },
+
+  {
+    "Emacspeak",
+    "Emacspeak",	
+  },
+
+  {
+    "Yasr",
+    "Yasr",	
+  },
+
+  {"Your desktop is supposed to be",
+  "O ambiente Usado é:",	 
+  },
+
+  {"Do you want to change the kind of desktop ?",
+  "Deseja alterar o Ambiente?",	   
+  },
+
+  {"Which desktop do you want ?",
+  "Qual ambiente você deseja usar?",	  
+  },
+
+  {"Do you want ParleMax ?",
+  "Você deseja usar o ParleMax em (Francês)?",	   
+  },
+
+  {"Do you want to reboot your PC?",
+  "Deseja reiniciar o PC?",	   
+  },
+
+  {"Do you want to shutdown your PC?",
+  "Deseja desligar o PC?",	   
+  },
+
+  {"Do you want MultiSpeech (English and Russian) ?",
+  "Deseja usar o MultiSpeech em (Inglês e Russo)?",	   
+  },
+
+  {"Do you really want to stop the Braille driver ?",
+  "Você realmente deseja desativar o dispositivo Braille?",	   
+  },
+
+  {"Do you want this menu in Russian ?",
+  "Deseja este menu em Russo?",	   
+  },
+
+  {"0.6 beta",
+  "0.6 beta",	
+  },
+
+  {"Do you want to change the keyboard features?",
+  "Deseja alterar o tipo de teclado?",	   
+  },
+
+  {"You can hold three keys at a time; for example Control Alt Del",
+  "Você pode pressionar três teclas ao mesmo tempo, por exemplo: Control Alt Del",	
+  },
+
+  {"You prefer to hold one key at a time",
+  "Você pode optar por pressionar uma tecla de cada vez",	
+  },
+
+  {"Automatically repeat the pressed key",
+  "Repetir a tecla pressionada automaticamente",		  
+  },
+
+  {"Do not automatically repeat the pressed key",
+  "Não repitir automaticamente a tecla pressionada",	   
+  },
+
+  // 81
+  {"Do you want to set up your internet connection",
+  "Deseja configurar uma conexão com a internet?",	   
+  },
+
+  {"Configure an external serial modem",
+  "Configurar um modem serial externo",	      
+  },
+
+  {"Install an ADSL USB Modem",
+  "Instala um modem ADSL (USB)",	    
+  },
+
+  {"Set up mail",
+  "Configura E-mail",	
+  },
+
+  {"Do you want to install ViaVoice?",
+  "Deseja Utilizar o ViaVoice?",	   
+  },
+
+  {"The ViaVoice package can't be found",
+  "O pacote do ViaVoice Não foi encontrado!",	
+  },
+
+  {"The IBMECI directory is not found",
+  "O diretório IBMECI não foi encontrado!",	
+  },
+
+  {"Please enter your password, and press Return",
+  "Por favor digite sua senha e pressione enter",	   
+  },
+
+  {"Do you want to install another language?",
+  "Deseja instalar outro idioma?",	   
+  },
+
+  {"Sorry, your password is not correct",
+  "Desculpe, a senha digitada está incorreta",	   
+  },
+
+  {"Previous",
+  "Próximo",	
+  },
+
+  {"Next",
+  "Avançar",	
+  },
+
+  {"Welcome To OraluxGold!",
+  "Bem-vindo ao OraluxGold!",	    
+  },
+
+  {"Do you want to save the configuration files?",
+  "Você deseja salvar seus arquivos de configuração?",	   
+  },
+
+  {"Albatross",
+  NULL,	
+  },
+
+  {"FreedomScientific",
+  NULL,	
+  },
+
+  {"B R F",
+  NULL,	
+  },
+
+  {"Finnish 2",
+  "Finlandês 2",	    
+  },
+
+  {"U S B",
+  "U S B",	
+  },
+
+  {"Which contraction table do you want ?",
+  "Qual a tabela de contração que você deseja?",	  
+  },
+
+  {"No contraction table",
+  "Nenhuma tabela de contração",		   
+  },
+
+  {"big 5",
+  "big 5",	
+  },
+
+  {"compress",
+  "compressão",	
+  },
+
+  {"Grade 2 US English",
+  "Grade 2 Inglês E.U.A",	  
+  },
+
+  {"FR abrege",
+  "Abregev FR", /* ? */	
+  },
+
+  {"FR integral",
+  "integral FR",	
+  },
+
+  {"The contraction braille table is supposed to be",
+  "A tabela de contração é baseada em:",	
+  },
+
+  {"Do you want to change the contraction table ?",
+  "Você deseja alterar a tabela de contração?",	   
+  },
+
+  {"Which contraction table do you want ?",
+  "Qual tabela de contração você deseja?",	  
+  },
+
+  {"Do you want Cicero T T S ?",
+  "Você deseja utilizar o T T S Cicero em (Francês)?",	   
+  },
+
+  {"The audio menu is going to start Yasr",
+  "O menu Áudio inicia com ois Yasr",	
+  },
+
+  {"If the voice synthesizer stops, please press Control Alt i to start it again",
+  "Se o sintetizador de voz parar, por favor, pressione Control Alt i para reiniciá-lo",
+  }
+}; 
