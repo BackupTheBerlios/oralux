@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // audiouserinterface.c
-// $Id: audioUserInterface.c,v 1.9 2005/07/10 20:41:19 gcasse Exp $
+// $Id: audioUserInterface.c,v 1.10 2005/07/17 19:38:29 gcasse Exp $
 // $Author: gcasse $
 // Description: Managing and playing the pre-recorded messages.
-// $Date: 2005/07/10 20:41:19 $ |
-// $Revision: 1.9 $ |
+// $Date: 2005/07/17 19:38:29 $ |
+// $Revision: 1.10 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 // September 2003: 
 // German translations by Guenther Harrasser.
@@ -801,13 +801,13 @@ char * TheMessages[][4]={
 
   {"Automatically repeat the pressed key",
    "Répéter automatiquement la touche appuyée",
-   "Automatisch den gedrückten punkt wiederholen",
+   "Automatisch die gedrückte Taste wiederholen",
    "Repetir Automáticamente la tecla pulsada",
   },
 
   {"Do not automatically repeat the pressed key",
    "Ne pas répéter automatiquement la touche appuyée",
-   "Den punkt nicht automatisch wiederholen",
+   "Die Taste nicht automatisch wiederholen",
    "No Repetir Automáticamente la tecla pulsada",
   },
 
@@ -819,7 +819,7 @@ char * TheMessages[][4]={
 
   {"Configure an external serial modem",
    "Configurer un modem externe série ",
-   "Konfigurieren eines externen Modems an der seriellen Schnittschnelle.",
+   "Konfigurieren eines externen Modems an der seriellen Schnittstelle.",
    "Configurar un modem externo en un puerto serie",
   },
 
@@ -975,7 +975,7 @@ char * TheMessages[][4]={
 
   {"Do you want to change the contraction table?",
    "Voulez-vous modifier la table abrégée ?",
-   "Wollen sie die Kontraktionstabelle ändern?",
+   "Wollen Sie die Kontraktionstabelle ändern?",
    "¿Quiéres cambiar la tabla de contracción?",
   },
 
