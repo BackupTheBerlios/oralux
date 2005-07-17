@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 test-tb.c
-$Id: test-t2l.c,v 1.4 2005/07/16 21:43:31 gcasse Exp $
+$Id: test-t2l.c,v 1.5 2005/07/17 17:06:25 gcasse Exp $
 $Author: gcasse $
 Description: test terminfo2list.
-$Date: 2005/07/16 21:43:31 $ |
-$Revision: 1.4 $ |
+$Date: 2005/07/17 17:06:25 $ |
+$Revision: 1.5 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -98,10 +98,10 @@ int main(int argc, char *argv[])
       g_list_foreach(aList, (GFunc)terminfointerpreter, NULL);
 
       SHOW_TIME("terminfofilter2lines");
-      aList = terminfofilter2lines( aList, &aTermAPI);
+      aList = terminfofilter2lines( aList, &aTermAPI, 1);
 
       SHOW_TIME("deleteList");
-      deleteList( aList);
+      deleteTermInfoList( aList);
 
       SHOW_TIME("The end");
     }

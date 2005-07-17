@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 tifilter2l.c
-$Id: tifilter2l.c,v 1.2 2005/07/16 17:38:29 gcasse Exp $
+$Id: tifilter2l.c,v 1.3 2005/07/17 17:06:25 gcasse Exp $
 $Author: gcasse $
 Description: terminfo filter, two lines.
-$Date: 2005/07/16 17:38:29 $ |
-$Revision: 1.2 $ |
+$Date: 2005/07/17 17:06:25 $ |
+$Revision: 1.3 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -23,160 +23,208 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ----------------------------------------------------------------------------
 */
+#include <stdlib.h>
 #include <glib.h>
 #include "escape2terminfo.h"
 /*#include "terminfo2list.h"*/
 #include "debug.h"
 #include "tifilter.h"
 
-/* < Global definitions */
+/* < linePortionGroup */
+/* A menu entry is supposed to include up to 3 line portions (highlighted car) */
+#define MAX_LINE_PORTION 3 
 
-#define EG_STYLE_C (EG_STYLE+'0')
-#define EG_POSITION_C (EG_POSITION+'0')
-#define EG_TEXT_C (EG_TEXT+'0')
-#define EG_OTHER_C (EG_OTHER+'0')
+/* At the moment, just two style changes are processed (two menu entries) */
+#define MAX_LINE_PORTION_GROUP 2 
 
-#define MAX_SUMMARY 100
-static char myEntrySummary[MAX_SUMMARY+1];
-static int myIndex=0;
+typedef linePortion LINE_PORTION_ARRAY[ MAX_LINE_PORTION * MAX_LINE_PORTION_GROUP];
+
+/* a "LinePortionGroup" is an array of the LinePortions composing a menu entry.
+   It is NULL terminated.
+*/
+typedef linePortion* LINE_PORTION_GROUP[ MAX_LINE_PORTION_GROUP][MAX_LINE_PORTION+1];
+
+#define sameLine(theGroup) \
+  (theGroup \
+   && theGroup[0][0] \
+   && theGroup[1][0] \
+   && (theGroup[0][0]->myLine == theGroup[1][0]->myLine))
 
 /* > */
 /* < context */
-/* A menu entry can include up to 3 line portions if a car is highlighted */
-#define MAX_LINE_PORTION 6 
 struct t_context
 {
   cursor myCursor;
   cursor mySavedCursor;
   int myNumberOfLine;
   int myNumberOfCol;
-  linePortion myLinePortion[ MAX_LINE_PORTION];
+  LINE_PORTION_ARRAY myLinePortion;
+  LINE_PORTION_GROUP myLinePortionGroup;
+/*   linePortion myLinePortion[ MAX_LINE_PORTION * MAX_LINE_PORTION_GROUP]; */
+/*   linePortion* myLinePortionGroup[ MAX_LINE_PORTION_GROUP][MAX_LINE_PORTION+1]; */
   int myLinePortionIndex;
+  int myLinePortionOverload;
+  termapi* myTermAPI;
 };
 typedef struct t_context context;
 
-static context myContext;
-
-void initContext(termapi* theTermAPI)
+static context* createContext(termapi* theTermAPI)
 {
-  theTermAPI->getCursor( &(myContext.myCursor));
-  theTermAPI->getDim( &(myContext.myNumberOfLine), &(myContext.myNumberOfCol));
-  myContext.myLinePortionIndex=0;
+  int i,j;
+  context* this=(context*) malloc(sizeof(context));
+
+  theTermAPI->getCursor( &(this->myCursor));
+  theTermAPI->getDim( &(this->myNumberOfLine), &(this->myNumberOfCol));
+  this->myLinePortionIndex=0;
+  this->myLinePortionOverload=0;
+  this->myTermAPI=theTermAPI;
+
+  for (i=0;i<MAX_LINE_PORTION_GROUP;i++)
+    {
+      for (j=0;j<MAX_LINE_PORTION;j++)
+	{
+	  this->myLinePortionGroup[i][j] = NULL;
+	}
+    }
+
+  return this;
 }
+
+#define deleteContext(this) free(this)
 /* > */
-/* < summarizeList */
-static void summarizeList(gpointer theEntry, gpointer theResult)
+
+/* < searchLinePortion */
+static void searchLinePortion(gpointer theEntry, gpointer theContext)
 {
-  char aGroup;
-  enum StringCapacity aCapacity;
+  terminfoEntry* anEntry = (terminfoEntry*)theEntry;
+  context* this = (context*)theContext;
+  GString* aText = NULL;
 
-  ENTER("summarizeList");
+  ENTER("searchLinePortion");
 
-  if ((theEntry == NULL) || (myIndex >= MAX_SUMMARY))
+  if ((anEntry == NULL) 
+      || (anEntry->myCapacity != TEXTFIELD))
     {
       return;
     }
 
-  aCapacity=((terminfoEntry*)theEntry)->myCapacity;
-
-  DISPLAY_CAPACITY(aCapacity);
-
-  switch( aCapacity)
+  aText = anEntry->myData1;
+  if (this->myLinePortionIndex >= MAX_LINE_PORTION)
     {
-    case SGR:
-      aGroup=EG_STYLE_C;
-      break;
-      
-    case TEXTFIELD:
-      {
-	GString* aText=((terminfoEntry*)theEntry)->myData1;
-	if(aText 
-	   && aText->str 
-	   && strcspn (aText->str, " \t\n,.;!?"))
-	  {
-	    aGroup=EG_TEXT_C;
-	  }
-	else
-	  {
-	    aGroup=EG_OTHER_C;
-	  }
-      }
-      break;
-      
-    case CR:
-    case CLEAR:
-    case HPA:
-    case CUP:
-    case CUD1:
-    case HOME:
-    case CUB1:
-    case CUF1:
-    case NEL:
-    case CUU:
-    case VPA:
-      aGroup=EG_POSITION_C;
-      break;
-      
-    default:
-      aGroup=EG_OTHER_C;
-      break;
+      this->myLinePortionOverload = 1;
     }
-
-  if ((myIndex==0) || (myEntrySummary[myIndex-1] != aGroup))
+  else if(aText && aText->str && strcspn (aText->str, " \t\n,.;!?"))
     {
-      myEntrySummary[myIndex] = aGroup;
-      myEntrySummary[++myIndex] = 0;
-      SHOW(myEntrySummary);
+      createLinePortion (this->myLinePortion+this->myLinePortionIndex,
+			 anEntry->myStartingPosition.myLine,
+			 anEntry->myStartingPosition.myCol,
+			 anEntry->myStartingPosition.myCol+strlen(aText->str),
+			 &(anEntry->myStartingPosition.myStyle),
+			 aText->str);
+      
+      (this->myLinePortionIndex)++;
     }
 }
 /* > */
-/* < processMenuItemsInSingleLine */
-GList* processMenuItemsInSingleLine( GList* theList, termapi* theTermAPI)
+/* < groupLinePortion */
+static int groupLinePortion( context* this)
 {
-  return theList;
-}
-/* > */
-/* < processMenuItemsInTwoLines */
+  int aNumberOfLinePortion=0;
+  int i,j;
+  #define aLinePortion this->myLinePortion
+  #define aGroup this->myLinePortionGroup
 
-GList* processMenuItemsInTwoLines( GList* theList, termapi* theTermAPI)
-{
-  return theList;
-}
+  ENTER("groupLinePortion");
 
-/* > */
-/* < terminfofilter2lines */
-GList* terminfofilter2lines(GList* theTerminfoList, termapi* theTermAPI)
-{
-  char* s=NULL;
-  char* s1=NULL;
-  ENTER("terminfofilter2lines");
-
-  myIndex=0;
-  initContext( theTermAPI);
-
-  g_list_foreach( theTerminfoList, (GFunc)summarizeList, NULL);
-
-  /* Expected pattern: <Text> ... <Style> ... <Text> 
-     In this first implementation, no more than two texts are looked for
-   */
-  if ((s1=strchr (myEntrySummary, EG_TEXT_C))
-       && (s=strchr (s1, EG_STYLE_C))
-       && (s=strchr (s, EG_TEXT_C))
-       && (0==strchr (s, EG_TEXT_C)))
+  if ((this->myLinePortionIndex == 0) 
+      || this->myLinePortionOverload)
     {
-      /* Texts upon one or two lines ? */
-      if ((s=strchr (s1, EG_POSITION_C))
-	  && (strchr (s, EG_TEXT_C)))
+      return 0;
+    }
+
+  i=j=0;
+  aNumberOfLinePortion=1;
+
+  aGroup[ aNumberOfLinePortion-1][ j] = &(aLinePortion[i]);
+  aGroup[ aNumberOfLinePortion-1][ ++j] = NULL;
+  SHOW4("aNumberOfLinePortion=%d, j=%d, \"%s\"\n", 
+	aNumberOfLinePortion, j-1, aLinePortion[i].myString);
+
+  for (i=1; (i < this->myLinePortionIndex) && aNumberOfLinePortion; i++)
+    {
+      if (j >= MAX_LINE_PORTION)
 	{
-	  theTerminfoList = processMenuItemsInSingleLine( theTerminfoList, theTermAPI);
+	  aNumberOfLinePortion=0;
+	}
+      else if ((aLinePortion[ i].myLine == aLinePortion[ i-1].myLine)
+	       && (aLinePortion[ i].myFirstCol == aLinePortion[ i-1].myLastCol)
+	       )
+	{
+	  aGroup[ aNumberOfLinePortion-1][ j] = &(aLinePortion[i]);
+	  aGroup[ aNumberOfLinePortion-1][ ++j] = NULL;
+
 	}
       else
 	{
-	  theTerminfoList = processMenuItemsInTwoLines( theTerminfoList, theTermAPI);
+	  aNumberOfLinePortion++;
+	  j=0;
+	  aGroup[ aNumberOfLinePortion-1][ j] = &(aLinePortion[i]);
+	  aGroup[ aNumberOfLinePortion-1][ ++j] = NULL;
+
 	}
+      SHOW4("aNumberOfLinePortion=%d, j=%d, \"%s\"\n", 
+	    aNumberOfLinePortion, j-1, aLinePortion[i].myString);
     }
 
-  return theTerminfoList;
+  return aNumberOfLinePortion;
+}
+/* > */
+/* < sameContent */
+static int sameContent( context* this)
+{
+  ENTER("sameContent");
+  return 1;
+}
+/* > */
+/* < sameStyle */
+static int sameStyle( context* this)
+{
+  ENTER("sameStyle");
+  return 0;
+}
+/* > */
+/* < terminfofilter2lines */
+GList* terminfofilter2lines(GList* theTerminfoList, termapi* theTermAPI, int isDuplicated)
+{
+  GList* aFilteredList=NULL;
+  context* this=NULL;
+  
+  ENTER("terminfofilter2lines");
+
+  this = createContext( theTermAPI);
+
+  g_list_foreach( theTerminfoList, (GFunc)searchLinePortion, this);
+
+  if ((groupLinePortion(this) == 2)
+      && sameContent(this) 
+      && !sameStyle(this))
+    {
+      if (isDuplicated)
+	{
+	  /* List copy: attention the GString pointers (TEXTFIELD) are just duplicated */
+	  aFilteredList = copyTerminfoList( theTerminfoList);
+	}
+      else
+	{
+	  aFilteredList = theTerminfoList;
+	}
+
+/*       this->myTermAPI->getBackgroundStyle( linePortion theLinePortion, style* theStyle); */
+    }
+
+  deleteContext(this);
+
+  return aFilteredList;
 }
 /* > */
 

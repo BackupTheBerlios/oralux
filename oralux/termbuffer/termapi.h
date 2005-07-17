@@ -17,8 +17,11 @@ struct t_linePortion
   int myFirstCol; /* First column of the portion */
   int myLastCol; /* Last column of the portion */
   style myStyle;
+  chartype* myString;
 };
 typedef struct t_linePortion linePortion;
+
+void createLinePortion (linePortion* theLinePortion, int theLine, int theCol, int theLastCol, style* theStyle, chartype* theString);
 /* > */
 /* < cursor */
 struct t_cursor

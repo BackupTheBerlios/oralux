@@ -20,6 +20,7 @@ typedef struct t_terminfoEntry terminfoEntry;
 /* > */
 
 GList* convertTerminfo2List( FILE* theStream);
-void deleteList(GList* theList);
+void deleteTermInfoList(GList* theList);
+GList* copyTerminfoList( GList* theList);
 
 #endif
