@@ -42,9 +42,7 @@ Date: xx Month 2004
 The previous 0.6 alpha minimenu is now based on pdmenu.
 
 ** mcvox
-mcvox is a Midnight Commander derivative which aims to supply a simple
-user interface for rendering by a voice synthesis or via tiny displays.
-We have started mcvox to enhance the previous minimenu in 0.6 alpha. 
+mcvox is a Midnight Commander derivative which is better rendered by a voice synthesizer, a Braille or tiny display.
 
 Using mcvox, several formats are automatically converted to text files. The formats are MS-Excel (XLS), MS-Word, PDF, Open Office (SXW or SXI), Postcript, Power Point, RTF.
 
