@@ -9,6 +9,6 @@ The input terminfo list is filtered, and the new list is returned.
 theTermAPI supplies several handlers to collect terminal info.
 */
 
-GList* terminfofilter(GList* theTerminfoList, termapi* theTermAPI); 
+GList* terminfofilter(GList* theTerminfoList, termAPI* theTermAPI); 
 
 #endif

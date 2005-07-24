@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 tifilter2l.c
-$Id: tifilter2l.c,v 1.4 2005/07/18 22:27:35 gcasse Exp $
+$Id: tifilter2l.c,v 1.5 2005/07/24 20:43:29 gcasse Exp $
 $Author: gcasse $
 Description: terminfo filter, two lines.
-$Date: 2005/07/18 22:27:35 $ |
-$Revision: 1.4 $ |
+$Date: 2005/07/24 20:43:29 $ |
+$Revision: 1.5 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -30,84 +30,58 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "debug.h"
 #include "tifilter.h"
 
-/* < linePortionGroup */
-/* A menu entry is supposed to include up to 3 line portions (highlighted car) */
+/* < context */
+
+/* A menu entry is supposed to include up to 3 line portions (highlighted car) 
+*/
 #define MAX_LINE_PORTION 3 
 
-/* At the moment, just two style changes are processed (two menu entries) */
-#define MAX_LINE_PORTION_GROUP 2 
+/* At the moment, just two style changes are processed (two menu entries) plus one for the remaining text */
+#define MAX_LINE_PORTION_GROUP 3
 
-#define MAX_LINE_PORTION_ARRAY (MAX_LINE_PORTION * MAX_LINE_PORTION_GROUP)
-
-/* a "LinePortionGroup" gathers the contiguous LinePortions (e.g. a label including a hotkey). It is NULL terminated.
-*/
-
-struct t_LinePortionGroup
-{
-  linePortion* myLinePortion[MAX_LINE_PORTION+1];
-  style myStyle;
-};
-
-typedef struct t_LinePortionGroup linePortionGroup;
-
-
-#define sameLine(theGroup) \
-  (theGroup \
-   && theGroup[0][0] \
-   && theGroup[1][0] \
-   && (theGroup[0][0]->myLine == theGroup[1][0]->myLine))
-
-static int sameContent( linePortionGroup* theGroup)
-{
-  ENTER("sameContent");
-  return 1;
-}
-
-static int sameStyle( linePortionGroup* theGroup )
-{
-  ENTER("sameStyle");
-  return 0;
-}
-
-/* > */
-/* < context */
 struct t_context
 {
   cursor myCursor;
   cursor mySavedCursor;
   int myNumberOfLine;
   int myNumberOfCol;
-  linePortion myLinePortion[ MAX_LINE_PORTION_ARRAY];
-  linePortionGroup myLinePortionGroup[ MAX_LINE_PORTION_GROUP];
-  int myLinePortionIndex;
-  int myLinePortionOverload;
-  termapi* myTermAPI;
+  GList* myLinePortionGroup[ MAX_LINE_PORTION_GROUP ];
+  int myLinePortionCount;
+  termAPI* myTermAPI;
 };
 typedef struct t_context context;
 
-static context* createContext(termapi* theTermAPI)
+static context* createContext(termAPI* theTermAPI)
 {
-  int i,j;
-  context* this=(context*) malloc(sizeof(context));
+  int i;
+  context* this = (context*) malloc(sizeof(context));
 
   theTermAPI->getCursor( &(this->myCursor));
   theTermAPI->getDim( &(this->myNumberOfLine), &(this->myNumberOfCol));
-  this->myLinePortionIndex=0;
-  this->myLinePortionOverload=0;
-  this->myTermAPI=theTermAPI;
+  this->myTermAPI = theTermAPI;
+  this->myLinePortionCount = 0;
 
-  for (i=0;i<MAX_LINE_PORTION_GROUP;i++)
+  for (i=0; i<MAX_LINE_PORTION_GROUP; i++)
     {
-      for (j=0;j<MAX_LINE_PORTION;j++)
-	{
-	  this->myLinePortionGroup[i].myLinePortion[j] = NULL;
-	}
+      this->myLinePortionGroup[i] = NULL;
     }
 
   return this;
 }
 
-#define deleteContext(this) free(this)
+static void deleteContext(context* this)
+{ 
+  int i;
+
+  for (i=0; i<MAX_LINE_PORTION_GROUP; i++)
+    {
+      if(this->myLinePortionGroup[i]);
+      {
+	deleteLinePortionGroup(this->myLinePortionGroup[i]);
+      }
+    }
+  free(this);
+}
 /* > */
 
 /* < searchLinePortion */
@@ -126,104 +100,47 @@ static void searchLinePortion(gpointer theEntry, gpointer theContext)
     }
 
   aText = anEntry->myData1;
-  if (this->myLinePortionIndex >= MAX_LINE_PORTION)
+  if(aText && aText->str && strcspn (aText->str, " \t"))     
     {
-      this->myLinePortionOverload = 1;
-    }
-  else if(aText && aText->str && strcspn (aText->str, " \t\n,.;!?"))
-    {
-      createLinePortion (this->myLinePortion+this->myLinePortionIndex,
-			 anEntry->myStartingPosition.myLine,
-			 anEntry->myStartingPosition.myCol,
-			 anEntry->myStartingPosition.myCol+strlen(aText->str),
-			 &(anEntry->myStartingPosition.myStyle),
-			 aText->str);
-      
-      (this->myLinePortionIndex)++;
+      cursor* c =  &(anEntry->myStartingPosition);
+      linePortion* p= createLinePortion (c->myLine, c->myCol, &(c->myStyle), aText->str);
+      this->myLinePortionGroup[ 0] = g_list_append( this->myLinePortionGroup[ 0], (gpointer)p);
     }
 }
 /* > */
 /* < groupLinePortion */
 static int groupLinePortion( context* this)
 {
-  int aNumberOfGroup=0;
-  int i,j;
-  #define aLinePortion this->myLinePortion
-  #define aGroup this->myLinePortionGroup
+  int i=0;
+  GList* aList=NULL;
+  GList* aPreviousList=NULL;
 
   ENTER("groupLinePortion");
 
-  if ((this->myLinePortionIndex == 0) 
-      || this->myLinePortionOverload)
+  if (this->myLinePortionGroup[0] == NULL)
     {
       return 0;
     }
 
-  i=j=0;
-  aNumberOfGroup=1;
+  aList = aPreviousList = this->myLinePortionGroup[i];
+  i++;
+  SHOW3("Group=%d: \"%s\"\n", i-1, getStringFromGList( aList));
 
-  aGroup[ aNumberOfGroup-1].myLinePortion[ j] = &(aLinePortion[i]);
-  aGroup[ aNumberOfGroup-1].myLinePortion[ ++j] = NULL;
-  SHOW4("aNumberOfGroup=%d, j=%d, \"%s\"\n", 
-	aNumberOfGroup, j-1, aLinePortion[i].myString);
-
-  for (i=1; (i < this->myLinePortionIndex) && aNumberOfGroup; i++)
+  while(( aList = g_list_next( aList)) && (i < MAX_LINE_PORTION_GROUP))
     {
-      if (j >= MAX_LINE_PORTION)
-	{
-	  aNumberOfGroup=0;
-	}
-      else if ((aLinePortion[ i].myLine == aLinePortion[ i-1].myLine)
-	       && (aLinePortion[ i].myFirstCol == aLinePortion[ i-1].myLastCol)
-	       )
-	{
-	  aGroup[ aNumberOfGroup-1].myLinePortion[ j] = &(aLinePortion[i]);
-	  aGroup[ aNumberOfGroup-1].myLinePortion[ ++j] = NULL;
-
-	}
-      else
-	{
-	  aNumberOfGroup++;
-	  j=0;
-	  aGroup[ aNumberOfGroup-1].myLinePortion[ j] = &(aLinePortion[i]);
-	  aGroup[ aNumberOfGroup-1].myLinePortion[ ++j] = NULL;
-
-	}
-      SHOW4("aNumberOfGroup=%d, j=%d, \"%s\"\n", 
-	    aNumberOfGroup, j-1, aLinePortion[i].myString);
+      /* New group ? */
+      if ((getLineFromGList( aList) != getLineFromGList( aPreviousList))
+	  || (getFirstColFromGList( aList) != getLastColFromGList( aPreviousList)+1))
+	{ 
+	  aList->prev = NULL;
+	  aPreviousList->next = NULL;
+	  this->myLinePortionGroup[i] = aList;
+	  i++;
+	} 
+      SHOW3("Group=%d: \"%s\"\n", i-1, getStringFromGList( aList));
     }
 
-  /* determining the major style of each group */
-  for (i=0; i<aNumberOfGroup; i++)
-    {
-      int aWeight[ MAX_LINE_PORTION];
-      int k;
-      for (j=0; (j < MAX_LINE_PORTION) && aGroup[ i].myLinePortion[ j]; j++)
-	{
-	  aWeight[ j] = 0;
-	  for (k=j+1; (k < MAX_LINE_PORTION) && aGroup[ i].myLinePortion[ k]; k++)
-	    {
-	      if (compareStyle( &(aGroup[ i].myLinePortion[ j]->myStyle), 
-				&(aGroup[ i].myLinePortion[ k]->myStyle)))
-		{
-		  aWeight[ j] += strlen(aGroup[ i].myLinePortion[ j]->myString);
-		}
-	    }
-	}
-
-      k=0;
-      for (j=0; (j < MAX_LINE_PORTION) && aGroup[ i].myLinePortion[ j]; j++)
-	{
-	  if (aWeight[ j] > aWeight[ k])
-	    {
-	      k=j;
-	    }
-	}
-      
-      copyStyle( &(aGroup[ i].myStyle), &(aGroup[ i].myLinePortion[ k]->myStyle)); 
-    }
-
-  return aNumberOfGroup;
+  return i;
 }
 /* > */
 /* < searchUnselectedGroup */
@@ -239,9 +156,10 @@ int searchUnselectedGroup( this)
 }
 /* > */
 /* < terminfofilter2lines */
-GList* terminfofilter2lines(GList* theTerminfoList, termapi* theTermAPI, int isDuplicated)
+
+GList* terminfofilter2lines(GList* theTerminfoList, termAPI* theTermAPI, int isDuplicated)
 {
-  GList* aFilteredList=NULL;
+  GList* aFilteredList=theTerminfoList;
   context* this=NULL;
   
   ENTER("terminfofilter2lines");
@@ -250,30 +168,46 @@ GList* terminfofilter2lines(GList* theTerminfoList, termapi* theTermAPI, int isD
 
   g_list_foreach( theTerminfoList, (GFunc)searchLinePortion, this);
 
-  if ((groupLinePortion(this) == 2)
-      && sameContent(this->myLinePortionGroup) 
-      && !sameStyle(this->myLinePortionGroup)
-      && sameContent(this->myLinePortionGroup+1) 
-      && !sameStyle(this->myLinePortionGroup+1))
+  if (groupLinePortion(this) == 2)
     {
-      if (isDuplicated)
+      GList* new_g[2];
+      GList* old_g[2];
+      linePortion new_p[2];
+      linePortion old_p[2];
+      int i;
+      int isInteresting=1;
+
+      for(i=0; i<2 && isInteresting; i++)
 	{
-	  aFilteredList = copyTerminfoList( theTerminfoList);
-	}
-      else
-	{
-	  aFilteredList = theTerminfoList;
+	  new_g[i]=this->myLinePortionGroup[i];
+	  getFeaturesLinePortionGroup( new_g[i], &(new_p[i]));
+
+	  old_g[i] = this->myTermAPI->getLinePortionGroup( new_p[i].myLine,
+							   new_p[i].myFirstCol,
+							   new_p[i].myLastCol);
+	  getFeaturesLinePortionGroup( old_g[i], &(old_p[i]));
+
+	  /* interesting if same contents and distinct styles */
+	  isInteresting = ( (strcmp( new_p[0].myString->str, 
+				     old_p[0].myString->str) == 0)
+			    && !compareStyle( &(new_p[0].myStyle), 
+					      &(old_p[0].myStyle)));
 	}
 
-/*       searchUnselectedGroup( this); */
-/*       insertCustomSilenceTerminfo( avant num entry debut, apres num entry fin) */
-
-/*      this->myTermAPI->getBackgroundStyle( linePortion theLinePortion, style* theStyle); */
+      if( isInteresting)
+	{
+	  if (isDuplicated)
+	    {
+	      aFilteredList = copyTerminfoList( theTerminfoList);
+	    }
+	  /*       searchUnselectedGroup( this); */
+	  /*       insertCustomSilenceTerminfo( avant num entry debut, apres num entry fin) */
+	}
     }
-
   deleteContext(this);
-
+  
   return aFilteredList;
 }
+
 /* > */
 

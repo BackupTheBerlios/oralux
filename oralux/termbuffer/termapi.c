@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 termapi.c
-$Id: termapi.c,v 1.1 2005/07/17 17:06:59 gcasse Exp $
+$Id: termapi.c,v 1.2 2005/07/24 20:43:29 gcasse Exp $
 $Author: gcasse $
 Description: termapi utilities
-$Date: 2005/07/17 17:06:59 $ |
-$Revision: 1.1 $ |
+$Date: 2005/07/24 20:43:29 $ |
+$Revision: 1.2 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -26,17 +26,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "termapi.h"
 #include "debug.h"
 
-void createLinePortion (linePortion* theLinePortion, int theLine, int theCol, int theLastCol, style* theStyle, chartype* theString)
+termAPI* createTermAPI()
 {
-  ENTER("createLinePortion");
-  theLinePortion->myLine=theLine;
-  theLinePortion->myFirstCol=theCol;
-  theLinePortion->myLastCol=theLastCol;
-  copyStyle(&(theLinePortion->myStyle), theStyle);
-  theLinePortion->myString=theString;
-  SHOW2("theLine=%d\n",theLine);
-  SHOW2("theCol=%d\n",theCol);
-  SHOW2("theLastCol=%d\n",theLastCol);
-  SHOW2("theString=%s\n",theString);
-  DISPLAY_STYLE(theStyle);
+  return NULL;
+}
+
+void deleteTermAPI( termAPI* theTermAPI)
+{
 }

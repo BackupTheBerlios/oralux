@@ -20,7 +20,7 @@ INCPATH=$(prefix)/include
 LIBPATH=$(prefix)/lib
 
 OBJS = termbuffer.o escape2terminfo.o linuxconsole.o debug.o test-tb.o
-OBJS2 = tifilter2l.o terminfo2list.o escape2terminfo.o linuxconsole.o terminfointerpreter.o termapi.o debug.o test-t2l.o termapiSimu.o
+OBJS2 = tifilter2l.o terminfo2list.o escape2terminfo.o linuxconsole.o lineportion.o terminfointerpreter.o debug.o test-t2l.o termapiVCSA.o
 
 all: terminfo2list
 #all: libtermbuffer.so test-tb
@@ -63,16 +63,16 @@ clean:
 tifilter2l.o: tifilter2l.h escape2terminfo.h debug.h Makefile
 terminfo2list.o: escape2terminfo.h debug.h terminfo2list.h
 terminfointerpreter.o: debug.h terminfointerpreter.h
-termapi.o: termapi.h debug.h
+termapi.o: termapi.h escape2terminfo.h lineportion.h debug.h
 escape2terminfo.o: escape2terminfo.l escape2terminfo.h debug.h
 linuxconsole.o: escape2terminfo.h
+lineportion.o: escape2terminfo.h lineportion.h
 debug.o: debug.h
-
-termapiSimu.o: termapiSimu.h
+termapiVCSA.o: termapi.h debug.h
 test-t2l.o: tifilter2l.h escape2terminfo.h debug.h terminfo2list.h
-test-tb.o: termbuffer.h
 
-termbuffer.o: escape2terminfo.h debug.h termbuffer.h Makefile
+#test-tb.o: termbuffer.h
+#termbuffer.o: escape2terminfo.h debug.h termbuffer.h Makefile
 
 
 
