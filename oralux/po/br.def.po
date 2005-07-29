@@ -1,0 +1,305 @@
+# Oralux Brazilian Portuguese translation
+# Copyright (C) 2005 Oralux.org Association.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Oralux\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-07-29 23:00+0200\n"
+"PO-Revision-Date: 2005-07-29 23:05+0200\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: <contact@oralux.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid ""
+"\n"
+"A few checkboxes."
+msgstr ""
+"\n"
+"Algumas caixas de verificação."
+
+msgid ""
+"\n"
+"And type return to select your preferred item. "
+msgstr ""
+"\n"
+"E pressione enter para selecionar o item desejado. "
+
+msgid ""
+"\n"
+"And type return to select your preferred option."
+msgstr ""
+"\n"
+"E pressione enter para selecionar a opção desejada."
+
+msgid ""
+"\n"
+"And type yes to select an option, or type no to unselect it. "
+msgstr ""
+"\n"
+"Digite sim para selecionar uma opção, ou não para desselecioná-la. "
+
+msgid ""
+"\n"
+"And type yes to select your preferred item. "
+msgstr ""
+"\n"
+"E digite Sim para selecionar o item desejado. "
+
+msgid ""
+"\n"
+"And type yes to select your preferred option. "
+msgstr ""
+"\n"
+"E digite sim para selecionar a opção desejada. "
+
+msgid ""
+"\n"
+"Button."
+msgstr ""
+"\n"
+"Botão."
+
+msgid ""
+"\n"
+"Input. "
+msgstr ""
+"\n"
+"Entrada."
+
+#, php-format
+msgid ""
+"\n"
+"Just press return if you accept this proposal: %s. "
+msgstr ""
+"\n"
+"Pressione enter se você concorda com: %s. "
+
+#, php-format
+msgid ""
+"\n"
+"Just type yes if you accept this proposal: %s. "
+msgstr ""
+"\n"
+"Pressione Sim se você concorda com: %s. "
+
+msgid ""
+"\n"
+"Long list."
+msgstr ""
+"\n"
+"Lista de vizualização."
+
+msgid ""
+"\n"
+"Note that you can select several options. "
+msgstr ""
+"\n"
+"Podem ser selecionadas várias opções. "
+
+msgid ""
+"\n"
+"Press return to read the next item. "
+msgstr ""
+"\n"
+"Pressione enter para ler o próximo item. "
+
+msgid ""
+"\n"
+"Press return to read the next option. "
+msgstr ""
+"\n"
+"Pressione enter para ler a próxima opção. "
+
+msgid ""
+"\n"
+"Press the up or down arrow key to read another item. "
+msgstr ""
+"\n"
+"Pressione seta acima ou abaixo para ler outro item. "
+
+msgid ""
+"\n"
+"Press the up or down arrow key to read another option. "
+msgstr ""
+"\n"
+"Pressione seta acima ou abaixo para ler outra opção. "
+
+#, php-format
+msgid ""
+"\n"
+"Proposal: %s. "
+msgstr ""
+"\n"
+"Sugestão: %s. "
+
+msgid ""
+"\n"
+"Several checkboxes."
+msgstr ""
+"\n"
+"Várias caixas de verificação."
+
+msgid ""
+"\n"
+"Short list."
+msgstr ""
+"\n"
+"Lista de Visualização."
+
+msgid ""
+"\n"
+"There are just a few checkboxes."
+msgstr ""
+"\n"
+"Só existem algumas caixas de verificação."
+
+msgid ""
+"\n"
+"There are several checkboxes."
+msgstr ""
+"\n"
+"Existem várias caixas de verificação."
+
+msgid ""
+"\n"
+"This is a button."
+msgstr ""
+"\n"
+"Este é um botão."
+
+msgid ""
+"\n"
+"This is a long list."
+msgstr ""
+"\n"
+"Esta é uma lista."
+
+msgid ""
+"\n"
+"This is a short list."
+msgstr ""
+"\n"
+"Esta é uma lista de visualização."
+
+msgid ""
+"\n"
+"Type your answer in this input field. "
+msgstr ""
+"\n"
+"Digite sua resposta neste campo. "
+
+msgid ""
+"\n"
+"Which mailbox do you want to delete?"
+msgstr ""
+"\n"
+"Qual caixa de e-mail deseja excluir?"
+
+msgid ""
+"\n"
+"Which mailbox do you want to modify?"
+msgstr ""
+"\n"
+"Qual caixa de e-mail deseja alterar?"
+
+msgid ""
+"\n"
+"Your changes have been saved"
+msgstr ""
+"\n"
+"Suas alterações foram salvas"
+
+msgid "About mail boxes"
+msgstr "Sobre as caixas de e-mail"
+
+msgid "Add a mailbox"
+msgstr "Adicionar uma caixa de e-mail"
+
+msgid "Button."
+msgstr "Botão."
+
+msgid "Cancel"
+msgstr "Cancelar"
+
+msgid "Delete a mailbox"
+msgstr "Excluir a caixa de e-mail"
+
+#, php-format
+msgid "Do you really want to delete %s?"
+msgstr "Você realmente deseja excluir %s?"
+
+msgid ""
+"Do you want to keep the messages in the server once they have been fetched "
+"to your computer?"
+msgstr ""
+
+msgid "Do you want to save your changes"
+msgstr ""
+
+msgid ""
+"Enter how often your mailboxes must be checked. For example, 20 means 20 "
+"minutes"
+msgstr ""
+
+msgid "Enter the login"
+msgstr ""
+
+msgid "Enter the name of the POP server, for example: pop.smith.com"
+msgstr "Digite o endereço do servidor POP3, por exemplo: pop3.projeto.net"
+
+msgid "Enter the name of the S M T P server, for example: smtp.smith.com"
+msgstr "Digite o endereço do servidor SMTP, por exemplo: smtp.projeto.net"
+
+msgid "Enter the name of this mailbox, for example: My Mailbox"
+msgstr "Digite o nome da sua caixa de e-mail, por exemplo: jose@projeto.net"
+
+msgid "Enter the password"
+msgstr "Digite sua senha"
+
+msgid "Enter the port or press return"
+msgstr "Digite o número da porta, ou pressione enter"
+
+msgid "Enter your full mailing address, for example: paul@smith.com"
+msgstr "Digite seu e-mail completo, Exemplo: jose@projeto.net"
+
+msgid "Enter your full name, for example: Paul Smith"
+msgstr "Digite seu nome completo. Exemplo: José Ambrósio"
+
+msgid "Modify a mailbox"
+msgstr "Altera uma caixa de e-mail"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "Press any key to continue."
+msgstr "Pressione qualquer tecla para continuar."
+
+msgid "Return to main menu"
+msgstr "Volta ao menu principal"
+
+msgid "Selected. "
+msgstr "Selecionado."
+
+msgid "Thanks to report this error to contact@oralux.org\n"
+msgstr "Obrigado por remeter este erro para contact@oralux.org\n"
+
+msgid "This is a button."
+msgstr "Este é um botão."
+
+msgid "Yes or No?"
+msgstr "Sim ou Não?"
+
+msgid "n"
+msgstr "N"
+
+msgid "no"
+msgstr "Não"
+
+msgid "y"
+msgstr "S"
+
+msgid "yes"
+msgstr "Sim"
