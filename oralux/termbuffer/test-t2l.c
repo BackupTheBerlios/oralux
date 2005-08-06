@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 test-tb.c
-$Id: test-t2l.c,v 1.6 2005/07/24 20:43:29 gcasse Exp $
+$Id: test-t2l.c,v 1.7 2005/08/06 22:06:32 gcasse Exp $
 $Author: gcasse $
 Description: test terminfo2list.
-$Date: 2005/07/24 20:43:29 $ |
-$Revision: 1.6 $ |
+$Date: 2005/08/06 22:06:32 $ |
+$Revision: 1.7 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -30,7 +30,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "terminfo2list.h"
 #include "terminfointerpreter.h"
 #include "tifilter2l.h"
-#include "termapiSimu.h"
 #include "debug.h"
 
 

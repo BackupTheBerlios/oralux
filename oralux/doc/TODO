@@ -582,6 +582,8 @@ line.
 
 1.2 Priority 2
 
++ the font must be selected by the user, eg lat0-08 for 50 lines.
+
 Oralux 0.7: 2.6.x kernel. See boot floppy issue.
 
 + swftools
@@ -725,6 +727,19 @@ will read from the current line to the end of the buffer.
 A key to repeat a last spoken object.  So if the 
 last thing read was the sentence then pressing a key would read it again.
 This would also work in the case of ispell.
+
+* Suggestions from Nigel for the screen reader
+
+When the screen reader is in read all mode pressing the down arrow key will 
+move to the next line and still carry on reading the rest of the document without stopping.
+
+Similarly pressing the up arrow key while in reed all mode will move to the 
+beginning of the current line.  If at the beginning of the current line then 
+the line above will be moved to. Again the screen reader will keep reading 
+until the end of the document without stopping.
+
+Both keys should be able to be pressed multiple times so many lines can be 
+skipped.
 
 
 1.3 Priority 3

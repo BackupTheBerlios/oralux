@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # screen.sh
-# $Id: screen.sh,v 1.2 2005/06/12 20:54:01 gcasse Exp $
+# $Id: screen.sh,v 1.3 2005/08/06 22:06:32 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing Screen
-# $Date: 2005/06/12 20:54:01 $ |
-# $Revision: 1.2 $ |
+# $Date: 2005/08/06 22:06:32 $ |
+# $Revision: 1.3 $ |
 # Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -36,10 +36,7 @@ InstallPackage()
     wget ftp://ftp.cs.univ-paris8.fr/mirrors/ftp.gnu.org/screen/screen-$SCREEN_RELEASE.tar.gz
     tar -zxvf screen-$SCREEN_RELEASE.tar.gz
 
-#     cd screen*
-#     patch -p0 screen/main.c < $INSTALL_PACKAGES/screen/main.c.patch
-
-    # avoid crash at launch time, speech server reinit, say word
+    # accessible window list
     patch -p0 < $INSTALL_PACKAGES/screen/screen.patch
 
     cd screen-$SCREEN_RELEASE

@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 terminfo2list.c
-$Id: terminfo2list.c,v 1.6 2005/07/17 17:06:24 gcasse Exp $
+$Id: terminfo2list.c,v 1.7 2005/08/06 22:06:32 gcasse Exp $
 $Author: gcasse $
 Description: convert the terminfo entries to a list of commands.
-$Date: 2005/07/17 17:06:24 $ |
-$Revision: 1.6 $ |
+$Date: 2005/08/06 22:06:32 $ |
+$Revision: 1.7 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -718,6 +718,33 @@ GList* copyTerminfoList(GList* theList)
     }
 
   return aList;
+}
+
+/* > */
+/* < convertList2Terminfo */
+
+static void concatByteArray( gpointer theEntry, gpointer theByteArray)
+{
+  ENTER("concatByteArray");
+
+  if (theEntry && theByteArray)
+    {
+      chartype* anEscapeSequence=((terminfoEntry*)theEntry)->myEscapeSequence;
+      g_byte_array_append( (GByteArray*) theByteArray, 
+			   (guint8*) anEscapeSequence, 
+			   (guint) sizeof(anEscapeSequence));
+    }
+}
+
+GByteArray* convertList2Terminfo( GList* theList)
+{
+  GByteArray* aByteArray=g_byte_array_new();
+
+  ENTER("convertList2Terminfo");
+
+  g_list_foreach( theList, (GFunc)concatByteArray, aByteArray);
+
+  return aByteArray;
 }
 
 /* > */

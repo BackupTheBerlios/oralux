@@ -3,6 +3,8 @@
 
 #include "escape2terminfo.h"
 
+void displayRawBuffer( unsigned char* theBuffer, int theSize);
+
 #ifdef DEBUG
 #include <stdio.h>
 #include <string.h>
@@ -35,6 +37,8 @@ void displayBuffer( char *theDataBuffer, struct t_style* theStyleBuffer, int the
 #define DISPLAY_STYLE(a) displayStyle(a)
 #define DISPLAY_CAPACITY(a) displayCapacity(a)
 #define DISPLAY_BUFFER(a,b,c,d) displayBuffer(a,b,c,d)
+#define DISPLAY_RAW_BUFFER(buf, size) displayRawBuffer(buf, size)
+
 
 #define SHOW_TIME(a) \
 {\
@@ -58,6 +62,8 @@ void displayBuffer( char *theDataBuffer, struct t_style* theStyleBuffer, int the
 #define DISPLAY_CAPACITY(a)
 #define DISPLAY_BUFFER(a,b,c,d)
 #define SHOW_TIME(a)
+/* #define DISPLAY_RAW_BUFFER(buf, size) */
+#define DISPLAY_RAW_BUFFER(buf, size) displayRawBuffer(buf, size)
 
 #endif /* DEBUG */
 

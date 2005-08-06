@@ -11,6 +11,7 @@ LEX = flex
 CFLAGS = -g -DDEBUG -pedantic -fPIC -Wall -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include
 #LDFLAGS=-L. -Wl,-rpath,. -ltermbuffer
 LDFLAGS=-lglib-2.0
+LDFLAGS3=$(LDFLAGS) -lutil
 
 TBMAJ = 0
 TBMIN = 1
@@ -20,13 +21,19 @@ INCPATH=$(prefix)/include
 LIBPATH=$(prefix)/lib
 
 OBJS = termbuffer.o escape2terminfo.o linuxconsole.o debug.o test-tb.o
-OBJS2 = tifilter2l.o terminfo2list.o escape2terminfo.o linuxconsole.o lineportion.o terminfointerpreter.o debug.o test-t2l.o termapiVCSA.o
+OBJS2 = tifilter2l.o terminfo2list.o escape2terminfo.o linuxconsole.o lineportion.o terminfointerpreter.o debug.o termapiVCSA.o
+OBJS_TI= test-t2l.o $(OBJS2)
+OBJS3 = test-tengoo.o $(OBJS2)
 
-all: terminfo2list
+all: terminfo2list tengoo
 #all: libtermbuffer.so test-tb
 
-terminfo2list: $(OBJS2)
-	$(CC) -o terminfo2list $(CFLAGS) $(OBJS2) $(LDFLAGS)
+terminfo2list: $(OBJS_TI)
+	$(CC) -o terminfo2list $(CFLAGS) $(OBJS_TI) $(LDFLAGS)
+
+tengoo: $(OBJS3)
+	$(CC) -o tengoo $(CFLAGS) $(OBJS3) $(LDFLAGS3)
+
 
 # RAF
 # libtermbuffer.so: libtermbuffer.so.$(TBMAJ)

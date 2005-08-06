@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 debug.c
-$Id: debug.c,v 1.3 2005/07/14 17:38:51 gcasse Exp $
+$Id: debug.c,v 1.4 2005/08/06 22:06:32 gcasse Exp $
 $Author: gcasse $
 Description: for applicative trace.
-$Date: 2005/07/14 17:38:51 $ |
-$Revision: 1.3 $ |
+$Date: 2005/08/06 22:06:32 $ |
+$Revision: 1.4 $ |
 Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -27,6 +27,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <string.h>
 #include <stdlib.h>
 #include "escape2terminfo.h"
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
 #include "debug.h"
 
 /* < array myStringCapacity */
@@ -603,6 +607,38 @@ void displayStyle(struct t_style* theStyle)
     }
   printf(" |\n");
 }
+/* > */
+/* < displayRawBuffer */
+void displayRawBuffer( unsigned char* theBuffer, int theSize)
+{
+  unsigned char* c=theBuffer;
+  static unsigned char aBuffer[6*255];
+  unsigned char* p=aBuffer;
+  int fd;
+
+  /*   ENTER("displayRawBuffer"); */
+
+  /*
+    p += sprintf((char*)p, "%c[H%c[2J", 0x1b, 0x1b);
+  */
+  p += sprintf((char*)p, "\r\n-->\r\n");
+  while (c < theBuffer+theSize)
+    {
+      if (*c<0x20)
+	{
+	  p += sprintf((char*)p, " 0x%x ",*c);
+	}
+      else
+	{
+	  p += sprintf((char*)p, "%c", *c);
+	}
+      c++;
+    }
+  fd = open( "/dev/tty2", O_RDWR);
+  write(fd, aBuffer, p - aBuffer);
+  close(fd);
+}
+
 /* > */
 
 /* 
