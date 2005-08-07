@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 linePortion.c
-$Id: lineportion.c,v 1.1 2005/07/24 20:43:29 gcasse Exp $
+$Id: lineportion.c,v 1.2 2005/08/07 19:43:54 gcasse Exp $
 $Author: gcasse $
 Description: manage line portions.
-$Date: 2005/07/24 20:43:29 $ |
-$Revision: 1.1 $ |
+$Date: 2005/08/07 19:43:54 $ |
+$Revision: 1.2 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -39,6 +39,8 @@ linePortion* createLinePortion (int theLine, int theCol, style* theStyle, charty
     this->myLastCol = theCol+strlen(theString);
     copyStyle(&(this->myStyle), theStyle);
     this->myString = g_string_new(theString);
+    SHOW3("%x=g_string_new(%s)", (unsigned int)this->myString, theString);
+
     SHOW2("theLine=%d\n", theLine);
     SHOW2("theCol=%d\n", theCol);
     SHOW2("theString=%s\n", theString);
@@ -52,6 +54,7 @@ void deleteLinePortion( linePortion* this)
     if (this)
       {
 	g_string_free( this->myString, 1);
+	SHOW3("g_string_free(%x, %d)", (unsigned int)this->myString, 1);
 	free(this);
       }
 }
@@ -154,10 +157,12 @@ int getFeaturesLinePortionGroup( GList* this, linePortion* theFeatures)
       /* > */
       /* < concatenate string */
       theFeatures->myString = g_string_new( getStringFromGList( this));
+      SHOW3("%x=g_string_new(%s)", (unsigned int)theFeatures->myString, getStringFromGList( this));
 
       for ( j=1; j < aCount; j++)
 	{
 	  g_string_append( theFeatures->myString, aWeight[ j].myLinePortion->myString->str);
+	  SHOW3("g_string_append(%x, %s)", (unsigned int)theFeatures->myString, aWeight[ j].myLinePortion->myString->str);
 	}
       /* > */
 

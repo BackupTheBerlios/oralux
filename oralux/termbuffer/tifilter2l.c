@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 tifilter2l.c
-$Id: tifilter2l.c,v 1.5 2005/07/24 20:43:29 gcasse Exp $
+$Id: tifilter2l.c,v 1.6 2005/08/07 19:43:54 gcasse Exp $
 $Author: gcasse $
 Description: terminfo filter, two lines.
-$Date: 2005/07/24 20:43:29 $ |
-$Revision: 1.5 $ |
+$Date: 2005/08/07 19:43:54 $ |
+$Revision: 1.6 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -56,6 +56,8 @@ static context* createContext(termAPI* theTermAPI)
   int i;
   context* this = (context*) malloc(sizeof(context));
 
+  ENTER("createContext");
+
   theTermAPI->getCursor( &(this->myCursor));
   theTermAPI->getDim( &(this->myNumberOfLine), &(this->myNumberOfCol));
   this->myTermAPI = theTermAPI;
@@ -73,8 +75,11 @@ static void deleteContext(context* this)
 { 
   int i;
 
+  ENTER("deleteContext");
+
   for (i=0; i<MAX_LINE_PORTION_GROUP; i++)
     {
+      SHOW2("Line Portion: %d\n",i);
       if(this->myLinePortionGroup[i]);
       {
 	deleteLinePortionGroup(this->myLinePortionGroup[i]);
@@ -113,7 +118,6 @@ static int groupLinePortion( context* this)
 {
   int i=0;
   GList* aList=NULL;
-  GList* aPreviousList=NULL;
 
   ENTER("groupLinePortion");
 
@@ -122,18 +126,18 @@ static int groupLinePortion( context* this)
       return 0;
     }
 
-  aList = aPreviousList = this->myLinePortionGroup[i];
+  aList = this->myLinePortionGroup[i];
   i++;
   SHOW3("Group=%d: \"%s\"\n", i-1, getStringFromGList( aList));
 
   while(( aList = g_list_next( aList)) && (i < MAX_LINE_PORTION_GROUP))
     {
       /* New group ? */
-      if ((getLineFromGList( aList) != getLineFromGList( aPreviousList))
-	  || (getFirstColFromGList( aList) != getLastColFromGList( aPreviousList)+1))
+      if ((getLineFromGList( aList) != getLineFromGList( aList->prev))
+	  || (getFirstColFromGList( aList) != getLastColFromGList( aList->prev)+1))
 	{ 
+	  aList->prev->next = NULL;
 	  aList->prev = NULL;
-	  aPreviousList->next = NULL;
 	  this->myLinePortionGroup[i] = aList;
 	  i++;
 	} 
@@ -147,6 +151,7 @@ static int groupLinePortion( context* this)
 int searchUnselectedGroup( this)
 {
 /*   int i=0; */
+  ENTER("searchUnselectedGroup");
 
 /*   for (i=0; i<MAX_LINE_PORTION_GROUP; i++) */
 /*     { */

@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 test-tb.c
-$Id: test-tengoo.c,v 1.1 2005/08/06 22:06:32 gcasse Exp $
+$Id: test-tengoo.c,v 1.2 2005/08/07 19:43:54 gcasse Exp $
 $Author: gcasse $
 Description: test terminfo2list.
-$Date: 2005/08/06 22:06:32 $ |
-$Revision: 1.1 $ |
+$Date: 2005/08/07 19:43:54 $ |
+$Revision: 1.2 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -47,7 +47,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "terminfointerpreter.h"
 #include "tifilter2l.h"
 
-#undef DEBUG
 #include "debug.h"
 
 extern char **environ;
@@ -65,7 +64,6 @@ unsigned char buf[256];
 #define OPT_STR_SIZE 80
 
 char usershell[OPT_STR_SIZE];
-int sighit = 0;
 static int shell = 0;
 static char **subprog = NULL;	/* if non-NULL, then exec it instead of shell */
 
@@ -273,12 +271,19 @@ static void getoutput()
   {
     GByteArray* aByteArray=NULL;
     GList* aList=NULL;
+    FILE* fdtest=NULL;
 
-    FILE* fdtest=fopen("/tmp/buf","w+");
-    fwrite( buf, 1, size, fdtest);
-
+    fdtest = fopen("/tmp/buf","w+");
+    if (fdtest == NULL)
+      {
+	perror("open tmp buf");
+	exit(0);
+      }
+    fwrite( buf, 1,  size, fdtest);
+    rewind( fdtest);
     aList = convertTerminfo2List( fdtest);
-  
+    fclose( fdtest);
+
     SHOW_TIME("terminfointerpreter");
     g_list_foreach(aList, (GFunc)terminfointerpreter, NULL);
   
@@ -286,19 +291,16 @@ static void getoutput()
     aList = terminfofilter2lines( aList, myTermAPI, 0);
 
     aByteArray = convertList2Terminfo( aList);
+    DISPLAY_RAW_BUFFER( aByteArray->data, aByteArray->len);
     (void) write(1, aByteArray->data, aByteArray->len);
 
-    SHOW_TIME("deleteList");
+    SHOW_TIME("deleteTermInfoList");
     deleteTermInfoList( aList);
 
+    SHOW_TIME("g_byte_array_free");
     g_byte_array_free( aByteArray, 1);
 
-    fclose(fdtest);
   }
-
-  /*  (void) write(1, buf, size); */
-
-  DISPLAY_RAW_BUFFER(buf, size);
 }
 
 static void parent()
@@ -328,12 +330,6 @@ static void parent()
     FD_SET(0, &rf);
     (void) select(maxfd, &rf, NULL, NULL, NULL);
 
-/* tbc - can we replace use of sighit by checking the select return val? */
-    if (sighit)
-    {
-      sighit = 0;
-      continue;
-    }
     if (FD_ISSET(0, &rf))
     {
       getinput();
@@ -341,7 +337,6 @@ static void parent()
     if (FD_ISSET(master, &rf))
     {
       getoutput();
-/*       kbuflen = 0; */
     }
   }
 }
@@ -399,6 +394,9 @@ int main(int argc, char *argv[])
 
   ENTER("main");
 
+
+  /*  setvbuf(stdout, NULL, _IONBF, 0); / * TBD remove */
+
   /* initialize gettext */
 #ifdef ENABLE_NLS
   setlocale(LC_ALL, "");
@@ -430,7 +428,10 @@ int main(int argc, char *argv[])
   }
 
   /* init */
-  subprog = argv + 1;
+  if (argc > 1)
+    {
+      subprog = argv + 1;
+    }
   strcpy(usershell, "/bin/bash");
 
   myTermAPI=createTermAPI();

@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 termapiSimu.c
-$Id: termapiVCSA.c,v 1.1 2005/07/24 20:43:29 gcasse Exp $
+$Id: termapiVCSA.c,v 1.2 2005/08/07 19:43:54 gcasse Exp $
 $Author: gcasse $
 Description: testapi implementation for tests.
-$Date: 2005/07/24 20:43:29 $ |
-$Revision: 1.1 $ |
+$Date: 2005/08/07 19:43:54 $ |
+$Revision: 1.2 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -157,6 +157,7 @@ static GList* _getLinePortionGroup( int theLine, int theFirstCol, int theLastCol
 	if (v[i].myAttribute == v[i-1].myAttribute)
 	  { 
 	    g_string_append( p->myString, c);
+	    SHOW3("g_string_append(%x, %s)", p->myString, c);
 	    p->myLastCol = aFirstCol+i;
 	  }
 	else

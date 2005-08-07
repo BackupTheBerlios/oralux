@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 terminfo2list.c
-$Id: terminfo2list.c,v 1.7 2005/08/06 22:06:32 gcasse Exp $
+$Id: terminfo2list.c,v 1.8 2005/08/07 19:43:54 gcasse Exp $
 $Author: gcasse $
 Description: convert the terminfo entries to a list of commands.
-$Date: 2005/08/06 22:06:32 $ |
-$Revision: 1.7 $ |
+$Date: 2005/08/07 19:43:54 $ |
+$Revision: 1.8 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -161,16 +161,22 @@ static terminfoEntry* createText(enum StringCapacity theCapacity, void* theData1
 {
   static GString* aString=NULL;
   static terminfoEntry* anEntry=NULL;
+  int len=0;
+
   ENTER("createText");
+
+  len=strlen(yytext);
 
   if (myPreviousCapacity==TEXTFIELD)
     {
       /* Add another char to the current gstring */
       g_string_append( aString, yytext);
+      SHOW3("g_string_append(%x, %s)", (unsigned int)aString, yytext);
     }
   else
     { /* First char */
       aString=g_string_new (yytext);
+      SHOW3("%x=g_string_new(%s)", (unsigned int)aString, yytext);
 
       /* add the new list element */
       anEntry = createEntry(theCapacity, NULL, NULL);
@@ -186,6 +192,8 @@ static void deleteText(terminfoEntry* theEntry)
   if (theEntry)
     {
       g_string_free( (GString*)theEntry->myData1, 1);
+      SHOW3("g_string_free(%x, %d)", (unsigned int)theEntry->myData1, 1);
+
       deleteEntry(theEntry);
     }
 }
@@ -202,6 +210,7 @@ static terminfoEntry* copyText(const terminfoEntry* theEntry)
       if (aText && aText->str)
 	{
 	  anEntry->myData1 = (void*)g_string_new( aText->str);
+	  SHOW3("%x=g_string_new(%s)", (unsigned int)anEntry->myData1, aText->str);
 	}
     }
 
@@ -683,7 +692,7 @@ static void deleteListEntry(gpointer theEntry, gpointer userData)
 
 void deleteTermInfoList(GList* theList)
 {
-  ENTER("deleteList");
+  ENTER("deleteTermInfoList");
 
   g_list_foreach(theList, (GFunc)deleteListEntry, NULL);
   g_list_free(theList);
@@ -729,10 +738,21 @@ static void concatByteArray( gpointer theEntry, gpointer theByteArray)
 
   if (theEntry && theByteArray)
     {
-      chartype* anEscapeSequence=((terminfoEntry*)theEntry)->myEscapeSequence;
+      terminfoEntry* anEntry = (terminfoEntry*)theEntry;
+      chartype* anEscapeSequence=NULL;
+      
+      if (anEntry->myCapacity == TEXTFIELD)
+	{
+	  anEscapeSequence = ((GString*)(anEntry->myData1))->str;
+	}
+      else
+	{
+	  anEscapeSequence = anEntry->myEscapeSequence;
+	}
+
       g_byte_array_append( (GByteArray*) theByteArray, 
 			   (guint8*) anEscapeSequence, 
-			   (guint) sizeof(anEscapeSequence));
+			   (guint) strlen(anEscapeSequence));
     }
 }
 
@@ -742,9 +762,9 @@ GByteArray* convertList2Terminfo( GList* theList)
 
   ENTER("convertList2Terminfo");
 
-  g_list_foreach( theList, (GFunc)concatByteArray, aByteArray);
+   g_list_foreach( theList, (GFunc)concatByteArray, aByteArray);
 
-  return aByteArray;
+   return aByteArray;
 }
 
 /* > */

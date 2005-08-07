@@ -7,8 +7,10 @@ CC = gcc
 prefix=/usr/local
 
 LEX = flex
-#CFLAGS = -g -DDEBUG -pedantic -fPIC -Wall
-CFLAGS = -g -DDEBUG -pedantic -fPIC -Wall -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include
+#CFLAGS = -pedantic -fPIC -Wall -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include
+#CFLAGS = -g -DDEBUG -pedantic -fPIC -Wall -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include
+CFLAGS = -g -pedantic -fPIC -Wall -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include
+
 #LDFLAGS=-L. -Wl,-rpath,. -ltermbuffer
 LDFLAGS=-lglib-2.0
 LDFLAGS3=$(LDFLAGS) -lutil
@@ -32,8 +34,9 @@ terminfo2list: $(OBJS_TI)
 	$(CC) -o terminfo2list $(CFLAGS) $(OBJS_TI) $(LDFLAGS)
 
 tengoo: $(OBJS3)
-	$(CC) -o tengoo $(CFLAGS) $(OBJS3) $(LDFLAGS3)
+	$(CC)  $(LDFLAGS3) -o tengoo $(CFLAGS) $(OBJS3)
 
+#	$(CC) -o tengoo $(CFLAGS) $(OBJS3) $(LDFLAGS3)
 
 # RAF
 # libtermbuffer.so: libtermbuffer.so.$(TBMAJ)
