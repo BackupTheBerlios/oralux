@@ -145,7 +145,7 @@ struct t_translation TheBrazilianPortugueseMessages[]=
   },
 
   {"left curly bracket",
-  "Abre colchete",	/* ? */
+  "Abre Parêntess",	/* ? */
   },
 
   {"left parenthesis",

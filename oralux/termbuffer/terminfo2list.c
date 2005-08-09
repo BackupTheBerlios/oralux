@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 terminfo2list.c
-$Id: terminfo2list.c,v 1.8 2005/08/07 19:43:54 gcasse Exp $
+$Id: terminfo2list.c,v 1.9 2005/08/09 21:26:54 gcasse Exp $
 $Author: gcasse $
 Description: convert the terminfo entries to a list of commands.
-$Date: 2005/08/07 19:43:54 $ |
-$Revision: 1.8 $ |
+$Date: 2005/08/09 21:26:54 $ |
+$Revision: 1.9 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -161,11 +161,8 @@ static terminfoEntry* createText(enum StringCapacity theCapacity, void* theData1
 {
   static GString* aString=NULL;
   static terminfoEntry* anEntry=NULL;
-  int len=0;
 
   ENTER("createText");
-
-  len=strlen(yytext);
 
   if (myPreviousCapacity==TEXTFIELD)
     {

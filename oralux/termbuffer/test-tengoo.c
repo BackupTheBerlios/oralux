@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 test-tb.c
-$Id: test-tengoo.c,v 1.2 2005/08/07 19:43:54 gcasse Exp $
+$Id: test-tengoo.c,v 1.3 2005/08/09 21:26:54 gcasse Exp $
 $Author: gcasse $
 Description: test terminfo2list.
-$Date: 2005/08/07 19:43:54 $ |
-$Revision: 1.2 $ |
+$Date: 2005/08/09 21:26:54 $ |
+$Revision: 1.3 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -271,9 +271,8 @@ static void getoutput()
   {
     GByteArray* aByteArray=NULL;
     GList* aList=NULL;
-    FILE* fdtest=NULL;
+    FILE* fdtest = fopen("/tmp/buf","w+");
 
-    fdtest = fopen("/tmp/buf","w+");
     if (fdtest == NULL)
       {
 	perror("open tmp buf");
