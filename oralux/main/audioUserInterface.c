@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // audiouserinterface.c
-// $Id: audioUserInterface.c,v 1.12 2005/08/09 21:26:54 gcasse Exp $
+// $Id: audioUserInterface.c,v 1.13 2005/08/10 21:32:13 gcasse Exp $
 // $Author: gcasse $
 // Description: Managing and playing the pre-recorded messages.
-// $Date: 2005/08/09 21:26:54 $ |
-// $Revision: 1.12 $ |
+// $Date: 2005/08/10 21:32:13 $ |
+// $Revision: 1.13 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 // September 2003: 
 // German translations by Guenther Harrasser.
@@ -994,13 +994,14 @@ char * TheMessages[][4]={
   {"The audio menu is going to start Yasr",
    "Le menu audio va lancer Yasr",
    NULL,
-   "El menu audio será ejecutado Yasr",
+   "El audio menu ejecutará el programa Yasr",
   },
 
   {"If the voice synthesizer stops, please press Control Alt i to start it again",
    "Si la synthèse vocale s'arrête, appuyez s'il vous plait sur Control Alt i pour la relancer",
    NULL,
-   "Si el sintetizador de voz se para, porfavor pulse CTRL+Alt+I para ejecutarlo de nuevo",
+   "Si el sintetizador de voz se detiene, por favor pulse CTRL+Alt+I para
+ejecutarlo de nuevo",
   },
 };
 

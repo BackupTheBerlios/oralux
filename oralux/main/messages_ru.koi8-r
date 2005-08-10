@@ -33,7 +33,7 @@ struct t_translation TheRussianMessages[]=
   },
 
   {"French Canadian",
-   NULL,
+   "Канадский Французский",
   },
 
   {"German",
@@ -656,11 +656,11 @@ struct t_translation TheRussianMessages[]=
   },
 
   {"The audio menu is going to start Yasr",
-   NULL,
+   "Аудио меню запускает Yasr",
   },
 
   {"If the voice synthesizer stops, please press Control Alt i to start it again",
-   NULL,
+   "Если синтезатор речи остановится, нажмите Control Alt i чтобы запустить его снова",
   },
 
 };
