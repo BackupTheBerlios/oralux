@@ -1,11 +1,11 @@
 <?PHP
 // ----------------------------------------------------------------------------
 // webpage.php
-// $Id: webpage.php,v 1.1 2004/09/28 21:48:44 gcasse Exp $
+// $Id: webpage.php,v 1.2 2005/08/14 23:35:22 gcasse Exp $
 // $Author: gcasse $
 // Description: the skeleton which eases building any web page of the site
-// $Date: 2004/09/28 21:48:44 $ |
-// $Revision: 1.1 $ |
+// $Date: 2005/08/14 23:35:22 $ |
+// $Revision: 1.2 $ |
 // Copyright (C) 2003 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -43,18 +43,32 @@ class webPage
   var $_myHtmlHead=null;
   var $_myHeader=null;
   var $_myFooter=null;
+  var $_myLanguage=null;
 
   // webPage
   // INPUT:
   // theEntry: this is the current entry of the menu
   // theDate: to display in the head of the page, the current date of change
   // theStyles: an array of style sheets (e.g. "faq.css") which will complete the default ones.
-  function webPage($theEntry, $theDate, $theStyles=null)
+  function webPage($theEntry, $theDate, $theStyles=null, $theLanguage=null)
     {
-      $this->_mydocType=new docType();      
-      $this->_myHtmlHead=new head($theEntry, $theDate, $theStyles);
+      $this->_mydocType=new docType();
+
+      switch ($theLangage)
+	{
+	case "ru":
+	  $aCharset="koi8-r";
+	  break;
+
+	default:
+	  $aCharset="iso-8859-1";
+	  break;
+	}
+
+      $this->_myHtmlHead=new head($theEntry, $theDate, $aCharset, $theStyles);
       $this->_myHeader=new header($theEntry);
       $this->_myFooter=new footer($theEntry);
+      $this->_myLanguage=$theLanguage;
     }
 
  function printTag($theHtmlBody)
@@ -62,7 +76,7 @@ class webPage
 // Printing the web page
 // First, doctype!
      $this->_mydocType->printTag();
-     $lang=getLang();
+     $lang = ($this->_myLanguage==null) ? getLang() : $this->_myLanguage;
      echo("<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"$lang\" lang=\"$lang\">\n");
      echo("<head>\n");
      $this->_myHtmlHead->printTag();
@@ -71,7 +85,7 @@ class webPage
      echo("<body id=\"oralux-org\">\n");
      $this->_myHeader->printTag();
 
-     include(GetTranslatedFile($theHtmlBody));
+     include(GetTranslatedFile($theHtmlBody, $lang));
      $this->_myFooter->printTag();
      echo("</body>\n");
      echo("</html>\n");

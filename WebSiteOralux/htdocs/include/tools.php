@@ -1,11 +1,11 @@
 <?PHP
 // ----------------------------------------------------------------------------
 // tools.php
-// $Id: tools.php,v 1.1 2004/09/28 21:48:44 gcasse Exp $
+// $Id: tools.php,v 1.2 2005/08/14 23:35:22 gcasse Exp $
 // $Author: gcasse $
 // Description: A few helpful tools
-// $Date: 2004/09/28 21:48:44 $ |
-// $Revision: 1.1 $ |
+// $Date: 2005/08/14 23:35:22 $ |
+// $Revision: 1.2 $ |
 // Copyright (C) 2003 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -46,7 +46,7 @@ function getLang()
 // because the following code checks that the value belongs to 
 // the expected languages
 
-  $knownlangs = array( "en", "fr" ); #etc
+  $knownlangs = array( "de", "en", "es", "fr", "ru" ); #etc
   $lang = "en";
   $lastquality = 0.0;
 
@@ -72,10 +72,10 @@ function getLang()
     	
     	//echo "language '$tag' quality '$quality'\n";
     	
-    	if(in_array($tag, $knownlangs) and $quality > $lastquality) 
-      {
-    		$lang = $tag;
-    		$lastquality = $quality;
+      if(in_array($tag, $knownlangs) and $quality > $lastquality) 
+	{
+	  $lang = $tag;
+	  $lastquality = $quality;
     	}
     } 
     else 
@@ -91,9 +91,9 @@ function getLang()
 // if the filename is "index.htm"
 // 1. lang=="en", then nothing is done, and index.htm is returned
 // 2. lang=="fr" then the returned name is "index-fr.htm"
-function GetTranslatedFile($theFile)
+function GetTranslatedFile($theFile, $theLanguage=null)
 {
-  $aLanguage=getLang();
+  $aLanguage = ($theLanguage==null) ? getLang() : $theLanguage;
   if ("en"==$aLanguage)
   {
     $aFile=$theFile;

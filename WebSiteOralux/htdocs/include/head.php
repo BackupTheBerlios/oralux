@@ -1,11 +1,11 @@
 <?PHP
 // ----------------------------------------------------------------------------
 // head.php
-// $Id: head.php,v 1.1 2004/09/28 21:48:43 gcasse Exp $
+// $Id: head.php,v 1.2 2005/08/14 23:35:22 gcasse Exp $
 // $Author: gcasse $
 // Description: The content of the html head
-// $Date: 2004/09/28 21:48:43 $ |
-// $Revision: 1.1 $ |
+// $Date: 2005/08/14 23:35:22 $ |
+// $Revision: 1.2 $ |
 // Copyright (C) 2003 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -37,7 +37,9 @@ class head
   // Type: array of strings
   var $_myStyles=null;
 
-  function head($theTitle, $theDate, $theStyles=null)
+  var $_myCharset=null;
+
+  function head($theTitle, $theDate, $theCharset, $theStyles=null)
     {
       global $TheTitleTranslation;
       global $TheSubTitleTranslation;
@@ -59,12 +61,14 @@ class head
       $this->_myTitle=$aTitle;
       $this->_myStyles=$theStyles;
       $this->_myDate=$theDate;
+      $this->_myCharset=$theCharset;
     }
 
   function printTag()
     {
       $TITLE=$this->_myTitle;
       $DATE=$this->_myDate;
+      $CHARSET=$this->_myCharset;
       include(GetTranslatedFile("htm/head.htm"));
 
       // Adding the supplied style sheets

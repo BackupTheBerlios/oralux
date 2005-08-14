@@ -1,0 +1,100 @@
+Unterschriften: Gianfranco Giudice <g.giudice@balcab.ch>
+
+Meine ersten Schritte in GNU/Emacs.
+
+Von Sylvie Xhaard
+
+Für den gebrauch von Oralux Linux
+
+"Es ist nicht offensichtlich, aber nicht unüberwindlich."
+
+1 Grundbefehle 
+2 Öffnen oder neue Datei erstellen 
+3 Dateien Speichern 
+4 Schreiben in Emacs
+4.1 Im Dokument navigieren 
+5 To surf the open buffers
+6 Benutzung des Verzeichnis-Editor
+7 Verwendung der Befehlszeile
+8 Beenden
+
+Beim Start von Emacspeak wird automatisch ein Hilfepuffer geladen mit Emacs and Emacs Speak. Speichern Sie Ihre
+Benutzereinstellungen und speichern Sie Ihre Dokumente wie in den FAQ beschrieben. Siehe springt zum nächsten Absatz.
+
+C- x [ blättert eine Seite zurück.
+
+C- x ] Blättert auf die nächste Seite.
+
+Esc < Springt an den Anfang des Puffers.
+
+Esc > Springt ans Ende des Puffers.
+
+------------------------------------------------------------------------------------------------------------------------------
+
+5 Navigieren im offenen Puffer C-x b
+
+------------------------------------------------------------------------------------------------------------------------------
+
+You opened and or created several files and you want to go from one to the other. No problem. Type C-x b
+
+By défault, if you press the Enter key, you turn to the last open buffer.
+
+If you want to open another buffer, type its name, or simply the first letter and press the tabulation key (the name of your
+buffer appears automatically).
+
+Each buffer is associated with a process. To close an open buffer, the process should be killed. C-x k, kill the active
+buffer.
+
+------------------------------------------------------------------------------------------------------------------------------
+
+6 Using the directory editor (Dired mode) C-x d
+
+------------------------------------------------------------------------------------------------------------------------------
+
+Type the complete path of the directory to be explored and press enter. A new buffer is opened. By default, the cursor is on
+the first letter of the first file or directory.You can move in the directory with the keys Up and Down.
+
+If your cursor is on a file, the Enter key opens the file.
+
+If your cursor is on a directory, the Enter key opens the directory.
+
+You can go up to the higher directory by selecting
+
+.. (the second line of the listing) and press enter.
+
+The dot on the first line stands for the current directory.
+
+------------------------------------------------------------------------------------------------------------------------------
+
+7 Using the command line (shell) M-x shell
+
+------------------------------------------------------------------------------------------------------------------------------
+
+The command for openning a shell buffer is M-x shell ( caution press Escape key then x and type shell)
+
+Some useful commands:
+
+who am i: tells you the user name you are logged in as
+
+pwd : print working directory
+
+cd : Change directory
+
+examples : cd .. go up to the higher directory cd / go to the top of the system cd go to your home directory (/home/knoppix)
+cd /mnt/floppy go to the floppy disc directory
+
+ls : list files or directories
+
+mkdir : create a directory
+
+cp : copy files
+
+example : cp /home/knoppix/emacs.txt /mnt/floppy (copy the file emacs.txt to a floppy disc)
+
+------------------------------------------------------------------------------------------------------------------------------
+
+8 To quit Emacs
+
+------------------------------------------------------------------------------------------------------------------------------
+
+C-x C-c

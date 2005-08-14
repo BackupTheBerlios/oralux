@@ -1,0 +1,108 @@
+The Calendar and the Diary
+By Sylvie Xhaard
+For use with Oralux Linux
+Last updated: 20/03/2004
+
+1. The Calendar
+	1.1 Run the calendar
+	1.2 Movement in the calendar
+	- by days
+	- by weeks
+	- by months
+	- by years
+	1.3 Modify the day of week begin
+	1.4 Exit from calendar
+
+2. The Diary
+	2.1 Commands to add to the Diary
+	2.2 Commands displaying Diary entries
+
+3.Appointment notification
+
+
+1. The calendar
+	1.1 Run the calendar
+	Type M-x calendar
+	The calendar display three-months centered on the current month, with point on the current date.
+
+	1.2 Movement in the calendar
+	By days
+	- left arrow key : move-point one day backward
+	-right arrow key : move-point one day forward
+	Go to specified date
+	type g d
+	type the year ( by default, it's the current year) and enter
+	type the month and enter
+	type the day and enter
+	By weeks
+	- up arrow key : move-point one week backward
+	- down arrow key : move-point one week forward
+	By months
+	- M-} : move-point one month forward
+	- M-{ : move-point one month backward
+	- M-a : move-point to start of month
+	- M-e : move-point to end of month
+	By years
+	- C-x ] : move-point one year forward
+	- C-x [ : move-point one year backward
+	- M-<   : move-point to start of year
+	- M->   : move-point to end of year
+
+	1.3 1 Modify the day of week begin
+	By default, weeks begin on Sunday. To make them begin on Monday instead, set the variable calendar-week-start-day to 1
+	type : M-x set-variable (Enter)
+		calendar-week-start-day (Enter)
+		1 (enter)
+
+	1.4 Exit from calendar
+	type q
+
+2. The diary
+By default, your Diary will be save in diary file ( in your home)
+The calendar window is always visible and  accessible.
+Type C-x o (o not zero) for switch between calendar and diary
+If you prefer the European style of writing dates -- in which the days come before the month--
+type M-x european-calendar while in the calendar.
+If you want to add time, write times in am/pm style or 24-hour European/military style.
+
+	2.1 Commands to add to the Diary
+	While in the Calendar, there are several commands to create diary entries
+	All diary entry begin with the date.
+
+	i d : add a diary entry for the selected date
+	i w : add a diary entry for the selected day of the week
+	i m : add a diary entry for the selected day of the month
+	i y : add a diary entry for the selected day of the year
+	i a : add an anniversary diary entry for the selected date
+	i b : add a block diary for the current region
+		to insert a block entry, place point and the mark (with C-SPC --SPC= SPACE KEY) on the two dates that begin and end, and type i b.
+	i c : add a cyclic diary entry starting at the date
+		the command prompt for the length of interval.
+
+	2.2 Commands displaying Diary entries
+
+	d : display all diary entries for the selected date
+	s : display the entire diary file
+
+3. Appointment notification
+
+To enable appointment notification, you must add this text to your .emacs file (in your personal directory)
+;; Calendar
+(display-time)
+(add-hook 'diary-hook' appt-make-list)
+(diary 0)
+
+When you display the diary (either with the d command in the calendar windows or with the M-x diary command), its sets up an appointment list of all the diary entries found with recognizable times of day, and reminds you just before each of them.
+
+For example :
+	9:20 Coffee break
+
+You will be reminded at 9:20 about you coffee break
+
+You can also use the appointment notification like an alarm clock. The command 'M-x appt-add' adds entries to the appointment list without affecting your diary file. You delete entries from the appointment list with 'M-x appt-delete'.
+
+
+More informations type ?
+
+
+

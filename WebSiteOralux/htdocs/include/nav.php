@@ -1,13 +1,13 @@
 <?PHP
 // ----------------------------------------------------------------------------
 // nav.php
-// $Id: nav.php,v 1.1 2004/09/28 21:48:44 gcasse Exp $
+// $Id: nav.php,v 1.2 2005/08/14 23:35:22 gcasse Exp $
 // $Author: gcasse $
 // Description: Printing the navigation bar
 // This is useful for the navigation bar. It supplies a link to go from page to page. But it doesn't supply a link for the current page.
 // 
-// $Date: 2004/09/28 21:48:44 $ |
-// $Revision: 1.1 $ |
+// $Date: 2005/08/14 23:35:22 $ |
+// $Revision: 1.2 $ |
 // Copyright (C) 2003 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -35,12 +35,9 @@ class nav
 {
   var $_myCurrentEntry="";
   var $_myEntries=array("Home"=>"index.php",
-                        "FAQ"=>"faq.php",
-                        "Roadmap"=>"roadmap.php",
+                        "Documents"=>"doc.php",
                         "Translation"=>"translation.php",
                         "Download"=>"download.php",
-                        "Preferences"=>"preferences.php",
-                        "About"=>"about.php",
                         );
 
   var $_myStartAnchorTag=null;

@@ -1,0 +1,123 @@
+Bonjour, 
+vous lisez ce texte via Emacspeak.
+
+Sommaire.
+
+1. Sauvegarder ses préférences.
+2. Comment sauvegarder ses documents.
+3. Comment parle Oralux.
+4. Débuter.
+5. FAQ Oralux.
+6. Vos impressions.
+
+1. Sauvegarder ses préférences.
+
+Vous souhaiterez sûrement sauvegarder le volume, le type de clavier, en bref toutes les préférences sélectionnées dans le menu d'introduction. Idem pour les autres fichiers de configuration comme par exemple les paramètres internet.
+
+Saveconfig permet de sauvegarder ces fichiers sur un disque dur, une disquette, une clé USB,...
+
+Lors des redémarrages suivants, ces paramètres seront automatiquement recherchés. 
+Voici comment procéder sous Emacspeak
+
+Lancez un buffer shell :
+ESCAPE x shell
+
+C'est à dire : pressez la touche ESCAPE puis la touche x et ensuite tapez shell.
+
+Puis, lancez saveconfig :
+saveconfig
+
+Vous indiquerez alors quels fichiers de configuration, vous
+souhaitez sauvegarder et dans quelle partition.
+
+2. Comment sauvegarder ses documents.
+
+Votre répertoire de travail se trouve par défaut dans la mémoire de
+l'ordinateur (le Ramdisk). Lorsque vous éteindrez l'ordinateur, ces
+données seront perdues.
+
+Si vous souhaitez les sauvegarder, il est possible de créer un compte
+persistant sur par exemple le disque dur, la clé usb, ou le lecteur
+zip.
+
+Il faudra lancer la commande shell mkpersistenthome pour créer un compte persistant.
+Voici comment procéder :
+
+Lancez tout d'abord un shell, en tapant :
+
+ESCAPE x shell
+
+Lancez la commande :
+
+mkpersistenthome
+
+Puis, quittez Emacspeak
+
+Control+x Control+c
+
+Ce qui signifie : maintenez la touche Control appuyée et appuyez sur la touche x.
+Ensuite, relâchez les deux touches.
+Puis, maintenez la touche Control appuyée et appuyez sur la touche c.
+Ensuite, relâchez les deux touches.
+
+Finalement, redémarrer votre ordinateur:
+
+sudo reboot
+
+3. Comment parle Oralux.
+
+En dehors de la synthèse vocale, deux programmes travaillent de concert pour qu'Oralux puisse parler.
+L'un d'entre eux s'appelle Emacs, et l'autre Emacspeak. 
+Emacs est un éditeur de textes avec de nombreuses améliorations.
+C'est un outil puissant, permettant potentiellement de faire tout ce que permet un ordinateur.
+Emacspeak prolonge Emacs et permet de faire parler une grande partie des fonctionnalités d'Emacs.
+
+Cela signifie aussi que vous aurez à apprendre Emacs et Emacspeak.
+
+Lorsqu'Emacspeak démarre, il lance tout d'abord Emacs puis initialise la synthèse vocale.
+Aussi, vous pouvez juste lancer Emacs pour un travail silencieux ou Emacspeak pour un environnement audio.
+
+4. Débuter.
+
+Les tutoriels "Mes premiers pas dans GNU/Emacs", "Calendrier et agenda" et "SES -Simple Emacs Spreadsheet" de Sylvie Xhaard se trouvent sous le répertoire :
+tutorials/fr
+
+Le tutoriel Emacspeak, en français, de Pierre Lorenzon est inclus dans le CD. Pour lire le fichier html, utilisez par exemple le navigateur w3m: 
+ESCAPE x w3m-find-file RETURN 
+et ensuite tapez :
+pl/emacspeak/index.html
+
+En anglais, le tutoriel Emacs est également un bon point de départ.
+Pour le lancer, appuyez sur Control+h, t.
+C'est à dire: maintenez la touche Control appuyée et appuyez sur la touche h.
+Ensuite, relâchez les deux touches et appuyer sur t.
+
+Si vous débutez sous Emacspeak, vous apprécierez sûrement la page info Emacspeak :
+Control+h i m Emacspeak.
+
+Vous lirez la FAQ Emacspeak grâce à la séquence Control+e, Shift+f.
+
+la liste des raccourcis Emacspeak se trouve dans le système d'aide Emacs; tapez Control+h,
+Control+e.
+
+Les archives (en anglais) de la liste Emacspeak :
+http://www.cs.vassar.edu/~priestdo/emacspeak/
+
+5. FAQ Oralux.
+
+la FAQ Oralux est au format HTML.
+Lancez le navigateur web w3m pour lire le fichier :
+ESCAPE x w3m-find-file RETURN
+
+Et ensuite tapez :
+/cdrom/KNOPPIX/faq-fr.htm 
+
+6. Vos impressions.
+Nous vous serions reconnaissants de nous faire partager vos impressions, vos remarques sur Oralux.
+L'adresse email est:
+
+contact@oralux.org
+
+En espérant que vous apprécierez Oralux.
+
+

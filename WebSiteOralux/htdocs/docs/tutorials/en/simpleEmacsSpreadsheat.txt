@@ -1,0 +1,126 @@
+SES -Simple Emacs Spreadsheet
+By Sylvie Xhaard
+For Use with Oralux Linux
+Last updated:  20/06/2004
+
+1. Introduction
+2.  Creation of a worksheet step by step
+3. To move in the spreadsheet
+4. Entering a formula
+5. To edit the contents of a cell
+6. Resizing the spreadsheet
+
+
+1. Introduction
+
+SES is a major mode for GNU/Emacs to edit spreadsheet files. A spreadsheet is a rectangular grid of cells. Each cell can contain text, a number or a formula.
+To create a new spreadsheet, open a new buffer with C-x C-f, name it for example count.ses and type M-x ses-mode
+
+By default, a newly-creating spreadsheet has 1 row and 1 column.
+A cell identifier is a symbol with a column letter and a row number.
+For example , the cell D5 is the intersection of the fourth column and the fifth line
+
+2.  Creation of a worksheet step by step
+
+We will create a worksheet which make it possible to calculate the total of the sales of three areas for the first quarter. It will be made up of 5 columns and 5 lines
+
+Open a new buffer
+C-x C-f
+name it : sales.ses
+Activate ses mode
+M-x ses-mode
+
+Press TAB for create a second column (B)
+Repeat this operation to obtain 5 columns
+
+Go back in cell B1
+Type j (Jump to cell), You will be asked to enter cell's identifier, type B1 (in capitals)
+
+Enter "January" in this cell.
+To enter a string, begin with a double quote. The ending double-quote is inserted for you.
+At prompt Cell B1 : type " January and Return
+The text is to insert in the B1 cell, and the cursor moved in the cell C1
+Enter February in  the C1 cell, March in the D1 cell and TOTAL in the E1 cell
+
+Press Tab to insert a new line
+The cursor is in cell A2
+Enter North in the A2 cell
+Enter 100 in the B2 cell. To enter a number into the current cell, just typing it
+Enter 200 in the C2 cell an 300 in the D2 cell.
+
+Calculate the total of the sales for North area
+To enter a computation, begin with a left parenthesis. The right parenthesis is inserted for you.
+In the E2 cell, type (+ B2 C2 D2 and return
+
+Start again from "to insert a new line"
+and type the values which you want for the Centre areas and Southern, and calculate the total for each area
+
+Insert a new line
+cell A5,  enter TOTAL
+Cell B5, calculate the total of January (+ B2 B3 B4)
+Cell C5 calculate the total of February
+cell D5 calculate the total of March
+
+3. To move in the spreadsheet
+
+j (ses-jump) Moves point to cell, specified by identifier.
+
+You can also move with arrows keys
+
+4. Entering a formula
+
+Number : To enter a number in the current cell, just typing it
+	 To enter a negative number , type the minus sign and your number
+	 The separator for the decimals is the point.
+
+Text :	To enter a string, begin with a double quote. The ending double-quote is inserted for you.
+
+Calculation : begin with à left-parenthesis, the right parenthesis is inserted for you.
+Caution : insert a space between each cell identifier
+
+To do a sum  		example : (+ A B C1)
+To do a subtraction	example : (- A1 B1 C1)
+To do a multiplication  example : (* A1 B1 C1)
+To do a decision	example : (/ A1 B1)
+
+Sum of contiguous cells	 (apply '+(ses-range A1 A12))
+Multiplication of contiguous cells	 (apply '*(ses-range A1 A12))
+MAX  to find the value maximum	 example : (MAX A1 B1 C1)
+MIN  to find the value minimum	 example : (MIN A1 B1 C1)
+
+5. To edit the contents of a cell
+To edit the existing formula in the current cell, press the Enter Key.
+
+6. Resizing the spreadsheet
+
+   6.1 Insert-Delete rows and columns
+
+   C-o (ses-insert-row) to insert a line above the current line
+   M-o (ses-insert-column) insert a column before the current column
+   C-k (ses-delete-row) delete the current line
+   M-k (ses-delete-column) delete the current column
+
+   TAB : moves point to the next rightward cell,
+      or insert a new column if already at last cell on line
+      or insert a new row if at end line
+
+   C-j : linefeed inserts below the current rows.
+
+   6.2  Entering a printer function
+
+   Printer functions convert binary cell values into the print forms that Emacs will display on the screen.
+
+   w (width)	change the current column width (by default, 7)
+   p		change the print form of the current cell
+   M-p		change the print form of the current column
+
+   Printer form begins by % and finished by ". The default printer is "%.7g". With this format, you can type the numbers which you want with a comma where wish it to you.
+
+   Decimal : "%.f"	example: "%.2f" two digits after the coma
+
+   exponential : "%.e"
+   example "%.2e" if the content of the cell is 120, you will obtain 1.20e+02
+
+   base 8 : "%.o"
+   convert the value
+

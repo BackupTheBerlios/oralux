@@ -1,0 +1,142 @@
+Calendrier et agenda
+
+1. Le calendrier
+   1.1 démarrer le calendrier
+   1.2 naviguer dans le calendrier
+       - par jour
+       - par semaine
+       - par mois
+       - par année
+   1.3 modifier le jour de début de semaine
+   1.4 Quitter le calendrier
+2. L'agenda
+   2.1 ajouter une entrée dans le fichier diary
+   2.2 lire les entrées
+3. Les alarmes
+   3.1 les alarmes liées au fichier diary
+   3.2 les alarmes non liées au fichier diary
+4. Autre fonctionnalités
+
+1. Le calendrier
+
+1.1 Démarrer le calendrier
+   M-x calendar
+   Le calendrier s'affiche sur trois mois, le mois courant etant au centre (Par défaut, le curseur se trouve sur la date du jour en cours)
+
+1.2. Naviguer dans le calendrier
+     De jour en jour
+     - flèche gauche: aller au jour précédent
+     - flèche droite: aller au jour suivant
+     Aller à une date spécifique
+     - taper : gd (Goto Date)
+     - saisir l'année (par defaut c'est l'année en cours) puis Enter
+     - saisir le mois (en anglais) puis Enter
+     - saisir le jour puis Enter
+     De semaine en semaine
+     - flèche haut : reculer d'une semaine
+     - flèche bas : avancer d'une semaine
+     De mois en mois
+     - M-} : avancer d'un mois
+     - M-{ : reculer d'un mois
+     - M-a : aller au début du mois
+     - M-e : aller à la fin du mois
+     D'année en année
+     - C-x ] : avancer d'une année
+     - C-x [ : reculer d'une année
+     - M-< : aller au début de l'année
+     - M-> : aller à la fin de l'année
+
+1.3 Modifier le jour du début de semaine
+Par défaut, le premier jour de la semaine est Dimanche, si vous souhaitez que la semaine commence le Lundi, taper les lignes suvantes:
+	M-x set-variable puis Enter
+	calendar-week-start-day puis Enter
+	1 puis enter
+Quitter le calendrier puis relancer le pour que votre modification prenne effet.
+
+1.4 Quitter le calendrier
+Taper q
+
+2. L'Agenda
+Bien entendu, vous devez avoir lancer Calendar.
+Par défaut, votre agenda sera enregistré dans le fichier diary (dans votre répertoire personnel).
+La fenêtre du calendrier est toujours visible (dans le bas de l'écran) et accessible.
+Lorsque vous ajouter une entrée, le fichier diary est ouvert dans un buffer, situé dans une fenêtre en haut de l'écran
+Pour aller du calendrier au fichier diary utiliser C-x o
+Si vous preférez que vos dates soit du type jj/mm/aa taper la commande suivante :
+M-x european-calendar
+
+
+    2.1 Ajouter une entrée dans le fichier diary
+
+    Chaque entrée commence par la date qui est inscrite automatiquement. Votre saisie peut être sur plusieurs lignes.
+    Une entrée peut-être une tâche à efectuée, un rendez-vous, un anniversaire, etc...
+    Si vous souhaitez associer une heure a votre entrée,Vous pouvez utiliser soit le système horaire sur 24h, soit le système am/pm.
+    Toutes les commandes ci-dessous vous permettent de saisir vos entrées dans le fichier diary.
+    Elles commencent toutes par "i" comme "insérer".
+
+    i d : ajouter une entrée pour la date selectionnée
+    i w : ajouter une entrée pour le jour selectionné toutes les  semaines
+    i m : ajouter une entrée pour la date selectionnée tous les mois
+    i y : ajouter une entrée pour la date selectionnée tous les ans
+    i a : ajouter un anniversaire pour la date selectionnée
+    i b : ajouter une entrée pour le bloc de jours selectionnés
+    i c : ajouter une entrée périodique à partir du jour selectionné
+	  à l'invite repeat every how many days = saisissez le nombre de jour auquel votre entrée doit se répéter.
+
+    2.2 Lire vos entrées
+
+	d :  edite les entrées pour la date selectionnée
+	s :  edite le contenu de votre fichier diary
+
+3. Les alarmes
+
+Pour activer la notification des alarmes, ajouter les lignes suivantes dans votre fichier .emacs (dans votre répertoire personnel)
+;; Calendar
+(display-time)
+(add-hook 'diary-hook' appt-make-list)
+(diary 0)
+
+	3.1 Les alarmes liées aux entrées du fichier diary
+
+	Il faut bien entendu que votre fichier diary soit ouvert :
+	soit en utilisant la commande 'd' à partir du calendrier
+	soit en l'ouvrant directement avec la commande M-x diary
+
+	Il faut également que l'heure de votre rendez-vous soit spécifiée.
+
+
+	Un signal sonore vous avertira que dans 10 mn vous avez rendez-vous et emacspeak prononce l'heure et l'objet du rendez-vous
+	Eemple :
+	Monday
+	9:30 Pause café
+	Un signal sonore sera mis à 9:20
+	21:00 Cinéma
+	Un signal sonore sera émis à 20:50
+
+
+	3.1 Les alarmes non liées aux entrées du fichier diary
+
+	Vous pouvez utliser la notification d'alarme, sans pour autant créer une entrée dans votre agenda.
+	M-x appt-add (Enter)
+	saisir l'heure (Enter)
+	saisir le motif (Enter)
+	Vous serez averti 10 mn avant l'heure
+
+	Pour supprimer
+	M-x appt-delete
+	confirmer la suppression.
+
+
+4. Autres fonctionnalités du Calendrier
+
+fonctionnalités visuelles par marquage des dates en surbrillance ou en couleur
+Afficher l'heure du lever et du coucher de soleil
+Afficher les phases de la lune
+Conversion des dates pour d'autres calendriers (Maya, Hebreux, Islamique, Chinois etc...)
+
+Pour en savoir plus sur calendar taper ?
+
+Sylvie Xhaard
+Oralux
+Mise à jour:  20/03/2004
+
