@@ -1,6 +1,7 @@
  <div class="nav">
   <ul>
-   <li>[ <a href="#main">Aller au contenu</a> | </li>
+   <li>[ <a href='<?php echo $_SERVER["PHP_SELF"]."?mylang=en"; ?>'>En
+   anglais </a> | </li><li> <a href="#main">Aller au contenu</a> | </li>
 <?php 
 foreach($TheTitleTranslation as $label=>$translation)
 {
@@ -8,4 +9,5 @@ echo("   <li>".$this->printEntry($label,$translation)." | </li>\n");
 }
 ?>   <li><a href="mailto:contact@oralux.org">Contactez nous</a> ]</li>
 	</ul>
+
  </div> <!-- nav -->

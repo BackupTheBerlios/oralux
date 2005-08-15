@@ -1,11 +1,11 @@
 <?PHP
 // ----------------------------------------------------------------------------
 // tools.php
-// $Id: tools.php,v 1.2 2005/08/14 23:35:22 gcasse Exp $
+// $Id: tools.php,v 1.3 2005/08/15 20:29:19 gcasse Exp $
 // $Author: gcasse $
 // Description: A few helpful tools
-// $Date: 2005/08/14 23:35:22 $ |
-// $Revision: 1.2 $ |
+// $Date: 2005/08/15 20:29:19 $ |
+// $Revision: 1.3 $ |
 // Copyright (C) 2003 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -28,7 +28,12 @@ function getLang()
 
 //  echo phpInfo().
 //echo "<hr>getLang() : $mylang";
-  if (isset($_SESSION['mylang']))
+  if (isset($_REQUEST['mylang']))
+  {
+    $mylang = $_REQUEST['mylang'];
+    $_SESSION['mylang']=$_REQUEST['mylang'];
+  }
+  else if (isset($_SESSION['mylang']))
   {
     $mylang = $_SESSION['mylang'];
   }
