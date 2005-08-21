@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 debug.c
-$Id: debug.c,v 1.4 2005/08/06 22:06:32 gcasse Exp $
+$Id: debug.c,v 1.5 2005/08/21 23:13:52 gcasse Exp $
 $Author: gcasse $
 Description: for applicative trace.
-$Date: 2005/08/06 22:06:32 $ |
-$Revision: 1.4 $ |
+$Date: 2005/08/21 23:13:52 $ |
+$Revision: 1.5 $ |
 Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -534,7 +534,7 @@ void displayCapacity( enum StringCapacity theCapacity)
     {
       *aString='E';
     }
-  printf("|%s = %s|\n", myStringCapacity[ theCapacity], aLine);
+  fprintf(TheOutputStream,"|%s = %s|\n", myStringCapacity[ theCapacity], aLine);
   free(aLine);
 }
 
@@ -557,7 +557,7 @@ void displayColor( char* theLabel, int theColor)
 
   if (theColor<sizeof(aColorArray)/sizeof(aColorArray[0]))
     {
-      printf("|%s: %s|\n",theLabel,aColorArray[theColor]);
+      fprintf(TheOutputStream,"|%s: %s|\n",theLabel,aColorArray[theColor]);
     }
 }
 /* > */
@@ -565,47 +565,47 @@ void displayColor( char* theLabel, int theColor)
 void displayStyle(struct t_style* theStyle)
 {
   ENTER("displayStyle");
-  printf("|");
+  fprintf(TheOutputStream,"|");
   displayColor( "Background",theStyle->myBackgroundColor);
   displayColor( "Foreground",theStyle->myForegroundColor);
 
   if (theStyle->isStandout)
     {
-      printf("STANDOUT ");
+      fprintf(TheOutputStream,"STANDOUT ");
     }
   if (theStyle->isUnderline)
     {
-      printf("UNDERLINE ");
+      fprintf(TheOutputStream,"UNDERLINE ");
     }
   if (theStyle->isReverse)
     {
-      printf("REVERSE ");
+      fprintf(TheOutputStream,"REVERSE ");
     }
   if (theStyle->isBlink)
     {
-      printf("BLINK ");
+      fprintf(TheOutputStream,"BLINK ");
     }
   if (theStyle->isDim)
     {
-      printf("DIM ");
+      fprintf(TheOutputStream,"DIM ");
     }
   if (theStyle->isBold)
     {
-      printf("BOLD ");
+      fprintf(TheOutputStream,"BOLD ");
     }
   if (theStyle->isBlank)
     {
-      printf("BLANK ");
+      fprintf(TheOutputStream,"BLANK ");
     }
   if (theStyle->isProtect)
     {
-      printf("PROTECT ");
+      fprintf(TheOutputStream,"PROTECT ");
     }
   if (theStyle->isAlternate)
     {
-      printf("ALTERNATE_CHARSET ");
+      fprintf(TheOutputStream,"ALTERNATE_CHARSET ");
     }
-  printf(" |\n");
+  fprintf(TheOutputStream," |\n");
 }
 /* > */
 /* < displayRawBuffer */
@@ -637,6 +637,29 @@ void displayRawBuffer( unsigned char* theBuffer, int theSize)
   fd = open( "/dev/tty2", O_RDWR);
   write(fd, aBuffer, p - aBuffer);
   close(fd);
+  SHOWn(aBuffer, p - aBuffer);
+}
+
+/* > */
+/* < debugBegin, debugEnd */
+FILE* TheOutputStream;
+
+void debugBegin()
+{
+  if (strcmp(OUTPUT_FILENAME,"stdout")==0)
+    {
+      TheOutputStream=stdout;
+    }
+  else
+    {
+      TheOutputStream=fopen(OUTPUT_FILENAME, "w+");
+    }
+  setvbuf(TheOutputStream, NULL, _IONBF, 0);
+}
+
+void debugEnd()
+{
+  fclose(TheOutputStream);
 }
 
 /* > */

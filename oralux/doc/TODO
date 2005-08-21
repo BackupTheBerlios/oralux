@@ -425,6 +425,7 @@ the cd has ejected shut down the machine fine.
 + lliaphon: suppression no comprendo et softspeech.log
 
 + festival: in spanish
++ required tts: br, de, fi, id, it, pl, pt.
 + Today, in French, punctuation is said in English.
 
 + use caps-lock as the control key, see a solution whichever the current keymap (fr, qwerty,...).
@@ -740,6 +741,25 @@ until the end of the document without stopping.
 
 Both keys should be able to be pressed multiple times so many lines can be 
 skipped.
+
+---
+* Idea from Nigel about the menu system to be used with YASR.
+
+The list should be in alphabetical order and each item should have a short 
+description after it.  E.G. Pine an email client.  Each list item will be on 
+a separate line and will be read out when moved to with either of the two 
+methods mentioned below.
+
+The list can be navigated by using the up and down cursor keys and first 
+letter navigation.  So if there are several items that begin with P pressing 
+P will cycle through them.  Press return on an item to select it.
+
+You could also have sub menus such as Help which could lead to a new menu 
+with help topics as well as an option to go back to the original menu.  This 
+could also fit in the alphabetical list with a Back to previous menu or 
+return to previous menu item.
+
+---
 
 
 1.3 Priority 3

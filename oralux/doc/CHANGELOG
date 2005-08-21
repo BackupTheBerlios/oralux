@@ -112,7 +112,7 @@ The very basic configuration files can now be saved in the boot floppy.
 Multispeech supplies using Emacspeak 21 several voices (voice lock mode).
 
 ** Cicero TTS 0.6 (+ patch from Stephane Doyon)
-French TTS by Nicholas Pitre and Stephane Doyon. Cicero is a responsive and lightweight TTS written in Python and using MBROLA.
+French TTS by Nicolas Pitre and Stephane Doyon. Cicero is a responsive and lightweight TTS written in Python and using MBROLA.
 
 / Freespeech English pronunciation dictionary
 / Enhanced Russian lexicon

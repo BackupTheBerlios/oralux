@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 test-tb.c
-$Id: test-tengoo.c,v 1.3 2005/08/09 21:26:54 gcasse Exp $
+$Id: test-tengoo.c,v 1.4 2005/08/21 23:13:53 gcasse Exp $
 $Author: gcasse $
 Description: test terminfo2list.
-$Date: 2005/08/09 21:26:54 $ |
-$Revision: 1.3 $ |
+$Date: 2005/08/21 23:13:53 $ |
+$Revision: 1.4 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -184,6 +184,8 @@ static void utmpconv(char *s, char *d, int pid)
   }
 
   deleteTermAPI( myTermAPI);
+
+  DEBUG_END;
 
   exit(0);
 }
@@ -391,8 +393,9 @@ int main(int argc, char *argv[])
 {
   struct winsize winsz = { 0, 0 };
 
-  ENTER("main");
+  DEBUG_BEGIN;
 
+  ENTER("main");
 
   /*  setvbuf(stdout, NULL, _IONBF, 0); / * TBD remove */
 

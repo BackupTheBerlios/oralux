@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 linePortion.c
-$Id: lineportion.c,v 1.2 2005/08/07 19:43:54 gcasse Exp $
+$Id: lineportion.c,v 1.3 2005/08/21 23:13:53 gcasse Exp $
 $Author: gcasse $
 Description: manage line portions.
-$Date: 2005/08/07 19:43:54 $ |
-$Revision: 1.2 $ |
+$Date: 2005/08/21 23:13:53 $ |
+$Revision: 1.3 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -107,7 +107,8 @@ int getFeaturesLinePortionGroup( GList* this, linePortion* theFeatures)
 
   if (this &&
       /* affectation */
-      (aCount = g_list_length(this)))
+      (aCount = g_list_length(this))
+      && theFeatures)
     {
       styleWeight* aWeight = (styleWeight*)malloc( aCount * sizeof(styleWeight));
       styleWeight* w = aWeight;
@@ -170,10 +171,15 @@ int getFeaturesLinePortionGroup( GList* this, linePortion* theFeatures)
       theFeatures->myFirstCol = aWeight[ 0].myLinePortion->myFirstCol;
       theFeatures->myLastCol = aWeight[ aCount-1].myLinePortion->myLastCol;
 
+      SHOW4("theFeatures, myLine=%d, myFirstCol=%d, myLastCol=%d\n", theFeatures->myLine, theFeatures->myFirstCol, theFeatures->myLastCol);
+
       free(aWeight);
 
       aResultIsAvailable=1;
     }
+
+  SHOW2("aResultIsAvailable=%d\n",aResultIsAvailable);
+
   return aResultIsAvailable;
 }
 /* > */

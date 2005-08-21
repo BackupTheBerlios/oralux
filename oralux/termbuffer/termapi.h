@@ -18,12 +18,15 @@ typedef struct t_cursor cursor;
 
 /* < termapi type */
 
+typedef int (*GET_ABG_HANDLER)( int theLine, int theFirstCol, int theLastCol, enum terminalColor* theColor);
+
 typedef GList* (*GET_GROUP_HANDLER)( int theLine, int theFirstCol, int theLastCol);
 typedef int (*GET_CURSOR_HANDLER)( cursor* theCursor);
 typedef int (*GET_DIM_HANDLER)( int* theNumberOfLine, int* theNumberOfCol);
 
 struct t_termAPI
 {
+  GET_ABG_HANDLER getAverageBackground;
   GET_GROUP_HANDLER getLinePortionGroup;
   GET_CURSOR_HANDLER getCursor;
   GET_DIM_HANDLER getDim;

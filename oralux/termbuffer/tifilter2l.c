@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 tifilter2l.c
-$Id: tifilter2l.c,v 1.6 2005/08/07 19:43:54 gcasse Exp $
+$Id: tifilter2l.c,v 1.7 2005/08/21 23:13:53 gcasse Exp $
 $Author: gcasse $
 Description: terminfo filter, two lines.
-$Date: 2005/08/07 19:43:54 $ |
-$Revision: 1.6 $ |
+$Date: 2005/08/21 23:13:53 $ |
+$Revision: 1.7 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -105,7 +105,7 @@ static void searchLinePortion(gpointer theEntry, gpointer theContext)
     }
 
   aText = anEntry->myData1;
-  if(aText && aText->str && strcspn (aText->str, " \t"))     
+  if(aText && aText->str)     
     {
       cursor* c =  &(anEntry->myStartingPosition);
       linePortion* p= createLinePortion (c->myLine, c->myCol, &(c->myStyle), aText->str);
@@ -147,17 +147,93 @@ static int groupLinePortion( context* this)
   return i;
 }
 /* > */
-/* < searchUnselectedGroup */
-int searchUnselectedGroup( this)
+/* < findLineForBackgroundTest */
+static int findLineTest( linePortion* p1, linePortion* p2, int* theLine, int* theFirstCol, int* theLastCol)
 {
-/*   int i=0; */
-  ENTER("searchUnselectedGroup");
+  int aLine1;
+  int aLine2;
+  int aLineIsFound=0;
 
-/*   for (i=0; i<MAX_LINE_PORTION_GROUP; i++) */
-/*     { */
-/*       getBackgroundGroup(i) */
-/*     } */
-  return 0;
+  ENTER("findLineTest");
+
+  if (!p1 || !p2 || !theLine || !theFirstCol || !theLastCol)
+    {
+      return 0;
+    }
+
+  aLineIsFound = 1;
+  
+  /* search which is the currently selected line */
+  if (p1->myLine <= p2->myLine)
+    {
+      aLine1 = p1->myLine;
+      aLine2 = p2->myLine;
+    }
+  else
+    {
+      aLine1 = p2->myLine;
+      aLine2 = p1->myLine;
+    }	  
+  
+  *theFirstCol = (p1->myFirstCol < p2->myFirstCol) ?
+    p1->myFirstCol : p2->myFirstCol;
+  
+  *theLastCol = (p1->myLastCol > p2->myLastCol) ?
+    p1->myLastCol : p2->myLastCol;
+  
+  if (aLine1 != aLine2)
+    {
+      if (aLine1 + 1 == aLine2)
+	{
+	  if (aLine1 == 0)
+	    {
+	      *theLine = aLine2 + 1;
+	    }
+	  else
+	    {
+	      *theLine = aLine1 - 1;
+	    }
+	}
+      else
+	{
+	  *theLine = aLine1 + 1;
+	}
+    }
+  else
+    {
+      int aCol1=0;
+      int aCol2=0;
+      
+      if (p1->myLastCol < p2->myFirstCol)
+	{
+	  aCol1 = p1->myLastCol;
+	  aCol2 = p2->myFirstCol;
+	}
+      else
+	{
+	  aCol1 = p2->myLastCol;
+	  aCol2 = p1->myFirstCol;
+	}	  
+
+      /* At least 4 chars between the two line portions */ 
+      if (aCol1 + 4 < aCol2)
+	{
+	  *theLine = aLine1;
+	  *theFirstCol = aCol1 + 1; 
+	  *theLastCol = aCol2 - 1; 
+	}
+      else if (aLine1 == 0)
+	{
+	  *theLine = aLine1 + 1;
+	}
+      else
+	{
+	  *theLine = aLine1 -1;
+	}
+    }
+  SHOW5("aLineIsFound=%d, theLine=%d, theFirstCol=%d, theLastCol=%d\n",aLineIsFound, *theLine, *theFirstCol, *theLastCol);
+
+return aLineIsFound;
 }
 /* > */
 /* < terminfofilter2lines */
@@ -184,9 +260,11 @@ GList* terminfofilter2lines(GList* theTerminfoList, termAPI* theTermAPI, int isD
 
       for(i=0; i<2 && isInteresting; i++)
 	{
+	  /* get info ('features') about the new group of line portions */ 
 	  new_g[i]=this->myLinePortionGroup[i];
 	  getFeaturesLinePortionGroup( new_g[i], &(new_p[i]));
 
+	  /* get info about the old group of line portions (currently displayed) */ 
 	  old_g[i] = this->myTermAPI->getLinePortionGroup( new_p[i].myLine,
 							   new_p[i].myFirstCol,
 							   new_p[i].myLastCol);
@@ -201,11 +279,24 @@ GList* terminfofilter2lines(GList* theTerminfoList, termAPI* theTermAPI, int isD
 
       if( isInteresting)
 	{
+	  int aLineTest1=0;
+	  int aFirstColTest1=0;
+	  int aLastColTest1=0;
+
 	  if (isDuplicated)
 	    {
 	      aFilteredList = copyTerminfoList( theTerminfoList);
 	    }
-	  /*       searchUnselectedGroup( this); */
+
+	  /* search which is the currently selected line */
+	  if (findLineTest( old_p, old_p+1, &aLineTest1, &aFirstColTest1, &aLastColTest1))
+	    {
+	      enum terminalColor aColor;
+	      if (this->myTermAPI->getAverageBackground(aLineTest1, aFirstColTest1, aLastColTest1, &aColor))
+		{
+		}
+	    }
+
 	  /*       insertCustomSilenceTerminfo( avant num entry debut, apres num entry fin) */
 	}
     }
