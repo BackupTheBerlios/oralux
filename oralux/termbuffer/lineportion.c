@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 linePortion.c
-$Id: lineportion.c,v 1.3 2005/08/21 23:13:53 gcasse Exp $
+$Id: lineportion.c,v 1.4 2005/08/22 22:55:04 gcasse Exp $
 $Author: gcasse $
 Description: manage line portions.
-$Date: 2005/08/21 23:13:53 $ |
-$Revision: 1.3 $ |
+$Date: 2005/08/22 22:55:04 $ |
+$Revision: 1.4 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -132,8 +132,7 @@ int getFeaturesLinePortionGroup( GList* this, linePortion* theFeatures)
 		{
 		  continue;
 		}
-	      if (compareStyle( &(aWeight[ j].myLinePortion->myStyle), 
-				&(aWeight[ k].myLinePortion->myStyle)))
+	      if (compareStyle( &(aWeight[ j].myLinePortion->myStyle), &(aWeight[ k].myLinePortion->myStyle))==0)
 		{
 		  aWeight[ j].myWeight += strlen( aWeight[ k].myLinePortion->myString->str);
 		  aWeight[ k].myStatus = STYLE_DUPLICATED;

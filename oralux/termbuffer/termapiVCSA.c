@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 termapiSimu.c
-$Id: termapiVCSA.c,v 1.3 2005/08/21 23:13:53 gcasse Exp $
+$Id: termapiVCSA.c,v 1.4 2005/08/22 22:55:04 gcasse Exp $
 $Author: gcasse $
 Description: testapi implementation for tests.
-$Date: 2005/08/21 23:13:53 $ |
-$Revision: 1.3 $ |
+$Date: 2005/08/22 22:55:04 $ |
+$Revision: 1.4 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -30,13 +30,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "termapi.h"
 #include "debug.h"
 
-/* < VCSA */
+/* < VCSA data */
 struct t_VCSA_Header
 {
   unsigned char myLines;
   unsigned char myCols;
-  unsigned char x; 
-  unsigned char y;
+  unsigned char myCol; 
+  unsigned char myLine;
 };
 typedef struct t_VCSA_Header VCSA_Header;
 
@@ -126,7 +126,7 @@ static GList* _getLinePortionGroup( int theLine, int theFirstCol, int theLastCol
     {
       aLastCol = myHeader.myCols - 1;
     }
-  if (aFirstCol >= aLastCol)
+  if (aFirstCol > aLastCol)
     {
       int i=aLastCol;
       aLastCol = aFirstCol;
@@ -134,7 +134,7 @@ static GList* _getLinePortionGroup( int theLine, int theFirstCol, int theLastCol
     }
   /* > */
   /* < get aBuffer */
-  aByteNumber = (aLastCol - aFirstCol) * sizeof(VCSA_Char);
+  aByteNumber = (aLastCol - aFirstCol + 1) * sizeof(VCSA_Char);
   aBuffer = (VCSA_Char *) malloc( aByteNumber);
 
   lseek( myDescriptor, 
@@ -159,7 +159,7 @@ static GList* _getLinePortionGroup( int theLine, int theFirstCol, int theLastCol
     p = createLinePortion (theLine, aFirstCol, &aStyle, (char*)c);
     aList = g_list_append( aList, (gpointer)p);
 
-    for( i=1; i < aLastCol - aFirstCol; i++)
+    for( i=1; i < aLastCol - aFirstCol + 1; i++)
       {
 	c[0] = v[i].myChar;
 	SHOW3("char %i=%c\n",i,v[i].myChar);
@@ -185,8 +185,8 @@ static GList* _getLinePortionGroup( int theLine, int theFirstCol, int theLastCol
 
 /* > */
 
-/* < _getAverageBackground */
-int _getAverageBackground( int theLine, int theFirstCol, int theLastCol, enum terminalColor* theColor)
+/* < _getColor */
+static int _getColor( int theLine, int theFirstCol, int theLastCol, enum terminalColor* theColor, int theBackgroundIsChecked)
 {
   int aFirstCol=theFirstCol;
   int aLastCol=theLastCol;
@@ -197,9 +197,9 @@ int _getAverageBackground( int theLine, int theFirstCol, int theLastCol, enum te
   int aColorIsFound=0;
   VCSA_Char* v = NULL;
 
-  ENTER("_getAverageBackground");
+  ENTER("_getColor");
 
-  SHOW4("theLine=%d, theFirstCol=%d, theLastCol=%d\n", theLine, theFirstCol, theLastCol);
+  SHOW5("theLine=%d, theFirstCol=%d, theLastCol=%d, theBackgroundIsChecked=%d\n", theLine, theFirstCol, theLastCol, theBackgroundIsChecked);
 
   /* < Check consistency */
   if (theLine >= myHeader.myLines)
@@ -215,7 +215,7 @@ int _getAverageBackground( int theLine, int theFirstCol, int theLastCol, enum te
     {
       aLastCol = myHeader.myCols - 1;
     }
-  if (aFirstCol >= aLastCol)
+  if (aFirstCol > aLastCol)
     {
       i=aLastCol;
       aLastCol = aFirstCol;
@@ -227,12 +227,11 @@ int _getAverageBackground( int theLine, int theFirstCol, int theLastCol, enum te
   for(i=0; i< COLOR_NB; i++)
     {
       aColorCounter[i]=0;
-      SHOW2("%d ",getBackgroundField(v[j].myAttribute));
     }
   /* > */
 
   /* < Count colors */
-  aByteNumber = (aLastCol - aFirstCol) * sizeof(VCSA_Char);
+  aByteNumber = (aLastCol - aFirstCol + 1) * sizeof(VCSA_Char);
   v = (VCSA_Char *) malloc( aByteNumber);
 
   SHOW2("\n---- Line:%d\n",j);
@@ -242,16 +241,26 @@ int _getAverageBackground( int theLine, int theFirstCol, int theLastCol, enum te
 	 0);
   read( myDescriptor, v, aByteNumber);
 
-  for (j=0; j<aByteNumber; j++)
+  for (j=0; j < aLastCol - aFirstCol + 1; j++)
     {
       /* Count how many times each color is met */
-      aColorCounter[ getBackgroundField(v[j].myAttribute)]++;
+      if (theBackgroundIsChecked)
+	{
+	  aColorCounter[ getBackgroundField(v[j].myAttribute)]++;
+	  SHOW2("%d",getBackgroundField(v[j].myAttribute));
+	}
+      else
+	{
+	  aColorCounter[ getForegroundField(v[j].myAttribute)]++;
+	  SHOW2("%d ",getForegroundField(v[j].myAttribute));
+	}
     }
   /* > */
 
   /* < Retrieve the color with higher score */
   j=0;
-  for( i=0; i< COLOR_NB; i++)
+  aColorIsFound=1;
+  for( i=1; i< COLOR_NB; i++)
     {
       if (aColorCounter[i] > aColorCounter[j])
 	{
@@ -266,34 +275,70 @@ int _getAverageBackground( int theLine, int theFirstCol, int theLastCol, enum te
 
   /* > */
 
+  *theColor = myAttributeToTermColor[j]; /* convert color */
+
   SHOW5("\naColorIsFound=%d, VCSA_color=%d, score=%d, theColor=%d\n", aColorIsFound, j, aColorCounter[j], *theColor);
 
   free( v);
 
-  *theColor = myAttributeToTermColor[j]; /* convert color */
   return aColorIsFound;
+}
+/* > */
+
+/* < _getBackground */
+static int _getBackground( int theLine, int theFirstCol, int theLastCol, enum terminalColor* theColor)
+
+{
+  ENTER("_getBackground");
+  return _getColor( theLine, theFirstCol, theLastCol, theColor, 1);
 }
 
 /* > */
 
-
-int _getCursor( cursor* theCursor)
+/* < _getForeground */
+static int _getForeground( int theLine, int theFirstCol, int theLastCol, enum terminalColor* theColor)
 {
-  ENTER("_getCursor");
-  theCursor->myLine=0;
-  theCursor->myCol=0;
-  clearStyle( & (theCursor->myStyle));
-  return 0;
+  ENTER("_getForeground");
+  return _getColor( theLine, theFirstCol, theLastCol, theColor, 0);
 }
 
-int _getDim( int* theNumberOfLine, int* theNumberOfCol)
+/* > */
+/* < _getCursor */
+static int _getCursor( cursor* theCursor)
+{
+  VCSA_Char v;
+
+  ENTER("_getCursor");
+
+  /* Coordinates */
+  lseek( myDescriptor, 0, 0);
+  read( myDescriptor, &myHeader, sizeof(VCSA_Header));
+  theCursor->myLine = myHeader.myLine;
+  theCursor->myCol = myHeader.myCol;
+
+  SHOW3("Cursor: line=%d, col=%d\n", theCursor->myLine, theCursor->myCol);
+
+  /* Style */
+  lseek( myDescriptor, 
+	 sizeof(VCSA_Header) + sizeof(VCSA_Char) * (myHeader.myLine * myHeader.myCols + myHeader.myCol), 
+	 0);
+  read( myDescriptor, &v, sizeof(VCSA_Char));
+
+  VCSA_getStyle( v.myAttribute, &(theCursor->myStyle));
+
+  return 1;
+}
+/* > */
+/* < _getDim */
+static int _getDim( int* theNumberOfLine, int* theNumberOfCol)
 {
   ENTER("_getDim");
   *theNumberOfLine=25;
   *theNumberOfCol=80;
   return 0;
 }
-
+/* > */
+/* < createTermAPI */
 termAPI* createTermAPI()
 {
   termAPI* aTermAPI = (termAPI*)malloc(sizeof(termAPI));
@@ -303,7 +348,8 @@ termAPI* createTermAPI()
   aTermAPI->getCursor=_getCursor;
   aTermAPI->getDim=_getDim;
   aTermAPI->getLinePortionGroup=_getLinePortionGroup;
-  aTermAPI->getAverageBackground=_getAverageBackground;
+  aTermAPI->getBackground=_getBackground;
+  aTermAPI->getForeground=_getForeground;
 
   myDescriptor = open( "/dev/vcsa", O_RDWR);
 
@@ -317,13 +363,15 @@ termAPI* createTermAPI()
 
   return aTermAPI;
 }
-
+/* > */
+/* < deleteTermAPI */
 void deleteTermAPI( termAPI* theTermAPI)
 {
   ENTER("deleteTermAPI");
   free( theTermAPI);
   close( myDescriptor);
 }
+/* > */
 
 
 

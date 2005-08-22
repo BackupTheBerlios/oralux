@@ -908,7 +908,7 @@ YY_RULE_SETUP
 #line 75 "escape2terminfo.l"
 {
 			TheParameter[0]=(yyleng==3) ? 1 : getDigit(yytext+2, yyleng-1-2);
-			return HPA; /* horisontal pos */
+			return HPA; /* horizontal pos */
 			}
 	YY_BREAK
 case 23:

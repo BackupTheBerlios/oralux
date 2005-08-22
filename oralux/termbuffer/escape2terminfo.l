@@ -74,7 +74,7 @@ ALT	[\x80-\xff]
 			}
 {ESC}\[{DIGIT}*G	{
 			TheParameter[0]=(yyleng==3) ? 1 : getDigit(yytext+2, yyleng-1-2);
-			return HPA; /* horisontal pos */
+			return HPA; /* horizontal pos */
 			}
 {ESC}\[{DIGIT}*d	{ /* Line number */
 			TheParameter[0]=(yyleng==3) ? 1 : getDigit(yytext+2, yyleng-1-2);

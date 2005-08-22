@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 tifilter2l.c
-$Id: tifilter2l.c,v 1.7 2005/08/21 23:13:53 gcasse Exp $
+$Id: tifilter2l.c,v 1.8 2005/08/22 22:55:04 gcasse Exp $
 $Author: gcasse $
 Description: terminfo filter, two lines.
-$Date: 2005/08/21 23:13:53 $ |
-$Revision: 1.7 $ |
+$Date: 2005/08/22 22:55:04 $ |
+$Revision: 1.8 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -236,6 +236,79 @@ static int findLineTest( linePortion* p1, linePortion* p2, int* theLine, int* th
 return aLineIsFound;
 }
 /* > */
+
+/* < getHiglightedLine */
+int getHiglightedLine( context* this, linePortion* p1, linePortion* p2)
+{
+  enum terminalColor aColor;
+  int aLineTest1=0;
+  int aFirstColTest1=0;
+  int aLastColTest1=0;
+
+  if (!findLineTest( p1, p2, &aLineTest1, &aFirstColTest1, &aLastColTest1))
+    {
+      return 0;
+    }
+
+  if (!this->myTermAPI->getBackground( aLineTest1, aFirstColTest1, aLastColTest1, &aColor))
+    {
+      return 0;
+    }
+
+  SHOW("highlighted Line?\n");
+  if (p1->myStyle.myBackgroundColor == aColor)
+    {
+      SHOW2("BG1: no (%s)\n", p1->myString->str);
+      if (p2->myStyle.myBackgroundColor == aColor)
+	{
+	  SHOW2("BG2: no (%s)\n", p2->myString->str);
+
+	  if (this->myTermAPI->getForeground(aLineTest1, aFirstColTest1, aLastColTest1, &aColor))
+	    {
+	      if (p1->myStyle.myForegroundColor == aColor)
+		{
+		  SHOW2("FG1: no (%s)\n", p1->myString->str);
+		  if (p2->myStyle.myForegroundColor == aColor)
+		    {
+		      SHOW2("FG2: no (%s)\n", p2->myString->str);
+		    }
+		  else
+		    {
+		      SHOW2("FG2: yes (%s)\n", p2->myString->str);
+		    }
+		}
+	      else
+		{
+		  SHOW2("FG1: yes (%s)\n", p1->myString->str);
+
+		  if (p2->myStyle.myForegroundColor == aColor)
+		    {
+		      SHOW2("FG2: no (%s)\n", p2->myString->str);
+		    }
+		  else
+		    {
+		      SHOW2("FG2: yes (%s)\n", p2->myString->str);
+		    }
+		}
+	    }
+	  else
+	    {
+	      return 0;
+	    }
+	}
+      else
+	{
+	  SHOW2("BG2: yes (%s)\n", p2->myString->str);
+	}
+    }
+  else
+    {
+      SHOW2("BG1: yes (%s)\n", p1->myString->str);
+    }
+  return 1;
+}
+/* > */
+
 /* < terminfofilter2lines */
 
 GList* terminfofilter2lines(GList* theTerminfoList, termAPI* theTermAPI, int isDuplicated)
@@ -271,32 +344,18 @@ GList* terminfofilter2lines(GList* theTerminfoList, termAPI* theTermAPI, int isD
 	  getFeaturesLinePortionGroup( old_g[i], &(old_p[i]));
 
 	  /* interesting if same contents and distinct styles */
-	  isInteresting = ( (strcmp( new_p[0].myString->str, 
-				     old_p[0].myString->str) == 0)
-			    && !compareStyle( &(new_p[0].myStyle), 
-					      &(old_p[0].myStyle)));
+	  isInteresting = ((strcmp( new_p[i].myString->str, old_p[i].myString->str) == 0)
+			   && (compareStyle( &(new_p[i].myStyle), &(old_p[i].myStyle)) != 0));
 	}
 
       if( isInteresting)
 	{
-	  int aLineTest1=0;
-	  int aFirstColTest1=0;
-	  int aLastColTest1=0;
-
 	  if (isDuplicated)
 	    {
 	      aFilteredList = copyTerminfoList( theTerminfoList);
 	    }
-
-	  /* search which is the currently selected line */
-	  if (findLineTest( old_p, old_p+1, &aLineTest1, &aFirstColTest1, &aLastColTest1))
-	    {
-	      enum terminalColor aColor;
-	      if (this->myTermAPI->getAverageBackground(aLineTest1, aFirstColTest1, aLastColTest1, &aColor))
-		{
-		}
-	    }
-
+	  getHiglightedLine( this, old_p, old_p+1);
+	  
 	  /*       insertCustomSilenceTerminfo( avant num entry debut, apres num entry fin) */
 	}
     }
