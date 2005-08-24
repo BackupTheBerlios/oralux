@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 test-tb.c
-$Id: test-tengoo.c,v 1.4 2005/08/21 23:13:53 gcasse Exp $
+$Id: test-tengoo.c,v 1.5 2005/08/24 22:46:48 gcasse Exp $
 $Author: gcasse $
 Description: test terminfo2list.
-$Date: 2005/08/21 23:13:53 $ |
-$Revision: 1.4 $ |
+$Date: 2005/08/24 22:46:48 $ |
+$Revision: 1.5 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -282,7 +282,8 @@ static void getoutput()
       }
     fwrite( buf, 1,  size, fdtest);
     rewind( fdtest);
-    aList = convertTerminfo2List( fdtest);
+
+    aList = convertTerminfo2List( fdtest, terminfointerpreter_getCursor());
     fclose( fdtest);
 
     SHOW_TIME("terminfointerpreter");

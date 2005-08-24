@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 termapiSimu.c
-$Id: termapiVCSA.c,v 1.4 2005/08/22 22:55:04 gcasse Exp $
+$Id: termapiVCSA.c,v 1.5 2005/08/24 22:46:48 gcasse Exp $
 $Author: gcasse $
 Description: testapi implementation for tests.
-$Date: 2005/08/22 22:55:04 $ |
-$Revision: 1.4 $ |
+$Date: 2005/08/24 22:46:48 $ |
+$Revision: 1.5 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -74,15 +74,16 @@ static VCSA_Header myHeader;
 /* < VCSA_getStyle */
 enum terminalColor myAttributeToTermColor[]=
   {
-    TERM_COLOR_BLACK,
-    TERM_COLOR_BLUE,
-    TERM_COLOR_GREEN,
-    TERM_COLOR_CYAN,
-    TERM_COLOR_RED,
-    TERM_COLOR_MAGENTA,
-    TERM_COLOR_YELLOW,
-    TERM_COLOR_WHITE,
+    TERM_COLOR_BLACK, /* 0 */
+    TERM_COLOR_BLUE, /* 4 */
+    TERM_COLOR_GREEN, /* 2 */
+    TERM_COLOR_CYAN, /* 6 */
+    TERM_COLOR_RED, /* 1 */
+    TERM_COLOR_MAGENTA, /* 5 */
+    TERM_COLOR_YELLOW, /* 3 */
+    TERM_COLOR_WHITE, /* 7 */
   };
+
 #define COLOR_NB sizeof(myAttributeToTermColor)/sizeof(myAttributeToTermColor[0])
 static void VCSA_getStyle( char theAttribute, style* theStyle)
 {

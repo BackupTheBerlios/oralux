@@ -51,6 +51,11 @@ typedef struct t_style style;
 #define compareStyle( theStyle1, theStyle2) memcmp( theStyle1, theStyle2, sizeof(struct t_style))
 #define clearStyle( theStyle)  memset (theStyle, 0, sizeof(struct t_style))
 
+/* equivalentStyle: indicates if two styles are visually equivalent. 
+Useful when e.g. an attribute read from the vcsa device is compared to a style.
+*/
+int equivalentStyle( style* theStyle1, style* theStyle2);
+
 /* > */
 /* < enum StringCapacity */
 

@@ -1,10 +1,13 @@
 	#include "escape2terminfo.h"
 	#include "linuxconsole.h"
+	#include "debug.h"
 
 	int TheParameter[MAXPARAM];
 	int TheNumberOfParameter;
 	struct t_style TheDefaultStyle;
 	struct t_style TheCurrentStyle;
+
+
 NUL	\x00
 BEL	\x07
 H	\x08
@@ -113,3 +116,47 @@ ALT	[\x80-\xff]
 .			return TEXTFIELD;
 
 %%
+	int equivalentStyle( style* theStyle1, style* theStyle2)
+	{
+	style *s[2];
+	unsigned int aBackground[2];
+	unsigned int aForeground[2];
+	int i;
+
+	ENTER("equivalentStyle");
+
+	s[0]=theStyle1;
+	s[1]=theStyle2;
+
+	for (i=0; i<2; i++)
+	{
+	  if (s[i]->isReverse)
+	  {
+	    aBackground[i] = s[i]->myForegroundColor;
+	    aForeground[i] = s[i]->myBackgroundColor;
+	  }
+	  else
+	  {
+	    aBackground[i] = s[i]->myBackgroundColor;
+	    aForeground[i] = s[i]->myForegroundColor;
+	  }
+
+	  if (s[i]->isDim)
+	  {
+	    aForeground[i] = 0x08; /* Grey */
+	  }
+
+	  if (s[i]->isUnderline)
+	  {
+	    aForeground[i] = 0x0F; /* Bold white */
+	  }
+	}
+	i = ((aForeground[0]==aForeground[1])
+	       && (aBackground[0]==aBackground[1])
+	       && (s[0]->isBold==s[1]->isBold)
+	       && (s[0]->isBlink==s[1]->isBlink));
+
+	SHOW2("result=%d",i);
+
+	return i;
+	}

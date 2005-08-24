@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 linePortion.c
-$Id: lineportion.c,v 1.4 2005/08/22 22:55:04 gcasse Exp $
+$Id: lineportion.c,v 1.5 2005/08/24 22:46:48 gcasse Exp $
 $Author: gcasse $
 Description: manage line portions.
-$Date: 2005/08/22 22:55:04 $ |
-$Revision: 1.4 $ |
+$Date: 2005/08/24 22:46:48 $ |
+$Revision: 1.5 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -154,6 +154,9 @@ int getFeaturesLinePortionGroup( GList* this, linePortion* theFeatures)
 	    }
 	}
       copyStyle( &(theFeatures->myStyle), &(aWeight[ k].myLinePortion->myStyle));
+
+      DISPLAY_STYLE( &(theFeatures->myStyle));
+
       /* > */
       /* < concatenate string */
       theFeatures->myString = g_string_new( getStringFromGList( this));
@@ -168,7 +171,7 @@ int getFeaturesLinePortionGroup( GList* this, linePortion* theFeatures)
 
       theFeatures->myLine = aWeight[ 0].myLinePortion->myLine;
       theFeatures->myFirstCol = aWeight[ 0].myLinePortion->myFirstCol;
-      theFeatures->myLastCol = aWeight[ aCount-1].myLinePortion->myLastCol;
+      theFeatures->myLastCol = aWeight[ aCount-1].myLinePortion->myLastCol - theFeatures->myFirstCol;
 
       SHOW4("theFeatures, myLine=%d, myFirstCol=%d, myLastCol=%d\n", theFeatures->myLine, theFeatures->myFirstCol, theFeatures->myLastCol);
 

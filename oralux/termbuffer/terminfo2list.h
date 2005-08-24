@@ -19,7 +19,7 @@ typedef struct t_terminfoEntry terminfoEntry;
 
 /* > */
 
-GList* convertTerminfo2List( FILE* theStream);
+GList* convertTerminfo2List( FILE* theStream, cursor* theCursor);
 GByteArray* convertList2Terminfo( GList* theList);
 void deleteTermInfoList( GList* theList);
 GList* copyTerminfoList( GList* theList);

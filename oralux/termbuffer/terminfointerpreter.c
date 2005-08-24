@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 terminfointerpreter.c
-$Id: terminfointerpreter.c,v 1.2 2005/07/16 21:43:31 gcasse Exp $
+$Id: terminfointerpreter.c,v 1.3 2005/08/24 22:46:48 gcasse Exp $
 $Author: gcasse $
 Description: an alpha stage terminfo interpreter
-$Date: 2005/07/16 21:43:31 $ |
-$Revision: 1.2 $ |
+$Date: 2005/08/24 22:46:48 $ |
+$Revision: 1.3 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -200,6 +200,7 @@ void terminfointerpreter(gpointer theEntry, gpointer userData)
       break;
     case SGR:
       copyStyle( &(myCursor.myStyle), (style*)(anEntry->myData1));
+      DISPLAY_STYLE(&(myCursor.myStyle));
       break;
     case VPA:
       myCursor.myLine=(aData1 > 0) ? aData1 - 1 : aData1;

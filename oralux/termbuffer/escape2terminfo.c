@@ -519,12 +519,13 @@ char *yytext;
 #line 1 "escape2terminfo.l"
 #include "escape2terminfo.h"
 #include "linuxconsole.h"
+#include "debug.h"
 int TheParameter[MAXPARAM];
 int TheNumberOfParameter;
 struct t_style TheDefaultStyle;
 struct t_style TheCurrentStyle;
 
-#line 528 "<stdout>"
+#line 529 "<stdout>"
 
 #define INITIAL 0
 #define graphics 1
@@ -677,10 +678,10 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 19 "escape2terminfo.l"
+#line 22 "escape2terminfo.l"
 
 
-#line 684 "<stdout>"
+#line 685 "<stdout>"
 
 	if ( (yy_init) )
 		{
@@ -765,12 +766,12 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 21 "escape2terminfo.l"
+#line 24 "escape2terminfo.l"
 BEGIN(graphics);
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 22 "escape2terminfo.l"
+#line 25 "escape2terminfo.l"
 {
 			unput(0x1b); /* ESC #1: new future sequence, ESC #2 to return to iso 8859-1 mapping */
 			BEGIN(INITIAL); 
@@ -778,12 +779,12 @@ YY_RULE_SETUP
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 26 "escape2terminfo.l"
+#line 29 "escape2terminfo.l"
 BEGIN(INITIAL); /* return to iso 8859-1 mapping */
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 27 "escape2terminfo.l"
+#line 30 "escape2terminfo.l"
 { /* erase any character in graphics mapping */
 			*yytext=0x20;
 			return TEXTFIELD;
@@ -792,7 +793,7 @@ YY_RULE_SETUP
 /* <alternate>{ESC}\[10m	BEGIN(INITIAL); */
 case 5:
 YY_RULE_SETUP
-#line 32 "escape2terminfo.l"
+#line 35 "escape2terminfo.l"
 { /* erase a (guessed) graphical character */
 			*yytext=0x20;
 			return TEXTFIELD;
@@ -800,7 +801,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 36 "escape2terminfo.l"
+#line 39 "escape2terminfo.l"
 {/* Change mode (affect also the bg, fg colors) */
 				getStyle( &TheCurrentStyle, &TheDefaultStyle);
 				if (TheCurrentStyle.isAlternate)
@@ -816,59 +817,59 @@ YY_RULE_SETUP
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 48 "escape2terminfo.l"
+#line 51 "escape2terminfo.l"
 /* filtered */
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 49 "escape2terminfo.l"
+#line 52 "escape2terminfo.l"
 return BEL;
 	YY_BREAK
 case 9:
 /* rule 9 can match eol */
 YY_RULE_SETUP
-#line 50 "escape2terminfo.l"
+#line 53 "escape2terminfo.l"
 return NEL; /* cr lf */
 	YY_BREAK
 case 10:
 /* rule 10 can match eol */
 YY_RULE_SETUP
-#line 51 "escape2terminfo.l"
+#line 54 "escape2terminfo.l"
 return CUD1; /* down one line */
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 52 "escape2terminfo.l"
+#line 55 "escape2terminfo.l"
 return CR; /* cr... */ 
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 53 "escape2terminfo.l"
+#line 56 "escape2terminfo.l"
 return CUB1; /* move left */
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 54 "escape2terminfo.l"
+#line 57 "escape2terminfo.l"
 return RC;
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 55 "escape2terminfo.l"
+#line 58 "escape2terminfo.l"
 return SC;
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 56 "escape2terminfo.l"
+#line 59 "escape2terminfo.l"
 return CUF1; /* move right */
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 57 "escape2terminfo.l"
+#line 60 "escape2terminfo.l"
 return CLEAR;
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 58 "escape2terminfo.l"
+#line 61 "escape2terminfo.l"
 {
 			TheParameter[0]=(yyleng==3) ? 0 : yytext[2]-'0';
 			return ED; /* clear to end */
@@ -876,7 +877,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 62 "escape2terminfo.l"
+#line 65 "escape2terminfo.l"
 {
 			TheParameter[0]=(yyleng==3) ? 0 : yytext[2]-'0';
 			return EL;
@@ -884,12 +885,12 @@ YY_RULE_SETUP
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 66 "escape2terminfo.l"
+#line 69 "escape2terminfo.l"
 return HOME;
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 67 "escape2terminfo.l"
+#line 70 "escape2terminfo.l"
 {
 			TheParameter[0]=(yyleng==3) ? 1 : getDigit(yytext+2, yyleng-1-2);
 			return ICH; /* insert char */
@@ -897,7 +898,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 71 "escape2terminfo.l"
+#line 74 "escape2terminfo.l"
 {
 			TheParameter[0]=(yyleng==3) ? 1 : getDigit(yytext+2, yyleng-1-2);
 			return IL; /* insert line */
@@ -905,7 +906,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 75 "escape2terminfo.l"
+#line 78 "escape2terminfo.l"
 {
 			TheParameter[0]=(yyleng==3) ? 1 : getDigit(yytext+2, yyleng-1-2);
 			return HPA; /* horizontal pos */
@@ -913,7 +914,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 79 "escape2terminfo.l"
+#line 82 "escape2terminfo.l"
 { /* Line number */
 			TheParameter[0]=(yyleng==3) ? 1 : getDigit(yytext+2, yyleng-1-2);
 			return VPA; /* vertical pos */
@@ -921,7 +922,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 83 "escape2terminfo.l"
+#line 86 "escape2terminfo.l"
 {
 			TheParameter[0]=(yyleng==3) ? 1 : getDigit(yytext+2, yyleng-1-2);
 			return DCH; /* delete one char */
@@ -929,7 +930,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 87 "escape2terminfo.l"
+#line 90 "escape2terminfo.l"
 {
 			TheParameter[0]=(yyleng==3) ? 1 : getDigit(yytext+2, yyleng-1-2);
 			return DL; /* delete line */
@@ -937,7 +938,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 91 "escape2terminfo.l"
+#line 94 "escape2terminfo.l"
 {
 			TheParameter[0]=(yyleng==3) ? 1 : getDigit(yytext+2, yyleng-1-2);
 			return ECH; /* erase char */
@@ -945,7 +946,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 95 "escape2terminfo.l"
+#line 98 "escape2terminfo.l"
 {
 			TheParameter[0]=(yyleng==3) ? 1 : getDigit(yytext+2, yyleng-1-2);
 			return CUU; /* up */
@@ -953,12 +954,12 @@ YY_RULE_SETUP
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 99 "escape2terminfo.l"
+#line 102 "escape2terminfo.l"
 /* filtered */ 
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 100 "escape2terminfo.l"
+#line 103 "escape2terminfo.l"
 {
 				int i=0;
 				for (i=2;i<yyleng;i++)
@@ -975,15 +976,15 @@ YY_RULE_SETUP
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 113 "escape2terminfo.l"
+#line 116 "escape2terminfo.l"
 return TEXTFIELD;
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 115 "escape2terminfo.l"
+#line 118 "escape2terminfo.l"
 ECHO;
 	YY_BREAK
-#line 987 "<stdout>"
+#line 988 "<stdout>"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(graphics):
 case YY_STATE_EOF(alternate):
@@ -1951,7 +1952,51 @@ void yyfree (void * ptr )
 #undef YY_DECL_IS_OURS
 #undef YY_DECL
 #endif
-#line 115 "escape2terminfo.l"
+#line 118 "escape2terminfo.l"
 
 
+	int equivalentStyle( style* theStyle1, style* theStyle2)
+	{
+	style *s[2];
+	unsigned int aBackground[2];
+	unsigned int aForeground[2];
+	int i;
+
+	ENTER("equivalentStyle");
+
+	s[0]=theStyle1;
+	s[1]=theStyle2;
+
+	for (i=0; i<2; i++)
+	{
+	  if (s[i]->isReverse)
+	  {
+	    aBackground[i] = s[i]->myForegroundColor;
+	    aForeground[i] = s[i]->myBackgroundColor;
+	  }
+	  else
+	  {
+	    aBackground[i] = s[i]->myBackgroundColor;
+	    aForeground[i] = s[i]->myForegroundColor;
+	  }
+
+	  if (s[i]->isDim)
+	  {
+	    aForeground[i] = 0x08; /* Grey */
+	  }
+
+	  if (s[i]->isUnderline)
+	  {
+	    aForeground[i] = 0x0F; /* Bold white */
+	  }
+	}
+	i = ((aForeground[0]==aForeground[1])
+	       && (aBackground[0]==aBackground[1])
+	       && (s[0]->isBold==s[1]->isBold)
+	       && (s[0]->isBlink==s[1]->isBlink));
+
+	SHOW2("result=%d",i);
+
+	return i;
+	}
 
