@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 termapiSimu.c
-$Id: termapiVCSA.c,v 1.5 2005/08/24 22:46:48 gcasse Exp $
+$Id: termapiVCSA.c,v 1.6 2005/08/28 00:00:42 gcasse Exp $
 $Author: gcasse $
 Description: testapi implementation for tests.
-$Date: 2005/08/24 22:46:48 $ |
-$Revision: 1.5 $ |
+$Date: 2005/08/28 00:00:42 $ |
+$Revision: 1.6 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -28,49 +28,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <stdio.h>
 #include <fcntl.h>
 #include "termapi.h"
+#include "linuxscreen.h"
 #include "debug.h"
 
-/* < VCSA data */
-struct t_VCSA_Header
-{
-  unsigned char myLines;
-  unsigned char myCols;
-  unsigned char myCol; 
-  unsigned char myLine;
-};
-typedef struct t_VCSA_Header VCSA_Header;
-
-/* struct t_VCSA_attribute */
-/* { */
-/*   unsigned int isBlink : 1; */
-/*   unsigned int myBackgroundColor : 3; */
-/*   unsigned int isBold : 1; */
-/*   unsigned int myForegroundColor : 3; */
-/*   unsigned int : 0; */
-/* }; */
-/* typedef struct t_VCSA_attribute VCSA_attribute; */
-
-#define getBlinkField(a) (((a)>>7) & 1)
-#define getBackgroundField(a) (((a)>>4) & 7)
-#define getBoldField(a) (((a)>>3) & 1)
-#define getForegroundField(a) ((a) & 7)
-
-/* #define VCSA_compareAttribute(a, b) ((a.isBlink==b.isBlink)\ */
-/* 				     &&(a.myBackgroundColor=b.myBackgroundColor)\ */
-/* 				     &&(a.isBold=b.isBold)\ */
-/* 				     &&(a.myForegroundColor=b.myForegroundColor)) */
-
-struct t_VCSA_Char
-{
-  char myChar; 
-  char myAttribute;
-};
-typedef struct t_VCSA_Char VCSA_Char;
-
-static int myDescriptor = 0;
-static VCSA_Header myHeader;
-
-/* > */
 /* < VCSA_getStyle */
 enum terminalColor myAttributeToTermColor[]=
   {
@@ -114,36 +74,9 @@ static GList* _getLinePortionGroup( int theLine, int theFirstCol, int theLastCol
 
   SHOW4("theLine=%d, theFirstCol=%d, theLastCol=%d\n", theLine, theFirstCol, theLastCol);
 
-  /* < check consistency */
-  if (theLine >= myHeader.myLines)
-    {
-      return NULL;
-    }
-  if (aFirstCol >= myHeader.myCols)
-    {
-      aFirstCol = myHeader.myCols - 1;
-    }
-  if (aLastCol >= myHeader.myCols)
-    {
-      aLastCol = myHeader.myCols - 1;
-    }
-  if (aFirstCol > aLastCol)
-    {
-      int i=aLastCol;
-      aLastCol = aFirstCol;
-      aFirstCol = i;
-    }
-  /* > */
-  /* < get aBuffer */
-  aByteNumber = (aLastCol - aFirstCol + 1) * sizeof(VCSA_Char);
-  aBuffer = (VCSA_Char *) malloc( aByteNumber);
-
-  lseek( myDescriptor, 
-	 sizeof(VCSA_Header) + sizeof(VCSA_Char) * (theLine * myHeader.myCols + aFirstCol), 
-	 0);
-  read( myDescriptor, aBuffer, aByteNumber);
-  /* > */
   /* < build aList*/
+
+  if (readLinuxScreen( theLine, aFirstCol, aLastCol, &aBuffer, &aByteNumber))
   {
     int i=0;
     char c[2];
@@ -154,7 +87,7 @@ static GList* _getLinePortionGroup( int theLine, int theFirstCol, int theLastCol
     c[0] = v[0].myChar;
     c[1] = 0;
 
-    SHOW3("char %i=%c\n",i,v[i].myChar);
+    SHOW4("char %i=%c (0x%x)\n",i,v[i].myChar,v[i].myChar);
 
     VCSA_getStyle( v[0].myAttribute, &aStyle);
     p = createLinePortion (theLine, aFirstCol, &aStyle, (char*)c);
@@ -163,7 +96,7 @@ static GList* _getLinePortionGroup( int theLine, int theFirstCol, int theLastCol
     for( i=1; i < aLastCol - aFirstCol + 1; i++)
       {
 	c[0] = v[i].myChar;
-	SHOW3("char %i=%c\n",i,v[i].myChar);
+	SHOW4("char %i=%c (0x%x)\n",i,v[i].myChar,v[i].myChar);
 	if (v[i].myAttribute == v[i-1].myAttribute)
 	  { 
 	    g_string_append( p->myString, c);
@@ -177,9 +110,9 @@ static GList* _getLinePortionGroup( int theLine, int theFirstCol, int theLastCol
 	    aList = g_list_append( aList, (gpointer)p);
 	  }
       }
+    free( aBuffer);
   }
   /* > */
-  free( aBuffer);
 
   return aList;
 }
@@ -202,27 +135,10 @@ static int _getColor( int theLine, int theFirstCol, int theLastCol, enum termina
 
   SHOW5("theLine=%d, theFirstCol=%d, theLastCol=%d, theBackgroundIsChecked=%d\n", theLine, theFirstCol, theLastCol, theBackgroundIsChecked);
 
-  /* < Check consistency */
-  if (theLine >= myHeader.myLines)
-    {
-      return 0;
-    }
-
-  if (aFirstCol >= myHeader.myCols)
-    {
-      aFirstCol = myHeader.myCols - 1;
-    }
-  if (aLastCol >= myHeader.myCols)
-    {
-      aLastCol = myHeader.myCols - 1;
-    }
-  if (aFirstCol > aLastCol)
-    {
-      i=aLastCol;
-      aLastCol = aFirstCol;
-      aFirstCol = i;
-    }
-  /* > */
+  if (!readLinuxScreen( theLine, aFirstCol, aLastCol, &v, &aByteNumber))
+  {
+    return 0;
+  }
 
   /* < Initialize aColorCounter */
   for(i=0; i< COLOR_NB; i++)
@@ -232,23 +148,14 @@ static int _getColor( int theLine, int theFirstCol, int theLastCol, enum termina
   /* > */
 
   /* < Count colors */
-  aByteNumber = (aLastCol - aFirstCol + 1) * sizeof(VCSA_Char);
-  v = (VCSA_Char *) malloc( aByteNumber);
-
-  SHOW2("\n---- Line:%d\n",j);
-
-  lseek( myDescriptor, 
-	 sizeof(VCSA_Header) + sizeof(VCSA_Char) * (i * myHeader.myCols + aFirstCol), 
-	 0);
-  read( myDescriptor, v, aByteNumber);
-
+  SHOW("Attributes:\n");
   for (j=0; j < aLastCol - aFirstCol + 1; j++)
     {
       /* Count how many times each color is met */
       if (theBackgroundIsChecked)
 	{
 	  aColorCounter[ getBackgroundField(v[j].myAttribute)]++;
-	  SHOW2("%d",getBackgroundField(v[j].myAttribute));
+	  SHOW2("%d ",getBackgroundField(v[j].myAttribute));
 	}
       else
 	{
@@ -307,27 +214,27 @@ static int _getForeground( int theLine, int theFirstCol, int theLastCol, enum te
 /* < _getCursor */
 static int _getCursor( cursor* theCursor)
 {
-  VCSA_Char v;
+  VCSA_Char* v=NULL;
+  int aByteNumber;
+  int aStatus=0;
 
   ENTER("_getCursor");
 
   /* Coordinates */
-  lseek( myDescriptor, 0, 0);
-  read( myDescriptor, &myHeader, sizeof(VCSA_Header));
-  theCursor->myLine = myHeader.myLine;
-  theCursor->myCol = myHeader.myCol;
+
+  getCursorLinuxScreen( &(theCursor->myLine), &(theCursor->myCol));
 
   SHOW3("Cursor: line=%d, col=%d\n", theCursor->myLine, theCursor->myCol);
 
   /* Style */
-  lseek( myDescriptor, 
-	 sizeof(VCSA_Header) + sizeof(VCSA_Char) * (myHeader.myLine * myHeader.myCols + myHeader.myCol), 
-	 0);
-  read( myDescriptor, &v, sizeof(VCSA_Char));
+  if (readLinuxScreen( theCursor->myLine, theCursor->myCol, theCursor->myCol, &v, &aByteNumber))
+  {
+    aStatus=1;
+    VCSA_getStyle( v->myAttribute, &(theCursor->myStyle));
+    free(v);
+  }
 
-  VCSA_getStyle( v.myAttribute, &(theCursor->myStyle));
-
-  return 1;
+  return aStatus;
 }
 /* > */
 /* < _getDim */
@@ -352,15 +259,11 @@ termAPI* createTermAPI()
   aTermAPI->getBackground=_getBackground;
   aTermAPI->getForeground=_getForeground;
 
-  myDescriptor = open( "/dev/vcsa", O_RDWR);
-
-  if (myDescriptor < 0) 
+  if (!openLinuxScreen()) 
     {
-      perror("/dev/vcsa");
+      perror("initLinuxScreen");
       exit(1);
     }
-
-  (void)read(myDescriptor, &myHeader, 4);
 
   return aTermAPI;
 }
@@ -370,7 +273,7 @@ void deleteTermAPI( termAPI* theTermAPI)
 {
   ENTER("deleteTermAPI");
   free( theTermAPI);
-  close( myDescriptor);
+  closeLinuxScreen ();
 }
 /* > */
 

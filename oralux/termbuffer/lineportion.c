@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 linePortion.c
-$Id: lineportion.c,v 1.5 2005/08/24 22:46:48 gcasse Exp $
+$Id: lineportion.c,v 1.6 2005/08/28 00:00:41 gcasse Exp $
 $Author: gcasse $
 Description: manage line portions.
-$Date: 2005/08/24 22:46:48 $ |
-$Revision: 1.5 $ |
+$Date: 2005/08/28 00:00:41 $ |
+$Revision: 1.6 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -36,15 +36,14 @@ linePortion* createLinePortion (int theLine, int theCol, style* theStyle, charty
 
     this->myLine = theLine;
     this->myFirstCol = theCol;
-    this->myLastCol = theCol+strlen(theString);
+    this->myLastCol = theCol+strlen(theString)-1;
     copyStyle(&(this->myStyle), theStyle);
     this->myString = g_string_new(theString);
-    SHOW3("%x=g_string_new(%s)", (unsigned int)this->myString, theString);
 
-    SHOW2("theLine=%d\n", theLine);
-    SHOW2("theCol=%d\n", theCol);
-    SHOW2("theString=%s\n", theString);
-    DISPLAY_STYLE(theStyle);
+    SHOW4("Line=%d, First Col=%d, Last Col=%d\n", this->myLine, this->myFirstCol, this->myLastCol);
+    SHOW2("String=\"%s\"\n", this->myString->str);
+    DISPLAY_STYLE( &(this->myStyle));
+
     return this;
 }
 
@@ -95,6 +94,8 @@ static void initStyleWeightHook( gpointer theLinePortion, gpointer theStyleWeigh
   (*w)->myStatus = WEIGHT_UNDEFINED; 
   (*w)->myLinePortion = (linePortion*)theLinePortion;
   SHOW2("str=%s\n",((linePortion*)theLinePortion)->myString->str);
+  SHOW2("First Col=%d\n",((linePortion*)theLinePortion)->myFirstCol);
+  SHOW2("Last Col=%d\n",((linePortion*)theLinePortion)->myLastCol);
   (*w)++;
 }
 
@@ -155,12 +156,10 @@ int getFeaturesLinePortionGroup( GList* this, linePortion* theFeatures)
 	}
       copyStyle( &(theFeatures->myStyle), &(aWeight[ k].myLinePortion->myStyle));
 
-      DISPLAY_STYLE( &(theFeatures->myStyle));
-
       /* > */
       /* < concatenate string */
       theFeatures->myString = g_string_new( getStringFromGList( this));
-      SHOW3("%x=g_string_new(%s)", (unsigned int)theFeatures->myString, getStringFromGList( this));
+      SHOW3("%x=g_string_new(%s)\n", (unsigned int)theFeatures->myString, getStringFromGList( this));
 
       for ( j=1; j < aCount; j++)
 	{
@@ -171,9 +170,11 @@ int getFeaturesLinePortionGroup( GList* this, linePortion* theFeatures)
 
       theFeatures->myLine = aWeight[ 0].myLinePortion->myLine;
       theFeatures->myFirstCol = aWeight[ 0].myLinePortion->myFirstCol;
-      theFeatures->myLastCol = aWeight[ aCount-1].myLinePortion->myLastCol - theFeatures->myFirstCol;
+      theFeatures->myLastCol = aWeight[ aCount-1].myLinePortion->myLastCol;
 
       SHOW4("theFeatures, myLine=%d, myFirstCol=%d, myLastCol=%d\n", theFeatures->myLine, theFeatures->myFirstCol, theFeatures->myLastCol);
+
+      DISPLAY_STYLE( &(theFeatures->myStyle));
 
       free(aWeight);
 

@@ -8,7 +8,7 @@ prefix=/usr/local
 
 LEX = flex
 #CFLAGS = -pedantic -fPIC -Wall -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include
-CFLAGS = -g -DDEBUG -pedantic -fPIC -Wall -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include
+CFLAGS = -g -DDEBUG -fPIC -Wall -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include
 #CFLAGS = -g -pedantic -fPIC -Wall -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include
 
 #LDFLAGS=-L. -Wl,-rpath,. -ltermbuffer
@@ -23,7 +23,7 @@ INCPATH=$(prefix)/include
 LIBPATH=$(prefix)/lib
 
 OBJS = termbuffer.o escape2terminfo.o linuxconsole.o debug.o test-tb.o
-OBJS2 = tifilter2l.o terminfo2list.o escape2terminfo.o linuxconsole.o lineportion.o terminfointerpreter.o debug.o termapiVCSA.o
+OBJS2 = tifilter2l.o terminfo2list.o escape2terminfo.o linuxconsole.o lineportion.o terminfointerpreter.o debug.o termapiVCSA.o linuxscreen.o
 OBJS_TI= test-t2l.o $(OBJS2)
 OBJS3 = test-tengoo.o $(OBJS2)
 

@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 tifilter2l.c
-$Id: tifilter2l.c,v 1.9 2005/08/24 22:46:48 gcasse Exp $
+$Id: tifilter2l.c,v 1.10 2005/08/28 00:00:42 gcasse Exp $
 $Author: gcasse $
 Description: terminfo filter, two lines.
-$Date: 2005/08/24 22:46:48 $ |
-$Revision: 1.9 $ |
+$Date: 2005/08/28 00:00:42 $ |
+$Revision: 1.10 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -237,13 +237,17 @@ return aLineIsFound;
 }
 /* > */
 
-/* < getHiglightedLine */
-int getHiglightedLine( context* this, linePortion* p1, linePortion* p2)
+/* < getHighlightedLine */
+static int getHighlightedLine( context* this, linePortion* p1, linePortion* p2)
 {
   enum terminalColor aColor;
   int aLineTest1=0;
   int aFirstColTest1=0;
   int aLastColTest1=0;
+  unsigned int aBackgroundColor[2];
+  unsigned int aForegroundColor[2];
+
+  ENTER("getHighlightedLine");
 
   if (!findLineTest( p1, p2, &aLineTest1, &aFirstColTest1, &aLastColTest1))
     {
@@ -256,19 +260,23 @@ int getHiglightedLine( context* this, linePortion* p1, linePortion* p2)
     }
 
   SHOW("highlighted Line?\n");
-  if (p1->myStyle.myBackgroundColor == aColor)
+  
+  getEquivalentStyle( &(p1->myStyle), aBackgroundColor, aForegroundColor);
+  getEquivalentStyle( &(p2->myStyle), aBackgroundColor+1, aForegroundColor+1);
+
+  if (aBackgroundColor[0] == aColor)
     {
       SHOW2("BG1: no (%s)\n", p1->myString->str);
-      if (p2->myStyle.myBackgroundColor == aColor)
+      if (aBackgroundColor[1] == aColor)
 	{
 	  SHOW2("BG2: no (%s)\n", p2->myString->str);
 
 	  if (this->myTermAPI->getForeground(aLineTest1, aFirstColTest1, aLastColTest1, &aColor))
 	    {
-	      if (p1->myStyle.myForegroundColor == aColor)
+	      if (aForegroundColor[0] == aColor)
 		{
 		  SHOW2("FG1: no (%s)\n", p1->myString->str);
-		  if (p2->myStyle.myForegroundColor == aColor)
+		  if (aForegroundColor[1] == aColor)
 		    {
 		      SHOW2("FG2: no (%s)\n", p2->myString->str);
 		    }
@@ -281,7 +289,7 @@ int getHiglightedLine( context* this, linePortion* p1, linePortion* p2)
 		{
 		  SHOW2("FG1: yes (%s)\n", p1->myString->str);
 
-		  if (p2->myStyle.myForegroundColor == aColor)
+		  if (aForegroundColor[1] == aColor)
 		    {
 		      SHOW2("FG2: no (%s)\n", p2->myString->str);
 		    }
@@ -363,7 +371,8 @@ GList* terminfofilter2lines(GList* theTerminfoList, termAPI* theTermAPI, int isD
 	    {
 	      aFilteredList = copyTerminfoList( theTerminfoList);
 	    }
-	  getHiglightedLine( this, old_p, old_p+1);
+	  SHOW("The old highlighted line was:\n");
+	  getHighlightedLine( this, old_p, old_p+1);
 	  
 	  /*       insertCustomSilenceTerminfo( avant num entry debut, apres num entry fin) */
 	}

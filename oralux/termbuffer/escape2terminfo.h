@@ -56,6 +56,9 @@ Useful when e.g. an attribute read from the vcsa device is compared to a style.
 */
 int equivalentStyle( style* theStyle1, style* theStyle2);
 
+/* according to theStyle, update theBackgroundColor and theForegroundColor */
+void getEquivalentStyle( style* theStyle, unsigned int* theBackgroundColor, unsigned int* theForegroundColor);
+
 /* > */
 /* < enum StringCapacity */
 

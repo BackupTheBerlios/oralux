@@ -116,6 +116,30 @@ ALT	[\x80-\xff]
 .			return TEXTFIELD;
 
 %%
+	void getEquivalentStyle( style* theStyle, unsigned int* theBackground, unsigned int* theForeground)
+	{
+	  if (theStyle->isReverse)
+	  {
+	    *theBackground = theStyle->myForegroundColor;
+	    *theForeground = theStyle->myBackgroundColor;
+	  }
+	  else
+	  {
+	    *theBackground = theStyle->myBackgroundColor;
+	    *theForeground = theStyle->myForegroundColor;
+	  }
+
+	  if (theStyle->isDim)
+	  {
+	    *theForeground = 0x08; /* Grey */
+	  }
+
+	  if (theStyle->isUnderline)
+	  {
+	    *theForeground = 0x0F; /* Bold white */
+	  }
+	}
+
 	int equivalentStyle( style* theStyle1, style* theStyle2)
 	{
 	style *s[2];
@@ -130,33 +154,14 @@ ALT	[\x80-\xff]
 
 	for (i=0; i<2; i++)
 	{
-	  if (s[i]->isReverse)
-	  {
-	    aBackground[i] = s[i]->myForegroundColor;
-	    aForeground[i] = s[i]->myBackgroundColor;
-	  }
-	  else
-	  {
-	    aBackground[i] = s[i]->myBackgroundColor;
-	    aForeground[i] = s[i]->myForegroundColor;
-	  }
-
-	  if (s[i]->isDim)
-	  {
-	    aForeground[i] = 0x08; /* Grey */
-	  }
-
-	  if (s[i]->isUnderline)
-	  {
-	    aForeground[i] = 0x0F; /* Bold white */
-	  }
+	  getEquivalentStyle( s[i], aBackground+i, aForeground+i);
 	}
 	i = ((aForeground[0]==aForeground[1])
 	       && (aBackground[0]==aBackground[1])
 	       && (s[0]->isBold==s[1]->isBold)
 	       && (s[0]->isBlink==s[1]->isBlink));
 
-	SHOW2("result=%d",i);
+	SHOW2("result=%d\n",i);
 
 	return i;
 	}

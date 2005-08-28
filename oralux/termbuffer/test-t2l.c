@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 test-tb.c
-$Id: test-t2l.c,v 1.8 2005/08/24 22:46:48 gcasse Exp $
+$Id: test-t2l.c,v 1.9 2005/08/28 00:00:42 gcasse Exp $
 $Author: gcasse $
 Description: test terminfo2list.
-$Date: 2005/08/24 22:46:48 $ |
-$Revision: 1.8 $ |
+$Date: 2005/08/28 00:00:42 $ |
+$Revision: 1.9 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -88,8 +88,7 @@ int main(int argc, char *argv[])
 
       SHOW_TIME("convertTerminfo2List");
 
-      aTermAPI->getCursor( &aCursor);
-      aList = convertTerminfo2List( fdtest, &aCursor);
+      aList = convertTerminfo2List( fdtest, terminfointerpreter_getCursor());
       fclose(fdtest);
 
       SHOW_TIME("terminfointerpreter");
