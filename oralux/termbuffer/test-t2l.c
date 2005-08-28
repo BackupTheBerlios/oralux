@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 test-tb.c
-$Id: test-t2l.c,v 1.9 2005/08/28 00:00:42 gcasse Exp $
+$Id: test-t2l.c,v 1.10 2005/08/28 18:54:36 gcasse Exp $
 $Author: gcasse $
 Description: test terminfo2list.
-$Date: 2005/08/28 00:00:42 $ |
-$Revision: 1.9 $ |
+$Date: 2005/08/28 18:54:36 $ |
+$Revision: 1.10 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -33,10 +33,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "debug.h"
 
 
-static void displayList(gpointer theEntry, gpointer userData)
-{
-  DISPLAY_CAPACITY( ((terminfoEntry*)theEntry)->myCapacity);
-}
+/* static void displayList(gpointer theEntry, gpointer userData) */
+/* { */
+/*   DISPLAY_CAPACITY( ((terminfoEntry*)theEntry)->myCapacity); */
+/* } */
 
 int main(int argc, char *argv[])
 {
@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
 
       SHOW_TIME("convertTerminfo2List");
 
-      aList = convertTerminfo2List( fdtest, terminfointerpreter_getCursor());
+      aList = convertTerminfo2List( fdtest);
       fclose(fdtest);
 
       SHOW_TIME("terminfointerpreter");

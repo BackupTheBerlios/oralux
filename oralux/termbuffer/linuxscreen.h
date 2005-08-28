@@ -34,8 +34,5 @@ typedef struct t_VCSA_Char VCSA_Char;
 int openLinuxScreen( );
 int getCursorLinuxScreen( int* theLine, int* theCol);
 int readLinuxScreen( int theLine, int theFirstCol, int theLastCol, VCSA_Char** theBuffer, int* theByteNumber);
-
-unsigned char translateCharLinuxScreen( unsigned char theChar, unsigned char theAttribute);
-
 void closeLinuxScreen();
 #endif

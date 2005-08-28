@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 terminfo2list.c
-$Id: terminfo2list.c,v 1.10 2005/08/24 22:46:48 gcasse Exp $
+$Id: terminfo2list.c,v 1.11 2005/08/28 18:54:36 gcasse Exp $
 $Author: gcasse $
 Description: convert the terminfo entries to a list of commands.
-$Date: 2005/08/24 22:46:48 $ |
-$Revision: 1.10 $ |
+$Date: 2005/08/28 18:54:36 $ |
+$Revision: 1.11 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -629,9 +629,17 @@ entryCommands TheEntryCommands[]=
   {createText, NULL, NULL, deleteText, TEXTFIELD, copyText} 
 };
 /* > */
+/* < initTerminfo2list */
+void initTerminfo2List( style* theDefaultStyle)
+{
+  ENTER("initTerminfo2List");
+  copyStyle( &TheDefaultStyle, theDefaultStyle);
+  copyStyle( &TheCurrentStyle, theDefaultStyle);
+}
+/* > */
 /* < convertTerminfo2List */
 
-GList* convertTerminfo2List( FILE* theStream, cursor* theCursor)
+GList* convertTerminfo2List( FILE* theStream)
 {
   enum StringCapacity aCapacity;
 
@@ -641,9 +649,6 @@ GList* convertTerminfo2List( FILE* theStream, cursor* theCursor)
 
   myList=NULL;
   myPreviousCapacity=ACSC; /* init: anything but textfield.*/
-
-  copyStyle( &TheDefaultStyle, &(theCursor->myStyle));
-  copyStyle( &TheCurrentStyle, &(theCursor->myStyle));
 
   while((aCapacity=yylex()))
     {

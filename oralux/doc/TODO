@@ -761,6 +761,18 @@ could also fit in the alphabetical list with a Back to previous menu or
 return to previous menu item.
 
 ---
+When the menu system is loaded it should give the user instructions on how 
+to use it.
+E.G. "Use cursor keys or first letter navigation to navigate the menu".
+
+Also a menu item with a sub menu such as help or help topics should have 
+submenu in brackets after it.
+E.G. Help (submenu).
+
+Or submenu without the brackets as this would speed it up slightly. 
+If you must use a character then I think a + is best.
+---
+
 
 
 1.3 Priority 3

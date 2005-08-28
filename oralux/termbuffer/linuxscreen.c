@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 linuxscreen.c
-$Id: linuxscreen.c,v 1.1 2005/08/28 00:00:42 gcasse Exp $
+$Id: linuxscreen.c,v 1.2 2005/08/28 18:54:36 gcasse Exp $
 $Author: gcasse $
 Description: Read the data from the current screen.
-$Date: 2005/08/28 00:00:42 $ |
-$Revision: 1.1 $ |
+$Date: 2005/08/28 18:54:36 $ |
+$Revision: 1.2 $ |
 Original Copyright (C) 1995-2004 by The BRLTTY Team. All rights reserved.
 
 August 2005, Gilles Casse (gcasse@oralux.org)
@@ -592,21 +592,6 @@ describeLinuxScreen (ScreenDescription *description) {
     }
   }
 }
-
-
-unsigned char translateCharLinuxScreen( unsigned char theChar, unsigned char theAttribute)
-{
-  int position = theChar;
-  unsigned char c;
-
-  if (vgaLargeTable && (theAttribute & 0X08))
-    {
-      position |= 0X100;
-    }
-   c = translationTable[position];
-   return c;
-}
-
 
 int openLinuxScreen( int* theScreenDescriptor)
 {
