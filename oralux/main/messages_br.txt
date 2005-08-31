@@ -21,7 +21,7 @@ struct t_translation TheBrazilianPortugueseMessages[]=
   },
 
   {"Danish",
-  "Húngaro", /* ? */	
+  "Dinamarquês",
   },
 
   {"Finnish",
@@ -141,15 +141,15 @@ struct t_translation TheBrazilianPortugueseMessages[]=
   },
 
   {"left angle bracket",
-  "Fecha colchete",	 /* ? */
+  "Abre colchete",
   },
 
   {"left curly bracket",
-  "Abre Parêntess",	/* ? */
+  "Abre Chave",
   },
 
   {"left parenthesis",
-  "Abre parênteses", /* ? */	 
+  "Abre parênteses",
   },
 
   {"left square bracket",
@@ -169,7 +169,7 @@ struct t_translation TheBrazilianPortugueseMessages[]=
   },
 
   {"right curly bracket",
-  "Fecha Parênteses", /* ?  */	  
+  "Fecha Chave",
   },
 
   {"What kind of keyboard is used ?",

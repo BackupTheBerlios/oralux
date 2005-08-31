@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 tifilter2l.c
-$Id: tifilter2l.c,v 1.10 2005/08/28 00:00:42 gcasse Exp $
+$Id: tifilter2l.c,v 1.11 2005/08/31 23:19:55 gcasse Exp $
 $Author: gcasse $
 Description: terminfo filter, two lines.
-$Date: 2005/08/28 00:00:42 $ |
-$Revision: 1.10 $ |
+$Date: 2005/08/31 23:19:55 $ |
+$Revision: 1.11 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -108,8 +108,8 @@ static void searchLinePortion(gpointer theEntry, gpointer theContext)
   if(aText && aText->str)     
     {
       cursor* c =  &(anEntry->myStartingPosition);
-      linePortion* p= createLinePortion (c->myLine, c->myCol, &(c->myStyle), aText->str);
-      this->myLinePortionGroup[ 0] = g_list_append( this->myLinePortionGroup[ 0], (gpointer)p);
+      linePortion* p= createLinePortion (c->myLine, c->myCol, &(c->myStyle), aText->str, anEntry->myParent);
+      this->myLinePortionGroup[ 0] = g_list_append( this->myLinePortionGroup[ 0], p);
     }
 }
 /* > */
@@ -238,7 +238,8 @@ return aLineIsFound;
 /* > */
 
 /* < getHighlightedLine */
-static int getHighlightedLine( context* this, linePortion* p1, linePortion* p2)
+/* return the highlighted line portion or NULL */
+static linePortion* getHighlightedLine( context* this, linePortion* p1, linePortion* p2)
 {
   enum terminalColor aColor;
   int aLineTest1=0;
@@ -246,17 +247,18 @@ static int getHighlightedLine( context* this, linePortion* p1, linePortion* p2)
   int aLastColTest1=0;
   unsigned int aBackgroundColor[2];
   unsigned int aForegroundColor[2];
+  linePortion* aHighlightedLinePortion=NULL;
 
   ENTER("getHighlightedLine");
 
   if (!findLineTest( p1, p2, &aLineTest1, &aFirstColTest1, &aLastColTest1))
     {
-      return 0;
+      return NULL;
     }
 
   if (!this->myTermAPI->getBackground( aLineTest1, aFirstColTest1, aLastColTest1, &aColor))
     {
-      return 0;
+      return NULL;
     }
 
   SHOW("highlighted Line?\n");
@@ -283,6 +285,7 @@ static int getHighlightedLine( context* this, linePortion* p1, linePortion* p2)
 		  else
 		    {
 		      SHOW2("FG2: yes (%s)\n", p2->myString->str);
+		      aHighlightedLinePortion = p2;
 		    }
 		}
 	      else
@@ -292,6 +295,7 @@ static int getHighlightedLine( context* this, linePortion* p1, linePortion* p2)
 		  if (aForegroundColor[1] == aColor)
 		    {
 		      SHOW2("FG2: no (%s)\n", p2->myString->str);
+		      aHighlightedLinePortion = p1;
 		    }
 		  else
 		    {
@@ -301,19 +305,22 @@ static int getHighlightedLine( context* this, linePortion* p1, linePortion* p2)
 	    }
 	  else
 	    {
-	      return 0;
+	      return NULL;
 	    }
 	}
       else
 	{
 	  SHOW2("BG2: yes (%s)\n", p2->myString->str);
+	  aHighlightedLinePortion = p2;			      
 	}
     }
   else
     {
       SHOW2("BG1: yes (%s)\n", p1->myString->str);
+      aHighlightedLinePortion = p1;
     }
-  return 1;
+
+  return aHighlightedLinePortion;
 }
 /* > */
 
@@ -367,14 +374,25 @@ GList* terminfofilter2lines(GList* theTerminfoList, termAPI* theTermAPI, int isD
 
       if( isInteresting)
 	{
+	  linePortion* aOldHighlightedLinePortion=NULL;
 	  if (isDuplicated)
 	    {
 	      aFilteredList = copyTerminfoList( theTerminfoList);
 	    }
 	  SHOW("The old highlighted line was:\n");
-	  getHighlightedLine( this, old_p, old_p+1);
-	  
-	  /*       insertCustomSilenceTerminfo( avant num entry debut, apres num entry fin) */
+	  aOldHighlightedLinePortion = getHighlightedLine( this, old_p, old_p+1);
+	  if (aOldHighlightedLinePortion)
+	    {
+	      GList* aFirstElement = NULL;
+	      GList* aLastElement = NULL;
+
+	      /* i = line portion group which is no more highlighted */
+	      i = (old_p == aOldHighlightedLinePortion) ? 0 : 1;
+
+	      aFirstElement = getTerminfoEntryLinePortionGroup( new_g[i]);
+	      aLastElement = getTerminfoEntryLinePortionGroup( g_list_last (new_g[i]));
+	      addPreviouslyHighlithedElement( aFirstElement, aLastElement);
+	    }
 	}
     }
   deleteContext(this);

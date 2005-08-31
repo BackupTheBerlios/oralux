@@ -19,10 +19,11 @@ struct t_linePortion
   int myLastCol; /* Last column of the portion */
   style myStyle;
   GString* myString;
+  GList* myParent; /* helpful to fastly retrieve the list element which is related to this line portion */
 };
 typedef struct t_linePortion linePortion;
 
-linePortion* createLinePortion (int theLine, int theCol, style* theStyle, chartype* theString);
+linePortion* createLinePortion (int theLine, int theCol, style* theStyle, chartype* theString, GList* theParent);
 void deleteLinePortion( linePortion* this);
 
 /* > */
@@ -39,6 +40,8 @@ void deleteLinePortionGroup( GList* this);
 #define getStyleAddressFromGList(a) &(((linePortion*)(a->data))->myStyle)
 
 int getFeaturesLinePortionGroup( GList* this, linePortion* theFeatures);
+
+#define getTerminfoEntryLinePortionGroup(theList) (((linePortion*)(theList->data))->myParent)
 
 /* > */
 

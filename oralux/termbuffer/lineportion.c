@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 linePortion.c
-$Id: lineportion.c,v 1.6 2005/08/28 00:00:41 gcasse Exp $
+$Id: lineportion.c,v 1.7 2005/08/31 23:19:55 gcasse Exp $
 $Author: gcasse $
 Description: manage line portions.
-$Date: 2005/08/28 00:00:41 $ |
-$Revision: 1.6 $ |
+$Date: 2005/08/31 23:19:55 $ |
+$Revision: 1.7 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -28,7 +28,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "debug.h"
 
 /* < linePortion */
-linePortion* createLinePortion (int theLine, int theCol, style* theStyle, chartype* theString)
+linePortion* createLinePortion (int theLine, int theCol, style* theStyle, chartype* theString, GList* theParent)
 {
     linePortion* this = (linePortion*) malloc(sizeof(linePortion));
 
@@ -37,6 +37,7 @@ linePortion* createLinePortion (int theLine, int theCol, style* theStyle, charty
     this->myLine = theLine;
     this->myFirstCol = theCol;
     this->myLastCol = theCol+strlen(theString)-1;
+    this->myParent = theParent;
     copyStyle(&(this->myStyle), theStyle);
     this->myString = g_string_new(theString);
 

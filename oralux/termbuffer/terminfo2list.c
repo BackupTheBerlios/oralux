@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 terminfo2list.c
-$Id: terminfo2list.c,v 1.11 2005/08/28 18:54:36 gcasse Exp $
+$Id: terminfo2list.c,v 1.12 2005/08/31 23:19:55 gcasse Exp $
 $Author: gcasse $
 Description: convert the terminfo entries to a list of commands.
-$Date: 2005/08/28 18:54:36 $ |
-$Revision: 1.11 $ |
+$Date: 2005/08/31 23:19:55 $ |
+$Revision: 1.12 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -54,7 +54,7 @@ typedef terminfoEntry* (*T_COPY_ENTRY)(const terminfoEntry* theEntry);
 
 
 /* > */
-/* < createEntry, deleteEntry */
+/* < createEntry, deleteEntry, copyEntry, createExternalEntry */
 
 static terminfoEntry* createEntry(enum StringCapacity theCapacity, void* theData1, void* theData2)
 {
@@ -68,9 +68,9 @@ static terminfoEntry* createEntry(enum StringCapacity theCapacity, void* theData
       anEntry->myData1 = theData1 ? (void*)(*((int*)theData1)) : NULL;
       anEntry->myData2 = theData2 ? (void*)(*((int*)theData2)) : NULL;
       anEntry->myEscapeSequence = strdup(yytext);
+      anEntry->myParent = NULL; /* will be updated once all the entries are created */
+      myList = g_list_append(myList, (gpointer)anEntry);
     }
-
-  myList = g_list_append(myList, (gpointer)anEntry);
 
   return anEntry;
 }
@@ -105,6 +105,23 @@ static terminfoEntry* copyEntry(const terminfoEntry* theEntry)
 	  anEntry->myData2 = theEntry->myData2;
 	  anEntry->myEscapeSequence = strdup(theEntry->myEscapeSequence);
 	}
+    }
+
+  return anEntry;
+}
+
+static terminfoEntry* createExternalEntry(enum StringCapacity theCapacity, void* theData1, void* theData2, chartype* theEscapeSequence)
+{
+  terminfoEntry* anEntry=(terminfoEntry*)malloc(sizeof(terminfoEntry));
+  ENTER("createExternalEntry");
+
+  if (anEntry)
+    {
+      anEntry->myCapacity = theCapacity;
+      /* if theData1 is a non NULL pointer, copy its data to myData1 */
+      anEntry->myData1 = theData1 ? (void*)(*((int*)theData1)) : NULL;
+      anEntry->myData2 = theData2 ? (void*)(*((int*)theData2)) : NULL;
+      anEntry->myEscapeSequence = strdup(theEscapeSequence);
     }
 
   return anEntry;
@@ -626,6 +643,7 @@ entryCommands TheEntryCommands[]=
   {NULL, NULL, NULL, NULL, EVHLM, NULL}, 
   {NULL, NULL, NULL, NULL, SGR1, NULL}, 
   {NULL, NULL, NULL, NULL, SLENGTH, NULL}, 
+  {NULL, NULL, NULL, deleteEntry, TPHL, copyEntry}, 
   {createText, NULL, NULL, deleteText, TEXTFIELD, copyText} 
 };
 /* > */
@@ -674,6 +692,15 @@ GList* convertTerminfo2List( FILE* theStream)
       myPreviousCapacity=aCapacity;
     }
 
+  /* update the myParent field */
+  {
+  GList* aList = myList;
+  while(aList)
+    {
+      ((terminfoEntry*)(aList->data))->myParent = aList;
+      aList = aList->next;
+    }
+  }
   return myList;
 }
 /* > */
@@ -770,6 +797,45 @@ GByteArray* convertList2Terminfo( GList* theList)
    g_list_foreach( theList, (GFunc)concatByteArray, aByteArray);
 
    return aByteArray;
+}
+
+/* > */
+
+/* < addPreviouslyHighlithedElement */
+GList* addPreviouslyHighlithedElement( GList* theFirstElement, GList* theLastElement)
+{
+  GList* aList = NULL;
+  int aParam = 0;
+  chartype* aFirstSequence="\x1B[0!";
+  chartype* aLastSequence="\x1B[1!";
+
+  ENTER("addPreviouslyHighlithedElement");
+
+  SHOW2("theFirstElement: txt='%s'\n",
+       ((GString*)((terminfoEntry*)(theFirstElement->data))->myData1)->str);
+  SHOW2("theLastElement: txt='%s'\n",
+       ((GString*)((terminfoEntry*)(theLastElement->data))->myData1)->str);
+
+  if (theFirstElement && theLastElement)
+    {
+      terminfoEntry* anEntry = NULL;
+      
+      /* First terminfo: TPHL param=0 */
+      aParam = 0;
+      anEntry = createExternalEntry( TPHL, &aParam, NULL, aFirstSequence);
+      myList = g_list_insert( myList, 
+			      (gpointer) anEntry, 
+			      g_list_position (myList, theFirstElement));
+      
+      /* Second terminfo: TPHL param=1 */
+      aParam = 1;
+      anEntry = createExternalEntry( TPHL, &aParam, NULL, aLastSequence);
+      myList = g_list_insert( myList, 
+			      (gpointer) anEntry, 
+			      1 + g_list_position (myList, theLastElement));
+    }
+
+  return aList;
 }
 
 /* > */

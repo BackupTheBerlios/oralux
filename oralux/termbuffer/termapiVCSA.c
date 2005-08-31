@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 termapiSimu.c
-$Id: termapiVCSA.c,v 1.6 2005/08/28 00:00:42 gcasse Exp $
+$Id: termapiVCSA.c,v 1.7 2005/08/31 23:19:55 gcasse Exp $
 $Author: gcasse $
 Description: testapi implementation for tests.
-$Date: 2005/08/28 00:00:42 $ |
-$Revision: 1.6 $ |
+$Date: 2005/08/31 23:19:55 $ |
+$Revision: 1.7 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -90,7 +90,7 @@ static GList* _getLinePortionGroup( int theLine, int theFirstCol, int theLastCol
     SHOW4("char %i=%c (0x%x)\n",i,v[i].myChar,v[i].myChar);
 
     VCSA_getStyle( v[0].myAttribute, &aStyle);
-    p = createLinePortion (theLine, aFirstCol, &aStyle, (char*)c);
+    p = createLinePortion (theLine, aFirstCol, &aStyle, (char*)c, NULL);
     aList = g_list_append( aList, (gpointer)p);
 
     for( i=1; i < aLastCol - aFirstCol + 1; i++)
@@ -106,7 +106,7 @@ static GList* _getLinePortionGroup( int theLine, int theFirstCol, int theLastCol
 	else
 	  {
 	    VCSA_getStyle( v[i].myAttribute, &aStyle);
-	    p = createLinePortion (theLine, aFirstCol+i, &aStyle, c);
+	    p = createLinePortion (theLine, aFirstCol+i, &aStyle, c, NULL);
 	    aList = g_list_append( aList, (gpointer)p);
 	  }
       }

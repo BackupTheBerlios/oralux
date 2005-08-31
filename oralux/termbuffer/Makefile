@@ -76,7 +76,7 @@ terminfointerpreter.o: debug.h terminfointerpreter.h
 termapi.o: termapi.h escape2terminfo.h lineportion.h debug.h
 escape2terminfo.o: escape2terminfo.l escape2terminfo.h debug.h
 linuxconsole.o: escape2terminfo.h
-lineportion.o: escape2terminfo.h lineportion.h
+lineportion.o: lineportion.h
 debug.o: debug.h
 termapiVCSA.o: termapi.h debug.h
 test-t2l.o: tifilter2l.h escape2terminfo.h debug.h terminfo2list.h
