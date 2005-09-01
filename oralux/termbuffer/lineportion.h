@@ -41,7 +41,7 @@ void deleteLinePortionGroup( GList* this);
 
 int getFeaturesLinePortionGroup( GList* this, linePortion* theFeatures);
 
-#define getTerminfoEntryLinePortionGroup(theList) (((linePortion*)(theList->data))->myParent)
+#define getTerminfoElementLinePortionGroup(theList) (((linePortion*)(theList->data))->myParent)
 
 /* > */
 

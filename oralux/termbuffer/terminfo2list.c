@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 terminfo2list.c
-$Id: terminfo2list.c,v 1.12 2005/08/31 23:19:55 gcasse Exp $
+$Id: terminfo2list.c,v 1.13 2005/09/01 20:33:43 gcasse Exp $
 $Author: gcasse $
 Description: convert the terminfo entries to a list of commands.
-$Date: 2005/08/31 23:19:55 $ |
-$Revision: 1.12 $ |
+$Date: 2005/09/01 20:33:43 $ |
+$Revision: 1.13 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -801,15 +801,14 @@ GByteArray* convertList2Terminfo( GList* theList)
 
 /* > */
 
-/* < addPreviouslyHighlithedElement */
-GList* addPreviouslyHighlithedElement( GList* theFirstElement, GList* theLastElement)
+/* < addPreviouslyHighligthedElement */
+GList* addPreviouslyHighligthedElement( GList* theFirstElement, GList* theLastElement)
 {
-  GList* aList = NULL;
   int aParam = 0;
   chartype* aFirstSequence="\x1B[0!";
   chartype* aLastSequence="\x1B[1!";
 
-  ENTER("addPreviouslyHighlithedElement");
+  ENTER("addPreviouslyHighligthedElement");
 
   SHOW2("theFirstElement: txt='%s'\n",
        ((GString*)((terminfoEntry*)(theFirstElement->data))->myData1)->str);
@@ -819,23 +818,31 @@ GList* addPreviouslyHighlithedElement( GList* theFirstElement, GList* theLastEle
   if (theFirstElement && theLastElement)
     {
       terminfoEntry* anEntry = NULL;
+      int aPosition = 0;
       
-      /* First terminfo: TPHL param=0 */
+      /* < First terminfo: TPHL param=0 */
       aParam = 0;
       anEntry = createExternalEntry( TPHL, &aParam, NULL, aFirstSequence);
+      aPosition = g_list_position (myList, theFirstElement);
       myList = g_list_insert( myList, 
 			      (gpointer) anEntry, 
-			      g_list_position (myList, theFirstElement));
-      
-      /* Second terminfo: TPHL param=1 */
+			      aPosition);
+
+      anEntry->myParent = g_list_nth( myList, aPosition);
+      /* > */
+
+      /* < Second terminfo: TPHL param=1 */
       aParam = 1;
       anEntry = createExternalEntry( TPHL, &aParam, NULL, aLastSequence);
+      aPosition = 1 + g_list_position (myList, theLastElement);
       myList = g_list_insert( myList, 
 			      (gpointer) anEntry, 
-			      1 + g_list_position (myList, theLastElement));
+			      aPosition);
+      anEntry->myParent = g_list_nth( myList, aPosition);
+      /* > */
     }
 
-  return aList;
+  return myList;
 }
 
 /* > */

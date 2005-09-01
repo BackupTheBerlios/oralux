@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 debug.c
-$Id: debug.c,v 1.5 2005/08/21 23:13:52 gcasse Exp $
+$Id: debug.c,v 1.6 2005/09/01 20:33:43 gcasse Exp $
 $Author: gcasse $
 Description: for applicative trace.
-$Date: 2005/08/21 23:13:52 $ |
-$Revision: 1.5 $ |
+$Date: 2005/09/01 20:33:43 $ |
+$Revision: 1.6 $ |
 Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -431,6 +431,7 @@ char* myStringCapacity[]={
   "EVHLM",
   "SGR1",
   "SLENGTH",
+  "TPHL",
   "TEXT...",
 };
 

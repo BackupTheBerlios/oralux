@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 tifilter2l.c
-$Id: tifilter2l.c,v 1.11 2005/08/31 23:19:55 gcasse Exp $
+$Id: tifilter2l.c,v 1.12 2005/09/01 20:33:43 gcasse Exp $
 $Author: gcasse $
 Description: terminfo filter, two lines.
-$Date: 2005/08/31 23:19:55 $ |
-$Revision: 1.11 $ |
+$Date: 2005/09/01 20:33:43 $ |
+$Revision: 1.12 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -389,9 +389,9 @@ GList* terminfofilter2lines(GList* theTerminfoList, termAPI* theTermAPI, int isD
 	      /* i = line portion group which is no more highlighted */
 	      i = (old_p == aOldHighlightedLinePortion) ? 0 : 1;
 
-	      aFirstElement = getTerminfoEntryLinePortionGroup( new_g[i]);
-	      aLastElement = getTerminfoEntryLinePortionGroup( g_list_last (new_g[i]));
-	      addPreviouslyHighlithedElement( aFirstElement, aLastElement);
+	      aFirstElement = getTerminfoElementLinePortionGroup( new_g[i]);
+	      aLastElement = getTerminfoElementLinePortionGroup( g_list_last (new_g[i]));
+	      aFilteredList = addPreviouslyHighligthedElement( aFirstElement, aLastElement);
 	    }
 	}
     }
