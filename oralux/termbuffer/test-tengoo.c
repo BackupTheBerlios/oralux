@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 test-tb.c
-$Id: test-tengoo.c,v 1.6 2005/08/28 18:54:36 gcasse Exp $
+$Id: test-tengoo.c,v 1.7 2005/09/02 22:03:46 gcasse Exp $
 $Author: gcasse $
 Description: test terminfo2list.
-$Date: 2005/08/28 18:54:36 $ |
-$Revision: 1.6 $ |
+$Date: 2005/09/02 22:03:46 $ |
+$Revision: 1.7 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -43,15 +43,18 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <sys/stat.h>
 #include <fcntl.h>
 
+/* < Tengoo*/
 #include "terminfo2list.h"
 #include "terminfointerpreter.h"
 #include "tifilter2l.h"
 
 #include "debug.h"
+static termAPI* myTermAPI=NULL;
+/* > */
 
 extern char **environ;
 
-#define CHARSIZE sizeof(chartype)
+#define CHARSIZE sizeof(chartyp)
 
 static struct termios t;
 
@@ -66,8 +69,6 @@ unsigned char buf[256];
 char usershell[OPT_STR_SIZE];
 static int shell = 0;
 static char **subprog = NULL;	/* if non-NULL, then exec it instead of shell */
-
-static termAPI* myTermAPI=NULL;
 
 static void yasr_ttyname_r(int fd, char *p, int size)
 {
@@ -183,7 +184,9 @@ static void utmpconv(char *s, char *d, int pid)
     (void) kill(cpid, 9);
   }
 
+  /* < Tengoo */
   deleteTermAPI( myTermAPI);
+  /* > */
 
   DEBUG_END;
 
@@ -270,6 +273,7 @@ static void getoutput()
     finish(0);
   }
 
+  /* < Tengoo */
   {
     GByteArray* aByteArray=NULL;
     GList* aList=NULL;
@@ -294,7 +298,13 @@ static void getoutput()
 
     aByteArray = convertList2Terminfo( aList);
     DISPLAY_RAW_BUFFER( aByteArray->data, aByteArray->len);
-    (void) write(1, aByteArray->data, aByteArray->len);
+
+    {
+      (void) write(1, aByteArray->data, aByteArray->len);
+/*       (void) write(1, buf, size);  */
+/*       size=MIN(aByteArray->len, 256); */
+/*       strncpy(buf,aByteArray->data, size); */
+    }
 
     SHOW_TIME("deleteTermInfoList");
     deleteTermInfoList( aList);
@@ -303,6 +313,10 @@ static void getoutput()
     g_byte_array_free( aByteArray, 1);
 
   }
+
+/*   (void) write(1, buf, size);  */
+
+  /* > */
 }
 
 static void parent()
@@ -394,9 +408,11 @@ int main(int argc, char *argv[])
 {
   struct winsize winsz = { 0, 0 };
 
+  /* < Tengoo */
   DEBUG_BEGIN;
 
   ENTER("main");
+  /* > */
 
   /*  setvbuf(stdout, NULL, _IONBF, 0); / * TBD remove */
 
@@ -437,14 +453,15 @@ int main(int argc, char *argv[])
     }
   strcpy(usershell, "/bin/bash");
 
-  myTermAPI=createTermAPI();
-
+  /* < Tengoo */
   {
     cursor aCursor;
+    myTermAPI=createTermAPI();
     myTermAPI->getCursor( &aCursor);
     terminfointerpreter_init( &aCursor);
     initTerminfo2List( &(aCursor.myStyle));
   }
+  /* > */
 
   SHOW("openpty");
   (void) openpty(&master, &slave, NULL, NULL, &winsz);

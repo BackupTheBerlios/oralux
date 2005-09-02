@@ -10,7 +10,7 @@ A line portion describes an horizontal area in the screen.
 When a menu is browsed, the selected item and the previously ones are displayed with distinct styles (for example distinct backgrounds).
 Two line portions must be particularly managed to distinguish the selected one.
 */
-typedef char chartype; /* TBD: add support for multi-bytes characters */
+typedef char chartyp; /* TBD: add support for multi-bytes characters */
 
 struct t_linePortion
 {
@@ -23,7 +23,7 @@ struct t_linePortion
 };
 typedef struct t_linePortion linePortion;
 
-linePortion* createLinePortion (int theLine, int theCol, style* theStyle, chartype* theString, GList* theParent);
+linePortion* createLinePortion (int theLine, int theCol, style* theStyle, chartyp* theString, GList* theParent);
 void deleteLinePortion( linePortion* this);
 
 /* > */

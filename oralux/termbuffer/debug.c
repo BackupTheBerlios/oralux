@@ -1,11 +1,12 @@
+#ifdef DEBUG
 /* 
 ----------------------------------------------------------------------------
 debug.c
-$Id: debug.c,v 1.6 2005/09/01 20:33:43 gcasse Exp $
+$Id: debug.c,v 1.7 2005/09/02 22:03:46 gcasse Exp $
 $Author: gcasse $
 Description: for applicative trace.
-$Date: 2005/09/01 20:33:43 $ |
-$Revision: 1.6 $ |
+$Date: 2005/09/02 22:03:46 $ |
+$Revision: 1.7 $ |
 Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -609,6 +610,28 @@ void displayStyle(struct t_style* theStyle)
   fprintf(TheOutputStream," |\n");
 }
 /* > */
+/* < debugBegin, debugEnd */
+FILE* TheOutputStream;
+
+void debugBegin()
+{
+  if (strcmp(OUTPUT_FILENAME,"stdout")==0)
+    {
+      TheOutputStream=stdout;
+    }
+  else
+    {
+      TheOutputStream=fopen(OUTPUT_FILENAME, "w+");
+    }
+  setvbuf(TheOutputStream, NULL, _IONBF, 0);
+}
+
+void debugEnd()
+{
+  fclose(TheOutputStream);
+}
+
+/* > */
 /* < displayRawBuffer */
 void displayRawBuffer( unsigned char* theBuffer, int theSize)
 {
@@ -642,32 +665,13 @@ void displayRawBuffer( unsigned char* theBuffer, int theSize)
 }
 
 /* > */
-/* < debugBegin, debugEnd */
-FILE* TheOutputStream;
 
-void debugBegin()
-{
-  if (strcmp(OUTPUT_FILENAME,"stdout")==0)
-    {
-      TheOutputStream=stdout;
-    }
-  else
-    {
-      TheOutputStream=fopen(OUTPUT_FILENAME, "w+");
-    }
-  setvbuf(TheOutputStream, NULL, _IONBF, 0);
-}
-
-void debugEnd()
-{
-  fclose(TheOutputStream);
-}
-
-/* > */
+#else
+void displayRawBuffer( unsigned char* theBuffer, int theSize){}
+#endif
 
 /* 
 Local variables:
 folded-file: t
 folding-internal-margins: nil
 */
-

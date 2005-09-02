@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 terminfo2list.c
-$Id: terminfo2list.c,v 1.13 2005/09/01 20:33:43 gcasse Exp $
+$Id: terminfo2list.c,v 1.14 2005/09/02 22:03:46 gcasse Exp $
 $Author: gcasse $
 Description: convert the terminfo entries to a list of commands.
-$Date: 2005/09/01 20:33:43 $ |
-$Revision: 1.13 $ |
+$Date: 2005/09/02 22:03:46 $ |
+$Revision: 1.14 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -110,7 +110,7 @@ static terminfoEntry* copyEntry(const terminfoEntry* theEntry)
   return anEntry;
 }
 
-static terminfoEntry* createExternalEntry(enum StringCapacity theCapacity, void* theData1, void* theData2, chartype* theEscapeSequence)
+static terminfoEntry* createExternalEntry(enum StringCapacity theCapacity, void* theData1, void* theData2, chartyp* theEscapeSequence)
 {
   terminfoEntry* anEntry=(terminfoEntry*)malloc(sizeof(terminfoEntry));
   ENTER("createExternalEntry");
@@ -771,7 +771,7 @@ static void concatByteArray( gpointer theEntry, gpointer theByteArray)
   if (theEntry && theByteArray)
     {
       terminfoEntry* anEntry = (terminfoEntry*)theEntry;
-      chartype* anEscapeSequence=NULL;
+      chartyp* anEscapeSequence=NULL;
       
       if (anEntry->myCapacity == TEXTFIELD)
 	{
@@ -805,8 +805,8 @@ GByteArray* convertList2Terminfo( GList* theList)
 GList* addPreviouslyHighligthedElement( GList* theFirstElement, GList* theLastElement)
 {
   int aParam = 0;
-  chartype* aFirstSequence="\x1B[0!";
-  chartype* aLastSequence="\x1B[1!";
+  chartyp* aFirstSequence="\x1B[0!";
+  chartyp* aLastSequence="\x1B[1!";
 
   ENTER("addPreviouslyHighligthedElement");
 

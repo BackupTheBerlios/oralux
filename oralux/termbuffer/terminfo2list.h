@@ -11,7 +11,7 @@ struct t_terminfoEntry
   enum StringCapacity myCapacity; /* capacity */
   void* myData1; /* data depend on capacity */
   void* myData2; 
-  chartype* myEscapeSequence; /* the original escape sequence */
+  chartyp* myEscapeSequence; /* the original escape sequence */
   cursor myStartingPosition;
   style myStyle;
   GList* myParent;
