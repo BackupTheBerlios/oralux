@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 tifilter2l.c
-$Id: tifilter2l.c,v 1.12 2005/09/01 20:33:43 gcasse Exp $
+$Id: tifilter2l.c,v 1.13 2005/09/05 20:10:43 gcasse Exp $
 $Author: gcasse $
 Description: terminfo filter, two lines.
-$Date: 2005/09/01 20:33:43 $ |
-$Revision: 1.12 $ |
+$Date: 2005/09/05 20:10:43 $ |
+$Revision: 1.13 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -88,7 +88,6 @@ static void deleteContext(context* this)
   free(this);
 }
 /* > */
-
 /* < searchLinePortion */
 static void searchLinePortion(gpointer theEntry, gpointer theContext)
 {
@@ -185,8 +184,8 @@ static int findLineTest( linePortion* p1, linePortion* p2, int* theLine, int* th
     {
       if (aLine1 + 1 == aLine2)
 	{
-	  if (aLine1 == 0)
-	    {
+	  if (aLine1 <= 1) 
+	    { /* 1 to avoid a possible menu bar */
 	      *theLine = aLine2 + 1;
 	    }
 	  else
@@ -236,7 +235,6 @@ static int findLineTest( linePortion* p1, linePortion* p2, int* theLine, int* th
 return aLineIsFound;
 }
 /* > */
-
 /* < getHighlightedLine */
 /* return the highlighted line portion or NULL */
 static linePortion* getHighlightedLine( context* this, linePortion* p1, linePortion* p2)
@@ -323,7 +321,6 @@ static linePortion* getHighlightedLine( context* this, linePortion* p1, linePort
   return aHighlightedLinePortion;
 }
 /* > */
-
 /* < terminfofilter2lines */
 
 GList* terminfofilter2lines(GList* theTerminfoList, termAPI* theTermAPI, int isDuplicated)
@@ -358,18 +355,21 @@ GList* terminfofilter2lines(GList* theTerminfoList, termAPI* theTermAPI, int isD
 							   new_p[i].myLastCol);
 	  getFeaturesLinePortionGroup( old_g[i], &(old_p[i]));
 
-	  SHOW3("new string %d: \"%s\"\n",i,new_p[i].myString->str);
-	  SHOW3("old string %d: \"%s\"\n",i,old_p[i].myString->str);
+	  if (new_p[i].myString && new_p[i].myString->str)
+	    {
+	      SHOW3("new string %d: \"%s\"\n",i,new_p[i].myString->str);
+	      SHOW3("old string %d: \"%s\"\n",i,old_p[i].myString->str);
 
-	  SHOW2("** New style %d:\n",i);
-	  DISPLAY_STYLE(&(new_p[i].myStyle));
+	      SHOW2("** New style %d:\n",i);
+	      DISPLAY_STYLE(&(new_p[i].myStyle));
+	      
+	      SHOW2("** Old style %d:\n",i);
+	      DISPLAY_STYLE(&(old_p[i].myStyle));
 
-	  SHOW2("** Old style %d:\n",i);
-	  DISPLAY_STYLE(&(old_p[i].myStyle));
-
-	  /* interesting if same contents and distinct styles */
-	  isInteresting = ((strcmp( new_p[i].myString->str, old_p[i].myString->str) == 0)
-			   && !equivalentStyle( &(new_p[i].myStyle), &(old_p[i].myStyle)));
+	      /* interesting if same contents and distinct styles */
+	      isInteresting = ((strcmp( new_p[i].myString->str, old_p[i].myString->str) == 0)
+			       && !equivalentStyle( &(new_p[i].myStyle), &(old_p[i].myStyle)));
+	    }
 	}
 
       if( isInteresting)
