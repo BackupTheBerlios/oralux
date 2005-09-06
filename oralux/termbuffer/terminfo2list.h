@@ -21,7 +21,8 @@ typedef struct t_terminfoEntry terminfoEntry;
 /* > */
 
 void initTerminfo2List( style* theDefaultStyle);
-GList* convertTerminfo2List( FILE* theStream);
+/* GList* convertTerminfo2List( FILE* theStream); */
+GList* convertTerminfo2List( char* theBuffer, int theLength);
 GByteArray* convertList2Terminfo( GList* theList);
 void deleteTermInfoList( GList* theList);
 GList* copyTerminfoList( GList* theList);

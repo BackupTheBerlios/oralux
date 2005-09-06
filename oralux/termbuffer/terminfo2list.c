@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 terminfo2list.c
-$Id: terminfo2list.c,v 1.14 2005/09/02 22:03:46 gcasse Exp $
+$Id: terminfo2list.c,v 1.15 2005/09/06 21:02:33 gcasse Exp $
 $Author: gcasse $
 Description: convert the terminfo entries to a list of commands.
-$Date: 2005/09/02 22:03:46 $ |
-$Revision: 1.14 $ |
+$Date: 2005/09/06 21:02:33 $ |
+$Revision: 1.15 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -657,13 +657,15 @@ void initTerminfo2List( style* theDefaultStyle)
 /* > */
 /* < convertTerminfo2List */
 
-GList* convertTerminfo2List( FILE* theStream)
+/* GList* convertTerminfo2List( FILE* theStream) */
+GList* convertTerminfo2List( char* theBuffer, int theLength)
 {
   enum StringCapacity aCapacity;
 
   ENTER("convertTerminfo2List");
 
-  yyin=theStream;
+/*   yyin=theStream; */
+  initEscape2Terminfo( theBuffer, theLength);
 
   myList=NULL;
   myPreviousCapacity=ACSC; /* init: anything but textfield.*/
@@ -692,12 +694,17 @@ GList* convertTerminfo2List( FILE* theStream)
       myPreviousCapacity=aCapacity;
     }
 
+  finishEscape2Terminfo();
+
   /* update the myParent field */
   {
   GList* aList = myList;
   while(aList)
     {
       ((terminfoEntry*)(aList->data))->myParent = aList;
+
+      SHOW3("myParent=%x, myEscapeSequence=%s\n", (unsigned int)((terminfoEntry*)(aList->data))->myParent, ((terminfoEntry*)(aList->data))->myEscapeSequence);
+
       aList = aList->next;
     }
   }

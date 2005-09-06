@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 
-/* < flex declarations, ++ */
+/* < misc declarations */
 extern int yylex (void);
 extern char *yytext;
 extern int yyleng;
@@ -15,6 +15,9 @@ extern int TheParameter[MAXPARAM];
 extern int TheNumberOfParameter;
 extern struct t_style TheDefaultStyle;
 extern struct t_style TheCurrentStyle;
+
+void initEscape2Terminfo( char* theBuffer, int theLength);
+void finishEscape2Terminfo();
 
 /* > */
 /* < terminalColor */

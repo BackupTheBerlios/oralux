@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 linePortion.c
-$Id: lineportion.c,v 1.8 2005/09/02 22:03:46 gcasse Exp $
+$Id: lineportion.c,v 1.9 2005/09/06 21:02:33 gcasse Exp $
 $Author: gcasse $
 Description: manage line portions.
-$Date: 2005/09/02 22:03:46 $ |
-$Revision: 1.8 $ |
+$Date: 2005/09/06 21:02:33 $ |
+$Revision: 1.9 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -41,7 +41,7 @@ linePortion* createLinePortion (int theLine, int theCol, style* theStyle, charty
     copyStyle(&(this->myStyle), theStyle);
     this->myString = g_string_new(theString);
 
-    SHOW4("Line=%d, First Col=%d, Last Col=%d\n", this->myLine, this->myFirstCol, this->myLastCol);
+    SHOW5("Line=%d, First Col=%d, Last Col=%d, this->myParent=%x\n", this->myLine, this->myFirstCol, this->myLastCol, (unsigned int)this->myParent);
     SHOW2("String=\"%s\"\n", this->myString->str);
     DISPLAY_STYLE( &(this->myStyle));
 

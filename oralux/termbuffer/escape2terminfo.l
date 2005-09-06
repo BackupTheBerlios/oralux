@@ -6,6 +6,7 @@
 	int TheNumberOfParameter;
 	struct t_style TheDefaultStyle;
 	struct t_style TheCurrentStyle;
+	YY_BUFFER_STATE TheBufferState;
 
 
 NUL	\x00
@@ -116,6 +117,16 @@ ALT	[\x80-\xff]
 .			return TEXTFIELD;
 
 %%
+	void initEscape2Terminfo( char* theBuffer, int theLength)
+	{
+	  TheBufferState = yy_scan_bytes ( theBuffer, theLength);
+	  yy_switch_to_buffer( TheBufferState);
+	}
+	void finishEscape2Terminfo()
+	{
+	  yy_delete_buffer( TheBufferState);
+	}
+
 	void getEquivalentStyle( style* theStyle, unsigned int* theBackground, unsigned int* theForeground)
 	{
 	  if (theStyle->isReverse)

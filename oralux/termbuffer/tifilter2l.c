@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 tifilter2l.c
-$Id: tifilter2l.c,v 1.13 2005/09/05 20:10:43 gcasse Exp $
+$Id: tifilter2l.c,v 1.14 2005/09/06 21:02:33 gcasse Exp $
 $Author: gcasse $
 Description: terminfo filter, two lines.
-$Date: 2005/09/05 20:10:43 $ |
-$Revision: 1.13 $ |
+$Date: 2005/09/06 21:02:33 $ |
+$Revision: 1.14 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -37,6 +37,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define MAX_LINE_PORTION 3 
 
 /* At the moment, just two style changes are processed (two menu entries) plus one for the remaining text */
+#define NB_STYLE_CHANGE 2
 #define MAX_LINE_PORTION_GROUP 3
 
 struct t_context
@@ -131,10 +132,16 @@ static int groupLinePortion( context* this)
 
   while(( aList = g_list_next( aList)) && (i < MAX_LINE_PORTION_GROUP))
     {
+      int acomp=compareStyle( getStyleAddressFromGList( aList), getStyleAddressFromGList( aList->prev));
+
+      SHOW2("*** same style:%d\n",acomp);
+
+
       /* New group ? */
       if ((getLineFromGList( aList) != getLineFromGList( aList->prev))
-	  || (getFirstColFromGList( aList) != getLastColFromGList( aList->prev)+1))
-	{ 
+	  || (getFirstColFromGList( aList) != getLastColFromGList( aList->prev)+1)
+	  || (compareStyle( getStyleAddressFromGList( aList), getStyleAddressFromGList( aList->prev))!=0))
+	{
 	  aList->prev->next = NULL;
 	  aList->prev = NULL;
 	  this->myLinePortionGroup[i] = aList;
@@ -142,6 +149,7 @@ static int groupLinePortion( context* this)
 	} 
       SHOW3("Group=%d: \"%s\"\n", i-1, getStringFromGList( aList));
     }
+  SHOW2("groupLinePortion returns: %d\n", i);
 
   return i;
 }
@@ -327,6 +335,7 @@ GList* terminfofilter2lines(GList* theTerminfoList, termAPI* theTermAPI, int isD
 {
   GList* aFilteredList=theTerminfoList;
   context* this=NULL;
+  int aNumberOfLinePortionGroup=0;
   
   ENTER("terminfofilter2lines");
 
@@ -334,45 +343,54 @@ GList* terminfofilter2lines(GList* theTerminfoList, termAPI* theTermAPI, int isD
 
   g_list_foreach( theTerminfoList, (GFunc)searchLinePortion, this);
 
-  if (groupLinePortion(this) == 2)
-    {
-      GList* new_g[2];
-      GList* old_g[2];
-      linePortion new_p[2];
-      linePortion old_p[2];
-      int i;
-      int isInteresting=1;
+  aNumberOfLinePortionGroup = groupLinePortion(this);
 
-      for(i=0; i<2 && isInteresting; i++)
+  if (aNumberOfLinePortionGroup >= NB_STYLE_CHANGE)
+    { /* looking for the style changes */
+      GList* new_g[ NB_STYLE_CHANGE+1];
+      GList* old_g[ NB_STYLE_CHANGE+1];
+      linePortion new_p[ NB_STYLE_CHANGE+1];
+      linePortion old_p[ NB_STYLE_CHANGE+1];
+      int i=0; /* myLinePortionGroup index */
+      int j=0; /* index and number of style changes */
+
+      for(i=0; i<aNumberOfLinePortionGroup && j<NB_STYLE_CHANGE+1; i++)
 	{
+	  SHOW2("* linePortionGroup %d\n",i);
+
 	  /* get info ('features') about the new group of line portions */ 
-	  new_g[i]=this->myLinePortionGroup[i];
-	  getFeaturesLinePortionGroup( new_g[i], &(new_p[i]));
+	  new_g[j]=this->myLinePortionGroup[i];
+	  getFeaturesLinePortionGroup( new_g[j], &(new_p[j]));
 
 	  /* get info about the old group of line portions (currently displayed) */ 
-	  old_g[i] = this->myTermAPI->getLinePortionGroup( new_p[i].myLine,
-							   new_p[i].myFirstCol,
-							   new_p[i].myLastCol);
-	  getFeaturesLinePortionGroup( old_g[i], &(old_p[i]));
+	  old_g[j] = this->myTermAPI->getLinePortionGroup( new_p[j].myLine,
+							   new_p[j].myFirstCol,
+							   new_p[j].myLastCol);
+	  getFeaturesLinePortionGroup( old_g[j], &(old_p[j]));
 
-	  if (new_p[i].myString && new_p[i].myString->str)
+	  if (new_p[j].myString && new_p[j].myString->str)
 	    {
-	      SHOW3("new string %d: \"%s\"\n",i,new_p[i].myString->str);
-	      SHOW3("old string %d: \"%s\"\n",i,old_p[i].myString->str);
+	      SHOW3("new string %d: \"%s\"\n",j,new_p[j].myString->str);
+	      SHOW3("old string %d: \"%s\"\n",j,old_p[j].myString->str);
 
-	      SHOW2("** New style %d:\n",i);
-	      DISPLAY_STYLE(&(new_p[i].myStyle));
+	      SHOW2("** New style %d:\n",j);
+	      DISPLAY_STYLE(&(new_p[j].myStyle));
 	      
-	      SHOW2("** Old style %d:\n",i);
-	      DISPLAY_STYLE(&(old_p[i].myStyle));
+	      SHOW2("** Old style %d:\n",j);
+	      DISPLAY_STYLE(&(old_p[j].myStyle));
 
 	      /* interesting if same contents and distinct styles */
-	      isInteresting = ((strcmp( new_p[i].myString->str, old_p[i].myString->str) == 0)
-			       && !equivalentStyle( &(new_p[i].myStyle), &(old_p[i].myStyle)));
+	      if ((strcmp( new_p[j].myString->str, old_p[j].myString->str) == 0)
+		  && !equivalentStyle( &(new_p[j].myStyle), &(old_p[j].myStyle)))
+		{
+		  j++;
+		}
 	    }
 	}
 
-      if( isInteresting)
+      SHOW2("Number of style changes = %d\n",j);
+
+      if( j==NB_STYLE_CHANGE)
 	{
 	  linePortion* aOldHighlightedLinePortion=NULL;
 	  if (isDuplicated)

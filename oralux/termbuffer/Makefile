@@ -21,9 +21,9 @@ OBJS = tifilter2l.o terminfo2list.o escape2terminfo.o linuxconsole.o lineportion
 OBJS2 = test-tengoo.o
 OBJS3 = test-tengoo.o $(OBJS)
 
-all: libtengoo.a
+all: libtengoo.a tengoo 
 
-tengoo: $(OBJS2)
+tengoo: $(OBJS2) libtengoo.a
 	$(CC) $(CFLAGS) test-tengoo.o -ltengoo $(LDFLAGS) -o tengoo  
 #	$(CC) -ltengoo -o tengoo $(CFLAGS) $(OBJS2)
 
@@ -37,7 +37,7 @@ clean:
 	/bin/rm -f *.o libtengoo.a
 
 # dependencies
-tifilter2l.o: tifilter2l.h escape2terminfo.h debug.h Makefile
+tifilter2l.o: tifilter2l.h escape2terminfo.h debug.h
 terminfo2list.o: escape2terminfo.h debug.h terminfo2list.h
 terminfointerpreter.o: debug.h terminfointerpreter.h
 termapi.o: termapi.h escape2terminfo.h lineportion.h debug.h
