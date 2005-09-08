@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 test-tb.c
-$Id: test-tb.c,v 1.4 2005/07/14 13:31:52 gcasse Exp $
+$Id: test-t2l.c,v 1.1 2005/09/08 18:42:53 gcasse Exp $
 $Author: gcasse $
-Description: test termbuffer.
-$Date: 2005/07/14 13:31:52 $ |
-$Revision: 1.4 $ |
+Description: test terminfo2list.
+$Date: 2005/09/08 18:42:53 $ |
+$Revision: 1.1 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -27,17 +27,29 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-#include "termbuffer.h"
+#include "terminfo2list.h"
+#include "terminfointerpreter.h"
+#include "tifilter2l.h"
+#include "debug.h"
+
+
+/* static void displayList(gpointer theEntry, gpointer userData) */
+/* { */
+/*   DISPLAY_CAPACITY( ((terminfoEntry*)theEntry)->myCapacity); */
+/* } */
 
 int main(int argc, char *argv[])
 {
   FILE* fd=NULL;
-  struct t_termbuffer* aTermbuffer=createTermbuffer( LINUX, 48, 128);
-  char* aOutput=NULL;
   enum {MAX_LINE=400};
   char* aTest=(char*)malloc(MAX_LINE);
   char* aAbsolutePath=malloc(MAX_LINE);
   int aLength=0;
+  cursor aCursor;
+  termAPI* aTermAPI=createTermAPI();
+  GList* aList=NULL;
+
+  aTermAPI->getCursor( &aCursor);
 
   getcwd (aAbsolutePath, MAX_LINE);
   aLength=strlen(aAbsolutePath);
@@ -49,9 +61,12 @@ int main(int argc, char *argv[])
       return 1;
     }
   
+  terminfointerpreter_init( &aCursor);
+
   while (fgets(aTest, MAX_LINE, fd))
     {
       FILE* fdtest=NULL;
+
       if ((*aTest=='#')||(*aTest=='\n'))
 	{
 	  continue;
@@ -71,18 +86,25 @@ int main(int argc, char *argv[])
 	  printf("*** Test: %s\n",aTest);
 	}
 
-      interpretEscapeSequence( aTermbuffer, fdtest, &aOutput);
+      SHOW_TIME("convertTerminfo2List");
 
+      aList = convertTerminfo2List( fdtest);
       fclose(fdtest);
-      if (aOutput)
-	{
-	  printf(">>>Output=%s<<<\n", aOutput);
-	  free(aOutput);
-	  aOutput=NULL;
-	}
+
+      SHOW_TIME("terminfointerpreter");
+      g_list_foreach(aList, (GFunc)terminfointerpreter, NULL);
+
+      SHOW_TIME("terminfofilter2lines");
+      aList = terminfofilter2lines( aList, aTermAPI, 0);
+
+      SHOW_TIME("deleteList");
+      deleteTermInfoList( aList);
+
+      SHOW_TIME("The end");
     }
 
-  deleteTermbuffer( aTermbuffer);
+  deleteTermAPI( aTermAPI);
+
   fclose(fd);
   free(aTest);
   free(aAbsolutePath);
