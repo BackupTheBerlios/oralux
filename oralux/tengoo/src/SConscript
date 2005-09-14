@@ -1,0 +1,9 @@
+#! /usr/bin/env python
+
+Import('env')
+
+env.SConscript('termapi/SConscript')
+env.SConscript('termbuffer/SConscript')
+env.SConscript('terminfo/SConscript')
+env.SConscript('debug/SConscript')
+env.SConscript('main/SConscript')

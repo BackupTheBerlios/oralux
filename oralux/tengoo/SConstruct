@@ -1,0 +1,11 @@
+#! /usr/bin/env python
+
+env = Environment(CC = 'gcc'
+	, CCFLAGS = '-g -DDEBUG -fPIC -Wall')
+
+#env = Environment(CC = 'gcc', CCFLAGS = '-O2 -fPIC -Wall')
+
+Export('env')
+
+SConscript(['src/SConscript'], build_dir='build')
+
