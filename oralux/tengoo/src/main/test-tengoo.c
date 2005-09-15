@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 test-tengoo.c
-$Id: test-tengoo.c,v 1.1 2005/09/14 21:10:08 gcasse Exp $
+$Id: test-tengoo.c,v 1.2 2005/09/15 22:10:18 gcasse Exp $
 $Author: gcasse $
 Description: test Tengoo.
-$Date: 2005/09/14 21:10:08 $ |
-$Revision: 1.1 $ |
+$Date: 2005/09/15 22:10:18 $ |
+$Revision: 1.2 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -44,12 +44,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <fcntl.h>
 
 /* < Tengoo*/
-#include "terminfo2list.h"
-#include "terminfointerpreter.h"
-#include "tifilter2l.h"
-
+#include "tengoo.h"
 #include "debug.h"
-static termAPI* myTermAPI=NULL;
+static void* myTengoo=NULL;
 /* > */
 
 extern char **environ;
@@ -63,9 +60,16 @@ typedef unsigned char uchar;
 static int cpid;
 static int size;
 static int master, slave;
-unsigned char buf[256];
-#define OPT_STR_SIZE 80
 
+/* < Tengoo */
+
+/* unsigned char buf[256]; */
+#define MAX_BUF_SIZE 10240 /* bigger to receive an enriched output */
+unsigned char buf[MAX_BUF_SIZE];
+
+/* > */
+
+#define OPT_STR_SIZE 80
 char usershell[OPT_STR_SIZE];
 static int shell = 0;
 static char **subprog = NULL;	/* if non-NULL, then exec it instead of shell */
@@ -185,7 +189,7 @@ static void utmpconv(char *s, char *d, int pid)
   }
 
   /* < Tengoo */
-  deleteTermAPI( myTermAPI);
+  deleteTengoo( myTengoo);
   /* > */
 
   DEBUG_END;
@@ -274,33 +278,15 @@ static void getoutput()
   }
 
   /* < Tengoo */
-  {
-    GByteArray* aByteArray=NULL;
-    GList* aList = convertTerminfo2List( buf, size);
+  GByteArray* aByteArray=manageOutputTengoo( myTengoo, buf, size);
 
-    SHOW_TIME("terminfointerpreter");
-    g_list_foreach(aList, (GFunc)terminfointerpreter, NULL);
-  
-    SHOW_TIME("terminfofilter2lines");
-    aList = terminfofilter2lines( aList, myTermAPI, 0);
-
-    aByteArray = convertList2Terminfo( aList);
-    DISPLAY_RAW_BUFFER( aByteArray->data, aByteArray->len);
-
-    {
-      (void) write(1, aByteArray->data, aByteArray->len);
+  (void) write(1, aByteArray->data, aByteArray->len);
 /*       (void) write(1, buf, size);  */
 /*       size=MIN(aByteArray->len, 256); */
 /*       strncpy(buf,aByteArray->data, size); */
-    }
-
-    SHOW_TIME("deleteTermInfoList");
-    deleteTermInfoList( aList);
 
     SHOW_TIME("g_byte_array_free");
     g_byte_array_free( aByteArray, 1);
-
-  }
 
 /*   (void) write(1, buf, size);  */
 
@@ -442,13 +428,7 @@ int main(int argc, char *argv[])
   strcpy(usershell, "/bin/bash");
 
   /* < Tengoo */
-  {
-    cursor aCursor;
-    myTermAPI=createTermAPI();
-    myTermAPI->getCursor( &aCursor);
-    terminfointerpreter_init( &aCursor);
-    initTerminfo2List( &(aCursor.myStyle));
-  }
+  myTengoo = createTengoo("links2");
   /* > */
 
   SHOW("openpty");

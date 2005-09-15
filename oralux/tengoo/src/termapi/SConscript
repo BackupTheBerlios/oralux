@@ -9,6 +9,9 @@ termapiVCSA.c
 include = Split("""
 /usr/include/glib-2.0
 /usr/lib/glib-2.0/include
+../debug
+../termbuffer
+../terminfo
 """)
 
 Import('env')
@@ -16,4 +19,4 @@ Import('env')
 termapi = env.Library(
     'termapi'
     , list
-    , CPPPATH = ['../debug', '../terminfo', '../termbuffer','/usr/include/glib-2.0', '/usr/lib/glib-2.0/include'])
+    , CPPPATH = include)

@@ -3,11 +3,17 @@ list = Split("""
 lineportion.c
 """)
 
+include = Split("""
+/usr/include/glib-2.0
+/usr/lib/glib-2.0/include
+../terminfo
+../debug
+""")
+
 Import('env');
 
 termbuffer = env.Library(
     'termbuffer'
     , list
-    , CPPPATH = ['/usr/include/glib-2.0', '/usr/lib/glib-2.0/include']
-    , LIBS = ['glib-2.0', 'util']);
+    , CPPPATH = include);
 

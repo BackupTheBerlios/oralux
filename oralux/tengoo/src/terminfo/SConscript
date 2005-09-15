@@ -7,6 +7,15 @@ terminfointerpreter.c
 tifilter2l.c
 """)
 
+include = Split("""
+/usr/include/glib-2.0
+/usr/lib/glib-2.0/include
+.
+../termbuffer
+../termapi
+../debug
+""")
+
 Import('env');
 
 env.CXXFile( "escape2terminfo.c", "escape2terminfo.ll" )
@@ -14,11 +23,6 @@ env.CXXFile( "escape2terminfo.c", "escape2terminfo.ll" )
 terminfo = env.Library(
     'terminfo'
     , list
-    , CPPPATH = ['/usr/include/glib-2.0'
-                 , '/usr/lib/glib-2.0/include'
-                 ,'.'
-                 ,'../termbuffer'
-                 ,'../termapi'
-                 ,'../debug']
-    , LIBS = ['glib-2.0', 'util']);
+    , CPPPATH = include
+    );
 
