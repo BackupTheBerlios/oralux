@@ -3,8 +3,13 @@
 #include <glib.h>
 #include "termapi.h"
 
-void* createMode(char* theName, termAPI* theTermAPI);
-GByteArray* manageInputMode( void* theMode, char* theInput, int theLength);
-GByteArray* manageOutputMode( void* theMode, char* theOutput, int theLength);
-void deleteMode( void* theMode);
+typedef void* (CREATE_MODE_HANDLER)( char* theName, termAPI* theTermAPI);
+typedef void (DELETE_MODE_HANDLER)( void* theMode);
+typedef GByteArray* (MANAGE_BUFFER_MODE_HANDLER)( void* theMode, char* theInput, int theLength);
+
+CREATE_MODE_HANDLER createMode;
+DELETE_MODE_HANDLER deleteMode;
+MANAGE_BUFFER_MODE_HANDLER manageInputMode;
+MANAGE_BUFFER_MODE_HANDLER manageOutputMode;
+
 #endif
