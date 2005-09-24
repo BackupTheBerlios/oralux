@@ -1,12 +1,13 @@
 #! /usr/bin/env python
 list = Split("""
-action.c
-modeAPI.c
+links2vox.c
 """)
 
 include = Split("""
 /usr/include/glib-2.0
 /usr/lib/glib-2.0/include
+../graphic
+../speech
 ../mode
 ../plugin
 ../termapi
@@ -17,8 +18,7 @@ include = Split("""
 
 Import('env');
 
-termbuffer = env.Library(
-    'mode'
+links2vox = env.SharedLibrary(
+    'links2vox'
     , list
     , CPPPATH = include);
-

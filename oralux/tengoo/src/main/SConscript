@@ -7,7 +7,9 @@ test-tengoo.c
 include = Split("""
 /usr/include/glib-2.0
 /usr/lib/glib-2.0/include
+../graphic
 ../mode
+../plugin
 ../termbuffer
 ../termapi
 ../terminfo
@@ -19,13 +21,17 @@ Import('env')
 env.Program(target = 'tengoo'
             , source = list
             , CPPPATH = include
-            , LIBPATH = ['../mode',
+            , LIBPATH = ['../graphic',
+                         '../mode',
+                         '../plugin',
                          '../termapi',
                          '../termbuffer',
                          '../terminfo',
                          '../debug']
             , LIBS = ['gmodule-2.0',
                       'glib-2.0',
+                      'links2vox',
+                      'graphic',
                       'mode',
                       'util',
                       'termapi',

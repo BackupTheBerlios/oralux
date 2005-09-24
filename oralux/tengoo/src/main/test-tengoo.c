@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 test-tengoo.c
-$Id: test-tengoo.c,v 1.2 2005/09/15 22:10:18 gcasse Exp $
+$Id: test-tengoo.c,v 1.3 2005/09/24 22:19:18 gcasse Exp $
 $Author: gcasse $
 Description: test Tengoo.
-$Date: 2005/09/15 22:10:18 $ |
-$Revision: 1.2 $ |
+$Date: 2005/09/24 22:19:18 $ |
+$Revision: 1.3 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -235,7 +235,21 @@ static void getinput()
   if (key >= 0x80 && key <= 0xff) key += 0x1a80;
 #endif
 
-  (void) write(master, buf, size);
+  /* < Tengoo */
+  GByteArray* aByteArray=transcodeInputTengoo( myTengoo, buf, size);
+
+  if (aByteArray)
+    {
+      size=MIN(aByteArray->len, 256);
+      strncpy(buf,aByteArray->data, size);
+
+      SHOW_TIME("g_byte_array_free");
+      g_byte_array_free( aByteArray, 1);
+      (void) write(master, buf, size);
+    }
+  /* > */
+
+/*   (void) write(master, buf, size); */
 }
 
 
@@ -278,19 +292,22 @@ static void getoutput()
   }
 
   /* < Tengoo */
-  GByteArray* aByteArray=manageOutputTengoo( myTengoo, buf, size);
+  GByteArray* aByteArray=transcodeOutputTengoo( myTengoo, buf, size);
 
-  (void) write(1, aByteArray->data, aByteArray->len);
+  if (aByteArray)
+    {
+/*       (void) write(1, aByteArray->data, aByteArray->len); */
 /*       (void) write(1, buf, size);  */
 /*       size=MIN(aByteArray->len, 256); */
 /*       strncpy(buf,aByteArray->data, size); */
 
-    SHOW_TIME("g_byte_array_free");
-    g_byte_array_free( aByteArray, 1);
-
-/*   (void) write(1, buf, size);  */
-
+      SHOW_TIME("g_byte_array_free");
+      g_byte_array_free( aByteArray, 1);
+    }
   /* > */
+
+  (void) write(1, buf, size);
+
 }
 
 static void parent()
@@ -428,7 +445,7 @@ int main(int argc, char *argv[])
   strcpy(usershell, "/bin/bash");
 
   /* < Tengoo */
-  myTengoo = createTengoo("links2");
+  myTengoo = createTengoo("links2vox", 255);
   /* > */
 
   SHOW("openpty");

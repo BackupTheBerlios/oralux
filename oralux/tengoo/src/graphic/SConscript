@@ -1,0 +1,17 @@
+#! /usr/bin/env python
+list = Split("""
+box.c
+point.c
+""")
+
+include = Split("""
+../terminfo
+../debug
+""")
+
+Import('env');
+
+graphic = env.Library(
+    'graphic'
+    , list
+    , CPPPATH = include);

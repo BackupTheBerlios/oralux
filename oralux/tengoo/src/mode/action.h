@@ -1,12 +1,10 @@
 #ifndef ACTION
 #define ACTION
 
-#include <glib.h>
-#include "termapi.h"
+#include "pluginAPI.h"
 
-typedef GByteArray* (actionCallBack)( char* theBuffer, int theLength, termAPI* theTermAPI);
-
-actionCallBack tagPreviouslyHighlightedArea;
-actionCallBack purgeOutput;
+TRANSCODE_PLUGINAPI getLinePortionAtCursor;
+TRANSCODE_PLUGINAPI purgeOutput;
+TRANSCODE_PLUGINAPI tagPreviouslyHighlightedArea;
 
 #endif

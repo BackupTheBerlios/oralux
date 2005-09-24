@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 tengoo.c
-$Id: tengoo.c,v 1.2 2005/09/16 21:53:36 gcasse Exp $
+$Id: tengoo.c,v 1.3 2005/09/24 22:19:18 gcasse Exp $
 $Author: gcasse $
 Description: Tengoo API.
-$Date: 2005/09/16 21:53:36 $ |
-$Revision: 1.2 $ |
+$Date: 2005/09/24 22:19:18 $ |
+$Revision: 1.3 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -31,7 +31,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "terminfo2list.h"
 #include "terminfointerpreter.h"
 
-#include "mode.h"
+#include "modeAPI.h"
 #include "debug.h"
 
 struct tengoo {
@@ -41,7 +41,7 @@ struct tengoo {
 typedef struct tengoo tengoo;
 
 /* < createTengoo */
-void* createTengoo( char* theMode)
+void* createTengoo( char* theMode, int theInputOutputMaxLength)
 {
   ENTER("createTengoo");
 
@@ -53,7 +53,7 @@ void* createTengoo( char* theMode)
   terminfointerpreter_init( &aCursor);
   initTerminfo2List( &(aCursor.myStyle));
 
-  this->myMode = createMode( theMode, this->myTermAPI);
+  this->myMode = createModeAPI( theMode, this->myTermAPI, theInputOutputMaxLength);
   
   return (void*)this;
 }
@@ -64,28 +64,42 @@ void deleteTengoo(void* theHandle)
   tengoo* this = (tengoo*)theHandle;
   ENTER("deleteTengoo");
 
-  deleteMode( this->myMode);
+  deleteModeAPI( this->myMode);
   deleteTermAPI( this->myTermAPI);
 }
 /* > */
-/* < manageInputTengoo */
-GByteArray* manageInputTengoo( void* theHandle, char* theInput, int theLength)
+/* < transcodeInputTengoo */
+GByteArray* transcodeInputTengoo( void* theHandle, char* theInput, int theLength)
 {
   tengoo* this = (tengoo*)theHandle;
+  GByteArray* aByteArray = NULL;
 
-  ENTER("manageOutputTengoo");
+  ENTER("transcodeInputTengoo");
 
-  return manageInputMode( this->myMode, theInput, theLength);
+  aByteArray = transcodeInputModeAPI( this->myMode, theInput, theLength);
+  if (aByteArray)
+    {
+      SHOW3("transcodeInputTengoo : aByteArray=%x length=%d\n", (int)aByteArray, ((aByteArray) ? aByteArray->len : 0));
+    }
+  return aByteArray;
 }
 /* > */
-/* < manageOutputTengoo */
-GByteArray* manageOutputTengoo( void* theHandle, char* theOutput, int theLength)
+/* < transcodeOutputTengoo */
+GByteArray* transcodeOutputTengoo( void* theHandle, char* theOutput, int theLength)
 {
   tengoo* this = (tengoo*)theHandle;
+  GByteArray* aByteArray = NULL;
 
-  ENTER("manageOutputTengoo");
+  ENTER("transcodeOutputTengoo");
+  SHOW3("**** theLength=%d, theOutput>>\n%s\n", theLength, theOutput);
 
-  return manageOutputMode( this->myMode, theOutput, theLength);
+  aByteArray = transcodeOutputModeAPI( this->myMode, theOutput, theLength);
+  
+  if (aByteArray)
+    {
+      SHOW3("transcodeOutputTengoo : aByteArray=%x length=%d\n", (int)aByteArray, ((aByteArray) ? aByteArray->len : 0));
+    }
+  return aByteArray;
 }
 /* > */
 

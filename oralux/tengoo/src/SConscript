@@ -2,6 +2,8 @@
 
 Import('env')
 
+env.SConscript('graphic/SConscript')
+env.SConscript('plugin/SConscript')
 env.SConscript('termapi/SConscript')
 env.SConscript('termbuffer/SConscript')
 env.SConscript('terminfo/SConscript')

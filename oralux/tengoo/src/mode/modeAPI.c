@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 mode.c
-$Id: mode.c,v 1.2 2005/09/17 23:05:40 gcasse Exp $
+$Id: modeAPI.c,v 1.1 2005/09/24 22:22:36 gcasse Exp $
 $Author: gcasse $
 Description: Mode API.
-$Date: 2005/09/17 23:05:40 $ |
-$Revision: 1.2 $ |
+$Date: 2005/09/24 22:22:36 $ |
+$Revision: 1.1 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -29,26 +29,21 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <gmodule.h>
 #include "action.h"
 #include "debug.h"
-#include "mode.h"
+#include "modeAPI.h"
+#include "termapi.h"
+#include "pluginAPI.h"
 
 /* < type */
-struct childMode
-{
-  void* myIdent;
-  CREATE_MODE_HANDLER* create;
-  DELETE_MODE_HANDLER* delete;
-  MANAGE_BUFFER_MODE_HANDLER* manageInput;
-  MANAGE_BUFFER_MODE_HANDLER* manageOutput;
-};
-typedef struct childMode childMode;
 
 struct mode
 {
   GModule* myModule;
-  childMode* myChild;
+  pluginAPI* myPluginAPI;
 };
 typedef struct mode mode;
+
 /* > */
+
 /* < createModule */
 static GModule* createModule( char* theName)
 {
@@ -56,32 +51,33 @@ static GModule* createModule( char* theName)
   return g_module_open( aPath, 0);
 }
 /* > */
-/* < createChildMode */
-static childMode* createChildMode( GModule* theModule, termAPI* theTermAPI)
+/* < createPluginAPI */
+static pluginAPI* createPluginAPI( mode* this, int theInputOutputMaxLength, termAPI* theTermAPI)
 {
-  childMode* p=NULL;
+  pluginAPI* p=NULL;
 
-  ENTER("createChildMode");
+  ENTER("createPluginAPI");
 
-  if (!theModule || !theTermAPI)
+  if (!this || !this->myModule)
     {
       return NULL;
     }
 
-  p = malloc(sizeof(childMode));
+  p = malloc(sizeof(pluginAPI));
   if (!p)
     {
       return NULL;
     }
 
-  memset(p, 0, sizeof(childMode));
+  memset(p, 0, sizeof(pluginAPI));
   
-  if(g_module_symbol( theModule, "createMode", (gpointer*)&(p->create))
-     && g_module_symbol( theModule, "deleteMode", (gpointer*)&(p->delete))
-     && g_module_symbol( theModule, "manageInputMode", (gpointer*)&(p->manageInput))
-     && g_module_symbol( theModule, "manageOutputMode", (gpointer*)&(p->manageOutput)))
+  if(g_module_symbol( this->myModule, "createPlugin", (gpointer*)&(p->create))
+     && g_module_symbol( this->myModule, "deletePlugin", (gpointer*)&(p->delete))
+     && g_module_symbol( this->myModule, "transcodeInputPlugin", (gpointer*)&(p->transcodeInput))
+     && g_module_symbol( this->myModule, "transcodeOutputPlugin", (gpointer*)&(p->transcodeOutput)))
     {
-      p->myIdent = p->create( NULL, theTermAPI);
+      p->myTermAPI = theTermAPI;
+      p->myPlugin = p->create( theTermAPI, theInputOutputMaxLength);
     }
   else
     {
@@ -92,12 +88,12 @@ static childMode* createChildMode( GModule* theModule, termAPI* theTermAPI)
   return p;
 }
 /* > */
-/* < createMode */
-void* createMode( char* theName, termAPI* theTermAPI)
+/* < createModeAPI */
+void* createModeAPI( char* theName, termAPI* theTermAPI, int theInputOutputMaxLength)
 {
   mode* this=NULL;
 
-  ENTER("createMode");
+  ENTER("createModeAPI");
 
   if (g_module_supported() == FALSE)
     {
@@ -116,34 +112,34 @@ void* createMode( char* theName, termAPI* theTermAPI)
   if (this->myModule == NULL)
     { 
       SHOW2("%s\n", g_module_error());
-      deleteMode( this);
+      deleteModeAPI( this);
       return NULL;
     }
 
-  this->myChild = createChildMode( this->myModule, theTermAPI);
-  if (this->myChild == NULL)
+  this->myPluginAPI = createPluginAPI( this, theInputOutputMaxLength, theTermAPI);
+  if (this->myPluginAPI == NULL)
     { 
       SHOW("Can't create the child mode\n");
-      deleteMode( this);
+      deleteModeAPI( this);
       return NULL;
     }
 
   return (void*)this;
 }
 /* > */
-/* < deleteMode */
-void deleteMode( void* theMode)
+/* < deleteModeAPI */
+void deleteModeAPI( void* theMode)
 {
   mode* this = (mode*)theMode;
 
-  ENTER("deleteMode");
+  ENTER("deleteModeAPI");
 
   if (this)
     {
-      if (this->myChild)
+      if (this->myPluginAPI)
 	{
-	  childMode* p = this->myChild;
-	  p->delete( p->myIdent);
+	  pluginAPI* p = this->myPluginAPI;
+	  p->delete( p->myPlugin);
 	  free( p);
 	}
 
@@ -159,34 +155,34 @@ void deleteMode( void* theMode)
     }
 }
 /* > */
-/* < manageInputMode */
-GByteArray* manageInputMode( void* theMode, char* theInput, int theLength)
+/* < transcodeInputModeAPI */
+GByteArray* transcodeInputModeAPI( void* theMode, char* theInput, int theLength)
 {
   mode* this = (mode*)theMode;
   GByteArray* aByteArray = NULL;
 
-  ENTER("manageInputMode");
+  ENTER("transcodeInputModeAPI");
 
-  if (this && this->myChild)
+  if (this && this->myPluginAPI)
     {
-      childMode* p = this->myChild;
-      aByteArray = p->manageInput( p, theInput, theLength);
+      pluginAPI* p = this->myPluginAPI;
+      aByteArray = p->transcodeInput( p, theInput, theLength);
     }
   return aByteArray;
 }
 /* > */
-/* < manageOutputMode */
-GByteArray* manageOutputMode( void* theMode, char* theOutput, int theLength)
+/* < transcodeOutputModeAPI */
+GByteArray* transcodeOutputModeAPI( void* theMode, char* theOutput, int theLength)
 {
   mode* this = (mode*)theMode;
   GByteArray* aByteArray = NULL;
 
-  ENTER("manageOutputMode");
+  ENTER("transcodeOutputModeAPI");
 
-  if (this && this->myChild)
+  if (this && this->myPluginAPI)
     {
-      childMode* p = this->myChild;
-      aByteArray = p->manageOutput( p, theOutput, theLength);
+      pluginAPI* p = this->myPluginAPI;
+      aByteArray = p->transcodeOutput( p, theOutput, theLength);
     }
 
   return aByteArray;
