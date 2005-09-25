@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 test-tengoo.c
-$Id: test-tengoo.c,v 1.3 2005/09/24 22:19:18 gcasse Exp $
+$Id: test-tengoo.c,v 1.4 2005/09/25 22:17:16 gcasse Exp $
 $Author: gcasse $
 Description: test Tengoo.
-$Date: 2005/09/24 22:19:18 $ |
-$Revision: 1.3 $ |
+$Date: 2005/09/25 22:17:16 $ |
+$Revision: 1.4 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -240,12 +240,12 @@ static void getinput()
 
   if (aByteArray)
     {
-      size=MIN(aByteArray->len, 256);
+      size=MIN(aByteArray->len, MAX_BUF_SIZE);
       strncpy(buf,aByteArray->data, size);
 
       SHOW_TIME("g_byte_array_free");
       g_byte_array_free( aByteArray, 1);
-      (void) write(master, buf, size);
+      (void) write(master, buf, size); /* to be commented */
     }
   /* > */
 
@@ -296,9 +296,9 @@ static void getoutput()
 
   if (aByteArray)
     {
-/*       (void) write(1, aByteArray->data, aByteArray->len); */
+      (void) write(1, aByteArray->data, aByteArray->len); /* in comment */
 /*       (void) write(1, buf, size);  */
-/*       size=MIN(aByteArray->len, 256); */
+/*       size=MIN(aByteArray->len, MAX_BUF_SIZE); */
 /*       strncpy(buf,aByteArray->data, size); */
 
       SHOW_TIME("g_byte_array_free");
@@ -306,7 +306,7 @@ static void getoutput()
     }
   /* > */
 
-  (void) write(1, buf, size);
+  /*  (void) write(1, buf, size);*/
 
 }
 
@@ -458,3 +458,9 @@ int main(int argc, char *argv[])
   perror("fork");
   return -1;
 }
+
+/* 
+Local variables:
+folded-file: t
+folding-internal-margins: nil
+*/

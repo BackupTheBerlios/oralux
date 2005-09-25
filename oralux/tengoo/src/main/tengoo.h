@@ -1,5 +1,5 @@
-#ifndef TENGOO
-#define TENGOO
+#ifndef TENGOO_H
+#define TENGOO_H
 
 #include <glib.h>
 

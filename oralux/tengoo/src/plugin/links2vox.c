@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 links2vox.c
-$Id: links2vox.c,v 1.1 2005/09/24 22:22:36 gcasse Exp $
+$Id: links2vox.c,v 1.2 2005/09/25 22:17:16 gcasse Exp $
 $Author: gcasse $
 Description: tengoo plugin for the links2 web browser.
-$Date: 2005/09/24 22:22:36 $ |
-$Revision: 1.1 $ |
+$Date: 2005/09/25 22:17:16 $ |
+$Revision: 1.2 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -86,7 +86,10 @@ static GByteArray* processLastOutputDuringLinkSearch( pluginAPI* thePluginAPI, c
 
   ENTER("processLastOutputDuringLinkSearch");
 
-  aByteArray = getLinePortionAtCursor( thePluginAPI, theOutput, theLength);
+  updateScreen( thePluginAPI, theOutput, theLength);
+
+  aByteArray = sayOnlyLinePortionAtCursor( thePluginAPI, theOutput, theLength);
+
   initCallback(this);
 
   return aByteArray;
@@ -111,11 +114,16 @@ static GByteArray* processSingleOutputDuringLinkSearch( pluginAPI* thePluginAPI,
 static GByteArray* processIntermediaryOutputDuringLinkSearch( pluginAPI* thePluginAPI, char* theOutput, int theLength)
 {
   plugin* this = (plugin*)(thePluginAPI->myPlugin);
+  GByteArray* aByteArray = NULL;
 
   ENTER("processIntermediaryOutputDuringLinkSearch");
+
+  aByteArray = muteDisplayedOutput( thePluginAPI, theOutput, theLength);
+
   this->myOutputIntermediaryBlockCallback = (TRANSCODE_PLUGINAPI*)processIntermediaryOutputDuringLinkSearch;
   this->myOutputLastBlockCallback = processLastOutputDuringLinkSearch;
-  return NULL;
+
+  return aByteArray;
 }
 /* > */
 /* > */
@@ -270,3 +278,8 @@ GByteArray* transcodeOutputPlugin( pluginAPI* thePluginAPI, char* theOutput, int
 /* > */
 
 
+/* 
+Local variables:
+folded-file: t
+folding-internal-margins: nil
+*/

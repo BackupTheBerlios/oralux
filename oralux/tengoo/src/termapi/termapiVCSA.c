@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 termapiSimu.c
-$Id: termapiVCSA.c,v 1.1 2005/09/14 21:10:08 gcasse Exp $
+$Id: termapiVCSA.c,v 1.2 2005/09/25 22:17:16 gcasse Exp $
 $Author: gcasse $
 Description: testapi implementation for tests.
-$Date: 2005/09/14 21:10:08 $ |
-$Revision: 1.1 $ |
+$Date: 2005/09/25 22:17:16 $ |
+$Revision: 1.2 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -243,7 +243,7 @@ static int _getDim( int* theNumberOfLine, int* theNumberOfCol)
   ENTER("_getDim");
   *theNumberOfLine=25;
   *theNumberOfCol=80;
-  return 0;
+  return 1;
 }
 /* > */
 /* < createTermAPI */
@@ -277,5 +277,10 @@ void deleteTermAPI( termAPI* theTermAPI)
 }
 /* > */
 
+/* 
+Local variables:
+folded-file: t
+folding-internal-margins: nil
+*/
 
 

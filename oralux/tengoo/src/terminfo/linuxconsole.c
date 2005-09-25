@@ -21,7 +21,6 @@ int getDigit(char* theBuffer, int theLength)
   return aValue;
 }
 /* > */
-
 /* < getStyle */
 
 /* Each integer is extracted from the SGR string and converted in the related bit */

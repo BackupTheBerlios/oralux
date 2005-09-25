@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 terminfo2list.c
-$Id: terminfo2list.c,v 1.1 2005/09/14 21:12:23 gcasse Exp $
+$Id: terminfo2list.c,v 1.2 2005/09/25 22:17:16 gcasse Exp $
 $Author: gcasse $
 Description: convert the terminfo entries to a list of commands.
-$Date: 2005/09/14 21:12:23 $ |
-$Revision: 1.1 $ |
+$Date: 2005/09/25 22:17:16 $ |
+$Revision: 1.2 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -28,6 +28,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <string.h>
 #include <glib.h>
 #include "escape2terminfo.h"
+#include "linuxconsole.h"
 #include "terminfo2list.h"
 #include "debug.h"
 
@@ -643,7 +644,7 @@ entryCommands TheEntryCommands[]=
   {NULL, NULL, NULL, NULL, EVHLM, NULL}, 
   {NULL, NULL, NULL, NULL, SGR1, NULL}, 
   {NULL, NULL, NULL, NULL, SLENGTH, NULL}, 
-  {NULL, NULL, NULL, deleteEntry, TPHL, copyEntry}, 
+  {NULL, NULL, NULL, deleteEntry, TSAR, copyEntry}, 
   {createText, NULL, NULL, deleteText, TEXTFIELD, copyText} 
 };
 /* > */
@@ -808,14 +809,16 @@ GByteArray* convertList2Terminfo( GList* theList)
 
 /* > */
 
-/* < addPreviouslyHighligthedElement */
-GList* addPreviouslyHighligthedElement( GList* theFirstElement, GList* theLastElement)
+/* < muteDisplayedElement */
+GList* muteDisplayedElement( GList* theFirstElement, GList* theLastElement)
 {
-  int aParam = 0;
-  chartyp* aFirstSequence="\x1B[0!";
-  chartyp* aLastSequence="\x1B[1!";
+  chartyp* aFirstSequence=NULL;
+  chartyp* aLastSequence=NULL;
 
-  ENTER("addPreviouslyHighligthedElement");
+  ENTER("muteDisplayedElement");
+
+  aFirstSequence = setRendering( 0, 1);
+  aLastSequence = setRendering( 100, 1);
 
   SHOW2("theFirstElement: txt='%s'\n",
        ((GString*)((terminfoEntry*)(theFirstElement->data))->myData1)->str);
@@ -827,9 +830,8 @@ GList* addPreviouslyHighligthedElement( GList* theFirstElement, GList* theLastEl
       terminfoEntry* anEntry = NULL;
       int aPosition = 0;
       
-      /* < First terminfo: TPHL param=0 */
-      aParam = 0;
-      anEntry = createExternalEntry( TPHL, &aParam, NULL, aFirstSequence);
+      /* < First TSAR terminfo */
+      anEntry = createExternalEntry( TSAR, NULL, NULL, aFirstSequence);
       aPosition = g_list_position (myList, theFirstElement);
       myList = g_list_insert( myList, 
 			      (gpointer) anEntry, 
@@ -838,9 +840,8 @@ GList* addPreviouslyHighligthedElement( GList* theFirstElement, GList* theLastEl
       anEntry->myParent = g_list_nth( myList, aPosition);
       /* > */
 
-      /* < Second terminfo: TPHL param=1 */
-      aParam = 1;
-      anEntry = createExternalEntry( TPHL, &aParam, NULL, aLastSequence);
+      /* < Second terminfo */
+      anEntry = createExternalEntry( TSAR, NULL, NULL, aLastSequence);
       aPosition = 1 + g_list_position (myList, theLastElement);
       myList = g_list_insert( myList, 
 			      (gpointer) anEntry, 
@@ -849,7 +850,33 @@ GList* addPreviouslyHighligthedElement( GList* theFirstElement, GList* theLastEl
       /* > */
     }
 
+  free(aFirstSequence);
+  free(aLastSequence);
+
   return myList;
 }
 
 /* > */
+
+/* < setRendering */
+char* setRendering( int theVolumeProsody, int theTextIsDisplayed )
+{
+  int aValue = (theVolumeProsody+5)/10;
+  char* aSequence = NULL;
+  const char* aFormat = "\x1B[1v;dt"; /* v=0..9 ;d=0 or 1 */
+  if (aValue > 9)
+    {
+      aValue = 9;
+    }
+  aSequence = strdup(aFormat);
+  aSequence[3] = '0'+ aValue;
+  aSequence[5] = (theTextIsDisplayed) ? '1' : '0';
+  return aSequence;
+}
+/* > */
+
+/* 
+Local variables:
+folded-file: t
+folding-internal-margins: nil
+*/

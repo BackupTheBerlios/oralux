@@ -465,7 +465,7 @@ enum StringCapacity
     EVHLM,       /* Enter vertical highlight mode */
     SGR1,        /* Define second set of video attributes #1-#6 */
     SLENGTH,     /* YI Set page length to #1 hundredth of an inch */
-    TPHL,        /* Tengoo private code: previously highlighted */
+    TSAR,        /* Tengoo: Select Aural Rendition */
     LASTENUM,
     TEXTFIELD=LASTENUM /* Used to identify text, this is not a capacity */
 };

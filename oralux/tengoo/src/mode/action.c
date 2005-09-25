@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 action.c
-$Id: action.c,v 1.2 2005/09/24 22:19:18 gcasse Exp $
+$Id: action.c,v 1.3 2005/09/25 22:17:16 gcasse Exp $
 $Author: gcasse $
 Description: execute the required action on the supplied buffer.
-$Date: 2005/09/24 22:19:18 $ |
-$Revision: 1.2 $ |
+$Date: 2005/09/25 22:17:16 $ |
+$Revision: 1.3 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -23,35 +23,41 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ----------------------------------------------------------------------------
 */
+#include <unistd.h>
+#include <stdlib.h>
 #include "action.h"
 #include "debug.h"
 #include "tifilter2l.h"
 #include "terminfointerpreter.h"
 
-GByteArray* getLinePortionAtCursor( pluginAPI* thePluginAPI, char* theBuffer, int theLength)
+GByteArray* sayOnlyLinePortionAtCursor( pluginAPI* thePluginAPI, char* theBuffer, int theLength)
 {
   GByteArray* aByteArray=NULL;
   termAPI* aTermAPI = NULL;
   cursor aCursor;
   GList* aList = NULL;
+  GList* aLinePortionGroup = NULL;
   int aNumberOfLine;
   int aNumberOfCol;
 
-  ENTER("getLinePortionAtCursor");
+  ENTER("sayOnlyLinePortionAtCursor");
 
+  /* < check consistency */
   if ((thePluginAPI == NULL)
       || (thePluginAPI->myTermAPI == NULL))
     {
       return NULL;
     }
-
+  /* > */
+  /* < get cursor from termAPI */
   aTermAPI = thePluginAPI->myTermAPI;
 
   if( !(aTermAPI->getCursor( &aCursor)))
   {
       return NULL;
   }
-
+  /* > */
+  /* < get dim from termapi */
   if ((aTermAPI->getDim == NULL) 
       || !(aTermAPI->getDim( &aNumberOfLine, &aNumberOfCol))
       || (aNumberOfCol == 0)
@@ -59,27 +65,67 @@ GByteArray* getLinePortionAtCursor( pluginAPI* thePluginAPI, char* theBuffer, in
   {
       return NULL;
   }
-
+  /* > */
+  /* < get line portion group at cursor from termapi */
   if (aTermAPI->getLinePortionGroup == NULL)
     {
       return NULL;
     }
 
-  aList = aTermAPI->getLinePortionGroup( aCursor.myLine, 
-					 aCursor.myCol, 
-					 aNumberOfCol - 1 - aCursor.myCol);
-
-  if (aList == NULL)
+  aLinePortionGroup = aTermAPI->getLinePortionGroup( aCursor.myLine, 
+						     aCursor.myCol, 
+						     aNumberOfCol - 1 - aCursor.myCol);
+  /* > */
+  /* < look for the first non empty lineportion */
+  aList = aLinePortionGroup;
+  while( aList)
     {
-      return NULL;
+      GString *s = getGStringFromGList( aList);
+      
+      if (s && 
+	  (s->len > strcspn( s->str, " \t\n\r")))
+	{
+	  break;
+	}
+      aList = g_list_next( aList);
+    }
+  /* > */
+  /* < mute the buffer and say the lineportion */
+  if (aList)
+  {
+    char* aSequence = NULL;
+
+    aByteArray = muteDisplayedOutput( thePluginAPI, theBuffer, theLength);
+
+    /* the retrieved line portion is added at the end of the buffer.
+       Say it but do not display it */
+
+    /* speech yes, screen no */
+    aSequence = setRendering( 100, 0);
+    g_byte_array_append( (GByteArray*) aByteArray, 
+			 (guint8*) aSequence, 
+			 (guint) strlen( aSequence));
+    free(aSequence);
+    
+    /* line portion */
+    {
+      GString *s = getGStringFromGList( aList);
+      g_byte_array_append( (GByteArray*) aByteArray, 
+			   (guint8*) s->str, 
+			   (guint) s->len);
+      SHOW2("sayOnlyLinePortionAtCursor: string is \"%s\"\n", s->str);
     }
 
-  /* look for the first non empty lineportion */
+    /* speech yes, screen yes */
+    aSequence = setRendering( 100, 1);
+    g_byte_array_append( (GByteArray*) aByteArray, 
+			 (guint8*) aSequence, 
+			 (guint) strlen( aSequence));
+    free(aSequence);
+  }
+  /* > */
 
-
-
-
-  
+  deleteLinePortionGroup( aLinePortionGroup);
 
   return aByteArray;
 }
@@ -110,8 +156,37 @@ GByteArray* tagPreviouslyHighlightedArea( pluginAPI* thePluginAPI, char* theBuff
   return aByteArray;
 }
 
-GByteArray* purgeOutput( pluginAPI* thePluginAPI, char* theBuffer, int theLength)
+GByteArray* muteDisplayedOutput( pluginAPI* thePluginAPI, char* theBuffer, int theLength)
 {
-  ENTER("purgeOutput");
+  char* aSequence = NULL;
+  GByteArray* aByteArray=NULL;
+  ENTER("muteDisplayedOutput");
+
+  aSequence = setRendering( 0, 1);
+  aByteArray = g_byte_array_new();
+
+  g_byte_array_append( (GByteArray*) aByteArray, 
+		       (guint8*) aSequence, 
+		       (guint) strlen(aSequence));
+
+  g_byte_array_append( (GByteArray*) aByteArray, 
+		       (guint8*) theBuffer, 
+		       (guint) theLength);
+
+  free( aSequence);
+
+  return aByteArray;
+}
+
+GByteArray* updateScreen( pluginAPI* thePluginAPI, char* theBuffer, int theLength)
+{
+  ENTER("displayOutput");
+  (void) write(1, theBuffer, theLength);
   return NULL;
 }
+
+/* 
+Local variables:
+folded-file: t
+folding-internal-margins: nil
+*/

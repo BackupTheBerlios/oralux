@@ -36,6 +36,7 @@ void deleteLinePortionGroup( GList* this);
 #define getLineFromGList(a) (((linePortion*)(a->data))->myLine)
 #define getFirstColFromGList(a) (((linePortion*)(a->data))->myFirstCol)
 #define getLastColFromGList(a) (((linePortion*)(a->data))->myLastCol)
+#define getGStringFromGList(a) (((linePortion*)(a->data))->myString)
 #define getStringFromGList(a) (((linePortion*)(a->data))->myString->str)
 #define getStyleAddressFromGList(a) &(((linePortion*)(a->data))->myStyle)
 

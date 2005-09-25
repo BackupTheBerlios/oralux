@@ -30,14 +30,20 @@ GList* copyTerminfoList( GList* theList);
 
 /* < Create entry for the private terminfo */
 
-/* addPreviouslyHighligthedElement: 
-The TPHL private terminfo is helpful to indicate that a sentence was previously highlighted. Its single parameter equals 0 or 1; 0 for the beginning of the sentence, and 1 for the end. 
-The syntax is :
-TPHL P=0, sentence, TPHL P=1 
+/* muteDisplayedElement: 
+The TSAR (Tengoo: Select Aural Rendition) private terminfo is helpful to enrich the escape sequences with aural informations. For example so that the screen reader does not say a part of the displayed text. 
 
-addPreviouslyHighligthedElement adds the two TPHL element before theFirstElement and after theLastElement.
+muteDisplayedElement adds a TSAR element (volume=0) before theFirstElement and after theLastElement (volume=100).
 */
-GList* addPreviouslyHighligthedElement( GList* theFirstElement, GList* theLastElement);
+GList* muteDisplayedElement( GList* theFirstElement, GList* theLastElement);
+
+/* 
+setRendering: returns the escape sequence for rendering a text via speech or screen.
+theVolumeProsody: 0..100 (0 = silent)
+theTextIsDisplayed: 0 or 1 (true)
+the char* returned must be freed by the caller 
+*/
+char* setRendering( int theVolumeProsody, int theTextIsDisplayed );
 
 /* > */
 

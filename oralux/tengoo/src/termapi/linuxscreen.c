@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 linuxscreen.c
-$Id: linuxscreen.c,v 1.1 2005/09/14 21:10:08 gcasse Exp $
+$Id: linuxscreen.c,v 1.2 2005/09/25 22:17:16 gcasse Exp $
 $Author: gcasse $
 Description: Read the data from the current screen.
-$Date: 2005/09/14 21:10:08 $ |
-$Revision: 1.1 $ |
+$Date: 2005/09/25 22:17:16 $ |
+$Revision: 1.2 $ |
 Original Copyright (C) 1995-2004 by The BRLTTY Team. All rights reserved.
 
 August 2005, Gilles Casse (gcasse@oralux.org)
@@ -695,3 +695,9 @@ int readLinuxScreen( int theLine, int theFirstCol, int theLastCol, VCSA_Char** t
 
   return aStatus;
 }
+
+/* 
+Local variables:
+folded-file: t
+folding-internal-margins: nil
+*/

@@ -3,8 +3,9 @@
 
 #include "pluginAPI.h"
 
-TRANSCODE_PLUGINAPI getLinePortionAtCursor;
-TRANSCODE_PLUGINAPI purgeOutput;
+TRANSCODE_PLUGINAPI muteDisplayedOutput;
+TRANSCODE_PLUGINAPI sayOnlyLinePortionAtCursor;
 TRANSCODE_PLUGINAPI tagPreviouslyHighlightedArea;
+TRANSCODE_PLUGINAPI updateScreen;
 
 #endif

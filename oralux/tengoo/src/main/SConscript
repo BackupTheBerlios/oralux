@@ -18,10 +18,32 @@ include = Split("""
 
 Import('env')
 
-env.Program(target = 'tengoo'
-            , source = list
+tengoo = env.Library(target = 'tengoo'
+                     , source = 'tengoo.c'
+                     , CPPPATH = include
+                     , LIBPATH = ['../graphic',
+                                  '../mode',
+                                  '../plugin',
+                                  '../termapi',
+                                  '../termbuffer',
+                                  '../terminfo',
+                                  '../debug']
+                     , LIBS = ['gmodule-2.0',
+                               'glib-2.0',
+                               'links2vox',
+                               'graphic',
+                               'mode',
+                               'util',
+                               'termapi',
+                               'terminfo',
+                               'termbuffer',
+                               'debug']);
+
+env.Program(target = 'test-tengoo'
+            , source = 'test-tengoo.c'
             , CPPPATH = include
-            , LIBPATH = ['../graphic',
+            , LIBPATH = ['.',
+                         '../graphic',
                          '../mode',
                          '../plugin',
                          '../termapi',
@@ -30,11 +52,13 @@ env.Program(target = 'tengoo'
                          '../debug']
             , LIBS = ['gmodule-2.0',
                       'glib-2.0',
+                      'tengoo',
                       'links2vox',
                       'graphic',
                       'mode',
                       'util',
                       'termapi',
-                      'termbuffer',
                       'terminfo',
-                      'debug'])
+                      'termbuffer',
+                      'debug']);
+

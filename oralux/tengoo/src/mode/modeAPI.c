@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 mode.c
-$Id: modeAPI.c,v 1.1 2005/09/24 22:22:36 gcasse Exp $
+$Id: modeAPI.c,v 1.2 2005/09/25 22:17:16 gcasse Exp $
 $Author: gcasse $
 Description: Mode API.
-$Date: 2005/09/24 22:22:36 $ |
-$Revision: 1.1 $ |
+$Date: 2005/09/25 22:17:16 $ |
+$Revision: 1.2 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -188,3 +188,8 @@ GByteArray* transcodeOutputModeAPI( void* theMode, char* theOutput, int theLengt
   return aByteArray;
 }
 /* > */
+/* 
+Local variables:
+folded-file: t
+folding-internal-margins: nil
+*/

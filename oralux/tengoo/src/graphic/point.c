@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 point.c
-$Id: point.c,v 1.1 2005/09/24 22:22:36 gcasse Exp $
+$Id: point.c,v 1.2 2005/09/25 22:17:16 gcasse Exp $
 $Author: gcasse $
 Description: point.
-$Date: 2005/09/24 22:22:36 $ |
-$Revision: 1.1 $ |
+$Date: 2005/09/25 22:17:16 $ |
+$Revision: 1.2 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -48,3 +48,9 @@ void translatePoint( point* this, int theXLength, int theYLength)
   this->x += theXLength;
   this->y += theYLength;
 }
+
+/* 
+Local variables:
+folded-file: t
+folding-internal-margins: nil
+*/
