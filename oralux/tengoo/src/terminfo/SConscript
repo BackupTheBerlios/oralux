@@ -5,6 +5,7 @@ linuxconsole.c
 terminfo2list.c
 terminfointerpreter.c  
 tifilter2l.c
+tigetline.c
 """)
 
 include = Split("""

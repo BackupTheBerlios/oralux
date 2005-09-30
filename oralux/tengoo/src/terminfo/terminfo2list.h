@@ -30,20 +30,22 @@ GList* copyTerminfoList( GList* theList);
 
 /* < Create entry for the private terminfo */
 
-/* muteDisplayedElement: 
+/* addSequence: 
 The TSAR (Tengoo: Select Aural Rendition) private terminfo is helpful to enrich the escape sequences with aural informations. For example so that the screen reader does not say a part of the displayed text. 
-
-muteDisplayedElement adds a TSAR element (volume=0) before theFirstElement and after theLastElement (volume=100).
 */
-GList* muteDisplayedElement( GList* theFirstElement, GList* theLastElement);
+GList* addSequence( chartyp* theFirstSequence, GList* theFirstElement, GList* theLastElement, chartyp* theLastSequence);
 
 /* 
-setRendering: returns the escape sequence for rendering a text via speech or screen.
-theVolumeProsody: 0..100 (0 = silent)
-theTextIsDisplayed: 0 or 1 (true)
+setRendering: returns the TSAR escape sequence.
+theVolume: 0..100 (0 = silent)
+theVoice: 0..9
 the char* returned must be freed by the caller 
 */
-char* setRendering( int theVolumeProsody, int theTextIsDisplayed );
+char* setRendering( int theVolume, int theVoice);
+
+
+GList* sayElement( GList* theFirstElement, GList* theLastElement);
+GList* muteElement( GList* theFirstElement, GList* theLastElement);
 
 /* > */
 

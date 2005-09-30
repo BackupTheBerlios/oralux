@@ -5,7 +5,7 @@
 
 TRANSCODE_PLUGINAPI muteDisplayedOutput;
 TRANSCODE_PLUGINAPI sayOnlyLinePortionAtCursor;
-TRANSCODE_PLUGINAPI tagPreviouslyHighlightedArea;
+TRANSCODE_PLUGINAPI mutePreviouslyHighlightedArea;
 TRANSCODE_PLUGINAPI updateScreen;
 
 #endif

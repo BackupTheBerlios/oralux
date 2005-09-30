@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 terminfointerpreter.c
-$Id: terminfointerpreter.c,v 1.2 2005/09/25 22:17:16 gcasse Exp $
+$Id: terminfointerpreter.c,v 1.3 2005/09/30 23:27:50 gcasse Exp $
 $Author: gcasse $
 Description: an alpha stage terminfo interpreter
-$Date: 2005/09/25 22:17:16 $ |
-$Revision: 1.2 $ |
+$Date: 2005/09/30 23:27:50 $ |
+$Revision: 1.3 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -40,7 +40,7 @@ void terminfointerpreter_init( cursor* theCursor)
   copyCursor(&mySavedCursor, theCursor);
 }
 /* > */
-/* < terminfointerpreter_init */
+/* < terminfointerpreter_getCursor */
 cursor* terminfointerpreter_getCursor()
 {
   ENTER("terminfointerpreter_getCursor");

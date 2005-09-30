@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 terminfo2list.c
-$Id: terminfo2list.c,v 1.2 2005/09/25 22:17:16 gcasse Exp $
+$Id: terminfo2list.c,v 1.3 2005/09/30 23:27:50 gcasse Exp $
 $Author: gcasse $
 Description: convert the terminfo entries to a list of commands.
-$Date: 2005/09/25 22:17:16 $ |
-$Revision: 1.2 $ |
+$Date: 2005/09/30 23:27:50 $ |
+$Revision: 1.3 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -34,8 +34,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 /* < global variables */
 
+/* TBD: no static */
 static enum StringCapacity myPreviousCapacity=ACSC;
-static GList* myList=NULL;
+static GList* myList=NULL; 
 
 /* > */
 /* < flex definitions */
@@ -808,17 +809,10 @@ GByteArray* convertList2Terminfo( GList* theList)
 }
 
 /* > */
-
-/* < muteDisplayedElement */
-GList* muteDisplayedElement( GList* theFirstElement, GList* theLastElement)
+/* < addSequence */
+GList* addSequence( chartyp* theFirstSequence, GList* theFirstElement, GList* theLastElement, chartyp* theLastSequence)
 {
-  chartyp* aFirstSequence=NULL;
-  chartyp* aLastSequence=NULL;
-
-  ENTER("muteDisplayedElement");
-
-  aFirstSequence = setRendering( 0, 1);
-  aLastSequence = setRendering( 100, 1);
+  ENTER("addSequence");
 
   SHOW2("theFirstElement: txt='%s'\n",
        ((GString*)((terminfoEntry*)(theFirstElement->data))->myData1)->str);
@@ -831,7 +825,7 @@ GList* muteDisplayedElement( GList* theFirstElement, GList* theLastElement)
       int aPosition = 0;
       
       /* < First TSAR terminfo */
-      anEntry = createExternalEntry( TSAR, NULL, NULL, aFirstSequence);
+      anEntry = createExternalEntry( TSAR, NULL, NULL, theFirstSequence);
       aPosition = g_list_position (myList, theFirstElement);
       myList = g_list_insert( myList, 
 			      (gpointer) anEntry, 
@@ -841,7 +835,7 @@ GList* muteDisplayedElement( GList* theFirstElement, GList* theLastElement)
       /* > */
 
       /* < Second terminfo */
-      anEntry = createExternalEntry( TSAR, NULL, NULL, aLastSequence);
+      anEntry = createExternalEntry( TSAR, NULL, NULL, theLastSequence);
       aPosition = 1 + g_list_position (myList, theLastElement);
       myList = g_list_insert( myList, 
 			      (gpointer) anEntry, 
@@ -850,29 +844,59 @@ GList* muteDisplayedElement( GList* theFirstElement, GList* theLastElement)
       /* > */
     }
 
-  free(aFirstSequence);
-  free(aLastSequence);
+  free( theFirstSequence);
+  free( theLastSequence);
 
   return myList;
 }
-
 /* > */
-
 /* < setRendering */
-char* setRendering( int theVolumeProsody, int theTextIsDisplayed )
+char* setRendering( int theVolume, int theVoice)
 {
-  int aValue = (theVolumeProsody+5)/10;
+  int aValue = (theVolume+5)/10;
   char* aSequence = NULL;
-  const char* aFormat = "\x1B[1v;dt"; /* v=0..9 ;d=0 or 1 */
+  const char* aFormat = "\x1B[1v;xt"; /* v=volume, range 0..9 ; x=voice range 0..9 */
+  /* volume */
   if (aValue > 9)
     {
       aValue = 9;
     }
   aSequence = strdup(aFormat);
   aSequence[3] = '0'+ aValue;
-  aSequence[5] = (theTextIsDisplayed) ? '1' : '0';
+
+  /* voice */
+  aValue = (theVoice > 9) ? 9 : theVoice;
+  aSequence[5] = '0'+ aValue;
   return aSequence;
 }
+/* > */
+/* < sayElement, muteElement */
+GList* sayElement( GList* theFirstElement, GList* theLastElement)
+{
+  chartyp* aFirstSequence=NULL;
+  chartyp* aLastSequence=NULL;
+
+  ENTER("sayElement");
+
+  aFirstSequence = setRendering( 100, 1);
+  aLastSequence = setRendering( 0, 1);
+
+  return addSequence( aFirstSequence, theFirstElement, theLastElement, aLastSequence);
+}
+
+GList* muteElement( GList* theFirstElement, GList* theLastElement)
+{
+  chartyp* aFirstSequence=NULL;
+  chartyp* aLastSequence=NULL;
+
+  ENTER("sayElement");
+
+  aFirstSequence = setRendering( 0, 1);
+  aLastSequence = setRendering( 100, 1);
+
+  return addSequence( aFirstSequence, theFirstElement, theLastElement, aLastSequence);
+}
+
 /* > */
 
 /* 

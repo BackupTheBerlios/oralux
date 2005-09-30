@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 links2vox.c
-$Id: links2vox.c,v 1.2 2005/09/25 22:17:16 gcasse Exp $
+$Id: links2vox.c,v 1.3 2005/09/30 23:27:50 gcasse Exp $
 $Author: gcasse $
 Description: tengoo plugin for the links2 web browser.
-$Date: 2005/09/25 22:17:16 $ |
-$Revision: 1.2 $ |
+$Date: 2005/09/30 23:27:50 $ |
+$Revision: 1.3 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -74,8 +74,8 @@ typedef struct plugin plugin;
 static void initCallback( plugin* this)
 {
   ENTER("initCallback");
-  this->myOutputIntermediaryBlockCallback = tagPreviouslyHighlightedArea;
-  this->myOutputLastBlockCallback = tagPreviouslyHighlightedArea;
+  this->myOutputIntermediaryBlockCallback = mutePreviouslyHighlightedArea;
+  this->myOutputLastBlockCallback = mutePreviouslyHighlightedArea;
 }
 /* > */
 /* < processLastOutputDuringLinkSearch */
@@ -103,7 +103,7 @@ static GByteArray* processSingleOutputDuringLinkSearch( pluginAPI* thePluginAPI,
 
   ENTER("processSingleOutputDuringLinkSearch");
 
-  aByteArray = tagPreviouslyHighlightedArea( thePluginAPI, theOutput, theLength);
+  aByteArray = mutePreviouslyHighlightedArea( thePluginAPI, theOutput, theLength);
 
   initCallback(this);
 
@@ -194,8 +194,8 @@ static GByteArray* manageCommand( plugin* this, enum commandIdentifier theComman
 
     default:
       this->myState = UNDEFINED;
-      this->myOutputIntermediaryBlockCallback = tagPreviouslyHighlightedArea;
-      this->myOutputLastBlockCallback = tagPreviouslyHighlightedArea;
+      this->myOutputIntermediaryBlockCallback = mutePreviouslyHighlightedArea;
+      this->myOutputLastBlockCallback = mutePreviouslyHighlightedArea;
       break;
     }
   SHOW2("myState=%d\n", this->myState);

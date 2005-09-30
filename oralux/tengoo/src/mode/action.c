@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 action.c
-$Id: action.c,v 1.3 2005/09/25 22:17:16 gcasse Exp $
+$Id: action.c,v 1.4 2005/09/30 23:27:50 gcasse Exp $
 $Author: gcasse $
 Description: execute the required action on the supplied buffer.
-$Date: 2005/09/25 22:17:16 $ |
-$Revision: 1.3 $ |
+$Date: 2005/09/30 23:27:50 $ |
+$Revision: 1.4 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -28,114 +28,63 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "action.h"
 #include "debug.h"
 #include "tifilter2l.h"
+#include "tigetline.h"
 #include "terminfointerpreter.h"
+
+
 
 GByteArray* sayOnlyLinePortionAtCursor( pluginAPI* thePluginAPI, char* theBuffer, int theLength)
 {
   GByteArray* aByteArray=NULL;
-  termAPI* aTermAPI = NULL;
-  cursor aCursor;
-  GList* aList = NULL;
-  GList* aLinePortionGroup = NULL;
-  int aNumberOfLine;
-  int aNumberOfCol;
+  GList* aFirstElement = NULL;
+  GList* aLastElement = NULL;
+  GList* aSelectedElement = NULL;
 
   ENTER("sayOnlyLinePortionAtCursor");
 
-  /* < check consistency */
-  if ((thePluginAPI == NULL)
-      || (thePluginAPI->myTermAPI == NULL))
+  aFirstElement = convertTerminfo2List( theBuffer, theLength);
+
+  if (aFirstElement == NULL)
     {
       return NULL;
     }
-  /* > */
-  /* < get cursor from termAPI */
-  aTermAPI = thePluginAPI->myTermAPI;
 
-  if( !(aTermAPI->getCursor( &aCursor)))
+  aLastElement = g_list_last( aFirstElement);
+  
+  g_list_foreach( aFirstElement, (GFunc)terminfointerpreter, NULL);
+  
   {
-      return NULL;
+    /* get the last cursor position */
+    terminfoEntry* anEntry = aLastElement->data;
+
+    if (anEntry)
+      {
+	/* get the selected line */
+	aSelectedElement = terminfoGetLineAtCursor( aFirstElement, &(anEntry->myStartingPosition));
+      }
   }
-  /* > */
-  /* < get dim from termapi */
-  if ((aTermAPI->getDim == NULL) 
-      || !(aTermAPI->getDim( &aNumberOfLine, &aNumberOfCol))
-      || (aNumberOfCol == 0)
-      || (aCursor.myCol >= aNumberOfCol))
-  {
-      return NULL;
-  }
-  /* > */
-  /* < get line portion group at cursor from termapi */
-  if (aTermAPI->getLinePortionGroup == NULL)
-    {
-      return NULL;
-    }
 
-  aLinePortionGroup = aTermAPI->getLinePortionGroup( aCursor.myLine, 
-						     aCursor.myCol, 
-						     aNumberOfCol - 1 - aCursor.myCol);
-  /* > */
-  /* < look for the first non empty lineportion */
-  aList = aLinePortionGroup;
-  while( aList)
-    {
-      GString *s = getGStringFromGList( aList);
-      
-      if (s && 
-	  (s->len > strcspn( s->str, " \t\n\r")))
-	{
-	  break;
-	}
-      aList = g_list_next( aList);
-    }
-  /* > */
-  /* < mute the buffer and say the lineportion */
-  if (aList)
-  {
-    char* aSequence = NULL;
+  /* Firstly, the whole list is mute */
+  aFirstElement = muteElement( aFirstElement, aLastElement);
 
-    aByteArray = muteDisplayedOutput( thePluginAPI, theBuffer, theLength);
+  /* then the selected element can be said */
+  aFirstElement = sayElement( aSelectedElement, aSelectedElement);
 
-    /* the retrieved line portion is added at the end of the buffer.
-       Say it but do not display it */
+  aByteArray = convertList2Terminfo( aFirstElement);
+  DISPLAY_RAW_BUFFER( aByteArray->data, aByteArray->len);
 
-    /* speech yes, screen no */
-    aSequence = setRendering( 100, 0);
-    g_byte_array_append( (GByteArray*) aByteArray, 
-			 (guint8*) aSequence, 
-			 (guint) strlen( aSequence));
-    free(aSequence);
-    
-    /* line portion */
-    {
-      GString *s = getGStringFromGList( aList);
-      g_byte_array_append( (GByteArray*) aByteArray, 
-			   (guint8*) s->str, 
-			   (guint) s->len);
-      SHOW2("sayOnlyLinePortionAtCursor: string is \"%s\"\n", s->str);
-    }
-
-    /* speech yes, screen yes */
-    aSequence = setRendering( 100, 1);
-    g_byte_array_append( (GByteArray*) aByteArray, 
-			 (guint8*) aSequence, 
-			 (guint) strlen( aSequence));
-    free(aSequence);
-  }
-  /* > */
-
-  deleteLinePortionGroup( aLinePortionGroup);
+  SHOW_TIME("deleteTermInfoList");
+  deleteTermInfoList( aFirstElement);
 
   return aByteArray;
 }
 
-GByteArray* tagPreviouslyHighlightedArea( pluginAPI* thePluginAPI, char* theBuffer, int theLength)
+GByteArray* mutePreviouslyHighlightedArea( pluginAPI* thePluginAPI, char* theBuffer, int theLength)
 {
   GByteArray* aByteArray=NULL;
   GList* aList = NULL;
 
-  ENTER("tagPreviouslyHighlightedArea");
+  ENTER("mutePreviouslyHighlightedArea");
 
   aList = convertTerminfo2List( theBuffer, theLength);
   

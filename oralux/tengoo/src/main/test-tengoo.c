@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 test-tengoo.c
-$Id: test-tengoo.c,v 1.4 2005/09/25 22:17:16 gcasse Exp $
+$Id: test-tengoo.c,v 1.5 2005/09/30 23:27:49 gcasse Exp $
 $Author: gcasse $
 Description: test Tengoo.
-$Date: 2005/09/25 22:17:16 $ |
-$Revision: 1.4 $ |
+$Date: 2005/09/30 23:27:49 $ |
+$Revision: 1.5 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -293,13 +293,15 @@ static void getoutput()
 
   /* < Tengoo */
   GByteArray* aByteArray=transcodeOutputTengoo( myTengoo, buf, size);
+/*       (void) write(1, buf, size);  */
 
   if (aByteArray)
     {
       (void) write(1, aByteArray->data, aByteArray->len); /* in comment */
-/*       (void) write(1, buf, size);  */
 /*       size=MIN(aByteArray->len, MAX_BUF_SIZE); */
 /*       strncpy(buf,aByteArray->data, size); */
+
+      DISPLAY_RAW_BUFFER(aByteArray->data, aByteArray->len);
 
       SHOW_TIME("g_byte_array_free");
       g_byte_array_free( aByteArray, 1);
