@@ -9,6 +9,6 @@ The related list element is returned or NULL otherwise.
 theTermAPI supplies several handlers to collect terminal info.
 */
 
-GList* terminfoGetLineAtCursor(GList* theTerminfoList, cursor* theCursor);
+GList* terminfoGetLinePortionAtCursor(GList* theTerminfoList, cursor* theCursor);
 
 #endif

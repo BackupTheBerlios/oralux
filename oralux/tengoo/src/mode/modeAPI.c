@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 mode.c
-$Id: modeAPI.c,v 1.2 2005/09/25 22:17:16 gcasse Exp $
+$Id: modeAPI.c,v 1.3 2005/10/01 14:41:15 gcasse Exp $
 $Author: gcasse $
 Description: Mode API.
-$Date: 2005/09/25 22:17:16 $ |
-$Revision: 1.2 $ |
+$Date: 2005/10/01 14:41:15 $ |
+$Revision: 1.3 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -33,15 +33,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "termapi.h"
 #include "pluginAPI.h"
 
-/* < type */
-
+/* < struct mode */
 struct mode
 {
   GModule* myModule;
   pluginAPI* myPluginAPI;
 };
 typedef struct mode mode;
-
 /* > */
 
 /* < createModule */
@@ -49,6 +47,18 @@ static GModule* createModule( char* theName)
 {
   gchar* aPath = g_module_build_path( NULL, theName);
   return g_module_open( aPath, 0);
+}
+/* > */
+/* < deleteModule */
+static void deleteModule( GModule* this)
+{
+  if (this)
+    {
+      if (g_module_close( this) == FALSE)
+	{
+	  SHOW2("%s\n", g_module_error());
+	}
+    }
 }
 /* > */
 /* < createPluginAPI */
@@ -77,6 +87,7 @@ static pluginAPI* createPluginAPI( mode* this, int theInputOutputMaxLength, term
      && g_module_symbol( this->myModule, "transcodeOutputPlugin", (gpointer*)&(p->transcodeOutput)))
     {
       p->myTermAPI = theTermAPI;
+      p->myBuffer = NULL;
       p->myPlugin = p->create( theTermAPI, theInputOutputMaxLength);
     }
   else
@@ -86,6 +97,22 @@ static pluginAPI* createPluginAPI( mode* this, int theInputOutputMaxLength, term
     }
 
   return p;
+}
+/* > */
+/* < deletePluginAPI */
+static void deletePluginAPI( pluginAPI* this)
+{
+  ENTER("deletePluginAPI");
+
+  if (this)
+    {
+      this->delete( this->myPlugin);
+      if (this->myBuffer)
+	{
+	  g_byte_array_free( this->myBuffer, 1);
+	}
+      free( this);
+    }
 }
 /* > */
 /* < createModeAPI */
@@ -136,21 +163,8 @@ void deleteModeAPI( void* theMode)
 
   if (this)
     {
-      if (this->myPluginAPI)
-	{
-	  pluginAPI* p = this->myPluginAPI;
-	  p->delete( p->myPlugin);
-	  free( p);
-	}
-
-      if (this->myModule)
-	{
-	  if (g_module_close( this->myModule) == FALSE)
-	    {
-	      SHOW2("%s\n", g_module_error());
-	    }
-	}
-
+      deletePluginAPI (this->myPluginAPI);
+      deleteModule(this->myModule);
       free( this);
     }
 }

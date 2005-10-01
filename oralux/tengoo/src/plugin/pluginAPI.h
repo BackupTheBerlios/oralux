@@ -17,6 +17,7 @@ struct pluginAPI
 {
   void* myPlugin;
   termAPI* myTermAPI;
+  GByteArray* myBuffer;
   TRANSCODE_PLUGINAPI* transcodeInput;
   TRANSCODE_PLUGINAPI* transcodeOutput;
   CREATE_PLUGIN* create;

@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 terminfo2list.c
-$Id: terminfo2list.c,v 1.3 2005/09/30 23:27:50 gcasse Exp $
+$Id: terminfo2list.c,v 1.4 2005/10/01 14:41:15 gcasse Exp $
 $Author: gcasse $
 Description: convert the terminfo entries to a list of commands.
-$Date: 2005/09/30 23:27:50 $ |
-$Revision: 1.3 $ |
+$Date: 2005/10/01 14:41:15 $ |
+$Revision: 1.4 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -813,11 +813,6 @@ GByteArray* convertList2Terminfo( GList* theList)
 GList* addSequence( chartyp* theFirstSequence, GList* theFirstElement, GList* theLastElement, chartyp* theLastSequence)
 {
   ENTER("addSequence");
-
-  SHOW2("theFirstElement: txt='%s'\n",
-       ((GString*)((terminfoEntry*)(theFirstElement->data))->myData1)->str);
-  SHOW2("theLastElement: txt='%s'\n",
-       ((GString*)((terminfoEntry*)(theLastElement->data))->myData1)->str);
 
   if (theFirstElement && theLastElement)
     {

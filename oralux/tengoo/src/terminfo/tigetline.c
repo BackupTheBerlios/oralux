@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 tifilter2l.c
-$Id: tigetline.c,v 1.1 2005/09/30 23:27:50 gcasse Exp $
+$Id: tigetline.c,v 1.2 2005/10/01 14:41:15 gcasse Exp $
 $Author: gcasse $
 Description: terminfo filter, retreive one line.
-$Date: 2005/09/30 23:27:50 $ |
-$Revision: 1.1 $ |
+$Date: 2005/10/01 14:41:15 $ |
+$Revision: 1.2 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -31,12 +31,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 /* < terminfoGetLineAtCursor */
 
-GList* terminfoGetLineAtCursor(GList* theTerminfoList, cursor* theCursor)
+GList* terminfoGetLinePortionAtCursor(GList* theTerminfoList, cursor* theCursor)
 {
   terminfoEntry* aSelectedElement = NULL;
   GList* anElement = theTerminfoList;
 
-  ENTER("terminfoGetLineAtCursor");
+  ENTER("terminfoGetLinePortionAtCursor");
 
   if ((anElement == NULL)
       || (theCursor == NULL))
@@ -51,28 +51,30 @@ GList* terminfoGetLineAtCursor(GList* theTerminfoList, cursor* theCursor)
       cursor* aCursor;
       anEntry = (terminfoEntry*)(anElement->data);
 
-      if (anEntry
-	  && (anEntry->myCapacity == TEXTFIELD)
-	  && anEntry->myData1)
+      if ((anEntry == NULL) 
+	  || (anEntry->myCapacity != TEXTFIELD))
 	{
-	  aCursor =  &(anEntry->myStartingPosition);
-	  aString = anEntry->myData1;
-
-	  if((aCursor->myLine == theCursor->myLine)
-	     && (aCursor->myCol >= theCursor->myCol)
-	     && aString->str
-	     && (aString->len > strcspn( aString->str, " \t\n\r"))
-	     && ((aSelectedElement == NULL)
-		 || (aSelectedElement->myStartingPosition.myCol > anEntry->myStartingPosition.myCol)))
-	    {
-	      SHOW4("Lasst selected string='%s', line=%d, col=%d\n", aString->str, aCursor->myLine, aCursor->myCol);
-	      aSelectedElement = anEntry;
-	    }
+	  anElement = g_list_next( anElement);
+	  continue;
 	}
+      
+      aCursor = &(anEntry->myStartingPosition);
+      aString = (GString*)(anEntry->myData1);
 
+      if((aCursor->myLine == theCursor->myLine)
+	 && (aCursor->myCol >= theCursor->myCol)
+	 && aString
+	 && aString->str
+	 && (aString->len > strspn( aString->str, " \t\n\r"))
+	 && ((aSelectedElement == NULL)
+	     || (aSelectedElement->myStartingPosition.myCol > anEntry->myStartingPosition.myCol)))
+	{
+	  SHOW4("Last selected string='%s', line=%d, col=%d\n", aString->str, aCursor->myLine, aCursor->myCol);
+	  aSelectedElement = anEntry;	     
+	}
       anElement = g_list_next( anElement);
     }
-      
+
   anElement = (aSelectedElement) ? aSelectedElement->myParent : NULL;
   
   SHOW2("selected element=%x\n", (int)anElement);

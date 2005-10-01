@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 tengoo.c
-$Id: tengoo.c,v 1.4 2005/09/25 22:17:16 gcasse Exp $
+$Id: tengoo.c,v 1.5 2005/10/01 14:41:15 gcasse Exp $
 $Author: gcasse $
 Description: Tengoo API.
-$Date: 2005/09/25 22:17:16 $ |
-$Revision: 1.4 $ |
+$Date: 2005/10/01 14:41:15 $ |
+$Revision: 1.5 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -24,6 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ----------------------------------------------------------------------------
 */
 
+/* < include */
 #include <stdlib.h>
 
 #include "tengoo.h"
@@ -33,12 +34,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "modeAPI.h"
 #include "debug.h"
+/* > */
 
+/* < struct tengoo */
 struct tengoo {
   termAPI* myTermAPI;
   void* myMode;
 };
 typedef struct tengoo tengoo;
+/* > */
 
 /* < createTengoo */
 void* createTengoo( char* theMode, int theInputOutputMaxLength)

@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 action.c
-$Id: action.c,v 1.4 2005/09/30 23:27:50 gcasse Exp $
+$Id: action.c,v 1.5 2005/10/01 14:41:15 gcasse Exp $
 $Author: gcasse $
 Description: execute the required action on the supplied buffer.
-$Date: 2005/09/30 23:27:50 $ |
-$Revision: 1.4 $ |
+$Date: 2005/10/01 14:41:15 $ |
+$Revision: 1.5 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -23,6 +23,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ----------------------------------------------------------------------------
 */
+
+/* < include */
 #include <unistd.h>
 #include <stdlib.h>
 #include "action.h"
@@ -30,9 +32,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "tifilter2l.h"
 #include "tigetline.h"
 #include "terminfointerpreter.h"
-
-
-
+/* > */
+/* < sayOnlyLinePortionAtCursor */
 GByteArray* sayOnlyLinePortionAtCursor( pluginAPI* thePluginAPI, char* theBuffer, int theLength)
 {
   GByteArray* aByteArray=NULL;
@@ -53,16 +54,17 @@ GByteArray* sayOnlyLinePortionAtCursor( pluginAPI* thePluginAPI, char* theBuffer
   
   g_list_foreach( aFirstElement, (GFunc)terminfointerpreter, NULL);
   
+  /* < get the last cursor position */
   {
-    /* get the last cursor position */
-    terminfoEntry* anEntry = aLastElement->data;
+    cursor* aCursor = terminfointerpreter_getCursor();
 
-    if (anEntry)
+    if (aCursor)
       {
-	/* get the selected line */
-	aSelectedElement = terminfoGetLineAtCursor( aFirstElement, &(anEntry->myStartingPosition));
+	/* get the selected line portion */
+	aSelectedElement = terminfoGetLinePortionAtCursor( aFirstElement, aCursor);
       }
   }
+  /* > */
 
   /* Firstly, the whole list is mute */
   aFirstElement = muteElement( aFirstElement, aLastElement);
@@ -78,7 +80,8 @@ GByteArray* sayOnlyLinePortionAtCursor( pluginAPI* thePluginAPI, char* theBuffer
 
   return aByteArray;
 }
-
+/* > */
+/* < mutePreviouslyHighlightedArea */
 GByteArray* mutePreviouslyHighlightedArea( pluginAPI* thePluginAPI, char* theBuffer, int theLength)
 {
   GByteArray* aByteArray=NULL;
@@ -104,7 +107,8 @@ GByteArray* mutePreviouslyHighlightedArea( pluginAPI* thePluginAPI, char* theBuf
 
   return aByteArray;
 }
-
+/* > */
+/* < muteDisplayedOutput */
 GByteArray* muteDisplayedOutput( pluginAPI* thePluginAPI, char* theBuffer, int theLength)
 {
   char* aSequence = NULL;
@@ -126,13 +130,37 @@ GByteArray* muteDisplayedOutput( pluginAPI* thePluginAPI, char* theBuffer, int t
 
   return aByteArray;
 }
+/* > */
+/* < appendBuffer */
+GByteArray* appendBuffer( pluginAPI* thePluginAPI, char* theOutput, int theLength)
+{
+  ENTER("appendBuffer");
 
+  if ((theOutput == NULL) || (theLength == 0))
+    {
+      return NULL;
+    }
+
+  if (thePluginAPI->myBuffer == NULL)
+    {
+      thePluginAPI->myBuffer = g_byte_array_new();
+    }
+
+  g_byte_array_append( thePluginAPI->myBuffer, 
+		       (guint8*) theOutput, 
+		       (guint) theLength);
+
+  return NULL;
+}
+/* > */
+/* < updateScreen */
 GByteArray* updateScreen( pluginAPI* thePluginAPI, char* theBuffer, int theLength)
 {
   ENTER("displayOutput");
   (void) write(1, theBuffer, theLength);
   return NULL;
 }
+/* > */
 
 /* 
 Local variables:
