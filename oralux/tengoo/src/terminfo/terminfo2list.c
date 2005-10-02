@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 terminfo2list.c
-$Id: terminfo2list.c,v 1.4 2005/10/01 14:41:15 gcasse Exp $
+$Id: terminfo2list.c,v 1.5 2005/10/02 20:14:57 gcasse Exp $
 $Author: gcasse $
 Description: convert the terminfo entries to a list of commands.
-$Date: 2005/10/01 14:41:15 $ |
-$Revision: 1.4 $ |
+$Date: 2005/10/02 20:14:57 $ |
+$Revision: 1.5 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -24,6 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ----------------------------------------------------------------------------
 */
 
+/* < include */
 #include <stdlib.h>
 #include <string.h>
 #include <glib.h>
@@ -31,7 +32,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "linuxconsole.h"
 #include "terminfo2list.h"
 #include "debug.h"
-
+/* > */
 /* < global variables */
 
 /* TBD: no static */
@@ -56,12 +57,23 @@ typedef terminfoEntry* (*T_COPY_ENTRY)(const terminfoEntry* theEntry);
 
 
 /* > */
+/* < createTerminfoEntry */
+static terminfoEntry* createTerminfoEntry()
+{
+  terminfoEntry* this = (terminfoEntry*)malloc(sizeof(terminfoEntry));
+  memset(this, 0, sizeof(terminfoEntry));
+  return this;
+}
+
+/* > */
 /* < createEntry, deleteEntry, copyEntry, createExternalEntry */
 
 static terminfoEntry* createEntry(enum StringCapacity theCapacity, void* theData1, void* theData2)
 {
-  terminfoEntry* anEntry=(terminfoEntry*)malloc(sizeof(terminfoEntry));
+  terminfoEntry* anEntry = NULL;
   ENTER("createEntry");
+
+  anEntry = createTerminfoEntry();
 
   if (anEntry)
     {
@@ -97,7 +109,7 @@ static terminfoEntry* copyEntry(const terminfoEntry* theEntry)
   
   if (theEntry) 
     {
-      anEntry=(terminfoEntry*)malloc(sizeof(terminfoEntry));
+      anEntry = createTerminfoEntry();
 
       if (anEntry)
 	{
@@ -114,7 +126,7 @@ static terminfoEntry* copyEntry(const terminfoEntry* theEntry)
 
 static terminfoEntry* createExternalEntry(enum StringCapacity theCapacity, void* theData1, void* theData2, chartyp* theEscapeSequence)
 {
-  terminfoEntry* anEntry=(terminfoEntry*)malloc(sizeof(terminfoEntry));
+  terminfoEntry* anEntry = createTerminfoEntry();
   ENTER("createExternalEntry");
 
   if (anEntry)
@@ -191,11 +203,11 @@ static terminfoEntry* createText(enum StringCapacity theCapacity, void* theData1
     }
   else
     { /* First char */
-      aString=g_string_new (yytext);
+      aString = g_string_new( yytext);
       SHOW3("%x=g_string_new(%s)", (unsigned int)aString, yytext);
 
       /* add the new list element */
-      anEntry = createEntry(theCapacity, NULL, NULL);
+      anEntry = createEntry( theCapacity, NULL, NULL);
       anEntry->myData1 = (void*)aString;
     }
 

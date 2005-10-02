@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 box.c
-$Id: box.c,v 1.2 2005/09/25 22:17:16 gcasse Exp $
+$Id: box.c,v 1.3 2005/10/02 20:13:35 gcasse Exp $
 $Author: gcasse $
 Description: box.
-$Date: 2005/09/25 22:17:16 $ |
-$Revision: 1.2 $ |
+$Date: 2005/10/02 20:13:35 $ |
+$Revision: 1.3 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -26,18 +26,46 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "box.h"
 #include "debug.h"
 
+/* < createBox*/
 box* createBox( point* theOrigin, int theXLength, int theYLength)
 {
   box* this = malloc(sizeof(box));
 
   ENTER("createBox");
 
-  copyPoint(& this->myOrigin, theOrigin);
-  copyPoint(& this->myCorner, theOrigin);
-  translatePoint(& this->myCorner, theXLength, theYLength);
+  if (this)
+    {
+      copyPoint(& this->myOrigin, theOrigin);
+      copyPoint(& this->myCorner, theOrigin);
+      translatePoint(& this->myCorner, theXLength, theYLength);
+    }
 
   return this;
 }
+/* > */
+/* < copyBox*/
+box* copyBox( box* theSource)
+{
+  box* this = NULL;
+
+  ENTER("copyBox");
+
+  if (!theSource)
+    {
+      return NULL;
+    }
+
+  this = malloc(sizeof(box));
+
+  if (this)
+    {
+      memcpy( this, theSource, sizeof(box));
+    }
+
+  return this;
+}
+/* > */
+
 
 /* 
 Local variables:

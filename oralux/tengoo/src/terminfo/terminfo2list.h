@@ -49,4 +49,10 @@ GList* muteElement( GList* theFirstElement, GList* theLastElement);
 
 /* > */
 
+/* 
+Local variables:
+folded-file: t
+folding-internal-margins: nil
+*/
+
 #endif

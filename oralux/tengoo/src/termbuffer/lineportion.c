@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 linePortion.c
-$Id: lineportion.c,v 1.2 2005/09/25 22:17:16 gcasse Exp $
+$Id: lineportion.c,v 1.3 2005/10/02 20:14:57 gcasse Exp $
 $Author: gcasse $
 Description: manage line portions.
-$Date: 2005/09/25 22:17:16 $ |
-$Revision: 1.2 $ |
+$Date: 2005/10/02 20:14:57 $ |
+$Revision: 1.3 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -28,26 +28,72 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "debug.h"
 
 /* < linePortion */
+/* < createLinePortion */
 linePortion* createLinePortion (int theLine, int theCol, style* theStyle, chartyp* theString, GList* theParent)
 {
-    linePortion* this = (linePortion*) malloc(sizeof(linePortion));
+  linePortion* this = NULL;
 
     ENTER("createLinePortion");
 
-    this->myLine = theLine;
-    this->myFirstCol = theCol;
-    this->myLastCol = theCol+strlen(theString)-1;
-    this->myParent = theParent;
-    copyStyle(&(this->myStyle), theStyle);
-    this->myString = g_string_new(theString);
+    if (!theStyle  || !theString)
+      {
+	return NULL;
+      }
 
-    SHOW5("Line=%d, First Col=%d, Last Col=%d, this->myParent=%x\n", this->myLine, this->myFirstCol, this->myLastCol, (unsigned int)this->myParent);
-    SHOW2("String=\"%s\"\n", this->myString->str);
-    DISPLAY_STYLE( &(this->myStyle));
+    this = (linePortion*) malloc(sizeof(linePortion));
+
+    if (this)
+      {
+	this->myLine = theLine;
+	this->myFirstCol = theCol;
+	this->myLastCol = theCol+strlen(theString)-1;
+	this->myParent = theParent;
+	copyStyle(&(this->myStyle), theStyle);
+	this->myString = g_string_new(theString);
+
+	if (this->myString == NULL)
+	  {
+	    free(this);
+	    this = NULL;
+	  }
+      }
+
+    if (this)
+      {
+	SHOW5("Line=%d, First Col=%d, Last Col=%d, this->myParent=%x\n", this->myLine, this->myFirstCol, this->myLastCol, (unsigned int)this->myParent);
+	SHOW2("String=\"%s\"\n", this->myString->str);
+	DISPLAY_STYLE( &(this->myStyle));
+      }
 
     return this;
 }
+/* > */
+/* < copyLinePortion */
+linePortion* copyLinePortion (linePortion* theSource)
+{
+  linePortion* this = NULL;
+  
+  ENTER("copyLinePortion");
+  
+  if (theSource)
+    {
+      this = createLinePortion (theSource->myLine, 
+				theSource->myFirstCol, 
+				&(theSource->myStyle), 
+				theSource->myString->str, 
+				theSource->myParent);
+    }
 
+  if (this)
+    {
+      SHOW5("Line=%d, First Col=%d, Last Col=%d, this->myParent=%x\n", this->myLine, this->myFirstCol, this->myLastCol, (unsigned int)this->myParent);
+      SHOW2("String=\"%s\"\n", this->myString->str);
+      DISPLAY_STYLE( &(this->myStyle));
+    }
+    return this;
+}
+/* > */
+/* < deleteLinePortion */
 void deleteLinePortion( linePortion* this)
 {
     ENTER("deleteLinePortion");
@@ -59,7 +105,7 @@ void deleteLinePortion( linePortion* this)
       }
 }
 /* > */
-
+/* > */
 /* < linePortionGroup */
 static void deleteLinePortionHook( gpointer theLinePortion, gpointer theFoo)
 {
@@ -91,13 +137,16 @@ static void initStyleWeightHook( gpointer theLinePortion, gpointer theStyleWeigh
 
   ENTER("initStyleWeightHook");
 
-  (*w)->myWeight = 0; 
-  (*w)->myStatus = WEIGHT_UNDEFINED; 
-  (*w)->myLinePortion = (linePortion*)theLinePortion;
-  SHOW2("str=%s\n",((linePortion*)theLinePortion)->myString->str);
-  SHOW2("First Col=%d\n",((linePortion*)theLinePortion)->myFirstCol);
-  SHOW2("Last Col=%d\n",((linePortion*)theLinePortion)->myLastCol);
-  (*w)++;
+  if (w && *w)
+    {
+      (*w)->myWeight = 0; 
+      (*w)->myStatus = WEIGHT_UNDEFINED; 
+      (*w)->myLinePortion = (linePortion*)theLinePortion;
+      SHOW2("str=%s\n",((linePortion*)theLinePortion)->myString->str);
+      SHOW2("First Col=%d\n",((linePortion*)theLinePortion)->myFirstCol);
+      SHOW2("Last Col=%d\n",((linePortion*)theLinePortion)->myLastCol);
+      (*w)++;
+    }
 }
 
 int getFeaturesLinePortionGroup( GList* this, linePortion* theFeatures)

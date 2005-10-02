@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 links2vox.c
-$Id: links2vox.c,v 1.4 2005/10/01 14:41:15 gcasse Exp $
+$Id: links2vox.c,v 1.5 2005/10/02 20:14:57 gcasse Exp $
 $Author: gcasse $
 Description: tengoo plugin for the links2 web browser.
-$Date: 2005/10/01 14:41:15 $ |
-$Revision: 1.4 $ |
+$Date: 2005/10/02 20:14:57 $ |
+$Revision: 1.5 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -47,7 +47,7 @@ enum commandIdentifier
     UNDEFINED_COMMAND,
     JUMP_TO_LINK,
     MUTE_STATUS_LINE,
-    SAY_BOX,
+    SAY_FRAME,
   };
 
 enum state 
@@ -62,12 +62,11 @@ struct plugin
   TRANSCODE_PLUGINAPI* myOutputIntermediaryBlockCallback;
   TRANSCODE_PLUGINAPI* myOutputLastBlockCallback;
   int myMaxLength;
-  point* myOrigin;
-  box* myScreen;
-  box* myStatus;
-  box* myTitle;
+/*   point* myOrigin; */
+/*   GList* myFrame; /\* list of frames *\/ */
 };
 typedef struct plugin plugin;
+
 /* > */
 /* < Callbacks */
 /* < initCallback */
@@ -181,17 +180,16 @@ static GByteArray* manageCommand( plugin* this, enum commandIdentifier theComman
       this->myState = SEARCH_LINK;
       this->myOutputIntermediaryBlockCallback = processIntermediaryOutputDuringLinkSearch;
       this->myOutputLastBlockCallback = processSingleOutputDuringLinkSearch;
-
       break;
 
     case MUTE_STATUS_LINE:
       {
-/* 	setVolumeBox( ); */
+/* 	setVolumeFrame( ); */
       }
       break;
 
-    case SAY_BOX:
-/* 	sayBox( ); */
+    case SAY_FRAME:
+/* 	sayFrame( ); */
       break;
 
     default:
@@ -209,7 +207,6 @@ static GByteArray* manageCommand( plugin* this, enum commandIdentifier theComman
 void* createPlugin( termAPI* theTermAPI, int theInputOutputMaxLength)
 {
   plugin* this=NULL;
-  point* p;
 
   ENTER("createPlugin");
 
@@ -218,13 +215,23 @@ void* createPlugin( termAPI* theTermAPI, int theInputOutputMaxLength)
 
   this->myMaxLength = theInputOutputMaxLength;
 
-  p = this->myOrigin = createPoint( 0, 0, 0);
-  this->myScreen = createBox( p, 79, 24);
-  this->myTitle = createBox( p, 79, 0);
+/*   /\* < create frames *\/ */
+/*   { */
+/*     frame* aFrame = NULL; */
+/*     point* p = this->myOrigin = createPoint( 0, 0, 0); */
 
-  translatePoint(p, 0, 24);
-  this->myStatus = createBox( p, 79, 0);
-  
+/*     aFrame = createFrame( screenFrame, "screen", p, 79, 24); */
+/*     this->myFrame = g_list_append( NULL, (gpointer)aFrame); */
+    
+/*     aFrame = createFrame( titleFrame, "title", p, 79, 0); */
+/*     this->myFrame = g_list_append( this->myFrame, (gpointer)aFrame); */
+
+/*     translatePoint( p, 0, 24); */
+/*     aFrame = createFrame( statusFrame, "status", p, 79, 0); */
+/*     this->myFrame = g_list_append( this->myFrame, (gpointer)aFrame); */
+/*   } */
+/*   /\* > *\/ */
+ 
   manageCommand( this, UNDEFINED_COMMAND, NULL, 0);
 
   return this;
@@ -237,12 +244,9 @@ void deletePlugin( void* theplugin)
 
   ENTER("deletePlugin");
 
-  deletePoint( this->myOrigin);
-  deleteBox( this->myScreen);
-  deleteBox( this->myStatus);
-  deleteBox( this->myTitle);
+  /*  deletePoint( this->myOrigin); */
 
-  free(this);
+  free( this);
 }
 /* > */
 /* < transcodeInput */
