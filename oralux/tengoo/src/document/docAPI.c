@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 docAPI.c
-$Id: docAPI.c,v 1.1 2005/10/02 20:14:57 gcasse Exp $
+$Id: docAPI.c,v 1.2 2005/10/02 20:28:33 gcasse Exp $
 $Author: gcasse $
-Description: manage document, logical structure of the dipslayed screen.
-$Date: 2005/10/02 20:14:57 $ |
-$Revision: 1.1 $ |
+Description: manage document, logical structure of the displayed screen.
+$Date: 2005/10/02 20:28:33 $ |
+$Revision: 1.2 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -55,7 +55,7 @@ static docNode* createDocNode( gpointer theData)
 }
 /* > */
 /* < createRootNode */
-docNode* createRootNode( style* theStyle)
+static docNode* createRootNode( style* theStyle)
 {
   docNode* this=NULL;
   style* aStyle = malloc(sizeof(style));

@@ -22,12 +22,11 @@ struct docNode
 };
 typedef struct docNode docNode;
 
-docNode* createRootNode( style* theStyle);
 docNode* createTextNode( linePortion* theLinePortion);
 docNode* createFrameNode( frame* theFrame);
 /* > */
 
-GNode* createDocAPI();
+GNode* createDocAPI( style* theStyle, int theVoiceVolume);
 void deleteDocAPI( GNode* this);
 
 /* < setVoiceVolumeDocAPI */

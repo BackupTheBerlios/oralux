@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 frame.c
-$Id: frame.c,v 1.1 2005/10/02 20:14:57 gcasse Exp $
+$Id: frame.c,v 1.2 2005/10/02 20:28:33 gcasse Exp $
 $Author: gcasse $
 Description: manage frames, screen divisions.
-$Date: 2005/10/02 20:14:57 $ |
-$Revision: 1.1 $ |
+$Date: 2005/10/02 20:28:33 $ |
+$Revision: 1.2 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -60,7 +60,6 @@ frame* createFrame( int theIdentifier, char* theName, point* theOrigin, int theX
       this->myIdentifier = theIdentifier;
       this->myName = strdup(theName);
       this->myBox = createBox( theOrigin, theXLength, theYLength);
-      this->myVoiceVolume = 100;
 
       if (!this->myName || !this->myBox)
 	{
@@ -91,7 +90,6 @@ frame* copyFrame( frame* theSource)
       this->myIdentifier = theSource->myIdentifier;
       this->myName = strdup(theSource->myName);
       this->myBox = copyBox( theSource->myBox);
-      this->myVoiceVolume = theSource->myVoiceVolume;
 
       if (!this->myName || !this->myBox)
 	{
@@ -101,15 +99,6 @@ frame* copyFrame( frame* theSource)
     }
 
   return this;
-}
-/* > */
-/* < setVoiceVolumeFrame */
-void setVoiceVolumeFrame( frame* this, int theValue)
-{
-  if (this)
-    {
-      this->myVoiceVolume = theValue;
-    }
 }
 /* > */
 
