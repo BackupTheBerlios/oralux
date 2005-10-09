@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 links2vox.c
-$Id: links2vox.c,v 1.5 2005/10/02 20:14:57 gcasse Exp $
+$Id: links2vox.c,v 1.6 2005/10/09 22:43:12 gcasse Exp $
 $Author: gcasse $
 Description: tengoo plugin for the links2 web browser.
-$Date: 2005/10/02 20:14:57 $ |
-$Revision: 1.5 $ |
+$Date: 2005/10/09 22:43:12 $ |
+$Revision: 1.6 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -25,7 +25,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 #include "pluginAPI.h"
 #include "point.h"
-#include "frame.h"
 #include "action.h"
 #include "debug.h"
 

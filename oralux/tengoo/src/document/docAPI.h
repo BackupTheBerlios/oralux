@@ -4,35 +4,45 @@
 #include "lineportion.h"
 #include "frame.h"
 
-/* < docNode */
-enum nodeType 
+enum elementType 
   {
-    rootType,
-    textType,
-    frameType,
+    anyType = 0,
+    rootType=1,
+    textType=2,
+    linkType=4,
+    frameType=8,
   };
 
-struct docNode
-{
-  enum nodeType myType;
-  style* myRoot;
-  linePortion* myLinePortion;
-  frame* myFrame;
-  int* myVoiceVolume;  
-};
-typedef struct docNode docNode;
+void* createDocAPI( int theVoiceVolume);
+void deleteDocAPI( void* theDocAPI);
 
-docNode* createTextNode( linePortion* theLinePortion);
-docNode* createFrameNode( frame* theFrame);
+/* < addFrameDocAPI */
+/* add a Frame style to the document  */
+void addFrameStyleDocAPI( void* theDocAPI, frame* theFrame);
 /* > */
 
-GNode* createDocAPI( style* theStyle, int theVoiceVolume);
-void deleteDocAPI( GNode* this);
-
-/* < setVoiceVolumeDocAPI */
-/* theValue: 0..100 (0=silence) */
-void setVoiceVolumeDocAPI( GNode* this, int theValue);
+/* < putListEntryDocAPI */
+/* put a list of terminfoEntry in the document.
+Each text entry will be associated to a text element (linked to the containing frame). 
+If an entry belongs to two or more frames, it will be splitted so that each resulting entry is included in one frame.
+ */
+GList* putListEntryDocAPI( void* theDocAPI, GList* theList);
 /* > */
+
+/* < setElementTypeDocAPI */
+/*
+  Must be called after putListEntryDocAPI to enrich the type of an entry 
+*/
+void setElementTypeDocAPI( void* theDocAPI, GList* theElement, enum elementType theType, int theELementHasFocus);
+/* > */
+
+/* < getListEntryDocAPI */
+/*
+returned the list in taking in account the styles.
+*/
+GList* getStyledListEntryDocAPI( void* theDocAPI);
+/* > */
+
 
 /* 
 Local variables:

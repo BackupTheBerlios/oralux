@@ -8,4 +8,3 @@ env = Environment(CC = 'gcc'
 Export('env')
 
 SConscript(['src/SConscript'], build_dir='build')
-

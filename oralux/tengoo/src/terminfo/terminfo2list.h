@@ -15,6 +15,7 @@ struct t_terminfoEntry
   cursor myStartingPosition;
   style myStyle;
   GList* myParent;
+  gpointer myContainingElement; /* reserved for DocAPI, logical containing element (frame, anchor,...) */
 };
 typedef struct t_terminfoEntry terminfoEntry;
 

@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 point.c
-$Id: point.c,v 1.2 2005/09/25 22:17:16 gcasse Exp $
+$Id: point.c,v 1.3 2005/10/09 22:43:12 gcasse Exp $
 $Author: gcasse $
 Description: point.
-$Date: 2005/09/25 22:17:16 $ |
-$Revision: 1.2 $ |
+$Date: 2005/10/09 22:43:12 $ |
+$Revision: 1.3 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -49,6 +49,11 @@ void translatePoint( point* this, int theXLength, int theYLength)
   this->y += theYLength;
 }
 
+
+int isSamePoint( point* thePoint1, point* thePoint2)
+{
+  return ((thePoint1->x == thePoint2->x) && (thePoint1->y == thePoint2->y) && (thePoint1->z == thePoint2->z));
+}
 /* 
 Local variables:
 folded-file: t

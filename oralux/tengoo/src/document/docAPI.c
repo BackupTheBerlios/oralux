@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 docAPI.c
-$Id: docAPI.c,v 1.2 2005/10/02 20:28:33 gcasse Exp $
+$Id: docAPI.c,v 1.3 2005/10/09 22:43:12 gcasse Exp $
 $Author: gcasse $
 Description: manage document, logical structure of the displayed screen.
-$Date: 2005/10/02 20:28:33 $ |
-$Revision: 1.2 $ |
+$Date: 2005/10/09 22:43:12 $ |
+$Revision: 1.3 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -25,8 +25,31 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 /* < include */
+#include <gnode.h>
+#include <assert.h>
 #include "docAPI.h"
+#include "terminfo2list.h"
 #include "debug.h"
+/* > */
+
+/* < document */
+struct document
+{
+  int* myLinkVoiceVolume;
+  GNode* myRootNode;
+  GNode* myCurrentTextNode;
+};
+typedef struct document document;
+/* > */
+/* < element */
+struct element
+{
+  enum elementType myType;
+  int myNodeHasFocus;
+  int* myVoiceVolume;
+  gpointer myData;
+};
+typedef struct element element;
 /* > */
 
 /* < misc */
@@ -34,205 +57,344 @@ enum
   {
     defaultVoiceVolume=100,
   };
-
-#define deleteRoot(a) free(a)
-
 /* > */
 
-/* < createDocNode */
-static docNode* createDocNode( gpointer theData)
+/* < createElement */
+static element* createElement( enum elementType theType, gpointer theData)
 {
-  docNode* this = NULL;
+  element* this = NULL;
 
-  ENTER("createDocNode");
+  ENTER("createElement");
 
-  this = malloc(sizeof(docNode));
+  this = malloc(sizeof(element));
   if(this)
     {
-      memset (this, 0, sizeof(docNode));      
+      memset (this, 0, sizeof(element));
+      this->myType = theType;
+      this->myData = theData;
     }
   return this;
 }
 /* > */
-/* < createRootNode */
-static docNode* createRootNode( style* theStyle)
+/* < deleteElement */
+static void deleteElement(element* this)
 {
-  docNode* this=NULL;
-  style* aStyle = malloc(sizeof(style));
-
-  if (aStyle)
-    {
-      copyStyle( aStyle, theStyle);
-
-      this = createDocNode( aStyle);
-      if (this)
-	{
-	  this->myType = rootType;
-	}
-      else
-	{
-	  deleteStyle( aStyle);
-	}
-    }
-  return this;
-}
-/* > */
-/* < createTextNode */
-docNode* createTextNode( linePortion* theSource)
-{
-  docNode* this = NULL;
-  linePortion* aLinePortion = NULL;
-
-  ENTER("createTextNode");
-
-  aLinePortion = copyLinePortion( theSource);
-
-  if (aLinePortion)
-    {
-      this = createDocNode( aLinePortion);
-      
-      if (this)
-	{
-	  this->myType = textType;
-	}
-      else
-	{
-	  deleteLinePortion( aLinePortion);
-	}
-    }
-  return this;
-}
-/* > */
-/* < createFrameNode */
-docNode* createFrameNode( frame* theSource)
-{
-  docNode* this = NULL;
-  frame* aFrame = NULL;
-
-  ENTER("createFrameNode");
-
-  aFrame = copyFrame( theSource);
-
-  if (aFrame)
-    {
-      this = createDocNode( aFrame);
-      
-      if (this)
-	{
-	  this->myType = frameType;
-	}
-      else
-	{
-	  deleteFrame( aFrame);
-	}
-    }
-  return this;
-}
-/* > */
-/* < deleteDocNode */
-static void deleteDocNode(docNode* this)
-{
-  ENTER("deleteDocNode");
+  ENTER("deleteElement");
 
   if (this)
     {
       free( this->myVoiceVolume);
       
-      switch( this->myType)
+      if( this->myData)
 	{
-	case rootType:
-	  deleteRoot( this->myRoot);
-	  break;
-	case frameType:
-	  deleteFrame( this->myFrame);
-	  break;
-	case textType:
-	  deleteLinePortion( this->myLinePortion);
-	  break;
+	  switch(this->myType)
+	    {
+	    case frameType:
+	      deleteFrame( this->myData);
+	      break;
+	    default:
+	      /* TBD: text */
+	      break;
+	    }
 	}
       free(this);
     }
 }
 /* > */
-/* < deleteGNode */
-static gboolean deleteGNode( GNode *theNode, gpointer theFoo)
+/* < deleteNode */
+static gboolean deleteNode( GNode *theNode, gpointer theElementType)
 {
-  docNode* this = NULL;
+  element* this = NULL;
+  int aType = (int)theElementType;
 
-  ENTER("deleteGNode");
+  ENTER("deleteNode");
 
   this = theNode->data;
-
-  if (this)
+  
+  if (this 
+      && ((aType == anyType) 
+	  || (aType & this->myType)))
     {
-      deleteDocNode(this);
+      deleteElement(this);
       free( this);
     }
+  
+  g_node_destroy( theNode);
 
   return 0;
 }
 /* > */
-/* < deleteDocAPI */
-void deleteDocAPI( GNode* this)
+/* < setVoiceVolumeDocAPI */
+static int setVoiceVolume( element* this, int theVoiceVolume)
 {
+  ENTER("setVoiceVolume");
+
+  if (this)
+    {
+      if (this->myVoiceVolume == NULL)
+	{
+	  this->myVoiceVolume = malloc(sizeof(int));	
+	}
+      if (this->myVoiceVolume)
+	{
+	  *(this->myVoiceVolume) = theVoiceVolume;	
+	}
+    }
+  return (this->myVoiceVolume != NULL);
+}
+/* > */
+/* < clearData */
+static void clearData( GNode* theNode, int theElementType)
+{
+  ENTER("clearData");
+
+  if (theNode)
+    {
+      g_node_traverse (theNode,
+		       G_IN_ORDER,
+		       G_TRAVERSE_ALL,
+		       -1,
+		       (GNodeTraverseFunc)deleteNode,
+		       (gpointer)theElementType);
+    }
+}
+/* > */
+/* < deleteDocAPI */
+void deleteDocAPI( void* theDocAPI)
+{
+  document* this = theDocAPI;
   ENTER("deleteDocAPI");
 
   if (this)
     {
-      g_node_traverse (this,
-		       G_IN_ORDER,
-		       G_TRAVERSE_ALL,
-		       -1,
-		       (GNodeTraverseFunc)deleteGNode,
-		       NULL);
-      g_node_destroy( this);
+      if (this->myRootNode)
+	{
+	  clearData( this->myRootNode, anyType);
+	  this->myRootNode = NULL;
+	}
+       free( this);
     }
 }
 /* > */
 /* < createDocAPI */
-GNode* createDocAPI( style* theStyle, int theVoiceVolume)
+void* createDocAPI( int theVoiceVolume)
 {
-  GNode* this = NULL;
+  document* this = NULL;
+  element* anElement = NULL;
 
   ENTER("createDocAPI");
 
-  if (theStyle)
+  /* < create the document */
+  this = malloc(sizeof(document));
+  if(this)
     {
-      docNode* aDocNode = createRootNode( theStyle);
+      memset (this, 0, sizeof(document));
+    }
+  /* > */
+  /* < build the style structure: first the root node */
+  anElement = createElement( rootType, NULL);
     
-      if (aDocNode)
+  if (anElement)
+    {
+      if (setVoiceVolume( anElement, theVoiceVolume))
 	{
-	  aDocNode->myVoiceVolume = malloc(sizeof(int));
-	  if (aDocNode->myVoiceVolume)
-	    {
-	      *(aDocNode->myVoiceVolume) = theVoiceVolume;
-	      this = g_node_new( aDocNode);
-	    }
-	  	  
-	  if (!this)
-	    {
-	      deleteDocNode( aDocNode);
-	    }
+	  this->myRootNode = g_node_new( anElement);
+	}
+
+      if (!this)
+	{
+	  deleteElement( anElement);
+	}
+    }
+  /* > */
+
+  return (void*) this;
+}
+/* > */
+/* < addFrameStyleDocAPI*/
+void addFrameStyleDocAPI( void* theDocAPI, frame* theFrame)
+{
+  document* this = theDocAPI;
+  element* anElement = NULL;
+  frame* aFrame = NULL;
+
+  ENTER("addFrameDocAPI");
+
+  if (!this || !this->myRootNode)
+    {
+      return;
+    }
+
+  aFrame = copyFrame( theFrame);
+
+  if (aFrame)
+    {
+      anElement = createElement( frameType, aFrame);
+      
+      if (!anElement)
+	{
+	  deleteFrame( aFrame);
+	}
+      else
+	{
+	  g_node_insert_data( this->myRootNode, -1, anElement);
+	}
+    }
+  /*  return anElement;*/
+}
+/* > */
+/* < findFrame */
+static GNode* findFrame( GNode* theNode, box* theBoundingBox, enum intersectionType* theType, box* theIntersectionBox)
+{
+  GNode* aNode = theNode;
+  GNode* aFrameNode = NULL;
+
+  ENTER("findFrame");
+
+  if (!theNode || !theBoundingBox || !theType || !theIntersectionBox)
+    {
+      return NULL;
+    }
+
+  while( aNode)
+    {
+      element* anElement = aNode->data;
+      frame* aFrame = NULL;
+
+      /* this must be a frame element */
+      assert (anElement && (anElement->myType == frameType));
+      aFrame = anElement->myData;
+
+      /* does the frame include a portion of the text? */
+      *theType  = isIncluded( theBoundingBox, aFrame->myBox, theIntersectionBox);
+
+      if( *theType == noIntersectionBox)
+	{
+	  aNode = g_node_next_sibling( aNode);
+	}
+      else
+	{
+	  aFrameNode = aNode;
+	  break;
 	}
     }
 
-  return this;
+  return aFrameNode;
 }
 /* > */
-
-/* < setVoiceVolumeDocAPI */
-void setVoiceVolumeDocAPI( GNode* this, int theValue)
+/* < linkEntryToTextElement */
+/* At this stage, the document tree is supposed to only include the root element, the optional frame elements and text elements (no link).
+*/
+static void linkEntryToTextElement(gpointer theEntry, gpointer theDocument)
 {
-  if (this && this->data)
+  document* this = theDocument;
+  terminfoEntry* anEntry = theEntry;
+
+  ENTER("linkEntryToTextElement");
+
+  if (anEntry 
+      && (anEntry->myCapacity == TEXTFIELD) 
+      && this
+      && this->myRootNode)
     {
-      docNode* aDocNode = this->data;
-      *(aDocNode->myVoiceVolume) = theValue;
+      /* < create the bounding box */
+      point* aOrigin = NULL;
+      box* aBox;
+      GNode* aFrameNode = NULL;
+      enum intersectionType aType = noIntersectionBox;
+      box anIntersectionBox;
+      element* aTextElement = NULL;
+
+      aOrigin = createPoint( anEntry->myStartingPosition.myCol, 
+			     anEntry->myStartingPosition.myLine,
+			     0);
+      aBox = createBox( aOrigin, ((GString*)(anEntry->myData1))->len, 0);
+
+      /* > */
+
+      if (this->myCurrentTextNode == NULL)
+	{
+	  /* select the first frame element including the text */
+	  GNode* aNode = g_node_first_child( this->myRootNode);
+	  aFrameNode = findFrame( aNode, aBox, &aType, &anIntersectionBox);
+	  aTextElement = createElement( textType, NULL);
+	}
+      else
+	{ /* a text element already exists : check that its containing box includes the new entry */
+	  aFrameNode = findFrame( this->myCurrentTextNode, aBox, &aType, &anIntersectionBox);
+	  if (aFrameNode && aFrameNode->children)
+	    {
+	      aTextElement = aFrameNode->children->data;
+	    }
+	  if (aTextElement == NULL)
+	    {
+	      aTextElement = createElement( textType, NULL);
+	    }
+	}
+
+      /* TBD: frame partially including an entry => split */
+      
+      if (!aFrameNode)
+	{ /* No frame node: the text element will be added to the root node */
+	  aFrameNode = this->myRootNode;
+	}
+      
+      if (aFrameNode->children == NULL)
+	{ /* create the text element */
+	  this->myCurrentTextNode = g_node_insert_data( aFrameNode, -1, aTextElement);
+	}
+
+      deleteBox( aBox);
+      deletePoint( aOrigin);
+      deleteElement( aTextElement);
     }
 }
 /* > */
+/* < putListEntryDocAPI */
+GList* putListEntryDocAPI( void* theDocAPI, GList* theList)
+{
+  document* this = theDocAPI;
+  GList* aList = theList;
+
+  ENTER("putListEntryDocAPI");
+
+  if (!this || !theList || !(this->myRootNode))
+    {
+      return NULL;
+    }
+
+  clearData( this->myRootNode, textType | linkType);
+  this->myCurrentTextNode = NULL;
+
+  /* determine (or create) the text element of each entry.
+     At the moment, each text entry displayed in the same frame 
+     is associated with the same text element.
+   */
+  g_list_foreach( theList, (GFunc)linkEntryToTextElement, this);
+
+  
+  /* TBD ... */
 
 
+  return aList;
+}
+/* > */
+/* < getStyledListEntryDocAPI */
+GList* getStyledListEntryDocAPI( void* theDocAPI)
+{
+  ENTER("getStyledListEntryDocAPI");
+  /* TBD */
+  return NULL;
+}
+/* > */
 
+/* < setElementTypeDocAPI */
+void setElementTypeDocAPI( void* theDocAPI, GList* theElement, enum elementType theType, int theELementHasFocus)
+{
+  ENTER("setElementTypeDocAPI");
+
+}
+/* > */
 
 /* 
 Local variables:
