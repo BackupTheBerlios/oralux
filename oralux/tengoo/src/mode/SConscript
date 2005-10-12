@@ -7,6 +7,8 @@ modeAPI.c
 include = Split("""
 /usr/include/glib-2.0
 /usr/lib/glib-2.0/include
+../document
+../graphic
 ../mode
 ../plugin
 ../termapi

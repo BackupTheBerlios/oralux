@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 mode.c
-$Id: modeAPI.c,v 1.3 2005/10/01 14:41:15 gcasse Exp $
+$Id: modeAPI.c,v 1.4 2005/10/12 20:01:38 gcasse Exp $
 $Author: gcasse $
 Description: Mode API.
-$Date: 2005/10/01 14:41:15 $ |
-$Revision: 1.3 $ |
+$Date: 2005/10/12 20:01:38 $ |
+$Revision: 1.4 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -28,6 +28,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <string.h>
 #include <gmodule.h>
 #include "action.h"
+#include "docAPI.h"
 #include "debug.h"
 #include "modeAPI.h"
 #include "termapi.h"
@@ -88,7 +89,7 @@ static pluginAPI* createPluginAPI( mode* this, int theInputOutputMaxLength, term
     {
       p->myTermAPI = theTermAPI;
       p->myBuffer = NULL;
-      p->myPlugin = p->create( theTermAPI, theInputOutputMaxLength);
+      p->myPlugin = p->create( theTermAPI, theInputOutputMaxLength, &(p->myDocument));
     }
   else
     {
@@ -111,6 +112,7 @@ static void deletePluginAPI( pluginAPI* this)
 	{
 	  g_byte_array_free( this->myBuffer, 1);
 	}
+      deleteDocAPI( this->myDocument);
       free( this);
     }
 }

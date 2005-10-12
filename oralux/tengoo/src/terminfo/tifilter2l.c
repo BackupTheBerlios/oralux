@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 tifilter2l.c
-$Id: tifilter2l.c,v 1.3 2005/09/30 23:27:50 gcasse Exp $
+$Id: tifilter2l.c,v 1.4 2005/10/12 20:01:38 gcasse Exp $
 $Author: gcasse $
 Description: terminfo filter, two lines.
-$Date: 2005/09/30 23:27:50 $ |
-$Revision: 1.3 $ |
+$Date: 2005/10/12 20:01:38 $ |
+$Revision: 1.4 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -326,15 +326,26 @@ static linePortion* getHighlightedLine( context* this, linePortion* p1, linePort
 /* > */
 /* < terminfofilter2lines */
 
-GList* terminfofilter2lines(GList* theTerminfoList, termAPI* theTermAPI, int isDuplicated)
+int terminfofilter2lines(GList* theTerminfoList, termAPI* theTermAPI, GList** thePreviouslyHighlightedElement, GList** theNewlyHighlightedElement)
 {
-  GList* aFilteredList=theTerminfoList;
   context* this=NULL;
   int aNumberOfLinePortionGroup=0;
   
   ENTER("terminfofilter2lines");
 
+  if (!theTerminfoList || !theTermAPI || !thePreviouslyHighlightedElement || !theNewlyHighlightedElement)
+    {
+      return 0;
+    }
+
+  *thePreviouslyHighlightedElement = NULL;
+  *theNewlyHighlightedElement = NULL;
+
   this = createContext( theTermAPI);
+  if (!this)
+    {
+      return 0;
+    }
 
   g_list_foreach( theTerminfoList, (GFunc)searchLinePortion, this);
 
@@ -389,29 +400,21 @@ GList* terminfofilter2lines(GList* theTerminfoList, termAPI* theTermAPI, int isD
       if( j==NB_STYLE_CHANGE)
 	{
 	  linePortion* aOldHighlightedLinePortion=NULL;
-	  if (isDuplicated)
-	    {
-	      aFilteredList = copyTerminfoList( theTerminfoList);
-	    }
 	  SHOW("The old highlighted line was:\n");
 	  aOldHighlightedLinePortion = getHighlightedLine( this, old_p, old_p+1);
 	  if (aOldHighlightedLinePortion)
 	    {
-	      GList* aFirstElement = NULL;
-	      GList* aLastElement = NULL;
-
 	      /* i = line portion group which is no more highlighted */
 	      i = (old_p == aOldHighlightedLinePortion) ? 0 : 1;
 
-	      aFirstElement = getTerminfoElementLinePortionGroup( new_g[i]);
-	      aLastElement = getTerminfoElementLinePortionGroup( g_list_last (new_g[i]));
-	      aFilteredList = muteElement( aFirstElement, aLastElement);
+	      *thePreviouslyHighlightedElement = getTerminfoElementLinePortionGroup( new_g[i]);
+	      *theNewlyHighlightedElement = getTerminfoElementLinePortionGroup( g_list_last (new_g[i]));
 	    }
 	}
     }
   deleteContext(this);
   
-  return aFilteredList;
+  return (*thePreviouslyHighlightedElement && *theNewlyHighlightedElement);
 }
 
 /* > */

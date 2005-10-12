@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 action.c
-$Id: action.c,v 1.5 2005/10/01 14:41:15 gcasse Exp $
+$Id: action.c,v 1.6 2005/10/12 20:01:38 gcasse Exp $
 $Author: gcasse $
 Description: execute the required action on the supplied buffer.
-$Date: 2005/10/01 14:41:15 $ |
-$Revision: 1.5 $ |
+$Date: 2005/10/12 20:01:38 $ |
+$Revision: 1.6 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -29,6 +29,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <stdlib.h>
 #include "action.h"
 #include "debug.h"
+#include "docAPI.h"
 #include "tifilter2l.h"
 #include "tigetline.h"
 #include "terminfointerpreter.h"
@@ -39,7 +40,7 @@ GByteArray* sayOnlyLinePortionAtCursor( pluginAPI* thePluginAPI, char* theBuffer
   GByteArray* aByteArray=NULL;
   GList* aFirstElement = NULL;
   GList* aLastElement = NULL;
-  GList* aSelectedElement = NULL;
+  GNode* aSelectedNode = NULL;
 
   ENTER("sayOnlyLinePortionAtCursor");
 
@@ -56,21 +57,25 @@ GByteArray* sayOnlyLinePortionAtCursor( pluginAPI* thePluginAPI, char* theBuffer
   
   /* < get the last cursor position */
   {
+    GList* aSelectedElement = NULL;
     cursor* aCursor = terminfointerpreter_getCursor();
 
     if (aCursor)
       {
 	/* get the selected line portion */
 	aSelectedElement = terminfoGetLinePortionAtCursor( aFirstElement, aCursor);
+	if (aSelectedElement && aSelectedElement->data)
+	  {
+	    aSelectedNode = ((terminfoEntry*)(aSelectedElement->data))->myNode;
+	  }
       }
   }
   /* > */
 
-  /* Firstly, the whole list is mute */
-  aFirstElement = muteElement( aFirstElement, aLastElement);
-
-  /* then the selected element can be said */
-  aFirstElement = sayElement( aSelectedElement, aSelectedElement);
+  clearContent( thePluginAPI->myDocument);
+  putListEntryDocAPI( thePluginAPI->myDocument, aFirstElement);
+  setElementTypeDocAPI( thePluginAPI->myDocument, aSelectedNode, linkType, 1);
+  aFirstElement = getStyledListEntryDocAPI( thePluginAPI->myDocument);
 
   aByteArray = convertList2Terminfo( aFirstElement);
   DISPLAY_RAW_BUFFER( aByteArray->data, aByteArray->len);
@@ -96,7 +101,16 @@ GByteArray* mutePreviouslyHighlightedArea( pluginAPI* thePluginAPI, char* theBuf
   
   SHOW_TIME("terminfofilter2lines");
   {
-    aList = terminfofilter2lines( aList, thePluginAPI->myTermAPI, 0);
+    GList* aPreviouslyHighlightedElement  = NULL; 
+    GList* aNewlyHighlightedElement = NULL;
+    if (terminfofilter2lines( aList, thePluginAPI->myTermAPI, &aPreviouslyHighlightedElement, &aNewlyHighlightedElement))
+      {
+	GNode* aPreviousLink  = ((terminfoEntry*)(aPreviouslyHighlightedElement))->myNode; 
+	GNode* aNextLink  = ((terminfoEntry*)(aNewlyHighlightedElement))->myNode;
+	setElementTypeDocAPI( thePluginAPI->myDocument, aPreviousLink, linkType, 0);
+	setElementTypeDocAPI( thePluginAPI->myDocument, aNextLink, linkType, 1);
+	aList = getStyledListEntryDocAPI( thePluginAPI->myDocument);
+      }
   }
 
   aByteArray = convertList2Terminfo( aList);

@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 links2vox.c
-$Id: links2vox.c,v 1.6 2005/10/09 22:43:12 gcasse Exp $
+$Id: links2vox.c,v 1.7 2005/10/12 20:01:38 gcasse Exp $
 $Author: gcasse $
 Description: tengoo plugin for the links2 web browser.
-$Date: 2005/10/09 22:43:12 $ |
-$Revision: 1.6 $ |
+$Date: 2005/10/12 20:01:38 $ |
+$Revision: 1.7 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -23,6 +23,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ----------------------------------------------------------------------------
 */
+#include "docAPI.h"
 #include "pluginAPI.h"
 #include "point.h"
 #include "action.h"
@@ -61,6 +62,7 @@ struct plugin
   TRANSCODE_PLUGINAPI* myOutputIntermediaryBlockCallback;
   TRANSCODE_PLUGINAPI* myOutputLastBlockCallback;
   int myMaxLength;
+  void* myDocument;
 /*   point* myOrigin; */
 /*   GList* myFrame; /\* list of frames *\/ */
 };
@@ -202,40 +204,6 @@ static GByteArray* manageCommand( plugin* this, enum commandIdentifier theComman
   return aByteArray;
 }
 /* > */
-/* < createPlugin */
-void* createPlugin( termAPI* theTermAPI, int theInputOutputMaxLength)
-{
-  plugin* this=NULL;
-
-  ENTER("createPlugin");
-
-  this = malloc(sizeof(plugin));
-  memset(this, 0, sizeof(plugin));
-
-  this->myMaxLength = theInputOutputMaxLength;
-
-/*   /\* < create frames *\/ */
-/*   { */
-/*     frame* aFrame = NULL; */
-/*     point* p = this->myOrigin = createPoint( 0, 0, 0); */
-
-/*     aFrame = createFrame( screenFrame, "screen", p, 79, 24); */
-/*     this->myFrame = g_list_append( NULL, (gpointer)aFrame); */
-    
-/*     aFrame = createFrame( titleFrame, "title", p, 79, 0); */
-/*     this->myFrame = g_list_append( this->myFrame, (gpointer)aFrame); */
-
-/*     translatePoint( p, 0, 24); */
-/*     aFrame = createFrame( statusFrame, "status", p, 79, 0); */
-/*     this->myFrame = g_list_append( this->myFrame, (gpointer)aFrame); */
-/*   } */
-/*   /\* > *\/ */
- 
-  manageCommand( this, UNDEFINED_COMMAND, NULL, 0);
-
-  return this;
-}
-/* > */
 /* < deletePlugin */
 void deletePlugin( void* theplugin)
 {
@@ -243,9 +211,46 @@ void deletePlugin( void* theplugin)
 
   ENTER("deletePlugin");
 
-  /*  deletePoint( this->myOrigin); */
-
   free( this);
+
+  /*  deletePoint( this->myOrigin); */
+}
+/* > */
+/* < createPlugin */
+void* createPlugin( termAPI* theTermAPI, int theInputOutputMaxLength, void** theDocument)
+{
+  plugin* this=NULL;
+
+  ENTER("createPlugin");
+
+  this = malloc(sizeof(plugin));
+
+  if (!this || !theDocument)
+    {
+      return NULL;
+    }
+
+  memset(this, 0, sizeof(plugin));
+
+  this->myMaxLength = theInputOutputMaxLength;
+
+  *theDocument = createDocAPI( 100); /* TBD: constant */
+
+  if (! *theDocument)
+    {
+      deletePlugin( this);
+      return NULL;
+    }
+
+  /* load the styles */
+  loadStyle( *theDocument, "links2tty.css");
+
+
+
+
+  manageCommand( this, UNDEFINED_COMMAND, NULL, 0);
+
+  return this;
 }
 /* > */
 /* < transcodeInput */

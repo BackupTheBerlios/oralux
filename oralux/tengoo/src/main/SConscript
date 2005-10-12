@@ -21,7 +21,8 @@ Import('env')
 tengoo = env.Library(target = 'tengoo'
                      , source = 'tengoo.c'
                      , CPPPATH = include
-                     , LIBPATH = ['../graphic',
+                     , LIBPATH = ['../document',
+                                  '../graphic',
                                   '../mode',
                                   '../plugin',
                                   '../termapi',
@@ -31,6 +32,7 @@ tengoo = env.Library(target = 'tengoo'
                      , LIBS = ['gmodule-2.0',
                                'glib-2.0',
                                'links2vox',
+                               'document',
                                'graphic',
                                'mode',
                                'util',
@@ -43,6 +45,7 @@ env.Program(target = 'test-tengoo'
             , source = 'test-tengoo.c'
             , CPPPATH = include
             , LIBPATH = ['.',
+                         '../document',
                          '../graphic',
                          '../mode',
                          '../plugin',
@@ -54,6 +57,7 @@ env.Program(target = 'test-tengoo'
                       'glib-2.0',
                       'tengoo',
                       'links2vox',
+                      'document',
                       'graphic',
                       'mode',
                       'util',

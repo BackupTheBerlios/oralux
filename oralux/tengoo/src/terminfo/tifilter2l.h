@@ -4,10 +4,10 @@
 #include "terminfo2list.h"
 
 /* 
-The input terminfo list is filtered, and the new list is returned.
-theTermAPI supplies several handlers to collect terminal info.
+   Look for two line portions with style changes (previously highlighted area and newly highlighted area)  
+theTermAPI supplies several handlers to collect the terminal info.
 */
 
-GList* terminfofilter2lines(GList* theTerminfoList, termAPI* theTermAPI, int isDuplicated);
+int terminfofilter2lines(GList* theTerminfoList, termAPI* theTermAPI, GList** thePreviouslyHighlightedElement, GList** theNewlyHighlightedElement);
 
 #endif

@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 docAPI.c
-$Id: docAPI.c,v 1.3 2005/10/09 22:43:12 gcasse Exp $
+$Id: docAPI.c,v 1.4 2005/10/12 20:01:38 gcasse Exp $
 $Author: gcasse $
 Description: manage document, logical structure of the displayed screen.
-$Date: 2005/10/09 22:43:12 $ |
-$Revision: 1.3 $ |
+$Date: 2005/10/12 20:01:38 $ |
+$Revision: 1.4 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -38,6 +38,7 @@ struct document
   int* myLinkVoiceVolume;
   GNode* myRootNode;
   GNode* myCurrentTextNode;
+  GList* myEntry;
 };
 typedef struct document document;
 /* > */
@@ -172,7 +173,9 @@ void deleteDocAPI( void* theDocAPI)
 	  clearData( this->myRootNode, anyType);
 	  this->myRootNode = NULL;
 	}
-       free( this);
+      deleteTermInfoList( this->myEntry);
+      
+      free( this);
     }
 }
 /* > */
@@ -211,25 +214,24 @@ void* createDocAPI( int theVoiceVolume)
   return (void*) this;
 }
 /* > */
-/* < addFrameStyleDocAPI*/
-void addFrameStyleDocAPI( void* theDocAPI, frame* theFrame)
+/* < addFrameElement */
+static void addFrameElement (gpointer theEntry, gpointer theDocument)
 {
-  document* this = theDocAPI;
-  element* anElement = NULL;
+  document* this = theDocument;
   frame* aFrame = NULL;
 
-  ENTER("addFrameDocAPI");
+  ENTER("addFrameElement");
 
-  if (!this || !this->myRootNode)
+  if (!theEntry || !this || !(this->myRootNode))
     {
       return;
     }
 
-  aFrame = copyFrame( theFrame);
+  aFrame = copyFrame( (frame*)theEntry);
 
   if (aFrame)
     {
-      anElement = createElement( frameType, aFrame);
+      element* anElement = createElement( frameType, aFrame);
       
       if (!anElement)
 	{
@@ -240,7 +242,59 @@ void addFrameStyleDocAPI( void* theDocAPI, frame* theFrame)
 	  g_node_insert_data( this->myRootNode, -1, anElement);
 	}
     }
-  /*  return anElement;*/
+}
+/* > */
+
+/* < addFrameStyleDocAPI*/
+void addFrameStyleDocAPI( void* theDocAPI, GList* theFrame)
+{
+  document* this = theDocAPI;
+
+  ENTER("addFrameDocAPI");
+
+  g_list_foreach( theFrame, (GFunc)addFrameElement, this);
+}
+/* > */
+/* <*/
+enum {
+  screenFrame,
+  statusFrame,
+  titleFrame,
+}; /* TBD */
+void loadStyle( void* theDocAPI, char* theFilename)
+{
+  frame* aFrame = NULL;
+  GList* aList = NULL;
+  point* p = NULL;
+
+  /* take in account the stored styles */
+
+  ENTER("loadStyle");
+
+  if (!theDocAPI || !theFilename)
+    {
+      return;
+    }
+
+  /* TBD: parse the style */
+
+  /* < create frames */
+  p = createPoint( 0, 0, 0);
+
+  aFrame = createFrame( screenFrame, "screen", p, 79, 24);
+  aList = g_list_append( aList, (gpointer)aFrame);
+
+  aFrame = createFrame( titleFrame, "title", p, 79, 0);
+  aList = g_list_append( aList, (gpointer)aFrame);
+
+  translatePoint( p, 0, 24);
+  aFrame = createFrame( statusFrame, "status", p, 79, 0);
+  aList = g_list_append( aList, (gpointer)aFrame);
+
+  addFrameStyleDocAPI( theDocAPI, aList);
+
+  g_list_free( aList);
+  /* > */
 }
 /* > */
 /* < findFrame */
@@ -351,48 +405,94 @@ static void linkEntryToTextElement(gpointer theEntry, gpointer theDocument)
 }
 /* > */
 /* < putListEntryDocAPI */
-GList* putListEntryDocAPI( void* theDocAPI, GList* theList)
+void putListEntryDocAPI( void* theDocAPI, GList* theList)
 {
   document* this = theDocAPI;
-  GList* aList = theList;
 
   ENTER("putListEntryDocAPI");
 
   if (!this || !theList || !(this->myRootNode))
     {
-      return NULL;
+      return;
     }
 
-  clearData( this->myRootNode, textType | linkType);
-  this->myCurrentTextNode = NULL;
+  this->myEntry = g_list_append( this->myEntry, theList);
 
   /* determine (or create) the text element of each entry.
      At the moment, each text entry displayed in the same frame 
      is associated with the same text element.
-   */
+  */
   g_list_foreach( theList, (GFunc)linkEntryToTextElement, this);
 
-  
-  /* TBD ... */
-
-
-  return aList;
 }
 /* > */
 /* < getStyledListEntryDocAPI */
 GList* getStyledListEntryDocAPI( void* theDocAPI)
 {
   ENTER("getStyledListEntryDocAPI");
-  /* TBD */
+
+
+
   return NULL;
 }
 /* > */
 
 /* < setElementTypeDocAPI */
-void setElementTypeDocAPI( void* theDocAPI, GList* theElement, enum elementType theType, int theELementHasFocus)
+void setElementTypeDocAPI( void* theDocAPI, void* theNode, enum elementType theType, int theELementHasFocus)
 {
-  ENTER("setElementTypeDocAPI");
+  document* this = theDocAPI;
+  GNode* aTextNode = theNode; 
+  element* aTextElement = NULL;
 
+  ENTER("putListEntryDocAPI");
+
+  if (!this || !aTextNode || !(aTextNode->data))
+    {
+      return;
+    }
+  
+  aTextElement = aTextNode->data;
+
+  switch(theType)
+    {
+    case linkType:
+      {
+	if( aTextElement->myType == textType)
+	  {
+	    /* a link element is added 
+	       the previous text element is left out, 
+	       no particular issue if the link was its only element. 
+	    */
+	    GNode* aLinkNode = NULL;
+	    aTextElement= createElement( linkType, NULL);
+	    
+	    aLinkNode = g_node_new( aTextElement);
+	    
+	    aTextNode = g_node_insert_after( aTextNode->parent, aTextNode, aLinkNode);
+	  }
+      }
+      break;
+    default:
+      break;
+    }
+  
+  aTextElement->myNodeHasFocus  = theELementHasFocus;
+}
+/* > */
+
+/* < clearContent */
+void clearContent( void* theDocAPI)
+{
+  document* this = theDocAPI;
+
+  ENTER("clearContent");
+  if (this)
+    {
+      clearData( this->myRootNode, textType | linkType);
+      this->myCurrentTextNode = NULL;
+
+      deleteTermInfoList(this->myEntry);
+    }
 }
 /* > */
 
