@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 terminfo2list.c
-$Id: terminfo2list.c,v 1.5 2005/10/02 20:14:57 gcasse Exp $
+$Id: terminfo2list.c,v 1.6 2005/10/14 23:37:53 gcasse Exp $
 $Author: gcasse $
 Description: convert the terminfo entries to a list of commands.
-$Date: 2005/10/02 20:14:57 $ |
-$Revision: 1.5 $ |
+$Date: 2005/10/14 23:37:53 $ |
+$Revision: 1.6 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -858,53 +858,32 @@ GList* addSequence( chartyp* theFirstSequence, GList* theFirstElement, GList* th
 }
 /* > */
 /* < setRendering */
-char* setRendering( int theVolume, int theVoice)
+terminfoEntry* get_TSAR_Sequence( int theVolume, int theVoice)
 {
-  int aValue = (theVolume+5)/10;
-  char* aSequence = NULL;
-  const char* aFormat = "\x1B[1v;xt"; /* v=volume, range 0..9 ; x=voice range 0..9 */
+  /* TSAR format: 
+     volume: range 0..9;
+     voice: range 0..9
+  */
+  #define TSAR_FORMAT "\x1B[1%d;%dt"
+
+  int aVolume = (theVolume+5)/10;
+  int aVoice = (theVoice > 9) ? 9 : theVoice;
+  char aSequence[ sizeof( TSAR_FORMAT)];
+  terminfoEntry* anEntry = NULL;
+
   /* volume */
-  if (aValue > 9)
+  if (aVolume > 9)
     {
-      aValue = 9;
+      aVolume = 9;
     }
-  aSequence = strdup(aFormat);
-  aSequence[3] = '0'+ aValue;
 
-  /* voice */
-  aValue = (theVoice > 9) ? 9 : theVoice;
-  aSequence[5] = '0'+ aValue;
-  return aSequence;
+  sprintf( aSequence, TSAR_FORMAT, aVolume, aVoice);
+  anEntry = createExternalEntry( TSAR, NULL, NULL, aSequence);
+
+  return anEntry;
 }
 /* > */
-/* < sayElement, muteElement */
-GList* sayElement( GList* theFirstElement, GList* theLastElement)
-{
-  chartyp* aFirstSequence=NULL;
-  chartyp* aLastSequence=NULL;
 
-  ENTER("sayElement");
-
-  aFirstSequence = setRendering( 100, 1);
-  aLastSequence = setRendering( 0, 1);
-
-  return addSequence( aFirstSequence, theFirstElement, theLastElement, aLastSequence);
-}
-
-GList* muteElement( GList* theFirstElement, GList* theLastElement)
-{
-  chartyp* aFirstSequence=NULL;
-  chartyp* aLastSequence=NULL;
-
-  ENTER("sayElement");
-
-  aFirstSequence = setRendering( 0, 1);
-  aLastSequence = setRendering( 100, 1);
-
-  return addSequence( aFirstSequence, theFirstElement, theLastElement, aLastSequence);
-}
-
-/* > */
 
 /* 
 Local variables:

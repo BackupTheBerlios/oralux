@@ -35,7 +35,16 @@ void putListEntryDocAPI( void* theDocAPI, GList* theList);
 /*
   Must be called after putListEntryDocAPI to enrich the type of an entry 
 */
-void setElementTypeDocAPI( void* theDocAPI, void* theNode, enum elementType theType, int theELementHasFocus);
+void setElementTypeDocAPI( void* theDocAPI, void* theNode, enum elementType theType);
+/* > */
+
+/* < setFocusDocAPI... */
+/*
+  Must be called after putListEntryDocAPI to enrich the type of an entry 
+  setFocusDocAPI: 
+*/
+void hoverNodeDocAPI( void* theNode);
+void activeNodeDocAPI( void* theNode);
 /* > */
 
 /* < getListEntryDocAPI */

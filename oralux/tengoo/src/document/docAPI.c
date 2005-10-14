@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 docAPI.c
-$Id: docAPI.c,v 1.4 2005/10/12 20:01:38 gcasse Exp $
+$Id: docAPI.c,v 1.5 2005/10/14 23:37:53 gcasse Exp $
 $Author: gcasse $
 Description: manage document, logical structure of the displayed screen.
-$Date: 2005/10/12 20:01:38 $ |
-$Revision: 1.4 $ |
+$Date: 2005/10/14 23:37:53 $ |
+$Revision: 1.5 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -31,14 +31,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "terminfo2list.h"
 #include "debug.h"
 /* > */
-
 /* < document */
 struct document
 {
-  int* myLinkVoiceVolume;
   GNode* myRootNode;
   GNode* myCurrentTextNode;
-  GList* myEntry;
+  GList* myFirstEntry;
 };
 typedef struct document document;
 /* > */
@@ -46,20 +44,22 @@ typedef struct document document;
 struct element
 {
   enum elementType myType;
-  int myNodeHasFocus;
-  int* myVoiceVolume;
+  gboolean myElementIsHovered;
+  gboolean myElementIsActive;
+  gboolean myElementHasFocus;
+  int myVoiceVolume;
+  int myComputedVoiceVolume;
   gpointer myData;
 };
 typedef struct element element;
 /* > */
-
 /* < misc */
 enum
   {
+    undefinedVoiceVolume=-1,
     defaultVoiceVolume=100,
   };
 /* > */
-
 /* < createElement */
 static element* createElement( enum elementType theType, gpointer theData)
 {
@@ -73,6 +73,7 @@ static element* createElement( enum elementType theType, gpointer theData)
       memset (this, 0, sizeof(element));
       this->myType = theType;
       this->myData = theData;
+      this->myVoiceVolume = this->myComputedVoiceVolume = undefinedVoiceVolume;
     }
   return this;
 }
@@ -84,8 +85,6 @@ static void deleteElement(element* this)
 
   if (this)
     {
-      free( this->myVoiceVolume);
-      
       if( this->myData)
 	{
 	  switch(this->myType)
@@ -107,6 +106,7 @@ static gboolean deleteNode( GNode *theNode, gpointer theElementType)
 {
   element* this = NULL;
   int aType = (int)theElementType;
+  gboolean aTraversalMustBeStoppped = FALSE;
 
   ENTER("deleteNode");
 
@@ -122,26 +122,18 @@ static gboolean deleteNode( GNode *theNode, gpointer theElementType)
   
   g_node_destroy( theNode);
 
-  return 0;
+  return aTraversalMustBeStoppped;
 }
 /* > */
-/* < setVoiceVolumeDocAPI */
-static int setVoiceVolume( element* this, int theVoiceVolume)
+/* < setVoiceVolume */
+static void setVoiceVolume( element* this, int theVoiceVolume)
 {
   ENTER("setVoiceVolume");
 
   if (this)
     {
-      if (this->myVoiceVolume == NULL)
-	{
-	  this->myVoiceVolume = malloc(sizeof(int));	
-	}
-      if (this->myVoiceVolume)
-	{
-	  *(this->myVoiceVolume) = theVoiceVolume;	
-	}
+      this->myVoiceVolume = theVoiceVolume;
     }
-  return (this->myVoiceVolume != NULL);
 }
 /* > */
 /* < clearData */
@@ -173,10 +165,52 @@ void deleteDocAPI( void* theDocAPI)
 	  clearData( this->myRootNode, anyType);
 	  this->myRootNode = NULL;
 	}
-      deleteTermInfoList( this->myEntry);
+      deleteTermInfoList( this->myFirstEntry);
       
       free( this);
     }
+}
+/* > */
+/* < computeStyleSingleNode */
+static gboolean computeStyleSingleNode( GNode *theNode, gpointer theFoo)
+{
+  gboolean aTraversalMustBeStoppped = FALSE; 
+  element* aCurrentElement = NULL;
+
+  ENTER("computeStyleSingleNode");
+
+  if (!theNode || !(theNode->data))
+    {
+      return aTraversalMustBeStoppped;
+    }
+
+  aCurrentElement = theNode->data;
+
+  aCurrentElement->myComputedVoiceVolume = undefinedVoiceVolume;
+
+  if (aCurrentElement->myVoiceVolume != undefinedVoiceVolume)
+    {
+      aCurrentElement->myComputedVoiceVolume = aCurrentElement->myVoiceVolume;
+    }
+  else if (theNode->parent && theNode->parent->data)
+    {
+      element* aParentElement = theNode->parent->data;
+      aCurrentElement->myComputedVoiceVolume = aParentElement->myComputedVoiceVolume;
+    }
+  return aTraversalMustBeStoppped;
+}
+/* > */
+/* < computeStyle */
+static void computeStyle( GNode* theNode)
+{
+  /* update the computed style of the node and its descendants */
+
+  g_node_traverse (theNode,
+		   G_LEVEL_ORDER,
+		   G_TRAVERSE_ALL,
+		   -1,
+		   (GNodeTraverseFunc)computeStyleSingleNode,
+		   (gpointer)NULL);
 }
 /* > */
 /* < createDocAPI */
@@ -199,10 +233,9 @@ void* createDocAPI( int theVoiceVolume)
     
   if (anElement)
     {
-      if (setVoiceVolume( anElement, theVoiceVolume))
-	{
-	  this->myRootNode = g_node_new( anElement);
-	}
+      setVoiceVolume( anElement, theVoiceVolume);
+      this->myRootNode = g_node_new( anElement);
+      computeStyle( this->myRootNode);
 
       if (!this)
 	{
@@ -239,13 +272,13 @@ static void addFrameElement (gpointer theEntry, gpointer theDocument)
 	}
       else
 	{
-	  g_node_insert_data( this->myRootNode, -1, anElement);
+	  GNode* aNode = g_node_insert_data( this->myRootNode, -1, anElement);
+	  computeStyle( aNode);
 	}
     }
 }
 /* > */
-
-/* < addFrameStyleDocAPI*/
+/* < addFrameStyleDocAPI */
 void addFrameStyleDocAPI( void* theDocAPI, GList* theFrame)
 {
   document* this = theDocAPI;
@@ -255,7 +288,7 @@ void addFrameStyleDocAPI( void* theDocAPI, GList* theFrame)
   g_list_foreach( theFrame, (GFunc)addFrameElement, this);
 }
 /* > */
-/* <*/
+/* < loadStyle */
 enum {
   screenFrame,
   statusFrame,
@@ -396,6 +429,7 @@ static void linkEntryToTextElement(gpointer theEntry, gpointer theDocument)
       if (aFrameNode->children == NULL)
 	{ /* create the text element */
 	  this->myCurrentTextNode = g_node_insert_data( aFrameNode, -1, aTextElement);
+	  computeStyle( this->myCurrentTextNode);
 	}
 
       deleteBox( aBox);
@@ -416,7 +450,7 @@ void putListEntryDocAPI( void* theDocAPI, GList* theList)
       return;
     }
 
-  this->myEntry = g_list_append( this->myEntry, theList);
+  this->myFirstEntry = g_list_append( this->myFirstEntry, theList);
 
   /* determine (or create) the text element of each entry.
      At the moment, each text entry displayed in the same frame 
@@ -429,54 +463,108 @@ void putListEntryDocAPI( void* theDocAPI, GList* theList)
 /* < getStyledListEntryDocAPI */
 GList* getStyledListEntryDocAPI( void* theDocAPI)
 {
+  document* this = theDocAPI;
+  GList* aList = NULL;
+  int aVolume = defaultVoiceVolume;
+
   ENTER("getStyledListEntryDocAPI");
 
+  if (!this || !(this->myFirstEntry))
+    {
+      return NULL;
+    }
 
+  aList = this->myFirstEntry;
+
+  do 
+    {
+      int aComputedVolume = undefinedVoiceVolume;
+      element* anElement = NULL;
+      GNode* aNode = getNodeFromList( aList);
+      
+      if (!aNode)
+	{
+	  continue;
+	}
+      assert(aNode->data);
+      anElement = (element*)(aNode->data);
+      aComputedVolume = anElement->myComputedVoiceVolume;
+
+      if (aVolume != aComputedVolume)
+	{
+	  terminfoEntry* anEntry = NULL;
+	  aVolume = aComputedVolume;
+	  anEntry = get_TSAR_Sequence( aVolume, 1);
+	  this->myFirstEntry = g_list_insert_before( this->myFirstEntry, aList, anEntry);
+	}
+    } while( (aList = g_list_next( aList)));
 
   return NULL;
 }
 /* > */
-
 /* < setElementTypeDocAPI */
-void setElementTypeDocAPI( void* theDocAPI, void* theNode, enum elementType theType, int theELementHasFocus)
+void setElementTypeDocAPI( void* theDocAPI, void* theNode, enum elementType theType)
 {
   document* this = theDocAPI;
-  GNode* aTextNode = theNode; 
-  element* aTextElement = NULL;
+  GNode* aNode = theNode; 
+  element* anElement = NULL;
 
   ENTER("putListEntryDocAPI");
 
-  if (!this || !aTextNode || !(aTextNode->data))
+  if (!this || !aNode || !(aNode->data))
     {
       return;
     }
   
-  aTextElement = aTextNode->data;
+  anElement = aNode->data;
 
   switch(theType)
     {
     case linkType:
       {
-	if( aTextElement->myType == textType)
+	if( anElement->myType == textType)
 	  {
 	    /* a link element is added 
 	       the previous text element is left out, 
 	       no particular issue if the link was its only element. 
 	    */
 	    GNode* aLinkNode = NULL;
-	    aTextElement= createElement( linkType, NULL);
+	    anElement= createElement( linkType, NULL);
+	    aLinkNode = g_node_new( anElement);
 	    
-	    aLinkNode = g_node_new( aTextElement);
-	    
-	    aTextNode = g_node_insert_after( aTextNode->parent, aTextNode, aLinkNode);
+	    /* insert the new node into the document tree */
+	    aNode = g_node_insert_after( aNode->parent, aNode, aLinkNode);
+	    computeStyle( aNode);
 	  }
       }
       break;
     default:
       break;
     }
-  
-  aTextElement->myNodeHasFocus  = theELementHasFocus;
+}
+/* > */
+
+/* < hoverNodeDocAPI, activeNodeDocAPI */
+void hoverNodeDocAPI( void* theNode)
+{
+  ENTER("hoverNodeDocAPI");
+
+  if (theNode)
+    {
+      element* anElement = ((GNode*)theNode)->data;
+      anElement->myElementIsHovered = TRUE;
+    }
+}
+
+void activeNodeDocAPI( void* theNode)
+{
+  ENTER("activeNodeDocAPI");
+
+  if (theNode)
+    {
+      element* anElement = ((GNode*)theNode)->data;
+      anElement->myElementIsActive = TRUE;
+    }
 }
 /* > */
 
@@ -491,7 +579,7 @@ void clearContent( void* theDocAPI)
       clearData( this->myRootNode, textType | linkType);
       this->myCurrentTextNode = NULL;
 
-      deleteTermInfoList(this->myEntry);
+      deleteTermInfoList( this->myFirstEntry);
     }
 }
 /* > */
@@ -501,5 +589,3 @@ Local variables:
 folded-file: t
 folding-internal-margins: nil
 */
-
-

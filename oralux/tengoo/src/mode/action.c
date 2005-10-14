@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 action.c
-$Id: action.c,v 1.6 2005/10/12 20:01:38 gcasse Exp $
+$Id: action.c,v 1.7 2005/10/14 23:37:53 gcasse Exp $
 $Author: gcasse $
 Description: execute the required action on the supplied buffer.
-$Date: 2005/10/12 20:01:38 $ |
-$Revision: 1.6 $ |
+$Date: 2005/10/14 23:37:53 $ |
+$Revision: 1.7 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -74,7 +74,8 @@ GByteArray* sayOnlyLinePortionAtCursor( pluginAPI* thePluginAPI, char* theBuffer
 
   clearContent( thePluginAPI->myDocument);
   putListEntryDocAPI( thePluginAPI->myDocument, aFirstElement);
-  setElementTypeDocAPI( thePluginAPI->myDocument, aSelectedNode, linkType, 1);
+  setElementTypeDocAPI( thePluginAPI->myDocument, aSelectedNode, linkType);
+  hoverNodeDocAPI( aSelectedNode);
   aFirstElement = getStyledListEntryDocAPI( thePluginAPI->myDocument);
 
   aByteArray = convertList2Terminfo( aFirstElement);
@@ -107,8 +108,9 @@ GByteArray* mutePreviouslyHighlightedArea( pluginAPI* thePluginAPI, char* theBuf
       {
 	GNode* aPreviousLink  = ((terminfoEntry*)(aPreviouslyHighlightedElement))->myNode; 
 	GNode* aNextLink  = ((terminfoEntry*)(aNewlyHighlightedElement))->myNode;
-	setElementTypeDocAPI( thePluginAPI->myDocument, aPreviousLink, linkType, 0);
-	setElementTypeDocAPI( thePluginAPI->myDocument, aNextLink, linkType, 1);
+	setElementTypeDocAPI( thePluginAPI->myDocument, aPreviousLink, linkType);
+	setElementTypeDocAPI( thePluginAPI->myDocument, aNextLink, linkType);
+	hoverNodeDocAPI( aNextLink);
 	aList = getStyledListEntryDocAPI( thePluginAPI->myDocument);
       }
   }
@@ -125,24 +127,26 @@ GByteArray* mutePreviouslyHighlightedArea( pluginAPI* thePluginAPI, char* theBuf
 /* < muteDisplayedOutput */
 GByteArray* muteDisplayedOutput( pluginAPI* thePluginAPI, char* theBuffer, int theLength)
 {
-  char* aSequence = NULL;
-  GByteArray* aByteArray=NULL;
-  ENTER("muteDisplayedOutput");
+/*   char* aSequence = NULL; */
+/*   GByteArray* aByteArray=NULL; */
+/*   ENTER("muteDisplayedOutput"); */
 
-  aSequence = setRendering( 0, 1);
-  aByteArray = g_byte_array_new();
+/*   aSequence = setRendering( 0, 1); */
+/*   aByteArray = g_byte_array_new(); */
 
-  g_byte_array_append( (GByteArray*) aByteArray, 
-		       (guint8*) aSequence, 
-		       (guint) strlen(aSequence));
+/*   g_byte_array_append( (GByteArray*) aByteArray,  */
+/* 		       (guint8*) aSequence,  */
+/* 		       (guint) strlen(aSequence)); */
 
-  g_byte_array_append( (GByteArray*) aByteArray, 
-		       (guint8*) theBuffer, 
-		       (guint) theLength);
+/*   g_byte_array_append( (GByteArray*) aByteArray,  */
+/* 		       (guint8*) theBuffer,  */
+/* 		       (guint) theLength); */
 
-  free( aSequence);
+/*   free( aSequence); */
 
-  return aByteArray;
+/*  return aByteArray; */
+
+  return NULL;
 }
 /* > */
 /* < appendBuffer */
