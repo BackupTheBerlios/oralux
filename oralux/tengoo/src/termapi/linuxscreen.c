@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 linuxscreen.c
-$Id: linuxscreen.c,v 1.2 2005/09/25 22:17:16 gcasse Exp $
+$Id: linuxscreen.c,v 1.3 2005/10/15 21:49:45 gcasse Exp $
 $Author: gcasse $
 Description: Read the data from the current screen.
-$Date: 2005/09/25 22:17:16 $ |
-$Revision: 1.2 $ |
+$Date: 2005/10/15 21:49:45 $ |
+$Revision: 1.3 $ |
 Original Copyright (C) 1995-2004 by The BRLTTY Team. All rights reserved.
 
 August 2005, Gilles Casse (gcasse@oralux.org)
@@ -481,7 +481,7 @@ setTranslationTable (int force) {
 
     memset(translationTable, '?', sizeof(translationTable));
     {
-       int character;
+       int character=0XFF;
        for (character=0XFF; character>=0; --character) {
          unsigned short unicode = applicationCharacterMap[character];
          int position = -1;

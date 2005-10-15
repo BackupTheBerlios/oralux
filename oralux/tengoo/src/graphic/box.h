@@ -22,7 +22,7 @@ enum intersectionType
     noIntersectionBox,
   };
 
-enum intersectionType isIncluded( box* this, box* thePossibleContainer, box* theIntersectionBox);
+enum intersectionType isIncludedBox( box* this, box* thePossibleContainer, box* theIntersectionBox);
 
 /* 
 Local variables:

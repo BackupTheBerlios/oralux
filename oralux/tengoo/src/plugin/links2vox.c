@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 links2vox.c
-$Id: links2vox.c,v 1.7 2005/10/12 20:01:38 gcasse Exp $
+$Id: links2vox.c,v 1.8 2005/10/15 21:49:45 gcasse Exp $
 $Author: gcasse $
 Description: tengoo plugin for the links2 web browser.
-$Date: 2005/10/12 20:01:38 $ |
-$Revision: 1.7 $ |
+$Date: 2005/10/15 21:49:45 $ |
+$Revision: 1.8 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -243,7 +243,7 @@ void* createPlugin( termAPI* theTermAPI, int theInputOutputMaxLength, void** the
     }
 
   /* load the styles */
-  loadStyle( *theDocument, "links2tty.css");
+  loadStyleDocAPI( *theDocument, "links2tty.css");
 
 
 

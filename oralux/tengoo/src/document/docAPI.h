@@ -35,35 +35,42 @@ void putListEntryDocAPI( void* theDocAPI, GList* theList);
 /*
   Must be called after putListEntryDocAPI to enrich the type of an entry 
 */
-void setElementTypeDocAPI( void* theDocAPI, void* theNode, enum elementType theType);
+void* setElementTypeDocAPI( void* theDocAPI, void* theNode, enum elementType theType);
 /* > */
 
-/* < setFocusDocAPI... */
+/* < setFocusStateDocAPI */
 /*
-  Must be called after putListEntryDocAPI to enrich the type of an entry 
-  setFocusDocAPI: 
+  Indicates for example that a link is hovered.
 */
-void hoverNodeDocAPI( void* theNode);
-void activeNodeDocAPI( void* theNode);
+enum elementFocusState
+  {
+    notHoveredElement=0,
+    hoveredElement=1,
+    activeElement=2,
+    focusedElement=4,
+  };
+
+void setFocusStateDocAPI( void* theNode, enum elementFocusState theState);
 /* > */
 
 /* < getListEntryDocAPI */
 /*
-returned the list in taking in account the styles.
+returned the list in taking in account the styles. 
+The list will be deleted by docAPI.
 */
 GList* getStyledListEntryDocAPI( void* theDocAPI);
 /* > */
 
 /* < loadStyle */
-void loadStyle( void* theDocAPI, char* theFilename);
+void loadStyleDocAPI( void* theDocAPI, char* theFilename);
 /* > */
 
-/* < clearContent */
+/* < clearContentDocAPI */
 /*
 clear any textual info (text and link nodes, entry list,...).
 The layout is not concerned (frame nodes,...).   
 */
-void clearContent( void* theDocAPI);
+void clearContentDocAPI( void* theDocAPI);
 /* > */
 
 

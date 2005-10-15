@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 action.c
-$Id: action.c,v 1.7 2005/10/14 23:37:53 gcasse Exp $
+$Id: action.c,v 1.8 2005/10/15 21:49:45 gcasse Exp $
 $Author: gcasse $
 Description: execute the required action on the supplied buffer.
-$Date: 2005/10/14 23:37:53 $ |
-$Revision: 1.7 $ |
+$Date: 2005/10/15 21:49:45 $ |
+$Revision: 1.8 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -38,22 +38,19 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 GByteArray* sayOnlyLinePortionAtCursor( pluginAPI* thePluginAPI, char* theBuffer, int theLength)
 {
   GByteArray* aByteArray=NULL;
-  GList* aFirstElement = NULL;
-  GList* aLastElement = NULL;
+  GList* aList = NULL;
   GNode* aSelectedNode = NULL;
 
   ENTER("sayOnlyLinePortionAtCursor");
 
-  aFirstElement = convertTerminfo2List( theBuffer, theLength);
-
-  if (aFirstElement == NULL)
+  aList = convertTerminfo2List( theBuffer, theLength);
+  if (aList == NULL)
     {
       return NULL;
     }
+  g_list_foreach( aList, (GFunc)terminfointerpreter, NULL);
 
-  aLastElement = g_list_last( aFirstElement);
-  
-  g_list_foreach( aFirstElement, (GFunc)terminfointerpreter, NULL);
+  putListEntryDocAPI( thePluginAPI->myDocument, aList);
   
   /* < get the last cursor position */
   {
@@ -63,26 +60,24 @@ GByteArray* sayOnlyLinePortionAtCursor( pluginAPI* thePluginAPI, char* theBuffer
     if (aCursor)
       {
 	/* get the selected line portion */
-	aSelectedElement = terminfoGetLinePortionAtCursor( aFirstElement, aCursor);
+	aSelectedElement = terminfoGetLinePortionAtCursor( aList, aCursor);
 	if (aSelectedElement && aSelectedElement->data)
 	  {
-	    aSelectedNode = ((terminfoEntry*)(aSelectedElement->data))->myNode;
+	    aSelectedNode = getNodeFromList( aSelectedElement);
+	    setElementTypeDocAPI( thePluginAPI->myDocument, aSelectedNode, linkType);
+	    setFocusStateDocAPI( aSelectedNode, hoveredElement);
 	  }
       }
   }
   /* > */
 
-  clearContent( thePluginAPI->myDocument);
-  putListEntryDocAPI( thePluginAPI->myDocument, aFirstElement);
-  setElementTypeDocAPI( thePluginAPI->myDocument, aSelectedNode, linkType);
-  hoverNodeDocAPI( aSelectedNode);
-  aFirstElement = getStyledListEntryDocAPI( thePluginAPI->myDocument);
-
-  aByteArray = convertList2Terminfo( aFirstElement);
+  aList = getStyledListEntryDocAPI( thePluginAPI->myDocument);
+  aByteArray = convertList2Terminfo( aList);
   DISPLAY_RAW_BUFFER( aByteArray->data, aByteArray->len);
 
   SHOW_TIME("deleteTermInfoList");
-  deleteTermInfoList( aFirstElement);
+  deleteTermInfoList( aList);
+  clearContentDocAPI( thePluginAPI->myDocument);
 
   return aByteArray;
 }
@@ -96,21 +91,25 @@ GByteArray* mutePreviouslyHighlightedArea( pluginAPI* thePluginAPI, char* theBuf
   ENTER("mutePreviouslyHighlightedArea");
 
   aList = convertTerminfo2List( theBuffer, theLength);
-  
-  SHOW_TIME("terminfointerpreter");
+  if (aList == NULL)
+    {
+      return NULL;
+    }
   g_list_foreach(aList, (GFunc)terminfointerpreter, NULL);
   
-  SHOW_TIME("terminfofilter2lines");
+  putListEntryDocAPI( thePluginAPI->myDocument, aList);
+
   {
     GList* aPreviouslyHighlightedElement  = NULL; 
     GList* aNewlyHighlightedElement = NULL;
     if (terminfofilter2lines( aList, thePluginAPI->myTermAPI, &aPreviouslyHighlightedElement, &aNewlyHighlightedElement))
       {
-	GNode* aPreviousLink  = ((terminfoEntry*)(aPreviouslyHighlightedElement))->myNode; 
-	GNode* aNextLink  = ((terminfoEntry*)(aNewlyHighlightedElement))->myNode;
-	setElementTypeDocAPI( thePluginAPI->myDocument, aPreviousLink, linkType);
-	setElementTypeDocAPI( thePluginAPI->myDocument, aNextLink, linkType);
-	hoverNodeDocAPI( aNextLink);
+	GNode* aPreviousLink  = getNodeFromList( aPreviouslyHighlightedElement); 
+	GNode* aNextLink  = getNodeFromList( aNewlyHighlightedElement);
+
+	aPreviousLink = setElementTypeDocAPI( thePluginAPI->myDocument, aPreviousLink, linkType);
+	aNextLink = setElementTypeDocAPI( thePluginAPI->myDocument, aNextLink, linkType);
+	setFocusStateDocAPI( aNextLink, hoveredElement);
 	aList = getStyledListEntryDocAPI( thePluginAPI->myDocument);
       }
   }
@@ -118,8 +117,8 @@ GByteArray* mutePreviouslyHighlightedArea( pluginAPI* thePluginAPI, char* theBuf
   aByteArray = convertList2Terminfo( aList);
   DISPLAY_RAW_BUFFER( aByteArray->data, aByteArray->len);
 
-  SHOW_TIME("deleteTermInfoList");
   deleteTermInfoList( aList);
+  clearContentDocAPI( thePluginAPI->myDocument);
 
   return aByteArray;
 }

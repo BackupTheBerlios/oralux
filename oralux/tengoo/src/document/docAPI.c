@@ -1,11 +1,12 @@
+/* < licence */
 /* 
 ----------------------------------------------------------------------------
 docAPI.c
-$Id: docAPI.c,v 1.5 2005/10/14 23:37:53 gcasse Exp $
+$Id: docAPI.c,v 1.6 2005/10/15 21:49:45 gcasse Exp $
 $Author: gcasse $
 Description: manage document, logical structure of the displayed screen.
-$Date: 2005/10/14 23:37:53 $ |
-$Revision: 1.5 $ |
+$Date: 2005/10/15 21:49:45 $ |
+$Revision: 1.6 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -23,7 +24,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ----------------------------------------------------------------------------
 */
-
+/* > */
 /* < include */
 #include <gnode.h>
 #include <assert.h>
@@ -44,9 +45,7 @@ typedef struct document document;
 struct element
 {
   enum elementType myType;
-  gboolean myElementIsHovered;
-  gboolean myElementIsActive;
-  gboolean myElementHasFocus;
+  enum elementFocusState myFocusState;
   int myVoiceVolume;
   int myComputedVoiceVolume;
   gpointer myData;
@@ -57,8 +56,45 @@ typedef struct element element;
 enum
   {
     undefinedVoiceVolume=-1,
+    silenceVoiceVolume=-1,
     defaultVoiceVolume=100,
   };
+
+#ifdef DEBUG
+char* displayType( int theType)
+{
+  static char aResult[1000];
+  aResult[0]=0;
+  if (theType == anyType)
+    {
+      strcpy(aResult,"any");
+    }
+  else
+    {
+      if (theType & rootType)
+	{
+	  strcat(aResult,"root,");
+	}
+      if (theType & textType)
+	{
+	  strcat(aResult,"text,");
+	}
+      if (theType & frameType)
+	{
+	  strcat(aResult,"frame,");
+	}
+      if (theType & linkType)
+	{
+	  strcat(aResult,"link,");
+	}
+    }
+  return aResult;
+}
+#define DISPLAY_TYPE( x) displayType(x)
+#else
+#define DISPLAY_TYPE( x)
+#endif
+
 /* > */
 /* < createElement */
 static element* createElement( enum elementType theType, gpointer theData)
@@ -74,6 +110,8 @@ static element* createElement( enum elementType theType, gpointer theData)
       this->myType = theType;
       this->myData = theData;
       this->myVoiceVolume = this->myComputedVoiceVolume = undefinedVoiceVolume;
+
+      SHOW3("element:%x, type=%s\n", this, DISPLAY_TYPE(theType));
     }
   return this;
 }
@@ -85,6 +123,7 @@ static void deleteElement(element* this)
 
   if (this)
     {
+      SHOW3("element:%x, type=%s\n", this, DISPLAY_TYPE(this->myType));
       if( this->myData)
 	{
 	  switch(this->myType)
@@ -106,23 +145,21 @@ static gboolean deleteNode( GNode *theNode, gpointer theElementType)
 {
   element* this = NULL;
   int aType = (int)theElementType;
-  gboolean aTraversalMustBeStoppped = FALSE;
+  gboolean aTraversalMustBeStopped = FALSE;
 
   ENTER("deleteNode");
 
   this = theNode->data;
   
-  if (this 
-      && ((aType == anyType) 
-	  || (aType & this->myType)))
+  if (this && ((aType == anyType) || (aType & this->myType)))
     {
-      deleteElement(this);
-      free( this);
-    }
-  
-  g_node_destroy( theNode);
+      SHOW2("delete node %x\n", theNode);
 
-  return aTraversalMustBeStoppped;
+      deleteElement(this);
+      g_node_destroy( theNode);
+    }
+
+  return aTraversalMustBeStopped;
 }
 /* > */
 /* < setVoiceVolume */
@@ -235,6 +272,8 @@ void* createDocAPI( int theVoiceVolume)
     {
       setVoiceVolume( anElement, theVoiceVolume);
       this->myRootNode = g_node_new( anElement);
+      SHOW2("Root node: %x\n", this->myRootNode);
+	    
       computeStyle( this->myRootNode);
 
       if (!this)
@@ -274,6 +313,8 @@ static void addFrameElement (gpointer theEntry, gpointer theDocument)
 	{
 	  GNode* aNode = g_node_insert_data( this->myRootNode, -1, anElement);
 	  computeStyle( aNode);
+	  SHOW4("add under Root %x, node %x, element=%x\n",
+	       this->myRootNode, aNode, anElement);
 	}
     }
 }
@@ -294,7 +335,7 @@ enum {
   statusFrame,
   titleFrame,
 }; /* TBD */
-void loadStyle( void* theDocAPI, char* theFilename)
+void loadStyleDocAPI( void* theDocAPI, char* theFilename)
 {
   frame* aFrame = NULL;
   GList* aList = NULL;
@@ -302,7 +343,7 @@ void loadStyle( void* theDocAPI, char* theFilename)
 
   /* take in account the stored styles */
 
-  ENTER("loadStyle");
+  ENTER("loadStyleDocAPI");
 
   if (!theDocAPI || !theFilename)
     {
@@ -335,6 +376,7 @@ static GNode* findFrame( GNode* theNode, box* theBoundingBox, enum intersectionT
 {
   GNode* aNode = theNode;
   GNode* aFrameNode = NULL;
+  gboolean aNextNodeIsSearched = TRUE;
 
   ENTER("findFrame");
 
@@ -343,28 +385,44 @@ static GNode* findFrame( GNode* theNode, box* theBoundingBox, enum intersectionT
       return NULL;
     }
 
-  while( aNode)
+  do 
     {
       element* anElement = aNode->data;
-      frame* aFrame = NULL;
+      assert (anElement);
 
-      /* this must be a frame element */
-      assert (anElement && (anElement->myType == frameType));
-      aFrame = anElement->myData;
+      if (anElement->myType == frameType)
+	{
+	  frame* aFrame = anElement->myData;
 
-      /* does the frame include a portion of the text? */
-      *theType  = isIncluded( theBoundingBox, aFrame->myBox, theIntersectionBox);
+	  /* does the frame include a portion of the text? */
+	  *theType  = isIncludedBox( theBoundingBox, aFrame->myBox, theIntersectionBox);
 
-      if( *theType == noIntersectionBox)
+	  if( *theType != noIntersectionBox)
+	    {
+	      aFrameNode = aNode; /* TBD: partial intersection */
+	      break;
+	    }
+	}
+
+      /* < following node */
+      if (aNextNodeIsSearched)
 	{
 	  aNode = g_node_next_sibling( aNode);
 	}
       else
 	{
-	  aFrameNode = aNode;
-	  break;
+	  aNode = g_node_prev_sibling( aNode);
 	}
-    }
+
+      if ((aNode==NULL) && aNextNodeIsSearched)
+	{
+	  aNextNodeIsSearched = FALSE;
+	  aNode = g_node_prev_sibling( theNode);
+	}
+      /* > */
+    } while( aNode);
+
+  SHOW2("frame node=%x\n",aFrameNode);
 
   return aFrameNode;
 }
@@ -390,14 +448,15 @@ static void linkEntryToTextElement(gpointer theEntry, gpointer theDocument)
       GNode* aFrameNode = NULL;
       enum intersectionType aType = noIntersectionBox;
       box anIntersectionBox;
-      element* aTextElement = NULL;
+      element* aTextElement = NULL; /* will be given to the node, no delete required */
 
       aOrigin = createPoint( anEntry->myStartingPosition.myCol, 
 			     anEntry->myStartingPosition.myLine,
 			     0);
       aBox = createBox( aOrigin, ((GString*)(anEntry->myData1))->len, 0);
-
       /* > */
+
+      SHOW2("myCurrentTextNode=%x\n", this->myCurrentTextNode);
 
       if (this->myCurrentTextNode == NULL)
 	{
@@ -408,7 +467,7 @@ static void linkEntryToTextElement(gpointer theEntry, gpointer theDocument)
 	}
       else
 	{ /* a text element already exists : check that its containing box includes the new entry */
-	  aFrameNode = findFrame( this->myCurrentTextNode, aBox, &aType, &anIntersectionBox);
+	  aFrameNode = findFrame( this->myCurrentTextNode->parent, aBox, &aType, &anIntersectionBox);
 	  if (aFrameNode && aFrameNode->children)
 	    {
 	      aTextElement = aFrameNode->children->data;
@@ -429,12 +488,31 @@ static void linkEntryToTextElement(gpointer theEntry, gpointer theDocument)
       if (aFrameNode->children == NULL)
 	{ /* create the text element */
 	  this->myCurrentTextNode = g_node_insert_data( aFrameNode, -1, aTextElement);
+	  SHOW4("insert under frame node:%x, new text node:%x, element:%x\n", 
+		aFrameNode, this->myCurrentTextNode, aTextElement);
 	  computeStyle( this->myCurrentTextNode);
 	}
 
       deleteBox( aBox);
       deletePoint( aOrigin);
-      deleteElement( aTextElement);
+    }
+}
+/* > */
+/* < searchHoveredNode */
+static void searchHoveredNode( GNode* theNode, gpointer theHoveredNodePointer)
+{
+  GNode** aHoveredNode = theHoveredNodePointer;
+
+  ENTER("searchHoveredNode");
+
+  if (theNode && theNode->data && aHoveredNode)
+    {
+      element* anElement = theNode->data;
+      if (anElement->myFocusState & hoveredElement )
+	{
+	  *aHoveredNode = theNode;
+	  SHOW2("Node: %x\n",theNode);
+	}
     }
 }
 /* > */
@@ -449,8 +527,9 @@ void putListEntryDocAPI( void* theDocAPI, GList* theList)
     {
       return;
     }
+  assert(this->myFirstEntry == NULL);
 
-  this->myFirstEntry = g_list_append( this->myFirstEntry, theList);
+  this->myFirstEntry = theList;
 
   /* determine (or create) the text element of each entry.
      At the moment, each text entry displayed in the same frame 
@@ -480,15 +559,35 @@ GList* getStyledListEntryDocAPI( void* theDocAPI)
     {
       int aComputedVolume = undefinedVoiceVolume;
       element* anElement = NULL;
+      GNode* aHoveredNode = NULL;
       GNode* aNode = getNodeFromList( aList);
+      GNode* aParent = NULL;
       
       if (!aNode)
 	{
 	  continue;
 	}
       assert(aNode->data);
-      anElement = (element*)(aNode->data);
-      aComputedVolume = anElement->myComputedVoiceVolume;
+
+      /* < look for the hovered element */
+      if (aNode->parent && (aNode->parent != aParent))
+	{
+	  g_node_children_foreach( aNode->parent,
+				   G_TRAVERSE_ALL,
+				   searchHoveredNode,
+				   (gpointer)&aHoveredNode);
+	}
+      /* > */
+
+      if (aHoveredNode && (aHoveredNode != aNode))
+	{
+	  aComputedVolume = silenceVoiceVolume;
+	}
+      else
+	{
+	  anElement = (element*)(aNode->data);      
+	  aComputedVolume = anElement->myComputedVoiceVolume;
+	}
 
       if (aVolume != aComputedVolume)
 	{
@@ -503,7 +602,7 @@ GList* getStyledListEntryDocAPI( void* theDocAPI)
 }
 /* > */
 /* < setElementTypeDocAPI */
-void setElementTypeDocAPI( void* theDocAPI, void* theNode, enum elementType theType)
+void* setElementTypeDocAPI( void* theDocAPI, void* theNode, enum elementType theType)
 {
   document* this = theDocAPI;
   GNode* aNode = theNode; 
@@ -513,7 +612,7 @@ void setElementTypeDocAPI( void* theDocAPI, void* theNode, enum elementType theT
 
   if (!this || !aNode || !(aNode->data))
     {
-      return;
+      return NULL;
     }
   
   anElement = aNode->data;
@@ -534,6 +633,7 @@ void setElementTypeDocAPI( void* theDocAPI, void* theNode, enum elementType theT
 	    
 	    /* insert the new node into the document tree */
 	    aNode = g_node_insert_after( aNode->parent, aNode, aLinkNode);
+	    SHOW3("add under node %x, new node=%x\n", (int)aNode->parent, (int)aNode);
 	    computeStyle( aNode);
 	  }
       }
@@ -541,45 +641,59 @@ void setElementTypeDocAPI( void* theDocAPI, void* theNode, enum elementType theT
     default:
       break;
     }
+  return aNode;
 }
 /* > */
-
-/* < hoverNodeDocAPI, activeNodeDocAPI */
-void hoverNodeDocAPI( void* theNode)
+/* < setElementFocusState */
+static void setElementFocusState( GNode* theNode, gpointer theData)
 {
-  ENTER("hoverNodeDocAPI");
+  ENTER("setElementFocusState");
 
-  if (theNode)
+  if (theNode && theNode->data)
     {
-      element* anElement = ((GNode*)theNode)->data;
-      anElement->myElementIsHovered = TRUE;
-    }
-}
-
-void activeNodeDocAPI( void* theNode)
-{
-  ENTER("activeNodeDocAPI");
-
-  if (theNode)
-    {
-      element* anElement = ((GNode*)theNode)->data;
-      anElement->myElementIsActive = TRUE;
+      element* anElement = theNode->data;
+      anElement->myFocusState = (enum elementFocusState)theData;
     }
 }
 /* > */
+/* < setFocusStateDocAPI */
+void setFocusStateDocAPI( void* theNode, enum elementFocusState theState)
+{
+  GNode* aNode = theNode;
 
-/* < clearContent */
-void clearContent( void* theDocAPI)
+  ENTER("setFocusStateDocAPI");
+
+  if (aNode)
+    {
+      element* anElement = aNode->data;
+
+      /* < if the node is hovered, its siblings are not hovered */
+      if ((theState & hoveredElement) && (aNode->parent))
+	{
+	  g_node_children_foreach( aNode->parent,
+				   G_TRAVERSE_ALL,
+				   setElementFocusState,
+				   (gpointer)notHoveredElement);
+	}
+      /* > */
+
+      anElement->myFocusState = theState;
+    }
+}
+/* > */
+/* < clearContentDocAPI */
+void clearContentDocAPI( void* theDocAPI)
 {
   document* this = theDocAPI;
 
-  ENTER("clearContent");
+  ENTER("clearContentDocAPI");
   if (this)
     {
       clearData( this->myRootNode, textType | linkType);
       this->myCurrentTextNode = NULL;
 
-      deleteTermInfoList( this->myFirstEntry);
+      /*      deleteTermInfoList( this->myFirstEntry);*/
+      this->myFirstEntry = NULL;
     }
 }
 /* > */
