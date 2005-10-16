@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 linuxscreen.c
-$Id: linuxscreen.c,v 1.3 2005/10/15 21:49:45 gcasse Exp $
+$Id: linuxscreen.c,v 1.4 2005/10/16 20:27:06 gcasse Exp $
 $Author: gcasse $
 Description: Read the data from the current screen.
-$Date: 2005/10/15 21:49:45 $ |
-$Revision: 1.3 $ |
+$Date: 2005/10/16 20:27:06 $ |
+$Revision: 1.4 $ |
 Original Copyright (C) 1995-2004 by The BRLTTY Team. All rights reserved.
 
 August 2005, Gilles Casse (gcasse@oralux.org)
@@ -79,9 +79,9 @@ typedef unsigned short int UnicodeNumber;
 typedef UnicodeNumber ApplicationCharacterMap[0X100];
 
 
-static unsigned int debugCharacterTranslationTable = 1;
-static unsigned int debugApplicationCharacterMap = 1;
-static unsigned int debugScreenFontMap = 1;
+static unsigned int debugCharacterTranslationTable = 0;
+static unsigned int debugApplicationCharacterMap = 0;
+static unsigned int debugScreenFontMap = 0;
 
 /* Copied from linux-2.2.17/drivers/char/consolemap.c: translations[0]
  * 8-bit Latin-1 mapped to Unicode -- trivial mapping
@@ -222,9 +222,9 @@ static void
 closeConsole (void) {
   if (consoleDescriptor != -1) {
     if (close(consoleDescriptor) == -1) {
-      SHOW("Console close");
+      SHOW("Console close\n");
     }
-    SHOW2("Console closed: fd=%d", consoleDescriptor);
+    SHOW2("Console closed: fd=%d\n", consoleDescriptor);
     consoleDescriptor = -1;
   }
 }
@@ -237,7 +237,7 @@ openConsole (unsigned char vt) {
     if (console != -1) {
       closeConsole();
       consoleDescriptor = console;
-      SHOW3("Console opened: %s: fd=%d", path, consoleDescriptor);
+      SHOW3("Console opened: %s: fd=%d\n", path, consoleDescriptor);
       free(path);
       return 1;
     }
@@ -254,9 +254,9 @@ static void
 closeScreen (void) {
   if (myScreenDescriptor != -1) {
     if (close(myScreenDescriptor) == -1) {
-      SHOW("Screen close");
+      SHOW("Screen close\n");
     }
-    SHOW2("Screen closed: fd=%d", myScreenDescriptor);
+    SHOW2("Screen closed: fd=%d\n", myScreenDescriptor);
     myScreenDescriptor = -1;
   }
 }
@@ -270,7 +270,7 @@ openScreen (unsigned char vt) {
       if (openConsole(vt)) {
         closeScreen();
         myScreenDescriptor = screen;
-        SHOW3("Screen opened: %s: fd=%d", path, myScreenDescriptor);
+        SHOW3("Screen opened: %s: fd=%d\n", path, myScreenDescriptor);
         free(path);
         virtualTerminal = vt;
         return 1;
@@ -309,7 +309,7 @@ logApplicationCharacterMap (void) {
     while (1) {
       if (!(character % 8)) {
         if (address) {
-          SHOW2("%s", buffer);
+          SHOW2("%s\n", buffer);
           if (!character) break;
         }
         address = buffer;
@@ -326,12 +326,12 @@ getUserAcm (int force) {
   if (controlConsole(GIO_UNISCRNMAP, &map) != -1) {
     if (force || (memcmp(applicationCharacterMap, map, sizeof(applicationCharacterMap)) != 0)) {
       memcpy(applicationCharacterMap, map, sizeof(applicationCharacterMap));
-      if (!force) SHOW("User application character map changed.");
+      if (!force) SHOW("User application character map changed.\n");
       logApplicationCharacterMap();
       return 1;
     }
   } else {
-    SHOW("ioctl GIO_UNISCRNMAP");
+    SHOW("ioctl GIO_UNISCRNMAP\n");
   }
   return 0;
 }
@@ -356,7 +356,7 @@ determineApplicationCharacterMap (int force) {
     logApplicationCharacterMap();
     name = "iso01";
   }
-  SHOW2("Application Character Map: %s", name);
+  SHOW2("Application Character Map: %s\n", name);
   return 1;
 }
 
@@ -377,7 +377,7 @@ setVgaCharacterCount (int force) {
   if (controlConsole(KDFONTOP, &cfo) != -1) {
     switch (cfo.charcount) {
       default:
-        SHOW2("Unexpected VGA character count: %d", cfo.charcount);
+        SHOW2("Unexpected VGA character count: %d\n", cfo.charcount);
       case 0X200:
         vgaLargeTable = 1;
       case 0X100:
@@ -386,13 +386,13 @@ setVgaCharacterCount (int force) {
         break;
     }
   } else if (errno != EINVAL) {
-    SHOW2("ioctl KDFONTOP[GET]: %s", strerror(errno));
+    SHOW2("ioctl KDFONTOP[GET]: %s\n", strerror(errno));
   }
 
   if (!force)
     if (vgaCharacterCount == oldCount)
       return 0;
-  SHOW3("VGA Character Count: %d(%s)",
+  SHOW3("VGA Character Count: %d(%s)\n",
            vgaCharacterCount,
            vgaLargeTable? "large": "small");
   return 1;
@@ -409,17 +409,17 @@ setScreenFontMap (int force) {
   while (1) {
     sfm.entry_ct = size;
     if (!(sfm.entries = (struct unipair *)malloc(sfm.entry_ct * sizeof(*sfm.entries)))) {
-      SHOW("Screen font map allocation");
+      SHOW("Screen font map allocation\n");
       return 0;
     }
     if (controlConsole(GIO_UNIMAP, &sfm) != -1) break;
     free(sfm.entries);
     if (errno != ENOMEM) {
-      SHOW("ioctl GIO_UNIMAP");
+      SHOW("ioctl GIO_UNIMAP\n");
       return 0;
     }
     if (!(size <<= 1)) {
-      SHOW("Screen font map too big.");
+      SHOW("Screen font map too big.\n");
       return 0;
     }
   }
@@ -441,12 +441,12 @@ setScreenFontMap (int force) {
   screenFontMapTable = sfm.entries;
   screenFontMapCount = sfm.entry_ct;
   screenFontMapSize = size;
-  SHOW2("Screen Font Map Size: %d", screenFontMapCount);
+  SHOW2("Screen Font Map Size: %d\n", screenFontMapCount);
   if (debugScreenFontMap) {
     int i;
     for (i=0; i<screenFontMapCount; ++i) {
       const struct unipair *map = &screenFontMapTable[i];
-      SHOW4("sfm[%03u]: unum=%4.4X fpos=%4.4X",
+      SHOW4("sfm[%03u]: unum=%4.4X fpos=%4.4X\n",
                i, map->unicode, map->fontpos);
     }
   }
@@ -507,12 +507,12 @@ setTranslationTable (int force) {
          }
          if (position < 0) {
            if (debugCharacterTranslationTable) {
-             SHOW3("No character mapping: char=%2.2X unum=%4.4X", character, unicode);
+             SHOW3("No character mapping: char=%2.2X unum=%4.4X\n", character, unicode);
            }
          } else {
            translationTable[position] = character;
            if (debugCharacterTranslationTable) {
-             SHOW4("Character mapping: char=%2.2X unum=%4.4X fpos=%2.2X",
+             SHOW4("Character mapping: char=%2.2X unum=%4.4X fpos=%2.2X\n",
                       character, unicode, position);
            }
          }
@@ -550,14 +550,14 @@ getScreenDescription (ScreenDescription *description) {
       description->posx = buffer[2];
       description->posy = buffer[3];
     } else if (count == -1) {
-      SHOW("Screen header read");
+      SHOW("Screen header read\n");
     } else {
       long int expected = sizeof(buffer);
-      SHOW3("Truncated screen header: expected %ld bytes, read %d.",
+      SHOW3("Truncated screen header: expected %ld bytes, read %d.\n",
                expected, count);
     }
   } else {
-    SHOW("Screen seek");
+    SHOW("Screen seek\n");
   }
 }
 
@@ -570,7 +570,7 @@ getConsoleDescription (ScreenDescription *description) {
     if (controlConsole(VT_GETSTATE, &state) != -1) {
       description->no = state.v_active;
     } else {
-      SHOW("ioctl VT_GETSTATE");
+      SHOW("ioctl VT_GETSTATE\n");
     }
   }
 }

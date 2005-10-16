@@ -1,11 +1,12 @@
+/* < license */
 /* 
 ----------------------------------------------------------------------------
 action.c
-$Id: action.c,v 1.8 2005/10/15 21:49:45 gcasse Exp $
+$Id: action.c,v 1.9 2005/10/16 20:27:06 gcasse Exp $
 $Author: gcasse $
 Description: execute the required action on the supplied buffer.
-$Date: 2005/10/15 21:49:45 $ |
-$Revision: 1.8 $ |
+$Date: 2005/10/16 20:27:06 $ |
+$Revision: 1.9 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -23,7 +24,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ----------------------------------------------------------------------------
 */
-
+/* > */
 /* < include */
 #include <unistd.h>
 #include <stdlib.h>
@@ -39,7 +40,6 @@ GByteArray* sayOnlyLinePortionAtCursor( pluginAPI* thePluginAPI, char* theBuffer
 {
   GByteArray* aByteArray=NULL;
   GList* aList = NULL;
-  GNode* aSelectedNode = NULL;
 
   ENTER("sayOnlyLinePortionAtCursor");
 
@@ -63,9 +63,8 @@ GByteArray* sayOnlyLinePortionAtCursor( pluginAPI* thePluginAPI, char* theBuffer
 	aSelectedElement = terminfoGetLinePortionAtCursor( aList, aCursor);
 	if (aSelectedElement && aSelectedElement->data)
 	  {
-	    aSelectedNode = getNodeFromList( aSelectedElement);
-	    setElementTypeDocAPI( thePluginAPI->myDocument, aSelectedNode, linkType);
-	    setFocusStateDocAPI( aSelectedNode, hoveredElement);
+	    setElementTypeDocAPI( thePluginAPI->myDocument, aSelectedElement, linkType);
+	    setFocusStateDocAPI( aSelectedElement, hoveredElement);
 	  }
       }
   }
@@ -104,12 +103,13 @@ GByteArray* mutePreviouslyHighlightedArea( pluginAPI* thePluginAPI, char* theBuf
     GList* aNewlyHighlightedElement = NULL;
     if (terminfofilter2lines( aList, thePluginAPI->myTermAPI, &aPreviouslyHighlightedElement, &aNewlyHighlightedElement))
       {
-	GNode* aPreviousLink  = getNodeFromList( aPreviouslyHighlightedElement); 
-	GNode* aNextLink  = getNodeFromList( aNewlyHighlightedElement);
-
-	aPreviousLink = setElementTypeDocAPI( thePluginAPI->myDocument, aPreviousLink, linkType);
-	aNextLink = setElementTypeDocAPI( thePluginAPI->myDocument, aNextLink, linkType);
-	setFocusStateDocAPI( aNextLink, hoveredElement);
+	setElementTypeDocAPI( thePluginAPI->myDocument, 
+			      aPreviouslyHighlightedElement, 
+			      linkType);
+	setElementTypeDocAPI( thePluginAPI->myDocument, 
+			      aNewlyHighlightedElement, 
+			      linkType);
+	setFocusStateDocAPI( aNewlyHighlightedElement, hoveredElement);
 	aList = getStyledListEntryDocAPI( thePluginAPI->myDocument);
       }
   }

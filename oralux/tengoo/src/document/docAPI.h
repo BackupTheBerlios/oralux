@@ -35,7 +35,7 @@ void putListEntryDocAPI( void* theDocAPI, GList* theList);
 /*
   Must be called after putListEntryDocAPI to enrich the type of an entry 
 */
-void* setElementTypeDocAPI( void* theDocAPI, void* theNode, enum elementType theType);
+void setElementTypeDocAPI( void* theDocAPI, GList* theEntry, enum elementType theType);
 /* > */
 
 /* < setFocusStateDocAPI */
@@ -50,7 +50,7 @@ enum elementFocusState
     focusedElement=4,
   };
 
-void setFocusStateDocAPI( void* theNode, enum elementFocusState theState);
+void setFocusStateDocAPI( GList* theEntry, enum elementFocusState theState);
 /* > */
 
 /* < getListEntryDocAPI */

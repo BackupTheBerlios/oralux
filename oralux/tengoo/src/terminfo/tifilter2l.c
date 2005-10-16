@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 tifilter2l.c
-$Id: tifilter2l.c,v 1.4 2005/10/12 20:01:38 gcasse Exp $
+$Id: tifilter2l.c,v 1.5 2005/10/16 20:27:06 gcasse Exp $
 $Author: gcasse $
 Description: terminfo filter, two lines.
-$Date: 2005/10/12 20:01:38 $ |
-$Revision: 1.4 $ |
+$Date: 2005/10/16 20:27:06 $ |
+$Revision: 1.5 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -404,16 +404,29 @@ int terminfofilter2lines(GList* theTerminfoList, termAPI* theTermAPI, GList** th
 	  aOldHighlightedLinePortion = getHighlightedLine( this, old_p, old_p+1);
 	  if (aOldHighlightedLinePortion)
 	    {
-	      /* i = line portion group which is no more highlighted */
-	      i = (old_p == aOldHighlightedLinePortion) ? 0 : 1;
+	      if (old_p == aOldHighlightedLinePortion)
+		{
+		  i=0; /* index of line portion group, no more highlighted */
+		  j=1;
+		}
+	      else
+		{
+		  i=1;
+		  j=0;
+		}
 
 	      *thePreviouslyHighlightedElement = getTerminfoElementLinePortionGroup( new_g[i]);
-	      *theNewlyHighlightedElement = getTerminfoElementLinePortionGroup( g_list_last (new_g[i]));
+	      *theNewlyHighlightedElement = getTerminfoElementLinePortionGroup( new_g[j]);
 	    }
 	}
     }
   deleteContext(this);
-  
+
+  SHOW3("PreviouslyHighlightedElement:%x, NewlyHighlightedElement:%x\n",
+	(int)*thePreviouslyHighlightedElement, 
+	(int)*theNewlyHighlightedElement);
+ 
+ 
   return (*thePreviouslyHighlightedElement && *theNewlyHighlightedElement);
 }
 

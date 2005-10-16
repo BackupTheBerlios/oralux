@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 box.c
-$Id: box.c,v 1.5 2005/10/15 21:49:45 gcasse Exp $
+$Id: box.c,v 1.6 2005/10/16 20:27:06 gcasse Exp $
 $Author: gcasse $
 Description: box.
-$Date: 2005/10/15 21:49:45 $ |
-$Revision: 1.5 $ |
+$Date: 2005/10/16 20:27:06 $ |
+$Revision: 1.6 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -31,10 +31,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 /* < debug */
 #ifdef DEBUG
-#define DISPLAY_BOX(b) SHOW4("Origin: x=%d, y=%d, z=%d\n",b->myOrigin.x,b->myOrigin.y,b->myOrigin.z); SHOW4("Corner: x=%d, y=%d, z=%d\n",b->myCorner.x,b->myCorner.y,b->myCorner.z)
+#define DISPLAY_BOX(b) if(b){SHOW4("Origin: x=%d, y=%d, z=%d\n",b->myOrigin.x,b->myOrigin.y,b->myOrigin.z); SHOW4("Corner: x=%d, y=%d, z=%d\n",b->myCorner.x,b->myCorner.y,b->myCorner.z);}
 
 
-char* displayIntersection( enum intersectionType x)
+void displayIntersection( enum intersectionType x)
 {
   char* aResult=NULL;
   switch(x)
@@ -52,7 +52,7 @@ char* displayIntersection( enum intersectionType x)
       aResult="undefined...";
       break;
     }
-  return aResult;
+  SHOW2("intersection=%s\n", aResult);
 }
 
 #define DISPLAY_INTERSECTION(x) displayIntersection(x)
@@ -68,11 +68,14 @@ box* createBox( point* theOrigin, int theXLength, int theYLength)
 
   ENTER("createBox");
 
-  if (this)
+  if (this && theOrigin && (theXLength > 0) && (theYLength > 0))
     {
       copyPoint(& this->myOrigin, theOrigin);
       copyPoint(& this->myCorner, theOrigin);
-      translatePoint(& this->myCorner, theXLength, theYLength);
+      translatePoint( &(this->myCorner), 
+		     theXLength - 1, 
+		     1 - theYLength);
+      SHOW("New box:\n");
       DISPLAY_BOX(this);
     }
   return this;
@@ -95,6 +98,8 @@ box* copyBox( box* theSource)
   if (this)
     {
       memcpy( this, theSource, sizeof(box));
+      SHOW2("this=%x\n", (int)this);
+      DISPLAY_BOX(this);
     }
 
   return this;
@@ -106,6 +111,11 @@ enum intersectionType isIncludedBox( box* this, box* thePossibleContainer, box* 
   enum intersectionType aResult=noIntersectionBox;
 
   ENTER("isIncludedBox");
+
+  SHOW2("*** this=%x\n", (int)this);
+  DISPLAY_BOX(this);
+  SHOW2("*** thePossibleContainer=%x\n", (int)thePossibleContainer);
+  DISPLAY_BOX(thePossibleContainer);
 
   if (!this || !thePossibleContainer || !theIntersectionBox)
     {
@@ -134,6 +144,7 @@ enum intersectionType isIncludedBox( box* this, box* thePossibleContainer, box* 
 	|| (xa2 < xb1)
 	|| (xa1 > xb2))
       {
+	DISPLAY_INTERSECTION(aResult);
 	return noIntersectionBox;
       }
 

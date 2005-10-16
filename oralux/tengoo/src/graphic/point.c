@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 point.c
-$Id: point.c,v 1.3 2005/10/09 22:43:12 gcasse Exp $
+$Id: point.c,v 1.4 2005/10/16 20:27:06 gcasse Exp $
 $Author: gcasse $
 Description: point.
-$Date: 2005/10/09 22:43:12 $ |
-$Revision: 1.3 $ |
+$Date: 2005/10/16 20:27:06 $ |
+$Revision: 1.4 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -26,6 +26,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "point.h"
 #include "debug.h"
 
+#ifdef DEBUG
+#define SHOW_POINT(a) if(a){SHOW4("x=%x, y=%x, z=%x\n", a->x, a->y, a->z);}
+#else
+#define SHOW_POINT(a)
+#endif
+
 point* createPoint( int x, int y, int z)
 {
   point* this = NULL;
@@ -38,6 +44,7 @@ point* createPoint( int x, int y, int z)
       this->x=x;
       this->y=y;
       this->z=z;
+      SHOW_POINT(this);
     }
   return this;
 }
@@ -45,14 +52,30 @@ point* createPoint( int x, int y, int z)
 void translatePoint( point* this, int theXLength, int theYLength)
 {
   ENTER("translatePoint");
-  this->x += theXLength;
-  this->y += theYLength;
+  if (this)
+    {
+      this->x += theXLength;
+      this->y += theYLength;
+      if (this->x < 0)
+	{
+	  this->x = 0;
+	}
+      if (this->y < 0)
+	{
+	  this->y = 0;
+	}
+      SHOW_POINT(this);
+    }
 }
-
 
 int isSamePoint( point* thePoint1, point* thePoint2)
 {
-  return ((thePoint1->x == thePoint2->x) && (thePoint1->y == thePoint2->y) && (thePoint1->z == thePoint2->z));
+  int aStatus=0;
+  if (thePoint1 && thePoint2)
+    {
+      aStatus = ((thePoint1->x == thePoint2->x) && (thePoint1->y == thePoint2->y) && (thePoint1->z == thePoint2->z));
+    }
+  return aStatus;
 }
 /* 
 Local variables:

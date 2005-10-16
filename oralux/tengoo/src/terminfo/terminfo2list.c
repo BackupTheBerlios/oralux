@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 terminfo2list.c
-$Id: terminfo2list.c,v 1.6 2005/10/14 23:37:53 gcasse Exp $
+$Id: terminfo2list.c,v 1.7 2005/10/16 20:27:06 gcasse Exp $
 $Author: gcasse $
 Description: convert the terminfo entries to a list of commands.
-$Date: 2005/10/14 23:37:53 $ |
-$Revision: 1.6 $ |
+$Date: 2005/10/16 20:27:06 $ |
+$Revision: 1.7 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -867,18 +867,19 @@ terminfoEntry* get_TSAR_Sequence( int theVolume, int theVoice)
   #define TSAR_FORMAT "\x1B[1%d;%dt"
 
   int aVolume = (theVolume+5)/10;
-  int aVoice = (theVoice > 9) ? 9 : theVoice;
+  int aVoice = 0;
   char aSequence[ sizeof( TSAR_FORMAT)];
   terminfoEntry* anEntry = NULL;
 
-  /* volume */
-  if (aVolume > 9)
-    {
-      aVolume = 9;
-    }
+  ENTER("get_TSAR_Sequence");
+
+  aVolume = CLAMP(aVolume, 0, 9);
+  aVoice = CLAMP(theVoice, 0, 9);
 
   sprintf( aSequence, TSAR_FORMAT, aVolume, aVoice);
   anEntry = createExternalEntry( TSAR, NULL, NULL, aSequence);
+
+  SHOW4("theVolume=%d, theVoice=%d, anEntry=%x\n", theVolume, theVoice, (int)anEntry);
 
   return anEntry;
 }

@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 frame.c
-$Id: frame.c,v 1.2 2005/10/02 20:28:33 gcasse Exp $
+$Id: frame.c,v 1.3 2005/10/16 20:27:06 gcasse Exp $
 $Author: gcasse $
 Description: manage frames, screen divisions.
-$Date: 2005/10/02 20:28:33 $ |
-$Revision: 1.2 $ |
+$Date: 2005/10/16 20:27:06 $ |
+$Revision: 1.3 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -48,7 +48,7 @@ frame* createFrame( int theIdentifier, char* theName, point* theOrigin, int theX
 
   ENTER("createFrame");
 
-  if (!theName || !theOrigin)
+  if (!theName || !theOrigin || (theXLength <= 0) || (theYLength <= 0))
     {
       return NULL;
     }
@@ -60,7 +60,8 @@ frame* createFrame( int theIdentifier, char* theName, point* theOrigin, int theX
       this->myIdentifier = theIdentifier;
       this->myName = strdup(theName);
       this->myBox = createBox( theOrigin, theXLength, theYLength);
-
+      SHOW4("Frame identifier=%d, name=%s, box=%x\n",
+	    this->myIdentifier, this->myName, (int)(this->myBox));
       if (!this->myName || !this->myBox)
 	{
 	  deleteFrame(this);

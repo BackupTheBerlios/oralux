@@ -4,13 +4,22 @@
 #include "point.h"
 struct box
 {
-  point myOrigin;
-  point myCorner;
+  point myOrigin; /* bottom left (lowest x, highest y) */
+  point myCorner; /* top right (highest x, lowest y) */
 };
 typedef struct box box;
 
 /* the supplied pointers are not stored (the data are copied) */
+/* < createBox */
+/*
+theOrigin: bottom left point
+theXlength : horizontal length of the box 
+theYlength : verticla length
+
+Length 1= smallest 'box' (just one point).
+*/
 box* createBox( point* theOrigin, int theXLength, int theYLength);
+/* > */
 box* copyBox( box* theSource);
 #define deleteBox(this) if (this){free(this);}
 int isSameBox( box* theBox1, box* theBox2);
