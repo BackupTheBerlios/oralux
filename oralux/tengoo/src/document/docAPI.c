@@ -2,11 +2,11 @@
 /* 
 ----------------------------------------------------------------------------
 docAPI.c
-$Id: docAPI.c,v 1.8 2005/10/17 14:12:25 gcasse Exp $
+$Id: docAPI.c,v 1.9 2005/10/17 15:24:37 gcasse Exp $
 $Author: gcasse $
 Description: manage document, logical structure of the displayed screen.
-$Date: 2005/10/17 14:12:25 $ |
-$Revision: 1.8 $ |
+$Date: 2005/10/17 15:24:37 $ |
+$Revision: 1.9 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -649,9 +649,19 @@ GList* getStyledListEntryDocAPI( void* theDocAPI)
 	}
       assert(aNode->data);
 
+      SHOW5("list element:%x, node:%x, parent:%x, element:%x\n", 
+	    (int)aList,
+	    (int)aNode,
+	    (int)aNode->parent,
+	    (int)(aNode->data));
+
       /* < look for the hovered element */
       if (aNode->parent && (aNode->parent != aParent))
 	{
+	  aParent = aNode->parent;
+	  SHOW2("aParent:%x\n", (int)aParent);
+
+	  aHoveredNode = NULL;
 	  g_node_children_foreach( aNode->parent,
 				   G_TRAVERSE_ALL,
 				   searchHoveredNode,
@@ -668,11 +678,7 @@ GList* getStyledListEntryDocAPI( void* theDocAPI)
 	  element* anElement = (element*)(aNode->data);      
 	  aComputedVolume = anElement->myComputedVoiceVolume;
 	}
-      SHOW5("list element:%x, node:%x, element:%x, voice volume:%d\n", 
-	    (int)aList,
-	    (int)aNode,
-	    (int)(aNode->data),
-	    aComputedVolume);
+      SHOW2("voice volume:%d\n", aComputedVolume);
 
       if (aVolume != aComputedVolume)
 	{
@@ -746,8 +752,10 @@ static void setElementFocusState( GNode* theNode, gpointer theData)
     {
       element* anElement = theNode->data;
       anElement->myFocusState = (enum elementFocusState)theData;
-      SHOW3("element:%x, focus state:%s\n",
+      SHOW5("node:%x, element:%x, type:%s, focus state:%s\n",
+	   (int)theNode,
 	   (int)anElement,
+	   DISPLAY_TYPE( anElement->myType),
 	   DISPLAY_FOCUS_STATE( anElement->myFocusState));
     }
 }
