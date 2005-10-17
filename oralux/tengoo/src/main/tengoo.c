@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 tengoo.c
-$Id: tengoo.c,v 1.5 2005/10/01 14:41:15 gcasse Exp $
+$Id: tengoo.c,v 1.6 2005/10/17 14:12:25 gcasse Exp $
 $Author: gcasse $
 Description: Tengoo API.
-$Date: 2005/10/01 14:41:15 $ |
-$Revision: 1.5 $ |
+$Date: 2005/10/17 14:12:25 $ |
+$Revision: 1.6 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -70,6 +70,7 @@ void deleteTengoo(void* theHandle)
 
   deleteModeAPI( this->myMode);
   deleteTermAPI( this->myTermAPI);
+  free(this);
 }
 /* > */
 /* < transcodeInputTengoo */

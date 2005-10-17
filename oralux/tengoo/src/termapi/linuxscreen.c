@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 linuxscreen.c
-$Id: linuxscreen.c,v 1.4 2005/10/16 20:27:06 gcasse Exp $
+$Id: linuxscreen.c,v 1.5 2005/10/17 14:12:25 gcasse Exp $
 $Author: gcasse $
 Description: Read the data from the current screen.
-$Date: 2005/10/16 20:27:06 $ |
-$Revision: 1.4 $ |
+$Date: 2005/10/17 14:12:25 $ |
+$Revision: 1.5 $ |
 Original Copyright (C) 1995-2004 by The BRLTTY Team. All rights reserved.
 
 August 2005, Gilles Casse (gcasse@oralux.org)
@@ -298,7 +298,7 @@ controlConsole (int operation, void *argument) {
 }
 
 static ApplicationCharacterMap applicationCharacterMap;
-static int (*setApplicationCharacterMap) (int force);
+static int (*setApplicationCharacterMap) (int force)=NULL;
 
 static void
 logApplicationCharacterMap (void) {

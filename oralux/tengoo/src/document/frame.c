@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 frame.c
-$Id: frame.c,v 1.3 2005/10/16 20:27:06 gcasse Exp $
+$Id: frame.c,v 1.4 2005/10/17 14:12:25 gcasse Exp $
 $Author: gcasse $
 Description: manage frames, screen divisions.
-$Date: 2005/10/16 20:27:06 $ |
-$Revision: 1.3 $ |
+$Date: 2005/10/17 14:12:25 $ |
+$Revision: 1.4 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -29,15 +29,18 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "debug.h"
 /* > */
 /* < deleteFrame */
-void deleteFrame( frame* this)
+void deleteFrame( frame** theFrame)
 {
   ENTER("deleteFrame");
 
-  if (this)
+  if (theFrame && *theFrame)
     {
+      frame* this = *theFrame;
+      SHOW2("Old frame=%x\n", (int)this);
       free( this->myName);
-      deleteBox( this->myBox);
+      deleteBox( &(this->myBox));
       free( this);
+      *theFrame = NULL;
     }
 }
 /* > */
@@ -60,12 +63,12 @@ frame* createFrame( int theIdentifier, char* theName, point* theOrigin, int theX
       this->myIdentifier = theIdentifier;
       this->myName = strdup(theName);
       this->myBox = createBox( theOrigin, theXLength, theYLength);
-      SHOW4("Frame identifier=%d, name=%s, box=%x\n",
+      SHOW5("New frame %x, identifier=%d, name=%s, box=%x\n",
+	    (int)this,
 	    this->myIdentifier, this->myName, (int)(this->myBox));
       if (!this->myName || !this->myBox)
 	{
-	  deleteFrame(this);
-	  this = NULL;
+	  deleteFrame( &this);
 	}
     }
 
@@ -88,14 +91,14 @@ frame* copyFrame( frame* theSource)
 
   if (this)
     {
+      SHOW2("New frame=%x\n", (int)this);
       this->myIdentifier = theSource->myIdentifier;
       this->myName = strdup(theSource->myName);
       this->myBox = copyBox( theSource->myBox);
 
       if (!this->myName || !this->myBox)
 	{
-	  deleteFrame(this);
-	  this = NULL;
+	  deleteFrame( &this);
 	}
     }
 

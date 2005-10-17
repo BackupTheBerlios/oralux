@@ -2,11 +2,11 @@
 /* 
 ----------------------------------------------------------------------------
 docAPI.c
-$Id: docAPI.c,v 1.7 2005/10/16 20:27:06 gcasse Exp $
+$Id: docAPI.c,v 1.8 2005/10/17 14:12:25 gcasse Exp $
 $Author: gcasse $
 Description: manage document, logical structure of the displayed screen.
-$Date: 2005/10/16 20:27:06 $ |
-$Revision: 1.7 $ |
+$Date: 2005/10/17 14:12:25 $ |
+$Revision: 1.8 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -160,7 +160,7 @@ static void deleteElement(element** theElement)
 	  switch(this->myType)
 	    {
 	    case frameType:
-	      deleteFrame( this->myData);
+	      deleteFrame( (frame**)&(this->myData));
 	      break;
 	    default:
 	      /* TBD: text */
@@ -235,7 +235,7 @@ void deleteDocAPI( void* theDocAPI)
 	  clearData( this->myRootNode, anyType);
 	  this->myRootNode = NULL;
 	}
-      deleteTermInfoList( this->myFirstEntry);
+/*       deleteTermInfoList( this->myFirstEntry); */
       
       free( this);
     }
@@ -343,7 +343,7 @@ static void addFrameElement (gpointer theEntry, gpointer theDocument)
       
       if (!anElement)
 	{
-	  deleteFrame( aFrame);
+	  deleteFrame( &aFrame);
 	}
       else
 	{
@@ -371,6 +371,20 @@ enum {
   statusFrame,
   titleFrame,
 }; /* TBD */
+
+/* < deleteFrameFromList */
+static void deleteFrameFromList(gpointer theEntry, gpointer userData)
+{
+  ENTER("deleteFrameFromList");
+
+  if (theEntry)
+    {
+      frame* aFrame=theEntry;
+      deleteFrame( &aFrame);
+    }
+}
+/* > */
+
 void loadStyleDocAPI( void* theDocAPI, char* theFilename)
 {
   frame* aFrame = NULL;
@@ -401,12 +415,14 @@ void loadStyleDocAPI( void* theDocAPI, char* theFilename)
   translatePoint( p, 0, -23);
   aFrame = createFrame( titleFrame, "title", p, 80, 1);
   aList = g_list_append( aList, (gpointer)aFrame);
+  /* > */
 
   addFrameStyleDocAPI( theDocAPI, aList);
 
+  /* < delete temporary objects */
+  g_list_foreach( aList, (GFunc)deleteFrameFromList, NULL);
   g_list_free( aList);
-  deletePoint(p);
-
+  deletePoint( &p);
   /* > */
 }
 /* > */
@@ -558,8 +574,8 @@ static void linkEntryToTextElement(gpointer theEntry, gpointer theDocument)
 
       anEntry->myNode = this->myCurrentTextNode;
 
-      deleteBox( aBox);
-      deletePoint( aOrigin);
+      deleteBox( &aBox);
+      deletePoint( &aOrigin);
     }
 }
 /* > */

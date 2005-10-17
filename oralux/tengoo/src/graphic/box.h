@@ -21,7 +21,7 @@ Length 1= smallest 'box' (just one point).
 box* createBox( point* theOrigin, int theXLength, int theYLength);
 /* > */
 box* copyBox( box* theSource);
-#define deleteBox(this) if (this){free(this);}
+void deleteBox(box** theBox);
 int isSameBox( box* theBox1, box* theBox2);
 /* #define isSameBox( theBox1, theBox2) (isSamePoint(&(theBox1->myOrigin), &(theBox2->myOrigin)) && isSamePoint(&(theBox1->myCorner), &(theBox2->myCorner))) */
 enum intersectionType

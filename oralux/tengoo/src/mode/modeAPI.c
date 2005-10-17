@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 mode.c
-$Id: modeAPI.c,v 1.4 2005/10/12 20:01:38 gcasse Exp $
+$Id: modeAPI.c,v 1.5 2005/10/17 14:12:25 gcasse Exp $
 $Author: gcasse $
 Description: Mode API.
-$Date: 2005/10/12 20:01:38 $ |
-$Revision: 1.4 $ |
+$Date: 2005/10/17 14:12:25 $ |
+$Revision: 1.5 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -46,19 +46,29 @@ typedef struct mode mode;
 /* < createModule */
 static GModule* createModule( char* theName)
 {
-  gchar* aPath = g_module_build_path( NULL, theName);
-  return g_module_open( aPath, 0);
+  gchar* aPath = NULL;
+  GModule* this = NULL;
+
+  ENTER("createModule");
+  aPath = g_module_build_path( NULL, theName);
+  this = g_module_open( aPath, 0);
+  SHOW2("New module:%x\n",(int)this);
+  return this;
 }
 /* > */
 /* < deleteModule */
-static void deleteModule( GModule* this)
+static void deleteModule( GModule** theModule)
 {
-  if (this)
+  ENTER("deleteModule");
+  if (theModule && *theModule)
     {
+      GModule* this = *theModule;
+      SHOW2("Old module:%x\n",(int)this);
       if (g_module_close( this) == FALSE)
 	{
 	  SHOW2("%s\n", g_module_error());
 	}
+      *theModule = NULL;
     }
 }
 /* > */
@@ -96,17 +106,20 @@ static pluginAPI* createPluginAPI( mode* this, int theInputOutputMaxLength, term
       free(p);
       p = NULL;
     }
+  SHOW2("New pluginAPI:%x\n",(int)this);
 
   return p;
 }
 /* > */
 /* < deletePluginAPI */
-static void deletePluginAPI( pluginAPI* this)
+static void deletePluginAPI( pluginAPI** thePluginAPI)
 {
   ENTER("deletePluginAPI");
 
-  if (this)
+  if (thePluginAPI && *thePluginAPI)
     {
+      pluginAPI* this = *thePluginAPI;
+      SHOW2("Old pluginAPI:%x\n",(int)this);
       this->delete( this->myPlugin);
       if (this->myBuffer)
 	{
@@ -114,6 +127,7 @@ static void deletePluginAPI( pluginAPI* this)
 	}
       deleteDocAPI( this->myDocument);
       free( this);
+      *thePluginAPI = NULL;
     }
 }
 /* > */
@@ -152,7 +166,7 @@ void* createModeAPI( char* theName, termAPI* theTermAPI, int theInputOutputMaxLe
       deleteModeAPI( this);
       return NULL;
     }
-
+  SHOW2("New modeAPI:%x\n",(int)this);
   return (void*)this;
 }
 /* > */
@@ -165,8 +179,9 @@ void deleteModeAPI( void* theMode)
 
   if (this)
     {
-      deletePluginAPI (this->myPluginAPI);
-      deleteModule(this->myModule);
+      SHOW2("Old modeAPI:%x\n",(int)this);
+      deletePluginAPI ( &(this->myPluginAPI));
+      deleteModule( &(this->myModule));
       free( this);
     }
 }

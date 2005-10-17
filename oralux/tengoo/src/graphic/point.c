@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 point.c
-$Id: point.c,v 1.4 2005/10/16 20:27:06 gcasse Exp $
+$Id: point.c,v 1.5 2005/10/17 14:12:25 gcasse Exp $
 $Author: gcasse $
 Description: point.
-$Date: 2005/10/16 20:27:06 $ |
-$Revision: 1.4 $ |
+$Date: 2005/10/17 14:12:25 $ |
+$Revision: 1.5 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -32,6 +32,20 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define SHOW_POINT(a)
 #endif
 
+/* < deletePoint */
+void deletePoint(point** thePoint)
+{
+  ENTER("deletePoint");
+
+  if (thePoint && *thePoint)
+    {
+      SHOW2("address:%x\n",(int)*thePoint);
+      free(*thePoint);
+      *thePoint=NULL;
+    }
+}
+/* > */
+/* < createPoint */
 point* createPoint( int x, int y, int z)
 {
   point* this = NULL;
@@ -48,7 +62,8 @@ point* createPoint( int x, int y, int z)
     }
   return this;
 }
-
+/* > */
+/* < translatePoint */
 void translatePoint( point* this, int theXLength, int theYLength)
 {
   ENTER("translatePoint");
@@ -67,7 +82,8 @@ void translatePoint( point* this, int theXLength, int theYLength)
       SHOW_POINT(this);
     }
 }
-
+/* > */
+/* < isSamePoint */
 int isSamePoint( point* thePoint1, point* thePoint2)
 {
   int aStatus=0;
@@ -77,6 +93,8 @@ int isSamePoint( point* thePoint1, point* thePoint2)
     }
   return aStatus;
 }
+/* > */
+
 /* 
 Local variables:
 folded-file: t

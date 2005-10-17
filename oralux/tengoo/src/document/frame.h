@@ -20,7 +20,7 @@ frame* createFrame( int theIdentifier, char* theName, point* theOrigin, int theX
 frame* copyFrame( frame* theSource);
 /* > */
 /* < deleteFrame */
-void deleteFrame( frame* this);
+void deleteFrame( frame** theFrame);
 /* > */
 
 /* 

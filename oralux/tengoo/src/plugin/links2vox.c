@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 links2vox.c
-$Id: links2vox.c,v 1.8 2005/10/15 21:49:45 gcasse Exp $
+$Id: links2vox.c,v 1.9 2005/10/17 14:12:25 gcasse Exp $
 $Author: gcasse $
 Description: tengoo plugin for the links2 web browser.
-$Date: 2005/10/15 21:49:45 $ |
-$Revision: 1.8 $ |
+$Date: 2005/10/17 14:12:25 $ |
+$Revision: 1.9 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -174,6 +174,7 @@ static GByteArray* manageCommand( plugin* this, enum commandIdentifier theComman
 			   (guint8*) theCommand, 
 			   (guint) theCommandLength);
     }
+
 
   switch( theCommandIdentifier)
     {

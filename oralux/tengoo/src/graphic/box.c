@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 box.c
-$Id: box.c,v 1.6 2005/10/16 20:27:06 gcasse Exp $
+$Id: box.c,v 1.7 2005/10/17 14:12:25 gcasse Exp $
 $Author: gcasse $
 Description: box.
-$Date: 2005/10/16 20:27:06 $ |
-$Revision: 1.6 $ |
+$Date: 2005/10/17 14:12:25 $ |
+$Revision: 1.7 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -61,6 +61,19 @@ void displayIntersection( enum intersectionType x)
 #define DISPLAY_INTERSECTION(x)
 #endif
 /* > */
+/* < deleteBox */
+void deleteBox(box** theBox)
+{
+  ENTER("deleteBox");
+
+  if (theBox && *theBox)
+    {
+      SHOW2("Old box:%x\n",(int)*theBox);
+      free(*theBox);
+      *theBox=NULL;
+    }
+}
+/* > */
 /* < createBox*/
 box* createBox( point* theOrigin, int theXLength, int theYLength)
 {
@@ -75,7 +88,7 @@ box* createBox( point* theOrigin, int theXLength, int theYLength)
       translatePoint( &(this->myCorner), 
 		     theXLength - 1, 
 		     1 - theYLength);
-      SHOW("New box:\n");
+      SHOW2("New box:%x\n",(int)this);
       DISPLAY_BOX(this);
     }
   return this;
@@ -98,7 +111,7 @@ box* copyBox( box* theSource)
   if (this)
     {
       memcpy( this, theSource, sizeof(box));
-      SHOW2("this=%x\n", (int)this);
+      SHOW2("New box:%x\n",(int)this);
       DISPLAY_BOX(this);
     }
 
