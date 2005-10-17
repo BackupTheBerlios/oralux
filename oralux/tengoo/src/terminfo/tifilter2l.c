@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 tifilter2l.c
-$Id: tifilter2l.c,v 1.5 2005/10/16 20:27:06 gcasse Exp $
+$Id: tifilter2l.c,v 1.6 2005/10/17 22:55:14 gcasse Exp $
 $Author: gcasse $
 Description: terminfo filter, two lines.
-$Date: 2005/10/16 20:27:06 $ |
-$Revision: 1.5 $ |
+$Date: 2005/10/17 22:55:14 $ |
+$Revision: 1.6 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -38,7 +38,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 /* At the moment, just two style changes are processed (two menu entries) plus one for the remaining text */
 #define NB_STYLE_CHANGE 2
-#define MAX_LINE_PORTION_GROUP 3
+#define MAX_LINE_PORTION_GROUP 4
 
 struct t_context
 {
@@ -135,7 +135,11 @@ static int groupLinePortion( context* this)
       /* New group ? */
       if ((getLineFromGList( aList) != getLineFromGList( aList->prev))
 	  || (getFirstColFromGList( aList) != getLastColFromGList( aList->prev)+1)
-	  || (compareStyle( getStyleAddressFromGList( aList), getStyleAddressFromGList( aList->prev))!=0))
+	  || (
+	      (compareStyle( getStyleAddressFromGList( aList), getStyleAddressFromGList( aList->prev))!=0)
+	      && (getStringLengthFromGList(aList) != 1)
+	      && (getStringLengthFromGList(aList->prev) != 1)
+	      ))
 	{
 	  aList->prev->next = NULL;
 	  aList->prev = NULL;
@@ -150,7 +154,7 @@ static int groupLinePortion( context* this)
 }
 /* > */
 /* < findLineForBackgroundTest */
-static int findLineTest( linePortion* p1, linePortion* p2, int* theLine, int* theFirstCol, int* theLastCol)
+static int findLineTest(  context* this, linePortion* p1, linePortion* p2, int* theLine, int* theFirstCol, int* theLastCol)
 {
   int aLine1;
   int aLine2;
@@ -177,11 +181,14 @@ static int findLineTest( linePortion* p1, linePortion* p2, int* theLine, int* th
       aLine2 = p1->myLine;
     }	  
   
-  *theFirstCol = (p1->myFirstCol < p2->myFirstCol) ?
-    p1->myFirstCol : p2->myFirstCol;
-  
-  *theLastCol = (p1->myLastCol > p2->myLastCol) ?
-    p1->myLastCol : p2->myLastCol;
+  *theFirstCol = MIN( p1->myFirstCol, p2->myFirstCol);
+  *theLastCol = MAX( p1->myLastCol, p2->myLastCol);
+
+  SHOW5("theFirstCol=%d, theLastCol=%d, aLine1=%d, aLine2=%d\n",
+       *theFirstCol,
+       *theLastCol,
+       aLine1,
+       aLine2);
   
   if (aLine1 != aLine2)
     {
@@ -224,6 +231,18 @@ static int findLineTest( linePortion* p1, linePortion* p2, int* theLine, int* th
 	  *theFirstCol = aCol1 + 1; 
 	  *theLastCol = aCol2 - 1; 
 	}
+      else if (*theFirstCol > 4)
+	{
+	  *theLine = aLine1;
+	  *theLastCol = *theFirstCol -1; 
+	  *theFirstCol = *theLastCol -4;
+	}
+      else if (*theLastCol + 4 < this->myNumberOfCol)
+	{
+	  *theLine = aLine1;
+	  *theFirstCol = *theLastCol + 1;
+	  *theLastCol = *theFirstCol + 4;
+	}
       else if (aLine1 == 0)
 	{
 	  *theLine = aLine1 + 1;
@@ -252,7 +271,7 @@ static linePortion* getHighlightedLine( context* this, linePortion* p1, linePort
 
   ENTER("getHighlightedLine");
 
-  if (!findLineTest( p1, p2, &aLineTest1, &aFirstColTest1, &aLastColTest1))
+  if (!findLineTest( this, p1, p2, &aLineTest1, &aFirstColTest1, &aLastColTest1))
     {
       return NULL;
     }
