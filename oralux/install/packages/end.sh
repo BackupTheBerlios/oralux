@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # end.sh
-# $Id: end.sh,v 1.6 2005/06/12 20:54:01 gcasse Exp $
+# $Id: end.sh,v 1.7 2005/12/04 22:42:27 gcasse Exp $
 # $Author: gcasse $
 # Description: This script must be the last one to call
-# $Date: 2005/06/12 20:54:01 $ |
-# $Revision: 1.6 $ |
+# $Date: 2005/12/04 22:42:27 $ |
+# $Revision: 1.7 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -36,36 +36,37 @@ InstallPackage()
 # Adding the package to the new Oralux tree
 Copy2Oralux()
 {
-    rm $NEW_ORALUX/KNOPPIX/rawrite*
+#     rm $NEW_ORALUX/KNOPPIX/rawrite*
     
-#    cp $INSTALL_PACKAGES/fdimage/fdimage.exe $NEW_ORALUX/KNOPPIX/
-    cp $INSTALL_PACKAGES/knoppix/mkfloppy.bat $NEW_ORALUX/KNOPPIX/
+# #    cp $INSTALL_PACKAGES/fdimage/fdimage.exe $NEW_ORALUX/KNOPPIX/
+#     cp $INSTALL_PACKAGES/knoppix/mkfloppy.bat $NEW_ORALUX/KNOPPIX/
 
-    cp $INSTALL_PACKAGES/knoblind/knoblind.bat $NEW_ORALUX/KNOPPIX/
-    cp $INSTALL_PACKAGES/knoblind/rawrite.exe $NEW_ORALUX/KNOPPIX/
-    cp $INSTALL_PACKAGES/knoblind/callrw.bat $NEW_ORALUX/KNOPPIX/
+#     cp $INSTALL_PACKAGES/knoblind/knoblind.bat $NEW_ORALUX/KNOPPIX/
+#     cp $INSTALL_PACKAGES/knoblind/rawrite.exe $NEW_ORALUX/KNOPPIX/
+#     cp $INSTALL_PACKAGES/knoblind/callrw.bat $NEW_ORALUX/KNOPPIX/
 
-    # Doc
-    mkdir $BUILD/usr/share/doc/rawrite
-    cp -pR $INSTALL_PACKAGES/knoblind/rawrite3.doc $BUILD/usr/share/doc/rawrite
+#     # Doc
+#     mkdir $BUILD/usr/share/doc/rawrite
+#     cp -pR $INSTALL_PACKAGES/knoblind/rawrite3.doc $BUILD/usr/share/doc/rawrite
 
     # Customizing the boot stage
     # To be done juste once!
-    mkdir /mnt/guest 2>/dev/null
-    mount -o loop $NEW_ORALUX/KNOPPIX/boot.img /mnt/guest
-    cp $INSTALL_PACKAGES/knoppix/boot.msg /mnt/guest
-    cp $INSTALL_PACKAGES/knoppix/f2 /mnt/guest
-    cp $INSTALL_PACKAGES/knoppix/f3 /mnt/guest
-    rm /mnt/guest/logo.16
+    ISOLINUX=$NEW_ORALUX/boot/isolinux
+    cp $INSTALL_PACKAGES/knoppix/boot.msg $ISOLINUX
+    cp $INSTALL_PACKAGES/knoppix/f2 $ISOLINUX
+    cp $INSTALL_PACKAGES/knoppix/f3 $ISOLINUX
+    rm $ISOLINUX/logo.16
 
     # The persistent home and the saved config will be searched
     # vga=normal (instead of vga=791)
-    cp /mnt/guest/syslinux.cfg /tmp
-    replace "lang=us" "myconfig=scan home=scan lang=us" "vga=791" "screen=800x600 vga=normal" -- /tmp/syslinux.cfg
-    sed "s;F2.*$;F2 f2\nF3 f3;g" /tmp/syslinux.cfg > /tmp/syslinux2.cfg
-    cp /tmp/syslinux2.cfg /mnt/guest/
-    rm /tmp/syslinux*.cfg
-    umount /mnt/guest
+    cp $ISOLINUX/isolinux.cfg /tmp
+
+    sed -e "s/lang=us/myconfig=scan home=scan lang=us/g" -e "s/vga=791/screen=800x600 vga=normal/g" /tmp/isolinux.cfg > $ISOLINUX/isolinux.cfg
+
+    rm /tmp/isolinux.cfg
+
+
+
 
     echo "unalias -a" >> $BUILD/etc/profile
 

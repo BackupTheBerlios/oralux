@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # listen-up.sh
-# $Id: listen-up.sh,v 1.2 2005/01/30 21:43:51 gcasse Exp $
+# $Id: listen-up.sh,v 1.3 2005/12/04 22:42:27 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing listen-up
-# $Date: 2005/01/30 21:43:51 $ |
-# $Revision: 1.2 $ |
+# $Date: 2005/12/04 22:42:27 $ |
+# $Revision: 1.3 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -60,18 +60,18 @@ Copy2Oralux()
 chroot $BUILD apt-get install libncurses5-dev
 
 #
-cd $BUILD/var/tmp
+cd $BUILD/tmp
 
 # osalp is required
 wget http://switch.dl.sourceforge.net/sourceforge/osalp/osalp-0.7.3.tar.gz 
 tar -zxvf osalp-0.7.3.tar.gz 
-chroot $BUILD bash -c "cd /var/tmp/osalp-0.7.3;./configure;make;make install"
+chroot $BUILD bash -c "cd /tmp/osalp-0.7.3;./configure;make;make install"
 
 #
 echo "NOTICE: password is please"
 cvs -d:pserver:anonymous@linux-speakup.org:/usr/src/CVS login
 cvs -d:pserver:anonymous@linux-speakup.org:/usr/src/CVS co listen-up
-chroot $BUILD bash -c "cd /var/tmp/listen-up;make;make install"
+chroot $BUILD bash -c "cd /tmp/listen-up;make;make install"
 }
 
 case $1 in

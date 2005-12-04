@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # eflite.sh
-# $Id: eflite.sh,v 1.2 2005/01/30 21:43:51 gcasse Exp $
+# $Id: eflite.sh,v 1.3 2005/12/04 22:42:27 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing eflite
-# $Date: 2005/01/30 21:43:51 $ |
-# $Revision: 1.2 $ |
+# $Date: 2005/12/04 22:42:27 $ |
+# $Revision: 1.3 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -29,14 +29,14 @@ source ../oralux.conf
 # Installing the package in the current tree
 InstallPackage()
 {
-    apt-get install -t unstable eflite
+    apt-get install eflite
 }
 
 ####
 # Adding the package to the new Oralux tree
 Copy2Oralux()
 {
-    chroot $BUILD apt-get -t unstable install eflite
+    chroot $BUILD apt-get install eflite
 }
 
 case $1 in

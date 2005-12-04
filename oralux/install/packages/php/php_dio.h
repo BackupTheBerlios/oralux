@@ -46,7 +46,7 @@ PHP_FUNCTION(dio_fcntl);
 PHP_FUNCTION(dio_close);
 PHP_FUNCTION(dio_tcsetattr);
 
-// --> August 2004: Gilles Casse (gcasse@oralux.org)
+// --> November 2005: Gilles Casse (gcasse@oralux.org)
 PHP_FUNCTION(dio_open_stdin);
 PHP_FUNCTION(dio_read_stdin);
 PHP_FUNCTION(dio_close_stdin);

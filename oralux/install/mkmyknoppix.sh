@@ -11,8 +11,8 @@
 # You have to adjust the variable rmpacks if you want to remove more packages
 # This script and the list for rmpacks is tested with knoppix version 3.2
 #
-# 4+/2003 (G.Casse): Customization for Oralux
-#
+# 4+/2003 G.Casse: Customization for Oralux
+# 10/2005 G.Casse: update to customize Knoppix CD >= 3.4
 source oralux.conf
 
 ####
@@ -35,22 +35,28 @@ add_soft() {
     next_script eflite.sh "eflite"
     next_script emacs.sh "emacs"
     next_script emacspeak.sh "emacspeak"
+
     next_script emacspeak-ss.sh "emacspeak-ss"
     next_script ses.sh "ses"
     next_script php.sh "php"
     next_script listen-up.sh "listen-up"
+
     next_script mail.sh "mail"
     next_script misc.sh "misc"
     next_script mbrola.sh "mbrola"
-    next_script efm.sh "efm"
-    next_script lliaphonParlemax.sh "lliaphonParlemax"
+
+#    next_script efm.sh "efm"
+#    next_script lliaphonParlemax.sh "lliaphonParlemax"
     next_script multispeech.sh "multispeech"
+
     next_script links.sh "links"
+
     next_script net.sh "net"
     next_script menu.sh "menu"
     next_script yasr.sh "yasr"
     next_script mcvox.sh "mcvox"
     next_script screen.sh "screen"
+
     next_script cicero.sh "cicero"
     next_script convert.sh "convert"
     next_script doc.sh "doc"
@@ -72,19 +78,20 @@ if [ ! -f $CDROM/KNOPPIX/KNOPPIX ]; then
   exit 0
 fi
 
-if [ ! -f KNOPPIX/boot.img ]; then 
-  echo "I can't find KNOPPIX/boot.img in $CDROM."
+if [ ! -f boot/isolinux/isolinux.bin ]; then 
+  echo "I can't find boot/isolinux/isolinux.bin in $CDROM."
   exit 0
 fi
 
-if [ ! -f KNOPPIX/boot.cat ]; then 
-  echo "I can't find KNOPPIX/boot.cat in $CDROM."
+if [ ! -f boot/isolinux/boot.cat ]; then 
+  echo "I can't find boot/isolinux/boot.cat in $CDROM."
   exit 0
 fi
 
 rm -f $knoppixCDiso 2>/dev/null
-mkisofs -l -r -J -V "Oralux" -hide-rr-moved -v -b KNOPPIX/boot.img -c KNOPPIX/boot.cat -o $knoppixCDiso .
+#mkisofs -l -r -J -V "Oralux" -hide-rr-moved -v -b KNOPPIX/boot.img -c KNOPPIX/boot.cat -o $knoppixCDiso .
 
+mkisofs -pad -l -r -J -v -V "KNOPPIX" -no-emul-boot -boot-load-size 4 -boot-info-table -b boot/isolinux/isolinux.bin -c boot/isolinux/boot.cat -hide-rr-moved -o $knoppixCDiso .
 }
 
 ####
@@ -101,10 +108,13 @@ knoppixCDiso2iso() {
     mount -r -o loop $knoppixCDiso $MNT_ORALUX
     mkdir -p $NEW_ORALUX
     rm -f $extractedKnoppix 2>/dev/null
-    tar --exclude KNOPPIX/KNOPPIX -C $MNT_ORALUX -cf - KNOPPIX | tar -C $NEW_ORALUX -xvf -
+#    cd $MNT_ORALUX && find . -size -10000k -type f -exec cp -p --parents '{}' $NEW_ORALUX \;
+
+#    tar --exclude KNOPPIX/KNOPPIX -C $MNT_ORALUX -cf - KNOPPIX | tar -C $NEW_ORALUX -xvf -
+    tar --exclude KNOPPIX/KNOPPIX -C $MNT_ORALUX -cf - . | tar -C $NEW_ORALUX -xvf -
     cp $MNT_ORALUX/KNOPPIX/KNOPPIX $extractedKnoppix.old
     umount $MNT_ORALUX
-    extract_compressed_fs $extractedKnoppix.old > $extractedKnoppix
+    /usr/bin/extract_compressed_fs $extractedKnoppix.old > $extractedKnoppix
 }
 
 ####
@@ -153,19 +163,25 @@ fi
 cp -L /etc/resolv.conf $BUILD/etc/resolv.conf
 echo "if this script exits, just run it once again and skip this stage" 
 
+# in case of "/dev/null: Permission Denied error message" 
+# see http://www.knoppix.net/wiki/Dev_null_permission_denied
+# one possibility is: "editing /etc/fstab and appending ',dev' to the options column".
 chroot $BUILD apt-get update
 
 # list of packages, that can be removed in $BUILD
 # about 1.1 Gbytes will be removed
 
-    for i in de fr da es it tr ru pl ja nl cs ; do
-	kde="$l kde-i18n-$i"
-    done
-    rmpacks="$kde openoffice-de-en glibc-doc ttf-openoffice abiword-gtk lyx trans-de-en libgimp1.2 kdoc kdelibs4-dev kdelibs4 kdebase-data kdelibs-data gnome-games-locale libopenh323-1.9.10 libqt3-dev libqt3-mt libqt3 mozilla-browser"
-
-    chroot $BUILD apt-get -y --force-yes --purge --ignore-hold remove $rmpacks
+#     for i in de fr da es it tr ru pl ja nl cs ; do
+# 	kde="$l kde-i18n-$i"
+#     done
+    rmpacks="libqt3c102-mt"
+#    chroot $BUILD apt-get -y --force-yes --purge --ignore-hold remove $rmpacks
+    chroot $BUILD apt-get --purge remove $rmpacks
+    chroot $BUILD  dpkg-divert --rename --remove /usr/bin/kdesktop_lock
+    rmpacks="kdebluetooth kdelock-knoppix openoffice-de-en ttf-openoffice trans-de-en kdoc kdebase-data kdelibs-data libqt3-headers"
+    chroot $BUILD apt-get --purge remove $rmpacks
     games=`chroot $BUILD dpkg -S games/|grep -v , |egrep -v bsdmainutils | awk '{print $1}'|sort|uniq |sed -e 's/://'`
-    chroot $BUILD apt-get -y --purge remove $games
+    chroot $BUILD apt-get --purge remove $games
 
     cd $ORALUX/install
     liste=`cat list_remove.txt|egrep -v "#"`;chroot $BUILD bash -c "dpkg -P `echo $liste`"
@@ -223,28 +239,39 @@ create_new_iso() {
 
 set +e
 
-if [ ! -f $NEW_ORALUX/KNOPPIX/boot.img ]; then 
-  echo "I can't find $NEW_ORALUX/KNOPPIX/boot.img."
+if [ ! -f $NEW_ORALUX/boot/isolinux/isolinux.bin ]; then 
+  echo "I can't find $NEW_ORALUX/boot/isolinux/isolinux.bin."
   exit 0
 fi
 
-if [ ! -f $NEW_ORALUX/KNOPPIX/boot.cat ]; then 
-  echo "I can't find $NEW_ORALUX/KNOPPIX/boot.cat."
+if [ ! -f $NEW_ORALUX/boot/isolinux/boot.cat ]; then 
+  echo "I can't find $NEW_ORALUX/boot/isolinux/boot.cat."
   exit 0
 fi
 
 rm -f $oraluxCDiso
 rm -f $NEW_ORALUX/KNOPPIX/KNOPPIX
-mkisofs -L -R -l -V "Oralux ISO9660" -v -allow-multidot $BUILD | create_compressed_fs - 65536 > $NEW_ORALUX/KNOPPIX/KNOPPIX
+#mkisofs -L -R -l -V "Oralux ISO9660" -v -allow-multidot $BUILD | create_compressed_fs - 65536 > $NEW_ORALUX/KNOPPIX/KNOPPIX
+
+# -exclude-list $EXCLUDELIST \
+#mkisofs -R -U -V "Oralux" \
+#-R -U -V "Oralux" \
+mkisofs -R -U -V "Oralux" \
+-publisher "Oralux.org Association, http://oralux.org" \
+-hide-rr-moved -cache-inodes -no-bak -pad \
+$BUILD | nice -5 /usr/bin/create_compressed_fs - 65536 > $NEW_ORALUX/KNOPPIX/KNOPPIX
 
 #Computing the md5sums
 cd $NEW_ORALUX
 
 [ -f KNOPPIX/md5sums ] && rm KNOPPIX/md5sums
-find . | grep -v boot.cat | grep -v md5sums | sed "s#./##" | sort | xargs md5sum 2>/dev/null >> KNOPPIX/md5sums
+find -type f -not -name md5sums -not -name boot.cat -not -name isolinux.bin -exec md5sum '{}' \; > KNOPPIX/md5sums
 
 cd $NEW_ORALUX
-mkisofs -l -r -J -V "Oralux" -hide-rr-moved -v -b KNOPPIX/boot.img -c KNOPPIX/boot.cat -o $oraluxCDiso $NEW_ORALUX
+#mkisofs -l -r -J -V "Oralux" -hide-rr-moved -v -b KNOPPIX/boot.img -c KNOPPIX/boot.cat -o $oraluxCDiso $NEW_ORALUX
+
+mkisofs -pad -l -r -J -v -V "Oralux" -no-emul-boot -boot-load-size 4 -boot-info-table -b boot/isolinux/isolinux.bin -c boot/isolinux/boot.cat -hide-rr-moved -o $oraluxCDiso $NEW_ORALUX
+
 }
 
 ####
@@ -264,14 +291,13 @@ cleartmp() {
 ####
 cd_info() {
 
-    cdrecord -scanbus
+    cdrecord dev=ATAPI -scanbus
 }
 
 ####
-knoppixonhd() {
-
-    knx-hdinstall
-}
+# knoppixonhd() {
+#     knx-hdinstall
+# }
 
 ####
 cd_erase() {
@@ -280,7 +306,7 @@ cd_erase() {
 	echo "Please update the CDBUS variable in oralux.conf!"
 	return
     fi
-    cdrecord blank=fast dev=$CDBUS
+    cdrecord blank=fast dev=ATAPI:$CDBUS
 }
 
 ####
@@ -290,7 +316,7 @@ cd_burn() {
 	echo "Please update the CDBUS variable in oralux.conf!"
 	return
     fi
-    cdrecord -v -eject speed=8 -pad dev=$CDBUS $oraluxCDiso
+    cdrecord -v -eject speed=8 -pad dev=ATAPI:$CDBUS $oraluxCDiso
 }
 
 ###
@@ -298,7 +324,9 @@ cd_burn() {
 #
 echo "Return skips a task. To execute the task type 'y' and return."
 
+if [ -n "$DEV_BUILD" ]; then
 umount $BUILD || true 
+fi
 
 # Check that the expected directory are present 
 [ -d $ARCH ] || mkdir $ARCH
@@ -308,8 +336,10 @@ umount $BUILD || true
 [ -d $NEW_ORALUX ] || mkdir $NEW_ORALUX
 [ -d $ISO ] || mkdir $ISO
 
-echo "mount $DEV_BUILD $BUILD"
-mount $DEV_BUILD $BUILD
+if [ -n "$DEV_BUILD" ]; then
+    echo "mount $DEV_BUILD $BUILD"
+    mount $DEV_BUILD $BUILD
+fi
 
 chmod +x $INSTALL_PACKAGES/*.sh
 
@@ -328,7 +358,7 @@ umount $BUILD/proc || true
 next_step rm_tmp "Remove $BUILD/var/tmp/"
 
 next_step update_index "Updating modules dependencies and indexes?"
-next_step create_new_iso "Creating ISO image for new KNOPPIX?"
+next_step create_new_iso "Creating ISO image for new Oralux?"
 next_step cd_info "Scan bus about your CD recorder?"
 next_step cd_erase "Erase CD?"
 next_step cd_burn "Burn CD?"

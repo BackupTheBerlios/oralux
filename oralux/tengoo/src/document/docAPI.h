@@ -73,6 +73,15 @@ The layout is not concerned (frame nodes,...).
 void clearContentDocAPI( void* theDocAPI);
 /* > */
 
+/* < getFramesDocAPI */
+/* return a list of frame names (char*). 
+   These frames are siblings of the current level. 
+*/
+GList* getFramesDocAPI();
+char* getHoveredFrameDocAPI();
+void setFocusOnFrameDocAPI( char* theFrameName, enum elementFocusState theState);
+
+/* > */
 
 /* 
 Local variables:

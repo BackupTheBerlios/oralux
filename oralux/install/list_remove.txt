@@ -96,18 +96,6 @@
    lyx
    acroread
    qcad
-   rocks-n-diamonds
-   kde-i18n-da
-   kde-i18n-it
-   kde-i18n-de
-   kde-i18n-fr
-   kde-i18n-ru
-   kde-i18n-nl
-   kde-i18n-ja
-   kde-i18n-es
-   kde-i18n-cs
-   kde-i18n-pl
-   kde-i18n-tr
 #   xfonts-intl-chinese
    kword
    kpresenter

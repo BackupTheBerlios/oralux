@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // main.c
-// $Id: main.c,v 1.8 2005/06/12 20:54:01 gcasse Exp $
+// $Id: main.c,v 1.9 2005/12/04 22:42:27 gcasse Exp $
 // $Author: gcasse $
 // Description: entry point. 
-// $Date: 2005/06/12 20:54:01 $ |
-// $Revision: 1.8 $ |
+// $Date: 2005/12/04 22:42:27 $ |
+// $Revision: 1.9 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -284,7 +284,7 @@ int main(int argc, char *argv[])
 	  // Running the introductory menu
       
 	  // Sing Cocoralux, sing !
-	  playOGG("cocoralux2.ogg");
+	  playOGG("theme/cocoralux2.ogg");
 	  
 	  // Creating the new emacspeak tree
 	  sprintf(TheLine,"mkdir -p %s", DTK_EMACSPEAK);

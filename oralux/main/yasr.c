@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // yasr.c
-// $Id: yasr.c,v 1.7 2005/07/10 20:41:20 gcasse Exp $
+// $Id: yasr.c,v 1.8 2005/12/04 22:42:27 gcasse Exp $
 // $Author: gcasse $
 // Description: Yasr configuration file. 
-// $Date: 2005/07/10 20:41:20 $ |
-// $Revision: 1.7 $ |
+// $Date: 2005/12/04 22:42:27 $ |
+// $Revision: 1.8 $ |
 // Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -26,6 +26,7 @@
 
 #include "constants.h"
 #include "textToSpeech.h"
+#include "audioUserInterface.h"
 #include "yasr.h"
 
 /* < Constants */

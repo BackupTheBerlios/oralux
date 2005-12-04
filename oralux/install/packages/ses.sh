@@ -1,10 +1,10 @@
 #! /bin/sh
 # ses.sh 
-# $Id: ses.sh,v 1.1 2004/09/27 20:30:00 gcasse Exp $
+# $Id: ses.sh,v 1.2 2005/12/04 22:42:27 gcasse Exp $
 # $Author: gcasse $
 # Description: installing SES Simple Emacs Spreadsheet
-# $Date: 2004/09/27 20:30:00 $ |
-# $Revision: 1.1 $ |
+# $Date: 2005/12/04 22:42:27 $ |
+# $Revision: 1.2 $ |
 # Copyright (C) 2004 Sylvie Xhaard (sxhaard@free.fr)
 #
 # This program is free software; you can redistribute it and/or
@@ -43,11 +43,11 @@ Copy2Oralux()
 {
 # Installing SES
 # the required sequence to install the packages to the Oralux build directory
-cd $BUILD/var/tmp
+cd $BUILD/tmp
 wget http://mywebpages.comcast.net/jyavner/ses/ses21-031130.tgz
 tar -xvzf ses21-031130.tgz
 mkdir $BUILD/usr/share/emacs/site-lisp/ses
-cd $BUILD/var/tmp/ses21-031130
+cd $BUILD/tmp/ses21-031130
 cp * $BUILD/usr/share/emacs/site-lisp/ses
 }
 

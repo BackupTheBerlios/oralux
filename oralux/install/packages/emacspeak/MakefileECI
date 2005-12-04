@@ -1,4 +1,4 @@
-#$Id: MakefileECI,v 1.1 2005/03/31 09:16:53 gcasse Exp $
+#$Id: MakefileECI,v 1.2 2005/12/04 22:42:27 gcasse Exp $
 # This is not the original file
 # Gilles Casse (15 March 2005): modified for Oralux 
 CC=g++
@@ -12,8 +12,8 @@ TTS=tcleci.so eci.ini VIAVOICE
 
 all: tcleci.so 
 
-CPPFLAGS=  -DUNIX -fpic  -g -I/usr/include/tcl8.3 -I/usr/include/tclX8.3
-LIBS=-L /usr/lib/ibmeci -ltclx8.3 -ldl
+CPPFLAGS=  -DUNIX -fpic  -g -I/usr/include/tcl8.4 -I/usr/include/tclX8.4
+LIBS=-L /usr/lib/ibmeci -ltclx8.4 -ldl
 
 tcleci.so: tcleci.o
 	$(CC) $(CFLAGS) -g -o $@ tcleci.o $(LIBS) -shared

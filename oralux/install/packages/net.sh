@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # net.sh
-# $Id: net.sh,v 1.5 2005/04/03 00:36:28 gcasse Exp $
+# $Id: net.sh,v 1.6 2005/12/04 22:42:27 gcasse Exp $
 # $Author: gcasse $
 # Description: ppp configuration tool, adsl drivers,...
-# $Date: 2005/04/03 00:36:28 $ |
-# $Revision: 1.5 $ |
+# $Date: 2005/12/04 22:42:27 $ |
+# $Revision: 1.6 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -52,7 +52,7 @@ Copy2Oralux()
     cp $INSTALL_PACKAGES/net/startadsl $BUILD/usr/bin
     cp $INSTALL_PACKAGES/net/stopadsl $BUILD/usr/bin
 
-    cd $BUILD/var/tmp
+    cd $BUILD/tmp
     rm -rf eagle-usb*
     wget http://switch.dl.sourceforge.net/sourceforge/eagle-usb/eagle-usb-1.9.6.tar.bz2
     tar -jxvf eagle-usb-1.9.6.tar.bz2 
@@ -67,7 +67,7 @@ Copy2Oralux()
 
     # USE_IFUPDOWN=0: useful for 'Free Degroupe' to force dhclient
 
-    chroot $BUILD bash -c "cd /var/tmp/eagle-usb*;\
+    chroot $BUILD bash -c "cd /tmp/eagle-usb*;\
 	export CC=gcc-2.95;\
 	export USE_IFUPDOWN=0;\
 	./configure --prefix=/usr/local/eagle-usb --exec-prefix=/usr/local/eagle-usb;\
@@ -83,8 +83,8 @@ Copy2Oralux()
 
 
 # ECI adsl
-    cp $ARCH/eciadsl-usermode_0.10-1_i386.deb /var/tmp
-    chroot $BUILD bash -c "cd /var/tmp;\
+    cp $ARCH/eciadsl-usermode_0.10-1_i386.deb /tmp
+    chroot $BUILD bash -c "cd /tmp;\
 dpkg -i eciadsl-usermode_0.10-1_i386.deb"
 
 }

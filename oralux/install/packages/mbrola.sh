@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # mbrola.sh
-# $Id: mbrola.sh,v 1.3 2005/06/11 22:48:37 gcasse Exp $
+# $Id: mbrola.sh,v 1.4 2005/12/04 22:42:27 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing mbrola
-# $Date: 2005/06/11 22:48:37 $ |
-# $Revision: 1.3 $ |
+# $Date: 2005/12/04 22:42:27 $ |
+# $Revision: 1.4 $ |
 # Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -37,13 +37,13 @@ InstallPackage()
 
     # mbrola binary: mbrola-linux-i386
     cd $MBROLA
-# we rely on MBROLA coming from EFM, so at the moment (0.6) the following lines are in comments.
-# In the future, we will have to modify EFM so that it uses our common mbrola binary
-#
-#    wget http://tcts.fpms.ac.be/synthesis/mbrola/bin/pclinux/mbr301h.zip
-#    unzip mbr301h.zip
-#    rm - f /usr/local/bin/mbrola
-#    cp /tmp/mbrola/mbrola-linux-i386 /usr/local/bin/mbrola
+
+    wget http://tcts.fpms.ac.be/synthesis/mbrola/bin/pclinux/mbr301h.zip
+    unzip mbr301h.zip
+    rm -f /usr/local/bin/mbrola
+    cp /tmp/mbrola/mbrola-linux-i386 /usr/local/bin/mbrola
+
+    mkdir -p /usr/share/oralux/doc/license/mbrola
 
     # fr3 (ParleMax)
     cd $MBROLA
@@ -77,7 +77,7 @@ InstallPackage()
 # Adding the package to the new Oralux tree
 Copy2Oralux()
 {
-    MBROLA=$BUILD/var/tmp/mbrola
+    MBROLA=$BUILD/tmp/mbrola
     mkdir $MBROLA
 
     VOICES=$BUILD/usr/local/share/mbrola/voices
@@ -85,12 +85,14 @@ Copy2Oralux()
 
     # mbrola binary: mbrola-linux-i386
     cd $MBROLA
-# we rely on MBROLA coming from EFM, so the following lines are in comments.
-#    wget http://tcts.fpms.ac.be/synthesis/mbrola/bin/pclinux/mbr301h.zip
-#    unzip mbr301h.zip
-#    rm - f $BUILD/usr/local/bin/mbrola
-#    cp $BUILD/var/tmp/mbrola/mbrola-linux-i386 $BUILD/usr/local/bin/mbrola
+
+    wget http://tcts.fpms.ac.be/synthesis/mbrola/bin/pclinux/mbr301h.zip
+    unzip mbr301h.zip
+    rm - f $BUILD/usr/local/bin/mbrola
+    cp $BUILD/tmp/mbrola/mbrola-linux-i386 $BUILD/usr/local/bin/mbrola
     
+    mkdir -p /usr/share/oralux/doc/license/mbrola
+
     # fr3 (ParleMax)
     cd $MBROLA
     wget http://tcts.fpms.ac.be/synthesis/mbrola/dba/fr3/fr3-990324.zip
@@ -115,7 +117,7 @@ Copy2Oralux()
     mv $MBROLA/en1/en1.txt $BUILD/usr/share/oralux/doc/license/mbrola
 
     #removing unused files
-    cd $BUILD/var/tmp
+    cd $BUILD/tmp
     rm -rf mbrola
 }
 

@@ -1,10 +1,10 @@
 # ----------------------------------------------------------------------------
 # README
-# $Id: README,v 1.7 2005/06/12 20:54:01 gcasse Exp $
+# $Id: README,v 1.8 2005/12/04 22:42:27 gcasse Exp $
 # $Author: gcasse $
 # Description: This file describes how to build Oralux from Knoppix.
-# $Date: 2005/06/12 20:54:01 $ |
-# $Revision: 1.7 $ |
+# $Date: 2005/12/04 22:42:27 $ |
+# $Revision: 1.8 $ |
 # Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -62,9 +62,10 @@ and slackware-packages/8.1/speach-interface/multispeech-1.2-i586-1.tgz
 English lexicon from:
 ftp://ftp.nluug.nl/pub/os/Linux/distr/altlinux/Sisyphus/files/i586/RPMS/freespeech-10.0-alt2.i586.rpm
 
-http://atrey.karlin.mff.cuni.cz/~clock/twibright/links/download/links-2.1pre15.tar.gz
+Links2 comes from:
+http://links.twibright.com/download/links-2.1pre19.tar.bz2
 
-rawrite.exe comes from:
+Rawrite.exe comes from:
 http://download.fedora.redhat.com/pub/fedora/linux/core/1/i386/os/dosutils/rawrite.exe
 
 ADSL driver

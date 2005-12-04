@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # php.sh
-# $Id: php.sh,v 1.8 2005/01/30 21:43:51 gcasse Exp $
+# $Id: php.sh,v 1.9 2005/12/04 22:42:27 gcasse Exp $
 # $Author: gcasse $
-# Description: Installing PHP
-# $Date: 2005/01/30 21:43:51 $ |
-# $Revision: 1.8 $ |
+# Description: Installing a customized PHP5 cli (non canonical mode)
+# $Date: 2005/12/04 22:42:27 $ |
+# $Revision: 1.9 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -26,21 +26,21 @@
 source ../oralux.conf
 export OPT_CONF="--prefix=/usr --program-suffix=-oralux --with-libxml-dir --disable-cgi --with-gettext --enable-dio --with-ncurses --with-curl --with-tidy"
 
+export RELEASE="5.0.5"
+
 ####
 # Installing the package in the current tree
 InstallPackage()
 {
-#    apt-get install php4-cgi
-    
     # php5
     apt-get install libxml2-dev
     apt-get install libcurl3-dev
     apt-get install libtidy-dev
     cd /tmp
-    rm -rf /tmp/php-5*
-    wget http://www.php.net/get/php-5.0.2.tar.bz2/from/fr.php.net/mirror
-    tar -jxvf php-5.0.2.tar.bz2
-    cd php-5.0.2
+    rm -rf /tmp/php-${RELEASE}*
+    wget http://www.php.net/get/php-${RELEASE}.tar.bz2/from/fr.php.net/mirror
+    tar -jxvf php-${RELEASE}.tar.bz2
+    cd php-${RELEASE}
     cp $INSTALL_PACKAGES/php/dio.c ext/dio
     cp $INSTALL_PACKAGES/php/php_dio.h ext/dio
     ./configure $OPT_CONF
@@ -56,19 +56,20 @@ InstallPackage()
 # Adding the package to the new Oralux tree
 Copy2Oralux()
 {
-#    chroot $BUILD apt-get install php4-cgi
     # php5
-    cd $BUILD/var/tmp
-    rm -rf $BUILD/var/tmp/php-5*
-    wget http://www.php.net/get/php-5.0.2.tar.bz2/from/fr.php.net/mirror
-    tar -jxvf php-5.0.2.tar.bz2
-    cp $INSTALL_PACKAGES/php/dio.c php-5.0.2/ext/dio
-    cp $INSTALL_PACKAGES/php/php_dio.h php-5.0.2/ext/dio
+    cd $BUILD/tmp
+#     rm -rf php-${RELEASE}*
+#     wget http://www.php.net/get/php-${RELEASE}.tar.bz2/from/fr.php.net/mirror
+#     tar -jxvf php-${RELEASE}.tar.bz2
+#     cp $INSTALL_PACKAGES/php/dio.c php-${RELEASE}/ext/dio
+#     cp $INSTALL_PACKAGES/php/php_dio.h php-${RELEASE}/ext/dio
 
-    chroot $BUILD bash -c "apt-get install libxml2-dev;\
-	apt-get install libcurl3-dev;\
+    chroot $BUILD bash -c "apt-get remove --purge php4-common;\
+        apt-get install libxml2-dev;\
+        apt-get install libcurl3-dev;\
 	apt-get install libtidy-dev;\
-	cd /var/tmp/php-5.0.2;\
+	apt-get install libncurses5-dev;\
+	cd /tmp/php-${RELEASE};\
 	./configure $OPT_CONF;make;make install;\
 	cd /usr/bin;\
 	rm -f php5;\

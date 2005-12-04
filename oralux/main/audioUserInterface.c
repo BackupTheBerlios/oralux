@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // audiouserinterface.c
-// $Id: audioUserInterface.c,v 1.13 2005/08/10 21:32:13 gcasse Exp $
+// $Id: audioUserInterface.c,v 1.14 2005/12/04 22:42:27 gcasse Exp $
 // $Author: gcasse $
 // Description: Managing and playing the pre-recorded messages.
-// $Date: 2005/08/10 21:32:13 $ |
-// $Revision: 1.13 $ |
+// $Date: 2005/12/04 22:42:27 $ |
+// $Revision: 1.14 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 // September 2003: 
 // German translations by Guenther Harrasser.
@@ -41,12 +41,12 @@ static char* ThePortName=NULL;
 
 static enum language TheCurrentLanguage; /* menu language (so a speech synthesizer and the translations are available for this language) */
 
-static char* TheLanguageSuffix[]={
-  "", //English
-  "-fr", //French
-  "-de", //German
-  "-es", //Spanish
-  "-ru", //Russian
+static char* TheLangDirectory[]={
+  "en", //English
+  "fr", //French
+  "de", //German
+  "es", //Spanish
+  "ru", //Russian
 };
 static int TheSoundIsEnable=1;
 
@@ -1000,8 +1000,7 @@ char * TheMessages[][4]={
   {"If the voice synthesizer stops, please press Control Alt i to start it again",
    "Si la synthèse vocale s'arrête, appuyez s'il vous plait sur Control Alt i pour la relancer",
    NULL,
-   "Si el sintetizador de voz se detiene, por favor pulse CTRL+Alt+I para
-ejecutarlo de nuevo",
+   "Si el sintetizador de voz se detiene, por favor pulse CTRL+Alt+I para ejecutarlo de nuevo",
   },
 };
 
@@ -1076,7 +1075,7 @@ void beep()
       return;
     }
   //  sprintf(buf,"stty -isig;ogg123 -q %s/beep.ogg", TheOggDirectory);
-  sprintf(buf,"%s/beep.ogg", TheOggDirectory);
+  sprintf(buf,"%s/theme/beep.ogg", TheOggDirectory);
   playOggVorbisFile(buf,1,0);
 }
 
@@ -1242,7 +1241,7 @@ char* getOggFilename(enum sentence theSentence)
 {
   ENTER("getOggFilename");
   static char buf[BUFSIZE];
-  sprintf(buf,"%s/s%02x%s.ogg", TheOggDirectory, (unsigned int)theSentence, TheLanguageSuffix[TheCurrentLanguage]);
+  sprintf(buf,"%s/%s/s%02x.ogg", TheOggDirectory, TheLangDirectory[TheCurrentLanguage], (unsigned int)theSentence);
   SHOW(buf);
   return buf;
 }
@@ -1254,7 +1253,7 @@ char* getOggFilenameForThisLanguage(enum sentence theSentence, enum language the
 {
   ENTER("getOggFilenameForThisLanguage");
   static char buf[BUFSIZE];
-  sprintf(buf,"%s/s%02x%s.ogg", TheOggDirectory, (unsigned int)theSentence, TheLanguageSuffix[theLanguage]);
+  sprintf(buf,"%s/%s/s%02x.ogg", TheOggDirectory, TheLangDirectory[theLanguage], (unsigned int)theSentence);
   SHOW(buf);
   return buf;
 }
@@ -1296,7 +1295,7 @@ char* getOggFilenameChar(char c)
       aLanguage=English;
     }
 
-  sprintf(buf,"%s/c%2x%s.ogg", TheOggDirectory, (unsigned int)c, TheLanguageSuffix[aLanguage]);
+  sprintf(buf,"%s/%s/c%2x.ogg", TheOggDirectory, TheLangDirectory[aLanguage], (unsigned int)c);
   SHOW(buf);
   return buf;
 }

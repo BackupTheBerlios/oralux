@@ -14,7 +14,7 @@
    +----------------------------------------------------------------------+
    | Author: Sterling Hughes <sterling@php.net>                           |
    +----------------------------------------------------------------------+
-   August 2004: Gilles Casse (gcasse@oralux.org)
+   November 2005: Gilles Casse (gcasse@oralux.org)
    * Modification: non canonical mode without ncurses
    +----------------------------------------------------------------------+
 
@@ -95,8 +95,10 @@ ZEND_GET_MODULE(dio)
 static void _dio_close_fd(zend_rsrc_list_entry *rsrc TSRMLS_DC)
 {
 	php_fd_t *f = (php_fd_t *) rsrc->ptr;
-	close(f->fd);
-	free(f);
+	if (f) {
+		close(f->fd);
+		free(f);
+	}
 }
 
 #define RDIOC(c) REGISTER_LONG_CONSTANT(#c, c, CONST_CS | CONST_PERSISTENT)
@@ -165,10 +167,13 @@ PHP_MINFO_FUNCTION(dio)
 	php_info_print_table_end();
 }
 
-static void new_php_fd(php_fd_t **f, int fd)
+static int new_php_fd(php_fd_t **f, int fd)
 {
-	*f = malloc(sizeof(php_fd_t));
+	if (!(*f = malloc(sizeof(php_fd_t)))) {
+		return 0;
+	}
 	(*f)->fd = fd;
+	return 1;
 }
 
 /* {{{ proto resource dio_open(string filename, int flags[, int mode])
@@ -187,7 +192,7 @@ PHP_FUNCTION(dio_open)
 	}
 
 	if (php_check_open_basedir(file_name TSRMLS_CC) || (PG(safe_mode) && !php_checkuid(file_name, "wb+", CHECKUID_CHECK_MODE_PARAM))) {
-	RETURN_FALSE;
+		RETURN_FALSE;
 	}
 
 	if (ZEND_NUM_ARGS() == 3) {
@@ -201,7 +206,10 @@ PHP_FUNCTION(dio_open)
 		RETURN_FALSE;
 	}
 
-	new_php_fd(&f, fd);
+	
+	if (!new_php_fd(&f, fd)) {
+		RETURN_FALSE;
+	}
 	ZEND_REGISTER_RESOURCE(return_value, f, le_fd);
 }
 /* }}} */
@@ -443,7 +451,9 @@ PHP_FUNCTION(dio_fcntl)
 				RETURN_FALSE;
 			}
 
-			new_php_fd(&new_f, fcntl(f->fd, cmd, Z_LVAL_P(arg)));
+			if (!new_php_fd(&new_f, fcntl(f->fd, cmd, Z_LVAL_P(arg)))) {
+				RETURN_FALSE;
+			}
 			ZEND_REGISTER_RESOURCE(return_value, new_f, le_fd);
 			break;
 		}
@@ -608,6 +618,8 @@ PHP_FUNCTION(dio_tcsetattr)
 			RETURN_FALSE;
 	}   
 
+	memset(&newtio, 0, sizeof(newtio));
+	tcgetattr(f->fd, &newtio);
 	newtio.c_cflag = BAUD | CRTSCTS | DATABITS | STOPBITS | PARITYON | PARITY | CLOCAL | CREAD;
 	newtio.c_iflag = IGNPAR;
 	newtio.c_oflag = 0;
@@ -646,7 +658,7 @@ PHP_FUNCTION(dio_close)
 
 #ifndef PHP_WIN32
 
-// --> GC 08/2004 for Oralux
+// --> GC 11/2005 for Oralux
 // See glibc manual (Low-Level Terminal Interface)
 
 
@@ -677,9 +689,11 @@ PHP_FUNCTION(dio_open_stdin)
 		RETURN_FALSE;
 	}
      
+	memset(&saved_attributes, 0, sizeof(saved_attributes));
 	tcgetattr (STDIN_FILENO, &saved_attributes);
 	atexit (reset_input_mode);	
 
+	memset(&tattr, 0, sizeof(tattr));
 	tcgetattr (STDIN_FILENO, &tattr);
 	tattr.c_lflag &= ~(ICANON | ECHO | ECHOCTL | ECHONL | ISIG); /* Clear ICANON, no echo. */
 	tattr.c_iflag &= ~(BRKINT | ICRNL);

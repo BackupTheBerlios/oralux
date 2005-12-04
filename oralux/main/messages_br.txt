@@ -141,7 +141,7 @@ struct t_translation TheBrazilianPortugueseMessages[]=
   },
 
   {"left angle bracket",
-  "Abre colchete",
+  "menor que",
   },
 
   {"left curly bracket",
@@ -153,11 +153,11 @@ struct t_translation TheBrazilianPortugueseMessages[]=
   },
 
   {"left square bracket",
-  "fecha parênteses", /* ? */	 
+  "fecha colchete",	 
   },
 
   {"vertical line",
-  "Linha Vertical",  
+  "barra vertical",  
   },
 
   {"space",

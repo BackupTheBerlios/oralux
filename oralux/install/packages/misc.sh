@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # misc.sh
-# $Id: misc.sh,v 1.9 2005/03/31 09:16:53 gcasse Exp $
+# $Id: misc.sh,v 1.10 2005/12/04 22:42:27 gcasse Exp $
 # $Author: gcasse $
 # Description: Miscellaneous packages
-# $Date: 2005/03/31 09:16:53 $ |
-# $Revision: 1.9 $ |
+# $Date: 2005/12/04 22:42:27 $ |
+# $Revision: 1.10 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -117,11 +117,11 @@ cd /tmp; rm -rf aspell-ru-*; wget ftp://ftp.gnu.org/gnu/aspell/dict/ru/aspell-ru
 Copy2Oralux()
 {
     chroot $BUILD bash -c "apt-get --purge remove brltty"
-    cd $BUILD/var/tmp
+    cd $BUILD/tmp
     rm -rf brltty*
     cp $ARCH/brltty-3.6.1.tar.gz .
     tar -zxvf brltty*
-    chroot $BUILD bash -c "cd /var/tmp/brltty*;\
+    chroot $BUILD bash -c "cd /tmp/brltty*;\
     ./configure;\
     make;\
     make install;\
@@ -166,8 +166,8 @@ Copy2Oralux()
 # - The cyrillic mode is not started by default (console-data must be used to set up the console)
     chroot $BUILD apt-get install console-cyrillic
 
-    cd $BUILD/var/tmp; rm -rf aspell-ru-*; wget ftp://ftp.gnu.org/gnu/aspell/dict/ru/aspell-ru-0.50-2.tar.bz2; tar -jxvf aspell-ru-*;
-    chroot $BUILD bash -c "cd /var/tmp/aspell-ru-*; ./configure; make; make install; cd /var/tmp; rm -rf  aspell-ru-*"
+    cd $BUILD/tmp; rm -rf aspell-ru-*; wget ftp://ftp.gnu.org/gnu/aspell/dict/ru/aspell-ru-0.50-2.tar.bz2; tar -jxvf aspell-ru-*;
+    chroot $BUILD bash -c "cd /tmp/aspell-ru-*; ./configure; make; make install; cd /tmp; rm -rf  aspell-ru-*"
 
     chroot $BUILD apt-get install audacity
     chroot $BUILD apt-get install ecasound

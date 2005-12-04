@@ -122,6 +122,7 @@ Message from Edmond > (setq vm-forwarding-subject-format "Message retransmis de 
 --------------------------------------
 + Yasr: bsdgames includes a very good "adventure" game wich can be played from the command line.
 
++ qalc
 
 + les droits d'acces des fichiers sous /home/knoppix correspondent a root !
 

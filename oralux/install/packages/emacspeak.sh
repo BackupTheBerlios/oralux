@@ -1,12 +1,12 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # emacspeak.sh
-# $Id: emacspeak.sh,v 1.6 2005/06/11 22:48:37 gcasse Exp $
+# $Id: emacspeak.sh,v 1.7 2005/12/04 22:42:27 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing emacspeak. Thanks to the Nath's howto: 
 # emacspeak-dtk-soft-debinst-howto.htm
-# $Date: 2005/06/11 22:48:37 $ |
-# $Revision: 1.6 $ |
+# $Date: 2005/12/04 22:42:27 $ |
+# $Revision: 1.7 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -70,6 +70,9 @@ substituteFile()
 # Installing the package in the current tree
 InstallPackage()
 {
+    # for emacspeak doc
+    apt-get install texinfo
+
     cd /tmp
     rm -rf emacspeak*
 
@@ -107,7 +110,7 @@ InstallPackage()
     EMACSPEAK_DIR="/usr/share/emacs/site-lisp/emacspeak"
     echo "export EMACSPEAK_DIR=$EMACSPEAK_DIR" >> /etc/profile
     echo "export LD_LIBRARY_PATH=/ramdisk/dtk/lib:\$LD_LIBRARY_PATH" >> /etc/profile
-    export DTK_PROGRAM=/usr/local/bin/eflite
+    export DTK_PROGRAM=/usr/bin/eflite
 
     echo "Do you want to use DECtalk (y or n) ?"
     read a
@@ -136,6 +139,9 @@ InstallPackage()
 # Adding the package to the new Oralux tree
 Copy2Oralux()
 {
+    # for emacspeak doc
+    apt-get install texinfo
+
     a=`echo $ARCH_EMACSPEAK|grep tar.gz|wc -c|sed "s/ //g"`
     if [ $a != 0 ]
         then
@@ -148,7 +154,7 @@ Copy2Oralux()
         method="TARBZ2"
     fi
 
-    cd $BUILD/var/tmp
+    cd $BUILD/tmp
     rm -rf emacspeak*
 
     if [ $method = "TARGZ" ]
@@ -167,7 +173,7 @@ Copy2Oralux()
     rm -f $BUILD/usr/share/emacs/site-lisp/emacspeak/servers/software-dtk/tcldtk.*
 
     # Installing emacspeak
-    cd $BUILD/var/tmp/emacspeak* 
+    cd $BUILD/tmp/emacspeak* 
     patch -p0 -i $INSTALL_PACKAGES/emacspeak/emacspeak-$RELEASE.patch
 
 #Comment for 0.6b
@@ -177,9 +183,9 @@ Copy2Oralux()
 
     cp $INSTALL_PACKAGES/emacspeak/*el lisp
 
-    chroot $BUILD bash -c "cd /var/tmp/emacspeak*; make config; make; make install"
+    chroot $BUILD bash -c "cd /tmp/emacspeak*; make config; make; make install"
 
-    cd $BUILD/var/tmp
+    cd $BUILD/tmp
     rm -rf emacspeak*
 
     EMACSPEAK_DIR="/usr/share/emacs/site-lisp/emacspeak"

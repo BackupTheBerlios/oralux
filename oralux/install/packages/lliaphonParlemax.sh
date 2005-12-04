@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # lliaphonParlemax.sh
-# $Id: lliaphonParlemax.sh,v 1.2 2005/01/30 21:43:51 gcasse Exp $
+# $Id: lliaphonParlemax.sh,v 1.3 2005/12/04 22:42:27 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing LLiaPhon and ParleMax
-# $Date: 2005/01/30 21:43:51 $ |
-# $Revision: 1.2 $ |
+# $Date: 2005/12/04 22:42:27 $ |
+# $Revision: 1.3 $ |
 # Copyright (C) 2004, 2005 Nath (nath.ml at free.fr)
 #
 # This program is free software; you can redistribute it and/or
@@ -70,13 +70,13 @@ rm -rf /usr/local/src/ParleMax/TARBALLPM
 Copy2Oralux()
 {
 # Installing LLiaPhon
-cd $BUILD/var/tmp
+cd $BUILD/tmp
 wget http://nathx.free.fr/biglux/lliaphon-0.3.2.tar.gz
 tar xvzf lliaphon-0.3.2.tar.gz
-chroot $BUILD bash -c "cd /var/tmp/lliaphon; make; make ressource; make install"
+chroot $BUILD bash -c "cd /tmp/lliaphon; make; make ressource; make install"
 
 echo "export LLIAPHON=/usr/local/lliaphon" >>$BUILD/etc/profile
-rm -rf $BUILD/var/tmp/lliaphon*
+rm -rf $BUILD/tmp/lliaphon*
 
 # Installing ParleMax (I copy the sources in /usr/local/src since it does not exist a make install command)
 cd $BUILD/usr/local/src

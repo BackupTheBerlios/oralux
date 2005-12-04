@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # multispeech.sh
-# $Id: multispeech.sh,v 1.5 2005/03/31 09:16:53 gcasse Exp $
+# $Id: multispeech.sh,v 1.6 2005/12/04 22:42:27 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing Multispeech.
-# $Date: 2005/03/31 09:16:53 $ |
-# $Revision: 1.5 $ |
+# $Date: 2005/12/04 22:42:27 $ |
+# $Revision: 1.6 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -197,24 +197,24 @@ InstallPackage()
 Copy2Oralux()
 {
 ### Rulex
-    cd $BUILD/var/tmp
+    cd $BUILD/tmp
     rm -rf rulex*
     tar -zxvf $ARCH_RULEX
     
-    chroot $BUILD bash -c "cd /var/tmp/rulex*; make lexicon; mkdir -p /usr/local/lib/ru_tts; make install"
+    chroot $BUILD bash -c "cd /tmp/rulex*; make lexicon; mkdir -p /usr/local/lib/ru_tts; make install"
 
 ### letters
 # multispeech-1.2.2.tar.bz2 does not include letters
 # we use the binary package
-    mkdir $BUILD/var/tmp/multispeech
-    cd $BUILD/var/tmp/multispeech
+    mkdir $BUILD/tmp/multispeech
+    cd $BUILD/tmp/multispeech
     tar -zxvf $ARCH_MULTISPEECH_BIN
     cp -pR usr/local/lib/multispeech/letters $BUILD/usr/local/lib/multispeech
-    cd $BUILD/var/tmp
+    cd $BUILD/tmp
     rm -rf multispeech
 
 ### ru_tts
-    cd $BUILD/var/tmp
+    cd $BUILD/tmp
     mkdir ru_tts
     cd ru_tts
     tar -zxvf $ARCH_RU_TTS
@@ -224,7 +224,7 @@ Copy2Oralux()
     mkdir -p $BUILD/usr/local/share/mbrola
 
 ### Lexicon for English synthesis
-    cd $BUILD/var/tmp
+    cd $BUILD/tmp
     rm -rf freespeech*
     alien -g $ARCH_LEXICON
     cp freespeech-10.0.orig/usr/share/freespeech/lexicon.dir $BUILD/usr/local/share/mbrola/lexicon.en.dir
@@ -233,7 +233,7 @@ Copy2Oralux()
     cp freespeech-10.0.orig/usr/share/doc/freespeech-10.0/Copying $BUILD/usr/share/oralux/doc/license/freespeech
 
 ### Multispeech
-    cd $BUILD/var/tmp
+    cd $BUILD/tmp
     rm -rf multispeech-*
     tar -jxvf $ARCH_MULTISPEECH_SRC 
     cd multispeech-*

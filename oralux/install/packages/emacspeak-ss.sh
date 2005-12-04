@@ -1,12 +1,12 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # emacspeak.sh
-# $Id: emacspeak-ss.sh,v 1.2 2005/01/30 21:43:51 gcasse Exp $
+# $Id: emacspeak-ss.sh,v 1.3 2005/12/04 22:42:27 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing emacspeak. Thanks to the Nath's howto: 
 # emacspeak-dtk-soft-debinst-howto.htm
-# $Date: 2005/01/30 21:43:51 $ |
-# $Revision: 1.2 $ |
+# $Date: 2005/12/04 22:42:27 $ |
+# $Revision: 1.3 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -121,7 +121,7 @@ Copy2Oralux()
         method="TARBZ2"
     fi
 
-    cd $BUILD/var/tmp
+    cd $BUILD/tmp
     rm -rf emacspeak*
 
     if [ $method = "TARGZ" ]
@@ -150,7 +150,7 @@ Copy2Oralux()
     done
 
     # Clearing /tmp
-    cd $BUILD/var/tmp
+    cd $BUILD/tmp
     rm -rf emacspeak*
 }
 

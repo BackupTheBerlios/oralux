@@ -87,7 +87,7 @@ SAVEX=""
 CHOWNHOME=""
 NETFILES='/etc/network|/etc/ppp|/etc/chat|/etc/isdn|/etc/sysconfig/isdn|/etc/sysconfig/provider|/etc/resolv\.conf|/etc/hosts|/etc/hosts\.|/etc/inetd\.conf'
 XFILES='/etc/X11'
-for i in `sed 's,",,g;s,/, ,g;' < "$TMP"`; do
+for i in `sed 's,",,g;s,/, ,g;s,'\'',,g;' < "$TMP"`; do
 case $i in
 p) SAVEHOME="yes" ;;
 d) SAVEDESK="yes" ;;
@@ -124,6 +124,7 @@ EOT
 return "$?"
 }
 
+# Just displays the symlink target, does not actually cause the automounter to attempt starting a mount.
 FLOPPYDIR="$(ls -l /mnt/floppy | awk '{print $NF}')"
 
 umountfloppy(){
@@ -132,7 +133,7 @@ mount | grep -q "$FLOPPYDIR" && umount "$FLOPPYDIR" 2>/dev/null
 
 # Directory selector
 PARTITIONS="/mnt/floppy [Floppy] on"
-for i in `awk '/^\/dev\/[hs]d[a-z].*\/mnt\/[hs]d[a-z]/{if(!/ntfs/){print $2}}' /etc/fstab`; do
+for i in `awk '/^\/dev\/([hs]d|ub)[a-z].*\/mnt\/([hs]d|ub)[a-z]/{if(!/ntfs/){print $2}}' /etc/fstab`; do
 PARTITIONS="$PARTITIONS ${i} [Disk/Partition] off"
 done
 
@@ -235,16 +236,26 @@ else
 umount "$DIRECTORY"
 fi
 
+BOOTOPT="knoppix myconfig=$DIRECTORY"
+AUTO="knoppix myconfig=scan"
+case "$DIRECTORY" in *floppy*)
+ BOOTOPT="knoppix floppyconfig"
+ AUTO=""
+esac
+
 # More language-dependent Messages
 case "$LANGUAGE" in
 de*|at*|ch*)
-SUCCESS="Die KNOPPIX-Konfiguration wurde erfolgreich gespeichert. Ihre Konfigurationsdateien werden beim nächsten KNOPPIX-Bootvorgang in die Ramdisk restauriert, wenn Sie im Bootscreen \"knoppix myconfig=$DIRECTORY\" bzw. \"knoppix myconfig=scan\" (automatische Suche) angeben."
+[ -n "$AUTO" ] && AUTO=" bzw. \"$AUTO\" (automatische Suche)"
+SUCCESS="Die KNOPPIX-Konfiguration wurde erfolgreich gespeichert. Ihre Konfigurationsdateien werden beim nächsten KNOPPIX-Bootvorgang in die Ramdisk restauriert, wenn Sie im Bootscreen \"$BOOTOPT\"$AUTO angeben."
 ;;
 es*)
-SUCCESS="La creación del configuración de KNOPPIX fue satisfactoria. Sus archivos de configuración serán reinstalados en el siguiente arranque de KNOPPIX si especifica \"knoppix myconfig=$DIRECTORY\" o \"knoppix myconfig=scan\" (automatic) en la línea de comandos del arranque."
+[ -n "$AUTO" ] && AUTO=" o \"$AUTO\" (automatic)"
+SUCCESS="La creación del configuración de KNOPPIX fue satisfactoria. Sus archivos de configuración serán reinstalados en el siguiente arranque de KNOPPIX si especifica \"$BOOTOPT\"$AUTO en la línea de comandos del arranque."
 ;;
 *)
-SUCCESS="Creation of the KNOPPIX configuration archive was successful. Your configuration files will be reinstalled to the ramdisk on next KNOPPIX boot if you specify \"knoppix myconfig=$DIRECTORY\", or \"knoppix myconfig=scan\" (automatic search) at the boot prompt."
+[ -n "$AUTO" ] && AUTO=", or \"$AUTO\" (automatic search)"
+SUCCESS="Creation of the KNOPPIX configuration archive was successful. Your configuration files will be reinstalled to the ramdisk on next KNOPPIX boot if you specify \"$BOOTOPT\"$AUTO at the boot prompt."
 ;;
 esac
 

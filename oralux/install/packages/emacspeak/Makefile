@@ -1,18 +1,18 @@
 # ATTENTION
 # This is not the original emacspeak file. Changed for Oralux. 
-#$Id: Makefile,v 1.3 2005/03/31 09:16:53 gcasse Exp $
+#$Id: Makefile,v 1.4 2005/12/04 22:42:27 gcasse Exp $
 #
 LABEL=1.1
 DIST=software-dtk-$(LABEL)
-CFLAGS=-O3 -fpic -pedantic -ansi -Wall -I /usr/include/tcl8.3 -I /ramdisk/dtk/include -march=i386
-#CFLAGS=-O3 -fpic -pedantic -ansi -Wall -I/usr/include/tcl8.3 -I/usr/include/tclX8.3 -march=i386
+CFLAGS=-O3 -fpic -pedantic -ansi -Wall -I /usr/include/tcl8.4 -I /ramdisk/dtk/include -march=i386
+#CFLAGS=-O3 -fpic -pedantic -ansi -Wall -I/usr/include/tcl8.4 -I/usr/include/tclX8.4 -march=i386
 CPPFLAGS=-DSTDC_HEADERS=1 -Dclock_t=long -DRETSIGTYPE=void 
 
 
 INSTALL=install
 CC=gcc
-LIBS=-L /ramdisk/dtk/lib -ltts -ltts_us -ltcl8.3
-#LIBS=-ltts -ltts_us -ltts_fr -ltclx8.3
+LIBS=-L /ramdisk/dtk/lib -ltts -ltts_us -ltcl8.4
+#LIBS=-ltts -ltts_us -ltts_fr -ltclx8.4
 SERVER_DIR=/usr/share/emacs/site-lisp/emacspeak/servers/software-dtk
 FILES=tcldtk.c tcldtk.so tcldtk.o Makefile
 

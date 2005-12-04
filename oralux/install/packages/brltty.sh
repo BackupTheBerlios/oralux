@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # brltty.sh
-# $Id: brltty.sh,v 1.3 2005/01/30 21:43:51 gcasse Exp $
+# $Id: brltty.sh,v 1.4 2005/12/04 22:42:27 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing BRLTTY
-# $Date: 2005/01/30 21:43:51 $ |
-# $Revision: 1.3 $ |
+# $Date: 2005/12/04 22:42:27 $ |
+# $Revision: 1.4 $ |
 # Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -54,14 +54,14 @@ Copy2Oralux()
 #    chroot $BUILD apt-get install php4-cgi
 
     # php5
-    cd $BUILD/var/tmp
-    rm -rf $BUILD/var/tmp/php-5*
+    cd $BUILD/tmp
+    rm -rf $BUILD/tmp/php-5*
     wget http://www.php.net/get/php-5.0.0.tar.bz2/from/fr.php.net/mirror
     tar -jxvf php-5.0.0.tar.bz2
     cp $INSTALL_PACKAGES/php/dio.c php-5.0.0/ext/dio
 
-    chroot $BUILD  bash -c "apt-get install libxml2-dev; cd /var/tmp/php-5.0.0;./configure $OPT_CONF;make;make install;cd /usr/bin; ln -s /usr/local/bin/php php5;cd /etc/alternatives;rm -f php;ln -s /usr/bin/php5 php"
-    rm -rf $BUILD/var/tmp/php-5*
+    chroot $BUILD  bash -c "apt-get install libxml2-dev; cd /tmp/php-5.0.0;./configure $OPT_CONF;make;make install;cd /usr/bin; ln -s /usr/local/bin/php php5;cd /etc/alternatives;rm -f php;ln -s /usr/bin/php5 php"
+    rm -rf $BUILD/tmp/php-5*
 }
 
 case $1 in

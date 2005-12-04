@@ -8,13 +8,14 @@
 # German translations by Guenther Harrasser.
 # Spanish translations by Fernando Pinto da Silva.
 #
-# 2003, 2004 Gilles Casse
+# 2003,2004 Gilles Casse
 # * French translation
 # * The new config is compared to the old one (via their md5sum)
 # * /etc/fstab is not stored
 # * If the (basic) configuration files are saved to the boot floppy, 
 #   cheatcode floppyconfig is added in syslinux.cfg instead of myconf=...
 # * knoppix.sh: once the files are restored, it installs the symbolic links (/etc/sysconfig/symlinks)
+# Nov 2005 (GC): port Knoppix 4.0.2
 #
 #set -v 
 export DIALOG="/usr/bin/php5 /usr/share/oralux/dialog/dialog.php"
@@ -39,6 +40,7 @@ exit 0
 
 trap bailout 1 2 3 15
 
+# Just displays the symlink target, does not actually cause the automounter to attempt starting a mount.
 FLOPPYDIR="$(ls -l /mnt/floppy | awk '{print $NF}')"
 
 umountfloppy(){
@@ -189,8 +191,7 @@ MESSAGE4="Please select directory for saving configuration files:"
 
 # Directory selector
 PARTITIONS="/mnt/floppy [Floppy] on"
-for i in `awk '/^\/dev\/[hs]d[a-z].*\/mnt\/[hs]d[a-z]/{if(!/ntfs/){print $2}}' /etc/fstab`
-do
+for i in `awk '/^\/dev\/([hs]d|ub)[a-z].*\/mnt\/([hs]d|ub)[a-z]/{if(!/ntfs/){print $2}}' /etc/fstab`; do
 PARTITIONS="$PARTITIONS ${i} [Disk/Partition] off"
 done
 
