@@ -7,6 +7,7 @@
 enum keyboard {
   americanKeyboard,  // Warning: same order as in enum sentence (audiointerface.h)
   belgianKeyboard,
+  brazilianKeyboard,
   britishKeyboard,
   bulgarianKeyboard,
 /*   chineseKeyboardSimplified,  */

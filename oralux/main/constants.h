@@ -60,6 +60,7 @@ enum language {
   // --> 
   // Attention: the four following values index TheMessages
   English, /* American English */
+  Brazilian,
   French,
   German,
   Spanish,

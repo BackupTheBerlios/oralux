@@ -172,6 +172,8 @@ enum sentence {
   DoYouWantCicero,
   yasrIsStarted,
   yasrResetKeys,
+  MenuInBrazilian,
+  brazilianSaid, // same order as in enum keyboard
   MaxSentence, // the last enum! Place any new enum before it, please.
 };
 

@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // i18n.c
-// $Id: i18n.c,v 1.5 2005/06/12 20:54:01 gcasse Exp $
+// $Id: i18n.c,v 1.6 2005/12/05 00:40:56 gcasse Exp $
 // $Author: gcasse $
 // Description: Internationalization. 
-// $Date: 2005/06/12 20:54:01 $ |
-// $Revision: 1.5 $ |
+// $Date: 2005/12/05 00:40:56 $ |
+// $Revision: 1.6 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -50,9 +50,12 @@ static T_KEYBOARD TheKeyboard[]={
   {belgianKeyboard,
    "be2-latin1",
    "be"},
+  {brazilianKeyboard,
+   "br-abnt2",
+   "abnt2"},
   {britishKeyboard,
-   "uk",
-   "uk"},
+   "uk", // uk_latin1
+   "uk"}, 
   {bulgarianKeyboard,
    "bg",
    "bg"},
@@ -109,6 +112,8 @@ typedef struct t_idLabel IDLABEL;
 static IDLABEL TheSpokenLanguage[]={
   {English,
    "us"},
+  {Brazilian,
+   "br"},
   {French,
    "fr"},
   {German,
@@ -187,6 +192,10 @@ static char* getConsoleFont(enum language theLanguage)
     {
     case Russian:
       aFont="/usr/share/consolefonts/koi8-r.psf.gz";
+      break;
+
+    case Brazilian:
+      aFont="/usr/share/consolefonts/lat9u-16.psf.gz";
       break;
 
     default:
@@ -315,6 +324,13 @@ void getLanguageVariable( enum language theWishedLanguage,
 
   switch(theWishedLanguage)
     {
+    case Brazilian:
+      *theCharset="iso8859-1";
+      *theCountry="br";
+      *theLang="br";
+      *theLanguage="br";
+      break;
+
     case French:
       *theCharset="iso8859-15";
       *theCountry="fr";
