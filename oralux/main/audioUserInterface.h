@@ -13,6 +13,7 @@
 enum sentence {
   americanSaid, // same order as in enum keyboard
   belgianSaid,
+  brazilianSaid, // same order as in enum keyboard
   britishSaid,
   bulgarianSaid,
   czechSaid,
@@ -173,7 +174,6 @@ enum sentence {
   yasrIsStarted,
   yasrResetKeys,
   MenuInBrazilian,
-  brazilianSaid, // same order as in enum keyboard
   MaxSentence, // the last enum! Place any new enum before it, please.
 };
 

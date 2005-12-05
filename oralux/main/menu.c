@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // menu.c
-// $Id: menu.c,v 1.10 2005/07/10 20:41:19 gcasse Exp $
+// $Id: menu.c,v 1.11 2005/12/05 23:32:56 gcasse Exp $
 // $Author: gcasse $
 // Description: introductory menu. 
-// $Date: 2005/07/10 20:41:19 $ |
-// $Revision: 1.10 $ |
+// $Date: 2005/12/05 23:32:56 $ |
+// $Revision: 1.11 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -274,12 +274,14 @@ static void setVolume()
 static enum language setMenuLanguage(enum language theDefaultLanguage)
 {
   ENTER("setMenuLanguage");
-  static char aMenu[]={MenuInEnglish, 
-		       MenuInFrench,
-		       MenuInGerman,
-		       MenuInSpanish,
-		       MenuInRussian,
-		       }; // Index= enum language
+  static int aMenu[] = {
+    MenuInEnglish, 
+    MenuInFrench,
+    MenuInGerman,
+    MenuInSpanish,
+    MenuInBrazilian,
+    MenuInRussian,
+  }; // Index= enum language
   enum language aLanguage=theDefaultLanguage;
   int aLanguageRequest=1;
   int aLanguageMax=sizeof(aMenu)/sizeof(aMenu[0]);

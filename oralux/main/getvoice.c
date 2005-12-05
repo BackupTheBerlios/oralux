@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // getvoice.c
-// $Id: getvoice.c,v 1.4 2005/03/31 09:16:54 gcasse Exp $
+// $Id: getvoice.c,v 1.5 2005/12/05 23:32:56 gcasse Exp $
 // $Author: gcasse $
 // Description: Used at installation time to build the "voices" used by oralux
-// $Date: 2005/03/31 09:16:54 $ |
-// $Revision: 1.4 $ |
+// $Date: 2005/12/05 23:32:56 $ |
+// $Revision: 1.5 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -25,6 +25,7 @@
 #include <stdio.h>
 #include <dtk/ttsapi.h>
 #include <sys/time.h>
+#include <assert.h>
 
 #include "audioUserInterface.h"
 #include "constants.h"
@@ -98,7 +99,7 @@ void initDECtalk(char* theLanguageId)
 int init(char* theLanguageId) 
 {
   ENTER("initDECtalk");
-  if (strcmp(theLanguageId,"ru")!=0)
+  if ((strcmp(theLanguageId,"ru")!=0) && (strcmp(theLanguageId,"br")!=0))
     {
       initDECtalk(theLanguageId);
     }
@@ -109,6 +110,7 @@ static char* TheLanguageId[]={
   "fr",
   "gr",
   "sp",
+  "br",
   "ru",
 };
 
@@ -118,27 +120,25 @@ static char* TheDefaultRate[]={
   "160",
   "160",
   "160",
+  "", // br
   "", // ru
 };
 
 static char* TheCurrentRate;
 
-void getvoice(char* theSentence, char* theOggFilename, int thePunctuationToBeSaid)
+void getdtkvoice(char* theSentence, char* theOggFilename, int thePunctuationToBeSaid)
 {
-  ENTER("getvoice");
+  ENTER("getdtkvoice");
   SHOW(theSentence);
   SHOW(theOggFilename);
   int aStatus;
   static char buf[BUFSIZE];
-  static char tmpFile[BUFSIZE];
 
   if (theSentence==NULL)
   {
     return;
   }
 
-//  sprintf(tmpFile, "%s.wav", theOggFilename);
-//  SHOW(tmpFile);
   aStatus =  TextToSpeechOpenWaveOutFile (
     dtkHandle,   
     TheWav,   
@@ -167,51 +167,67 @@ void getvoice(char* theSentence, char* theOggFilename, int thePunctuationToBeSai
   system(buf);
 }
 
-void getvoiceRussian(char* theSentence, char* theOggFilename)
+void getvoice(char* theSentence, char* theOggFilename, enum language theLanguage)
 {
-  ENTER("getvoiceRussian");
+  ENTER("getvoice");
   SHOW(theSentence);
   SHOW(theOggFilename);
   int aStatus;
-  static char buf[BUFSIZE];
+  static char buf[2*BUFSIZE];
   static char aSentence[BUFSIZE];
-  static char tmpFile[BUFSIZE];
   int i;
 
   if (theSentence==NULL)
   {
     return;
   }
+  assert(strlen(theSentence) < BUFSIZE);
 
-  for (i=0; i<strlen(theSentence); i++)
+  if (theLanguage == Russian)
     {
-      switch(theSentence[i])
+      for (i=0; i<strlen(theSentence); i++)
 	{
-	case ',':
-	case ';':
-	case '!':
-	case '?':
-	case '(':
-	case ')':
-	case '-':
-	case '_':
-	case '[':
-	case ']':
-	  aSentence[i]=' ';
-	  break;
+	  switch(theSentence[i])
+	    {
+	    case ',':
+	    case ';':
+	    case '!':
+	    case '?':
+	    case '(':
+	    case ')':
+	    case '-':
+	    case '_':
+	    case '[':
+	    case ']':
+	      aSentence[i]=' ';
+	      break;
 
-	case '.':
-	  aSentence[i] = (isdigit( theSentence[i+1])) ? '.' : ' ';
-	  break;
+	    case '.':
+	      aSentence[i] = (isdigit( theSentence[i+1])) ? '.' : ' ';
+	      break;
 
-	default:
-	  aSentence[i]=theSentence[i];
-	  break;
+	    default:
+	      aSentence[i]=theSentence[i];
+	      break;
+	    }
 	}
+      aSentence[i]=0;
     }
-  aSentence[i]=0;
+  else
+    {
+      strcpy(aSentence, theSentence);
+    }
 
-  sprintf(buf,"echo \"%s\" | ru_tts -s /usr/local/lib/ru_tts/lexicon -r 0.14 -p 0.19 | exec sox -t raw -s -b -r 10000 -c 1 -v 0.70 - -c 1 -w %s", aSentence, TheWav);  
+
+  switch( theLanguage)
+    {
+    case Brazilian:
+      sprintf(buf,"echo \"%s\" | ttpport | mbrola -t 0.89 -f 1.00 -v 1.00 -l 16000 -e /usr/local/share/mbrola/voices/br1 - -A | exec sox -t raw -s -w -r 16000 -c 1 -v 1.50 - -c 1 -w %s", aSentence, TheWav);  
+      break;
+    case Russian:
+      sprintf(buf,"echo \"%s\" | ru_tts -s /usr/local/lib/ru_tts/lexicon -r 0.14 -p 0.19 | exec sox -t raw -s -b -r 10000 -c 1 -v 0.70 - -c 1 -w %s", aSentence, TheWav);  
+      break;
+    }
 
   system(buf);
   SHOW(buf);
@@ -313,7 +329,17 @@ int main(int argc, char *argv[])
         continue;
       }
       a[0]=aCharacter;
-      getvoice(a, getOggFilenameChar(aCharacter), aPunctuationToBeSaid);
+      switch(aLanguage)
+	{
+	case Brazilian:
+	    getvoice( a, getOggFilenameChar(aCharacter), aLanguage);
+	  break;
+
+	default:
+	  /* case Russian: */
+	  getdtkvoice(a, getOggFilenameChar(aCharacter), aPunctuationToBeSaid);
+	  break;
+	}
     }
   }
   else
@@ -339,13 +365,26 @@ int main(int argc, char *argv[])
 	    system(buf);
 	    aNumberOfNotYetTranslatedSentences++;
 	  }
-	else if (aLanguage==Russian)
-	  {
-	    getvoiceRussian(getText(i), getOggFilename(i));
-	  }
 	else
 	  {
-	    getvoice(getText(i), getOggFilename(i), aPunctuationToBeSaid);
+	    char* aSentence = getText(i);
+	    printf("s%02x %s\n", i, aSentence);
+	    switch(aLanguage)
+	      {
+	      case Brazilian:
+	      case Russian:
+		getvoice(aSentence, getOggFilename(i), aLanguage);
+		break;
+
+	      default:
+		getdtkvoice(aSentence, getOggFilename(i), aPunctuationToBeSaid);
+		break;
+	      }
+/* 		{ */
+/* 		  static char buf[200]; */
+/* 		sprintf(buf,"ogg123 %s\n", getOggFilename(i)); */
+/* 		system(buf); */
+/* 		} */
 	  }
     }
     if (aNumberOfNotYetTranslatedSentences)

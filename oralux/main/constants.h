@@ -58,17 +58,16 @@ enum phpStatus {
 
 enum language {
   // --> 
-  // Attention: the four following values index TheMessages
+  // Attention: the five following values index TheMessages
   English, /* American English */
-  Brazilian,
   French,
   German,
   Spanish,
+  Brazilian,
   // <--
   Russian, 
-  MenuLanguageMax, //Last possible language for the menu
+  MenuLanguageMax=Russian, //Last possible language for the menu
 
-  BrazilianPortuguese=MenuLanguageMax,
   British,
   CanadianFrench,
   Finnish,

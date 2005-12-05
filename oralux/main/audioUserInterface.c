@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // audiouserinterface.c
-// $Id: audioUserInterface.c,v 1.16 2005/12/05 00:52:47 gcasse Exp $
+// $Id: audioUserInterface.c,v 1.17 2005/12/05 23:32:56 gcasse Exp $
 // $Author: gcasse $
 // Description: Managing and playing the pre-recorded messages.
-// $Date: 2005/12/05 00:52:47 $ |
-// $Revision: 1.16 $ |
+// $Date: 2005/12/05 23:32:56 $ |
+// $Revision: 1.17 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 // September 2003: 
 // * German translations by Guenther Harrasser.
@@ -44,10 +44,10 @@ static enum language TheCurrentLanguage; /* menu language (so a speech synthesiz
 
 static char* TheLangDirectory[]={
   "en", //English
-  "br", //Brazilian Portuguese
   "fr", //French
   "de", //German
   "es", //Spanish
+  "br", //Brazilian Portuguese
   "ru", //Russian
 };
 static int TheSoundIsEnable=1;
@@ -82,6 +82,12 @@ char * TheMessages[][5]={
    "Belgische",
    "Belga",
    "Belga",
+  },
+  {"Brazilian Portuguese",
+   "Portugais brésilien",
+   NULL,
+   NULL,
+   "Português Brasileiro",
   },
   {"British",
    "Britannique",
@@ -227,7 +233,7 @@ char * TheMessages[][5]={
    "Problème avec le fichier PHP status",
    "Probleme mit der Datei PHP Status",
    "Problema con el fichero PHP status",
-   "Problema com o status do arquivo file PHP",
+   "Problema com o status do arquivo file P H P",
   },
   {"The DECtalk package can't be found",
    "Le fichier DECtalk est introuvable",
@@ -257,13 +263,13 @@ char * TheMessages[][5]={
    "Le répertoire software - dtk est introuvable",
    "Das software-dtk Verzeichnis wird nicht gefunden",
    "El directorio software-dtk no se encuentra",
-   "O diretório software-dtk não foi encontrado",
+   "O diretório software-d t k não foi encontrado",
   },
   {"The dtk directory is not found",
    "Le répertoire dtk est introuvable",
    "Das dtk Verzeichnis wird nicht gefunden",
    "El directorio dtk no se encuentra",
-   "O diretório dtk não foi encontrado",
+   "O diretório d t k não foi encontrado",
   },
   {"Please enter your serial number, and press Return",
    "Entrez s'il vous plait votre numéro de série, et appuyer sur Entrée",
@@ -389,13 +395,13 @@ char * TheMessages[][5]={
    "Voulez-vous éjecter le CD ROM ?",
    "Wollen Sie der CD ROM auswerfen ?",
    "¿Quiere salga el CD ROM ?",
-   "Deseja ejetar o CD ROM?",
+   "Deseja ejetar o C D ROM?",
   },
   {"Once the CD is taken, out, press Return",
    "Une fois le CD retiré, appuyer sur Entrée",
    "Wenn die CD ausgeworfen ist, Eingabetaste drücken",
    "Una vez retirado el CD, pulsar enter",
-   "Retire o cd, feche a gaveta do CD ROM, e tecle enter",
+   "Retire o C D, feche a gaveta do C D ROM, e tecle enter",
   },
   {"Do you want this menu in German ?",
    "Voulez-vous ce menu en allemand ?",
@@ -495,7 +501,7 @@ char * TheMessages[][5]={
    "MDV",
    "MDV",
    "MDV",
-   "MDV",
+   "M D V",
   },
   {"MiniBraille",
    "MiniBraille",
@@ -519,7 +525,7 @@ char * TheMessages[][5]={
    "Vario, R B T (emulation 1)",
    "Vario, R B T (emulation 1)",
    "Vario, R B T (emulation 1)",
-   "Vario, R B T (emulation 1)",
+   "Vario, R B T (emulation um)",
   },
   {"VideoBraille",
    "Vidéo Braille",
@@ -531,7 +537,7 @@ char * TheMessages[][5]={
    "Vario, R B T (emulation 2)",
    "Vario, R B T (emulation 2)",
    "Vario, R B T (emulation 2)",
-   "Vario, R B T (emulation 2)",
+   "Vario, R B T (emulation dois)",
   },
   {"Voyager",
    "Voyageur",
@@ -581,7 +587,7 @@ char * TheMessages[][5]={
    "Suédois 2",
    "Schwedische 2",
    "Sueco 2",
-   "Suéco 2",
+   "Suéco dois",
   },
   {"Vietnamese",
    "Vietnamien",
@@ -702,7 +708,7 @@ char * TheMessages[][5]={
     "Braille 'n Spik",
     "Braille 'n Spik",
     "Braille 'n Spik",
-    "Braille 'n Spik",
+    "Braille n Spik",
   },
 
   {
@@ -710,7 +716,7 @@ char * TheMessages[][5]={
     "Ciber 232",
     "Ciber 232",
     "Ciber 232",
-    "Ciber 232",
+    "Ciber dois três dois",
   },
 
   {
@@ -718,7 +724,7 @@ char * TheMessages[][5]={
     "Ciber 232 Plus",
     "Ciber 232 Plus",
     "Ciber 232 Plus",
-    "Ciber 232 Plus",
+    "Ciber dois três dois Plus",
   },
 
   {
@@ -742,7 +748,7 @@ char * TheMessages[][5]={
     "DECtalk 3",
     "DECtalk 3",
     "DECtalk 3",
-    "DECtalk 3",
+    "DECtalk três",
   },
 
   {
@@ -758,7 +764,7 @@ char * TheMessages[][5]={
     "DoubleTalk LT",
     "DoubleTalk LT",
     "DoubleTalk LT",
-    "DoubleTalk LT",
+    "DoubleTalk L T",
   },
 
   {
@@ -766,7 +772,7 @@ char * TheMessages[][5]={
     "DoubleTalk PC",
     "DoubleTalk PC",
     "DoubleTalk PC",
-    "DoubleTalk PC",
+    "DoubleTalk P C",
   },
 
   {
@@ -782,7 +788,7 @@ char * TheMessages[][5]={
     "PC Hablado notebook",
     "PC Hablado notebook",
     "PC Hablado notebook",
-    "PC Hablado notebook",
+    "P C Hablado notebook",
   },
 
   {
@@ -790,7 +796,7 @@ char * TheMessages[][5]={
     "Type 'n Spik",
     "Type 'n Spik",
     "Type 'n Spik",
-    "Type 'n Spik",
+    "Type n Spik",
   },
 
   {"Do you want to select an external voice synthesizer ?",
@@ -869,14 +875,14 @@ char * TheMessages[][5]={
    "Voulez-vous redémarrez votre PC ?",
    "Wollen Sie den Computer neu starten?",
    "¿Quieres reiniciar tu PC?",
-   "Deseja reiniciar o PC?",
+   "Deseja reiniciar o P C?",
   },
 
   {"Do you want to shutdown your PC?",
    "Voulez-vous arrêtez votre PC ?",
    "Wollen Sie den Computer herunterfahren?",
    "¿Quieres apagar tu PC?",
-   "Deseja desligar o PC?",
+   "Deseja desligar o P C?",
   },
 
   {"Do you want MultiSpeech (English and Russian) ?",
@@ -900,11 +906,11 @@ char * TheMessages[][5]={
    "Deseja este menu em Russo?",
   },
 
-  {"0.6 beta", // "[:pu all] 0.6 beta",
-   "0.6 beta",
-   "0.6 beta",
-   "0.6 beta",
-   "0.6 beta",
+  {"zero point seven", // "[:pu all] 0.6 beta", 
+   "zéro point sept",
+   "0.7",
+   "0.7",
+   "zero punto sete",
   },
 
   {"Do you want to change the keyboard features?",
@@ -960,7 +966,7 @@ char * TheMessages[][5]={
    "Installer un MODEM A D S L  U S B",
    "Ein ADSL-Modem mit USB-Schnittstelle einrichten.",
    "Instalar un Modem A D S L  U S B",
-   "Instala um modem ADSL (USB)",
+   "Instala um modem A D S L (U S B)",
   },
 
   {"Set up e-mail",
@@ -988,7 +994,7 @@ char * TheMessages[][5]={
    "Le répertoire IBMECI est introuvable",
    "Das IBMECI Verzeichnis wird nicht gefunden",
    "El directorio IBMECI no se encuentra",
-   "O diretório IBMECI não foi encontrado!",
+   "O diretório I B M E C I não foi encontrado!",
   },
 
   {"Please enter your password, and press Return",
@@ -1044,7 +1050,7 @@ char * TheMessages[][5]={
    "Albatross",
    "Albatross",
    "Albatross",
-   "FreedomScientific",
+   "Albatross",
   },
 
   {"FreedomScientific",
@@ -1065,7 +1071,7 @@ char * TheMessages[][5]={
    "Finlandais 2",
    "Finnische 2",
    "Finlandés 2",
-   "Finlandês 2",
+   "Finlandês dois",
   },
 
   {"U S B",
@@ -1093,7 +1099,7 @@ char * TheMessages[][5]={
    "big 5",
    "big 5",
    "big 5",
-   "big 5",
+   "big cinco",
   },
 
   {"compress",
@@ -1107,21 +1113,21 @@ char * TheMessages[][5]={
    "Grade 2 US English",
    "Grade 2 US English",
    "Grade 2 US English",
-   "Grade 2 Inglês E.U.A",
+   "Grade dois Inglês E.U.A",
   },
 
   {"FR abrege",
    "Français abrégé",
    "FR abrege",
    "FR abrege",
-   "Abregev FR",
+   "Abregev F R",
   },
 
   {"FR integral",
    "Français intégral",
    "FR integral",
    "FR integral",
-   "integral FR",
+   "integral F R",
   },
 
   {"The contraction braille table is supposed to be",
@@ -1170,15 +1176,9 @@ char * TheMessages[][5]={
    "Voulez-vous ce menu en portugais brésilien ?",
    NULL,
    NULL,
-   NULL,
+   "Deseja este menu em Português Brasileiro?",
   },
 
-  {"Brazilian Portuguese",
-   "Portugais brésilien",
-   NULL,
-   NULL,
-   "Português Brasileiro",
-  },
 };
 
 /* > */

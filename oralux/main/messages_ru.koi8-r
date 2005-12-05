@@ -8,6 +8,10 @@ struct t_translation TheRussianMessages[]=
    "Бельгийский",
   },
 
+  {"Brazilian Portuguese",
+   NULL,
+  },
+
   {"British",
    "Британский",
   },
@@ -664,10 +668,6 @@ struct t_translation TheRussianMessages[]=
   },
 
   {"Do you want this menu in Brazilian Portuguese ?",
-   NULL,
-  },
-
-  {"Brazilian Portuguese",
    NULL,
   },
 
