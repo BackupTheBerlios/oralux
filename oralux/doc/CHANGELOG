@@ -1,8 +1,8 @@
 s###
 
 ###
-Release 0.6 beta
-Date: xx Month 2004
+Release 0.7 a
+Date: xx Month 2005
 
 * Overview
 * Major updates
@@ -22,6 +22,24 @@ Date: xx Month 2004
 / the F2/F3 cheatcodes pages are updated
 / Calendar in Spanish has been updated by Miguel Paolino. 
 / Calendar in German has been translated by Peter Piechutzky
+
+* Contributors
+Gianfranco Giudice : German translation of the 'Emacs' document.
+Gregory N. Tsygankov : Russian translation of the Yasr document.
+Igor Svarc : rereading of the English messages.
+Ivan Vernichenko: messages translation in Russian.
+Jorge Redondo Justo: FAQ and messages translation in Spanish.
+Laurent Cadet de Fontenay: English rewriting of the home page and the FAQ.
+Miguel Paolino: Spanish translation of the 'Emacs' and 'Calendar' document.
+Nigel Stoppard: English rewriting of the 'Emacs' document.
+Osvaldo La Rosa : FAQ translation in Dutch.
+Peter Piechutzky : German translation of the "Calendar" document.
+Roman Zalessky: messages translation in Russian.
+Rusmanto Maryanto: HOWTO Using Oralux in Indonesian (Bahasa Indonesia),.
+Sergei Studennikov: messages translation in Russian.
+Sergei V. Fleytin: Russian translation of the Oralux introduction, configuration of Emacs in Russian.
+Thomas Crépin: German messages improvements.
+
 
 * Bug fixes
 + Clearly say that RETURN must be pressed once the CD is ejected.

@@ -1,14 +1,15 @@
 // ----------------------------------------------------------------------------
 // audiouserinterface.c
-// $Id: audioUserInterface.c,v 1.15 2005/12/05 00:40:55 gcasse Exp $
+// $Id: audioUserInterface.c,v 1.16 2005/12/05 00:52:47 gcasse Exp $
 // $Author: gcasse $
 // Description: Managing and playing the pre-recorded messages.
-// $Date: 2005/12/05 00:40:55 $ |
-// $Revision: 1.15 $ |
+// $Date: 2005/12/05 00:52:47 $ |
+// $Revision: 1.16 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 // September 2003: 
-// German translations by Guenther Harrasser.
-// Spanish translations by Jesús Angulo and Fernando Pinto da Silva.
+// * German translations by Guenther Harrasser.
+// * Spanish translations by Jesús Angulo and Fernando Pinto da Silva.
+// * 2004-2005: see Changelog
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
