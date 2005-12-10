@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # multispeech.sh
-# $Id: multispeech.sh,v 1.7 2005/12/10 14:37:45 gcasse Exp $
+# $Id: multispeech.sh,v 1.8 2005/12/10 22:35:07 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing Multispeech.
-# $Date: 2005/12/10 14:37:45 $ |
-# $Revision: 1.7 $ |
+# $Date: 2005/12/10 22:35:07 $ |
+# $Revision: 1.8 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -25,17 +25,12 @@
 ####
 source ../oralux.conf
 
-DIR=$INSTALL_PACKAGES/multispeech
-
 RULEX_RELEASE=0.9.22
 MULTISPEECH_RELEASE=1.2.2-oralux
 ARCH_RULEX=$ARCH/rulex-$RULEX_RELEASE.tar.gz 
-ARCH_MULTISPEECH_BIN=$ARCH/multispeech-1.2-i586-1.tgz
-ARCH_MULTISPEECH_SRC=$DIR/multispeech-$MULTISPEECH_RELEASE.tar.bz2
+ARCH_MULTISPEECH_SRC=$ARCH/multispeech-$MULTISPEECH_RELEASE.tar.bz2
 ARCH_RU_TTS=$ARCH/ru_tts-0.4-i586-1.tgz
 ARCH_LEXICON=$ARCH/freespeech-10.0-alt2.i586.rpm
-
-
 
 echo "Previously compiled with g++-3.2"
 
@@ -43,66 +38,82 @@ echo "Previously compiled with g++-3.2"
 # Installing the package in the current tree
 InstallPackage()
 {
+    apt-get install libgdbm-dev
+
+    MBROLA="/usr/local/share/mbrola"
+    install -d $MBROLA
+
+    BIN="/usr/local/bin"
+    install -d $BIN
+
+    export TMP=$tmp
+#    install -d $TMP
+
 ### Rulex
-    cd /tmp
+    cd $TMP
     rm -rf rulex*
     tar -zxvf $ARCH_RULEX
-    cd rulex*
+    cd /tmp/rulex*
     make lexicon
     mkdir -p /usr/local/lib/ru_tts
     make install
 
 ### ru_tts
-    cd /tmp
+    cd $TMP
     mkdir ru_tts
      cd ru_tts
     tar -zxvf $ARCH_RU_TTS
-    cp usr/local/bin/* /usr/local/bin
-
-    mkdir -p /usr/local/share/mbrola
+    install -m 555 usr/local/bin/* $BIN
 
 ### Lexicon for English synthesis
-    cd /tmp
+    cd $TMP
     rm -rf freespeech*
     alien -g $ARCH_LEXICON
-    cp freespeech-10.0.orig/usr/share/freespeech/lexicon.dir /usr/local/share/mbrola/lexicon.en.dir
-    cp freespeech-10.0.orig/usr/share/freespeech/lexicon.dir /usr/local/share/mbrola/lexicon.en.pag
-    mkdir -p /usr/share/oralux/doc/license/freespeech
-    cp freespeech-10.0.orig/usr/share/doc/freespeech-10.0/Copying /usr/share/oralux/doc/license/freespeech
+    SRC="freespeech-10.0.orig/usr/share/freespeech"
+    install -m 444 $SRC/lexicon.dir $MBROLA/lexicon.en.dir
+    install -m 444 $SRC/lexicon.dir $MBROLA/lexicon.en.pag
+
+    SRC="freespeech-10.0.orig/usr/share/doc/freespeech-10.0"
+    DOC="$BUILD/usr/local/share/doc/freespeech"
+    install -d $DOC
+    install -m 444 $SRC/Copying $DOC
 
 ### Multispeech
-    cd /tmp
+    cd $TMP
     rm -rf multispeech-*
     tar -jxvf $ARCH_MULTISPEECH_SRC 
     cd multispeech-*
-    export TMP=`pwd`
+    export SRC=`pwd`
 
-    apt-get install libgdbm-dev
-
-### Compiling Multispeech
     make
-    cd $TMP/lisp
+    cd $SRC/lisp
     make
 
 ### Installing the elisp files
-    cp -f $TMP/lisp/*.el* /usr/share/emacs/site-lisp/emacspeak/lisp
+    install -m 444 $SRC/lisp/*.el* /usr/share/emacs/site-lisp/emacspeak/lisp
 
 ### Installing the remaining files
-    mkdir -p /usr/local/lib/multispeech
-    cd /usr/local/lib/multispeech
-    cp -pR $TMP/letters .
-    cp -pR $TMP/scripts/players .
-    cp -pR $TMP/scripts/tts .
-    cp $TMP/binaries/speech_server .
+    LIB="/usr/local/lib/multispeech"
 
-    cd /usr/local/bin
-    cp $TMP/binaries/freephone .
-    cp $TMP/binaries/rawplay .
-    cp $TMP/binaries/tones .
+    install -d $LIB/players
+    install -d $LIB/tts
+
+    for i in "br de en es fr ru"; do
+	install -d $LIB/letters/$i
+	install -m 444 $SRC/letters/$i/* $LIB/letters/$i
+	install -m 555 $SRC/scripts/players/$i $LIB/players
+	install -m 555 $SRC/scripts/tts/$i $LIB/tts
+    done
+    
+    install -m 555 $SRC/binaries/speech_server $LIB
+
+    install -m 555 $SRC/binaries/freephone $BIN
+    install -m 555 $SRC/binaries/rawplay $BIN
+    install -m 555 $SRC/binaries/tones $BIN
 
 # Clear temporary files
-    rm -rf $TMP/multispeech-$MULTISPEECH_RELEASE
-    rm -rf $TMP/rulex-$RULEX_RELEASE
+    rm -rf $SRC/multispeech-$MULTISPEECH_RELEASE
+    rm -rf $SRC/rulex-$RULEX_RELEASE
 
     cd /usr/share/emacs/site-lisp/emacspeak/servers
     echo multispeech >> .servers
@@ -114,64 +125,79 @@ InstallPackage()
 # Adding the package to the new Oralux tree
 Copy2Oralux()
 {
+    chroot $BUILD apt-get install libgdbm-dev
+
+    export MBROLA="$BUILD/usr/local/share/mbrola"
+    install -d $MBROLA
+
+    export BIN="$BUILD/usr/local/bin"
+    install -d $BIN
+
+    export TMP=$BUILD/tmp
+    install -d $TMP
+
 ### Rulex
-    cd $BUILD/tmp
+    cd $TMP
     rm -rf rulex*
     tar -zxvf $ARCH_RULEX
-    
     chroot $BUILD bash -c "cd /tmp/rulex*; make lexicon; mkdir -p /usr/local/lib/ru_tts; make install"
 
 ### ru_tts
-    cd $BUILD/tmp
+    cd $TMP
     mkdir ru_tts
     cd ru_tts
     tar -zxvf $ARCH_RU_TTS
-    cp usr/local/bin/* $BUILD/usr/local/bin
-
-    mkdir -p $BUILD/usr/local/share/mbrola
+    install -m 555 usr/local/bin/* $BIN
 
 ### Lexicon for English synthesis
-    cd $BUILD/tmp
+    cd $TMP
     rm -rf freespeech*
     alien -g $ARCH_LEXICON
-    cp freespeech-10.0.orig/usr/share/freespeech/lexicon.dir $BUILD/usr/local/share/mbrola/lexicon.en.dir
-    cp freespeech-10.0.orig/usr/share/freespeech/lexicon.dir $BUILD/usr/local/share/mbrola/lexicon.en.pag
-    mkdir -p $BUILD/usr/share/oralux/doc/license/freespeech
-    cp freespeech-10.0.orig/usr/share/doc/freespeech-10.0/Copying $BUILD/usr/share/oralux/doc/license/freespeech
+    SRC="freespeech-10.0.orig/usr/share/freespeech"
+    install -m 444 $SRC/lexicon.dir $MBROLA/lexicon.en.dir
+    install -m 444 $SRC/lexicon.dir $MBROLA/lexicon.en.pag
+
+    SRC="freespeech-10.0.orig/usr/share/doc/freespeech-10.0"
+    DOC="$BUILD/usr/local/share/doc/freespeech"
+    install -d $DOC
+    install -m 444 $SRC/Copying $DOC
 
 ### Multispeech
-    cd $BUILD/tmp
+    cd $TMP
     rm -rf multispeech-*
     tar -jxvf $ARCH_MULTISPEECH_SRC 
     cd multispeech-*
-    export TMP=`pwd`
+    export SRC=`pwd`
 
-    chroot $BUILD apt-get install libgdbm-dev
-
-### Compiling Multispeech
     make
-    cd $TMP/lisp
+    cd $SRC/lisp
     make
 
 ### Installing the elisp files
-    cp -f $TMP/lisp/Russian-spelling.el $BUILD/usr/share/emacs/site-lisp/emacspeak/lisp
+    install -m 444 $SRC/lisp/*.el* $BUILD/usr/share/emacs/site-lisp/emacspeak/lisp
 
 ### Installing the remaining files
-    mkdir -p $BUILD/usr/local/lib/multispeech
-    cd $BUILD/usr/local/lib/multispeech
-    cp -pR $TMP/letters .
-    cp -pR $TMP/scripts/players .
-    cp -pR $TMP/scripts/tts .
-    cp $TMP/binaries/speech_server .
+    LIB="$BUILD/usr/local/lib/multispeech"
 
-    cd $BUILD/usr/local/bin
-    cp $TMP/binaries/freephone .
-    cp $TMP/binaries/rawplay .
-    cp $TMP/binaries/tones .
+    install -d $LIB/players
+    install -d $LIB/tts
+
+    for i in "br de en es fr ru"; do
+	install -d $LIB/letters/$i
+	install -m 444 $SRC/letters/$i/* $LIB/letters/$i
+	install -m 555 $SRC/scripts/players/$i $LIB/players
+	install -m 555 $SRC/scripts/tts/$i $LIB/tts
+    done
+
+    install -m 555 $SRC/binaries/speech_server $LIB
+
+    install -m 555 $SRC/binaries/freephone $BIN
+    install -m 555 $SRC/binaries/rawplay $BIN
+    install -m 555 $SRC/binaries/tones $BIN
 
 # Clear temporary files
-    rm -rf $TMP/multispeech-$MULTISPEECH_RELEASE
-    rm -rf $TMP/rulex-$RULEX_RELEASE
+    rm -rf $SRC/multispeech-$MULTISPEECH_RELEASE
+    rm -rf $SRC/rulex-$RULEX_RELEASE
 
     chroot $BUILD bash -c "cd /usr/share/emacs/site-lisp/emacspeak/servers; echo multispeech >> .servers; rm -f multispeech; ln -s /usr/local/lib/multispeech/speech_server multispeech"
 }

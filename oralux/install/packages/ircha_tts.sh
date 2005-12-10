@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # ircha_tts.sh
-# $Id: ircha_tts.sh,v 1.1 2005/12/10 17:04:05 gcasse Exp $
+# $Id: ircha_tts.sh,v 1.2 2005/12/10 22:35:07 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing ircha_tts, Spanish phonetizer
-# $Date: 2005/12/10 17:04:05 $ |
-# $Revision: 1.1 $ |
+# $Date: 2005/12/10 22:35:07 $ |
+# $Revision: 1.2 $ |
 # Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -29,6 +29,7 @@ source ../oralux.conf
 # Installing the package in the current tree
 InstallPackage()
 {
+    install -d $BUILD/usr/local/bin
     install -m 555 ircha_tts/ircha_tts.pl $BUILD/usr/local/bin
 }
 

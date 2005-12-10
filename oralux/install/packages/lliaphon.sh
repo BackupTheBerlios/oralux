@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # lliaphon.sh
-# $Id: lliaphon.sh,v 1.1 2005/12/10 14:37:45 gcasse Exp $
+# $Id: lliaphon.sh,v 1.2 2005/12/10 22:35:07 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing LLiaPhon
-# $Date: 2005/12/10 14:37:45 $ |
-# $Revision: 1.1 $ |
+# $Date: 2005/12/10 22:35:07 $ |
+# $Revision: 1.2 $ |
 # Copyright (C) 2004, 2005 Nath (nath.ml at free.fr)
 #
 # This program is free software; you can redistribute it and/or
@@ -53,7 +53,7 @@ wget $URL
 tar xvzf lliaphon-${REL}.tar.gz
 chroot $BUILD bash -c "cd /tmp/lliaphon-$REL;./configure --enable-lex80k;make;make install"
 
-#echo "export LLIAPHON=/usr/local/lliaphon" >>/etc/profile
+##echo "export LLIAPHON=/usr/local/lliaphon" >>/etc/profile
 rm -rf $BUILD/tmp/lliaphon*
 }
 

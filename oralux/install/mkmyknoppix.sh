@@ -46,7 +46,10 @@ add_soft() {
     next_script mbrola.sh "mbrola"
 
 #    next_script efm.sh "efm"
-#    next_script lliaphonParlemax.sh "lliaphonParlemax"
+    next_script ircha_tts.sh "ircha_tts"
+    next_script lliaphon.sh "lliaphon"
+    next_script ttpport.sh "ttpport"
+    next_script txt2pho.sh "txt2pho"
     next_script multispeech.sh "multispeech"
 
     next_script links.sh "links"

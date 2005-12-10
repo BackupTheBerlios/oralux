@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # txt2pho.sh
-# $Id: txt2pho.sh,v 1.1 2005/12/10 16:57:49 gcasse Exp $
+# $Id: txt2pho.sh,v 1.2 2005/12/10 22:35:07 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing txt2pho, Spanish phonetizer
-# $Date: 2005/12/10 16:57:49 $ |
-# $Revision: 1.1 $ |
+# $Date: 2005/12/10 22:35:07 $ |
+# $Revision: 1.2 $ |
 # Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -69,24 +69,31 @@ substituteFile()
 # Installing the package in the current tree
 InstallPackage()
 {
-    BIN="$BUILD/usr/local/bin"
-    DATA="$BUILD/usr/local/share/txt2pho"
-    DOC="$BUILD/usr/local/share/doc/txt2pho"
-    ETC="$BUILD/etc"
-    INSTALL="$INSTALL_PACKAGES/txt2pho"
     TMP="$BUILD/tmp"
+    install -d $TMP
 
     cd $TMP
     wget $URL
     unzip txt2pho.zip
     cd txt2pho
 
+    BIN="$BUILD/usr/local/bin"
+    install -d $BIN
     install -m 555 txt2pho $BIN
+
+    DATA="$BUILD/usr/local/share/txt2pho"
     install -d $DATA
     install -m 444 data/* $DATA
+
+    DOC="$BUILD/usr/local/share/doc/txt2pho"
     install -d $DOC
     install -m 444 README $DOC
 
+    ETC="$BUILD/etc"
+    install -d $ETC
+
+    INSTALL="$INSTALL_PACKAGES/txt2pho"
+    install -d $INSTALL
     if [ -e $ETC/txt2pho ]; then
 	cp $ETC/txt2pho $TMP/txt2phorc
 	substituteFile txt2phorc $TMP

@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # ttpport.sh
-# $Id: ttpport.sh,v 1.1 2005/12/10 17:04:05 gcasse Exp $
+# $Id: ttpport.sh,v 1.2 2005/12/10 22:35:07 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing ttpport, Brazilian portuguese phonetizer
-# $Date: 2005/12/10 17:04:05 $ |
-# $Revision: 1.1 $ |
+# $Date: 2005/12/10 22:35:07 $ |
+# $Revision: 1.2 $ |
 # Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -29,9 +29,19 @@ source ../oralux.conf
 # Installing the package in the current tree
 InstallPackage()
 {
-    install -m 555 ttpport/ttport $BUILD/usr/local/bin
-    install -d $BUILD/usr/local/share/mbrola/ttpport
-    install -m 444 ttpport/* $BUILD/usr/local/share/mbrola/ttpport
+    cd ttpport
+
+    BIN="$BUILD/usr/local/bin"
+    install -d $BIN
+    install -m 555 ttpport $BIN
+
+    DATA="$BUILD/usr/local/share/mbrola/ttpport"
+    install -d $DATA
+    install -m 444 dicton port_rules portuguese.dat $DATA
+
+    DOC="$BUILD/usr/local/share/doc/ttpport"
+    install -d $DOC
+    install -m 444 readme.txt $DOC
 }
 
 ####
