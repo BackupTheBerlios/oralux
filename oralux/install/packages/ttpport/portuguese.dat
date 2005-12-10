@@ -1,0 +1,102 @@
+{
+	# Values of debug of this config file
+	debug=>{
+		trans_word => 1, 	# func transcribe word
+		treat => 1, 		#
+		prosody => 1, 		# see prosody being added
+		change_pho => 1, 	# change sampa->phonemes in database
+		massage => 1, 		# massage text
+		conv => 1, 		# 
+		match => 1,		# show sylables being matched
+		transcribe => 1, 	#
+		rules => 0, 		# show rules that are read
+		plain => 1, 		# show plaintext
+		add_tags => 1, 		# show tags
+		phrases => 1,		# 
+		},
+	
+	# Default style of this config file
+defstyle=>'port1',
+	
+'port1'=>{	    
+transcribe_word=>[
+	    
+# and now a rather sad section (things with context)
+#        $t =~ s/([aeiou] )s/$1 s2/; # (vowel s) -> (vowel s2)
+#        $t =~ s/^r/R/; 
+# r in the beginning is transformed in R eg: (r u a) -> (R u a)
+#        $t =~ s/^e/E/;
+#        $t =~ s/(\.|n|l|s) r/$1 R/;     # nao percebi
+#        $t =~ s/r ([^aeiou])/r2 $1/; 		# change (a r) -> (a r2)
+#        $t =~ s/$a/6/;		# changes (a) in the end of a word in (6)
+#        $t =~ s/i a /j a /;     # caused by deficiencias (ja ja)
+#        $t =~ s/i a$/j a/;
+#        $t =~ s/L[ ]?$/l/;      # for catalan names
+#	['([aeiouE] )s','$1 s2',''], # (vowel s) -> (vowel s2)
+# GC: for br1
+	['t S e','S e', ''], # tcheco: t-x unkown by br1
+	['f f','f', ''], # f-f unkown
+	['t t','t', ''], # t-t unkown
+	['f t','f , t', ''], # software: f-t unkown
+	['k t','k , t', ''], # DECtalk: k-t
+	['g n','g , n', ''], # ignorar: g-n unkown
+	['t n','t , n', ''], # Vietnamita: t-n unkown
+	['p h','f', ''], # dolphin: p-h unkown
+	['k p','k , p', ''], # 
+	['k s','c s', ''], # Emacs: k-s2 unkown
+	['p t','p , t', ''], # optar: p-t unkown
+#	['g s','g , s', ''], # big cinco: g-s unkown
+#	['k m','k , m', ''], # 
+#	['k s','k , s', ''], # accent: k-s unkown
+#	['n m','n , m', ''], # n-m unkown
+#	['g t','g , t', ''], # log text: g-t unkown
+#	['k k','k', ''], # Emacspeak com: k-k unkown
+#
+	['^r','R', ''], # (r u a) -> (R u a)
+	['(\.|n|l|s) r','$1 R', ''], # 
+	['r ([^aeiouE])','r2 $1', ''], # (r consonant) -> (r2 consonant) 
+	['(r )$','r2',''], # (r) in the end -> (r2)
+	['(l )$','w',''], # (l) in the end -> (w)
+	['S ([^aeiouE])','s2 $1',''], # texto -> testo
+	['s ([^aeiouE])','s2 $1',''], # mesmo -> mes2mo
+	['([eE]) n ([^aeiouE])','e~ $2',''], # quente -> k em te
+	['([a6]) n ([^aeiouE])','am $2',''], # cantar -> k am ta re
+	['([o(oo)]) n ([^aeiouE])','o~ $2',''], # contar -> k om ta re
+	['([iI]) n ([^aeiouE])','i~ $2',''], # indice -> in di ce
+	['([uU]) n ([^aeiouE])','u~ $2',''], #		
+	['([aeiouE]) s ([aeiouE])','$1 z $2',''], #
+	['c ([eiEI])','s $1',''], #			
+	['(l) ([^aeiouíóúáE])','w $2',''],		
+	['(s )$','s2',''],
+	['(z )$','z2',''],
+	['([eE]) m ([^aeiouE])','e~ $2',''], # quente -> k em te
+	['([a6]) m ([^aeiouE])','am $2',''], # cantar -> k am ta re
+	['([o(oo)]) m ([^aeiouE])','o~ $2',''], # contar -> k om ta re
+	['([iI]) m ([^aeiouE])','i~ $2',''], # indice -> in di ce
+	['([uU]) m ([^aeiouE])','u~ $2',''], 
+	['(o m )$','o~',''], # som -> s om
+	['(a m )$','am',''], # chamam -> cham am
+	['(e m )$','e~',''], # sentem -> sen tem
+	['(i m )$','i~',''], # assim -> ass im
+	['(u m )$','u~',''], # cab um -> um
+	['(q u a)','k w a$2',''], # qualidade
+	    ],
+	    another_func=>[
+	    				['(\w+|\s+|[^.].)+?(\!|\?|\.\.\.|\.)[\s]*', '', ], # finds a period with spaces and nelines at the end
+	    ],
+	},
+	
+	'port2'=>{	    
+	    transcribe_word=>[
+					['([^\.])\.\.([^\.])','$1.$2',''], #.. por . ponto
+					['[ \t\f][ \t\f]+',' ', ''], # dois ou mias espaços por um espaço
+					['[ \t\f]+(\!|\?|\.\.\.|\.)','$1', ''], # 1ou+espaços + ponto por ponto
+					['(\!|\?|\.\.\.|\.)(\w)','$1 $2', ''], # letra.letra por letra. letra
+					['\s(\!|\?|\.\.\.|\.)[\s]?','',''], # deletes blank lines without text
+	    ],
+	    another_func=>[
+	    					['(\w+|\s+|[^.].)+?(\!|\?|\.\.\.|\.)[\s]*', '', ], # finds a period with spaces and nelines at the end
+	    				],
+	},
+	
+}

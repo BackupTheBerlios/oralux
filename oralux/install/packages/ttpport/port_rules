@@ -1,0 +1,121 @@
+# 2005 Gilles Casse <gcasse@oralux.org>: w added
+# Copyright 2000, Luis Alves e Sergio Reis
+#
+# Everything that follows is context free
+# things that are context dependent are elsewhere
+#
+# see http://www.phon.ucl.ac.uk/home/sampa/portug.htm
+#
+# Vowels and diphthongs
+
+w	w              work           "work          
+
+i	i              vinte           "vint@          
+#                       lápis           "lapiS
+
+e       e               fazer           f6"zer
+# E       E              belo            "bElu
+
+a       a               falo            "falu
+# 6       6               cama            "k6m6
+#                       madeira         m6"d6jr6
+
+o       o               lobo            "lobu
+
+u       u               jus             ZuS             
+#                       futuro          fu"turu
+
+#    êm            têm             t6~j~   etc.: e~j~, o~j~, u~j~
+# e~j~    e~j~		                        etc.: e~j~, o~j~, u~j~
+# o~j~	o~j~		                        etc.: e~j~, o~j~, u~j~
+# u~j~	u~j~		                        etc.: e~j~, o~j~, u~j~
+        
+# acentos:
+
+a:      'a
+ee      'e
+i:      'i
+oo:     'o
+u:      'u
+
+# qu representado como k_w1
+
+k_w1_e_n quên 
+k_w1_a	  qua
+
+# Semiconsonantalisation
+#plosives 
+p       p               pai             paj
+b       b               barco           "barku
+t       t               tenho           "teJu
+d       d               doce            "dos@
+k       c               com             ko~
+g       g               grande          "gr6nd@
+k	q		quem
+
+
+#fricatives 
+f       f               falo            "falu
+v       v               verde           "verd@  
+s       s               céu             sEw
+s2	ss
+z       z               casa            "kaz6
+S       ch              chapéu          S6"pEw
+S	sh		
+S       x               texto
+Z       j               jóia            "ZOj6
+
+#nasals 
+m       m               mar             mar
+n       n               nada            "nad6
+J       nh              vinho           "viJu
+
+#liquids 
+l       l               lanche          "l6nS@
+L       lh               trabalho        tr6"baLu
+R       rr              carro             karru
+r       r               caro            "karu
+
+# portuguese specials
+Z_i	gi
+Z_e	ge
+s2	ç
+c_e	ce
+c_i	ci
+g_u	gu
+@:_w	ão
+@:	ã
+o_e~	õe
+
+a_w	au		mau		maw
+k	qu		quiser
+k	k		katia
+k	ck		emacks
+i	y		yoda
+,	,
+e:	e:
+h	h
+# 
+# Look at some interesting words like
+# chalet, gag,jazz,shock
+# 
+# what to do about double consonants (Frapp)
+# 
+# how importand is knowing syllable/word boundaries to assimilation
+# assimilations (bdg ptk) 
+# 
+# semiconsonants....
+# 
+# the intra and extra word phonemena need to be treated separately I reckon.
+# 
+# I think accents should be specifically included.
+.       \-       eg sub-rayar
+|       \|      word boundary
+
+
+
+
+
+
+
+

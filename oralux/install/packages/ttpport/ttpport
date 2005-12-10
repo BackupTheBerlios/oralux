@@ -1,0 +1,1431 @@
+#!/usr/bin/perl -ws
+#use strict;
+use locale;
+
+# 2005 - Gilles Casse <gcasse@oralux.org> char_corrs updated, paths changed.
+# 2003 - Alterado por Cássio Santos 
+# Copyright 2000 Eduardo Reis & Luis Alves
+# Copyright 1997 Alistair Conkie
+# See the readme.txt
+
+# Usage: a program do text to speech, in a most basic form.
+
+
+# Change the paths here !!!
+my $mbrola_cmd = " ";
+
+# Este hash armazena o código referente à silabas especiais:
+
+my %char_corrs = (
+	"\301", "'a",
+        "\341", "'a",
+	"\311", "'e",	
+        "\351", "'e",
+	"\315", "'i",
+        "\355", "'i",
+        "\363", "'o",
+        "\323", "'o",
+        "\372", "'u",
+	"\332", "'u",
+#TODO        "\374", '"u',
+# in comment otherwise "cinqüenta" is not said
+
+        "\374", 'u',
+        "\361", "~n",
+        "\341", "a",        # a acute accent
+        "\343", "a",        # a tilde
+        "\347", "c",        # c cedilla
+        "\302", "a",        # A Circumflex
+        "\342", "a",        # a Circumflex
+        "\311", "e",        # E Acute accent
+        "\312", "e",        # E Circumflex
+        "\352", "e",        # e Circumflex
+        "\316", "i",        # I Circumflex
+        "\355", "o",        # o acute accent
+        "\356", "i",        # i Circumflex
+        "\324", "o",        # O Circumflex
+        "\364", "o",        # o Circumflex
+        "\365", "o",        # o tilde
+        "\333", "u",        # U Circumflex
+        "\372", "u",        # u acute accent
+        "\373", "u",        # u Circumflex
+
+        ##### THERE ARE SEVERAL MISSING
+        ## inverted ? 277
+        ## inverted ! 241
+);
+
+# I want to be able to note NO sentence stress here too.
+# Este hash diz se a palavra possui variação no sentence stress
+
+my %fw = (        
+        'vos', 'fw',
+        'dele', 'fw',
+        'ele', 'fw',
+        'em', 'fw',
+        'quem', 'fw',
+        'com', 'fw',
+        'qual', 'fw',
+        'quando', 'fw',
+        'as', 'fw',
+        'os', 'fw',        
+        'mais', 'fw',        
+        'nos', 'fw',               
+        'pois', 'fw',
+        'sim', 'fw',
+        'seus', 'fw',
+        'um', 'fw',
+	'uma', 'fw',
+        
+        'até', 'no_ss',        
+        'quase', 'no_ss',
+        'desde', 'no_ss',
+        'donde', 'no_ss',
+        'frente', 'no_ss',
+        'como', 'no_ss',
+        'contra', 'no_ss',
+        'quando', 'no_ss',
+        'entretanto', 'no_ss',
+        'porque', 'no_ss',
+        'posto', 'no_ss',
+        'que', 'no_ss',
+        'cerca', 'no_ss',
+        'Sino', 'no_ss',
+        'sobre', 'no_ss',
+
+);
+
+# Este hash determina qual silaba vai ser enviada para o sampa
+
+my %tosampa =
+    (
+#plosives
+     'p','p',
+     'b','b',
+     't','t',
+     'd','d',
+     'k','k',
+     'g','g',
+     
+#fricatives
+     'f','f',
+     'v','v',
+     's','s',
+     'z','z',
+     'S','x',
+     'Z','j',
+     
+#nasals
+     'm','m',
+     'n','n',
+     'J','nh',
+     
+#liquids
+     'l','l',
+     'r','r',
+     'L','h',
+     'R','rr',
+     
+#vowels and diphthongs
+     'i','i',
+     'e','e',
+     'E','ee',
+     'ee','ee',
+     'oo:','oo1',
+     'a','a',
+     '6','@',
+     
+     'o','o',
+     'u','u',
+     
+     'i~','im',
+     'i~:','im',
+     'e~','em',
+     'e~:','em',
+     'o~','om',
+     'o~:','om',
+     'u~','um',
+     'u~:','um',
+     
+     
+     #estranhos
+     'w1', 'w',
+     'a:', 'a1',
+     'e:', 'e1',
+     'i:', 'i1',
+     'o:', 'o1',
+     'u:', 'u1',
+     '#', '_',  
+     '@', '@',
+     '@:','@',
+     'ee:', 'ee', #perceber      p e r2 s e b e r e
+     'ii:', 'i1', #texto         t e i x t o
+     'uu:', 'u1', #não           n am u
+     'oo:', 'oo',
+     
+#extra
+     's2','s2',
+     'am','am',
+     'am:','am',
+     'r2','r2',
+     'oo','oo',
+     'w','w',
+     'w:','w',
+     ',','_',
+     'h','h',
+     );
+
+# Este hash determina as durações de cada letra: 
+# Basic durations
+my %dur0 = (
+	    #sampa orig implemented
+	    #plosives
+	    'p', '100',
+	    'b', '100',
+	    't', '91',
+	    'd', '75',
+	    'k', '83',
+	    'g', '70',
+	    'h', '83',
+	    
+	    #fricatives               
+	    'f', '108',
+	    'v', '100',
+	    's', '100',
+	    'z', '100', # equal to s             
+	    'S', '100', #sampa -> T
+	    'Z', '100', # ??
+	    
+	    #nasals                               
+	    'm', '100',
+	    'n', '83',
+	    'J', '83', # ??
+	    
+	    #liquids
+	    'l', '83',
+	    'L', '100',
+	    'r', '100',
+	    'R', '100',   #sampa -> rr
+	    
+	    #vowels        
+	    'i', '95',
+	    'e', '95',                
+	    'E', '95', # mim
+	    'a', '95',
+	    '6', '95', # mim
+	    'o', '95',
+	    'u', '100',
+	    '@', '108',
+	    'i~', '112', # ??
+	    'e~', '112', # ??
+	    'o~', '112', # ??
+	    'u~', '112', # ??
+	    
+	    #estranhos
+	    '@:','108',
+	    'o~:', '150',
+	    'a:', '130',
+	    'e:', '130',
+	    'e~:','150',
+	    'u~:','150',
+	    'i~:','150',
+	    'i:', '130',
+	    'o:', '130',
+	    'u:', '130',
+	    'ee:', '130',
+	    'ee','130',
+	    'uu:', '130',
+	    'oo:','130',
+	    'ii:', '130',
+	    'w:','100',
+	    
+	    #extra
+	    'z2','120',
+	    's2','120',
+	    'am','112',
+	    'am:','130',
+	    'r2','120',
+	    'oo','112',
+	    'w','100',
+	    'w1','65',
+	    ',','110',
+	    );
+
+#rules for transcribe_word
+# Este hash irá determinar quais serão as saidas do programa:
+
+my %debug=(
+	   trans_word => 0, 	# 
+	   treat => 0, 		#
+	   prosody => 0, 		# see prosody being added
+	   change_pho => 0, 	# change sampa->phonemes in database
+	   massage => 0, 		# massage text
+	   conv => 0, 		# 
+	   match => 0,		# show sylables being matched
+	   transcribe => 1, 	#
+	   rules => 0, 		# show rules that are read
+	   plain => 0, 		# show plaintext
+	   add_tags => 0, 		# show tags
+	   phrases => 0,		# 
+	   );
+my ($defcfg,$defstyle) = readcfg("/usr/local/share/mbrola/ttpport/portuguese.dat");
+
+
+# Preparation - reading in the phonetization rules
+# Neste trecho o programa recebe o arquivo port_rules e monta o hash %ts com as
+# silabas e os seus correspondentes.
+
+open(RULES,"/usr/local/share/mbrola/ttpport/port_rules");
+while(<RULES>) {
+        chop;
+        if(($_ =~ /^\#/) || ($_ eq '')) {
+                next;
+        }
+        @bits = split(' ',$_);
+        if(@bits>1) {
+                $ts{$bits[1]} = $bits[0];
+        }
+}
+close(RULES);
+
+#Debug
+
+######################################################
+# FUNÇÃO transcribe_word:                            #
+# Recebe uma palavra e armazena na variável local $i # 
+# Devolve uma palavra traduzida.                     #
+######################################################
+
+sub transcribe_word {
+    local($i) = $_[0];
+    local($t);
+    local($w);
+    ($tv,$rn,$w,$t) = find_match('',$i);        	
+    
+    $t =~ s/_/ /g;
+    
+    my $conf = $defcfg->{$defstyle};
+    my $transcribe_word = $conf->{transcribe_word};
+    my $retword = $t;
+    for(@$transcribe_word){
+	my $tmp = sprintf '$retword%s', "=~ s/$_->[0]/$_->[1]/g$_->[2];\n";
+	eval($tmp);
+    }    
+    return($retword);
+}
+#########################################################
+# FUNÇÃO find_match:                                    #
+# Procura no hash  %ts o correspondente para cada letra #
+#########################################################
+
+sub find_match {
+
+    local($preword,$word) = @_;
+
+    local($key,$newpreword,$newword,$w,$t,$tv);
+    
+    if($word eq '') {       # diff from L+K
+	return((1,'','',''));
+    }
+    else {
+	foreach $key (reverse(sort(keys(%ts)))) {
+	    if($word =~/^($key)(.*)/) {     # needs to be more comp?
+		
+		$newpreword ="$preword$1";
+		$newword = $2;
+		($tv,$rn,$w,$t) = find_match($newpreword,$newword);
+		if($tv eq 1) {
+		    $w = "$key $w";
+		    $t = "$ts{$key} $t";
+		    return(($tv,$rn,$w,$t));
+		}
+	    }
+	}
+	return((0,'','',''));
+    }
+}
+my $first_time = 1;
+sub use_synth {
+}
+
+
+##############################################################
+# FUNÇÃO segmento_invalido:                                  #
+# Recebe uma palavra como entrada e verifica a existência de #
+# segmento inválido, soletrando a palavra, caso afirmativo.  #
+##############################################################
+
+sub segmento_invalido {
+    local($palavra) = $_[0];
+    @letras = split(//,$palavra);
+    $e = 0;
+    $i = 0;
+    while (($e <= $#letras) && ($letras[$e] =~ /[aeiou]/)) { 
+	$e++;
+    }
+    if (($e <= $#letras-1) &&
+	($letras[$e+1] !~ /[aeiou]/) &&
+	(($e == 0) || ($letras[$e-1] !~ /[aeiou]/))) {
+	for ($e = 0; $e <= $#letras; $e++) {
+	    $letras[$e] = identifica_letra ($letras[$e]);
+	}
+	$palavra = join(",", @letras);
+	$i = 1;
+    }
+    return($palavra);
+}
+####################################################################
+# FUNÇÃO tonica_var                                                #
+# Receve uma palavra como entrada e verifica se a tônica variável  #
+# é aberta ou fechada, eliminado alguns padrões e procurando em um #
+# dicionário de tonicas, e retorna a tônica com os tags de stress. #
+####################################################################
+
+sub tonica_var {
+    open(DIC,"</usr/local/share/mbrola/ttpport/dicton");
+    local($palavra) = $_[0];
+    local ($ton) = $_[1];
+    local ($pura) = $_[2];
+    $i = 0;
+
+    @letras = split (' ',$palavra);
+    if ($letras[$ton+1] =~ /[mn]/){ $i = 1;}
+    elsif (($letras[$ton] eq 'a') &&
+	   ($letras[$ton+1] !~ /[mnaeiou]/)){ $i = 2;}
+    elsif (($#letras-$ton >= 3) &&
+	   ($letras[$ton] eq 'o') && ($letras[$ton+1] eq 's') &&
+	   ($letras[$ton+2] =~ /[oa]/) && ($letras[$ton+3] =~ /[s]/)){ $i = 2;}
+    elsif (($#letras-$ton < 3) &&
+	   ($letras[$ton] eq 'o') && ($letras[$ton+1] eq 's') &&
+	   ($letras[$ton+2] eq 'o')){ $i = 1;}
+    elsif (($#letras-$ton < 3) &&
+	   ($letras[$ton] eq 'o') && ($letras[$ton+1] eq 's') &&
+	   ($letras[$ton+2] eq 'a')){ $i = 2;}
+    elsif (($ton+2 <= $#letras) &&
+	   ($letras[$ton] eq 'o') && ($letras[$ton+1] =~ /[r]/) &&
+	   (($letras[$ton+2] eq 't') || ($letras[$ton+2] eq 'l'))){ $i = 2;}
+    elsif (($#letras >= 7) && ($ton > 0) && ($letras[$ton-1] eq 'd') &&
+	   ($letras[$ton] eq 'o') && ($letras[$ton+1] =~ /[r]/)){ $i = 1;}
+    elsif (($#letras >= 7) && ($ton > 0) && ($letras[$ton-1] =~ /[s]/) &&
+	   ($letras[$ton] eq 'e') && ($letras[$ton+1] =~ /[s]/)){$i = 1;}
+
+    # Se não está em nenhuma dessas padronizações, procura no dicionário:
+    if($i == 0){
+	if(<DIC> =~ m/$pura( )/smi){$i = 2;}
+    }
+    if (($letras[$ton] eq 'e') && ($i == 2)){ $letras[$ton] = "ee";}
+    elsif (($letras[$ton] eq 'a') && ($i == 1)){ $letras[$ton] = "@";}
+    elsif (($letras[$ton] eq 'o') && ($i == 2)){ $letras[$ton] = "oo";}
+    close(DIC);
+    return ($letras[$ton]);
+}
+
+#####################################################################
+# FUNÇÃO identifica_letra:                                          #
+# Recebe uma palavra como entrada e verifica se é do tipo consoante #
+# isolada, devolvendo o nome da consoante, caso afirmativo.         #
+#####################################################################
+
+sub identifica_letra {
+    local($letra) = $_[0];;
+    @bits = split (//,$letra);
+    
+    if ($#bits == 0) {
+	if ($bits[0] =~ /[bBdDgGpPqQtTvVzZ]/) {
+	    $bits[1] = "e:";
+	    $letra = join("",@bits)
+	    }
+	elsif ($bits[0] =~ /[fFlLmMnNsS]/) {
+	    $bits[1] = $bits [0];
+	    $bits[2] = 'e';
+		if ($bits[1] =~ /[mMnN]/) {
+		    $bits[0] = "e:";
+		}
+	    else {
+		$bits[0] = "'e";
+	    }
+	    $letra = join("",@bits)
+	    }
+	elsif ($bits[0] =~ /[cC]/) {
+	    $letra = "se";
+	}
+	elsif ($bits[0] =~ /[hH]/) {
+	    $letra = "ag'a";
+	}
+	elsif ($bits[0] =~ /[rR]/){
+	    $letra = "'erre";
+	}
+	elsif ($bits[0] =~ /[jJ]/) {
+	    $letra = 'jota';
+	}
+	elsif ($bits[0] =~ /[kK]/) {
+	    $bits[1] = 'a';
+	    $letra = join("",@bits)
+        }
+	elsif ($bits[0] =~ /[xX]/) {
+	    $letra = 'xis';
+	}
+	elsif ($bits[0] =~ /[wW]/) {
+	    $letra = "d'abliu";
+        }
+        elsif ($bits[0] =~ /[yY]/) {
+            $letra = "'ipisulom";
+	}
+
+    }
+    return ($letra);
+}
+
+
+########################################################
+# FUNÇÃO add_missing_stresses:                         #
+# Recebe uma palavra e adiciona um indicador de stress #
+########################################################
+
+sub add_missing_stresses {
+    local($phons) = $_[0];
+    local ($pura) = $_[1];
+    local($j) = 0;
+    # we want to provide two, fairly complex patterns
+    # why is it so complicated?     it certainly need not be
+    # first if the word terminates in n or s or vowel and has 2 sylls
+    # we add a stress marker -- if one is needed
+
+    @bits = split(/\|/,$phons);
+    $found_stress = 0;
+    
+    foreach $bitphons (@bits) {
+	
+	if($bitphons =~ /:/) {
+	    # no need to do anything
+	    @phonlist = split(' ',$bitphons);
+	    $found_stress = 1;
+	}
+	# Se a palavra não é acentuada procuramos a tônica
+	else {
+	    # it's much simpler to split
+	    @phonlist = split(' ',$bitphons);
+	    $e = $#phonlist;
+	    
+	    # 1- Se termina em a(s),e(s),o(s),em(ns) a tônica
+	    # é a penúltima silaba.
+	    
+	    if(($e>=2) &&
+	       ($phonlist[$e] =~ /[aeo]/) || 
+	       (($phonlist[$e-1] =~ /[aeo]/) && 
+		(($phonlist[$e] =~ /s/) ||
+		 ($phonlist[$e] eq 's2')))) {
+		$j = $e - 2;
+		while (($j>0) && ($phonlist[$j] !~ /[aeiou]/)) {
+		    $j--;
+		}
+	    }
+	    elsif (($e>=2) &&
+		   (($phonlist[$e-1] eq 'e') && ($phonlist[$e] eq 'm')) ||
+		   ($phonlist[$e-1] eq 'e~')) {
+		$j = $e - 2;
+		while (($j>0) && ($phonlist[$j] !~ /[aeiou]/)) {
+		    $j--;
+		}
+	    }
+	    
+	    # 2- Caso contrário só pode ser oxítona, ultima silaba é a
+	    # tônica.
+	    
+	    elsif ($e>=2){
+		$j = $e;
+		while (($j>0) && ($phonlist[$j] !~ /[aeiou]/)) {
+		    $j--;
+		}
+	    }
+	    
+	    # 3- Verifica a ocorrência de encontros vocálicos.
+
+	    if (($j>0) &&
+		($phonlist[$j] =~ /[aeiou]/) &&
+		($phonlist[$j-1] =~ /[aeiou]/) ) {
+		$j--;
+	    }
+  
+	    # 4- Analiza o tipo de stress variado.
+    
+	    if ( ($phonlist[$j] =~ /[aoe]/) && ($#phonlist>1) ) {
+		$phonlist[$j] = tonica_var(join(' ',@phonlist), $j, $pura);
+		$phonlist[$j] .= ':'
+		}
+	    elsif ($phonlist[$j] =~ /[iu]/) { 
+		$phonlist[$j] .= ':'
+		}
+	}
+	$bitphons = join(' ',@phonlist);
+    }
+    $phons = join(" . ",@bits);
+    return($phons);
+}
+
+###################################
+# The start of the program itself #
+###################################
+
+$buffer = '';           # assume has had \n->space
+@sentencelist = ();
+while($line = <>) {
+    if($line eq "\n") {
+	if($buffer !~ /^[ \t\n]*$/) {
+	    push(@sentencelist,"$buffer");
+	    $buffer = '';
+	}
+	process_and_send_to_synth(@sentencelist);
+	@sentencelist = ();
+    }
+    else {
+	chop($line);
+	$line .= " ";
+	@line = split(//,$line);
+	foreach $i (@line) {
+	    if($i =~ /[?\.!]/) {
+		# suspect a sentence
+		$buffer .= " $i";
+		$poss_sent = 1;
+	    }
+	    elsif (($i eq "(") || ($i eq "{") || ($i eq "[")) {
+		$buffer .= " $i ";
+	    }
+	    elsif (($i eq ")") || ($i eq "}") || ($i eq "]")) {
+		$buffer .= " $i ";
+	    }
+	    elsif (($i =~ /[\241]/) || ($i =~ /[\277]/)) {  
+		# inverted ! and ? resp
+		$buffer .= " $i ";
+	    }
+	    elsif (($i eq ":") || ($i eq ";") || ($i eq ",")) {
+		$buffer .= " $i ";
+	    }
+	    elsif (($i eq "\n") || ($i eq "\t") || ($i eq " ")) {
+		if($poss_sent eq 1) {
+		    if($buffer !~ /^[ \t\n]*$/) {
+			push(@sentencelist,"$buffer");
+			$buffer = '';
+		    }
+		    process_and_send_to_synth(@sentencelist);
+		    @sentencelist = ();
+		}
+		else {
+		    $poss_sent = 0;
+		    $buffer .= ' ';
+		}
+	    }
+	    elsif(defined($char_corrs{$i})) {
+		$buffer .= $char_corrs{$i};
+		$poss_sent = 0;
+	    }
+	    else {
+		$buffer .= $i;
+		$poss_sent = 0;
+	    }
+	}
+    }
+}
+
+# tidy up for EOF
+if($buffer ne '') {
+    push(@sentencelist,"$buffer");
+}
+
+process_and_send_to_synth(@sentencelist);
+
+sub process_and_send_to_synth {
+        local(@sentences) = @_;
+        local($xxxx_str);
+	
+        $xxxx_str = "";
+	
+        $first = 1;
+        foreach $sent (@sentences) {
+	    @xxxx_data = process_sentence($sent);
+	    if($first) {
+		$xxxx_str .= join("\n",@xxxx_data);
+		$first = 0;
+	    } else {
+		$xxxx_str .= "\n" . join("\n",@xxxx_data);
+	    }
+        }
+        $LISTEN = 1;
+        if($LISTEN) {
+	    use_synth($xxxx_str);
+        }
+    }
+
+
+sub printdebug {
+        
+	local($id, $idebug, @out) = @_;
+       
+	foreach $i (@out) {
+		print "$i\n" if($idebug && $id==1);
+	}
+	
+	
+}
+
+sub process_sentence {
+        local(@tokens) = split(' ',$_[0]);
+
+	printdebug("2", $debug{plain}, @tokens);
+	
+        @tokens0 = treat(@tokens);        
+        printdebug("3", $debug{treat}, @tokens0);
+        
+        @tokens1 = add_tags(@tokens0);        
+        printdebug("4", $debug{add_tags}, @tokens1);
+        
+        @tokens2 = phrases(@tokens1);
+        printdebug("5", $debug{phrases}, @tokens2);
+        
+        @tokens3 = transcribe(@tokens2);
+        printdebug("6", $debug{transcribe}, @tokens3);
+        
+        @tokens4 = conv(@tokens3);
+        printdebug("7", $debug{conv}, @tokens4);
+        
+        @tokens5 = massage(@tokens4);
+        printdebug("8", $debug{massage}, @tokens5);
+        
+        @tokens6 = prosody(@tokens5);
+        printdebug("9", $debug{prosody}, @tokens6);
+        
+        @tokens7 = change_phonemes(@tokens6);
+        printdebug( 1 , $debug{change_pho}, @tokens7);
+
+        return(@tokens7);
+}
+
+###################################################################
+# FUNÇÃO token_type:                                              #
+# Recebe uma palavra e devolve word se estiver entre A-Z,a-z,0-9  #
+# ou devolve punct caso contrário.                                #
+###################################################################
+
+sub token_type {
+        local($look) = $_[0];
+
+        if($look =~ /[A-Za-z0-9]/) {
+                return('word');
+        }
+        return('punct');
+}
+
+#####################################################################
+# FUNÇÃO add_tags:                                                  #
+# Recebe uma palavra e verifica se é do tipo pontuação, se não for, #
+# imprime /FW se estiver no hash fw, ou /CW caso contrário.         #
+# Se a mesma for do tipo pontuação, imprime /PUNCT.                 #
+#####################################################################
+
+sub add_tags {
+        local(@data) = @_;
+        local($out) = '';
+        local(@out) = ();
+        local($n) = 0;
+
+        foreach $i (@data) {
+                if((token_type($i)) eq 'word') {
+                        if((function_word($i)) eq 'yes') {
+                                $out = "$i/FW";
+                        }else {
+                                $out = "$i/CW";
+                        }
+                }
+		else {
+                        $out = "$i/PUNCT";
+                }
+                $out[$n++] = $out;
+        }
+        return(@out);
+}
+
+sub phrases {
+        local(@data) = @_;
+        local(@out) = ();
+
+        for($i=0,$j=0;$i<$#data;$i++) {
+                if(($data[$i] =~ /\/CW$/) && ($data[$i+1] =~ /\/FW$/)) {
+                        $out[$j++] = $data[$i];
+                        $out[$j++] = '/PUNCT';
+                } else {
+                        $out[$j++] = $data[$i];
+                }
+        }
+        $out[$j++] = $data[$i];
+        return(@out);
+}
+
+#######################################################################
+# FUNÇÃO function_word:                                               #
+# Recebe uma palavra e retorna yes, se a mesma fizer parte do hash fw #
+# ou retorna no se não fizer.                                         #
+#######################################################################
+
+sub function_word {
+        local($word) = $_[0];
+
+        if(defined($fw{$word})) {
+                return('yes');
+        } else {
+                return('no');
+        }
+}
+
+########################################################################
+# FUNÇÃO transcribe:                                                   #
+# Recebe o texto e transcreve utilizando as funções transcribe_word,   #
+# add_missing_stresses e syllabify.                                    #
+# se a palavra conter o tag /CW a função add_missing_stresses é        #
+# utilizada, se conter o tag /FW a mesma função não é utilizada.       # 
+########################################################################
+
+sub transcribe {
+    local(@input) = @_;
+    local($word);
+    local(@out) = ();
+    local($trans);
+    local($j) = 0;
+    
+    foreach $chunk (@input) {
+                if($chunk =~ /(.*)\/CW/) {
+		    $word = $1;
+		    
+		    $word = identifica_letra($word);
+
+		    #$word = segmento_invalido($word);
+		    
+		    $trans = transcribe_word($word);
+		   
+		    $trans = add_missing_stresses($trans, $word);
+		 
+		    $trans = syllabify($trans);
+		    
+		    $out[$j++] = "$trans/CW";
+		}
+                elsif($chunk =~ /(.*)\/FW/) {
+		    $word = $1;
+		    $trans = transcribe_word($word);
+		    $trans = syllabify($trans);
+		    
+		    ## This still leaves the problem of what
+		    ## precisely to do with the non accented words
+		    
+		    $out[$j++] = "$trans/FW";
+		}
+                else {
+		    $out[$j++] = "$chunk";
+		}
+	    }
+    
+    return(@out);
+}
+
+##################
+# FUNÇÃO conv:   #
+# PRIMEIRA PARTE #
+# SEGUNDA PARTE  #
+##################
+
+sub conv {
+    local(@inlist) = @_;
+    
+    local(@outlist) = ();
+    local($word) = '';
+    local($j) = 0;
+    local($syll_num) = 0;
+    local($stress) = '';
+    
+    # fills first element with silence
+    $outlist[$j++] = '# 50 H[<1.0>';  
+    
+    #Puts elements of inlist in $word              
+    foreach $word (@inlist) {
+	
+	## PRIMEIRA PARTE:
+	## Nessa interação o programa verificará qual é o tipo da 
+        ## pontuação, adicionando a duração correspondente à letra:
+	
+	if($word =~ /(.*)\/PUNCT/) {
+	    $notes = $1;
+	    $k = & last_vowel(@outlist);
+	    if($notes eq '') {              # minor phrase boundary
+		$outlist[$k] .= "L-H]<0.2>";
+		# zero duration...
+	    }
+	    else {                                # major phrase boundary
+		if($notes eq '-') {
+		    $outlist[$k] .= "L-H]<0.7>";
+		    $duration = 50;
+		}
+		elsif(($notes eq ':') || ($notes eq '-')) {
+		    $outlist[$k] .= "L-H]<0.7>";
+		    $duration = 250; ### was 750
+		}
+		elsif($notes eq ';') {
+		    $outlist[$k] .= "L-L]<0.7>";
+		    $duration = 250; ### was 750
+		}
+		elsif($notes eq '.') {
+		    $outlist[$k] .= "L-L]<1.0>";
+		    $duration = 250; ### was 1200
+		}
+		elsif($notes eq '!') {          # not right
+		    $outlist[$k] .= "L-L]<1.0>";
+		    $duration = 250; ### was 1200
+		}
+		elsif($notes eq '?') {          # not right
+		    $outlist[$k] .= "L-L]<1.0>";
+		    $duration = 250; ### was 1200
+		}
+		elsif (($notes eq ',') || ($notes eq '(') ||
+		       ($notes eq '[') || ($notes eq '{') ||
+		       ($notes eq ')') || ($notes eq ']') ||
+		       ($notes eq '}') || ($notes eq '"')) {
+		    $outlist[$k] .= "L-H]<0.7>";
+		    $duration = 200;
+		}
+		$outlist[$j++] = "# $duration";
+	    }
+	    next;
+	}
+	elsif($word =~ /(.*)\/CW/) {
+	    $phonemes = $1;
+	    $wordtype = 'CW';
+	}
+	elsif($word =~ /(.*)\/FW/) {
+	    $phonemes = $1;
+	    $wordtype = 'FW';
+	}
+	
+	## SEGUNDA PARTE:
+	## Verifica se o stress ":" está contido na palavra, adicionando
+	## o tag H*<0.5> se estiver, e montando a saida da seguinte forma:
+	## - <letra> <numero_da_silaba> <tag_de_stress>.
+
+	@phonemes = split(' ',$phonemes);
+	foreach $ph (@phonemes) {
+	    if($ph =~ /\-/) {
+		next;
+	    }
+	    if(defined($dur0{$ph})) { # true phoneme
+		if($ph =~ /:$/) {
+		    $stress = "H*<0.5>";
+		}
+		$outlist[$j++] = "$ph $syll_num $stress";
+                # and maybe a sentence stress
+		$stress = '';
+	    } 
+	    elsif (($ph eq '+') || ($ph eq '-') ||
+		   ($ph eq '.') || ($ph eq '|')) {
+		$syll_num += 1;
+	    }
+	}
+	$syll_num += 1;
+    }
+    if(($j eq 1) || ($outlist[$j-1] !~ /^#/)) {
+       $outlist[$j] = '# 500';
+    }
+       
+       return(@outlist);
+}
+
+##########################################################
+# FUNÇÃO last_vowel:                                     #
+# Recebe uma palavra e devolve a posição da ultima vogal #
+##########################################################
+
+sub last_vowel{
+        local(@phonemelist) = @_;
+        local($i);
+        local(@phoneme);
+
+        for($i=$#phonemelist;$i>=0;$i--) {
+                @phoneme = split(' ',$phonemelist[$i]); 
+                if($phoneme[0] =~ /[aeiou]/) {
+                        return($i);
+                }
+        }
+       
+}
+
+####################################################################
+# FUNÇÃO syllabify:                                                #
+# Recebe uma palavra e,                                            #
+#   - inicialmente percorre $phonlist até achar em uma posição     #
+#     entre 0 e (#phonlist-2) uma consoante seguida de L ou R      #
+#     adicionando "." antes da sua ocorrencia em phonlist.         #
+#   - na segunda regra, percorre $phonlist, se achar uma consoante #
+#     olha para a próxima letra, se for vogal, ou \- seguido de    #
+#     vogal, e adiciona "." antes da sua ocorrencia, somente se    #
+#     possivel ou necessário (ver condições abaixo).               #
+#   - na terceira regra, as primeiras posições de $phonlist são    #
+#     observadas, se ocorrerem, vogal-consoante-vogal ou           #
+#     vogal-consoante-"\-"-vogal, o caractere "." é adicionado     #
+#     após a primeira vogal.                                       #
+#   - na quarta regra, percorre $phonlist, se houver ocorrencia de #
+#     vogal-volgal:, adiciona "." entre elas.                      #
+####################################################################
+
+sub syllabify {
+    local($phs) = $_[0];
+    
+    @phonlist = split(' ',$phs);
+    local(@outlist) = ();
+    
+    # first van Gerwen rule
+    for($e=0;$e<=$#phonlist;$e++) {
+	if(($e > 0) && ($e <= $#phonlist-2)) {  # possibly wrong
+	    if(($phonlist[$e] =~ /[BFGKP]/) && ($phonlist[$e+1] eq "L")) {
+		push(@outlist,".");
+	    }
+	    elsif(($phonlist[$e] =~ /[BDFGKPT]/) && ($phonlist[$e+1] eq "R")) {
+		push(@outlist,".");
+	    }
+	} 
+	push(@outlist,$phonlist[$e]);
+    }
+    
+    (@phonlist) = @outlist;
+    @outlist = ();
+
+    # second van Gerwen rule
+    # paraphrasing
+    # if we have a consonant followed by a vowel, or h plus vowel AND
+    # the preceeding whatsits are not word boundary/syll boundary 
+    # followed by a phoneme go for it
+    
+    for($e=0;$e<=$#phonlist;$e++) {
+	$rightOK = 0;
+	if($phonlist[$e] !~ /[AEIOU\.]/) {
+
+	    if(($e<$#phonlist) && ($phonlist[$e+1] =~ /[AEIOU]/)) {
+		# Achou um segmento consoante-vogal
+		$rightOK = 1;
+	    }
+	    
+	    elsif (($e<$#phonlist-1) && ($phonlist[$e+1] eq "\-") &&
+		   ($phonlist[$e+2] =~ /[AEIOU]/)) {
+		$rightOK = 1;
+	    }
+	    
+	    if($rightOK) {
+		if(($e >= 2) && ($phonlist[$e-1] ne ".") &&
+		   ($phonlist[$e-2] ne ".")) {
+		    push(@outlist,".");
+		}
+	    }
+	}
+	push(@outlist,$phonlist[$e]);
+    }
+    
+    
+    (@phonlist) = @outlist;
+    @outlist = ();
+    
+    # third van Gerwen rule
+    # BE very careful about size of array
+
+    if(($phonlist[0] =~ /[AEIOU]/) && ($phonlist[1] !~ /[AEIOU]/)) {
+	if($phonlist[2] =~ /[AEIOU]/) {
+	    $first = shift(@phonlist);
+	    unshift(@phonlist,".");
+	    unshift(@phonlist,$first);
+	}
+	elsif (($phonlist[2] eq "\-") && ($phonlist[3] =~ /[AEIOU]/)) {
+	    $first = shift(@phonlist),
+	    unshift(@phonlist,".");
+	    unshift(@phonlist,$first);
+	}
+    }
+
+
+    @outlist = ();
+    
+    # fourth van Gerwen rule
+    for($e=0;$e<=$#phonlist;$e++) {
+	push(@outlist,$phonlist[$e]);
+	if($phonlist[$e] =~ /[AEIOU]/) {
+	    if($phonlist[$e+1] =~ /^(A:|E:|I:|O:|U:|A|E|O)$/) {
+		push(@outlist,".");
+	    }
+	}
+	
+    }
+    
+    return(join(' ',@outlist));
+}
+
+#######################################################################
+# FUNÇÃO treat:                                                       #
+# Recebe uma palavra e analiza a ocorrencia de segmentos sub ou mente #
+# com algumas restrições, e adiciona "-" no local de ocorrencia.      #
+#######################################################################
+
+sub treat {     ## various bits of preprocessing -- everything that is in van Gerwen in the main rules
+        local(@words) = @_;
+        local($word);
+
+        ### sub-, -mente, hyphens, TOlower
+        ### stress additions
+	
+        foreach $word (@words) {
+	    $word =~ y/A-Z/a-z/;
+	    if($word =~ /.+\-.+/ ) {
+		$word =~ y/\-/|/;
+	    }
+	    elsif($word =~ /^sub(lev|lin|lun|ray|rei|rep|rog)/) {
+		$word =~ s/^sub/sub\-/;
+	    }
+	    elsif($word =~ /mente$/) {
+		if($word !~ /^(aumente|lamente|tormente)$/) {
+		    $word =~ s/mente$/|mente/;
+		}
+	    }
+	    elsif($word =~ /^(va|ve|vi|da|di|fe|ha|he|no|ti|yo|ya)$/ ) {
+		$word =~ s/(.)(.)/$1'$2/;
+            } 
+        }
+
+        return(@words);
+}
+
+
+
+sub massage {
+    local(@in) = @_;
+    local(@out) = ();
+    
+    # now we are in a position, knowing the pauses, to do the assimilation.
+
+    @phonss = ();
+    @syllns = ();
+    @pcomms = ();
+    
+    return(@in); # não fazer nada aqui pois é especifico do espanhol
+    
+    for($mi=0;$mi<=$#in;$mi++) {
+	@fiddlybit = (split(' ',$in[$mi]),"");
+	($phonss[$mi],$syllns[$mi],$pcomms[$mi]) =
+	($fiddlybit[0],$fiddlybit[1],$fiddlybit[2]);
+    }
+    for($mi=0;$mi<=$#in;$mi++) {
+	# lots of assimilations
+	if($phonss[$mi] eq "b") {
+	    if($mi==0) {
+		$phonss[$mi] = "B";
+	    }
+	    elsif(($phonss[$mi-1] =~ /[MN#]/) &&
+	         ($syllns[$mi-1] != $syllns[$mi])) {
+		$phonss[$mi] = "B";
+	    }
+	}
+	elsif($phonss[$mi] eq "g") {
+	    if($mi==0) {
+		$phonss[$mi] = "G";
+	    }
+	    elsif(($phonss[$mi-1] =~ /[MN#]/) &&
+		 ($syllns[$mi-1] != $syllns[$mi])) {
+		$phonss[$mi] = "G";
+	    }
+        }
+	elsif($phonss[$mi] eq "d") {
+	    if($mi==0) {
+		$phonss[$mi] = "D";
+	    }
+	    elsif(($phonss[$mi-1] =~ /[MN#]/) &&
+		 ($syllns[$mi-1] != $syllns[$mi])) {
+		$phonss[$mi] = "D";
+	    }
+	}
+
+    }
+    for($mi=0;$mi<=$#in-2;$mi++) {
+	if(($phonss[$mi] eq "k") && 
+	   ($phonss[$mi+1] eq "s") && 
+	   ($syllns[$mi+1] != $syllns[$mi+2])) {
+	    $phonss[$mi] = "ELIMINATE";
+	}
+    }
+    for($mi=0;$mi<=$#in-1;$mi++) {
+	if(($phonss[$mi] eq "s") &&
+	   ($phonss[$mi+1] eq "R") &&
+	   ($syllns[$mi] != $syllns[$mi+1])) {
+	    $phonss[$mi] = "ELIMINATE";
+	}
+    }
+    for($mi=0;$mi<=$#in-1;$mi++) {
+	if(($phonss[$mi] eq $phonss[$mi+1]) &&
+	   ($phonss[$mi] !~ /[aeiou]/)) {
+	    $phonss[$mi] = "ELIMINATE";
+	}
+    }
+    for($mi=0;$mi<=$#in-1;$mi++) {
+	if(($phonss[$mi] eq "k") && ($syllns[$mi] != $syllns[$mi+1])) {
+	    $phonss[$mi] = "G";
+	}
+    }
+    for($mi=0;$mi<=$#in-2;$mi++) {
+	if(($phonss[$mi] eq "k") && ($phonss[$mi+1] eq "s") &&
+	   ($syllns[$mi+1] != $syllns[$mi+2])) {
+	    $phonss[$mi] = "G";
+	}
+    }
+    for($mi=0;$mi<=$#in-1;$mi++) {
+	if(($phonss[$mi] eq "p") && ($syllns[$mi] != $syllns[$mi+1])) {
+	    $phonss[$mi] = "B";
+	}
+    }
+    for($mi=0;$mi<=$#in-2;$mi++) {
+	if(($phonss[$mi] eq "p") && ($phonss[$mi+1] eq "s") &&
+	   ($syllns[$mi+1] != $syllns[$mi+2])) {
+	    $phonss[$mi] = "B";
+	}
+    }
+    for($mi=0;$mi<=$#in-1;$mi++) {
+	if(($phonss[$mi] eq "t") && ($syllns[$mi] != $syllns[$mi+1])) {
+	    $phonss[$mi] = "D";
+	}
+    }
+    for($mi=0;$mi<=$#in-2;$mi++) {
+	if(($phonss[$mi] eq "t") && ($phonss[$mi+1] eq "s") &&
+	   ($syllns[$mi+1] != $syllns[$mi+2])) {
+	    $phonss[$mi] = "D";
+	}
+    }
+    for($mi=0;$mi<=$#in-1;$mi++) {
+	if(($phonss[$mi] eq "s") && ($phonss[$mi+1] =~ /[Sbdgr]/) &&
+	   ($syllns[$mi] != $syllns[$mi+1])) {
+	    $phonss[$mi] = "S";
+	}
+    }
+    for($mi=0;$mi<=$#in;$mi++) {
+	# do ELIMINATE
+	if($phonss[$mi] ne "ELIMINATE") {
+	    push(@out,join(' ',($phonss[$mi],$syllns[$mi],$pcomms[$mi])));
+	}
+    }
+	    
+    return(@out);
+}
+
+########################################################################
+# FUNÇÃO snum:                                                         #
+# Recebe um segmento de palavra e devolve o número de sílabas da mesma #
+########################################################################
+
+sub snum {
+    # syllable number
+    local($input) = $_[0];
+    local(@input) = split(' ',$input);
+    if($input[0] ne '#') {
+	return($input[1]);
+    }
+    else {
+	return(-1);
+    }
+}
+
+######################################################################
+# FUNÇÃO prosody:                                                    #
+# Recebe uma palavra com os tags de stress já determinados e devolte #
+# a sequencia de letras com o par prosody para ser interpretado pelo #
+# mbrola.                                                            #
+######################################################################
+
+sub prosody {
+    local(@phonemelist) = @_;
+    
+    local(@spnlist) = ();
+    local(@spnlistreserve) = ();
+    local($curr_snum) = -1;         # just for starting off
+    local($ref_snum) = -1;          # just for starting off
+    
+    for($i=0;$i<=$#phonemelist;$i++) {
+
+	@phoneme = split(' ',$phonemelist[$i]);
+	$spnlist[$i] = "$phoneme[0]";
+	$curr_snum = & snum($phonemelist[$i]);
+	if($phoneme[0] ne '#') {
+	    $spnlist[$i] .= "\t$dur0{$phoneme[0]}";
+	}
+	else {
+	    $spnlist[$i] .= "\t$phoneme[1]";
+	}
+
+	## 1 - Determina o par prosody para a primeira e a ultima silaba
+
+	if($i eq 0) {
+	    $spnlist[$i] .= "\t(0,120)";
+	    next;
+	}
+	if($i eq $#phonemelist) {
+	    $spnlist[$i] .= "\t(99,80)";
+	    next;
+	}
+
+	# need to find max and min with same syllable number.
+	## 2 - Grava a posição da palavra onde houve alteração
+	## no tamanho da silaba.
+
+	if($curr_snum ne $ref_snum) {
+	    $sos = $i;
+	    $ref_snum = $curr_snum;
+	}
+
+	## 3 - Analiza os tags de stress, determinando o par prosody (%,p)
+	
+	if($#phoneme eq 2) {
+	    $fop = $i;
+	    while(& snum($phonemelist[$fop]) eq $curr_snum) {
+		$fop++;
+	    }
+	    $fop--;         # we overshot slightly
+	    if($phoneme[2] =~ /^H\*<(\d+\.\d+)>$/) {
+		$spnlist[$sos] .= "\t(0,100)";
+		$spnlist[$i] .= "\t(30,130)";
+	    }
+	    elsif($phoneme[2] =~ /^H\[<(\d+\.\d+)>$/) {
+	    }
+	    elsif($phoneme[2] =~ /^L-H\]<(\d+\.\d+)>$/) {
+		$spnlistreserve[$fop] .= "\t(90,100)";
+	    }
+	    elsif($phoneme[2] =~ /^L-L\]<(\d+\.\d+)>$/) {
+		$spnlistreserve[$fop] .= "\t(99,80)";
+	    }
+	    elsif($phoneme[2] =~ /^H\*<.\..>L-H\]<(\d+\.\d+)>$/) {
+		$spnlist[$sos] .= "\t(0,100)";
+		$spnlist[$i] .= "\t(30,130)";
+		$spnlist[$i] .= "\t(80,100)";
+		$spnlistreserve[$fop] .= "\t(99,120)";
+	    }
+	    elsif($phoneme[2] =~ /^H\*<.\..>L-L\]<(\d+\.\d+)>$/) {
+		$spnlist[$sos] .= "\t(0,100)";
+		$spnlist[$i] .= "\t(30,130)";
+		$spnlist[$i] .= "\t(80,90)";
+		$spnlistreserve[$fop] .= "\t(99,80)";
+	    }
+	    else {
+		print STDERR "Having a bit of trouble finding a suitable f0, mate!\n";
+	    }
+	}
+    }
+    for($i=0;$i<=$#spnlist;$i++) {
+	$spnlist[$i] .= $spnlistreserve[$i] if(defined($spnlistreserve[$i]));
+    }
+    
+    return(@spnlist);
+}
+
+sub interpolate {
+
+        ## x1,y1,x2,y2,xx -> yy
+
+        local($a,$b,$c,$d,$e) = @_;
+        local($f);
+ 
+        $f = ($c*$b + $d*$e - $e*$b -$a*$d)/($c-$a);
+ 
+        return(int($f));
+}
+
+
+sub abs_targets {
+        local(($cumdur,$index,$dur,@targs)) = @_;
+        local($ta,$rval,$absx);
+        local(@rval) = ();
+
+        foreach $ta (@targs) {
+                if($ta =~ /\(([0-9]+),([0-9]+)\)/) {
+                        $perc = $1;
+                        $absy = $2;
+                } else {
+                        print "Problem with target\n";
+                }
+                $absx =  $cumdur + int($perc*$dur/100);
+                push(@rval,join(' ',$index,$absx,$absy,$perc));
+        }
+        return(@rval);
+}
+
+############################################################
+# Funcao Change_phonemes:                                  #
+# Recebe a lista de saída já com todos os tags de fonética #
+# e devolve a letra correspondente no hash tosampa.        #
+############################################################
+
+sub change_phonemes {
+        local(@llist) = @_;
+	local ($l);
+
+        foreach $l (@llist) {
+
+
+                @pline = split(' ',$l);
+		$pline[0] = 's2' if ($pline[0] eq 'z2');
+                $pline[0] = $tosampa{$pline[0]};
+                $pline[0] =~ s/1// if(defined($pline[0]));
+                $l = join("\t",@pline) if(defined(@pline));
+		
+		#print "change_phonemes: $l\n";
+		# 'e preciso ter cuidado porque o @ da' bronca nas subs seguintes
+                $l =~ s/\(/ /g;
+                $l =~ s/\)/ /g;
+                $l =~ s/,/ /g;
+
+        }
+       
+        @llist;
+}
+
+#read a file with a perl struct into memory
+sub readcfg{
+    my ($filename)= @_;
+    my $defcfg;
+    my $defstyle;
+    $defcfg=do($filename) or die("Parag::readcfg - Problems reading the file: $filename\n");
+    # see default style in config file
+    if (defined($defcfg->{defstyle})){
+    	$defstyle = $defcfg->{defstyle};
+    }
+    # see default debugs in config file
+    if (defined($defcfg->{debug})){
+    	for (keys(%debug)){
+    		$debug{$_} = $defcfg->{debug}->{$_};    		
+    	}
+    }
+    return($defcfg,$defstyle);
+}
+
+#prints a structured var into stdout
+#for debug or to generate a file
+sub dumpvar{
+        my($v)=@_;
+        if(!ref($v)){print "\'$v\'"}
+
+        if(ref($v)eq"ARRAY"){
+                print "[\n";
+                for (@$v) {
+                        dumpvar($_);
+                        print ",\n";
+                }
+                print "]\n";
+        }
+
+        if(ref($v)eq"HASH"){
+                print "{\n";
+                for (keys %$v){
+                        print "$_=>";
+                        dumpvar($v->{$_});
+                        print ",\n";
+                }
+                print "}\n";
+        }
+}
+
+
+
