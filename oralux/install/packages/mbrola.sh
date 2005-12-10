@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # mbrola.sh
-# $Id: mbrola.sh,v 1.5 2005/12/10 14:37:45 gcasse Exp $
+# $Id: mbrola.sh,v 1.6 2005/12/10 16:57:48 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing mbrola
-# $Date: 2005/12/10 14:37:45 $ |
-# $Revision: 1.5 $ |
+# $Date: 2005/12/10 16:57:48 $ |
+# $Revision: 1.6 $ |
 # Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -34,59 +34,66 @@ InstallPackage()
     MBROLA=$BUILD/tmp/mbrola
     mkdir $MBROLA
 
+    DOC=$BUILD/usr/local/share/doc/mbrola
+    install -d $DOC
+
     VOICES=$BUILD/usr/local/share/mbrola/voices
-    mkdir -p $VOICES
+    install -d $VOICES
 
     # mbrola binary: mbrola-linux-i386
     cd $MBROLA
     wget ${MBROLA_URL}/bin/pclinux/mbr301h.zip
     unzip mbr301h.zip
     rm -f $BUILD/usr/local/bin/mbrola
-    cp $BUILD/tmp/mbrola/mbrola-linux-i386 $BUILD/usr/local/bin/mbrola
-
-    mkdir -p $BUILD/usr/share/oralux/doc/license/mbrola
+    install -m 555 $BUILD/tmp/mbrola/mbrola-linux-i386 $BUILD/usr/local/bin/mbrola
 
     # br1
     cd $MBROLA
     wget ${MBROLA_URL}/dba/br1/br1-971105.zip
     unzip br1*zip
-    mv $MBROLA/br1/br1 $VOICES
-    # TODO: add br1.txt to doc
-    mv $MBROLA/br1/license.txt $BUILD/usr/share/oralux/doc/license/mbrola/br1.txt
+    install -m 444 $MBROLA/br1/br1 $VOICES
+    install -d $DOC/br1
+    install -m 444 $MBROLA/br1/license.txt $DOC/br1
+    install -m 444 $MBROLA/br1/br1.txt $DOC/br1
+
     # de6
     cd $MBROLA
     wget ${MBROLA_URL}/dba/de6/de6.zip
     unzip de6.zip
-    mv $MBROLA/de6/de6 $VOICES
-    # TODO: add de6.txt to doc
-    mv $MBROLA/de6/license.txt $BUILD/usr/share/oralux/doc/license/mbrola/de6.txt
+    install -m 444 $MBROLA/de6/de6 $VOICES
+    install -d $DOC/de6
+    install -m 444 $MBROLA/de6/license.txt $DOC/de6
+    install -m 444 $MBROLA/de6/de6.txt $DOC/de6
 
     # en1
     cd $MBROLA
     wget ${MBROLA_URL}/dba/en1/en1-980910.zip
     unzip en1*zip
-    mv $MBROLA/en1/en1 $VOICES/en1
-    mv $MBROLA/en1/en1.txt $BUILD/usr/share/oralux/doc/license/mbrola
+    install -m 444 $MBROLA/en1/en1 $VOICES
+    install -d $DOC/en1
+    install -m 444 $MBROLA/en1/en1.txt $DOC/en1
 
     # es1
     cd $MBROLA
     wget ${MBROLA_URL}/dba/es1/es1-980610.zip
     unzip es1*zip
-    mv $MBROLA/es1/es1 $VOICES
-    # TODO: add es1.txt to doc
-    mv $MBROLA/es1/license.txt $BUILD/usr/share/oralux/doc/license/mbrola
+    install -m 444 $MBROLA/es1/es1 $VOICES
+    install -d $DOC/es1
+    install -m 444 $MBROLA/es1/license.txt $DOC/es1
+    install -m 444 $MBROLA/es1/es1.txt $DOC/es1
 
     # fr4
     cd $MBROLA
     wget ${MBROLA_URL}/dba/fr4/fr4-990521.zip
     unzip fr4*zip
-    mv $MBROLA/fr4 $VOICES/fr4
-    # TODO: add fr4.txt to doc
-    mv $MBROLA/license.txt $BUILD/usr/share/oralux/doc/license/mbrola/license_fr4.txt
-    
+    install -m 444 $MBROLA/fr4/fr4 $VOICES
+    install -d $DOC/fr4
+    install -m 444 $MBROLA/fr4/license.txt $DOC/fr4
+    install -m 444 $MBROLA/fr4/fr4.txt $DOC/fr4
+
     #removing unused files
     cd $BUILD/tmp
-    rm -rf mbrola
+    rm -rf $MBROLA
 }
 
 ####
