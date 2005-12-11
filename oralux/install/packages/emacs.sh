@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # emacs.sh
-# $Id: emacs.sh,v 1.3 2005/01/30 21:43:51 gcasse Exp $
+# $Id: emacs.sh,v 1.4 2005/12/11 23:02:33 gcasse Exp $
 # $Author: gcasse $
 # Description: Emacs
-# $Date: 2005/01/30 21:43:51 $ |
-# $Revision: 1.3 $ |
+# $Date: 2005/12/11 23:02:33 $ |
+# $Revision: 1.4 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -25,7 +25,7 @@
 ####
 source ../oralux.conf
 
-EMACS_REL="21.3"
+EMACS_REL="21.4"
 
 ####
 # Installing the package in the current tree
@@ -39,11 +39,17 @@ InstallPackage()
 # Adding the package to the new Oralux tree
 Copy2Oralux()
 {
+    export URL="http://cvs.savannah.gnu.org/viewcvs/emacs/emacs/etc"
+    export DEST="$BUILD/usr/share/emacs/$EMACS_REL/etc"
+
     chroot $BUILD apt-get install wget-el
     cd /tmp
-    rm -f TUTORIAL.ru*
-    wget http://savannah.gnu.org/cgi-bin/viewcvs/*checkout*/emacs/emacs/etc/TUTORIAL.ru?rev=1.7
-    cp TUTORIAL.ru* $BUILD/usr/share/emacs/$EMACS_REL/etc/TUTORIAL.ru
+
+    wget $URL/TUTORIAL.pt_BR?rev=1.8 --output-document=TUTORIAL.pt_BR
+    wget $URL/TUTORIAL.ru?rev=1.13 --output-document=TUTORIAL.ru
+
+    install -d $DEST
+    install -m 444 TUTORIAL.pt_BR TUTORIAL.ru $DEST
 }
 
 case $1 in

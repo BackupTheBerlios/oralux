@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # mbrola.sh
-# $Id: mbrola.sh,v 1.6 2005/12/10 16:57:48 gcasse Exp $
+# $Id: mbrola.sh,v 1.7 2005/12/11 23:02:33 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing mbrola
-# $Date: 2005/12/10 16:57:48 $ |
-# $Revision: 1.6 $ |
+# $Date: 2005/12/11 23:02:33 $ |
+# $Revision: 1.7 $ |
 # Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -86,10 +86,10 @@ InstallPackage()
     cd $MBROLA
     wget ${MBROLA_URL}/dba/fr4/fr4-990521.zip
     unzip fr4*zip
-    install -m 444 $MBROLA/fr4/fr4 $VOICES
+    install -m 444 $MBROLA/fr4 $VOICES
     install -d $DOC/fr4
-    install -m 444 $MBROLA/fr4/license.txt $DOC/fr4
-    install -m 444 $MBROLA/fr4/fr4.txt $DOC/fr4
+    install -m 444 $MBROLA/license.txt $DOC/fr4
+    install -m 444 $MBROLA/fr4.txt $DOC/fr4
 
     #removing unused files
     cd $BUILD/tmp

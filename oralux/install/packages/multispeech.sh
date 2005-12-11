@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # multispeech.sh
-# $Id: multispeech.sh,v 1.8 2005/12/10 22:35:07 gcasse Exp $
+# $Id: multispeech.sh,v 1.9 2005/12/11 23:02:33 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing Multispeech.
-# $Date: 2005/12/10 22:35:07 $ |
-# $Revision: 1.8 $ |
+# $Date: 2005/12/11 23:02:33 $ |
+# $Revision: 1.9 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -23,10 +23,11 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 # ----------------------------------------------------------------------------
 ####
+set -vx
 source ../oralux.conf
 
 RULEX_RELEASE=0.9.22
-MULTISPEECH_RELEASE=1.2.2-oralux
+MULTISPEECH_RELEASE=1.2.2-oralux.1
 ARCH_RULEX=$ARCH/rulex-$RULEX_RELEASE.tar.gz 
 ARCH_MULTISPEECH_SRC=$ARCH/multispeech-$MULTISPEECH_RELEASE.tar.bz2
 ARCH_RU_TTS=$ARCH/ru_tts-0.4-i586-1.tgz
@@ -98,7 +99,7 @@ InstallPackage()
     install -d $LIB/players
     install -d $LIB/tts
 
-    for i in "br de en es fr ru"; do
+    for i in br de en es fr ru; do
 	install -d $LIB/letters/$i
 	install -m 444 $SRC/letters/$i/* $LIB/letters/$i
 	install -m 555 $SRC/scripts/players/$i $LIB/players
@@ -182,9 +183,10 @@ Copy2Oralux()
     install -d $LIB/players
     install -d $LIB/tts
 
-    for i in "br de en es fr ru"; do
+    for i in br de en es fr ru; do
 	install -d $LIB/letters/$i
-	install -m 444 $SRC/letters/$i/* $LIB/letters/$i
+	cd $SRC/letters/$i
+	install -m 444 * $LIB/letters/$i
 	install -m 555 $SRC/scripts/players/$i $LIB/players
 	install -m 555 $SRC/scripts/tts/$i $LIB/tts
     done
