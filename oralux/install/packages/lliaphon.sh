@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # lliaphon.sh
-# $Id: lliaphon.sh,v 1.2 2005/12/10 22:35:07 gcasse Exp $
+# $Id: lliaphon.sh,v 1.3 2005/12/18 23:36:31 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing LLiaPhon
-# $Date: 2005/12/10 22:35:07 $ |
-# $Revision: 1.2 $ |
+# $Date: 2005/12/18 23:36:31 $ |
+# $Revision: 1.3 $ |
 # Copyright (C) 2004, 2005 Nath (nath.ml at free.fr)
 #
 # This program is free software; you can redistribute it and/or
@@ -35,10 +35,17 @@ InstallPackage()
 cd /tmp
 wget $URL
 tar xvzf lliaphon-${REL}.tar.gz
+patch -p0 < $INSTALL_PACKAGES/lliaphon/lliaphon-0.4-oralux.patch
 cd /tmp/lliaphon-$REL
 ./configure --enable-lex80k
 make
 make install
+
+cd /tmp
+cp -pR $INSTALL_PACKAGES/lliaphon .
+cd /tmp/lliaphon
+make install
+
 #echo "export LLIAPHON=/usr/local/lliaphon" >>/etc/profile
 rm -rf /tmp/lliaphon*
 }
@@ -51,7 +58,11 @@ Copy2Oralux()
 cd $BUILD/tmp
 wget $URL
 tar xvzf lliaphon-${REL}.tar.gz
+patch -p0 < $INSTALL_PACKAGES/lliaphon/lliaphon-0.4-oralux.patch
 chroot $BUILD bash -c "cd /tmp/lliaphon-$REL;./configure --enable-lex80k;make;make install"
+
+cp -pR $INSTALL_PACKAGES/lliaphon .
+chroot $BUILD bash -c "cd /tmp/lliaphon;make install"
 
 ##echo "export LLIAPHON=/usr/local/lliaphon" >>/etc/profile
 rm -rf $BUILD/tmp/lliaphon*

@@ -1,0 +1,13 @@
+diff -u lliaphon-0.4.orig/util.c lliaphon-0.4/util.c
+--- lliaphon-0.4.orig/util.c	2004-11-29 22:22:33.000000000 +0100
++++ lliaphon-0.4/util.c	2005-12-18 21:25:03.000000000 +0100
+@@ -91,7 +91,8 @@
+     }
+  }
+ 
+-static int delais[2][2] = { {0, 50}, {3600, 0} };
++//static int delais[2][2] = { {0, 50}, {3600, 0} };
++static int delais[2][2] = { {0, 0}, {3600, 0} };
+ /************************************************************************
+              char *sentence_from_stdin(int fd)
+ 

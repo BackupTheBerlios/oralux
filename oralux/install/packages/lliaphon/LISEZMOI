@@ -1,0 +1,14 @@
+Objectif: Lliaphon en tache de fond pour un utilisateur donné.
+19 Déc 2005, Gilles Casse <gcasse@oralux.org>
+
+Le client communique par fifo avec le serveur lliaphon :
+
+$HOME/.lliaphondin.fifo: écriture du texte à phonétiser 
+$HOME/.lliaphondout.fifo: lecture des phonèmes 
+
+Il lit le texte sur son entrée standard, le transmet au serveur, lit les phonèmes (éventuellement plusieurs blocs), et les recopie sur sa sortie standard.
+
+Le serveur est le logiciel lliaphon dont l'entrée et la sortie standard ont été redirigés. 
+
+Un patch est appliqué à lliaphon-0.4 pour supprimer les 50ms entre blocs de phonèmes : lorsque la lecture de .lliaphondout.fifo échoue, on considère que tous les phonèmes sont reçus.
+

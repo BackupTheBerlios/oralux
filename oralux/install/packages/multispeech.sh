@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # multispeech.sh
-# $Id: multispeech.sh,v 1.9 2005/12/11 23:02:33 gcasse Exp $
+# $Id: multispeech.sh,v 1.10 2005/12/18 23:36:31 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing Multispeech.
-# $Date: 2005/12/11 23:02:33 $ |
-# $Revision: 1.9 $ |
+# $Date: 2005/12/18 23:36:31 $ |
+# $Revision: 1.10 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -27,7 +27,7 @@ set -vx
 source ../oralux.conf
 
 RULEX_RELEASE=0.9.22
-MULTISPEECH_RELEASE=1.2.2-oralux.1
+MULTISPEECH_RELEASE=1.2.2-oralux.2
 ARCH_RULEX=$ARCH/rulex-$RULEX_RELEASE.tar.gz 
 ARCH_MULTISPEECH_SRC=$ARCH/multispeech-$MULTISPEECH_RELEASE.tar.bz2
 ARCH_RU_TTS=$ARCH/ru_tts-0.4-i586-1.tgz

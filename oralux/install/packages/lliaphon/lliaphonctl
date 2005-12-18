@@ -1,0 +1,29 @@
+#! /bin/sh
+#
+# $Id: lliaphonctl,v 1.1 2005/12/18 23:36:31 gcasse Exp $
+# $Author: gcasse $
+# Description: lliaphon daemon start/stop script. 
+# $Date: 2005/12/18 23:36:31 $ |
+# $Revision: 1.1 $ |
+# Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
+#
+# License: GPL
+#
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+DAEMON=`which lliaphond`
+
+test -f $DAEMON || exit 0
+
+case "$1" in
+  stop)
+	killall -KILL lliaphon-client 2>/dev/null
+	killall -KILL lliaphon 2>/dev/null
+	;;
+  *)
+	killall -KILL lliaphon-client 2>/dev/null
+	killall -KILL lliaphon 2>/dev/null
+	($DAEMON 2>/dev/null)&
+	;;
+esac
+
+exit 0
