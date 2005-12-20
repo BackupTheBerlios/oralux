@@ -33,6 +33,9 @@ add_soft() {
     next_script tcl.sh "Tcl"
     next_script flite.sh "flite"
     next_script eflite.sh "eflite"
+
+    next_script jabber.sh "jabber"
+
     next_script emacs.sh "emacs"
     next_script emacspeak.sh "emacspeak"
 
@@ -45,7 +48,6 @@ add_soft() {
     next_script misc.sh "misc"
     next_script mbrola.sh "mbrola"
 
-#    next_script efm.sh "efm"
     next_script ircha_tts.sh "ircha_tts"
     next_script lliaphon.sh "lliaphon"
     next_script ttpport.sh "ttpport"

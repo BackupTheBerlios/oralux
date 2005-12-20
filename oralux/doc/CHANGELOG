@@ -1,7 +1,7 @@
 s###
 
 ###
-Release 0.7 a
+Release 0.7 
 Date: xx Month 2005
 
 * Overview
@@ -9,36 +9,25 @@ Date: xx Month 2005
 * Doc
 * Bug fixes
 * Enhancements
-* New packages
+* New softwares
+* Credits
 
 
 * Major updates
 + Brltty 3.6-1
-+ Emacspeak 21
++ Emacspeak 23
 + Yasr 0.6.7
 
+* Overview
+Oralux 0.7 proposes two audio environments (Emacspeak and Yasr), six languages (Brazilian Portuguese, English, French, German, Russian, Spanish). 
+
+Oralux 0.7 is based on Knoppix 4.02. 
 
 * Doc
 / the F2/F3 cheatcodes pages are updated
 / Calendar in Spanish has been updated by Miguel Paolino. 
 / Calendar in German has been translated by Peter Piechutzky
 
-* Contributors
-Gianfranco Giudice : German translation of the 'Emacs' document.
-Gregory N. Tsygankov : Russian translation of the Yasr document.
-Igor Svarc : rereading of the English messages.
-Ivan Vernichenko: messages translation in Russian.
-Jorge Redondo Justo: FAQ and messages translation in Spanish.
-Laurent Cadet de Fontenay: English rewriting of the home page and the FAQ.
-Miguel Paolino: Spanish translation of the 'Emacs' and 'Calendar' document.
-Nigel Stoppard: English rewriting of the 'Emacs' document.
-Osvaldo La Rosa : FAQ translation in Dutch.
-Peter Piechutzky : German translation of the "Calendar" document.
-Roman Zalessky: messages translation in Russian.
-Rusmanto Maryanto: HOWTO Using Oralux in Indonesian (Bahasa Indonesia),.
-Sergei Studennikov: messages translation in Russian.
-Sergei V. Fleytin: Russian translation of the Oralux introduction, configuration of Emacs in Russian.
-Thomas Crépin: German messages improvements.
 
 
 * Bug fixes
@@ -48,7 +37,12 @@ Thomas Crépin: German messages improvements.
 (yasr:tts.c, tts_init).
 
 * Enhancements
+** Alsa
+Alsa is the default driver. The oss cheatcode is also proposed.
 
+** Multispeech
+Compliant with four others languages: Brazilian Portuguese, French, German and Spanish.
+ 
 ** audio menu
 - The French Canadian keyboard has been added.
 - The internet preferences can be configured.
@@ -81,7 +75,7 @@ available in standard or review mode.
 
 ** Screen 4.0.2 + patch (a more accessible windows list).
 
-** Emacspeak 22.0 + patches by Igor B. Poretsky (multispeech, emacs-w3m, and more). 
+** Emacspeak 23.0 + patches by Igor B. Poretsky (multispeech, emacs-w3m, and more). 
 See the Changelog at:
 ftp://ftp.rakurs.spb.ru/pub/Goga/projects/speech-interface/patches/emacspeak/ChangeLog
 
@@ -117,7 +111,6 @@ Left and right cursor keys move by letter.
 Escape left and right move by word.  
 Escape up arrow reads the current line and Escape down arrow reads from the current line to the end of the buffer.
 
-
 / Configuration files in the boot floppy: 
 The very basic configuration files can now be saved in the boot floppy.
 
@@ -147,7 +140,18 @@ Thanks to Sergei V. Fleytin
 
 + Yasr: in standard mode, alt+ctrl+m is no more reserved to read the next line (since ctrl-m is interpreted as enter).
 
-* New packages
+* New softwares
++ Instant messaging support. 
+Jabber clients: emacs-jabber and imcom. 
+Jabber server: packages included.
+(Erc still available).
+
++ Voice synthesizers:
+ttport: perl script for the Brazilian Portuguese language.
+txt2pho: phonetizer for the German language.
+ircha_tts: perl script (ircha project) for the Spanish language.
+enlex: English phonetizer.
+
 / The listen-up digital talking book player is included.
 / File conversion: the xpdf-utils (pdftotext) and catdoc (.doc to text) packages have been added 
 + bsdgames
@@ -157,6 +161,33 @@ Thanks to Sergei V. Fleytin
 + tramp
 + toolame
 
+* Credits
+
+Special thanks to Igor B. Poretsky.
+
+** Oralux team
+Cassio Santos
+Doug Smith
+Gilles Casse
+Nathalie Vielmas
+Sylvie Xhaard
+
+** Contributors
+Gianfranco Giudice : German translation of the 'Emacs' document.
+Gregory N. Tsygankov : Russian translation of the Yasr document.
+Igor Svarc : rereading of the English messages.
+Ivan Vernichenko: messages translation in Russian.
+Jorge Redondo Justo: FAQ and messages translation in Spanish.
+Laurent Cadet de Fontenay: English rewriting of the home page and the FAQ.
+Miguel Paolino: Spanish translation of the 'Emacs' and 'Calendar' document.
+Nigel Stoppard: English rewriting of the 'Emacs' document.
+Osvaldo La Rosa : FAQ translation in Dutch.
+Peter Piechutzky : German translation of the "Calendar" document.
+Roman Zalessky: messages translation in Russian.
+Rusmanto Maryanto: HOWTO Using Oralux in Indonesian (Bahasa Indonesia),.
+Sergei Studennikov: messages translation in Russian.
+Sergei V. Fleytin: Russian translation of the Oralux introduction, configuration of Emacs in Russian.
+Thomas Crépin: German messages improvements.
 
 
 

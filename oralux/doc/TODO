@@ -30,6 +30,12 @@ In the following lines, + means evolution, - bug.
 
 *** Priority 1.1
 
+For the next releases, mention also the MBROLA license in the website and in the root directory of the CD. 
+
+download:  
+
+linphonec
+
 * Major bug: a configuration file is removed (even no symlink) in using saveconfig from 0.6 alpha when the file is identical to the config file from the CD (e.g. knoppix and /KNOPPIX/etc/sysconfig/knoppix).
 
 * dosemu dosemu-freedos
@@ -45,7 +51,6 @@ test avec NCURSES_NO_PADDING
 
 - le menu 'Gauche' n'est plus dit
 - apres l'affichage de l'aide (pour Shell link par exemple), l'écran n'est pas completement effacé.
-
 
 + doc d'intro pour Screen + mcvox + yasr
 

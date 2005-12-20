@@ -1,66 +1,10 @@
-# ----------------------------------------------------------------------------
-# README
-# $Id: README,v 1.8 2005/12/04 22:42:27 gcasse Exp $
-# $Author: gcasse $
-# Description: This file describes how to build Oralux from Knoppix.
-# $Date: 2005/12/04 22:42:27 $ |
-# $Revision: 1.8 $ |
-# Copyright (C) 2003, 2004 Gilles Casse (gcasse@oralux.org)
-#
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-# ----------------------------------------------------------------------------
-####
+Oralux 0.7 CD
 
-Content
-
-
-1. Introduction
-1.1 Required Hardware
-1.2 Required Files
-2. Installing the Oralux tree
-2.1 Knoppix on hd
-2.2 Installing the Oralux sdk
-3. mkmyknoppix
-
-
-1. Introduction
-1.1 Required Hardware
-The first step is to check that you have the necessary amount of free
-space on your hard disk.
-Today, you need around 9.5 Gb shared in 3 partitions: 
-- one big partition (6 GB) where Knoppix is installed. 
-- one for building and testing the CD (2.5 GB)
-- and another one for the swap (the size of the RAM + the swap must equal 1GB). 
-
-1.2 Required Files
-The following files will be downloaded and stored in $HOME/oralux/install/arch
+This CD is based on KNOPPIX_V4.0.2CD-2005-09-23-EN.iso.
+Details about customization: /usr/share/oralux/install/mkmyknoppix.sh
 
 Softwares:
-http://switch.dl.sourceforge.net/sourceforge/emacspeak/emacspeak-22.tar.bz2
 http://fr.rpmfind.net/linux/blinux/emacspeak/blinux/emacspeak-ss-1.9.1.tar.gz
-http://www.pollock-nageoire.net/patches/efm-install-util.tgz
-
-Emacpeak-21 Patch by Igor B. Poretsky (Multispeech and more):
-ftp://ftp.rakurs.spb.ru/pub/Goga/projects/speech-interface/patches/emacspeak
-
-Multispeech
-ftp://ftp.rakurs.spb.ru/pub/Goga 
-under projects/speech-interface/multispeech-1.2.2.tar.bz2
-and slackware-packages/8.1/speach-interface/multispeech-1.2-i586-1.tgz 
-English lexicon from:
-ftp://ftp.nluug.nl/pub/os/Linux/distr/altlinux/Sisyphus/files/i586/RPMS/freespeech-10.0-alt2.i586.rpm
 
 Links2 comes from:
 http://links.twibright.com/download/links-2.1pre19.tar.bz2
@@ -80,12 +24,10 @@ BRLTTY:
 http://www.mielke.cc/brltty/releases/brltty-3.6.1.tar.gz
 
 
-If you already have the KNOPPIX iso file (e.g. for Oralux 0.06: KNOPPIX_V3.3-2004-02-16-EN.iso), 
+If you already have the KNOPPIX iso file (e.g. for Oralux 0.7: KNOPPIX_V4.0.2CD-2005-09-23-EN.iso), 
 renames it $HOME/oralux/factory/iso/knoppixCD.iso
 
 Doc
-If you want to install the current documentation, you will find it at :
-
 - Emacspeak tutorial (in French) by Pierre Lorenzon
 http://www.pollock-nageoire.net/emacspeak/index.html
 
@@ -95,78 +37,3 @@ fr.groups.yahoo.com/group/carrefourblinux/ files/
 - TUX&GNU@school (English, French, German)
 www.fsfeurope.org/projects/education/tgs/index.en.html
 
-2. Installing the Oralux tree
-
-2.1 Knoppix on hd
-First install KNOPPIX on your hard disk in a single partition. Please, avoid an old KNOPPIX release on hd: you could met incompatibilities in regards e.g. of the cloop versions.
-
-I used knoppix-installer.
-
-2.2 Installing the Oralux sdk
-Uncompressed the Oralux tarball:
-
-cd $HOME
-
-tar -zxvf Oralux-dev_0.6.tar.gz
-
-And under root: 
-ln -s /home/MyAccount/oralux /root
-
-To build the Oralux tree under root.
-
-[Note April 2004: CVS will be available after July 2004]. 
-If you choose to check out the files from the CVS, please choose the tagged files (e.g. o006). 
-The surer way is to download the tarball from the oralux.org website.
-
-Edit the configuration file named install/oralux.conf and update it according your cdrom features and your partition. 
-
-3. mkmyknoppix
-
-Internet is required to update and add the debian packages or the tarballs.
-Run as root:
-apt-get update
-
-cd /root/oralux/install
-./mkmyknoppix
-
-There are several stages. Typing return, jumps a stage; pressing the y key, and then return, starts the stage.
-Be very careful with any of this stage. More details follow.
-
-3.1 Clear the $HOME/oralux/factory/newOralux directory and temporary files ?
-I answered yes (y).
-
-3.2 Make a KNOPPIX CD ISO image from the KNOPPIX CDROM?
-No, because my KNOPPIX iso was already renamed as $HOME/oralux/factory/iso/knoppixCD.iso
-
-3.3 Extract and Make the ISO from the KNOPPIX CD ISO image?
-Yes
-
-3.4 Remove /home/gilles/oralux/factory/iso/extractedKnoppix.iso?
-No
-
-3.5 Remove unused packages?
-Yes. This stage is not quite clean today. If this exits, you may want to start again the script, and jump to the next stage...
-
-3.6 Add softwares?
-Yes
-
-Then, there will be distinct sub stages:
-general.sh, tcl.sh,...
-The installation of efm takes a long time but is automatic.
-We have added a few details which are not yet automatically isntalled (see please install/efm).
-
-3.7 Updating indexes?
-Yes.
-
-3.8 Creating ISO image for new KNOPPIX? (around half an hour to one hour)
-Yes!
-
-3.9 Burning CD
-The following stages help to burn the CD.
-Besides it, you may want to boot on the partition where Oralux is built ($HOME/oralux/factory/build) and 
-
-* Scan bus about your CD recorder?
-This is a reminder. The returned number might be equal to this one in your $HOME/oralux/install/oralux.conf file.
-
-* Erase CD?
-* Burn CD?
