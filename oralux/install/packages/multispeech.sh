@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # multispeech.sh
-# $Id: multispeech.sh,v 1.10 2005/12/18 23:36:31 gcasse Exp $
+# $Id: multispeech.sh,v 1.11 2005/12/20 22:00:45 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing Multispeech.
-# $Date: 2005/12/18 23:36:31 $ |
-# $Revision: 1.10 $ |
+# $Date: 2005/12/20 22:00:45 $ |
+# $Revision: 1.11 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -26,25 +26,32 @@
 set -vx
 source ../oralux.conf
 
-RULEX_RELEASE=0.9.22
-MULTISPEECH_RELEASE=1.2.2-oralux.2
-ARCH_RULEX=$ARCH/rulex-$RULEX_RELEASE.tar.gz 
-ARCH_MULTISPEECH_SRC=$ARCH/multispeech-$MULTISPEECH_RELEASE.tar.bz2
-ARCH_RU_TTS=$ARCH/ru_tts-0.4-i586-1.tgz
-ARCH_LEXICON=$ARCH/freespeech-10.0-alt2.i586.rpm
+export RULEX_RELEASE=1.0
+export MULTISPEECH_RELEASE=oralux-2005-12-19
+export ARCH_RULEX=$ARCH/rulex-$RULEX_RELEASE.tar.gz 
+export ARCH_MULTISPEECH_SRC=$ARCH/multispeech-$MULTISPEECH_RELEASE.tar.bz2
+#export ARCH_RU_TTS=$ARCH/ru_tts.bz2
+export ARCH_LEXICON=$ARCH/enlex.tar.bz2
+#export DOC="/usr/local/share/doc"
+export BIN="/usr/local/bin"
+export MBROLA="/usr/local/share/mbrola"
 
-echo "Previously compiled with g++-3.2"
+
+# cd $ARCH
+# wget http://oralux.org/tmp/multispeech-$MULTISPEECH_RELEASE.tar.bz2
+# wget ftp://ftp.rakurs.spb.ru/pub/Goga/projects/speech-interface/rulex/rulex-$RULEX_RELEASE.tar.gz
+# wget ftp://ftp.rakurs.spb.ru/pub/Goga/projects/speech-interface/ru_tts/binaries/ru_tts.bz2
+# wget ftp://ftp.rakurs.spb.ru/pub/Goga/projects/speech-interface/current/enlex.tar.bz2
+
+echo "Previously compiled with g++-3.3"
 
 ####
 # Installing the package in the current tree
 InstallPackage()
 {
-    apt-get install libgdbm-dev
+    apt-get install libdb3-dev
 
-    MBROLA="/usr/local/share/mbrola"
     install -d $MBROLA
-
-    BIN="/usr/local/bin"
     install -d $BIN
 
     export TMP=$tmp
@@ -56,28 +63,22 @@ InstallPackage()
     tar -zxvf $ARCH_RULEX
     cd /tmp/rulex*
     make lexicon
-    mkdir -p /usr/local/lib/ru_tts
+    install -d /usr/local/lib/ru_tts
     make install
 
 ### ru_tts
     cd $TMP
-    mkdir ru_tts
-     cd ru_tts
-    tar -zxvf $ARCH_RU_TTS
-    install -m 555 usr/local/bin/* $BIN
+    cp $ARCH/ru_tts.bz2 .
+    bunzip2 ru_tts.bz2
+    install -m 555 ru_tts $BIN
 
 ### Lexicon for English synthesis
     cd $TMP
-    rm -rf freespeech*
-    alien -g $ARCH_LEXICON
-    SRC="freespeech-10.0.orig/usr/share/freespeech"
-    install -m 444 $SRC/lexicon.dir $MBROLA/lexicon.en.dir
-    install -m 444 $SRC/lexicon.dir $MBROLA/lexicon.en.pag
-
-    SRC="freespeech-10.0.orig/usr/share/doc/freespeech-10.0"
-    DOC="$BUILD/usr/local/share/doc/freespeech"
-    install -d $DOC
-    install -m 444 $SRC/Copying $DOC
+    cp $ARCH/enlex.tar.bz2 .
+    tar -jxvf enlex.tar.bz2
+    cd enlex
+    make
+    install -m 444 lexicon $MBROLA/lexicon.en
 
 ### Multispeech
     cd $TMP
@@ -86,12 +87,13 @@ InstallPackage()
     cd multispeech-*
     export SRC=`pwd`
 
-    make
-    cd $SRC/lisp
+    echo "TODO: make letters_de and letters_fr (de, fr) must be run as current user"
+    read a
+
     make
 
 ### Installing the elisp files
-    install -m 444 $SRC/lisp/*.el* /usr/share/emacs/site-lisp/emacspeak/lisp
+#    install -m 444 $SRC/lisp/*.el* /usr/share/emacs/site-lisp/emacspeak/lisp
 
 ### Installing the remaining files
     LIB="/usr/local/lib/multispeech"
@@ -107,14 +109,12 @@ InstallPackage()
     done
     
     install -m 555 $SRC/binaries/speech_server $LIB
-
     install -m 555 $SRC/binaries/freephone $BIN
-    install -m 555 $SRC/binaries/rawplay $BIN
     install -m 555 $SRC/binaries/tones $BIN
 
 # Clear temporary files
-    rm -rf $SRC/multispeech-$MULTISPEECH_RELEASE
-    rm -rf $SRC/rulex-$RULEX_RELEASE
+#    rm -rf $TMP/multispeech-$MULTISPEECH_RELEASE
+#    rm -rf $TMP/rulex-$RULEX_RELEASE
 
     cd /usr/share/emacs/site-lisp/emacspeak/servers
     echo multispeech >> .servers
@@ -126,12 +126,12 @@ InstallPackage()
 # Adding the package to the new Oralux tree
 Copy2Oralux()
 {
-    chroot $BUILD apt-get install libgdbm-dev
+    chroot $BUILD apt-get install libdb3-dev
 
-    export MBROLA="$BUILD/usr/local/share/mbrola"
+    export MBROLA="$BUILD/$MBROLA"
     install -d $MBROLA
 
-    export BIN="$BUILD/usr/local/bin"
+    export BIN="$BUILD/$BIN"
     install -d $BIN
 
     export TMP=$BUILD/tmp
@@ -141,27 +141,21 @@ Copy2Oralux()
     cd $TMP
     rm -rf rulex*
     tar -zxvf $ARCH_RULEX
-    chroot $BUILD bash -c "cd /tmp/rulex*; make lexicon; mkdir -p /usr/local/lib/ru_tts; make install"
+    chroot $BUILD bash -c "cd /tmp/rulex*; make lexicon; install -d /usr/local/lib/ru_tts; make install"
 
 ### ru_tts
     cd $TMP
-    mkdir ru_tts
-    cd ru_tts
-    tar -zxvf $ARCH_RU_TTS
-    install -m 555 usr/local/bin/* $BIN
+    cp $ARCH/ru_tts.bz2 .
+    bunzip2 ru_tts.bz2
+    install -m 555 ru_tts $BIN
 
 ### Lexicon for English synthesis
     cd $TMP
-    rm -rf freespeech*
-    alien -g $ARCH_LEXICON
-    SRC="freespeech-10.0.orig/usr/share/freespeech"
-    install -m 444 $SRC/lexicon.dir $MBROLA/lexicon.en.dir
-    install -m 444 $SRC/lexicon.dir $MBROLA/lexicon.en.pag
-
-    SRC="freespeech-10.0.orig/usr/share/doc/freespeech-10.0"
-    DOC="$BUILD/usr/local/share/doc/freespeech"
-    install -d $DOC
-    install -m 444 $SRC/Copying $DOC
+    cp $ARCH/enlex.tar.bz2 .
+    tar -jxvf enlex.tar.bz2
+    cd enlex
+    make
+    install -m 444 lexicon $MBROLA/lexicon.en
 
 ### Multispeech
     cd $TMP
@@ -170,13 +164,10 @@ Copy2Oralux()
     cd multispeech-*
     export SRC=`pwd`
 
+    echo "TODO: make letters_de and letters_fr (de, fr) must be run as current user"
+    read a
     make
-    cd $SRC/lisp
-    make
-
-### Installing the elisp files
-    install -m 444 $SRC/lisp/*.el* $BUILD/usr/share/emacs/site-lisp/emacspeak/lisp
-
+ 
 ### Installing the remaining files
     LIB="$BUILD/usr/local/lib/multispeech"
 
@@ -185,21 +176,18 @@ Copy2Oralux()
 
     for i in br de en es fr ru; do
 	install -d $LIB/letters/$i
-	cd $SRC/letters/$i
-	install -m 444 * $LIB/letters/$i
+	install -m 444 $SRC/letters/$i/* $LIB/letters/$i
 	install -m 555 $SRC/scripts/players/$i $LIB/players
 	install -m 555 $SRC/scripts/tts/$i $LIB/tts
     done
 
     install -m 555 $SRC/binaries/speech_server $LIB
-
     install -m 555 $SRC/binaries/freephone $BIN
-    install -m 555 $SRC/binaries/rawplay $BIN
     install -m 555 $SRC/binaries/tones $BIN
 
 # Clear temporary files
-    rm -rf $SRC/multispeech-$MULTISPEECH_RELEASE
-    rm -rf $SRC/rulex-$RULEX_RELEASE
+#    rm -rf $SRC/multispeech-$MULTISPEECH_RELEASE
+#    rm -rf $SRC/rulex-$RULEX_RELEASE
 
     chroot $BUILD bash -c "cd /usr/share/emacs/site-lisp/emacspeak/servers; echo multispeech >> .servers; rm -f multispeech; ln -s /usr/local/lib/multispeech/speech_server multispeech"
 }

@@ -1,12 +1,12 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # emacspeak.sh
-# $Id: emacspeak.sh,v 1.7 2005/12/04 22:42:27 gcasse Exp $
+# $Id: emacspeak.sh,v 1.8 2005/12/20 22:00:45 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing emacspeak. Thanks to the Nath's howto: 
 # emacspeak-dtk-soft-debinst-howto.htm
-# $Date: 2005/12/04 22:42:27 $ |
-# $Revision: 1.7 $ |
+# $Date: 2005/12/20 22:00:45 $ |
+# $Revision: 1.8 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -25,85 +25,39 @@
 # ----------------------------------------------------------------------------
 ####
 source ../oralux.conf
-EMACSPEAK=emacspeak-22.tar.bz2
+EMACSPEAK=emacspeak-23.0.tar.bz2
 ARCH_EMACSPEAK=$ARCH/$EMACSPEAK
-RELEASE=22
 
-####
-# Replacing the original EMACSPEAK file from a customized one
-substituteFile()
-{
-    file=$1
-    dir=$2
-    # If the new file "dir/file" (either coming from Emacspeak or already updated for Oralux) isn't equal to the saved one.
-    comp=`diff $INSTALL_PACKAGES/emacspeak/$file.sav $dir/$file |wc -l|awk '{print $1}'`
-    # we have to compare it with the previously updated Oralux file
-    # If they are distinct, we are sure the new file has to replace the saved file.
-    # and then be updated with the oralux customization
-    # 
-    comp2=`diff $INSTALL_PACKAGES/emacspeak/$file $dir/$file |wc -l|awk '{print $1}'`
-    if [ "$comp" != "0" ] && [ "$comp2" != "0" ]; then
-        echo "the new EMACSPEAK file $dir/$file is different from our original one $INSTALL_PACKAGES/emacspeak/$file.sav"
-        echo "--> Press q, to quit (so that the following operations are achieved:"
-	echo "1. The saved file $INSTALL_PACKAGES/emacspeak/$file.sav might be equal to the new file $dir/$file from Emacspeak."
-	echo "2. Our customized file $INSTALL_PACKAGES/emacspeak/$file might be updated with the new features from $dir/$file)."
-	echo "--> Press any other key to jump this stage"
-	read a
+# Patch by Igor B. Poretsky (multispeech integration, and more)
+PATCH=emacspeak-23.patch
 
-	if [ "$a" == "q" ] || [ "$a" == "Q" ]; then
-	    exit 1
-	fi  
-    elif [ "$comp2" != "0" ]; then
-        echo "the new EMACSPEAK file $dir/$file is different from our customized one $INSTALL_PACKAGES/emacspeak/$file"
-        echo "--> Press q, to quit (so that the following operations are achieved:"
-	echo "The customized file $INSTALL_PACKAGES/emacspeak/$file will take in account the new features from $dir/$file)."
-	echo "--> Press any other key to jump this stage"
-	read a
+cd $ARCH
+wget http://switch.dl.sourceforge.net/sourceforge/emacspeak/$EMACSPEAK
+wget ftp://ftp.rakurs.spb.ru/pub/Goga/projects/speech-interface/patches/emacspeak/$PATCH.bz2
+cp $PATCH.bz2 $INSTALL_PACKAGES/emacspeak
 
-	if [ "$a" == "q" ] || [ "$a" == "Q" ]; then
-	    exit 1
-	fi 
-    fi
-}
 
 ####
 # Installing the package in the current tree
 InstallPackage()
 {
-    # for emacspeak doc
-    apt-get install texinfo
+    apt-get install debian-el edb emacs-wiki muse-el nxml-mode planner-el texinfo xsltproc
 
     cd /tmp
     rm -rf emacspeak*
-
-    if [ $method = "TARGZ" ]
-        then
-        tar -zxvf $ARCH_EMACSPEAK
-    fi
-    if [ $method = "TARBZ2" ]
-        then
-        tar -jxvf $ARCH_EMACSPEAK
-    fi
-
-    # Installing emacspeak
-    cd /tmp/emacspeak*; 
-    
-    # Patch by Igor B. Poretsky (multispeech integration, and more)
-    patch -p0 -i $INSTALL_PACKAGES/emacspeak/emacspeak-$RELEASE.patch
+    tar -jxvf $ARCH_EMACSPEAK
+    cp $INSTALL_PACKAGES/emacspeak/$PATCH.bz2 .
+    bunzip2 $PATCH.bz2
+    cd emacspeak-??.[^p]*    
+    patch -p0 -i ../$PATCH
+    cp $INSTALL_PACKAGES/emacspeak/*el lisp
 
 #Comment for 0.6b
 #     cp $INSTALL_PACKAGES/emacspeak/MakefileECI servers/linux-outloud/Makefile
 #     cp $INSTALL_PACKAGES/emacspeak/tcleci.cpp servers/linux-outloud
 #     cp $INSTALL_PACKAGES/emacspeak/outloud servers
-
-    cp $INSTALL_PACKAGES/emacspeak/*el lisp
-
-    make
-
-#Comment for 0.6b
 #     cd ..
 #     cp $INSTALL_PACKAGES/vv/outloud .
-
 
     make config; make; make install
 
@@ -120,11 +74,9 @@ InstallPackage()
 	echo "export DTK_PROGRAM=dtk-soft" >> /etc/profile
 	echo "unset DTK_TCL" >> /etc/profile
 	cd $EMACSPEAK_DIR/servers/software-dtk
-	rm -f tcldtk.o
-	rm -f tcldtk.so
-	rm -f Makefile
+	rm -f tcldtk.o tcldtk.so Makefile
 	cp $INSTALL_PACKAGES/emacspeak/Makefile .
-	replace /ramdisk/dtk/include /usr/local/include/dtk/ -- Makefile
+#	replace /ramdisk/dtk/include /usr/local/include/dtk/ -- Makefile
 	echo "Update the software-dtk Makefile according the optional languages (fr, sp, gr)"
 	cp $INSTALL_PACKAGES/emacspeak/tcldtk.c .
 	cp $INSTALL_PACKAGES/emacspeak/dtk-soft ..
@@ -133,60 +85,26 @@ InstallPackage()
 
     # Installing emacspeak.info
     install-info /usr/share/info/emacspeak.info
+    cp $INSTALL_PACKAGES/emacspeak/emacspeak /usr/bin
+    cp $INSTALL_PACKAGES/emacspeak/emacspeak.conf2 /etc/emacspeak.conf
 }
 
 ####
 # Adding the package to the new Oralux tree
 Copy2Oralux()
 {
-    # for emacspeak doc
-    apt-get install texinfo
-
-    a=`echo $ARCH_EMACSPEAK|grep tar.gz|wc -c|sed "s/ //g"`
-    if [ $a != 0 ]
-        then
-        method="TARGZ"
-    fi
-
-    a=`echo $ARCH_EMACSPEAK|grep tar.bz2|wc -c|sed "s/ //g"`
-    if [ $a != 0 ]
-        then
-        method="TARBZ2"
-    fi
+    chroot $BUILD apt-get install debian-el edb emacs-wiki muse-el nxml-mode planner-el texinfo xsltproc
 
     cd $BUILD/tmp
     rm -rf emacspeak*
-
-    if [ $method = "TARGZ" ]
-        then
-        tar -zxvf $ARCH_EMACSPEAK
-    fi
-    if [ $method = "TARBZ2" ]
-        then
-        tar -jxvf $ARCH_EMACSPEAK
-    fi
-
-    # For emacspeak-amphetadesk.el (emacspeak 19.0)
-    chroot $BUILD apt-get install w3-el-e21
-
-    rm -f $BUILD/usr/share/emacs/site-lisp/emacspeak/servers/software-dtk/Makefile 
-    rm -f $BUILD/usr/share/emacs/site-lisp/emacspeak/servers/software-dtk/tcldtk.*
-
-    # Installing emacspeak
-    cd $BUILD/tmp/emacspeak* 
-    patch -p0 -i $INSTALL_PACKAGES/emacspeak/emacspeak-$RELEASE.patch
-
-#Comment for 0.6b
-#     cp $INSTALL_PACKAGES/emacspeak/MakefileECI servers/linux-outloud/Makefile
-#     cp $INSTALL_PACKAGES/emacspeak/tcleci.cpp servers/linux-outloud
-#     cp $INSTALL_PACKAGES/emacspeak/outloud servers
-
+    tar -jxvf $ARCH_EMACSPEAK
+    cp $INSTALL_PACKAGES/emacspeak/$PATCH.bz2 .
+    bunzip2 $PATCH.bz2
+    cd emacspeak-??.[^p]*    
+    patch -p0 -i ../$PATCH
     cp $INSTALL_PACKAGES/emacspeak/*el lisp
 
     chroot $BUILD bash -c "cd /tmp/emacspeak*; make config; make; make install"
-
-    cd $BUILD/tmp
-    rm -rf emacspeak*
 
     EMACSPEAK_DIR="/usr/share/emacs/site-lisp/emacspeak"
     echo "export EMACSPEAK_DIR=$EMACSPEAK_DIR" >> $BUILD/etc/profile
@@ -233,10 +151,7 @@ Copy2Oralux()
     chroot $BUILD install-info /usr/share/info/emacspeak.info
 
     # Installing the customized emacspeak scripts
-#     substituteFile emacspeak $BUILD/usr/bin
-#     substituteFile emacspeak-setup.el $BUILD/usr/bin
     cp $INSTALL_PACKAGES/emacspeak/emacspeak $BUILD/usr/bin
-    cp $INSTALL_PACKAGES/emacspeak/emacspeak-setup.el $BUILD/usr/bin
 }
 
 if [ ! -e $ARCH_EMACSPEAK ]

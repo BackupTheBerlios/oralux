@@ -1,6 +1,6 @@
 #!/bin/sh
 # emacspeak - execute emacs with speech enhancements
-# Id: emacspeak.sh.def,v 20.0 2004/05/01 01:16:25 raman
+# Id: emacspeak.sh.def,v 23.505 2005/11/25 16:30:52 raman Exp 
 # WARNING:
 # This file is not the original one: modified for Oralux
 #

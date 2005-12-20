@@ -1,5 +1,11 @@
+;;;This file has been modified for Oralux
+;;; Change:
+;;; * Language switching.
+;;; 20 Dec 2005, Gilles Casse <gcasse@oralux.org>
+;;; this file includes the patch by Igor B. Poretsky <master@goga.energo.ru>
+;;;
 ;;; dtk-interp.el --- Language specific (e.g. TCL) interface to speech server
-;;; Id: dtk-interp.el,v 22.0 2005/04/30 16:39:41 raman Exp 
+;;; Id: dtk-interp.el,v 23.505 2005/11/25 16:30:49 raman Exp 
 ;;; Author: raman  
 ;;; Description:  Interfacing to the speech server
 ;;; Keywords: TTS, Dectalk, Speech Server
@@ -8,8 +14,8 @@
 ;;; LCD Archive Entry:
 ;;; emacspeak| T. V. Raman |raman@cs.cornell.edu 
 ;;; A speech interface to Emacs |
-;;; Date: 2005/04/30 16:39:41  |
-;;;  Revision: 22.0  | 
+;;; Date: 2005/11/25 16:30:49  |
+;;;  Revision: 23.505  | 
 ;;; Location undetermined
 ;;;
 
@@ -36,10 +42,6 @@
 ;;; the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
 
 ;;}}}
-;;; Change:
-;;; * Language switching.
-;;; 14 May 2005, Gilles Casse <gcasse@oralux.org>
-;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;{{{ introduction
