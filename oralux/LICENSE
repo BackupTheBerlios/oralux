@@ -1,8 +1,17 @@
-The sources written by the Oralux team are under the GPL licence.
-You may want to read the file named GPL in this directory or read it online at: 
-http://www.gnu.org/licenses/gpl.txt
+The sources written by the Oralux team are under the GNU General Public License. 
 
 The other softwares come from Knoppix, Debian, or directly from several others authors.
+
+-------
+WARNING
+-------
+This CD includes the MBROLA binary and several MBROLA databases or phonetizers.
+Read the MBROLA license agreement for non-commercial, non-military use of the program and databases.
+
+The MBROLA and phonetizers licence holders authorize the web sellers to distribute the Oralux CD if the web sellers do not charge money for the softwares or databases but for their service of providing the Oralux collection on a physical CD. The fact that they ship it does not change the license granted to end users: non-commercial, non-military use.
+-------
+
+The distinct licences are available under /usr/share/doc
 
 The whole GPL sources are available on demand. 
 Contact us at contact@oralux.org to pay the virgin CDs and the shipping.

@@ -2,11 +2,11 @@
 /* 
 ----------------------------------------------------------------------------
 docAPI.c
-$Id: docAPI.c,v 1.9 2005/10/17 15:24:37 gcasse Exp $
+$Id: docAPI.c,v 1.10 2005/12/22 00:39:49 gcasse Exp $
 $Author: gcasse $
 Description: manage document, logical structure of the displayed screen.
-$Date: 2005/10/17 15:24:37 $ |
-$Revision: 1.9 $ |
+$Date: 2005/12/22 00:39:49 $ |
+$Revision: 1.10 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -177,7 +177,6 @@ static gboolean deleteNode( GNode *theNode, gpointer theElementType)
 {
   element* this = NULL;
   int aType = (int)theElementType;
-  gboolean aTraversalMustBeStopped = FALSE;
 
   ENTER("deleteNode");
 
@@ -186,12 +185,11 @@ static gboolean deleteNode( GNode *theNode, gpointer theElementType)
   if (this && ((aType == anyType) || (aType & this->myType)))
     {
       SHOW2("delete node %x\n", (int)theNode);
-
       deleteElement(&this);
+      g_node_unlink ( theNode);
       g_node_destroy( theNode);
     }
-
-  return aTraversalMustBeStopped;
+  return FALSE; // traversal must go on
 }
 /* > */
 /* < setVoiceVolume */
@@ -795,6 +793,7 @@ void clearContentDocAPI( void* theDocAPI)
     {
       clearData( this->myRootNode, textType | linkType);
       this->myCurrentTextNode = NULL;
+      DISPLAY_TREE(this->myRootNode);
 
       /*      deleteTermInfoList( this->myFirstEntry);*/
       this->myFirstEntry = NULL;

@@ -19,7 +19,7 @@ include = Split("""
 
 Import('env');
 
-termbuffer = env.Library(
+mode = env.Library(
     'mode'
     , list
     , CPPPATH = include);

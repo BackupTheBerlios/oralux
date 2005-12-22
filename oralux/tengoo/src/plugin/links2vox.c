@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 links2vox.c
-$Id: links2vox.c,v 1.9 2005/10/17 14:12:25 gcasse Exp $
+$Id: links2vox.c,v 1.10 2005/12/22 00:39:49 gcasse Exp $
 $Author: gcasse $
 Description: tengoo plugin for the links2 web browser.
-$Date: 2005/10/17 14:12:25 $ |
-$Revision: 1.9 $ |
+$Date: 2005/12/22 00:39:49 $ |
+$Revision: 1.10 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -254,7 +254,7 @@ void* createPlugin( termAPI* theTermAPI, int theInputOutputMaxLength, void** the
   return this;
 }
 /* > */
-/* < transcodeInput */
+/* < transcodeInputPlugin */
 GByteArray* transcodeInputPlugin( pluginAPI* thePluginAPI, char* theInput, int theLength)
 {
   plugin* this=(plugin*)(thePluginAPI->myPlugin);
@@ -266,7 +266,7 @@ GByteArray* transcodeInputPlugin( pluginAPI* thePluginAPI, char* theInput, int t
   return manageCommand( this, anIdentifier, theInput, theLength);
 }
 /* > */
-/* < transcodeOutput */
+/* < transcodeOutputPlugin */
 GByteArray* transcodeOutputPlugin( pluginAPI* thePluginAPI, char* theOutput, int theLength)
 {
   GByteArray* aByteArray = NULL;

@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 tifilter2l.c
-$Id: tifilter2l.c,v 1.6 2005/10/17 22:55:14 gcasse Exp $
+$Id: tifilter2l.c,v 1.7 2005/12/22 00:39:49 gcasse Exp $
 $Author: gcasse $
 Description: terminfo filter, two lines.
-$Date: 2005/10/17 22:55:14 $ |
-$Revision: 1.6 $ |
+$Date: 2005/12/22 00:39:49 $ |
+$Revision: 1.7 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -370,6 +370,8 @@ int terminfofilter2lines(GList* theTerminfoList, termAPI* theTermAPI, GList** th
 
   aNumberOfLinePortionGroup = groupLinePortion(this);
 
+  SHOW3("aNumberOfLinePortionGroup(%d) >= NB_STYLE_CHANGE(%d)?\n", aNumberOfLinePortionGroup, NB_STYLE_CHANGE);
+
   if (aNumberOfLinePortionGroup >= NB_STYLE_CHANGE)
     { /* looking for the style changes */
       GList* new_g[ NB_STYLE_CHANGE+1];
@@ -379,7 +381,12 @@ int terminfofilter2lines(GList* theTerminfoList, termAPI* theTermAPI, GList** th
       int i=0; /* myLinePortionGroup index */
       int j=0; /* index and number of style changes */
 
-      for(i=0; i<aNumberOfLinePortionGroup && j<NB_STYLE_CHANGE+1; i++)
+      for(j=0; j<NB_STYLE_CHANGE+1; j++)
+	{
+	  old_g[j] = new_g[j] = NULL;
+	}
+
+      for(i=0, j=0; i<aNumberOfLinePortionGroup && j<NB_STYLE_CHANGE+1; i++)
 	{
 	  SHOW2("* linePortionGroup %d\n",i);
 
@@ -437,6 +444,11 @@ int terminfofilter2lines(GList* theTerminfoList, termAPI* theTermAPI, GList** th
 	      *thePreviouslyHighlightedElement = getTerminfoElementLinePortionGroup( new_g[i]);
 	      *theNewlyHighlightedElement = getTerminfoElementLinePortionGroup( new_g[j]);
 	    }
+	}
+
+      for(j=0; j<NB_STYLE_CHANGE+1; j++)
+	{
+	  deleteLinePortionGroup(old_g[j]);
 	}
     }
   deleteContext(this);

@@ -40,6 +40,7 @@ fprintf(TheOutputStream,"== ENTER %s (%d)\n",a,__LINE__)
 #define LEAVE2(a,b) fprintf(TheOutputStream,"LEAVE %s (%d)\n",a,b)
 
 void displayColor( char* theLabel, int theColor);
+void displayTree( void* theNode);
 void displayStyle(struct t_style* theStyle);
 void displayCapacity( enum StringCapacity theCapacity);
 void displayBuffer( char *theDataBuffer, struct t_style* theStyleBuffer, int theMaxLine, int theMaxCol);
@@ -49,6 +50,7 @@ void displayBuffer( char *theDataBuffer, struct t_style* theStyleBuffer, int the
 #define DISPLAY_CAPACITY(a) displayCapacity(a)
 #define DISPLAY_BUFFER(a,b,c,d) displayBuffer(a,b,c,d)
 #define DISPLAY_RAW_BUFFER(buf, size) displayRawBuffer(buf, size)
+#define DISPLAY_TREE(a) displayTree(a)
 
 
 #define SHOW_TIME(a) \
@@ -72,6 +74,7 @@ void displayBuffer( char *theDataBuffer, struct t_style* theStyleBuffer, int the
 #define LEAVE(a)
 #define LEAVE2(a,b)
 #define DISPLAY_COLOR(a,b)
+#define DISPLAY_TREE(a)
 #define DISPLAY_STYLE(a)
 #define DISPLAY_CAPACITY(a)
 #define DISPLAY_BUFFER(a,b,c,d)

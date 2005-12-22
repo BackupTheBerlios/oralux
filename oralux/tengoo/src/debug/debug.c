@@ -2,11 +2,11 @@
 /* 
 ----------------------------------------------------------------------------
 debug.c
-$Id: debug.c,v 1.1 2005/09/14 21:10:08 gcasse Exp $
+$Id: debug.c,v 1.2 2005/12/22 00:39:49 gcasse Exp $
 $Author: gcasse $
 Description: for applicative trace.
-$Date: 2005/09/14 21:10:08 $ |
-$Revision: 1.1 $ |
+$Date: 2005/12/22 00:39:49 $ |
+$Revision: 1.2 $ |
 Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -27,11 +27,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "escape2terminfo.h"
+#include <glib.h>
+#include <gnode.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include "escape2terminfo.h"
 #include "debug.h"
 
 /* < array myStringCapacity */
@@ -664,6 +666,29 @@ void displayRawBuffer( unsigned char* theBuffer, int theSize)
   SHOWn(aBuffer, p - aBuffer);
 }
 
+/* > */
+
+/* < displayTree */
+static gboolean displayNode( GNode *theNode, gpointer theElementType)
+{
+  ENTER("displayNode");
+
+  fprintf(TheOutputStream,"Node=%x > data=%x, next=%x, prev=%x, parent=%x, children=%x,|\n", 
+	  (int)theNode, (int)(theNode->data), (int)theNode->next, 
+	  (int)theNode->prev, (int)theNode->parent, (int)theNode->children);
+
+  return FALSE; // traversal must go on
+}
+
+void displayTree(void *theNode)
+{
+  g_node_traverse ((GNode*)theNode,
+		   G_IN_ORDER,
+		   G_TRAVERSE_ALL,
+		   -1,
+		   (GNodeTraverseFunc)displayNode,
+		   NULL);
+}
 /* > */
 
 #else

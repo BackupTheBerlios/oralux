@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 mode.c
-$Id: modeAPI.c,v 1.5 2005/10/17 14:12:25 gcasse Exp $
+$Id: modeAPI.c,v 1.6 2005/12/22 00:39:49 gcasse Exp $
 $Author: gcasse $
 Description: Mode API.
-$Date: 2005/10/17 14:12:25 $ |
-$Revision: 1.5 $ |
+$Date: 2005/12/22 00:39:49 $ |
+$Revision: 1.6 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -51,7 +51,8 @@ static GModule* createModule( char* theName)
 
   ENTER("createModule");
   aPath = g_module_build_path( NULL, theName);
-  this = g_module_open( aPath, 0);
+  this = g_module_open( aPath, G_MODULE_BIND_LAZY);
+  free( aPath);
   SHOW2("New module:%x\n",(int)this);
   return this;
 }
@@ -138,11 +139,12 @@ void* createModeAPI( char* theName, termAPI* theTermAPI, int theInputOutputMaxLe
 
   ENTER("createModeAPI");
 
-  if (g_module_supported() == FALSE)
-    {
-      SHOW2("%s\n", g_module_error());
-      exit(1);
-    }
+  /* TODO: in comment to avoid memory leak */
+  /*   if (g_module_supported() == FALSE) */
+  /*     { */
+  /*       SHOW2("%s\n", g_module_error()); */
+  /*       exit(1); */
+  /*     } */
 
   this = malloc(sizeof(mode));
   if (this == NULL)

@@ -3,10 +3,17 @@ list = Split("""
 debug.c
 """)
 
+include = Split("""
+/usr/include/glib-2.0
+/usr/include/glib-2.0/glib
+/usr/lib/glib-2.0/include
+../terminfo
+""")
+
 Import('env');
 
 debug = env.Library(
     'debug'
     , list
-    , CPPPATH = ['../terminfo'])
+    , CPPPATH = include)
 

@@ -17,7 +17,7 @@ include = Split("""
 
 Import('env');
 
-termbuffer = env.Library(
+document = env.Library(
     'document'
     , list
     , CPPPATH = include);

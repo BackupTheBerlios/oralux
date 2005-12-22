@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # yasr.sh
-# $Id: yasr.sh,v 1.3 2005/06/11 22:48:37 gcasse Exp $
+# $Id: yasr.sh,v 1.4 2005/12/22 00:39:49 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing Yasr
-# $Date: 2005/06/11 22:48:37 $ |
-# $Revision: 1.3 $ |
+# $Date: 2005/12/22 00:39:49 $ |
+# $Revision: 1.4 $ |
 # Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -25,6 +25,9 @@
 ####
 source ../oralux.conf
 export YASR_RELEASE=0.6.7
+cd $ARCH
+wget http://ovh.dl.sourceforge.net/sourceforge/yasr/yasr-$YASR_RELEASE.tar.gz
+
 
 ####
 # Installing the package in the current tree
@@ -34,7 +37,7 @@ InstallPackage()
     rm -rf /etc/yasr
     cd /tmp
     rm -rf yasr*
-    wget http://ovh.dl.sourceforge.net/sourceforge/yasr/yasr-$YASR_RELEASE.tar.gz
+    cp $ARCH/yasr-$YASR_RELEASE.tar.gz .
     tar -zxvf yasr-$YASR_RELEASE.tar.gz
 
 #     cd yasr*
@@ -43,6 +46,8 @@ InstallPackage()
     # avoid crash at launch time, speech server reinit, say word
     patch -p0 < $INSTALL_PACKAGES/yasr/yasr.patch
     patch -p0 < $INSTALL_PACKAGES/yasr/arg.patch
+    # special escape key
+    patch -p0 < $INSTALL_PACKAGES/yasr/test-tengoo.patch
 
     cd yasr-$YASR_RELEASE
     ./configure --prefix=/usr
@@ -58,15 +63,18 @@ Copy2Oralux()
 {
     export INSTALL_PACKAGES=/usr/share/oralux/install/packages
 
+    rm -rf $BUILD/etc/yasr
+    cd $BUILD/tmp
+    rm -rf yasr*
+    cp $ARCH/yasr-$YASR_RELEASE.tar.gz .
+    tar -zxvf yasr-$YASR_RELEASE.tar.gz
+
     chroot $BUILD  bash -c "\
     apt-get --purge remove yasr;\
-    rm -rf /etc/yasr;\
-    cd /tmp;\
-    rm -rf yasr*;\
-    wget http://ovh.dl.sourceforge.net/sourceforge/yasr/yasr-$YASR_RELEASE.tar.gz;\
-    tar -zxvf yasr-$YASR_RELEASE.tar.gz;\
+    cd /tmp:\
     patch -p0 < $INSTALL_PACKAGES/yasr/yasr.patch;\
     patch -p0 < $INSTALL_PACKAGES/yasr/arg.patch;\
+    patch -p0 < $INSTALL_PACKAGES/yasr/test-tengoo.patch;\
     cd yasr-$YASR_RELEASE;\
     ./configure --prefix=/usr;\
     make;\

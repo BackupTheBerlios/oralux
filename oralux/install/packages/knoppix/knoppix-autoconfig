@@ -1100,7 +1100,7 @@ if [ -n "$partitions" ]; then
   MOUNTOPTS="ro"
   case "$f" in
     vfat|msdos|ntfs) MOUNTOPTS="$MOUNTOPTS,uid=knoppix,gid=knoppix" ;;
-    ext3|ext3|reiserfs|xfs) MOUNTOPTS="$MOUNTOPTS,noatime" ;;
+    ext2|ext3|reiserfs|xfs) MOUNTOPTS="$MOUNTOPTS,noatime" ;;
     *) continue ;;
   esac
   mount -o "$MOUNTOPTS" -t $f $p $m 2>/dev/null || continue
