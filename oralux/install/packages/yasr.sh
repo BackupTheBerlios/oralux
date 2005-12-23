@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # yasr.sh
-# $Id: yasr.sh,v 1.4 2005/12/22 00:39:49 gcasse Exp $
+# $Id: yasr.sh,v 1.5 2005/12/23 20:13:22 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing Yasr
-# $Date: 2005/12/22 00:39:49 $ |
-# $Revision: 1.4 $ |
+# $Date: 2005/12/23 20:13:22 $ |
+# $Revision: 1.5 $ |
 # Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -26,7 +26,7 @@
 source ../oralux.conf
 export YASR_RELEASE=0.6.7
 cd $ARCH
-wget http://ovh.dl.sourceforge.net/sourceforge/yasr/yasr-$YASR_RELEASE.tar.gz
+#wget http://ovh.dl.sourceforge.net/sourceforge/yasr/yasr-$YASR_RELEASE.tar.gz
 
 
 ####
@@ -61,7 +61,14 @@ InstallPackage()
 # Adding the package to the new Oralux tree
 Copy2Oralux()
 {
-    export INSTALL_PACKAGES=/usr/share/oralux/install/packages
+    export NEW_INSTALL_PACKAGES=/usr/share/oralux/install/packages
+    export SRC=$INSTALL_PACKAGES/yasr
+    export DEST=$BUILD/$NEW_INSTALL_PACKAGES/yasr
+
+    install -d $DEST
+    install -m 555 $SRC/yasr.patch $DEST 
+    install -m 555 $SRC/arg.patch $DEST
+    install -m 555 $SRC/test-tengoo.patch $DEST
 
     rm -rf $BUILD/etc/yasr
     cd $BUILD/tmp
@@ -71,10 +78,10 @@ Copy2Oralux()
 
     chroot $BUILD  bash -c "\
     apt-get --purge remove yasr;\
-    cd /tmp:\
-    patch -p0 < $INSTALL_PACKAGES/yasr/yasr.patch;\
-    patch -p0 < $INSTALL_PACKAGES/yasr/arg.patch;\
-    patch -p0 < $INSTALL_PACKAGES/yasr/test-tengoo.patch;\
+    cd /tmp;\
+    patch -p0 < $NEW_INSTALL_PACKAGES/yasr/yasr.patch;\
+    patch -p0 < $NEW_INSTALL_PACKAGES/yasr/arg.patch;\
+    patch -p0 < $NEW_INSTALL_PACKAGES/yasr/test-tengoo.patch;\
     cd yasr-$YASR_RELEASE;\
     ./configure --prefix=/usr;\
     make;\

@@ -6,11 +6,11 @@
 
 enum elementType 
   {
-    anyType = 0,
     rootType=1,
     textType=2,
     linkType=4,
     frameType=8,
+    anyNotRootType =14, 
   };
 
 void* createDocAPI( int theVoiceVolume);

@@ -2,11 +2,11 @@
 /* 
 ----------------------------------------------------------------------------
 debug.c
-$Id: debug.c,v 1.2 2005/12/22 00:39:49 gcasse Exp $
+$Id: debug.c,v 1.3 2005/12/23 20:13:22 gcasse Exp $
 $Author: gcasse $
 Description: for applicative trace.
-$Date: 2005/12/22 00:39:49 $ |
-$Revision: 1.2 $ |
+$Date: 2005/12/23 20:13:22 $ |
+$Revision: 1.3 $ |
 Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -669,25 +669,24 @@ void displayRawBuffer( unsigned char* theBuffer, int theSize)
 /* > */
 
 /* < displayTree */
-static gboolean displayNode( GNode *theNode, gpointer theElementType)
-{
-  ENTER("displayNode");
-
-  fprintf(TheOutputStream,"Node=%x > data=%x, next=%x, prev=%x, parent=%x, children=%x,|\n", 
-	  (int)theNode, (int)(theNode->data), (int)theNode->next, 
-	  (int)theNode->prev, (int)theNode->parent, (int)theNode->children);
-
-  return FALSE; // traversal must go on
-}
-
 void displayTree(void *theNode)
 {
-  g_node_traverse ((GNode*)theNode,
-		   G_IN_ORDER,
-		   G_TRAVERSE_ALL,
-		   -1,
-		   (GNodeTraverseFunc)displayNode,
-		   NULL);
+  GNode* aNode = theNode;
+  fprintf(TheOutputStream,"> displayTree: Node=%x\n", (int)aNode); 
+  if (aNode)
+    {
+      fprintf(TheOutputStream,"next=%x, prev=%x, parent=%x, children=%x\n",
+	      (int)aNode->next, (int)aNode->prev,
+	      (int)aNode->parent, (int)aNode->children);
+      if(aNode->next)
+	{
+	  displayTree( aNode->next);
+	}
+      if(aNode->children)
+	{
+	  displayTree( aNode->children);
+	}
+    }
 }
 /* > */
 

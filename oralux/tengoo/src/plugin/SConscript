@@ -19,7 +19,12 @@ include = Split("""
 
 Import('env');
 
+
 links2vox = env.SharedLibrary(
     'links2vox'
     , list
-    , CPPPATH = include);
+    , CPPPATH = include
+    , LINKFLAGS = "-Wl,--soname=liblinks2vox.so.1"
+    );
+
+InstallAs("liblinks2vox.so.1.0.0", links2vox)

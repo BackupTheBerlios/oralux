@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # jabber.sh
-# $Id: jabber.sh,v 1.1 2005/12/20 22:00:45 gcasse Exp $
+# $Id: jabber.sh,v 1.2 2005/12/23 20:13:22 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing jabber
-# $Date: 2005/12/20 22:00:45 $ |
-# $Revision: 1.1 $ |
+# $Date: 2005/12/23 20:13:22 $ |
+# $Revision: 1.2 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -29,8 +29,14 @@ export EMACS_JABBER=emacs-jabber_0.6.1_all.deb
 export DIR=/usr/share/emacs21/site-lisp/emacs-jabber
 cd $ARCH
 
-wget http://ovh.dl.sourceforge.net/sourceforge/emacs-jabber/$EMACS_JABBER
+if [ ! -e $MICQ.tgz ]; then 
+    wget http://ovh.dl.sourceforge.net/sourceforge/emacs-jabber/$EMACS_JABBER
+fi
 
+export MICQ=micq-0.5.0.4
+if [ ! -e $MICQ.tgz ]; then 
+    wget http://micq.org/source/$MICQ.tgz
+fi
 ####
 # Installing the package in the current tree
 InstallPackage()
@@ -44,6 +50,14 @@ InstallPackage()
     # emacs client
     apt-get install flim
     dpkg -i $ARCH/$EMACS_JABBER
+
+    # micq
+    cd /tmp
+    cp $ARCH/$MICQ.tgz .
+    tar -zxvf $MICQ.tgz 
+    cd $MICQ
+    ./configure --enable-ssl=openssl
+    make install
 }
 
 ####
@@ -61,6 +75,14 @@ Copy2Oralux()
     # emacs client
     cp $ARCH/$EMACS_JABBER $BUILD/tmp
     chroot $BUILD dpkg -i /tmp/$EMACS_JABBER
+
+    # micq
+    cd /$BUILD/tmp
+    cp $ARCH/$MICQ.tgz .
+    tar -zxvf $MICQ.tgz 
+    chroot $BUILD bash -c "cd /tmp/$MICQ;\
+    ./configure --enable-ssl=openssl;\
+    make install"
 }
 
 case $1 in

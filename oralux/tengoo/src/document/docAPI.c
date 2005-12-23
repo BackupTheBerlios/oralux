@@ -2,11 +2,11 @@
 /* 
 ----------------------------------------------------------------------------
 docAPI.c
-$Id: docAPI.c,v 1.10 2005/12/22 00:39:49 gcasse Exp $
+$Id: docAPI.c,v 1.11 2005/12/23 20:13:22 gcasse Exp $
 $Author: gcasse $
 Description: manage document, logical structure of the displayed screen.
-$Date: 2005/12/22 00:39:49 $ |
-$Revision: 1.10 $ |
+$Date: 2005/12/23 20:13:22 $ |
+$Revision: 1.11 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -66,62 +66,72 @@ enum
 #ifdef DEBUG
 char* displayType( int theType)
 {
-  static char aResult[1000];
-  aResult[0]=0;
-  if (theType == anyType)
+  static char aResult[2][1000];
+  static int i=0;
+  char* s=NULL;
+  i=(i+1)%2;
+  s=aResult[i];
+  s[0]=0;
+
+  if (theType == anyNotRootType)
     {
-      strcpy(aResult,"any");
+      strcpy(s,"anyNotRootType");
     }
   else
     {
       if (theType & rootType)
 	{
-	  strcat(aResult,"root ");
+	  strcat(s,"root ");
 	}
       if (theType & textType)
 	{
-	  strcat(aResult,"text ");
+	  strcat(s,"text ");
 	}
       if (theType & frameType)
 	{
-	  strcat(aResult,"frame ");
+	  strcat(s,"frame ");
 	}
       if (theType & linkType)
 	{
-	  strcat(aResult,"link ");
+	  strcat(s,"link ");
 	}
     }
-  return aResult;
+  return s;
 }
 char* displayFocusState( int theState)
 {
-  static char aResult[1000];
-  aResult[0]=0;
+  static char aResult[2][1000];
+  static int i=0;
+  char* s=NULL;
+  i=(i+1)%2;
+  s=aResult[i];
+  s[0]=0;
+
   if (theState == notHoveredElement)
     {
-      strcpy(aResult,"notHovered");
+      strcpy(s,"notHovered");
     }
   else
     {
       if (theState & hoveredElement)
 	{
-	  strcat(aResult,"hovered ");
+	  strcat(s,"hovered ");
 	}
       if (theState & activeElement)
 	{
-	  strcat(aResult,"active ");
+	  strcat(s,"active ");
 	}
       if (theState & focusedElement)
 	{
-	  strcat(aResult,"focused ");
+	  strcat(s,"focused ");
 	}
     }
-  return aResult;
+  return s;
 }
 #define DISPLAY_TYPE( x) displayType(x)
 #define DISPLAY_FOCUS_STATE( x) displayFocusState(x)
 #else
-#define DISPLAY_TYPE( x)
+#define DISPLAY_TYPE( x) 
 #define DISPLAY_FOCUS_STATE( x)
 #endif
 
@@ -179,12 +189,13 @@ static gboolean deleteNode( GNode *theNode, gpointer theElementType)
   int aType = (int)theElementType;
 
   ENTER("deleteNode");
-
-  this = theNode->data;
   
-  if (this && ((aType == anyType) || (aType & this->myType)))
+  this = theNode->data;
+
+  SHOW4("Node %x, type:%s, expected:%s\n", (int)theNode, DISPLAY_TYPE(this->myType), DISPLAY_TYPE( (int)theElementType));
+  
+  if (this && (aType & this->myType))
     {
-      SHOW2("delete node %x\n", (int)theNode);
       deleteElement(&this);
       g_node_unlink ( theNode);
       g_node_destroy( theNode);
@@ -208,6 +219,9 @@ static void clearData( GNode* theNode, int theElementType)
 {
   ENTER("clearData");
 
+  SHOW3("the root Node:%x, expected type:%s\n", (int)theNode, DISPLAY_TYPE( theElementType));
+  DISPLAY_TREE( theNode);
+
   if (theNode)
     {
       g_node_traverse (theNode,
@@ -229,8 +243,9 @@ void deleteDocAPI( void* theDocAPI)
   if (this)
     {
       if (this->myRootNode)
-	{
-	  clearData( this->myRootNode, anyType);
+	{ /* TODO: cleaner */
+	  clearData( this->myRootNode, anyNotRootType);
+	  g_node_destroy(this->myRootNode); 
 	  this->myRootNode = NULL;
 	}
 /*       deleteTermInfoList( this->myFirstEntry); */
@@ -791,9 +806,10 @@ void clearContentDocAPI( void* theDocAPI)
   ENTER("clearContentDocAPI");
   if (this)
     {
+      SHOW2("this=%x\n", (int)this);
       clearData( this->myRootNode, textType | linkType);
+      DISPLAY_TREE( this->myRootNode);
       this->myCurrentTextNode = NULL;
-      DISPLAY_TREE(this->myRootNode);
 
       /*      deleteTermInfoList( this->myFirstEntry);*/
       this->myFirstEntry = NULL;

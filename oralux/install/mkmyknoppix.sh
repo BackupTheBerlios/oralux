@@ -59,6 +59,7 @@ add_soft() {
     next_script net.sh "net"
     next_script menu.sh "menu"
     next_script yasr.sh "yasr"
+    next_script tengoo.sh "tengoo"
     next_script mcvox.sh "mcvox"
     next_script screen.sh "screen"
 

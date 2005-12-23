@@ -6,9 +6,6 @@ Details about customization: /usr/share/oralux/install/mkmyknoppix.sh
 Softwares:
 http://fr.rpmfind.net/linux/blinux/emacspeak/blinux/emacspeak-ss-1.9.1.tar.gz
 
-Links2 comes from:
-http://links.twibright.com/download/links-2.1pre19.tar.bz2
-
 Rawrite.exe comes from:
 http://download.fedora.redhat.com/pub/fedora/linux/core/1/i386/os/dosutils/rawrite.exe
 
@@ -23,9 +20,6 @@ http://ovh.dl.sourceforge.net/sourceforge/speedtouchconf/speedtouchconf-2.0-beta
 BRLTTY:
 http://www.mielke.cc/brltty/releases/brltty-3.6.1.tar.gz
 
-
-If you already have the KNOPPIX iso file (e.g. for Oralux 0.7: KNOPPIX_V4.0.2CD-2005-09-23-EN.iso), 
-renames it $HOME/oralux/factory/iso/knoppixCD.iso
 
 Doc
 - Emacspeak tutorial (in French) by Pierre Lorenzon

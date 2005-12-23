@@ -3,11 +3,11 @@
 # To update the relevant fields with your data, search the keyword: [INPUT 
 # ----------------------------------------------------------------------------
 # links.sh
-# $Id: links.sh,v 1.3 2005/12/04 22:42:27 gcasse Exp $
+# $Id: links.sh,v 1.4 2005/12/23 20:13:22 gcasse Exp $
 # $Author: gcasse $
 # Description: installing links
-# $Date: 2005/12/04 22:42:27 $ |
-# $Revision: 1.3 $ |
+# $Date: 2005/12/23 20:13:22 $ |
+# $Revision: 1.4 $ |
 # Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -26,8 +26,10 @@
 # ----------------------------------------------------------------------------
 ####
 source ../oralux.conf
-export TARBALL=links-2.1pre19.tar.bz2
-export DIR=links-2.1pre19
+export DIR=links-2.1pre20
+export TARBALL=$DIR.tar.bz2
+cd $ARCH
+#wget http://links.twibright.com/download/$DIR.tar.bz2
 
 ####
 # Installing the package in the current tree
@@ -50,7 +52,7 @@ Copy2Oralux()
 {
     cd $BUILD/tmp
     rm -rf links*
-    tar -zxvf $ARCH/$TARBALL
+    tar -jxvf $ARCH/$TARBALL
     chroot $BUILD bash -c "cd /tmp/$DIR; ./configure --enable-javascript --with-ssl=/usr/include/openssl; make; rm -f /usr/bin/links; cp links /usr/bin/links"
     rm -rf $BUILD/tmp/links*
 }
