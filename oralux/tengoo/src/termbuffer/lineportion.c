@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 linePortion.c
-$Id: lineportion.c,v 1.3 2005/10/02 20:14:57 gcasse Exp $
+$Id: lineportion.c,v 1.4 2005/12/24 16:36:00 gcasse Exp $
 $Author: gcasse $
 Description: manage line portions.
-$Date: 2005/10/02 20:14:57 $ |
-$Revision: 1.3 $ |
+$Date: 2005/12/24 16:36:00 $ |
+$Revision: 1.4 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -29,43 +29,57 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 /* < linePortion */
 /* < createLinePortion */
+linePortion* createLinePortionDefault ()
+{
+  static style aDefaultStyle;
+
+  ENTER("createLinePortionDefault");
+
+  clearStyle( &aDefaultStyle);
+  return createLinePortion (0, 0, &aDefaultStyle, "", NULL);
+}
+
 linePortion* createLinePortion (int theLine, int theCol, style* theStyle, chartyp* theString, GList* theParent)
 {
   linePortion* this = NULL;
 
-    ENTER("createLinePortion");
+  ENTER("createLinePortion");
 
-    if (!theStyle  || !theString)
-      {
-	return NULL;
-      }
+  if (!theStyle  || !theString)
+    {
+      return NULL;
+    }
 
-    this = (linePortion*) malloc(sizeof(linePortion));
+  this = (linePortion*) malloc(sizeof(linePortion));
 
-    if (this)
-      {
-	this->myLine = theLine;
-	this->myFirstCol = theCol;
-	this->myLastCol = theCol+strlen(theString)-1;
-	this->myParent = theParent;
-	copyStyle(&(this->myStyle), theStyle);
-	this->myString = g_string_new(theString);
-
-	if (this->myString == NULL)
-	  {
-	    free(this);
-	    this = NULL;
-	  }
-      }
-
-    if (this)
-      {
-	SHOW5("Line=%d, First Col=%d, Last Col=%d, this->myParent=%x\n", this->myLine, this->myFirstCol, this->myLastCol, (unsigned int)this->myParent);
-	SHOW2("String=\"%s\"\n", this->myString->str);
-	DISPLAY_STYLE( &(this->myStyle));
-      }
-
-    return this;
+  if (this)
+    {
+      this->myLine = theLine;
+      this->myFirstCol = theCol;
+      this->myLastCol = theCol+strlen(theString)-1;
+      this->myParent = theParent;
+      copyStyle(&(this->myStyle), theStyle);
+      this->myString = g_string_new(theString);
+      
+      if (this->myString == NULL)
+	{
+	  free(this);
+	  this = NULL;
+	}
+      else
+	{
+	  SHOW3("g_string_new:%x, str:%x", (int)this->myString, (int)(this->myString->str));
+	}
+    }
+  
+  if (this)
+    {
+      SHOW5("Line=%d, First Col=%d, Last Col=%d, this->myParent=%x\n", this->myLine, this->myFirstCol, this->myLastCol, (unsigned int)this->myParent);
+      SHOW2("String=\"%s\"\n", this->myString->str);
+      DISPLAY_STYLE( &(this->myStyle));
+    }
+  
+  return this;
 }
 /* > */
 /* < copyLinePortion */
@@ -99,8 +113,8 @@ void deleteLinePortion( linePortion* this)
     ENTER("deleteLinePortion");
     if (this)
       {
+	SHOW3("g_string_free:%x, str:%x", (int)this->myString, (int)(this->myString->str));
 	g_string_free( this->myString, 1);
-	SHOW3("g_string_free(%x, %d)", (unsigned int)this->myString, 1);
 	free(this);
       }
 }
@@ -119,6 +133,7 @@ void deleteLinePortionGroup( GList* this)
   if (this)
     {
       g_list_foreach( this, (GFunc)deleteLinePortionHook, NULL);
+      g_list_free( this);
     }
 }
 
@@ -139,8 +154,8 @@ static void initStyleWeightHook( gpointer theLinePortion, gpointer theStyleWeigh
 
   if (w && *w)
     {
-      (*w)->myWeight = 0; 
-      (*w)->myStatus = WEIGHT_UNDEFINED; 
+      (*w)->myWeight = 0;
+      (*w)->myStatus = WEIGHT_UNDEFINED;
       (*w)->myLinePortion = (linePortion*)theLinePortion;
       SHOW2("str=%s\n",((linePortion*)theLinePortion)->myString->str);
       SHOW2("First Col=%d\n",((linePortion*)theLinePortion)->myFirstCol);
@@ -208,6 +223,7 @@ int getFeaturesLinePortionGroup( GList* this, linePortion* theFeatures)
 
       /* > */
       /* < concatenate string */
+      g_string_free(theFeatures->myString, 1);
       theFeatures->myString = g_string_new( getStringFromGList( this));
       SHOW3("%x=g_string_new(%s)\n", (unsigned int)theFeatures->myString, getStringFromGList( this));
 

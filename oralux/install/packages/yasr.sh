@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # yasr.sh
-# $Id: yasr.sh,v 1.5 2005/12/23 20:13:22 gcasse Exp $
+# $Id: yasr.sh,v 1.6 2005/12/24 16:36:00 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing Yasr
-# $Date: 2005/12/23 20:13:22 $ |
-# $Revision: 1.5 $ |
+# $Date: 2005/12/24 16:36:00 $ |
+# $Revision: 1.6 $ |
 # Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -55,6 +55,9 @@ InstallPackage()
     make install
     cd /tmp
     rm -rf yasr*
+
+    install -m 644 $INSTALL_PACKAGES/yasr/fr.mo /usr/share/locale/fr/LC_MESSAGES/yasr.mo 
+    install -m 644 $INSTALL_PACKAGES/yasr/es.mo /usr/share/locale/es/LC_MESSAGES/yasr.mo 
 }
 
 ####
@@ -66,9 +69,7 @@ Copy2Oralux()
     export DEST=$BUILD/$NEW_INSTALL_PACKAGES/yasr
 
     install -d $DEST
-    install -m 555 $SRC/yasr.patch $DEST 
-    install -m 555 $SRC/arg.patch $DEST
-    install -m 555 $SRC/test-tengoo.patch $DEST
+    install -m 555 $SRC/* $DEST 
 
     rm -rf $BUILD/etc/yasr
     cd $BUILD/tmp
@@ -85,7 +86,9 @@ Copy2Oralux()
     cd yasr-$YASR_RELEASE;\
     ./configure --prefix=/usr;\
     make;\
-    make install"
+    make install;
+    install -m 644 $NEW_INSTALL_PACKAGES/yasr/fr.mo /usr/share/locale/fr/LC_MESSAGES/yasr.mo;\
+    install -m 644 $NEW_INSTALL_PACKAGES/yasr/es.mo /usr/share/locale/es/LC_MESSAGES/yasr.mo"
 }
 
 case $1 in

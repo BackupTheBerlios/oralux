@@ -24,6 +24,7 @@ struct t_linePortion
 typedef struct t_linePortion linePortion;
 
 linePortion* createLinePortion (int theLine, int theCol, style* theStyle, chartyp* theString, GList* theParent);
+linePortion* createLinePortionDefault();
 linePortion* copyLinePortion (linePortion* theLinePortion);
 void deleteLinePortion( linePortion* this);
 

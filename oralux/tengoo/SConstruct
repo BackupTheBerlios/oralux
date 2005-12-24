@@ -1,9 +1,8 @@
 #! /usr/bin/env python
 
-env = Environment(CC = 'gcc'
-                  , CCFLAGS = '-march=i386 -g -DDEBUG -Wall')
-
-#env = Environment(CC = 'gcc', CCFLAGS = '-O2 -fPIC -Wall')
+env = Environment(CC = 'gcc', CCFLAGS = '-march=i386 -ggdb -Wall')
+#env = Environment(CC = 'gcc', CCFLAGS = '-march=i386 -ggdb -DDEBUG -Wall')
+#env = Environment(CC = 'gcc', CCFLAGS = '-march=i386 -O2 -Wall')
 
 Export('env')
 

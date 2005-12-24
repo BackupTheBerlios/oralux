@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 tifilter2l.c
-$Id: tifilter2l.c,v 1.7 2005/12/22 00:39:49 gcasse Exp $
+$Id: tifilter2l.c,v 1.8 2005/12/24 16:36:00 gcasse Exp $
 $Author: gcasse $
 Description: terminfo filter, two lines.
-$Date: 2005/12/22 00:39:49 $ |
-$Revision: 1.7 $ |
+$Date: 2005/12/24 16:36:00 $ |
+$Revision: 1.8 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -376,14 +376,18 @@ int terminfofilter2lines(GList* theTerminfoList, termAPI* theTermAPI, GList** th
     { /* looking for the style changes */
       GList* new_g[ NB_STYLE_CHANGE+1];
       GList* old_g[ NB_STYLE_CHANGE+1];
-      linePortion new_p[ NB_STYLE_CHANGE+1];
-      linePortion old_p[ NB_STYLE_CHANGE+1];
+      linePortion* new_p[ NB_STYLE_CHANGE+1];
+      linePortion* old_p[ NB_STYLE_CHANGE+1];
       int i=0; /* myLinePortionGroup index */
       int j=0; /* index and number of style changes */
+      int aResult=0;
 
       for(j=0; j<NB_STYLE_CHANGE+1; j++)
 	{
-	  old_g[j] = new_g[j] = NULL;
+	  old_g[j] = NULL;
+	  new_g[j] = NULL;
+ 	  old_p[j] = createLinePortionDefault();
+	  new_p[j] = createLinePortionDefault();
 	}
 
       for(i=0, j=0; i<aNumberOfLinePortionGroup && j<NB_STYLE_CHANGE+1; i++)
@@ -392,29 +396,30 @@ int terminfofilter2lines(GList* theTerminfoList, termAPI* theTermAPI, GList** th
 
 	  /* get info ('features') about the new group of line portions */ 
 	  new_g[j]=this->myLinePortionGroup[i];
-	  getFeaturesLinePortionGroup( new_g[j], &(new_p[j]));
+	  getFeaturesLinePortionGroup( new_g[j], new_p[j]);
 
 	  /* get info about the old group of line portions (currently displayed) */ 
-	  old_g[j] = this->myTermAPI->getLinePortionGroup( new_p[j].myLine,
-							   new_p[j].myFirstCol,
-							   new_p[j].myLastCol);
-	  getFeaturesLinePortionGroup( old_g[j], &(old_p[j]));
+	  old_g[j] = this->myTermAPI->getLinePortionGroup( new_p[j]->myLine,
+							   new_p[j]->myFirstCol,
+							   new_p[j]->myLastCol);
+	  aResult = getFeaturesLinePortionGroup( old_g[j], old_p[j]);
 
-	  if (new_p[j].myString && new_p[j].myString->str
-	      && old_p[j].myString && old_p[j].myString->str)
+	  if (aResult
+	      && new_p[j]->myString && new_p[j]->myString->str
+	      && old_p[j]->myString && old_p[j]->myString->str)
 	    {
-	      SHOW3("new string %d: \"%s\"\n",j,new_p[j].myString->str);
-	      SHOW3("old string %d: \"%s\"\n",j,old_p[j].myString->str);
+	      SHOW3("new string %d: \"%s\"\n",j,new_p[j]->myString->str);
+	      SHOW3("old string %d: \"%s\"\n",j,old_p[j]->myString->str);
 
 	      SHOW2("** New style %d:\n",j);
-	      DISPLAY_STYLE(&(new_p[j].myStyle));
+	      DISPLAY_STYLE(&(new_p[j]->myStyle));
 	      
 	      SHOW2("** Old style %d:\n",j);
-	      DISPLAY_STYLE(&(old_p[j].myStyle));
+	      DISPLAY_STYLE(&(old_p[j]->myStyle));
 
 	      /* interesting if same contents and distinct styles */
-	      if ((strcmp( new_p[j].myString->str, old_p[j].myString->str) == 0)
-		  && !equivalentStyle( &(new_p[j].myStyle), &(old_p[j].myStyle)))
+	      if ((strcmp( new_p[j]->myString->str, old_p[j]->myString->str) == 0)
+		  && !equivalentStyle( &(new_p[j]->myStyle), &(old_p[j]->myStyle)))
 		{
 		  j++;
 		}
@@ -427,10 +432,10 @@ int terminfofilter2lines(GList* theTerminfoList, termAPI* theTermAPI, GList** th
 	{
 	  linePortion* aOldHighlightedLinePortion=NULL;
 	  SHOW("The old highlighted line was:\n");
-	  aOldHighlightedLinePortion = getHighlightedLine( this, old_p, old_p+1);
+	  aOldHighlightedLinePortion = getHighlightedLine( this, old_p[0], old_p[1]);
 	  if (aOldHighlightedLinePortion)
 	    {
-	      if (old_p == aOldHighlightedLinePortion)
+	      if (old_p[0] == aOldHighlightedLinePortion)
 		{
 		  i=0; /* index of line portion group, no more highlighted */
 		  j=1;
@@ -449,6 +454,10 @@ int terminfofilter2lines(GList* theTerminfoList, termAPI* theTermAPI, GList** th
       for(j=0; j<NB_STYLE_CHANGE+1; j++)
 	{
 	  deleteLinePortionGroup(old_g[j]);
+	  /* new_g[j] not freed: this->myLinePortionGroup[i] */
+
+ 	  deleteLinePortion( old_p[j]);
+ 	  deleteLinePortion( new_p[j]);
 	}
     }
   deleteContext(this);
