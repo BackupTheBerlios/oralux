@@ -1,0 +1,24 @@
+diff -ur yasr-0.6.7.patch/yasr/main.c yasr-0.6.7/yasr/main.c
+--- yasr-0.6.7.patch/yasr/main.c	2005-12-21 19:05:22.000000000 +0100
++++ yasr-0.6.7/yasr/main.c	2005-12-21 19:12:36.000000000 +0100
+@@ -567,6 +567,20 @@
+   }
+   switch (*p)
+   {
++  case 't': 
++    /* TSAR (Tengoo: Select Aural Rendition) 
++       private terminfo helpful to enrich the escape sequences 
++       with aural informations */
++    if (parm[0]==10)
++    {
++      ui.silent = 1;
++    }
++    else if (parm[0]==19)
++    {
++      ui.silent = 0;
++    }
++    break;
++
+   case '@':			/* insert characters */
+     (void) memmove(win->row[win->cr] + win->cc + PARM1, win->row[win->cr] + win->cc, (win->cols - win->cc - PARM1) * CHARSIZE);
+     (void) memset(win->row[win->cr] + win->cc, 0, parm[0] * CHARSIZE);

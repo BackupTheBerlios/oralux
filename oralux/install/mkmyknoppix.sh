@@ -152,8 +152,9 @@ rm_extractedKnoppix() {
 
 ####
 rm_tmp() {
-    rm -rf $BUILD/var/tmp/*
-    echo "$BUILD/var/tmp is cleaned"
+    rm -rf $BUILD/tmp/*
+    chroot $BUILD apt-get clean
+    echo "cleaned"
 }
 
 
@@ -194,7 +195,6 @@ chroot $BUILD apt-get update
 
     chroot $BUILD bash -c "COLUMNS=200 dpkg -l | grep ^rc | awk '{print $2} ' | xargs dpkg -P"
     chroot $BUILD bash -c "deborphan | xargs dpkg -P"
-    chroot $BUILD apt-get clean
 
     mv $BUILD/etc/resolv.conf.sav $BUILD/etc/resolv.conf
 }
@@ -366,7 +366,7 @@ next_step remove_unused_packages "Remove unused packages?"
 next_step add_soft "Add softwares?"
 umount $BUILD/proc || true
 
-next_step rm_tmp "Remove $BUILD/var/tmp/"
+next_step rm_tmp "Remove $BUILD/tmp + apt-get clean"
 
 next_step update_index "Updating modules dependencies and indexes?"
 next_step create_new_iso "Creating ISO image for new Oralux?"
