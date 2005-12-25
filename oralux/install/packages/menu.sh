@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # menu.sh
-# $Id: menu.sh,v 1.7 2005/12/25 21:02:35 gcasse Exp $
+# $Id: menu.sh,v 1.8 2005/12/25 21:16:52 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing the audio menu
-# $Date: 2005/12/25 21:02:35 $ |
-# $Revision: 1.7 $ |
+# $Date: 2005/12/25 21:16:52 $ |
+# $Revision: 1.8 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -42,7 +42,7 @@ Copy2Oralux()
    # As getvoice is built from dtk (dtk/ttsapi.h)
    # we have to delete the related objects
    cd $MAIN
-   make oralux
+   make oralux-target
    make clean.getvoice 2>/dev/null
    rm -f *.o
 
