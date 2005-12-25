@@ -4,15 +4,11 @@ This CD is based on KNOPPIX_V4.0.2CD-2005-09-23-EN.iso.
 Details about customization: /usr/share/oralux/install/mkmyknoppix.sh
 
 Softwares:
-http://fr.rpmfind.net/linux/blinux/emacspeak/blinux/emacspeak-ss-1.9.1.tar.gz
 
 Rawrite.exe comes from:
 http://download.fedora.redhat.com/pub/fedora/linux/core/1/i386/os/dosutils/rawrite.exe
 
 ADSL driver
-ECI ADSL
-http://eciadsl.flashtux.org/download.php
-
 RUF: Speedtouch
 http://speedtouchconf.sourceforge.net/
 http://ovh.dl.sourceforge.net/sourceforge/speedtouchconf/speedtouchconf-2.0-beta1_12-Mar-2005.tar.gz

@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # mail.sh
-# $Id: mail.sh,v 1.3 2005/01/30 21:43:51 gcasse Exp $
+# $Id: mail.sh,v 1.4 2005/12/25 21:02:35 gcasse Exp $
 # $Author: gcasse $
 # Description: Mail
-# $Date: 2005/01/30 21:43:51 $ |
-# $Revision: 1.3 $ |
+# $Date: 2005/12/25 21:02:35 $ |
+# $Revision: 1.4 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -25,6 +25,13 @@
 ####
 source ../oralux.conf
 
+set -vx
+
+export LIST="exim4 gnus mutt vm mime-codecs nmh \
+mh-e gnus fetchmail procmail bbdb mew"
+
+#exim
+
 ####
 # Installing the package in the current tree
 InstallPackage()
@@ -41,17 +48,19 @@ InstallPackage()
 
 ##    dpkg-reconfigure postfix
 
-    apt-get install gnus
-    apt-get install mutt
-    apt-get install vm
-    apt-get install mime-codecs
-    apt-get install nmh
-    apt-get install mh-e
-    apt-get install gnus
-    apt-get install fetchmail
-    apt-get install procmail
-    apt-get install bbdb
-    apt-get install mew
+    apt-get install $LIST
+
+    # TODO: update vm 
+    cd /tmp
+    cp $INSTALL_PACKAGES/mail/qp-decode.c .
+    gcc -o qp-decode qp-decode.c
+    install -m 755 qp-decode /usr/bin
+
+    # S99fetchmail
+    update-rc.d -f fetchmail remove
+
+    # S20exim4
+    update-rc.d -f exim4 remove
 
 #     cd /tmp
 #     rm -rf vm-pcrisis*
@@ -67,17 +76,14 @@ Copy2Oralux()
 {
 #    chroot $BUILD apt-get install --purge postfix
 
-    chroot $BUILD apt-get install gnus
-    chroot $BUILD apt-get install mutt
-    chroot $BUILD apt-get install vm
-    chroot $BUILD apt-get install mime-codecs
-    chroot $BUILD apt-get install nmh
-    chroot $BUILD apt-get install mh-e
-    chroot $BUILD apt-get install gnus
-    chroot $BUILD apt-get install fetchmail
-    chroot $BUILD apt-get install procmail
-    chroot $BUILD apt-get install bbdb
-    chroot $BUILD apt-get install mew
+    chroot $BUILD apt-get install $LIST
+
+    cd /tmp
+    cp $INSTALL_PACKAGES/mail/qp-decode.c .
+    gcc -o qp-decode qp-decode.c
+    install -m 755 qp-decode $BUILD/usr/bin
+
+    chroot $BUILD bash -c 'update-rc.d -f fetchmail remove;update-rc.d -f exim4 remove'
 
 #     cd /tmp
 #     rm -rf vm-pcrisis*

@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // main.c
-// $Id: main.c,v 1.9 2005/12/04 22:42:27 gcasse Exp $
+// $Id: main.c,v 1.10 2005/12/25 21:02:35 gcasse Exp $
 // $Author: gcasse $
 // Description: entry point. 
-// $Date: 2005/12/04 22:42:27 $ |
-// $Revision: 1.9 $ |
+// $Date: 2005/12/25 21:02:35 $ |
+// $Revision: 1.10 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -63,11 +63,6 @@ void buildConfigurationEmacspeak(struct textToSpeechStruct* theTextToSpeech)
   char* aTTS=getStringSynthesis(theTextToSpeech->myIdentifier);
   char* aPort=serialPortGetString(theTextToSpeech->myPort);
 
-  if (theTextToSpeech->myIdentifier==TTS_EFM)
-    {
-      // if EFM is selected, the user still has the choice to start the original Emacspeak (with Flite).
-      aTTS=getStringSynthesis(TTS_Flite);
-    }
   fprintf(fd, "\nTTS=%s", aTTS);
   fprintf(fd, "\nPORT=%s", aPort);
   fclose(fd);

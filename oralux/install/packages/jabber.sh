@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # jabber.sh
-# $Id: jabber.sh,v 1.2 2005/12/23 20:13:22 gcasse Exp $
+# $Id: jabber.sh,v 1.3 2005/12/25 21:02:35 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing jabber
-# $Date: 2005/12/23 20:13:22 $ |
-# $Revision: 1.2 $ |
+# $Date: 2005/12/25 21:02:35 $ |
+# $Revision: 1.3 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -44,6 +44,8 @@ InstallPackage()
     # jabber server
     apt-get install jabber jabber-aim jabber-irc jabber-jit jabber-jud jabber-msn jabber-muc jabber-yahoo adduser-plugin-notifyjabber
 
+    update-rc.d -f jabber remove
+
     # command line client
     apt-get install imcom
 
@@ -66,6 +68,8 @@ Copy2Oralux()
 {
     # jabber server
     chroot $BUILD apt-get install jabber jabber-aim jabber-irc jabber-jit jabber-jud jabber-msn jabber-muc jabber-yahoo adduser-plugin-notifyjabber
+
+    chroot $BUILD update-rc.d -f jabber remove
 
     # command line client
     chroot $BUILD apt-get install imcom

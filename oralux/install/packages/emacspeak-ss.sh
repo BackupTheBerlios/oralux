@@ -1,12 +1,12 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # emacspeak.sh
-# $Id: emacspeak-ss.sh,v 1.3 2005/12/04 22:42:27 gcasse Exp $
+# $Id: emacspeak-ss.sh,v 1.4 2005/12/25 21:02:35 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing emacspeak. Thanks to the Nath's howto: 
 # emacspeak-dtk-soft-debinst-howto.htm
-# $Date: 2005/12/04 22:42:27 $ |
-# $Revision: 1.3 $ |
+# $Date: 2005/12/25 21:02:35 $ |
+# $Revision: 1.4 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -30,59 +30,12 @@ ARCH_EMACSPEAK_SS=$ARCH/$EMACSPEAK_SS
 LISTE="accent apollo braillenspeak ciber doubletalk pchablado"
 
 ####
-# Replacing the original KNOPPIX file from a customized one
-substituteFile()
-{
-    file=$1
-    dir=$2
-    # If the new file "dir/file" (either coming from Knoppix or already updated for Oralux) isn't equal to the saved one.
-    comp=`diff $INSTALL_PACKAGES/knoppix/$file.sav $dir/$file |wc -l|awk '{print $1}'`
-    # we have to compare it with the previously updated Oralux file
-    # If they are distinct, we are sure the new file has to replace the saved file.
-    # and then be updated with the oralux customization
-    # 
-    comp2=`diff $INSTALL_PACKAGES/knoppix/$file $dir/$file |wc -l|awk '{print $1}'`
-    if [ "$comp" != "0" ] && [ "$comp2" != "0" ]; then
-        echo "the new KNOPPIX file $dir/$file is different from our original one $INSTALL_PACKAGES/knoppix/$file.sav"
-        echo "--> Press q, to quit (so that the following operations are achieved:"
-	echo "1. The saved file $INSTALL_PACKAGES/knoppix/$file.sav might be equal to the new file $dir/$file from Knoppix."
-	echo "2. Our customized file $INSTALL_PACKAGES/knoppix/$file might be updated with the new features from $dir/$file)."
-	echo "--> Press any other key to jump this stage"
-	read a
-
-	if [ "$a" == "q" ] || [ "$a" == "Q" ]; then
-	    exit 1
-	fi  
-    elif [ "$comp2" != "0" ]; then
-        echo "the new KNOPPIX file $dir/$file is different from our customized one $INSTALL_PACKAGES/knoppix/$file"
-        echo "--> Press q, to quit (so that the following operations are achieved:"
-	echo "The customized file $INSTALL_PACKAGES/knoppix/$file will take in account the new features from $dir/$file)."
-	echo "--> Press any other key to jump this stage"
-	read a
-
-	if [ "$a" == "q" ] || [ "$a" == "Q" ]; then
-	    exit 1
-	fi 
-    fi
-}
-
-####
 # Installing the package in the current tree
 InstallPackage()
 {
     cd /tmp
     rm -rf emacspeak*
-
-    if [ $method = "TARGZ" ]
-        then
-        tar -zxvf $ARCH_EMACSPEAK_SS
-    fi
-    if [ $method = "TARBZ2" ]
-        then
-        tar -jxvf $ARCH_EMACSPEAK_SS
-    fi
-
-    # Installing emacspeak-ss
+    tar -zxvf $ARCH_EMACSPEAK_SS
     cd /tmp/emacspeak*; ./configure; make; make install
 
     cd /usr/share/emacs/site-lisp/emacspeak/servers
@@ -108,31 +61,9 @@ InstallPackage()
 # Adding the package to the new Oralux tree
 Copy2Oralux()
 {
-    # Installing emacspeak-ss
-    a=`echo $ARCH_EMACSPEAK_SS|grep tar.gz|wc -c|sed "s/ //g"`
-    if [ $a != 0 ]
-        then
-        method="TARGZ"
-    fi
-
-    a=`echo $ARCH_EMACSPEAK_SS|grep tar.bz2|wc -c|sed "s/ //g"`
-    if [ $a != 0 ]
-        then
-        method="TARBZ2"
-    fi
-
     cd $BUILD/tmp
     rm -rf emacspeak*
-
-    if [ $method = "TARGZ" ]
-        then
-        tar -zxvf $ARCH_EMACSPEAK_SS
-    fi
-    if [ $method = "TARBZ2" ]
-        then
-        tar -jxvf $ARCH_EMACSPEAK_SS
-    fi
-
+    tar -zxvf $ARCH_EMACSPEAK_SS
     chroot $BUILD bash -c "cd /tmp/emacspeak*; ./configure; make; make install"
 
     cd $BUILD/usr/share/emacs/site-lisp/emacspeak/servers
@@ -157,7 +88,7 @@ Copy2Oralux()
 if [ ! -e $ARCH_EMACSPEAK_SS ]
     then
     cd $ARCH
-    echo "Downloading $EMACSPEAK"
+    echo "Downloading $EMACSPEAK_SS"
     wget -nd http://fr.rpmfind.net/linux/blinux/emacspeak/blinux/$EMACSPEAK_SS
 fi
 

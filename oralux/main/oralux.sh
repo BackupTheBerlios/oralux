@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # oralux.sh
-# $Id: oralux.sh,v 1.10 2005/06/15 21:52:06 gcasse Exp $
+# $Id: oralux.sh,v 1.11 2005/12/25 21:02:35 gcasse Exp $
 # $Author: gcasse $
 # Description: This script is called at init time
-# $Date: 2005/06/15 21:52:06 $ |
-# $Revision: 1.10 $ |
+# $Date: 2005/12/25 21:02:35 $ |
+# $Revision: 1.11 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -24,13 +24,14 @@
 # ----------------------------------------------------------------------------
 ####
 
-TTY=`tty`
 FILE=/tmp/oralux.tmp
+TTY=$(tty|sed 's+/UNIONFS++')
 
 getStickyString()
 {
     echo "s/=[ ]*"$1"[ \t]*$/= S"$1"/g"
 }
+
 
 if [ "$TTY" == "/dev/tty1" -a ! -e "$FILE" ]
     then
@@ -48,7 +49,7 @@ if [ "$TTY" == "/dev/tty1" -a ! -e "$FILE" ]
 	export DIALOG=/usr/bin/dialog-oralux
 
 	cd /usr/share/oralux/main
-	sudo ./oralux `tty` start
+	sudo ./oralux $TTY start
 
 	# Restoring the initial dialog
 	export DIALOG=/usr/bin/dialog
@@ -85,12 +86,13 @@ if [ "$TTY" == "/dev/tty1" -a ! -e "$FILE" ]
 	    setterm -repeat off
 	fi
 	
+	if [ -z $MULTISPEECH_LANG_SWITCH ] && [ "$LANGUAGE" = "ru" ]; then
+	    export MULTISPEECH_LANG_SWITCH=1
+	fi
+
 # Starting the audio desktop
 	cd /home/knoppix
-	if [ $EMACSPEAKTTS == "EFM" ]
-	    then
-	    efm
-	elif [ $DESKTOP == "Emacspeak" ]
+	if [ $DESKTOP == "Emacspeak" ]
 	    then
 	    emacspeak
 	elif [ $DESKTOP == "Shell" ]
@@ -100,11 +102,15 @@ echo "lancement zsh"
 	else	    
 # TBD
 	    sudo chown knoppix:knoppix /home/knoppix/.yasr.conf
-	    yasr /usr/bin/screen -c /usr/share/oralux/install/packages/screen/.screenrc.work
+	    yasr /usr/bin/test-tengoo
+	    # just for safe
+	    pkill test-tengoo
+	    reset
+#/usr/bin/screen -c /usr/share/oralux/install/packages/screen/.screenrc.work
 	fi
 	echo -e '\007'	
 	cd /usr/share/oralux/main
-	sudo ./oralux `tty` stop
+	sudo ./oralux $TTY stop
     done
 fi
 

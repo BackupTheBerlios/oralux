@@ -1,7 +1,7 @@
 #ifndef CONSTANTS
 #define CONSTANTS 1
 
-#define ORALUX_RELEASE "0.6beta"
+#define ORALUX_RELEASE "0.7"
 
 #define ORALUXGOLD 1
 #define ORALUXGOLD_DIR "/usr/share/oraluxGold"

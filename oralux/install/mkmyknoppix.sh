@@ -169,16 +169,6 @@ fi
 cp -L /etc/resolv.conf $BUILD/etc/resolv.conf
 echo "if this script exits, just run it once again and skip this stage" 
 
-# in case of "/dev/null: Permission Denied error message" 
-# see http://www.knoppix.net/wiki/Dev_null_permission_denied
-# one possibility is: "editing /etc/fstab and appending ',dev' to the options column".
-if [ -n "$DEV_BUILD" ]; then
-    mount -o remount,dev $DEV_BUILD
-else
-    # current partition
-    mount -o remount,dev `df . | tail -1 | awk '{print $1}'`
-fi
-
 chroot $BUILD apt-get update
 
 # list of packages, that can be removed in $BUILD
@@ -352,6 +342,14 @@ fi
 if [ -n "$DEV_BUILD" ]; then
     echo "mount $DEV_BUILD $BUILD"
     mount $DEV_BUILD $BUILD
+
+# in case of "/dev/null: Permission Denied error message" 
+# see http://www.knoppix.net/wiki/Dev_null_permission_denied
+# one possibility is: "editing /etc/fstab and appending ',dev' to the options column".
+    mount -o remount,dev $DEV_BUILD
+else
+# in case of "/dev/null: Permission Denied error message"...
+    mount -o remount,dev `df . | tail -1 | awk '{print $1}'`
 fi
 
 chmod +x $INSTALL_PACKAGES/*.sh

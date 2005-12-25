@@ -9,8 +9,6 @@
 enum textToSpeech { 
   TTS_Flite,
   TTS_DECtalk,
-  TTS_EFM,
-  TTS_ParleMax,
   TTS_Multispeech,
   TTS_Cicero,
   TTS_ViaVoice,

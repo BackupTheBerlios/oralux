@@ -1,12 +1,12 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # emacspeak.sh
-# $Id: emacspeak.sh,v 1.8 2005/12/20 22:00:45 gcasse Exp $
+# $Id: emacspeak.sh,v 1.9 2005/12/25 21:02:35 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing emacspeak. Thanks to the Nath's howto: 
 # emacspeak-dtk-soft-debinst-howto.htm
-# $Date: 2005/12/20 22:00:45 $ |
-# $Revision: 1.8 $ |
+# $Date: 2005/12/25 21:02:35 $ |
+# $Revision: 1.9 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -27,24 +27,34 @@
 source ../oralux.conf
 EMACSPEAK=emacspeak-23.0.tar.bz2
 ARCH_EMACSPEAK=$ARCH/$EMACSPEAK
+LIB_LIST="debian-el edb emacs-goodies-el emacs-wiki muse-el nxml-mode planner-el texinfo w3-el-e21 w3m-el xsltproc"
 
 # Patch by Igor B. Poretsky (multispeech integration, and more)
-PATCH=emacspeak-23.patch
+PATCH=emacspeak-23-2005_12_16.patch
 
 cd $ARCH
-wget http://switch.dl.sourceforge.net/sourceforge/emacspeak/$EMACSPEAK
-wget ftp://ftp.rakurs.spb.ru/pub/Goga/projects/speech-interface/patches/emacspeak/$PATCH.bz2
-cp $PATCH.bz2 $INSTALL_PACKAGES/emacspeak
 
+if [ ! -e $ARCH_EMACSPEAK ]
+    then
+    echo "Downloading $EMACSPEAK"
+#    wget http://switch.dl.sourceforge.net/sourceforge/emacspeak/$EMACSPEAK
+fi
+
+if [ ! -e $ARCH/$PATCH.bz2 ]
+    then
+    echo "Downloading $PATCH"
+#    wget ftp://ftp.rakurs.spb.ru/pub/Goga/projects/speech-interface/patches/emacspeak/emacspeak-23.patch
+fi
 
 ####
 # Installing the package in the current tree
 InstallPackage()
 {
-    apt-get install debian-el edb emacs-wiki muse-el nxml-mode planner-el texinfo xsltproc
+    apt-get install $LIB_LIST
 
     cd /tmp
     rm -rf emacspeak*
+    rm -rf /usr/share/emacs/site-lisp/emacspeak
     tar -jxvf $ARCH_EMACSPEAK
     cp $INSTALL_PACKAGES/emacspeak/$PATCH.bz2 .
     bunzip2 $PATCH.bz2
@@ -93,10 +103,11 @@ InstallPackage()
 # Adding the package to the new Oralux tree
 Copy2Oralux()
 {
-    chroot $BUILD apt-get install debian-el edb emacs-wiki muse-el nxml-mode planner-el texinfo xsltproc
+    chroot $BUILD apt-get install $LIB_LIST
 
     cd $BUILD/tmp
     rm -rf emacspeak*
+    rm -rf $BUILD/usr/share/emacs/site-lisp/emacspeak
     tar -jxvf $ARCH_EMACSPEAK
     cp $INSTALL_PACKAGES/emacspeak/$PATCH.bz2 .
     bunzip2 $PATCH.bz2
@@ -104,7 +115,7 @@ Copy2Oralux()
     patch -p0 -i ../$PATCH
     cp $INSTALL_PACKAGES/emacspeak/*el lisp
 
-    chroot $BUILD bash -c "cd /tmp/emacspeak*; make config; make; make install"
+    chroot $BUILD bash -c 'cd /tmp/emacspeak-??.[^p]*; make config; make; make install'
 
     EMACSPEAK_DIR="/usr/share/emacs/site-lisp/emacspeak"
     echo "export EMACSPEAK_DIR=$EMACSPEAK_DIR" >> $BUILD/etc/profile

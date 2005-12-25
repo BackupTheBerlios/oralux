@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # brltty.sh
-# $Id: brltty.sh,v 1.5 2005/12/23 20:13:22 gcasse Exp $
+# $Id: brltty.sh,v 1.6 2005/12/25 21:02:35 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing BRLTTY
-# $Date: 2005/12/23 20:13:22 $ |
-# $Revision: 1.5 $ |
+# $Date: 2005/12/25 21:02:35 $ |
+# $Revision: 1.6 $ |
 # Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -44,6 +44,21 @@ InstallPackage()
     wget http://www.mielke.cc/brltty/releases/brltty-3.6-1.i386.rpm
     alien brlapi-0.3.0-1.i386.rpm
     dpkg -i brlapi*.deb
+
+# #    apt-get install brltty
+
+#     apt-get --purge remove brltty
+#     cd tmp
+#     rm -rf brltty*
+#     cp $ARCH/brltty-3.6.1.tar.gz .
+#     tar -zxvf brltty*
+#     cd brltty*
+#     ./configure
+#     make 
+#     make install
+
+#     rm -f /etc/brltty.conf
+    
 
     rm -rf /tmp/brl*
 }

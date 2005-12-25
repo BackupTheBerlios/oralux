@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // textToSpeech.c
-// $Id: textToSpeech.c,v 1.5 2005/06/12 20:54:01 gcasse Exp $
+// $Id: textToSpeech.c,v 1.6 2005/12/25 21:02:35 gcasse Exp $
 // $Author: gcasse $
 // Description: Ask about the whished TTS and install it. 
-// $Date: 2005/06/12 20:54:01 $ |
-// $Revision: 1.5 $ |
+// $Date: 2005/12/25 21:02:35 $ |
+// $Revision: 1.6 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -270,21 +270,10 @@ static struct synthItem TheProposedSynth[]= {
   {TTS_Multispeech, DoYouWantMultispeech},
   {TTS_Flite, DoYouWantFlite},
   {TTS_Cicero, DoYouWantCicero},
-  {TTS_EFM, DoYouWantEFM}, 
-  {TTS_ParleMax, DoYouWantParleMax},
   {TTS_DECtalk, DoYouWantToInstallDECtalk},
   {TTS_Undefined, selectExternalSynth}, //last item
 };
 
-/* static struct synthItem TheAvailableSynthForYasr[]= {  */
-/*   {TTS_ViaVoice, DoYouWantToInstallViaVoice}, */
-/*   {TTS_Flite, DoYouWantFlite}, */
-/*   {TTS_DECtalk, DoYouWantToInstallDECtalk}, */
-/*   {TTS_Multispeech, DoYouWantMultispeech}, */
-/*   {TTS_ParleMax, DoYouWantParleMax}, */
-/* }; */
-
-// The number of items must be equal to the max number of items of the previous TheSynthQuestionxxx
 typedef struct synthItem synthItem;
 
 int getIndexInArrayFromIdentifier( synthItem** theArray, int theMaxIndex, enum textToSpeech theIdentifier)
@@ -333,8 +322,7 @@ static int chooseSynt( struct textToSpeechStruct* theTextToSpeech,
 	  continue;
 	}
       else if ((theDesktop != Emacspeak)
-	       && ( (TheProposedSynth[i].myIdentifier == TTS_EFM)
-		    || (TheProposedSynth[i].myIdentifier == TTS_Undefined)))
+	       && (TheProposedSynth[i].myIdentifier == TTS_Undefined))
 	{
 	  continue;
 	}
@@ -356,12 +344,6 @@ static int chooseSynt( struct textToSpeechStruct* theTextToSpeech,
       {
 	// hardware synth are not yet available using Yasr
 	enum textToSpeech aIdentifier=isExternalSynth(theTextToSpeech->myIdentifier) ? TTS_Flite:theTextToSpeech->myIdentifier;
-
-	// EFM is not yet available using Yasr
-	if (theTextToSpeech->myIdentifier==TTS_EFM)
-	  {
-	    aIdentifier=(thePreferredLanguage==French) ? TTS_Cicero : TTS_Flite;
-	  }
 
 	aIndex=getIndexInArrayFromIdentifier(aArrayOfAvailableSynth , aMaxTextToSpeech, aIdentifier);
       }
@@ -389,25 +371,17 @@ static int chooseSynt( struct textToSpeechStruct* theTextToSpeech,
 	      theTextToSpeech->myIdentifier = aArrayOfAvailableSynth[aIndex]->myIdentifier;
 	      switch (theTextToSpeech->myIdentifier)
 	 	{
-		case TTS_EFM:
-		  theTextToSpeech->myLanguage = (thePreferredLanguage == French) ? French : English;
+		case TTS_Multispeech:
+		case TTS_ViaVoice:
+		  theTextToSpeech->myLanguage = thePreferredLanguage;
 		  break;
-		  
+
 		case TTS_Flite:
 		  theTextToSpeech->myLanguage = English;
 		  break;
 
-		case TTS_Multispeech:
-		  theTextToSpeech->myLanguage = (thePreferredLanguage == Russian) ? Russian : English;
-		  break;
-
 		case TTS_Cicero:
-		case TTS_ParleMax:
 		  theTextToSpeech->myLanguage = French;
-		  break;
-
-		case TTS_ViaVoice:
-		  theTextToSpeech->myLanguage = thePreferredLanguage;
 		  break;
 
 		default:
@@ -1022,10 +996,8 @@ struct t_Label{
 static struct t_Label myLabels[]={
   {TTS_Flite, "Flite"},
   {TTS_DECtalk, "DECtalk"},
-  {TTS_EFM, "EFM"},
   {TTS_Multispeech, "Multispeech"},
   {TTS_Cicero, "Cicero"},
-  {TTS_ParleMax, "ParleMax"},
   {TTS_ViaVoice, "ViaVoice"},
   {TTS_AccentSA,"AccentSA"},
   {TTS_BrailleLite,"BrailleLite"},

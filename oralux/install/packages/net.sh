@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # net.sh
-# $Id: net.sh,v 1.6 2005/12/04 22:42:27 gcasse Exp $
+# $Id: net.sh,v 1.7 2005/12/25 21:02:35 gcasse Exp $
 # $Author: gcasse $
 # Description: ppp configuration tool, adsl drivers,...
-# $Date: 2005/12/04 22:42:27 $ |
-# $Revision: 1.6 $ |
+# $Date: 2005/12/25 21:02:35 $ |
+# $Revision: 1.7 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -25,6 +25,8 @@
 ####
 source ../oralux.conf
 
+cd $ARCH
+
 ####
 # Installing the package in the current tree
 InstallPackage()
@@ -38,54 +40,54 @@ Copy2Oralux()
 {
     # pppconfig
     chroot $BUILD apt-get install pppconfig
-    sdiff -s $INSTALL_PACKAGES/net/pppconfig $BUILD/usr/sbin
-    echo "--> pppconfig might be updated (see previous diff) ?"
-    echo "--> Press return to continue, or Control-c to change pppconfig"
-    read a
+#     sdiff -s $INSTALL_PACKAGES/net/pppconfig $BUILD/usr/sbin
+#     echo "--> pppconfig might be updated (see previous diff) ?"
+#     echo "--> Press return to continue, or Control-c to change pppconfig"
+#     read a
 
-    cp $INSTALL_PACKAGES/net/pppconfig $BUILD/usr/sbin
+#     cp $INSTALL_PACKAGES/net/pppconfig $BUILD/usr/sbin
 
-    # dhclient (in fact pump), useful for eagle-usb
-    cp $INSTALL_PACKAGES/net/dhclient $BUILD/sbin/dhclient
+#     # dhclient (in fact pump)
+#     cp $INSTALL_PACKAGES/net/dhclient $BUILD/sbin/dhclient
 
-    # eagle-usb
-    cp $INSTALL_PACKAGES/net/startadsl $BUILD/usr/bin
-    cp $INSTALL_PACKAGES/net/stopadsl $BUILD/usr/bin
+#     # eagle-usb
+#     cp $INSTALL_PACKAGES/net/startadsl $BUILD/usr/bin
+#     cp $INSTALL_PACKAGES/net/stopadsl $BUILD/usr/bin
 
-    cd $BUILD/tmp
-    rm -rf eagle-usb*
-    wget http://switch.dl.sourceforge.net/sourceforge/eagle-usb/eagle-usb-1.9.6.tar.bz2
-    tar -jxvf eagle-usb-1.9.6.tar.bz2 
-    cd eagle-usb*
-    //
-    echo "The kernel has been compiled using the following release of gcc:"
-    cat /proc/version | awk '{print $5,$6,$7}'
-    export CC=gcc-2.95
-    echo "CC is currently set to $CC"
-    echo "If this is correct, press RETURN otherwise press Control C"
-    read a
+#     cd $BUILD/tmp
+#     rm -rf eagle-usb*
+#     wget http://switch.dl.sourceforge.net/sourceforge/eagle-usb/eagle-usb-1.9.6.tar.bz2
+#     tar -jxvf eagle-usb-1.9.6.tar.bz2 
+#     cd eagle-usb*
+#     //
+#     echo "The kernel has been compiled using the following release of gcc:"
+#     cat /proc/version | awk '{print $5,$6,$7}'
+#     export CC=gcc-2.95
+#     echo "CC is currently set to $CC"
+#     echo "If this is correct, press RETURN otherwise press Control C"
+#     read a
 
-    # USE_IFUPDOWN=0: useful for 'Free Degroupe' to force dhclient
+#     # USE_IFUPDOWN=0: useful for 'Free Degroupe' to force dhclient
 
-    chroot $BUILD bash -c "cd /tmp/eagle-usb*;\
-	export CC=gcc-2.95;\
-	export USE_IFUPDOWN=0;\
-	./configure --prefix=/usr/local/eagle-usb --exec-prefix=/usr/local/eagle-usb;\
-	make uninstall;\
-	make clean;\
-	make;\
-	make install;\
-	depmod -a;\
-	mkdir -p /etc/eagle-usb/hotplug;\
-	cd /usr/lib/hotplug;ln -s /etc/eagle-usb/hotplug eagle-usb;"
+#     chroot $BUILD bash -c "cd /tmp/eagle-usb*;\
+# 	export CC=gcc-2.95;\
+# 	export USE_IFUPDOWN=0;\
+# 	./configure --prefix=/usr/local/eagle-usb --exec-prefix=/usr/local/eagle-usb;\
+# 	make uninstall;\
+# 	make clean;\
+# 	make;\
+# 	make install;\
+# 	depmod -a;\
+# 	mkdir -p /etc/eagle-usb/hotplug;\
+# 	cd /usr/lib/hotplug;ln -s /etc/eagle-usb/hotplug eagle-usb;"
 
-    cp $INSTALL_PACKAGES/net/eagleconfig $BUILD/usr/local/eagle-usb/sbin
+#     cp $INSTALL_PACKAGES/net/eagleconfig $BUILD/usr/local/eagle-usb/sbin
 
+# eagle-usb-utils
+# eagle-usb-modules-source
 
 # ECI adsl
-    cp $ARCH/eciadsl-usermode_0.10-1_i386.deb /tmp
-    chroot $BUILD bash -c "cd /tmp;\
-dpkg -i eciadsl-usermode_0.10-1_i386.deb"
+#apt-get install eciadsl
 
 }
 

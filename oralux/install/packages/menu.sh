@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # menu.sh
-# $Id: menu.sh,v 1.6 2005/12/04 22:42:27 gcasse Exp $
+# $Id: menu.sh,v 1.7 2005/12/25 21:02:35 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing the audio menu
-# $Date: 2005/12/04 22:42:27 $ |
-# $Revision: 1.6 $ |
+# $Date: 2005/12/25 21:02:35 $ |
+# $Revision: 1.7 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -57,60 +57,60 @@ Copy2Oralux()
    chroot $BUILD bash -c "cd /usr/bin; ln -s /usr/share/oralux/dialog/dialog.php dialog-oralux"
 }
 
-debianizeBase()
-{
-    RELEASE=$1
-    PACKAGE_NAME=$2
-    DIR_ORIG=$3
+# debianizeBase()
+# {
+#     RELEASE=$1
+#     PACKAGE_NAME=$2
+#     DIR_ORIG=$3
 
-    PACKAGE_VERSION="${PACKAGE_NAME}-$ORALUX_VERSION.$RELEASE"
+#     PACKAGE_VERSION="${PACKAGE_NAME}-$ORALUX_VERSION.$RELEASE"
 
-    DIR=$DEBIANDIR/$PACKAGE_NAME
+#     DIR=$DEBIANDIR/$PACKAGE_NAME
 
-    [ -n "$DIR" ] && [ -n "$PACKAGE_VERSION" ] && (rm -r "$DIR"/"$PACKAGE_VERSION";rm "$DIR"/"$PACKAGE_NAME"*.orig.tar.gz)
+#     [ -n "$DIR" ] && [ -n "$PACKAGE_VERSION" ] && (rm -r "$DIR"/"$PACKAGE_VERSION";rm "$DIR"/"$PACKAGE_NAME"*.orig.tar.gz)
 
-    mkdir -p $DIR/$PACKAGE_VERSION
+#     mkdir -p $DIR/$PACKAGE_VERSION
 
-#    cd $ORALUX
-    tar -C $ORALUX/$DIR_ORIG --exclude CVS --exclude "*~" -cf - . | tar -C $DIR/$PACKAGE_VERSION -xvf -
-    cd $DIR
-    tar -zcf $PACKAGE_VERSION.tar.gz $PACKAGE_VERSION
-    cd $PACKAGE_VERSION
-    dh_make -e $MAINTMAIL -f ../$PACKAGE_VERSION.tar.gz
-}
+# #    cd $ORALUX
+#     tar -C $ORALUX/$DIR_ORIG --exclude CVS --exclude "*~" -cf - . | tar -C $DIR/$PACKAGE_VERSION -xvf -
+#     cd $DIR
+#     tar -zcf $PACKAGE_VERSION.tar.gz $PACKAGE_VERSION
+#     cd $PACKAGE_VERSION
+#     dh_make -e $MAINTMAIL -f ../$PACKAGE_VERSION.tar.gz
+# }
 
-debianizeAudio()
-{
-    RELEASE=$1
-    TYPE=$2
+# debianizeAudio()
+# {
+#     RELEASE=$1
+#     TYPE=$2
 
-    PACKAGE_NAME="oralux-audio-$TYPE"
-    PACKAGE_VERSION="${PACKAGE_NAME}-$ORALUX_VERSION.$RELEASE"
+#     PACKAGE_NAME="oralux-audio-$TYPE"
+#     PACKAGE_VERSION="${PACKAGE_NAME}-$ORALUX_VERSION.$RELEASE"
 
-    DIR=$DEBIANDIR/$PACKAGE_NAME
+#     DIR=$DEBIANDIR/$PACKAGE_NAME
 
-    [ -n "$DIR" ] && [ -n "$PACKAGE_VERSION" ] && (rm -r "$DIR"/"$PACKAGE_VERSION";rm "$DIR"/"$PACKAGE_NAME"*.orig.tar.gz)
+#     [ -n "$DIR" ] && [ -n "$PACKAGE_VERSION" ] && (rm -r "$DIR"/"$PACKAGE_VERSION";rm "$DIR"/"$PACKAGE_NAME"*.orig.tar.gz)
 
-    mkdir -p $DIR/${PACKAGE_VERSION}
+#     mkdir -p $DIR/${PACKAGE_VERSION}
 
-    tar -C $ORALUX/audio/$TYPE --exclude CVS --exclude "*~" -cf - . | tar -C $DIR/${PACKAGE_VERSION} -xvf -
+#     tar -C $ORALUX/audio/$TYPE --exclude CVS --exclude "*~" -cf - . | tar -C $DIR/${PACKAGE_VERSION} -xvf -
 
-    cd $DIR
-    tar -zcf $PACKAGE_VERSION.tar.gz $PACKAGE_VERSION
-    cd $PACKAGE_VERSION
-    dh_make -e $MAINTMAIL -f ../$PACKAGE_VERSION.tar.gz
-}
+#     cd $DIR
+#     tar -zcf $PACKAGE_VERSION.tar.gz $PACKAGE_VERSION
+#     cd $PACKAGE_VERSION
+#     dh_make -e $MAINTMAIL -f ../$PACKAGE_VERSION.tar.gz
+# }
 
 
-debianizeBase $MAIN_RELEASE "oralux-main" "main"
-exit 0
+# debianizeBase $MAIN_RELEASE "oralux-main" "main"
+# exit 0
 
-debianizeAudio $AUDIO_RELEASE_de "de" 
-debianizeAudio $AUDIO_RELEASE_us "en"
-debianizeAudio $AUDIO_RELEASE_es "es" 
-debianizeAudio $AUDIO_RELEASE_fr "fr" 
-debianizeAudio $AUDIO_RELEASE_ru "ru" 
-debianizeAudio $AUDIO_RELEASE_theme "theme"
+# debianizeAudio $AUDIO_RELEASE_de "de" 
+# debianizeAudio $AUDIO_RELEASE_us "en"
+# debianizeAudio $AUDIO_RELEASE_es "es" 
+# debianizeAudio $AUDIO_RELEASE_fr "fr" 
+# debianizeAudio $AUDIO_RELEASE_ru "ru" 
+# debianizeAudio $AUDIO_RELEASE_theme "theme"
 
 case $1 in
     i|I)

@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // audiouserinterface.c
-// $Id: audioUserInterface.c,v 1.17 2005/12/05 23:32:56 gcasse Exp $
+// $Id: audioUserInterface.c,v 1.18 2005/12/25 21:02:35 gcasse Exp $
 // $Author: gcasse $
 // Description: Managing and playing the pre-recorded messages.
-// $Date: 2005/12/05 23:32:56 $ |
-// $Revision: 1.17 $ |
+// $Date: 2005/12/25 21:02:35 $ |
+// $Revision: 1.18 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 // September 2003: 
 // * German translations by Guenther Harrasser.
@@ -885,11 +885,11 @@ char * TheMessages[][5]={
    "Deseja desligar o P C?",
   },
 
-  {"Do you want MultiSpeech (English and Russian) ?",
-   "Voulez-vous MultiSpeech (anglais et russe) ?",
-   "Wollen Sie MultiSpeech (Englische und Russische) ?",
-   "¿Quieres MultiSpeech (Inglés y Ruso) ?",
-   "Deseja usar o MultiSpeech em (Inglês e Russo)?",
+  {"Do you want Multispeech (English, Brazilian Portuguese, French, German, Russian, Spanish)?",
+   "Voulez-vous Multispeech (français, allemand, anglais, espagnol, portugais brésilien, russe) ?",
+   "Wollen Sie Multispeech (Deutsche, Brasilianisches Portugiesische, Englische, Französische, Russische, Spanische)?",
+   "¿Quieres MultiSpeech (Español, Alemán, Portugués Brasileño, Francés, Inglés, Ruso) ?",
+   "Deseja usar o Multispeech em (Português Brasileiro, Alemão, Espanhol, Francês, Inglês, Russo)?",
   },
 
   {"Do you really want to stop the Braille driver ?",
@@ -908,8 +908,8 @@ char * TheMessages[][5]={
 
   {"zero point seven", // "[:pu all] 0.6 beta", 
    "zéro point sept",
-   "0.7",
-   "0.7",
+   "0 punkt 7",
+   "0 punto 7",
    "zero punto sete",
   },
 

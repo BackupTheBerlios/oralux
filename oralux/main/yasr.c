@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // yasr.c
-// $Id: yasr.c,v 1.8 2005/12/04 22:42:27 gcasse Exp $
+// $Id: yasr.c,v 1.9 2005/12/25 21:02:35 gcasse Exp $
 // $Author: gcasse $
 // Description: Yasr configuration file. 
-// $Date: 2005/12/04 22:42:27 $ |
-// $Revision: 1.8 $ |
+// $Date: 2005/12/25 21:02:35 $ |
+// $Revision: 1.9 $ |
 // Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -87,10 +87,6 @@ static char* getNewSynthesizer(enum textToSpeech theTextToSpeech)
       aSynthesizer="synthesizer=emacspeak server\nsynthesizer port=|/usr/bin/tcl /usr/share/emacs/site-lisp/emacspeak/servers/cicero";
       break;
 
-    case TTS_ParleMax:
-      aSynthesizer="synthesizer=emacspeak server\nsynthesizer port=|maxlect";
-      break;
-      
     case TTS_Multispeech:
       aSynthesizer="synthesizer=emacspeak server\nsynthesizer port=|/usr/local/lib/multispeech/speech_server";
       break;
@@ -217,7 +213,6 @@ void runYasr( struct textToSpeechStruct* theTextToSpeech,
     case TTS_Flite:
     case TTS_DECtalk:
     case TTS_Cicero:
-    case TTS_ParleMax:
     case TTS_Multispeech:
 #ifdef ORALUXGOLD
     case TTS_ViaVoice:
@@ -267,9 +262,6 @@ void runYasr( struct textToSpeechStruct* theTextToSpeech,
       aParam="|/usr/bin/tcl /usr/share/emacs/site-lisp/emacspeak/servers/outloud";
       break;
 #endif
-    case TTS_ParleMax:
-      aParam="|/usr/local/bin/maxlect";
-      break;
     case TTS_Multispeech:
       aParam="|/usr/local/lib/multispeech/speech_server";
       break;

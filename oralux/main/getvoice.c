@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // getvoice.c
-// $Id: getvoice.c,v 1.5 2005/12/05 23:32:56 gcasse Exp $
+// $Id: getvoice.c,v 1.6 2005/12/25 21:02:35 gcasse Exp $
 // $Author: gcasse $
 // Description: Used at installation time to build the "voices" used by oralux
-// $Date: 2005/12/05 23:32:56 $ |
-// $Revision: 1.5 $ |
+// $Date: 2005/12/25 21:02:35 $ |
+// $Revision: 1.6 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -224,6 +224,14 @@ void getvoice(char* theSentence, char* theOggFilename, enum language theLanguage
     case Brazilian:
       sprintf(buf,"echo \"%s\" | ttpport | mbrola -t 0.89 -f 1.00 -v 1.00 -l 16000 -e /usr/local/share/mbrola/voices/br1 - -A | exec sox -t raw -s -w -r 16000 -c 1 -v 1.50 - -c 1 -w %s", aSentence, TheWav);  
       break;
+    case English:
+      break;
+    case French:
+      break;
+    case German:
+      break;
+    case Spanish:
+      break;
     case Russian:
       sprintf(buf,"echo \"%s\" | ru_tts -s /usr/local/lib/ru_tts/lexicon -r 0.14 -p 0.19 | exec sox -t raw -s -b -r 10000 -c 1 -v 0.70 - -c 1 -w %s", aSentence, TheWav);  
       break;
@@ -332,6 +340,7 @@ int main(int argc, char *argv[])
       switch(aLanguage)
 	{
 	case Brazilian:
+	case Russian:
 	    getvoice( a, getOggFilenameChar(aCharacter), aLanguage);
 	  break;
 
