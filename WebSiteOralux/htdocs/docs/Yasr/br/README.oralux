@@ -1,0 +1,63 @@
+YASR ("É um leitor de tela") que ainda está na fase de desenvolvimento.
+
+Atualmente o Yasr possui dois conjuntos de mapas de teclas (keymaps), um para o modo de revisão (ie, revisar a tela) e um para o modo padrão). 
+Quando o Yasr ffor iniciado, você estará no modo padrão.
+
+Para alterar o modo, simplesmente pressione Ctrl-alt r.
+Isso significa pressionar e segurar as teclas Control e alt (as da esquerda), e pressionar a tecla r.
+
+Segue abaixo uma lista de teclas e suas funções definidas por padrão. 
+Teclas precedidas por [N] podem opcionalmente serem precedidas por um número.
+
+-- Modo de revisão --
+
+Barra de espaços: fala a posição do cursor.
+^: move para o primeiro caracter da linha, e lê a palavra.
+$: move para o último caracter da linha, e lê a palavra.
+[N]b: Lê o caracter anterior, ou move a esquerda n caracteres.
+[N]c: Lê o caracter, ou move para o caracter n na linha e o lê.
+[N]d: Lê o próximo caracter, ou move a direita n caracteres.
+e: Lê da posição atual do cursor até o fim da tela.
+f: Busca por um determinado texto na tela.
+<: Faz uma busca da posição atual do cursor até o início da janela,
+   utilizando uma palavra que tenha cido especificada.
+>: Faz uma busca da posição atual do cursor até o fim da janela,
+   utilizando uma palavra que tenha cido especificada.
+[N]k: Vai para a linha anterior e a lê, o mesmo que seta acima.
+[N]l: Lê a linha atual, ou vai para a linha n e a lê.
+[N]m: move para a próxima linha e a lê, o mesmo que seta abaixo.
+n: envia diretamente ao aplicativo.
+t: lê início da janela até a posição atual do cursor.
+w: lê toda a tela.
+z: Move para o início da palavra anterior e a lê.
+x: Move para o início da próxima palavra e a lê.
+[N] Seta acima: Vai para linha anterior e a lê. (tbd -- seta acima e
+   abaixo para ler a palavra ou caracter na linha desejada).
+[N] Seta abaixo: Vai para a próxima linha e a lê.
+[N]Seta para a esquerda: Volta um caracter e o lê.
+[N]Seta a direita: Vai para o próximo caracter e o lê.
+(: Vai para o parágrafo anterior.
+): Vai para o próximo parágrafo.
+`: Lê o valor ASCII do caracter atual.
+
+** Modo padrão ** (Estas teclas funcionam também no modo de revisão)
+ctrl-alt-b: Lê o caracter anterior.
+ctrl-alt-c: Lê caracter.
+ctrl-alt-d: Lê Palavra.
+ctrl-alt-e: Lê da posição atual do cursor até o final da tela.
+ctrl-alt-i: Reinicia o sintetizador.
+ctrl-alt-k: Lê a linha anterior.
+ctrl-alt-l: Lê a linha.
+ctrl-alt-r: Altera o modo de revisão.
+ctrl-alt-t: Lê da posição do cursor até o início da tela.
+ctrl-alt-w: Lê toda a tela.
+ctrl-alt-x: Ativa a opção mudo do sintetizador. Para reativa-lo pressione ctrl-alt-x novamente).
+
+alt-enter: Desativa o Yass. Sinlencia o sintetizador e desabilita suas combinações de teclas.
+	Pressione novamente para reativá-lo.
+	Nota: esta tecla está definida no Menu Opções? como
+	"Teclas-Desabilitadas".
+
+Sugestões, correções, ETC. Serão bem-vindas!
+
+   -Michael P. Gorse <mgorse@users.sourceforge.net>
