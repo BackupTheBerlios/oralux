@@ -1,0 +1,59 @@
+YASR (acrónimo en inglés de "Otro lector de pantalla más") es un lector de
+pantalla ligero, aún en desarrollo.
+
+Actualmente yasr tiene dos mapas de teclado, uno para el "modo de revisión" (por ejemplo, para revisar la pantalla) y otro para el modo estándar. 
+Cuando YASR inicia, usted se hallara en el modo estándar.
+
+Para cambiar de modo, sólo pulse Ctrl-alt-r.
+Esto significa, pulse las teclas Control y Alt (las del lado izquierdo) y
+sin soltarlas pulse la tecla r.
+
+A continuación se muestra una lista de teclas y sus funciones, las cuales están definidas por defecto. Teclas precedidas por [n] pueden ser precedidas por un número.
+
+-- Modo de revisión --
+
+Espacio: dí la posición del cursor.
+^: muévete al primer caracter de la línea y dí palabra.
+$: muévete al último caracter de la línea y dí palabra.
+[n]b: dí el caracter previo o muevete hacia la izquierda n caracteres.
+[n]c: dí el caracter, o muevete hacia el caracter n de la línea y dilo.
+[n]d: dí el siguiente caracter o muevete hacia la derecha n caracteres.
+e: lee del cursor al fondo de la pantalla.
+f: busca texto en la pantalla.
+<: busca desde el cursor hacia el principio de la pantalla empleando la cadena    de caracteres buscada previamente.
+>: busca desde el cursor hacia el final de la pantalla empleando la cadena de c   aracteres buscada previamente.
+[n]k: muevete hacia arriba una línea y leela (actualmente es igual que la flecha para arriba).
+[n]l: dí la línea actual o salta a la línea n y leela.
+[n]m: muevete hacia abajo una línea y leela (actualmente es igual a la flecha hacia abajo).
+n: rodea (envía directamente a la aplicación sin interpretar).
+t: lee desde el principio hasta el cursor.
+w: lee toda la pantalla.
+z: muevete al principio de la palabra previa y leela.
+x: muevete al principio de la siguiente palabra y leela.
+[n]flecha para arriba: muévete a la línea previa y lee la línea (por hacer -- opcionalmente permitir a las flechas leer una palabra o caracter en lugar de un línea).
+[n]flecha para abajo: muévete a la siguiente línea y leela.
+[n]flecha a la izquierda: muévete hacia atrás un caracter y leelo.
+[n]flecha a la derecha: muévete hacia adelante un caracter y leelo.
+(: vé al párrafo previo.
+): vé al parrafó siguiente.
+`: lee el valor ASCII del caracter actual.
+
+** modoestándar ** (éstas teclas también funcionan en modo de revisión)
+ctrl-alt-b: dí el caracter previo.
+ctrl-alt-c: dí el caracter.
+ctrl-alt-d: dí palabra.
+ctrl-alt-e: lee desde el cursor hasta el final de la pantalla.
+ctrl-alt-i: reinicializa el sintetizador.
+ctrl-alt-k: dí la línea previa.
+ctrl-alt-l: lee línea.
+ctrl-alt-r: cambia modo de revisión.
+ctrl-alt-t: lee desde el inicio hasta el cursor.
+ctrl-alt-w: lee la pantalla completa.
+ctrl-alt-x: silencia el habla. Como ctrl-alt-x pero continúa en silencia hasta que alguna tecla sea pulsada (por ejemplo, presionando ctrl-alt-x por segunda vez reinicia el habla).
+alt-enter: Inhabilita yasr. Yasr es silencioso e ignora todas las teclas cuando se halla inhabilitado.
+	Pulselo de nuevo para rehabilitarlo.
+	Nota: esta tecla está definida en la sección de opciones [options] como "DisableKey".
+
+Sugerencias, parches, etc. son bienvenidos.
+
+   -Michael P. Gorse <mgorse@users.sourceforge.net>

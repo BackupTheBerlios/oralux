@@ -1,0 +1,64 @@
+YASR ("Yet Another Screen Reader") is a lightweight, portable screen reader, still being developed.
+
+Currently yasr has two sets of keymaps, one for "review mode" (ie,
+reviewing the screen) and one for the standard mode. 
+When YASR starts, you will be in the standard mode.
+
+To change the mode, just press Ctrl-alt-r. 
+It means hold down the Control and alt keys (the left ones), and press the r key.
+
+Following is a list of a few keys and their functions that are defined by default. 
+Keys preceeded by [N] can optionally be preceeded by a number.
+
+-- Review mode --
+
+spacebar: say review cursor position.
+^: move to the first character on the line, and say word.
+$: move to the last character on the line, and say word.
+[N]b: say previous character, or move left n characters.
+[N]c: say character, or move to character n on the line and say it.
+[N]d: say next character, or move right n characters.
+e: read from cursor to bottom of screen.
+f: search for text on the screen.
+<: search from cursor to top of screen, using the previously-entered search
+   string.
+>: search from cursor to bottom of screen, using the previously-entered search
+   string.
+[N]k: move up a line and read the line (currently same as up arrow).
+[N]l: say current line, or jump to line n and read it.
+[N]m: move down a line and read the line (currently same as down arrow).
+n: bypass (send directly to the application).
+t: read from top to cursor.
+w: read entire screen.
+z: move to beginning of previous word and read the word.
+x: move to beginning of next word and read the word.
+[N]up arrow: move to previous line and read the line. (tbd -- allow up and down
+   arrow to read a word or character instead of the line if desired).
+[N]down arrow: move to next line and read the line.
+[N]left arrow: move back one character and read the character.
+[N]right arrow: move ahead one character and read the character.
+(: go to previous paragraph.
+): go to next paragraph.
+`: read the ASCII value of the current character.
+
+** standard mode ** (these keys also work in review mode)
+ctrl-alt-b: say previous character.
+ctrl-alt-c: say character.
+ctrl-alt-d: say word.
+ctrl-alt-e: read cursor to bottom of screen.
+ctrl-alt-i: reinitialize the synthesizer.
+ctrl-alt-k: say previous line.
+ctrl-alt-l: read line.
+ctrl-alt-r: toggle review mode.
+ctrl-alt-t: read top to cursor.
+ctrl-alt-w: read entire screen.
+ctrl-alt-x: silence speech. Pressing ctrl-alt-x a second time will start speech again, for example.
+
+alt-enter: disable yasr.  Yasr is silent and ignores all keys when disabled.
+	Press again to re-enable.
+	Note: this key is defined in the [options] section as "DisableKey".
+
+Suggestions, patches, etc. welcome.
+
+   -Michael P. Gorse <mgorse@users.sourceforge.net>
+

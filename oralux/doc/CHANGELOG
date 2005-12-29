@@ -28,8 +28,6 @@ Oralux 0.7 is based on Knoppix 4.02.
 / Calendar in Spanish has been updated by Miguel Paolino. 
 / Calendar in German has been translated by Peter Piechutzky
 
-
-
 * Bug fixes
 + Clearly say that RETURN must be pressed once the CD is ejected.
 + Preferences menu: setting BRLTTY: the contraction table item is added
@@ -41,8 +39,24 @@ Oralux 0.7 is based on Knoppix 4.02.
 Alsa is the default driver. The oss cheatcode is also proposed.
 
 ** Multispeech
-Compliant with four others languages: Brazilian Portuguese, French, German and Spanish.
+Customized version compliant with four others languages: Brazilian Portuguese, French, German and Spanish.
+
+* Brazilian Portuguese with ttpport by Cassio Santos and al (Alistair
+  D. Conkie, Eduardo Reis, Luis Alves) and the br1 MBROLA database by
+  Denis R. Costa, 
+
+* French with Lliaphon by the Biglux team and the fr4 MBROLA database
+  by Vincent Pagel,
+
+* German with txt2pho by Thomas Portele and the de6 MBROLA database by
+  Dr Marc Schroeder,
+
+* Spanish thanks to a software by the IrcHa team and the es1 MBROLA
+  database (originally created by Alistair D. Conkie and al).
  
+** English phonetizer
+Enlex by Igor B. Poretsky.
+
 ** audio menu
 - The French Canadian keyboard has been added.
 - The internet preferences can be configured.
@@ -145,12 +159,6 @@ Thanks to Sergei V. Fleytin
 Jabber clients: emacs-jabber and imcom. 
 Jabber server: packages included.
 (Erc still available).
-
-+ Voice synthesizers:
-ttport: perl script for the Brazilian Portuguese language.
-txt2pho: phonetizer for the German language.
-ircha_tts: perl script (ircha project) for the Spanish language.
-enlex: English phonetizer.
 
 / The listen-up digital talking book player is included.
 / File conversion: the xpdf-utils (pdftotext) and catdoc (.doc to text) packages have been added 
