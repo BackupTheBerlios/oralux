@@ -39,7 +39,6 @@ x: move to beginning of next word and read the word.
 [N]right arrow: move ahead one character and read the character.
 (: go to previous paragraph
 ): go to next paragraph
-ctrl-alt-i: reinitialize the synthesizer
 `: read the ASCII value of the current character
 
 ** standard mode ** (these keys also work in review mode)
@@ -47,6 +46,7 @@ ctrl-alt-b: say previous character
 ctrl-alt-c: say character
 ctrl-alt-d: say word
 ctrl-alt-e: read cursor to bottom of screen
+ctrl-alt-i: reinitialize the synthesizer
 ctrl-alt-k: say previous line
 ctrl-alt-l: read line
 ctrl-alt-r: toggle review mode
