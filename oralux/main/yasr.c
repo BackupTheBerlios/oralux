@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // yasr.c
-// $Id: yasr.c,v 1.9 2005/12/25 21:02:35 gcasse Exp $
+// $Id: yasr.c,v 1.10 2006/01/01 21:24:09 gcasse Exp $
 // $Author: gcasse $
 // Description: Yasr configuration file. 
-// $Date: 2005/12/25 21:02:35 $ |
-// $Revision: 1.9 $ |
+// $Date: 2006/01/01 21:24:09 $ |
+// $Revision: 1.10 $ |
 // Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -200,7 +200,7 @@ void runYasr( struct textToSpeechStruct* theTextToSpeech,
 	      char* theCommand)
 {
   // Select a software synthesizer possibly compliant with the user preferences.
-  enum textToSpeech aYasrSynthesizer=TTS_Flite;
+  enum textToSpeech aYasrSynthesizer=TTS_Multispeech;
   enum language aPossibleLanguage=theMenuLanguage;
 
   say( yasrIsStarted);
@@ -222,19 +222,7 @@ void runYasr( struct textToSpeechStruct* theTextToSpeech,
       break;
 
     default:
-      // We select the nearest possible synthesizer according to the language
-      switch (theMenuLanguage)
-	{
-	case French:
-	  aYasrSynthesizer=TTS_Cicero;
-	  break;
-	case English:
-	case German:
-	case Spanish:
-	default:
-	  aYasrSynthesizer=TTS_Flite;
-	  break;
-	}
+      aYasrSynthesizer=TTS_Multispeech;
       break;
     }
 

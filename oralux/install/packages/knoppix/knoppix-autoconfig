@@ -4,7 +4,7 @@
 # (C) Klaus Knopper <knopper@knopper.net> 2005
 #
 # Oralux changes
-# Gilles Casse, 2003-2005
+# Gilles Casse, 2003-2006
 # - No AES256 at the moment
 # - Oralux conf file
 # - Floppy disk and knoppix.sh
@@ -18,6 +18,7 @@
 # - oss cheatcode (stored in conf). no oss cheatcode.
 # For more details, see diff with knoppix-autoconfig.sav
 #
+# knoppix-image is not interactive (at the moment)
 
 PATH="/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11R6/bin"
 export PATH
@@ -1135,7 +1136,8 @@ if [ -n "$partitions" ]; then
      continue
     fi
    fi
-   if type -a knoppix-image >/dev/null 2>&1 && knoppix-image "$IMAGE" </dev/console >/dev/console 2>&1; then
+# Oralux: knoppix-image is not interactive (at the moment).
+   if type -a knoppix-image >/dev/null 2>&1 && knoppix-image -b "$IMAGE" </dev/console >/dev/console 2>&1; then
     KNOPPIX_IMG="$IMAGE"
     mount -o remount,ro $m 2>/dev/null
    fi

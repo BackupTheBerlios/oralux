@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # php.sh
-# $Id: php.sh,v 1.9 2005/12/04 22:42:27 gcasse Exp $
+# $Id: php.sh,v 1.10 2006/01/01 21:24:09 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing a customized PHP5 cli (non canonical mode)
-# $Date: 2005/12/04 22:42:27 $ |
-# $Revision: 1.9 $ |
+# $Date: 2006/01/01 21:24:09 $ |
+# $Revision: 1.10 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -47,8 +47,9 @@ InstallPackage()
     make
     make install
     cd /usr/bin 
-    rm -f php5
+    rm -f php5 php
     ln -s /usr/bin/php-oralux php5
+    ln -s /usr/bin/php-oralux php
     cd /etc/alternatives;rm -f php;ln -s /usr/bin/php5 php
 }
 
@@ -72,8 +73,9 @@ Copy2Oralux()
 	cd /tmp/php-${RELEASE};\
 	./configure $OPT_CONF;make;make install;\
 	cd /usr/bin;\
-	rm -f php5;\
+	rm -f php5 php;\
 	ln -s /usr/bin/php-oralux php5;\
+	ln -s /usr/bin/php-oralux php;\
 	cd /etc/alternatives;\
 	rm -f php;\
 	ln -s /usr/bin/php5 php"

@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // textToSpeech.c
-// $Id: textToSpeech.c,v 1.6 2005/12/25 21:02:35 gcasse Exp $
+// $Id: textToSpeech.c,v 1.7 2006/01/01 21:24:09 gcasse Exp $
 // $Author: gcasse $
 // Description: Ask about the whished TTS and install it. 
-// $Date: 2005/12/25 21:02:35 $ |
-// $Revision: 1.6 $ |
+// $Date: 2006/01/01 21:24:09 $ |
+// $Revision: 1.7 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -23,6 +23,7 @@
 // ----------------------------------------------------------------------------
 
 #include <stdio.h>
+#include <string.h>
 #include <fcntl.h>
 #include <stdlib.h>
 #include <sys/stat.h>
@@ -343,7 +344,7 @@ static int chooseSynt( struct textToSpeechStruct* theTextToSpeech,
     default:
       {
 	// hardware synth are not yet available using Yasr
-	enum textToSpeech aIdentifier=isExternalSynth(theTextToSpeech->myIdentifier) ? TTS_Flite:theTextToSpeech->myIdentifier;
+	enum textToSpeech aIdentifier=isExternalSynth(theTextToSpeech->myIdentifier) ? TTS_Multispeech:theTextToSpeech->myIdentifier;
 
 	aIndex=getIndexInArrayFromIdentifier(aArrayOfAvailableSynth , aMaxTextToSpeech, aIdentifier);
       }
@@ -520,7 +521,7 @@ static void ManageDECtalkInstallation( enum textToSpeech* theTextToSpeech,
 			    enum language* theTextToSpeechLanguage)
 {
   ENTER("ManageDECtalkInstallation");
-  *theTextToSpeech=TTS_Flite;
+  *theTextToSpeech=TTS_Multispeech;
   *theTextToSpeechLanguage=English;
 
   // installDECtalk
@@ -586,7 +587,7 @@ static void ManageDECtalkInstallation( enum textToSpeech* theTextToSpeech,
 	    }
 	  else
 	    {
-	      *theTextToSpeech=TTS_Flite;
+	      *theTextToSpeech=TTS_Multispeech;
 	      *theTextToSpeechLanguage=English;
 	    }
 	  break;
@@ -609,7 +610,7 @@ static void ManageDECtalkInstallation( enum textToSpeech* theTextToSpeech,
   // Building the emacspeak shared libary
   if ((*theTextToSpeech==TTS_DECtalk) && !BuildingEmacspeakSharedLibrary())
     {
-      *theTextToSpeech=TTS_Flite;
+      *theTextToSpeech=TTS_Multispeech;
       *theTextToSpeechLanguage=English;
       say(TheTcldtkLibraryIsNotBuilt);
     }
@@ -621,7 +622,7 @@ static void ManageViaVoiceInstallation( enum textToSpeech* theTextToSpeech,
 					int theUserMustBeAskedFor)
 {
   ENTER("ManageViaVoiceInstallation");
-  *theTextToSpeech=TTS_Flite;
+  *theTextToSpeech=TTS_Multispeech;
   *theTextToSpeechLanguage=English;
 
   if (installViaVoice( theUserMustBeAskedFor))
@@ -938,7 +939,7 @@ static int install(struct textToSpeechStruct* theTextToSpeech, enum language the
 
 // setTextToSpeech
 void setTextToSpeech(struct textToSpeechStruct* theTextToSpeech,
-		     //enum language thePreferredLanguage,
+		     enum language thePreferredLanguage,
 		     enum desktopIdentifier theDesktop,
 		     int theUserMustBeAskedFor)
 {
@@ -949,18 +950,18 @@ void setTextToSpeech(struct textToSpeechStruct* theTextToSpeech,
   while(aRequest)
     {
       aRequest=0;
-      //theTextToSpeech->myLanguage = thePreferredLanguage;
+      theTextToSpeech->myLanguage = thePreferredLanguage;
       if (theUserMustBeAskedFor)
 	{
-	  //	  if (!chooseSynt( theTextToSpeech, thePreferredLanguage, theDesktop))
-	  if (!chooseSynt( theTextToSpeech, theTextToSpeech->myLanguage, theDesktop))
+	  //if (!chooseSynt( theTextToSpeech, thePreferredLanguage, theDesktop))
+	    if (!chooseSynt( theTextToSpeech, theTextToSpeech->myLanguage, theDesktop))
 	    {
 	      return;
 	    }
 	}
  
-      //      if (!install(theTextToSpeech, thePreferredLanguage))
-      if (!install(theTextToSpeech, theTextToSpeech->myLanguage, theUserMustBeAskedFor))
+      //if (!install(theTextToSpeech, thePreferredLanguage, theUserMustBeAskedFor))
+	if (!install(theTextToSpeech, theTextToSpeech->myLanguage, theUserMustBeAskedFor))
 	{
 	  aRequest=1;
 	  theUserMustBeAskedFor=1;
@@ -1017,7 +1018,7 @@ static struct t_Label myLabels[]={
 
 char* getStringSynthesis(enum textToSpeech theValue)
 {
-  char* aValue="Flite";
+  char* aValue="Multispeech";
   int i=0;
   for (i=0;i<sizeof(myLabels)/sizeof(myLabels[0]);i++)
     {

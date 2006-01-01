@@ -1,0 +1,324 @@
+#!/bin/bash
+# knoppix-image - activate KNOPPIX.IMG (merge with unionfs)
+# (C) Klaus Knopper Feb 2005
+# Jan 2006: Update for Oralux, Gilles Casse <gcasse@oralux.org>
+# option -i: interactive
+
+PATH="/bin:/sbin:/usr/bin:/usr/sbin"
+export PATH
+
+XDIALOG_HIGH_DIALOG_COMPAT=1
+export XDIALOG_HIGH_DIALOG_COMPAT
+
+[ "`id -u`" != "0" ] && exec sudo "$0" "$@"
+
+TMP="/tmp/knoppix-image.tmp$$"
+
+IMAGE=""
+
+bailout(){
+rm -f "$TMP"
+[ -n "$IMAGE" ] && mount -o remount,ro "$(dirname "$IMAGE")" 2>/dev/null
+exit 0
+}
+
+# ANSI COLORS
+CRE="[K"
+NORMAL="[0;39m"
+# RED: Failure or error message
+RED="[1;31m"
+# GREEN: Success message
+GREEN="[1;32m"
+# YELLOW: Descriptions
+YELLOW="[1;33m"
+# BLUE: System messages
+BLUE="[1;34m"
+# MAGENTA: Found devices or drivers
+MAGENTA="[1;35m"
+# CYAN: Questions
+CYAN="[1;36m"
+# BOLD WHITE: Hint
+WHITE="[1;37m"
+
+DIALOG="dialog"
+[ -n "$DISPLAY" ] && [ -x /usr/bin/Xdialog ] && DIALOG="Xdialog"
+
+trap bailout 1 2 3 15
+
+# LANGUAGE etc.
+[ -f /etc/sysconfig/knoppix ] && . /etc/sysconfig/knoppix
+[ -z "$LANG" ] && export LANG
+[ -z "$LANGUAGE" ] && export LANGUAGE
+[ -z "$CHARSET" ] && export CHARSET
+
+# Oralux: knoppix-image is not interactive (at the moment)
+INTERACTIVE="yes"
+if [ "$1" == "-b" ]; then
+    INTERACTIVE="no"
+    echo "home system init" > "$TMP"
+    IMAGE="$2"
+else
+    IMAGE="$1"
+fi
+
+[ -n "$IMAGE" -a -f "$IMAGE" ] || { $DIALOG --title ERROR --msgbox "Usage: $0 [-q] imagefile" 8 55; bailout; }
+[ "`id -u`" = "0" ] || { $DIALOG --title ERROR --msgbox "$0 must be run as in admin mode." 8 55; bailout; }
+
+getpassword(){
+ case "$LANGUAGE" in
+ de*|at*|ch*)
+ HEADER="AES256 Verschlüsselungs-Passwort"
+ ENTER="Eingabe:"
+ ;;
+ es*)
+ HEADER="contraseña de cifrado AES256"
+ ENTER="Teclee:"
+ ;;
+ *)
+ HEADER="AES256 encryption password"
+ ENTER="Enter:"
+ ;;
+ esac
+ rm -f "$TMP.pass"
+ if [ "$DIALOG" = "Xdialog" ]; then
+ $DIALOG --title "$HEADER" --password --inputbox "$ENTER" 15 60 "" 2>"$TMP.pass"
+ else
+ $DIALOG --title "$HEADER" --insecure --passwordbox "$ENTER" 8 65 "" 2>"$TMP.pass"
+ fi
+ RC="$?"
+ PASSWORD="$(<$TMP.pass)"
+ rm -f "$TMP.pass"
+ echo "$PASSWORD" >&2
+ return "$RC"
+}
+
+# Save/restore /etc/mtab
+
+MTAB=""
+
+save_mtab(){
+MTAB="$(cat /etc/mtab)"
+}
+
+restore_mtab(){
+if [ -n "$MTAB" ]; then
+echo "$MTAB" >/etc/mtab
+fi
+}
+
+
+# The return value of mount -o remount,rw is lying. Do a "brute force" check to see if we REALLY
+# have a writable directory.
+checkwritable(){
+if touch "$1/write_check.$$" 2>/dev/null; then
+rm -f "$1/write_check.$$"
+return 0
+fi
+return 1
+}
+
+LOOPDEV=""
+
+findfreeloop(){
+for i in 0 1 2 3 4 5 6 7; do
+LOOP="/dev/loop$i"
+losetup "$LOOP" >/dev/null 2>&1 || { echo "$LOOP"; return 0; }
+done
+return 1
+}
+
+# fscheckencrypted expects an encryption password from stdin
+fscheckencrypted(){
+ LOOPDEV="$(findfreeloop)"
+ if [ -n "$LOOPDEV" ] && losetup -e AES256 -p0 "$LOOPDEV" "$1" && [ "$(fstype $1)" = "ext2" ]; then
+  e2fsck -y "$LOOPDEV"
+  RC="$?"
+  losetup -d "$LOOPDEV"
+  return "$RC"
+ fi
+ return 1
+}
+
+# Try to mount this filesystem read-only, without or with encryption
+# trymount device|file mountpoint
+trymount(){
+ # Check if already mounted
+ case "$(cat /proc/mounts)" in *\ $2\ *)
+  checkwritable "$2" && return 0
+  mount -o remount,rw "$2" && checkwritable "$2" && return 0
+  return 1;;
+ esac
+ [ "$(fstype $1)" = "ext2" ] && e2fsck -y "$1"
+ [ -d "$2" ] || mkdir -p "$2"
+ # Apparently, mount-aes DOES autodetect AES loopback files (sometimes).
+ [ -b "$1" ] && { mount -t auto -o rw,dev,suid "$1" "$2" 2>/dev/null; RC="$?"; }
+ # We need to mount crypto-loop files with initial rw support
+ [ -f "$1" ] && { mount -t auto -o loop,rw,dev,suid "$1" "$2" 2>/dev/null; RC="$?"; }
+ # Mount succeeded?
+ if [ "$RC" = "0" ]; then
+ checkwritable "$2" && return 0
+ umount "$2" 2>/dev/null ; return 1
+ fi
+ echo ""
+ echo "${CYAN}Filesystem not autodetected, trying to mount $1 with AES256 encryption${NORMAL}"
+ while :; do
+ rm -f "$TMP"
+ getpassword 2>"$TMP" || break
+ fscheckencrypted "$1" <"$TMP"
+ if mount -v -p0 -o loop,rw,dev,suid,encryption=AES256 "$1" "$2" <"$TMP"; then
+  rm -f "$TMP"
+  checkwritable "$2" && return 0
+  umount "$2" 2>/dev/null ; return 1
+ fi
+ done
+ rm -f "$TMP"
+ return 1
+}
+
+# Check if first 96k of file are zeros
+iszero(){
+ODSTRING="0000000 000000 000000 000000 000000 000000 000000 000000 000000
+*
+0300000"
+[ "$(od -N 96k $1)" = "$ODSTRING" ]  && return 0 || return 1
+}
+
+iszero "$IMAGE" && bailout
+
+case "$LANGUAGE" in
+ de*|ch*|at*)
+ TITLE="KNOPPIX-KONFIGURATION"
+ DESC1="KNOPPIX hat eine Image-Datei ($IMAGE) gefunden. In dieser Image-Datei befinden sich die unten aufgelisteten Komponenten, die Sie separat aktivieren können.
+Bitte beachten Sie, dass solche Konfigurations-Images wegen eventuell mit Administratorkennung ablaufender Skripte im Gegensatz zum \"normalen\" Start von KNOPPIX ein Sicherheitsrisiko darstellen können, daher müssen Sie, wenn Sie das möchten, die Aktivierung hier mit \"OK\" bestätigen.
+Wenn Sie nichts tun, wird in 20 Sekunden mit dem normalen Systemstart ohne Image-Aktivierung fortgefahren."
+ MENU1="Persistentes Knoppix-Heimverzeichnis einbinden"
+ MENU2="Als persistentes, schreibbares System einbinden"
+ MENU3="Gespeicherte Konfiguration überschreiben/updaten"
+ MENU4="INIT-Bootskripte (Netzwerk, Drucker etc.) starten"
+ ERRORW="Kann das Image nicht im Lese/Schreibmodus einbinden! Vielleicht ist die Partition, auf der es liegt, nicht schreibbar (z.B. passiert dies, wenn ein NTFS-Dateisystem erst von Windows(TM)-scandisk/chkdisk in einen konsistenten Zustand gebracht werden muss)."
+ ;;
+ es*)
+ TITLE="CONFIGURACIÓN DE KNOPPIX"
+ DESC1="KNOPPIX ha encontrado una imagen en el fichero ($IMAGE). Esta imagen contiene los siguientes componentes, que pueden ser activados por separado.
+Tenga en cuenta el potencial riesgo de estas imágenes de configuración, debido a los scripts que se ejecutan en modo administrador, a diferencia del arranque \"normal\" de KNOPPIX. Si desea activar la imagen, seleccione \"OK\".
+Si no hace nada, el sistema arrancará normalmente (sin activar la imagen) en 20 segundos."
+ MENU1="Montar directorio home persistente de Knoppix"
+ MENU2="Añadir como persistente, el área del sistema reescrita"
+ MENU3="Sobreescribir/actualizar la configuración del sistema"
+ MENU4="Iniciar los scripts de arranque INIT-bootscripts (red, impresora etc.)"
+ ERRORW="No se pudo montar la imagen en modo lectura/escritura. Puede que la partición que contiene la imagen no sea escribible. Esto también puede ocurrir, por ejemplo, si a un sistema de ficheros NTFS se le debe pasar la utilidad scandisk/chkdisk de Windows(TM) para que quede en un estado consistente."
+ ;;
+ *)
+ TITLE="KNOPPIX-CONFIGURATION"
+ DESC1="KNOPPIX has found an image file ($IMAGE). This image contains the components listed below, which can be activated separately.
+Please be aware of the potential security risk of such configuration images, because of scripts that can run in admin mode, as opposed to the \"normal\" start of KNOPPIX. Therefore, if you wish, you have to acknowledge image activation by selecting \"OK\".
+If you do nothing, the system will boot normally (without image activation) in 20 seconds."
+ MENU1="Mount persistent Knoppix-Homedirectory"
+ MENU2="Add as persistent, writable system area"
+ MENU3="Overwrite/update stored system configuration"
+ MENU4="Start INIT-bootscripts (network, printer etc.)"
+ ERRORW="Cannot mount the Image in read/write mode! Maybe the partition containing the image is not writable. This can also happen if, for example, the NTFS filesystem needs to be brought into a consistent state first by using the Windows(TM) scandisk/chkdisk utility."
+ ;;
+esac
+
+SELECTION=""
+# Oralux: not interactive at the moment
+if [  $INTERACTIVE == "no" ] || \
+    $DIALOG --title "$TITLE" --timeout 20 --defaultno --checklist "$DESC1" 22 75 4 home "$MENU1" on system "$MENU2" on overwrite "$MENU3" off init "$MENU4" on 2>"$TMP"; then
+# if $DIALOG --title "$TITLE" --timeout 20 --defaultno --checklist "$DESC1" 22 75 4 home "$MENU1" on 2>"$TMP"; then
+    SELECTION="$(<$TMP)"
+    rm -f "$TMP"
+# mount base partition rw
+    mount -o remount,rw "$(dirname "$IMAGE")"
+    trymount "$IMAGE" /KNOPPIX.IMG || { $DIALOG --title ERROR --msgbox "$ERRORW" 15 75; umount /KNOPPIX.IMG 2>/dev/null; bailout; }
+else
+    rm -f "$TMP"
+    umount /KNOPPIX.IMG 2>/dev/null
+    bailout
+fi
+
+OLDHOMEDIR=""
+case "$SELECTION" in *home*)
+ ERROR=""
+ if [ -d /KNOPPIX.IMG/home/knoppix ]; then
+  ERROR="$(ln -snf /KNOPPIX.IMG/home /home 2>&1)"; RC="$?"
+ else
+  # Image is just the Knoppix homedir, compatibility with Knoppix Versions <= 3.7
+  OLDHOMEDIR="yes"
+  echo "${RED}WARNING: $IMAGE is probably an old version of \"Knoppix persistent homedir\". You should create a new one soon.${NORMAL}"
+  ERROR="$(mount --bind /KNOPPIX.IMG /home/knoppix 2>&1)" ; RC="$?"
+ fi
+ if [ "$RC" = "0" ]; then
+  echo "${GREEN}>> /home/knoppix mounted OK from $IMAGE.${NORMAL}"
+ else
+  echo "${RED}FAILED."; echo "$ERROR${NORMAL}"
+ fi
+ ;;
+esac
+    
+UNION="/KNOPPIX=ro"
+# Add all KNOPPIX images to the union
+for c in 1 2 3 4 5 6 7; do
+ [ -d "/KNOPPIX$c" ] && UNION="$UNION:/KNOPPIX$c=ro"
+done
+
+case "$SELECTION" in *system*)
+ if [ -n "$OLDHOMEDIR" ]; then
+  echo "${RED}Cannot create union system from old knoppix.img home-only format, sorry.${NORMAL}"
+ else
+  # Image contains (maybe) a complete root filesystem
+  [ -d /UNIONFS ] || mkdir -p /UNIONFS
+  RC=0
+  case "$(cat /proc/mounts)" in
+   *\ /UNIONFS\ *) ;; # Already present, do nothing
+   *) # Unite
+    ERROR="$(mount -t unionfs -o dirs=/ramdisk=rw:$UNION /UNIONFS /UNIONFS 2>&1)" ; RC="$?" ;;
+  esac
+  save_mtab
+  if [ "$RC" = "0" ]; then
+   umount -ln /dev/pts >/dev/null 2>&1
+   ERROR="$(mount -t unionfs -o dirs=/KNOPPIX.IMG=rw:$UNION persistent /UNIONFS 2>&1)"
+   RC="$?"
+   mount -n -t devpts /dev/pts /dev/pts 2>/dev/null
+  fi
+  if [ "$RC" != "0" ]; then
+   echo "${RED}Creating union system -> image FAILED for $IMAGE."; echo "$ERROR${NORMAL}"
+  else
+   # Fix mtab
+   echo "$MTAB" | grep -q '^persistent'  || MTAB="$MTAB
+$(awk '/^persistent/{print $0;exit 0;}' /etc/mtab)"
+   for i in /*; do # Create links for existing ones
+    [ "$i" = "/home" -o "$i" = "/tmp" ] && continue # Don't relink /home or /tmp
+    [ "$i" -ef "/UNIONFS$i" ] && continue
+    [ -L "$i" ] && ln -snf "/UNIONFS$i" /
+   done
+   for i in /UNIONFS/*; do # Create links for new ones on /UNIONFS
+    [ "$i" = "/UNIONFS/home" -o "$i" = "/UNIONFS/tmp" ] && continue # Don't relink /home or /tmp
+    [ "$i" -ef "${i##/UNIONFS}" ] && continue
+    [ -e "${i##/UNIONFS}" ] || ln -snf "$i" /
+   done
+   restore_mtab
+   echo "${GREEN}>> Read-only CD/DVD system successfully merged with read-write $IMAGE.${NORMAL}"
+  fi
+ fi
+ ;;
+esac
+
+case "$SELECTION" in *overwrite*)
+ [ -z "$OLDHOMEDIR" ] && rsync --update --exclude /ramdisk/etc/mtab -Ha /ramdisk/etc/ /UNIONFS/etc
+;;
+esac
+
+case "$SELECTION" in *init*)
+# Check for extra knoppix.sh shellscript in image
+MYCONFIG="$(ls -1d /KNOPPIX.IMG/[Kk][Nn][Oo][Pp][Pp][Ii][Xx].[Ss][Hh] 2>/dev/null)"
+if [ -n "$MYCONFIG" -a -f "$MYCONFIG" ]; then
+echo ""
+FOUND_CONFIG="yes"
+echo "${GREEN}>> Executing ${MAGENTA}$MYCONFIG${GREEN}.${NORMAL}"
+echo "6" > /proc/sys/kernel/printk
+. "$MYCONFIG" /KNOPPIX.IMG || true
+echo "0" > /proc/sys/kernel/printk
+fi
+;;
+esac

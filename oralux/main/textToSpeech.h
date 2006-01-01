@@ -39,7 +39,7 @@ struct textToSpeechStruct {
 int HasExternalTextToSpeech(struct textToSpeechStruct* theExternalTextToSpeech);
 
 void setTextToSpeech(struct textToSpeechStruct* theTextToSpeech,
-		     //		     enum language thePreferredLanguage,
+		     enum language thePreferredLanguage,
 		     enum desktopIdentifier theDesktop,
 		     int theUserMustBeAskedFor);
 

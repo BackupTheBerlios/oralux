@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // main.c
-// $Id: main.c,v 1.10 2005/12/25 21:02:35 gcasse Exp $
+// $Id: main.c,v 1.11 2006/01/01 21:24:09 gcasse Exp $
 // $Author: gcasse $
 // Description: entry point. 
-// $Date: 2005/12/25 21:02:35 $ |
-// $Revision: 1.10 $ |
+// $Date: 2006/01/01 21:24:09 $ |
+// $Revision: 1.11 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -24,6 +24,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "audioUserInterface.h"
 #include "constants.h"
@@ -215,7 +216,7 @@ int main(int argc, char *argv[])
 
   // Which is the default synthesis for emacspeak
   char* aStringSynthesis=getConf("EMACSPEAKTTS", "/etc/sysconfig/knoppix");
-  enum textToSpeech aEnumSynthesis=TTS_Flite;
+  enum textToSpeech aEnumSynthesis=TTS_Multispeech;
 
 #ifdef ORALUXGOLD
   aEnumSynthesis=TTS_ViaVoice;

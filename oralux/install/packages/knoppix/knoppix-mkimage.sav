@@ -1,0 +1,353 @@
+#!/bin/bash
+# knoppix-mkimage - create KNOPPIX home directory and configuration image
+# (C) Klaus Knopper Feb 2005
+
+PATH="/bin:/sbin:/usr/bin:/usr/sbin"
+export PATH
+
+XDIALOG_HIGH_DIALOG_COMPAT=1
+export XDIALOG_HIGH_DIALOG_COMPAT
+#XDIALOG_FORCE_AUTOSIZE=1
+#export XDIALOG_FORCE_AUTOSIZE
+
+# Get root
+[ "`id -u`" != "0" ] && exec sudo "$0" "$@"
+
+TMP="/tmp/knoppix-mkimage.tmp$$"
+
+DIRECTORY=""
+
+bailout(){
+rm -f "$TMP" "$TMP.done" "$TMP.err"
+[ -n "$DIRECTORY" ] && umount "$DIRECTORY" 2>/dev/null
+exit 0
+}
+
+# Check if first 96k of file are zeros
+iszero(){
+ODSTRING="0000000 000000 000000 000000 000000 000000 000000 000000 000000
+*
+0300000"
+[ "$(od -N 96k $1)" = "$ODSTRING" ]  && return 0 || return 1
+}
+
+DIALOG="dialog"
+[ -n "$DISPLAY" ] && [ -x /usr/bin/Xdialog ] && DIALOG="Xdialog"
+
+trap bailout 1 2 3 15
+
+# LANGUAGE etc.
+[ -f /etc/sysconfig/knoppix ] && . /etc/sysconfig/knoppix
+[ -z "$LANG" ] && export LANG
+[ -z "$LANGUAGE" ] && export LANGUAGE
+[ -z "$CHARSET" ] && export CHARSET
+
+# NTFS warnings
+ntfsdisclaimer(){
+case "$LANGUAGE" in
+de*|at*|ch*)
+NTFSTITLE="NTFS WARNUNG"
+NTFSWARNING1="Linux unterstützt das NTFS-Dateisystem von Windows(TM) XP nur sehr eingeschränkt, da der Hersteller seine Spezifikationen nicht vollständig offenlegt. Allerdings ist es möglich, den Inhalt einer bereits angelegten Datei zu verändern. Das lässt sich für das Einrichten virtueller Laufwerke auf NTFS-Partitionen nutzen.
+
+WARNUNG: DIES IST EIN NEUES, NOCH EIN SEHR EXPERIMENTELLES FEATURE. FÜR DIE EINWANDFREIE FUNKTION KANN KEINE GARANTIE GEGEBEN WERDEN.
+Möchten Sie weitermachen?"
+NTFSWARNING2="WARNUNG (2): NTFS/Windows(TM) kann unerwartet reagieren, wenn Linux bei einem schreibbar eingebundenen NTFS Dateisystem nicht sauber beendet/heruntergefahren wird, oder beim Schreiben von Daten Fehler auftreten. In diese Fällen wird Windows beim Start \"SCANDISK\" oder \"CHKDSK\" starten, um die Konsistenz der Partition zu überprüfen. Normalerweise treten dabei keine Fehler auf, sofern das Dateisystem nicht schon vor dem Start von Linux in einem defekten Zustand war. Unter ungünstigen Umständen könnten jedoch Daten verlorengehen.
+
+Wollen Sie immer noch weitermachen?"
+NTFSWARNING3="WARNUNG (3): Haben Sie alle wichtigen und unersetzlichen Daten von der Partition, auf der Sie ein KNOPPIX-Image einrichten möchten, auf ein externes Medium gesichert, sind Backups vorhanden und sind Sie im Notfall in der Lage, die NTFS-Partition (und Windows) selbst wieder zu reparieren?"
+;;
+es*)
+NTFSTITLE="AVISO SOBRE NTFS"
+NTFSWARNING1="El sistema de ficheros NTFS/XP de Windows(TM) sólo está parcialmente soportado por Linux, debido a las especificaciones técnicas insuficientes proporcionadas por el fabricante. Pero existe soporte para sobreescribir el contenido de ficheros existentes, lo cual es útil para crear discos \"virutales\" en particiones NTFS.
+
+AVISO: ESTA CARACTERÍSTICA ES TOTALMENTE EXPERIMENTAL. NO HAY GARANTÍA DE QUE FUNCIONE EN SU SISTEMA.
+¿Desea continuar?"
+NTFSWARNING2="AVISO (2): NTFS/Windows(TM) puede reaccionar de formas inesperadas si Linux no se apaga de forma limpia después de haber trabajado con sistemas de ficheros NTFS montados en modo escritura, o si hay errores edurante operaciones de escritura. En estos casos, Windows iniciará \"SCANDISK\" o \"CHKDSK\" para asegurarse de que los datos de la partición son consistentes. Normalmente no se producen errores durante la comprobación, pero en casos ocasionales, se pueden perder datos.
+
+¿Aún desea continuar?"
+NTFSWARNING3="AVISO (3): ¿Ha hecho una copia de todos los datos importantes de la partición que desea usar para la imagen de KNOPPIX en un soprte externo? ¿Es usted capaz de, en el peor de los casos, reparar la partición NTFS (o Windows) por su cuenta?"
+;;
+*)
+NTFSTITLE="NTFS WARNING"
+NTFSWARNING1="The Windows(TM) NTFS/XP filesystem is only partly supported by Linux, because of insufficient technical specifications by the manufacturer. But there is support for overwriting file contents of existing files, which is useful for creating \"virtual disk drives\" on a NTFS partition.
+
+WARNING: THIS IS YET A VERY EXPERIMENTAL FEATURE. THERE IS NO WARRANTY THAT IT WILl WORK FOR YOUR SYSTEM.
+Do you want to continue?"
+NTFSWARNING2="WARNING (2): NTFS/Windows(TM) can react in unexpected ways if Linux is not cleanly shut down after work when an NTFS filesystem is mounted in write mode, or if there are errors during write operations. In these cases, Windows will start \"SCANDISK\" or \"CHKDSK\" to make sure the partition data is in a consistent state. Usually no errors occur during the check, but in rare cases, data may be lost.
+
+Do you still want to continue?"
+NTFSWARNING3="WARNING (3): Have you made a copy of all important data from the partition you want to use for a KNOPPIX image, on external backup media? Are you able, in the worst case, to repair the NTFS partition (or Windows) on your own?"
+;;
+esac
+$DIALOG --cr-wrap --defaultno --title "$NTFSTITLE" --yesno "$NTFSWARNING1" 16 75 || return 1
+$DIALOG --cr-wrap --defaultno --title "$NTFSTITLE" --yesno "$NTFSWARNING2" 16 75 || return 1
+$DIALOG --cr-wrap --defaultno --title "$NTFSTITLE" --yesno "$NTFSWARNING3" 10 75 || return 1 
+return 0
+}
+
+HOMEKB="$(du -sk /ramdisk/. 2>/dev/null | awk '{print $1}')"
+
+# Language-dependent Messages
+case "$LANGUAGE" in
+de*|at*|ch*)
+TITLE1="Permanentes KNOPPIX Image anlegen"
+MESSAGE1="Dieses Skript richtet ein permanentes Festplatten-Image für den User \"knoppix\" auf Ihrer Festplatte oder einem Wechselmedium wie Memorystick, Compactflash oder ZIP-Medium ein. Hierdurch ist es möglich, Daten und persönliche Konfigurationen über einen Reboot hinaus zu speichern. Per Bootoption, z.B. \"home=/mnt/uba1\" für die erste Partition eines USB-Memorystick, können Sie beim Systemstart das permanente Heimverzeichnis wieder aktivieren. Die Bootoption \"home=scan\" durchsucht automatisch alle Partitionen und erkannten Speichermedien nach einem persistenten KNOPPIX-Heimverzeichnis.
+
+Möchten Sie das Heimverzeichnis des Benutzers \"knoppix\" und/oder die Systemkonfiguration permanent speichern?"
+MESSAGE2="Bitte wählen Sie die Partition, auf der Sie das Image anlegen möchten."
+MESSAGE3="Hier befindet sich bereits eine KNOPPIX.IMG-Datei mit Daten. Möchten Sie die Datei formatieren und neu einrichten?
+NEIN=Abbruch"
+MESSAGE4="Dies ist eine NTFS-Partition. Da es hierfür vom Hersteller keinen Linux-Support gibt, der das direkte Schreiben auf die Partition ermöglichen würde, müssen Sie zunächst von Windows(TM) aus eine leere Image-Datei einrichten. Ein Programm hierfür finden Sie im Verzeichnis KNOPPIX auf Ihrer CD. WARNUNG: DIES IST EIN NEUES, EXPERIMENTELLES FEATURE. ES GIBT KEINE GARANTIE, DASS ALLES EINWANDFREI FUNKTIONIERT."
+MESSAGE5="Bitte wählen Sie das Dateisystem für das KNOPPIX image. ext3, reiserfs und xfs sind sog. \"journaling\" Dateisysteme und sehr robust gegen Fehler, benötigen aber leider 30MB mehr Platz, der nicht für den eigentlichen Inhalt verwendet werden kann."
+MESSAGE6="Dieses Image ist gerade in Benutzung, daher kann es nicht gelöscht werden! Bitte booten Sie ggf. Knoppix neu, OHNE das Image $IMAGE einzubinden."
+MESSAGE11="Diese Partition kann momentan nicht im Schreibmodus eingehängt werden. Das Programm wird beendet."
+E1="Persönliche Einstellungen (Desktop, Programme)"
+E2="Netzwerk Einstellungen (LAN, Modem, ISDN, ASDL)"
+E3="Grafik Subsystem Einstellungen (XF86Config)"
+E4="Weitere systemweite Einstellungen (Drucker etc.)"
+E5="Alle Desktop-Dateien (${DESKTOPKB}kB)"
+SUCCESS="FERTIG!
+
+Die KNOPPIX-Konfiguration wurde erfolgreich gespeichert. Ihre Konfigurationsdateien werden beim nächsten KNOPPIX-Bootvorgang in die Ramdisk restauriert, wenn Sie im Bootscreen \"knoppix floppyconfig\" (Diskette) bzw. \"knoppix myconfig=/mnt/verzeichnisname\" angeben."
+ERROR="Leider konnte die KNOPPIX-Konfiguration NICHT gespeichert werden:"
+MESSAGE_NO_PARTS="Keine passende Partition gefunden."
+;;
+*)
+TITLE1="Create persistent KNOPPIX home directory"
+MESSAGE1="This script creates a persistent virtual harddisk image for the \"knoppix\" account on your harddisk or on a changeable medium like memory sticks, compact flash or zip media. Using this features makes it possible to store personal data and config files permanently over a reboot. The boot option \"home=/dev/uba1\", for the first partition of a USB memory stick as example, activates the persistent home directory at system startup. You can also let KNOPPIX scan all autodetected storage devices using the boot option \"home=scan\".
+
+Do you want to create a persistent home directory or system config archive for the \"knoppix\" user?"
+
+MESSAGE2="Please select a partition for creating the image:"
+MESSAGE3="There is already a Knoppix image present on this partition. Would like to delete/format it?"
+MESSAGE4="This is an NTFS partition. Because there is no vendor support for Linux that would allow writing directly to such a file system, you will first have to create an empty image file from within Windows(TM). You can find a program for this in the KNOPPIX directory on your CD. PLEASE BE AWARE THAT THIS IS A NEW YET A VERY EXPERINEMTAL FEATURE. THERE IS NO GUARANTEE THAT IT WILL WORK."
+MESSAGE5="Please chose the filesystem for the KNOPPIX image. ext3, reiserfs and xfs are journaling file systems and are very robust to errors, but require an additional amount of about 30MB disk space for the journal that cannot be used by actual content."
+MESSAGE6="This image is currently in use. If you want to delete/reformat it, please reboot Knoppix first, without activating the image $IMAGE."
+MESSAGE11="This harddisk partition cannot be mounted in read-write mode currently, sorry."
+E1="Personal configuration (desktop, programs)"
+E2="Network settings (LAN, Modem, ISDN, ADSL)"
+E3="Graphics subsystem settings (XF86Config)"
+E4="Other system configuration (printer etc.)"
+E5="All files on the Desktop (${DESKTOPKB}kB)"
+SUCCESS="SUCCESS!
+
+Creation of KNOPPIX configuration floppy was successful. Your configuration files will be reinstalled to the ramdisk on next KNOPPIX boot if you specify \"knoppix floppyconf\" (floppy disk), or \"knoppix myconfig=/mnt/directoryname\" at the boot prompt."
+ERROR="The KNOPPIX configuration could NOT be saved:"
+MESSAGE_NO_PARTS="No suitable partitions could be found."
+;;
+esac
+
+$DIALOG --cr-wrap --clear --title "$TITLE1" --yesno "$MESSAGE1" 18 75 || bailout
+
+# Build partition selector
+PARTITIONS=""
+count=0
+for i in `awk '/^\/dev\/([hs]d|ub)[a-z].*\/mnt\/([hs]d|ub)[a-z]/{print $1}' /etc/fstab`; do
+ fstype="$(awk "/^${i//\//\\/} /"'{print $3;exit}' /etc/fstab)"
+ case "$fstype" in reiserfs|ext3|ext2|xfs|vfat|ntfs) ;; *) continue ;; esac
+ size="$(awk '{if($NF=="'"${i##*/}"'"){print $3; exit}}' /proc/partitions)" # kB
+ size="$((size/1024))MB" # MB
+ PARTITIONS[$((count++))]="${i}"
+ case "$i" in
+  *hda*) PARTITIONS[$((count++))]="IDE  HD Partition [$fstype] ($size)" ;;
+  *sda*) PARTITIONS[$((count++))]="SCSI HD Partition [$fstype] ($size)" ;;
+  *uba*) PARTITIONS[$((count++))]="USB  HD Partition [$fstype] ($size)" ;;
+      *) PARTITIONS[$((count++))]="Unknown [$fstype] ($size)" ;;
+ esac
+ PARTITIONS[$((count++))]="off"
+done
+[ -z "$PARTITIONS" ] && { $DIALOG --cr-wrap --clear --title "$TITLE1" --msgbox "$ERROR $MESSAGE_NO_PARTS" 10 75; bailout; }
+
+DIRECTORY=""
+PARTITION=""
+while [ -z "$PARTITION" -o -z "$DIRECTORY" -o ! -e "$DIRECTORY" ]; do
+rm -f "$TMP"
+$DIALOG --cr-wrap --clear --title "$TITLE1" --radiolist "$MESSAGE2" 18 75 9 "${PARTITIONS[@]}" 2>"$TMP" || bailout
+PARTITION="$(<$TMP)"
+DIRECTORY="/mnt/${PARTITION##/dev/}"
+done
+
+mount | grep -q "$DIRECTORY" || mount -r "$DIRECTORY" 2>"$TMP.err"
+[ "$?" != "0" ] && { $DIALOG --cr-wrap --title "$TITLE1" --msgbox "$ERROR `cat $TMP.err`" 10 75; bailout; }
+NTFS=""
+mount | grep -q "$DIRECTORY.*ntfs"
+[ "$?" = "0" ] && NTFS=true
+
+IMAGE="$(ls -1d $DIRECTORY/[Kk][Nn][Oo][Pp][Pp][Ii][Xx].[Ii][Mm][Gg])"
+
+# Language-dependent Messages
+case "$LANGUAGE" in
+de*|at*|ch*)
+MESSAGE6="Dieses Image ist gerade in Benutzung, daher kann es nicht gelöscht werden! Bitte booten Sie ggf. Knoppix neu, OHNE das Image $IMAGE einzubinden."
+;;
+*)
+MESSAGE6="This image is currently in use. If you want to delete/reformat it, please reboot Knoppix first, without activating the image $IMAGE."
+;;
+esac
+
+if [ -n "$IMAGE" -a -f "$IMAGE" ]; then
+ mount | grep -q "$IMAGE" && { $DIALOG --cr-wrap --title "$TITLE1" --msgbox "$MESSAGE6" 10 75; bailout; }
+ if iszero "$IMAGE"; then
+  true
+ else
+  $DIALOG --cr-wrap --clear --title "$TITLE1" --defaultno --yesno "$MESSAGE3" 8 75 || bailout
+ fi
+else
+ IMAGE=""
+ [ -n "$NTFS" ] && { $DIALOG --cr-wrap --title "$TITLE1" --msgbox "$MESSAGE4" 12 75; bailout; }
+fi
+
+# Here, we have either NO image, or an existing image that is OK to overwrite.
+if [ -n "$NTFS" ]; then
+ntfsdisclaimer || bailout
+fi
+
+# Now, make partition writable
+mount -o remount,rw "$DIRECTORY" || { $DIALOG --cr-wrap --msgbox "$MESSAGE11" 10 75; bailout; }
+
+# More language-dependent Messages
+case "$LANGUAGE" in
+de*|at*|ch*)
+MESSAGE7="Möchten Sie das Image mit AES256 (=Advanced Encryption Standard 256bit, s.a. http://csrc.nist.gov/encryption/aes/) verschlüsseln? Hierzu ist die Eingabe eines sehr langen Passwortes beim Einrichten sowie beim Einbinden des Verzeichnisses beim Systemstart erforderlich. NEIN=unverschlüsselt"
+MESSAGE8="Bitte geben Sie die gewünschte Größe des Knoppix-Image in MB an (aktuell belegt: $HOMEKB Kilobyte, verfügbar:"
+MESSAGE9="Formatiere Image-Datei und kopiere Daten..."
+MESSAGE10="Lege Datenbereich für Linux an..."
+SUCCESS="Image-Datei wurde erfolgreich mit dem Linux ext2 Dateisystem formatiert, und Ihre Heimverzeichnis-Daten sowie System-Konfigurationsdateien wurden darauf transferiert.
+
+Sie können jetzt Ihren Computer neu starten, und beim Booten sollte KNOPPIX das Image automatisch finden. Alternativ können Sie beim boot:-Prompt \"knoppix home=$PARTITION\" oder \"knoppix home=scan\" angeben."
+;;
+*)
+MESSAGE7="Do you want to save your home directory encrypted with AES256 (Advanced Encryption Standard, see http://csrc.nist.gov/encryption/aes/)? If yes, you will have to specify a very long password at homedir creation and boot time."
+MESSAGE8="Please enter the desired size of your persistent homedir in MB (currently used: $HOMEKB kB, available:"
+MESSAGE9="Formatting Knoppix-Image and copying data..."
+MESSAGE10="Preparing for Linux filesystem..."
+SUCCESS="The Knoppix-Image has been succeessfully formatted with the Linux ext2 filesystem, and your home directory and system configuration data has been transferred to it.
+
+You may now reboot your computer, and KNOPPIX should find the image automatically. Alternatively, type \"knoppix home=$PARTITION\" or \"knoppix home=scan\" at the KNOPPIX boot: prompt."
+;;
+esac
+
+gauge(){
+rm -f "$TMP.done"
+status=0
+while [ ! -e "$TMP.done" ]; do echo "$status" ; status="`expr \( 100 - $status \) / 5 + $status`"; sleep 4; done | $DIALOG --title "$TITLE1" --gauge "$1" 8 75 0
+}
+
+# Stop status bar
+killgauge(){
+touch "$TMP.done" ; wait ; rm -f "$TMP.done"
+}
+
+ENCRYPTION=""
+$DIALOG --cr-wrap --clear --title "$TITLE1" --defaultno --yesno "$MESSAGE7" 9 75 && ENCRYPTION="AES256"
+
+
+SIZEMB=0
+if [ -z "$NTFS" ]; then
+ [ -n "$IMAGE" ] && rm -f "$IMAGE"
+ IMAGE="$DIRECTORY/knoppix.img"
+ AMOUNT=0
+ AVAIL="$(df -m $DIRECTORY/. | tail -1 | awk '{print $4}')"
+ until [ "$AMOUNT" -ge 1 -a "$AMOUNT" -le "$AVAIL" ] 2>/dev/null; do
+  $DIALOG --cr-wrap --clear --title "$TITLE1" --inputbox "$MESSAGE8 $AVAIL MB)" 10 62 "100" 2>"$TMP" || bailout
+  AMOUNT="$(<$TMP)"
+ done
+ gauge "$MESSAGE10" &
+ IF_DEVICE=/dev/zero
+ [ -n "$ENCRYPTION" ] && IF_DEVICE=/dev/urandom
+ dd if="$IF_DEVICE" of="$IMAGE" bs=1M count="$AMOUNT" || { killgauge; sleep 2; bailout; }
+ killgauge
+else
+ # NTFS, overwrite file with random data of exactly the same size
+ [ -z "$IMAGE" ] && bailout # This should never happen
+ SIZEMB="$(ls -l $IMAGE | awk '{print $5}')"
+ SIZEMB="$(($SIZEMB/1024/1024))"
+ [ "$SIZEMB" -ge 100 ] || bailout # This should also never happen
+fi
+
+# New: chose filesystem
+# unfinished yet
+# while [ -z "$FS" ]; do
+# rm -f "$TMP"
+# $DIALOG --cr-wrap --clear --title "$TITLE1" --radiolist "$MESSAGE5" 18 75 9 "ext2" "Ext2 Filesystem" on "ext3" "Ext3 (journaling) Filesystem" off "reiserfs" "ReiserFS (journaling) Filesystem" off 2>"$TMP" || bailout
+# FS="$(<$TMP)"
+# done
+
+findfreeloop(){
+i=0
+for i in 0 1 2 3 4 5 6 7; do
+LOOP="/dev/loop$i"
+losetup "$LOOP" >/dev/null 2>&1 || { echo "$LOOP"; return 0; }
+done
+return 1
+}
+
+getpassword(){
+case "$LANGUAGE" in
+de*|at*|ch*)
+HEADER="AES256 Verschlüsselungs-Passwort (Minimum 20 Zeichen!)"
+ENTER="Eingabe:"
+AGAIN="Noch einmal, um sicherzugehen:"
+;;
+*)
+HEADER="AES256 encryption password (minimum 20 characters!)"
+ENTER="Enter:"
+AGAIN="Again, just to be sure:"
+;;
+esac
+PASS1=""
+PASS2=""
+until [ -n "$PASS1" -a "$PASS1" = "$PASS2" ]; do
+rm -f "$TMP.pass"
+if [ "$DIALOG" = "Xdialog" ]; then
+Xdialog --title "$TITLE1" --password --password --2inputsbox "$HEADER" 15 60 "$ENTER" "" "$AGAIN" "" 2>"$TMP.pass" || bailout
+PASSWORDS="$(<$TMP.pass)"
+PASS1="${PASSWORDS%%/*}"
+PASS2="${PASSWORDS##*/}"
+else
+dialog --title "$HEADER" --insecure --passwordbox "$ENTER" 8 65 "" 2>"$TMP.pass" || bailout
+PASS1="$(<$TMP.pass)"
+dialog --title "$HEADER" --insecure --passwordbox "$AGAIN" 8 65 "" 2>"$TMP.pass" || bailout
+PASS2="$(<$TMP.pass)"
+fi
+done
+rm -f "$TMP.pass"
+echo "$PASS1" >&2
+}
+
+LOOPDEV="$(findfreeloop)" || bailout
+FORMAT=""
+
+if [ -n "$ENCRYPTION" ]; then
+ getpassword 2>"$TMP"
+ losetup -p0 -e "$ENCRYPTION" "$LOOPDEV" "$IMAGE" 2>"$TMP.err" <"$TMP"
+else 
+ losetup "$LOOPDEV" "$IMAGE" 2>"$TMP.err"
+fi
+
+if [ "$?" != "0" ]; then
+ rm -f "$TMP"
+ $DIALOG --cr-wrap --title "$TITLE1" --msgbox "$ERROR `cat $TMP.err`" 10 75
+ bailout
+fi
+
+rm -f "$TMP"
+# Start progress display and copy data
+gauge "$MESSAGE9" &
+[ -n "$NTFS" ] && dd if=/dev/urandom of="$LOOPDEV" bs=1M count="$SIZEMB" 
+mke2fs -m0 "$LOOPDEV" 2>"$TMP.err" || { killgauge; $DIALOG --cr-wrap --title "$TITLE1" --msgbox "$ERROR `cat $TMP.err`" 10 75; bailout; }
+mkdir -p /tmp/knxhome
+mount -t ext2 "$LOOPDEV" /tmp/knxhome 2>"$TMP.err" && rsync --exclude /ramdisk/var/tmp/ --exclude /ramdisk/etc/mtab --exclude /etc/mtab -Ha /ramdisk/ /tmp/knxhome 2>"$TMP.err" || { umount /tmp/knxhome 2>/dev/null; killgauge; $DIALOG --cr-wrap --title "$TITLE1" --msgbox "$ERROR `cat $TMP.err`" 10 75; bailout; }
+
+# Save knoppix.sh script ?
+# Rather add some links in the network/printer configuration scripts that go to the pesistent homedir.
+
+# Finish
+umount /tmp/knxhome
+[ -n "$LOOPDEV" ] && losetup -d "$LOOPDEV"
+umount "$DIRECTORY" 2>/dev/null
+killgauge
+
+$DIALOG --cr-wrap --title "$TITLE1" --msgbox "$SUCCESS" 17 65
+
+bailout

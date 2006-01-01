@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // menu.c
-// $Id: menu.c,v 1.11 2005/12/05 23:32:56 gcasse Exp $
+// $Id: menu.c,v 1.12 2006/01/01 21:24:09 gcasse Exp $
 // $Author: gcasse $
 // Description: introductory menu. 
-// $Date: 2005/12/05 23:32:56 $ |
-// $Revision: 1.11 $ |
+// $Date: 2006/01/01 21:24:09 $ |
+// $Revision: 1.12 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -23,6 +23,7 @@
 // ----------------------------------------------------------------------------
 
 #include <stdio.h>
+#include <string.h>
 #include <fcntl.h>
 #include <stdlib.h>
 #include <sys/stat.h>
@@ -676,7 +677,7 @@ void menu(struct menuInfo* theSelectedInfo, int *theConfHasBeenUpdated)
   else
     {
       setTextToSpeech( &(theSelectedInfo->myTextToSpeech), 
-		       //theSelectedInfo->myLanguage,
+		       theSelectedInfo->myMenuLanguage,
 		       theSelectedInfo->myDesktop,
 		       0);
       aMenuState=MENU_End;
@@ -734,7 +735,7 @@ void menu(struct menuInfo* theSelectedInfo, int *theConfHasBeenUpdated)
 
 	case MENU_TTS:
 	  setTextToSpeech( &(theSelectedInfo->myTextToSpeech),
-			   //theSelectedInfo->myMenuLanguage,
+			   theSelectedInfo->myMenuLanguage,
 			   theSelectedInfo->myDesktop,
 			   1);
 	  aMenuState = (GNC_UpArrowKey == getLastKeyPressed()) ? MENU_Desktop : MENU_Internet;
