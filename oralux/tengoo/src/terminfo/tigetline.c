@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 tifilter2l.c
-$Id: tigetline.c,v 1.3 2006/01/05 23:30:46 gcasse Exp $
+$Id: tigetline.c,v 1.4 2006/01/05 23:46:10 gcasse Exp $
 $Author: gcasse $
 Description: terminfo filter, retreive one line.
-$Date: 2006/01/05 23:30:46 $ |
-$Revision: 1.3 $ |
+$Date: 2006/01/05 23:46:10 $ |
+$Revision: 1.4 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -180,10 +180,6 @@ GList* terminfoExpandText(GList* theTerminfoList, termAPI* theTermAPI, cursor* t
 
   aPreviousCursor = & (this->myCursor);
 
-  aPreviousCell = aPreviousCursor->myCol + this->myNumberOfCol * aPreviousCursor->myLine;
-
-  aCell = theCursor->myCol + myNumberOfCol * theCursor->myLine;
-
   /* Current word must be announced */
 
   if (aPreviousCursor->myLine == theCursor->myLine)
@@ -193,30 +189,28 @@ GList* terminfoExpandText(GList* theTerminfoList, termAPI* theTermAPI, cursor* t
 
 	  goto  exitExpand;
 	}
-      else if (isEOL( myTermAPI, theCursor->myCol)
+      else if (getChar( theCursor))
 	{
 
 	  goto  exitExpand;
 	}
     }
 
-  if (countChar( myTermAPI, aPreviousCursor, theCursor) == 1)
+  if (countChar( aPreviousCursor, theCursor) == 1)
     {
-      getChar( myTermAPI, theCursor);
+      getChar( theCursor);
     }
-  else if (countWord( myTermAPI, aPreviousCursor, theCursor)==1)
+  else if (countWord( aPreviousCursor, theCursor)==1)
     {
-      getWord( myTermAPI, theCursor);
+      getWord( theCursor);
     }
   else
     {
-      getLine
+      getLine( theCursor);
     }
 
 
      
-myCursor.myCol
-  
 
 
 
