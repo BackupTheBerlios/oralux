@@ -2,11 +2,11 @@
 /* 
 ----------------------------------------------------------------------------
 action.c
-$Id: action.c,v 1.9 2005/10/16 20:27:06 gcasse Exp $
+$Id: action.c,v 1.10 2006/01/05 23:30:46 gcasse Exp $
 $Author: gcasse $
 Description: execute the required action on the supplied buffer.
-$Date: 2005/10/16 20:27:06 $ |
-$Revision: 1.9 $ |
+$Date: 2006/01/05 23:30:46 $ |
+$Revision: 1.10 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -50,7 +50,7 @@ GByteArray* sayOnlyLinePortionAtCursor( pluginAPI* thePluginAPI, char* theBuffer
     }
   g_list_foreach( aList, (GFunc)terminfointerpreter, NULL);
 
-  putListEntryDocAPI( thePluginAPI->myDocument, aList);
+  appendListEntryDocAPI( thePluginAPI->myDocument, aList);
   
   /* < get the last cursor position */
   {
@@ -86,6 +86,7 @@ GByteArray* mutePreviouslyHighlightedArea( pluginAPI* thePluginAPI, char* theBuf
 {
   GByteArray* aByteArray=NULL;
   GList* aList = NULL;
+  cursor* aCursor = NULL;
 
   ENTER("mutePreviouslyHighlightedArea");
 
@@ -96,23 +97,31 @@ GByteArray* mutePreviouslyHighlightedArea( pluginAPI* thePluginAPI, char* theBuf
     }
   g_list_foreach(aList, (GFunc)terminfointerpreter, NULL);
   
-  putListEntryDocAPI( thePluginAPI->myDocument, aList);
+  aCursor = terminfointerpreter_getCursor(); /* TBD: malloc, no static cursor */
 
-  {
-    GList* aPreviouslyHighlightedElement  = NULL; 
-    GList* aNewlyHighlightedElement = NULL;
-    if (terminfofilter2lines( aList, thePluginAPI->myTermAPI, &aPreviouslyHighlightedElement, &aNewlyHighlightedElement))
-      {
-	setElementTypeDocAPI( thePluginAPI->myDocument, 
-			      aPreviouslyHighlightedElement, 
-			      linkType);
-	setElementTypeDocAPI( thePluginAPI->myDocument, 
-			      aNewlyHighlightedElement, 
-			      linkType);
-	setFocusStateDocAPI( aNewlyHighlightedElement, hoveredElement);
-	aList = getStyledListEntryDocAPI( thePluginAPI->myDocument);
-      }
-  }
+  if(terminfoExpandText( &aList, thePluginAPI->myTermAPI, aCursor))
+    {
+      appendListEntryDocAPI( thePluginAPI->myDocument, aList);
+    }
+  else 
+    {
+      GList* aPreviouslyHighlightedElement  = NULL; 
+      GList* aNewlyHighlightedElement = NULL;
+
+      appendListEntryDocAPI( thePluginAPI->myDocument, aList);
+
+      if (terminfofilter2lines( aList, thePluginAPI->myTermAPI, &aPreviouslyHighlightedElement, &aNewlyHighlightedElement))
+	{
+	  setElementTypeDocAPI( thePluginAPI->myDocument, 
+				aPreviouslyHighlightedElement, 
+				linkType);
+	  setElementTypeDocAPI( thePluginAPI->myDocument, 
+				aNewlyHighlightedElement, 
+				linkType);
+	  setFocusStateDocAPI( aNewlyHighlightedElement, hoveredElement);
+	  aList = getStyledListEntryDocAPI( thePluginAPI->myDocument);
+	}
+    }
 
   aByteArray = convertList2Terminfo( aList);
   DISPLAY_RAW_BUFFER( aByteArray->data, aByteArray->len);

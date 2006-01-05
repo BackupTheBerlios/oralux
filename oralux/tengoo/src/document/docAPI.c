@@ -2,11 +2,11 @@
 /* 
 ----------------------------------------------------------------------------
 docAPI.c
-$Id: docAPI.c,v 1.11 2005/12/23 20:13:22 gcasse Exp $
+$Id: docAPI.c,v 1.12 2006/01/05 23:30:46 gcasse Exp $
 $Author: gcasse $
 Description: manage document, logical structure of the displayed screen.
-$Date: 2005/12/23 20:13:22 $ |
-$Revision: 1.11 $ |
+$Date: 2006/01/05 23:30:46 $ |
+$Revision: 1.12 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -500,6 +500,7 @@ static GNode* findFrame( GNode* theNode, box* theBoundingBox, enum intersectionT
   return aFrameNode;
 }
 /* > */
+
 /* < linkEntryToTextElement */
 /* At this stage, the document tree is supposed to only include the root element, the optional frame elements and text elements (no link).
 */
@@ -610,27 +611,25 @@ static void searchHoveredNode( GNode* theNode, gpointer theHoveredNodePointer)
     }
 }
 /* > */
-/* < putListEntryDocAPI */
-void putListEntryDocAPI( void* theDocAPI, GList* theList)
+/* < appendListEntryDocAPI */
+void appendListEntryDocAPI( void* theDocAPI, GList* theList)
 {
   document* this = theDocAPI;
 
-  ENTER("putListEntryDocAPI");
+  ENTER("appendListEntryDocAPI");
 
   if (!this || !theList || !(this->myRootNode))
     {
       return;
     }
-  assert(this->myFirstEntry == NULL);
 
-  this->myFirstEntry = theList;
+  this->myFirstEntry = g_list_concat( this->myFirstEntry, theList);
 
   /* determine (or create) the text element of each entry.
      At the moment, each text entry displayed in the same frame 
      is associated with the same text element.
   */
   g_list_foreach( theList, (GFunc)linkEntryToTextElement, this);
-
 }
 /* > */
 /* < getStyledListEntryDocAPI */

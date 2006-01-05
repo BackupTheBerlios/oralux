@@ -21,14 +21,14 @@ void deleteDocAPI( void* theDocAPI);
 void addFrameStyleDocAPI( void* theDocAPI, GList* theFrame);
 /* > */
 
-/* < putListEntryDocAPI */
-/* put a list of terminfoEntry in the document.
+/* < appendListEntryDocAPI */
+/* append the list of terminfoEntries.
 Each text entry will be associated to a text element (linked to the containing frame). 
-If an entry belongs to two or more frames, it will be splitted so that each resulting entry is included in one frame.
+If an entry belongs to two or more frames, it will be split so that each resulting entry is included in one frame.
 
 The supplied list will be deleted by docAPI.
 */
-void putListEntryDocAPI( void* theDocAPI, GList* theList);
+void appendListEntryDocAPI( void* theDocAPI, GList* theList);
 /* > */
 
 /* < setElementTypeDocAPI */
