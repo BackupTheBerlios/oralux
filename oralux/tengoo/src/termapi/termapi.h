@@ -23,9 +23,6 @@ typedef int (*GET_COLOR_HANDLER)( int theLine, int theFirstCol, int theLastCol, 
 typedef GList* (*GET_GROUP_HANDLER)( int theLine, int theFirstCol, int theLastCol);
 typedef int (*GET_CURSOR_HANDLER)( cursor* theCursor);
 typedef int (*GET_DIM_HANDLER)( int* theNumberOfLine, int* theNumberOfCol);
-typedef int (*COUNT_TEXT)( cursor* thePreviousCursor, cursor* theCursor);
-typedef int (*GET_TEXT)( cursor* theCursor);
-
 
 struct t_termAPI
 {
@@ -34,11 +31,6 @@ struct t_termAPI
   GET_GROUP_HANDLER getLinePortionGroup;
   GET_CURSOR_HANDLER getCursor;
   GET_DIM_HANDLER getDim;
-  COUNT_TEXT countChar;
-  COUNT_TEXT countWord;
-  GET_TEXT getChar;
-  GET_TEXT getWord;
-  GET_TEXT getLine;
 };
 typedef struct t_termAPI termAPI;
 

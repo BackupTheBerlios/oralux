@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 tifilter2l.c
-$Id: tifilter2l.c,v 1.8 2005/12/24 16:36:00 gcasse Exp $
+$Id: tifilter2l.c,v 1.9 2006/01/08 23:51:27 gcasse Exp $
 $Author: gcasse $
 Description: terminfo filter, two lines.
-$Date: 2005/12/24 16:36:00 $ |
-$Revision: 1.8 $ |
+$Date: 2006/01/08 23:51:27 $ |
+$Revision: 1.9 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -77,6 +77,11 @@ static void deleteContext(context* this)
   int i;
 
   ENTER("deleteContext");
+
+  if (!this)
+    {
+      return;
+    }
 
   for (i=0; i<MAX_LINE_PORTION_GROUP; i++)
     {

@@ -29,10 +29,18 @@ struct t_VCSA_Char
 };
 typedef struct t_VCSA_Char VCSA_Char;
 
+/* From "scr.h" */
+typedef struct {
+  short rows, cols;	/* screen dimensions */
+  short posx, posy;	/* cursor position */
+  short no;		      /* screen number */
+} ScreenDescription;
 /* > */
 
 int openLinuxScreen( );
 int getCursorLinuxScreen( int* theLine, int* theCol);
 int readLinuxScreen( int theLine, int theFirstCol, int theLastCol, VCSA_Char** theBuffer, int* theByteNumber);
+void getScreenDescription (ScreenDescription *description);
 void closeLinuxScreen();
+
 #endif

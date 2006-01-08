@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 linePortion.c
-$Id: lineportion.c,v 1.4 2005/12/24 16:36:00 gcasse Exp $
+$Id: lineportion.c,v 1.5 2006/01/08 23:51:27 gcasse Exp $
 $Author: gcasse $
 Description: manage line portions.
-$Date: 2005/12/24 16:36:00 $ |
-$Revision: 1.4 $ |
+$Date: 2006/01/08 23:51:27 $ |
+$Revision: 1.5 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -250,6 +250,37 @@ int getFeaturesLinePortionGroup( GList* this, linePortion* theFeatures)
   SHOW2("aResultIsAvailable=%d\n",aResultIsAvailable);
 
   return aResultIsAvailable;
+}
+
+GList* getWordLinePortion( GList* this, enum wordOccurrence theOccurrence)
+{
+  linePortion* aFirstLinePortion = NULL;
+  GList* aList = (theOccurrence == FIRST_OCCURRENCE) ? this : g_list_last(this);
+  GList* aWord = NULL; /* linePortionGroup */
+
+  ENTER("getWordLinePortion");
+
+  while( aList && aList->data)
+    {
+      aFirstLinePortion = (linePortion*)aList->data;
+      if (aFirstLinePortion->myString && aFirstLinePortion->myString->str)
+	{
+	  break;
+	}
+      aFirstLinePortion = NULL;
+      aList = (theOccurrence == FIRST_OCCURRENCE) ? aList->next : aList->prev;    }
+
+  if (!aFirstLinePortion)
+    {
+      return NULL;
+    }
+
+  /* Note: the first line portion can just be a few characters of the word (due to style changes). */
+  /* TBD: style changes */
+
+  aWord = g_list_append( aWord, copyLinePortion (aFirstLinePortion));
+
+  return aWord;
 }
 /* > */
 

@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 tifilter2l.c
-$Id: tigetline.c,v 1.4 2006/01/05 23:46:10 gcasse Exp $
+$Id: tigetline.c,v 1.5 2006/01/08 23:51:27 gcasse Exp $
 $Author: gcasse $
 Description: terminfo filter, retreive one line.
-$Date: 2006/01/05 23:46:10 $ |
-$Revision: 1.4 $ |
+$Date: 2006/01/08 23:51:27 $ |
+$Revision: 1.5 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -27,6 +27,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <glib.h>
 #include "escape2terminfo.h"
 #include "debug.h"
+#include "termapi.h"
 #include "tigetline.h"
 
 /* < terminfoGetLinePortionAtCursor */
@@ -87,17 +88,16 @@ GList* terminfoGetLinePortionAtCursor(GList* theTerminfoList, cursor* theCursor)
 struct t_context
 {
   cursor myCursor;
-  cursor mySavedCursor;
   int myNumberOfLine;
   int myNumberOfCol;
   termAPI* myTermAPI;
+  GList** myTerminfoList;
   int myTextIsFound;
 };
 typedef struct t_context context;
 
-static context* createContext(termAPI* theTermAPI)
+static context* createContext(termAPI* theTermAPI, GList** theTerminfoList)
 {
-  int i;
   context* this = (context*) malloc(sizeof(context));
 
   ENTER("createContext");
@@ -105,9 +105,8 @@ static context* createContext(termAPI* theTermAPI)
   theTermAPI->getCursor( &(this->myCursor));
   theTermAPI->getDim( &(this->myNumberOfLine), &(this->myNumberOfCol));
   this->myTermAPI = theTermAPI;
+  this->myTerminfoList = theTerminfoList;
   this->myTextIsFound = 0;
-
-cursor* terminfointerpreter_getCursor()
 
   return this;
 }
@@ -123,7 +122,6 @@ static void searchText(gpointer theEntry, gpointer theContext)
 {
   terminfoEntry* anEntry = (terminfoEntry*)theEntry;
   context* this = (context*)theContext;
-  GString* aText = NULL;
 
   ENTER("searchText");
 
@@ -143,32 +141,80 @@ static void searchText(gpointer theEntry, gpointer theContext)
 
 }
 /* > */
+/* < appendList */
+static void appendList(gpointer theLinePortion, gpointer theContext)
+{
+  terminfoEntry* anEntry = NULL;
+  context* this = (context*)theContext;
+  linePortion* aLinePortion = (linePortion*)theLinePortion;
 
+  ENTER("appendList");
+
+  if (!aLinePortion || !this || !this->myTerminfoList || !*this->myTerminfoList)
+    {
+      return;
+    }
+
+  /* < add terminfoEntry: position */
+  anEntry = getPositionEntry( aLinePortion->myLine, aLinePortion->myFirstCol);
+
+  if(!anEntry)
+    {
+      return;
+    }
+
+  *this->myTerminfoList = g_list_append( *this->myTerminfoList, anEntry);
+  /* > */
+  /* < add terminfoEntry: style */
+  anEntry = getStyleEntry( &(aLinePortion->myStyle));
+
+  if(!anEntry)
+    {
+      return;
+    }
+
+  *this->myTerminfoList = g_list_append( *this->myTerminfoList, anEntry);
+  /* > */
+  /* < add terminfoEntry: text */
+  if ((aLinePortion->myString)
+      && (aLinePortion->myString->str))
+    {
+      anEntry = getTextEntry( aLinePortion->myString->str);
+      
+      if(!anEntry)
+	{
+	  return;
+	}
+      *this->myTerminfoList = g_list_append( *this->myTerminfoList, anEntry);
+    }
+  /* > */
+}
+/* > */
 /* < terminfoExpandText */
 /* TBD:  taking in account frame */
-GList* terminfoExpandText(GList* theTerminfoList, termAPI* theTermAPI, cursor* theCursor)
+int terminfoExpandText( GList** theTerminfoList, termAPI* theTermAPI, cursor* theCursor)
 {
   int aResult=0;
   cursor* aPreviousCursor = NULL;
-  int aPreviousCell;
-  int aNextCell;
+  GList* aLinePortionGroup = NULL;
+  context* this = NULL;
 
   ENTER("terminfoExpandText");
 
   if (!theTerminfoList || !*theTerminfoList || !theTermAPI)
     {
-      return 0;
+      goto exitExpand;
     }
 
-  this = createContext( theTermAPI);
+  this = createContext( theTermAPI, theTerminfoList);
   if (!this)
     {
-      return 0;
+      goto exitExpand;
     }
 
-  g_list_foreach( theTerminfoList, (GFunc)searchText, this);
+  g_list_foreach( *theTerminfoList, (GFunc)searchText, this);
 
-  if (!this->myTextIsFound)
+  if (this->myTextIsFound)
     {
       goto exitExpand;
     }
@@ -176,43 +222,48 @@ GList* terminfoExpandText(GList* theTerminfoList, termAPI* theTermAPI, cursor* t
   aResult = 1;
 
   /* identifying the type of displacement */
-  /* TBD: initial implementation. The command must be taken in account */
+  /* TBD: initial implementation. The command must be taken in account (last char/first char jump)*/
 
   aPreviousCursor = & (this->myCursor);
 
-  /* Current word must be announced */
-
   if (aPreviousCursor->myLine == theCursor->myLine)
     {
-      if (theCursor->myCol == 0)
+      int aFirstCol = 0;
+      int aLastCol = 0;
+
+      if (aPreviousCursor->myCol < theCursor->myCol)
 	{
-
-	  goto  exitExpand;
+	  aFirstCol = aPreviousCursor->myCol;
+	  aLastCol = theCursor->myCol;
 	}
-      else if (getChar( theCursor))
+      else
 	{
-
-	  goto  exitExpand;
+	  aFirstCol = theCursor->myCol;
+	  aLastCol = aPreviousCursor->myCol;
 	}
-    }
 
-  if (countChar( aPreviousCursor, theCursor) == 1)
-    {
-      getChar( theCursor);
-    }
-  else if (countWord( aPreviousCursor, theCursor)==1)
-    {
-      getWord( theCursor);
+      aLinePortionGroup = this->myTermAPI->getLinePortionGroup( theCursor->myLine, aFirstCol, aLastCol);
+      
+      if (aFirstCol + 1 < aLastCol)
+	{
+	  GList* aWord = NULL;
+	  enum wordOccurrence aWordOccurrence = (aPreviousCursor->myCol < theCursor->myCol) ? LAST_OCCURRENCE : FIRST_OCCURRENCE;
+	  aWord = getWordLinePortion( aLinePortionGroup, aWordOccurrence);
+	  deleteLinePortionGroup( aLinePortionGroup);
+	  aLinePortionGroup = aWord;
+	}
     }
   else
     {
-      getLine( theCursor);
+      /* TBD: command must be taken in account. Next word + next line. */
+      aLinePortionGroup = this->myTermAPI->getLinePortionGroup( theCursor->myLine, 0, this->myNumberOfCol - 1);
     }
 
-
-     
-
-
+  if (aLinePortionGroup)
+    {
+      g_list_foreach( aLinePortionGroup, (GFunc)appendList, this);
+      deleteLinePortionGroup( aLinePortionGroup);
+    }
 
  exitExpand:
   deleteContext( this);

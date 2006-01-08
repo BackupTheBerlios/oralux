@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 termapiSimu.c
-$Id: termapiVCSA.c,v 1.3 2006/01/05 23:30:46 gcasse Exp $
+$Id: termapiVCSA.c,v 1.4 2006/01/08 23:51:27 gcasse Exp $
 $Author: gcasse $
 Description: testapi implementation for tests.
-$Date: 2006/01/05 23:30:46 $ |
-$Revision: 1.3 $ |
+$Date: 2006/01/08 23:51:27 $ |
+$Revision: 1.4 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -118,7 +118,6 @@ static GList* _getLinePortionGroup( int theLine, int theFirstCol, int theLastCol
 }
 
 /* > */
-
 /* < _getColor */
 static int _getColor( int theLine, int theFirstCol, int theLastCol, enum terminalColor* theColor, int theBackgroundIsChecked)
 {
@@ -192,7 +191,6 @@ static int _getColor( int theLine, int theFirstCol, int theLastCol, enum termina
   return aColorIsFound;
 }
 /* > */
-
 /* < _getBackground */
 static int _getBackground( int theLine, int theFirstCol, int theLastCol, enum terminalColor* theColor)
 
@@ -202,7 +200,6 @@ static int _getBackground( int theLine, int theFirstCol, int theLastCol, enum te
 }
 
 /* > */
-
 /* < _getForeground */
 static int _getForeground( int theLine, int theFirstCol, int theLastCol, enum terminalColor* theColor)
 {
@@ -240,38 +237,18 @@ static int _getCursor( cursor* theCursor)
 /* < _getDim */
 static int _getDim( int* theNumberOfLine, int* theNumberOfCol)
 {
+  ScreenDescription aDescription;
+
   ENTER("_getDim");
-  *theNumberOfLine=25;
-  *theNumberOfCol=80;
+
+  getScreenDescription (& aDescription);
+
+  *theNumberOfLine = aDescription.rows;
+  *theNumberOfCol = aDescription.cols;
+
   return 1;
 }
 /* > */
-
-static int _countChar( cursor* thePreviousCursor, cursor* theCursor)
-{
-  ENTER("_countChar");
-}
-
-static int _countWord( cursor* thePreviousCursor, cursor* theCursor)
-{
-  ENTER("_countWord");
-}
-
-static int _getChar( cursor* theCursor)
-{
-  ENTER("_getChar");
-}
-
-static int _getWord( cursor* theCursor)
-{
-  ENTER("_getWord");
-}
-
-static int _getLine( cursor* theCursor)
-{
-  ENTER("_getLine");
-}
-
 /* < createTermAPI */
 termAPI* createTermAPI()
 {
@@ -284,11 +261,6 @@ termAPI* createTermAPI()
   aTermAPI->getLinePortionGroup=_getLinePortionGroup;
   aTermAPI->getBackground=_getBackground;
   aTermAPI->getForeground=_getForeground;
-  aTermAPI->countChar=_countChar;
-  aTermAPI->countWord=_countWord;
-  aTermAPI->getChar=_getChar;
-  aTermAPI->getWord=_getWord;
-  aTermAPI->getLine=_getLine;
 
   if (!openLinuxScreen()) 
     {

@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 terminfo2list.c
-$Id: terminfo2list.c,v 1.7 2005/10/16 20:27:06 gcasse Exp $
+$Id: terminfo2list.c,v 1.8 2006/01/08 23:51:27 gcasse Exp $
 $Author: gcasse $
 Description: convert the terminfo entries to a list of commands.
-$Date: 2005/10/16 20:27:06 $ |
-$Revision: 1.7 $ |
+$Date: 2006/01/08 23:51:27 $ |
+$Revision: 1.8 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -884,7 +884,115 @@ terminfoEntry* get_TSAR_Sequence( int theVolume, int theVoice)
   return anEntry;
 }
 /* > */
+/* < getTextEntry */
+terminfoEntry* getTextEntry( char* theText)
+{
+  GString* aString = g_string_new( theText);
+  char *aSequence = strdup( theText);
+  terminfoEntry* anEntry = NULL;
 
+  ENTER("getTextEntry");
+
+  anEntry = createExternalEntry( TEXTFIELD, NULL, NULL, aSequence);
+
+  if (anEntry)
+    {
+      anEntry->myData1 = (void*)aString;
+    }
+  else
+    {
+      g_string_free( aString, 1);
+      free( aSequence);
+    }
+
+  return anEntry;
+}
+/* > */
+/* < getPositionEntry */
+terminfoEntry* getPositionEntry( int theLine, int theCol)
+{
+  #define CUP_FORMAT "\x1B[%d;%dH"
+  char *aSequence = malloc( sizeof(CUP_FORMAT) + 10);
+  terminfoEntry* anEntry = NULL;
+  int aLine = (theLine+1) % 1000;
+  int aCol = (theCol+1) % 1000;
+
+  ENTER("getPositionEntry");
+
+  if (!aSequence)
+      {
+	return NULL;
+      }
+
+  sprintf( aSequence, CUP_FORMAT, aLine, aCol);
+  anEntry = createExternalEntry( CUP, NULL, NULL, aSequence);
+
+  if (anEntry)
+    {
+      anEntry->myData1 = (void*)(aLine-1);
+      anEntry->myData2 = (void*)(aCol-1);
+    }
+  else
+    {
+      free(aSequence);
+    }
+
+  return anEntry;
+}
+/* > */
+/* < getStyleEntry */
+terminfoEntry* getStyleEntry( style* theStyle)
+{
+  terminfoEntry* anEntry = NULL;
+  GString* aString = NULL;
+  style* aStyle = NULL;
+  char* aSequence = NULL;
+
+  ENTER("getStyleEntry");
+
+  /* < build the escape sequence */
+  aString = getSGR( theStyle);
+  if (!aString)
+    {
+      goto exit_getStyleEntry;
+    }
+
+  aSequence = aString->str;
+  if (!aSequence)
+    {
+      goto exit_getStyleEntry;
+    }
+  /* > */
+
+  aStyle = (style*)malloc(sizeof(style));
+  if (!aStyle)
+    {
+      goto exit_getStyleEntry;
+    }
+
+  copyStyle( aStyle, theStyle);
+
+  anEntry = createExternalEntry( SGR, NULL, NULL, aSequence);
+  
+ exit_getStyleEntry:
+  if (aString)
+    {
+      g_string_free( aString, 0);
+    }
+
+  if (anEntry)
+    {
+      anEntry->myData1 = (void*)aStyle;
+    }
+  else
+    {
+      free(aSequence);
+      free(aStyle);
+    }
+
+  return anEntry;
+}
+/* > */
 
 /* 
 Local variables:

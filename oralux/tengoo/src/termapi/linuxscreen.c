@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 linuxscreen.c
-$Id: linuxscreen.c,v 1.5 2005/10/17 14:12:25 gcasse Exp $
+$Id: linuxscreen.c,v 1.6 2006/01/08 23:51:22 gcasse Exp $
 $Author: gcasse $
 Description: Read the data from the current screen.
-$Date: 2005/10/17 14:12:25 $ |
-$Revision: 1.5 $ |
+$Date: 2006/01/08 23:51:22 $ |
+$Revision: 1.6 $ |
 Original Copyright (C) 1995-2004 by The BRLTTY Team. All rights reserved.
 
 August 2005, Gilles Casse (gcasse@oralux.org)
@@ -52,12 +52,6 @@ static VCSA_Header myHeader;
 
 
 /* From "scr.h" */
-typedef struct {
-  short rows, cols;	/* screen dimensions */
-  short posx, posy;	/* cursor position */
-  short no;		      /* screen number */
-} ScreenDescription;
-
 typedef struct {
   short left, top;	/* top-left corner (offset from 0) */
   short width, height;	/* dimensions */
@@ -539,7 +533,7 @@ void closeLinuxScreen (void) {
   closeScreen();
 }
 
-static void
+void
 getScreenDescription (ScreenDescription *description) {
   if (lseek(myScreenDescriptor, 0, SEEK_SET) != -1) {
     unsigned char buffer[4];

@@ -45,6 +45,13 @@ the terminfoEntry* returned must be freed by the caller
 terminfoEntry* get_TSAR_Sequence( int theVolume, int theVoice);
 /* > */
 
+/* < getting other terminfoEntries */
+terminfoEntry* getTextEntry( char* theText);
+terminfoEntry* getPositionEntry( int theLine, int theCol);
+terminfoEntry* getStyleEntry( style* theStyle);
+/* > */
+
+
 /* 
 Local variables:
 folded-file: t

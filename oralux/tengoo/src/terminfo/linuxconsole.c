@@ -124,6 +124,41 @@ void getStyle( struct t_style* theStyle, struct t_style* theDefaultStyle)
 }
 
 /* > */
+/* < getSGR */
+/* convert the style to a SGR escape sequence */
+GString* getSGR( struct t_style* theStyle)
+{
+  #define SGR_FORMAT "\x1B[%d;%d"
+  GString* aString = g_string_new (SGR_FORMAT);
+	  
+  ENTER("getSGR");
+
+  DISPLAY_STYLE( theStyle);
+
+  g_string_printf( aString, SGR_FORMAT, theStyle->myForegroundColor + 30, theStyle->myBackgroundColor + 40);
+
+  if (theStyle->isBold)
+    {
+      g_string_append( aString, ";1");
+    }
+  if (theStyle->isDim)
+    {
+      g_string_append( aString, ";2");
+    }
+  if (!theStyle->isDim && !theStyle->isBold)
+    {
+      g_string_append( aString, ";22");
+    }
+
+  g_string_append_printf( aString, ";%d", (theStyle->isUnderline) ? 4 : 24);
+  g_string_append_printf( aString, ";%d", (theStyle->isBlink) ? 5 : 25);
+  g_string_append_printf( aString, ";%d", (theStyle->isReverse) ? 7 : 27);
+  g_string_append_printf( aString, ";%d", (theStyle->isAlternate) ? 11 : 10);
+  g_string_append( aString, ";m");
+
+  return aString;
+}
+/* > */
 
 /* 
 Local variables:
