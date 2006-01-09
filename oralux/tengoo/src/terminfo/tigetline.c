@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 tifilter2l.c
-$Id: tigetline.c,v 1.5 2006/01/08 23:51:27 gcasse Exp $
+$Id: tigetline.c,v 1.6 2006/01/09 22:54:10 gcasse Exp $
 $Author: gcasse $
 Description: terminfo filter, retreive one line.
-$Date: 2006/01/08 23:51:27 $ |
-$Revision: 1.5 $ |
+$Date: 2006/01/09 22:54:10 $ |
+$Revision: 1.6 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -201,7 +201,7 @@ int terminfoExpandText( GList** theTerminfoList, termAPI* theTermAPI, cursor* th
 
   ENTER("terminfoExpandText");
 
-  if (!theTerminfoList || !*theTerminfoList || !theTermAPI)
+  if (!theTerminfoList || !*theTerminfoList || !theTermAPI || !theCursor)
     {
       goto exitExpand;
     }
@@ -233,8 +233,8 @@ int terminfoExpandText( GList** theTerminfoList, termAPI* theTermAPI, cursor* th
 
       if (aPreviousCursor->myCol < theCursor->myCol)
 	{
-	  aFirstCol = aPreviousCursor->myCol;
-	  aLastCol = theCursor->myCol;
+	  aFirstCol = theCursor->myCol;
+	  aLastCol = this->myNumberOfCol - 1;
 	}
       else
 	{
@@ -261,8 +261,17 @@ int terminfoExpandText( GList** theTerminfoList, termAPI* theTermAPI, cursor* th
 
   if (aLinePortionGroup)
     {
+      terminfoEntry* anEntry = NULL;
+
       g_list_foreach( aLinePortionGroup, (GFunc)appendList, this);
       deleteLinePortionGroup( aLinePortionGroup);
+
+      anEntry = getPositionEntry( theCursor->myLine, theCursor->myCol);
+
+      if(anEntry)
+	{
+	  *theTerminfoList = g_list_append( *theTerminfoList, anEntry);
+	}
     }
 
  exitExpand:
