@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 tifilter2l.c
-$Id: tigetline.c,v 1.6 2006/01/09 22:54:10 gcasse Exp $
+$Id: tigetline.c,v 1.7 2006/01/11 22:19:54 gcasse Exp $
 $Author: gcasse $
 Description: terminfo filter, retreive one line.
-$Date: 2006/01/09 22:54:10 $ |
-$Revision: 1.6 $ |
+$Date: 2006/01/11 22:19:54 $ |
+$Revision: 1.7 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -247,8 +247,7 @@ int terminfoExpandText( GList** theTerminfoList, termAPI* theTermAPI, cursor* th
       if (aFirstCol + 1 < aLastCol)
 	{
 	  GList* aWord = NULL;
-	  enum wordOccurrence aWordOccurrence = (aPreviousCursor->myCol < theCursor->myCol) ? LAST_OCCURRENCE : FIRST_OCCURRENCE;
-	  aWord = getWordLinePortion( aLinePortionGroup, aWordOccurrence);
+	  aWord = getWordLinePortion( aLinePortionGroup, FIRST_OCCURRENCE);
 	  deleteLinePortionGroup( aLinePortionGroup);
 	  aLinePortionGroup = aWord;
 	}

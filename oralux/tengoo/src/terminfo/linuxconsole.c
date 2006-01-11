@@ -141,20 +141,42 @@ GString* getSGR( struct t_style* theStyle)
     {
       g_string_append( aString, ";1");
     }
+
   if (theStyle->isDim)
     {
       g_string_append( aString, ";2");
     }
+
   if (!theStyle->isDim && !theStyle->isBold)
     {
       g_string_append( aString, ";22");
     }
 
+/*   if (theStyle->isUnderline) */
+/*     { */
+/*       g_string_append( aString, ";4"); */
+/*     } */
   g_string_append_printf( aString, ";%d", (theStyle->isUnderline) ? 4 : 24);
+
+/*   if (theStyle->isBlink) */
+/*     { */
+/*       g_string_append( aString, ";5"); */
+/*     } */
   g_string_append_printf( aString, ";%d", (theStyle->isBlink) ? 5 : 25);
+
+/*   if (theStyle->isReverse) */
+/*     { */
+/*       g_string_append( aString, ";7"); */
+/*     } */
   g_string_append_printf( aString, ";%d", (theStyle->isReverse) ? 7 : 27);
+
+/*   if (theStyle->isAlternate) */
+/*     { */
+/*       g_string_append( aString, ";11"); */
+/*     } */
   g_string_append_printf( aString, ";%d", (theStyle->isAlternate) ? 11 : 10);
-  g_string_append( aString, ";m");
+
+  g_string_append( aString, "m");
 
   return aString;
 }
