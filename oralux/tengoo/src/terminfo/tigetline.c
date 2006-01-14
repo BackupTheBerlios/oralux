@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 tifilter2l.c
-$Id: tigetline.c,v 1.7 2006/01/11 22:19:54 gcasse Exp $
+$Id: tigetline.c,v 1.8 2006/01/14 01:10:15 gcasse Exp $
 $Author: gcasse $
 Description: terminfo filter, retreive one line.
-$Date: 2006/01/11 22:19:54 $ |
-$Revision: 1.7 $ |
+$Date: 2006/01/14 01:10:15 $ |
+$Revision: 1.8 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -92,6 +92,7 @@ struct t_context
   int myNumberOfCol;
   termAPI* myTermAPI;
   GList** myTerminfoList;
+  GList* myAddedList;
   int myTextIsFound;
 };
 typedef struct t_context context;
@@ -106,6 +107,7 @@ static context* createContext(termAPI* theTermAPI, GList** theTerminfoList)
   theTermAPI->getDim( &(this->myNumberOfLine), &(this->myNumberOfCol));
   this->myTermAPI = theTermAPI;
   this->myTerminfoList = theTerminfoList;
+  this->myAddedList = NULL;
   this->myTextIsFound = 0;
 
   return this;
@@ -125,32 +127,47 @@ static void searchText(gpointer theEntry, gpointer theContext)
 
   ENTER("searchText");
 
-  if ((anEntry == NULL) 
-      || (anEntry->myCapacity != TEXTFIELD))
+  DISPLAY_CAPACITY(anEntry->myCapacity);
+  /* In case of cursor jump, the line, word,.. will be expanded (said). 
+     If some text is found the line will not be expanded. */
+
+  if (anEntry 
+      && (anEntry->myCapacity == TEXTFIELD))
     {
-      return;
+      GString* aString = anEntry->myData1;
+
+      /* strcspn: in some cases, the cursor jumps to a new line and 
+	 the ">" char prepends the line. This symbol is understood 
+	 as a prompt not as text: the whole line must be expanded (said).
+      */
+      if (aString
+	  && aString->str)
+	{
+	  char* s = strdup( aString->str);
+
+	  SHOW2("s=%s\n",s);
+
+	  if( s && strtok( s, " \n\r\t*-+=/\\<>#$.,;:!?§"))
+	    {
+	      this->myTextIsFound = 1;
+	      SHOW("myTextIsFound\n");
+	    }
+	  free( s);
+	}
     }
-
-  this->myTextIsFound = 1;
-
-/*   aText = anEntry->myData1; */
-/*   if(aText && aText->str)      */
-/*     { */
-/*       cursor* c =  &(anEntry->myStartingPosition); */
-/*     } */
-
 }
 /* > */
-/* < appendList */
-static void appendList(gpointer theLinePortion, gpointer theContext)
+/* < addList */
+static void addList(gpointer theLinePortion, gpointer theContext)
 {
   terminfoEntry* anEntry = NULL;
   context* this = (context*)theContext;
   linePortion* aLinePortion = (linePortion*)theLinePortion;
 
-  ENTER("appendList");
+  ENTER("addList");
 
-  if (!aLinePortion || !this || !this->myTerminfoList || !*this->myTerminfoList)
+  //  if (!aLinePortion || !this || !this->myTerminfoList || !*this->myTerminfoList)
+  if (!aLinePortion || !this)
     {
       return;
     }
@@ -163,7 +180,8 @@ static void appendList(gpointer theLinePortion, gpointer theContext)
       return;
     }
 
-  *this->myTerminfoList = g_list_append( *this->myTerminfoList, anEntry);
+  this->myAddedList = g_list_append( this->myAddedList, anEntry);
+  //  *this->myTerminfoList = g_list_append( *this->myTerminfoList, anEntry);
   /* > */
   /* < add terminfoEntry: style */
   anEntry = getStyleEntry( &(aLinePortion->myStyle));
@@ -173,7 +191,8 @@ static void appendList(gpointer theLinePortion, gpointer theContext)
       return;
     }
 
-  *this->myTerminfoList = g_list_append( *this->myTerminfoList, anEntry);
+  this->myAddedList = g_list_append( this->myAddedList, anEntry);
+  //  *this->myTerminfoList = g_list_append( *this->myTerminfoList, anEntry);
   /* > */
   /* < add terminfoEntry: text */
   if ((aLinePortion->myString)
@@ -185,23 +204,25 @@ static void appendList(gpointer theLinePortion, gpointer theContext)
 	{
 	  return;
 	}
-      *this->myTerminfoList = g_list_append( *this->myTerminfoList, anEntry);
+      this->myAddedList = g_list_append( this->myAddedList, anEntry);
+      //      *this->myTerminfoList = g_list_append( *this->myTerminfoList, anEntry);
     }
   /* > */
 }
 /* > */
 /* < terminfoExpandText */
 /* TBD:  taking in account frame */
-int terminfoExpandText( GList** theTerminfoList, termAPI* theTermAPI, cursor* theCursor)
+int terminfoExpandText( GList** theTerminfoList, termAPI* theTermAPI, cursor* theFirstCursor, cursor* theLastCursor)
 {
   int aResult=0;
-  cursor* aPreviousCursor = NULL;
   GList* aLinePortionGroup = NULL;
   context* this = NULL;
 
   ENTER("terminfoExpandText");
 
-  if (!theTerminfoList || !*theTerminfoList || !theTermAPI || !theCursor)
+  DISPLAY_STYLE( &(theFirstCursor->myStyle));
+
+  if (!theTerminfoList || !*theTerminfoList || !theTermAPI || !theFirstCursor)
     {
       goto exitExpand;
     }
@@ -224,25 +245,25 @@ int terminfoExpandText( GList** theTerminfoList, termAPI* theTermAPI, cursor* th
   /* identifying the type of displacement */
   /* TBD: initial implementation. The command must be taken in account (last char/first char jump)*/
 
-  aPreviousCursor = & (this->myCursor);
+  //  aPreviousCursor = & (this->myCursor);
 
-  if (aPreviousCursor->myLine == theCursor->myLine)
+  if (theFirstCursor->myLine == theLastCursor->myLine)
     {
       int aFirstCol = 0;
       int aLastCol = 0;
 
-      if (aPreviousCursor->myCol < theCursor->myCol)
+      if (theFirstCursor->myCol < theLastCursor->myCol)
 	{
-	  aFirstCol = theCursor->myCol;
+	  aFirstCol = theLastCursor->myCol;
 	  aLastCol = this->myNumberOfCol - 1;
 	}
       else
 	{
-	  aFirstCol = theCursor->myCol;
-	  aLastCol = aPreviousCursor->myCol;
+	  aFirstCol = theLastCursor->myCol;
+	  aLastCol = theFirstCursor->myCol;
 	}
 
-      aLinePortionGroup = this->myTermAPI->getLinePortionGroup( theCursor->myLine, aFirstCol, aLastCol);
+      aLinePortionGroup = this->myTermAPI->getLinePortionGroup( theLastCursor->myLine, aFirstCol, aLastCol);
       
       if (aFirstCol + 1 < aLastCol)
 	{
@@ -255,31 +276,37 @@ int terminfoExpandText( GList** theTerminfoList, termAPI* theTermAPI, cursor* th
   else
     {
       /* TBD: command must be taken in account. Next word + next line. */
-      aLinePortionGroup = this->myTermAPI->getLinePortionGroup( theCursor->myLine, 0, this->myNumberOfCol - 1);
+      aLinePortionGroup = this->myTermAPI->getLinePortionGroup( theLastCursor->myLine, 0, this->myNumberOfCol - 1);
     }
 
   if (aLinePortionGroup)
     {
       terminfoEntry* anEntry = NULL;
 
-      g_list_foreach( aLinePortionGroup, (GFunc)appendList, this);
+      g_list_foreach( aLinePortionGroup, (GFunc)addList, this);
       deleteLinePortionGroup( aLinePortionGroup);
 
-      anEntry = getPositionEntry( theCursor->myLine, theCursor->myCol);
-
+      anEntry = getPositionEntry( theFirstCursor->myLine, theFirstCursor->myCol);
       if(anEntry)
 	{
-	  *theTerminfoList = g_list_append( *theTerminfoList, anEntry);
+	  // TBD: the expanded text must be merged to the possible prompt
+	  // for example ">" + "  hello" implies "> hello".
+	  // At the moment, "  hello" and then ">" is said 
+	  // and "> hello" is displayed. 
+	  this->myAddedList = g_list_append( this->myAddedList, anEntry);
+	  *theTerminfoList = g_list_concat( this->myAddedList, *theTerminfoList);
 	}
     }
 
  exitExpand:
   deleteContext( this);
+
+  SHOW2("Exit=%d\n", aResult);
+
   return aResult;
 }
 
 /* > */
-
 /* 
 Local variables:
 folded-file: t

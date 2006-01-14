@@ -2,11 +2,11 @@
 /* 
 ----------------------------------------------------------------------------
 action.c
-$Id: action.c,v 1.10 2006/01/05 23:30:46 gcasse Exp $
+$Id: action.c,v 1.11 2006/01/14 01:10:09 gcasse Exp $
 $Author: gcasse $
 Description: execute the required action on the supplied buffer.
-$Date: 2006/01/05 23:30:46 $ |
-$Revision: 1.10 $ |
+$Date: 2006/01/14 01:10:09 $ |
+$Revision: 1.11 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -86,7 +86,8 @@ GByteArray* mutePreviouslyHighlightedArea( pluginAPI* thePluginAPI, char* theBuf
 {
   GByteArray* aByteArray=NULL;
   GList* aList = NULL;
-  cursor* aCursor = NULL;
+  cursor aFirstCursor;
+  cursor aLastCursor;
 
   ENTER("mutePreviouslyHighlightedArea");
 
@@ -95,11 +96,12 @@ GByteArray* mutePreviouslyHighlightedArea( pluginAPI* thePluginAPI, char* theBuf
     {
       return NULL;
     }
+  copyCursor(&aFirstCursor, terminfointerpreter_getCursor()); /* TBD: malloc, no static cursor */
   g_list_foreach(aList, (GFunc)terminfointerpreter, NULL);
   
-  aCursor = terminfointerpreter_getCursor(); /* TBD: malloc, no static cursor */
+  copyCursor(&aLastCursor, terminfointerpreter_getCursor()); /* TBD: malloc, no static cursor */
 
-  if(terminfoExpandText( &aList, thePluginAPI->myTermAPI, aCursor))
+  if(terminfoExpandText( &aList, thePluginAPI->myTermAPI, &aFirstCursor, &aLastCursor))
     {
       appendListEntryDocAPI( thePluginAPI->myDocument, aList);
     }
