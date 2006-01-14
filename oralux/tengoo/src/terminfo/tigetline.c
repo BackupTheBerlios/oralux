@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 tifilter2l.c
-$Id: tigetline.c,v 1.8 2006/01/14 01:10:15 gcasse Exp $
+$Id: tigetline.c,v 1.9 2006/01/14 08:34:51 gcasse Exp $
 $Author: gcasse $
 Description: terminfo filter, retreive one line.
-$Date: 2006/01/14 01:10:15 $ |
-$Revision: 1.8 $ |
+$Date: 2006/01/14 08:34:51 $ |
+$Revision: 1.9 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -92,7 +92,7 @@ struct t_context
   int myNumberOfCol;
   termAPI* myTermAPI;
   GList** myTerminfoList;
-  GList* myAddedList;
+  GList* myExpansionList;
   int myTextIsFound;
 };
 typedef struct t_context context;
@@ -107,7 +107,7 @@ static context* createContext(termAPI* theTermAPI, GList** theTerminfoList)
   theTermAPI->getDim( &(this->myNumberOfLine), &(this->myNumberOfCol));
   this->myTermAPI = theTermAPI;
   this->myTerminfoList = theTerminfoList;
-  this->myAddedList = NULL;
+  this->myExpansionList = NULL;
   this->myTextIsFound = 0;
 
   return this;
@@ -180,7 +180,7 @@ static void addList(gpointer theLinePortion, gpointer theContext)
       return;
     }
 
-  this->myAddedList = g_list_append( this->myAddedList, anEntry);
+  this->myExpansionList = g_list_append( this->myExpansionList, anEntry);
   //  *this->myTerminfoList = g_list_append( *this->myTerminfoList, anEntry);
   /* > */
   /* < add terminfoEntry: style */
@@ -191,7 +191,7 @@ static void addList(gpointer theLinePortion, gpointer theContext)
       return;
     }
 
-  this->myAddedList = g_list_append( this->myAddedList, anEntry);
+  this->myExpansionList = g_list_append( this->myExpansionList, anEntry);
   //  *this->myTerminfoList = g_list_append( *this->myTerminfoList, anEntry);
   /* > */
   /* < add terminfoEntry: text */
@@ -204,14 +204,14 @@ static void addList(gpointer theLinePortion, gpointer theContext)
 	{
 	  return;
 	}
-      this->myAddedList = g_list_append( this->myAddedList, anEntry);
+      this->myExpansionList = g_list_append( this->myExpansionList, anEntry);
       //      *this->myTerminfoList = g_list_append( *this->myTerminfoList, anEntry);
     }
   /* > */
 }
 /* > */
 /* < terminfoExpandText */
-/* TBD:  taking in account frame */
+/* TBD:  taking in account frame (docAPI.c) */
 int terminfoExpandText( GList** theTerminfoList, termAPI* theTermAPI, cursor* theFirstCursor, cursor* theLastCursor)
 {
   int aResult=0;
@@ -243,9 +243,7 @@ int terminfoExpandText( GList** theTerminfoList, termAPI* theTermAPI, cursor* th
   aResult = 1;
 
   /* identifying the type of displacement */
-  /* TBD: initial implementation. The command must be taken in account (last char/first char jump)*/
-
-  //  aPreviousCursor = & (this->myCursor);
+  /* TBD: initial implementation. The command must be taken in account (last char/first char jump; jump to next word on next line)*/
 
   if (theFirstCursor->myLine == theLastCursor->myLine)
     {
@@ -289,12 +287,26 @@ int terminfoExpandText( GList** theTerminfoList, termAPI* theTermAPI, cursor* th
       anEntry = getPositionEntry( theFirstCursor->myLine, theFirstCursor->myCol);
       if(anEntry)
 	{
-	  // TBD: the expanded text must be merged to the possible prompt
-	  // for example ">" + "  hello" implies "> hello".
-	  // At the moment, "  hello" and then ">" is said 
-	  // and "> hello" is displayed. 
-	  this->myAddedList = g_list_append( this->myAddedList, anEntry);
-	  *theTerminfoList = g_list_concat( this->myAddedList, *theTerminfoList);
+	  // TBD: the expanded text must be merged to the possible prompt.
+	  //
+	  // For example, if prompt = ">" and expansion = "  hello" 
+	  // it implies "> hello".
+	  // And the terminfo = ">" + "  hello" + ">".
+	  // The second muted ">" is added to be sure that the expansion 
+	  // does not overwrite the original prompt.
+	  GList* aTerminfoList2 = copyTerminfoList( *theTerminfoList);
+	  GList* aList = g_list_concat( *theTerminfoList, this->myExpansionList);
+	  /* < the original terminfo must not be overwritten by the expansion */
+	  {
+	  aList = g_list_append( aList, anEntry); /* back to first cursor */
+	  aList = g_list_append( aList, get_TSAR_Sequence( 0, 1)); /* muted */
+	  aList = g_list_concat( aList, aTerminfoList2);
+	  /* TBD: volume must be related to the computed value (docAPI.c) */
+	  aList = g_list_append( aList, get_TSAR_Sequence( 100, 1));
+	  }
+	  /* > */
+
+	  *theTerminfoList = aList;
 	}
     }
 
