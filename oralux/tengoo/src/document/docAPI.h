@@ -20,7 +20,6 @@ void deleteDocAPI( void* theDocAPI);
 /* add a Frame style to the document  */
 void addFrameStyleDocAPI( void* theDocAPI, GList* theFrame);
 /* > */
-
 /* < appendListEntryDocAPI */
 /* append the list of terminfoEntries.
 Each text entry will be associated to a text element (linked to the containing frame). 
@@ -30,14 +29,12 @@ The supplied list will be deleted by docAPI.
 */
 void appendListEntryDocAPI( void* theDocAPI, GList* theList);
 /* > */
-
 /* < setElementTypeDocAPI */
 /*
   Must be called after putListEntryDocAPI to enrich the type of an entry 
 */
 void setElementTypeDocAPI( void* theDocAPI, GList* theEntry, enum elementType theType);
 /* > */
-
 /* < setFocusStateDocAPI */
 /*
   Indicates for example that a link is hovered.
@@ -52,7 +49,6 @@ enum elementFocusState
 
 void setFocusStateDocAPI( GList* theEntry, enum elementFocusState theState);
 /* > */
-
 /* < getListEntryDocAPI */
 /*
 returned the list in taking in account the styles. 
@@ -60,11 +56,9 @@ The list will be deleted by docAPI.
 */
 GList* getStyledListEntryDocAPI( void* theDocAPI);
 /* > */
-
 /* < loadStyle */
 void loadStyleDocAPI( void* theDocAPI, char* theFilename);
 /* > */
-
 /* < clearContentDocAPI */
 /*
 clear any textual info (text and link nodes, entry list,...).
@@ -72,7 +66,6 @@ The layout is not concerned (frame nodes,...).
 */
 void clearContentDocAPI( void* theDocAPI);
 /* > */
-
 /* < getFramesDocAPI */
 /* return a list of frame names (char*). 
    These frames are siblings of the current level. 

@@ -2,11 +2,11 @@
 /* 
 ----------------------------------------------------------------------------
 action.c
-$Id: action.c,v 1.11 2006/01/14 01:10:09 gcasse Exp $
+$Id: action.c,v 1.12 2006/01/14 23:47:57 gcasse Exp $
 $Author: gcasse $
 Description: execute the required action on the supplied buffer.
-$Date: 2006/01/14 01:10:09 $ |
-$Revision: 1.11 $ |
+$Date: 2006/01/14 23:47:57 $ |
+$Revision: 1.12 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -125,6 +125,7 @@ GByteArray* mutePreviouslyHighlightedArea( pluginAPI* thePluginAPI, char* theBuf
 	}
     }
 
+  terminfoVocalStyle( &aList);
   aByteArray = convertList2Terminfo( aList);
   DISPLAY_RAW_BUFFER( aByteArray->data, aByteArray->len);
 

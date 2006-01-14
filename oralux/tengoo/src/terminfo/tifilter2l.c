@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 tifilter2l.c
-$Id: tifilter2l.c,v 1.9 2006/01/08 23:51:27 gcasse Exp $
+$Id: tifilter2l.c,v 1.10 2006/01/14 23:47:57 gcasse Exp $
 $Author: gcasse $
 Description: terminfo filter, two lines.
-$Date: 2006/01/08 23:51:27 $ |
-$Revision: 1.9 $ |
+$Date: 2006/01/14 23:47:57 $ |
+$Revision: 1.10 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -433,7 +433,8 @@ int terminfofilter2lines(GList* theTerminfoList, termAPI* theTermAPI, GList** th
 
       SHOW2("Number of style changes = %d\n",j);
 
-      if( j==NB_STYLE_CHANGE)
+      if( (j==NB_STYLE_CHANGE)
+	  && (!equivalentStyle( &(new_p[0]->myStyle), &(new_p[1]->myStyle))))
 	{
 	  linePortion* aOldHighlightedLinePortion=NULL;
 	  SHOW("The old highlighted line was:\n");

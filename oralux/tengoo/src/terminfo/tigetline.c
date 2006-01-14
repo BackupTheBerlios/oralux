@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 tifilter2l.c
-$Id: tigetline.c,v 1.9 2006/01/14 08:34:51 gcasse Exp $
+$Id: tigetline.c,v 1.10 2006/01/14 23:47:57 gcasse Exp $
 $Author: gcasse $
 Description: terminfo filter, retreive one line.
-$Date: 2006/01/14 08:34:51 $ |
-$Revision: 1.9 $ |
+$Date: 2006/01/14 23:47:57 $ |
+$Revision: 1.10 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -94,6 +94,7 @@ struct t_context
   GList** myTerminfoList;
   GList* myExpansionList;
   int myTextIsFound;
+  int myPunctuationIsFound;
 };
 typedef struct t_context context;
 
@@ -109,7 +110,7 @@ static context* createContext(termAPI* theTermAPI, GList** theTerminfoList)
   this->myTerminfoList = theTerminfoList;
   this->myExpansionList = NULL;
   this->myTextIsFound = 0;
-
+  this->myPunctuationIsFound = 0;
   return this;
 }
 
@@ -127,7 +128,6 @@ static void searchText(gpointer theEntry, gpointer theContext)
 
   ENTER("searchText");
 
-  DISPLAY_CAPACITY(anEntry->myCapacity);
   /* In case of cursor jump, the line, word,.. will be expanded (said). 
      If some text is found the line will not be expanded. */
 
@@ -145,12 +145,20 @@ static void searchText(gpointer theEntry, gpointer theContext)
 	{
 	  char* s = strdup( aString->str);
 
-	  SHOW2("s=%s\n",s);
-
-	  if( s && strtok( s, " \n\r\t*-+=/\\<>#$.,;:!?§"))
+	  if(s)
 	    {
-	      this->myTextIsFound = 1;
-	      SHOW("myTextIsFound\n");
+	      SHOW2("s=%s\n",s);
+
+	      if (strtok( s, " \n\r\t*-+=/\\<>#$.,;:!?§"))
+		{
+		  this->myTextIsFound = 1;
+		  SHOW("myTextIsFound\n");
+		}
+	      else if (strtok( s, "*-+=/\\<>#$.,;:!?§"))
+		{
+		  this->myPunctuationIsFound = 1;
+		  SHOW("myPunctuationIsFound\n");
+		}
 	    }
 	  free( s);
 	}
@@ -287,26 +295,34 @@ int terminfoExpandText( GList** theTerminfoList, termAPI* theTermAPI, cursor* th
       anEntry = getPositionEntry( theFirstCursor->myLine, theFirstCursor->myCol);
       if(anEntry)
 	{
-	  // TBD: the expanded text must be merged to the possible prompt.
-	  //
-	  // For example, if prompt = ">" and expansion = "  hello" 
-	  // it implies "> hello".
-	  // And the terminfo = ">" + "  hello" + ">".
-	  // The second muted ">" is added to be sure that the expansion 
-	  // does not overwrite the original prompt.
-	  GList* aTerminfoList2 = copyTerminfoList( *theTerminfoList);
-	  GList* aList = g_list_concat( *theTerminfoList, this->myExpansionList);
-	  /* < the original terminfo must not be overwritten by the expansion */
-	  {
-	  aList = g_list_append( aList, anEntry); /* back to first cursor */
-	  aList = g_list_append( aList, get_TSAR_Sequence( 0, 1)); /* muted */
-	  aList = g_list_concat( aList, aTerminfoList2);
-	  /* TBD: volume must be related to the computed value (docAPI.c) */
-	  aList = g_list_append( aList, get_TSAR_Sequence( 100, 1));
-	  }
-	  /* > */
+	  if (this->myPunctuationIsFound)
+	    {
+	      // TBD: the expanded text must be merged with the possible prompt.
+	      //
+	      // For example, if prompt = ">" and expansion = "  hello" 
+	      // it implies "> hello".
+	      // And the terminfo = ">" + "  hello" + ">".
+	      // The second muted ">" is added to be sure that the expansion 
+	      // does not overwrite the original prompt.
+	      GList* aTerminfoList2 = copyTerminfoList( *theTerminfoList);
+	      GList* aList = g_list_concat( *theTerminfoList, this->myExpansionList);
+	      /* < the original terminfo must not be overwritten by the expansion */
+	      {
+		aList = g_list_append( aList, anEntry); /* back to first cursor */
+		aList = g_list_append( aList, get_TSAR_Sequence( 0, 1)); /* muted */
+		aList = g_list_concat( aList, aTerminfoList2);
+		/* TBD: volume must be related to the computed value (docAPI.c) */
+		aList = g_list_append( aList, get_TSAR_Sequence( 100, 1));
+	      }
+	      /* > */
 
-	  *theTerminfoList = aList;
+	      *theTerminfoList = aList;
+	    }
+	  else
+	    { /* No prompt, just an expansion */
+	      GList* aList = g_list_append( this->myExpansionList, anEntry); /* back to first cursor */
+	      *theTerminfoList = g_list_concat( aList, *theTerminfoList);
+	    }
 	}
     }
 
@@ -319,6 +335,52 @@ int terminfoExpandText( GList** theTerminfoList, termAPI* theTermAPI, cursor* th
 }
 
 /* > */
+
+
+/* < terminfoVocalStyle */
+void terminfoVocalStyle( GList** theTerminfoList)
+{
+  GList* aList = *theTerminfoList;
+
+  ENTER("terminfoVocalStyle");
+
+  /* TBD: move to docAPI.c */
+  while( aList)
+    {
+      terminfoEntry* anEntry = NULL;
+      
+      anEntry = (terminfoEntry*)(aList->data);
+      
+      if (anEntry 
+	  && (anEntry->myCapacity == SGR)
+	  && anEntry->myData1)
+	{
+	  style* aStyle = anEntry->myData1;
+	  int aVoice;
+
+	  aVoice = 0;
+	  
+	  if (aStyle->isBold || aStyle->isUnderline)
+	    {
+	      aVoice = 2;
+	    }
+	  else if ((aStyle->myForegroundColor != TERM_COLOR_WHITE)
+		   || (aStyle->myBackgroundColor != TERM_COLOR_BLACK))
+	    {
+	      aVoice = 3;
+	    }
+
+	  if (aVoice)
+	    {
+	      *theTerminfoList = g_list_insert_before( *theTerminfoList, aList, get_TSAR_Sequence( 100, aVoice));
+	    }
+	}      
+      aList = aList->next;
+    }
+}
+
+/* > */
+
 /* 
 Local variables:
 folded-file: t

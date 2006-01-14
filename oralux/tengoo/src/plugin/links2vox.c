@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 links2vox.c
-$Id: links2vox.c,v 1.10 2005/12/22 00:39:49 gcasse Exp $
+$Id: links2vox.c,v 1.11 2006/01/14 23:47:57 gcasse Exp $
 $Author: gcasse $
 Description: tengoo plugin for the links2 web browser.
-$Date: 2005/12/22 00:39:49 $ |
-$Revision: 1.10 $ |
+$Date: 2006/01/14 23:47:57 $ |
+$Revision: 1.11 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -180,7 +180,9 @@ static GByteArray* manageCommand( plugin* this, enum commandIdentifier theComman
     {
     case JUMP_TO_LINK:
       this->myState = SEARCH_LINK;
-      this->myOutputIntermediaryBlockCallback = processIntermediaryOutputDuringLinkSearch;
+      // TBD: at the momemnt, the links2 plugin is the single mode.
+            this->myOutputIntermediaryBlockCallback = processIntermediaryOutputDuringLinkSearch;
+      //      this->myOutputIntermediaryBlockCallback = processSingleOutputDuringLinkSearch;
       this->myOutputLastBlockCallback = processSingleOutputDuringLinkSearch;
       break;
 

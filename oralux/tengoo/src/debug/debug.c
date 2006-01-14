@@ -2,11 +2,11 @@
 /* 
 ----------------------------------------------------------------------------
 debug.c
-$Id: debug.c,v 1.3 2005/12/23 20:13:22 gcasse Exp $
+$Id: debug.c,v 1.4 2006/01/14 23:47:57 gcasse Exp $
 $Author: gcasse $
 Description: for applicative trace.
-$Date: 2005/12/23 20:13:22 $ |
-$Revision: 1.3 $ |
+$Date: 2006/01/14 23:47:57 $ |
+$Revision: 1.4 $ |
 Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -528,7 +528,7 @@ void displayBuffer( char *theDataBuffer, struct t_style* theStyleBuffer, int the
 
 /* > */
 /* < displayCapacity */
-void displayCapacity( enum StringCapacity theCapacity)
+void displayCapacity( enum StringCapacity theCapacity, char* theFile)
 { /* debug: display pattern */
   char* aLine=strdup( yytext);
   char* aString=aLine;
@@ -538,13 +538,13 @@ void displayCapacity( enum StringCapacity theCapacity)
     {
       *aString='E';
     }
-  fprintf(TheOutputStream,"|%s = %s|\n", myStringCapacity[ theCapacity], aLine);
+  fprintf(TheOutputStream,"%s: " "|%s = %s|\n", theFile, myStringCapacity[ theCapacity], aLine);
   free(aLine);
 }
 
 /* > */
 /* < displayColor */
-void displayColor( char* theLabel, int theColor)
+void displayColor( char* theLabel, int theColor, char* theFile)
 {
   static char* aColorArray[]=
     {
@@ -561,17 +561,17 @@ void displayColor( char* theLabel, int theColor)
 
   if (theColor<sizeof(aColorArray)/sizeof(aColorArray[0]))
     {
-      fprintf(TheOutputStream,"|%s: %s|\n",theLabel,aColorArray[theColor]);
+      fprintf(TheOutputStream,"%s: " "|%s: %s|\n",theFile,theLabel,aColorArray[theColor]);
     }
 }
 /* > */
 /* < displayModes */
-void displayStyle(struct t_style* theStyle)
+void displayStyle(struct t_style* theStyle, char* theFile)
 {
   ENTER("displayStyle");
-  fprintf(TheOutputStream,"|");
-  displayColor( "Background",theStyle->myBackgroundColor);
-  displayColor( "Foreground",theStyle->myForegroundColor);
+  fprintf(TheOutputStream,"%s: " "|", theFile);
+  displayColor( "Background",theStyle->myBackgroundColor, theFile);
+  displayColor( "Foreground",theStyle->myForegroundColor, theFile);
 
   if (theStyle->isStandout)
     {
