@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 terminfointerpreter.c
-$Id: terminfointerpreter.c,v 1.3 2005/09/30 23:27:50 gcasse Exp $
+$Id: terminfointerpreter.c,v 1.4 2006/01/15 15:46:50 gcasse Exp $
 $Author: gcasse $
 Description: an alpha stage terminfo interpreter
-$Date: 2005/09/30 23:27:50 $ |
-$Revision: 1.3 $ |
+$Date: 2006/01/15 15:46:50 $ |
+$Revision: 1.4 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -30,6 +30,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 /* < globals */
 static cursor mySavedCursor;
 static cursor myCursor;
+static int vc_tab_stop[5];
 /* > */
 
 /* < terminfointerpreter_init */
@@ -38,6 +39,13 @@ void terminfointerpreter_init( cursor* theCursor)
   ENTER("terminfointerpreter_init");
   copyCursor(&myCursor, theCursor);
   copyCursor(&mySavedCursor, theCursor);
+  /* from kernel 2.6.12 vt.c */
+  vc_tab_stop[0]	= 0x01010100;
+  vc_tab_stop[1]	=
+    vc_tab_stop[2]	=
+    vc_tab_stop[3]	=
+    vc_tab_stop[4]	= 0x01010101;
+
 }
 /* > */
 /* < terminfointerpreter_getCursor */
@@ -185,6 +193,16 @@ void terminfointerpreter(gpointer theEntry, gpointer userData)
     case HPA:
       myCursor.myCol=aData1 - 1;
       break;
+    case HT:
+      /* from kernel 2.6.12 vt.c */
+      while (myCursor.myCol < 160) 
+	{
+	  myCursor.myCol++;
+	  if (vc_tab_stop[ myCursor.myCol >> 5] & (1 << (myCursor.myCol & 31)))
+	    break;
+	}
+      break;
+
     case ICH: /* insert n characters */
 /* 	    insertCol( this, myContext.myCursor.myCol + aData1 - 1, &(myContext.myCursor.myStyle), theOutput); */
       break;

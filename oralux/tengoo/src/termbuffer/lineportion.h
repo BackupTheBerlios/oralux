@@ -47,13 +47,11 @@ int getFeaturesLinePortionGroup( GList* this, linePortion* theFeatures);
 
 #define getTerminfoElementLinePortionGroup(theList) (((linePortion*)(theList->data))->myParent)
 
-enum wordOccurrence {
-  FIRST_OCCURRENCE=0,
-  LAST_OCCURRENCE=-1};
-
 /* getWordLinePortion returns the wished word (a group line portion) from the initial group line portion.
 NULL is returned if no word is found. */
-GList* getWordLinePortion( GList* this, enum wordOccurrence theOccurrence);
+/* Emacs-like word separator */
+#define WORD_SEPARATOR " \n\r\t*-_+=/\\<>#$.,;:!?§\"'µ()[]{}@^%"
+GList* getWordLinePortion( GList* this);
 /* > */
 
 /* 

@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 tifilter2l.c
-$Id: tigetline.c,v 1.10 2006/01/14 23:47:57 gcasse Exp $
+$Id: tigetline.c,v 1.11 2006/01/15 15:46:50 gcasse Exp $
 $Author: gcasse $
 Description: terminfo filter, retreive one line.
-$Date: 2006/01/14 23:47:57 $ |
-$Revision: 1.10 $ |
+$Date: 2006/01/15 15:46:50 $ |
+$Revision: 1.11 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -94,7 +94,6 @@ struct t_context
   GList** myTerminfoList;
   GList* myExpansionList;
   int myTextIsFound;
-  int myPunctuationIsFound;
 };
 typedef struct t_context context;
 
@@ -110,7 +109,6 @@ static context* createContext(termAPI* theTermAPI, GList** theTerminfoList)
   this->myTerminfoList = theTerminfoList;
   this->myExpansionList = NULL;
   this->myTextIsFound = 0;
-  this->myPunctuationIsFound = 0;
   return this;
 }
 
@@ -149,15 +147,10 @@ static void searchText(gpointer theEntry, gpointer theContext)
 	    {
 	      SHOW2("s=%s\n",s);
 
-	      if (strtok( s, " \n\r\t*-+=/\\<>#$.,;:!?§"))
+	      if (strtok( s, WORD_SEPARATOR))
 		{
 		  this->myTextIsFound = 1;
 		  SHOW("myTextIsFound\n");
-		}
-	      else if (strtok( s, "*-+=/\\<>#$.,;:!?§"))
-		{
-		  this->myPunctuationIsFound = 1;
-		  SHOW("myPunctuationIsFound\n");
 		}
 	    }
 	  free( s);
@@ -258,7 +251,15 @@ int terminfoExpandText( GList** theTerminfoList, termAPI* theTermAPI, cursor* th
       int aFirstCol = 0;
       int aLastCol = 0;
 
-      if (theFirstCursor->myCol < theLastCursor->myCol)
+      if (theFirstCursor->myCol + 1 == theLastCursor->myCol)
+	{
+	  aFirstCol = aLastCol = theLastCursor->myCol;
+	}
+      else if (theLastCursor->myCol + 1 == theFirstCursor->myCol)
+	{
+	  aFirstCol = aLastCol = theLastCursor->myCol;
+	}
+      else if (theFirstCursor->myCol < theLastCursor->myCol)
 	{
 	  aFirstCol = theLastCursor->myCol;
 	  aLastCol = this->myNumberOfCol - 1;
@@ -274,7 +275,7 @@ int terminfoExpandText( GList** theTerminfoList, termAPI* theTermAPI, cursor* th
       if (aFirstCol + 1 < aLastCol)
 	{
 	  GList* aWord = NULL;
-	  aWord = getWordLinePortion( aLinePortionGroup, FIRST_OCCURRENCE);
+	  aWord = getWordLinePortion( aLinePortionGroup);
 	  deleteLinePortionGroup( aLinePortionGroup);
 	  aLinePortionGroup = aWord;
 	}
@@ -295,34 +296,26 @@ int terminfoExpandText( GList** theTerminfoList, termAPI* theTermAPI, cursor* th
       anEntry = getPositionEntry( theFirstCursor->myLine, theFirstCursor->myCol);
       if(anEntry)
 	{
-	  if (this->myPunctuationIsFound)
-	    {
-	      // TBD: the expanded text must be merged with the possible prompt.
-	      //
-	      // For example, if prompt = ">" and expansion = "  hello" 
-	      // it implies "> hello".
-	      // And the terminfo = ">" + "  hello" + ">".
-	      // The second muted ">" is added to be sure that the expansion 
-	      // does not overwrite the original prompt.
-	      GList* aTerminfoList2 = copyTerminfoList( *theTerminfoList);
-	      GList* aList = g_list_concat( *theTerminfoList, this->myExpansionList);
-	      /* < the original terminfo must not be overwritten by the expansion */
-	      {
-		aList = g_list_append( aList, anEntry); /* back to first cursor */
-		aList = g_list_append( aList, get_TSAR_Sequence( 0, 1)); /* muted */
-		aList = g_list_concat( aList, aTerminfoList2);
-		/* TBD: volume must be related to the computed value (docAPI.c) */
-		aList = g_list_append( aList, get_TSAR_Sequence( 100, 1));
-	      }
-	      /* > */
+	  // TBD: the expanded text must be merged with the possible prompt.
+	  //
+	  // For example, if prompt = ">" and expansion = "  hello" 
+	  // it implies "> hello".
+	  // And the terminfo = ">" + "  hello" + ">".
+	  // The second muted ">" is added to be sure that the expansion 
+	  // does not overwrite the original prompt.
+	  GList* aTerminfoList2 = copyTerminfoList( *theTerminfoList);
+	  GList* aList = g_list_concat( *theTerminfoList, this->myExpansionList);
+	  /* < the original terminfo must not be overwritten by the expansion */
+	  {
+	    aList = g_list_append( aList, anEntry); /* back to first cursor */
+	    aList = g_list_append( aList, get_TSAR_Sequence( 0, 1)); /* muted */
+	    aList = g_list_concat( aList, aTerminfoList2);
+	    /* TBD: volume must be related to the computed value (docAPI.c) */
+	    aList = g_list_append( aList, get_TSAR_Sequence( 100, 1));
+	  }
+	  /* > */
 
-	      *theTerminfoList = aList;
-	    }
-	  else
-	    { /* No prompt, just an expansion */
-	      GList* aList = g_list_append( this->myExpansionList, anEntry); /* back to first cursor */
-	      *theTerminfoList = g_list_concat( aList, *theTerminfoList);
-	    }
+	  *theTerminfoList = aList;
 	}
     }
 

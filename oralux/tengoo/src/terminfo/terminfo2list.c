@@ -1,11 +1,11 @@
 /* 
 ----------------------------------------------------------------------------
 terminfo2list.c
-$Id: terminfo2list.c,v 1.8 2006/01/08 23:51:27 gcasse Exp $
+$Id: terminfo2list.c,v 1.9 2006/01/15 15:46:50 gcasse Exp $
 $Author: gcasse $
 Description: convert the terminfo entries to a list of commands.
-$Date: 2006/01/08 23:51:27 $ |
-$Revision: 1.8 $ |
+$Date: 2006/01/15 15:46:50 $ |
+$Revision: 1.9 $ |
 Copyright (C) 2005 Gilles Casse (gcasse@oralux.org)
 
 This program is free software; you can redistribute it and/or
@@ -597,7 +597,7 @@ entryCommands TheEntryCommands[]=
   {NULL, NULL, NULL, NULL, RCSD, NULL}, 
   {NULL, NULL, NULL, NULL, SUBCS, NULL}, 
   {NULL, NULL, NULL, NULL, SUPCS, NULL}, 
-  {NULL, NULL, NULL, NULL, HT, NULL}, 
+  {createEntry, NULL, NULL, deleteEntry, HT, copyEntry},
   {NULL, NULL, NULL, NULL, DOCR, NULL}, 
   {NULL, NULL, NULL, NULL, TSL, NULL}, 
   {NULL, NULL, NULL, NULL, TONE, NULL}, 

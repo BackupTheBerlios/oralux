@@ -1,0 +1,189 @@
+diff -ur yasr-0.6.7.new2/yasr/main.c yasr-0.6.7/yasr/main.c
+--- yasr-0.6.7.new2/yasr/main.c	2005-12-21 19:16:17.000000000 +0100
++++ yasr-0.6.7/yasr/main.c	2006-01-14 21:25:45.000000000 +0100
+@@ -579,6 +579,7 @@
+     {
+       ui.silent = 0;
+     }
++    ui.voice = parm[1];
+     break;
+ 
+   case '@':			/* insert characters */
+diff -ur yasr-0.6.7.new2/yasr/tts.c yasr-0.6.7/yasr/tts.c
+--- yasr-0.6.7.new2/yasr/tts.c	2005-12-21 19:05:13.000000000 +0100
++++ yasr-0.6.7/yasr/tts.c	2006-01-15 16:27:13.000000000 +0100
+@@ -21,6 +21,7 @@
+ #include <netinet/in.h>
+ #include <arpa/inet.h>
+ #include "tts.h"
++       #include <locale.h>
+ 
+ char ttsbuf[80];
+ 
+@@ -256,14 +257,42 @@
+ }
+ 
+ 
+-static int unspeakable(unsigned char ch)
++static int unspeakable(unsigned char ch, unsigned char ch2)
+ {
++  static int command = 0;
+   char *p = synth[tts.synth].unspeakable;
+ 
+   if (ch < 32) return 1;
+   while (*p)
+   {
+-    if (*p++ == ch) return 1;
++    if (*p++ == ch) 
++      {
++	int r = 1;
++
++	if (tts.synth == TTS_EMACSPEAK_SERVER)
++	  {
++	    /* sequence [_ xxx ] is now helpful for selecting the voice 
++	     and is not filtered. */
++	    if (command)
++	      {
++		r = 0; /* do not filter */
++		if (ch == ']')
++		  {
++		    command = 0; /* end of command */
++		  }
++	      }
++	    else if ((ch == '[') && (ch2 == '_'))
++	      {
++		r = 0; /* do not filter */
++		command = 1; /* start of command */
++	      }
++	  }
++	else
++	  {
++	    command = 0;
++	  }
++	return r;
++      }
+   }
+   return (0);
+ }
+@@ -280,43 +309,77 @@
+   char *p;
+   int obp = 0;
+   int i;
++  unsigned char* buf2=buf;
++  int len2=len;
+ 
+   if (!len)
+     return;
++
++  if ((tts.synth == TTS_EMACSPEAK_SERVER)
++      && ui.voice)
++    {
++      #define FORMAT "[_:  pi:%1.1f  fr:%d ]"
++
++      buf2 = malloc( len + sizeof(FORMAT) + 20);      
++      setlocale(LC_NUMERIC,"C");
++
++      switch(ui.voice)
++	{
++	case 2:
++	  len2 = sprintf(buf2, FORMAT, 0.6, 16200);
++	  break;
++	case 3:
++	  len2 = sprintf(buf2, FORMAT, 1.2, 16400);
++	  break;
++	default:
++	  len2 = sprintf(buf2, FORMAT, 1.0, 16000);
++	  break;
++	}
++      strncpy( buf2 + len2, buf, len);
++      len2 += len;
++      buf2[ len2] = 0;
++      ui.voice = 0;
++    }
++
+   opt_queue_empty(0);
+   p = synth[tts.synth].say;
+   opt_queue_empty(0);
+   while (*p)
+-  {
+-    if (*p == '%')
+     {
+-      p++;
+-      for (i = 0; i < len; i++)
+-      {
+-	if (unspeakable((unsigned char)buf[i]))
++      if (*p == '%')
+ 	{
+-	  if (obp && obuf[obp - 1] != 32)
+-	  {
+-	    obuf[obp++] = ' ';
+-	  }
+-	  if (dict[buf[i]])
++	  p++;
++	  for (i = 0; i < len2; i++)
++	    {
++	      if (unspeakable((unsigned char)buf2[i], (unsigned char)buf2[i+1]))
++		{
++		  if (obp && obuf[obp - 1] != 32)
++		    {
++		      obuf[obp++] = ' ';
++		    }
++		  if (dict[buf2[i]])
++		    {
++		      (void) strcpy(obuf + obp, dict[buf2[i]]);
++		      obp = strlen(obuf);
++		    }
++		  obuf[obp++] = 32;
++		} else
++		  {
++		    obuf[obp++] = buf2[i];
++		  }
++	    }
++	} else
+ 	  {
+-	    (void) strcpy(obuf + obp, dict[buf[i]]);
+-	    obp = strlen(obuf);
++	    obuf[obp++] = *p;
+ 	  }
+-	  obuf[obp++] = 32;
+-	} else
+-	{
+-	  obuf[obp++] = buf[i];
+-	}
+-      }
+-    } else
+-    {
+-      obuf[obp++] = *p;
++      p++;
+     }
+-    p++;
+-  }
+   tts_send(obuf, obp);
++
++  if (buf2 != buf)
++    {
++      free(buf2);
++    }
+ }
+ 
+ 
+@@ -347,7 +410,7 @@
+   {
+     ch = 32;
+   }
+-  if (unspeakable(ch) && dict[ch])
++  if (unspeakable(ch,' ') && dict[ch])
+   {
+     tts_say(dict[ch]);
+     return;
+diff -ur yasr-0.6.7.new2/yasr/yasr.h yasr-0.6.7/yasr/yasr.h
+--- yasr-0.6.7.new2/yasr/yasr.h	2005-12-21 19:05:13.000000000 +0100
++++ yasr-0.6.7/yasr/yasr.h	2006-01-14 16:35:04.000000000 +0100
+@@ -169,6 +169,7 @@
+     int revmode;
+     int silent;
+     int rc_detached;
++    int voice;
+     Keymap keymap;
+ };
+ 

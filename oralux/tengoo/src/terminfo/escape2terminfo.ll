@@ -12,6 +12,7 @@
 NUL	\x00
 BEL	\x07
 H	\x08
+I	\x09
 J	\x0a
 M	\x0d
 ESC	\x1b
@@ -52,6 +53,7 @@ ALT	[\x80-\xff]
 {NUL}			/* filtered */
 {BEL}			return BEL;
 {M}{J}			return NEL; /* cr lf */
+{I}			return HT; /* horizontal tab */
 {J}			return CUD1; /* down one line */
 {M}			return CR; /* cr... */ 
 {H}			return CUB1; /* move left */

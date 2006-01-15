@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # yasr.sh
-# $Id: yasr.sh,v 1.6 2005/12/24 16:36:00 gcasse Exp $
+# $Id: yasr.sh,v 1.7 2006/01/15 15:45:37 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing Yasr
-# $Date: 2005/12/24 16:36:00 $ |
-# $Revision: 1.6 $ |
+# $Date: 2006/01/15 15:45:37 $ |
+# $Revision: 1.7 $ |
 # Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -46,8 +46,10 @@ InstallPackage()
     # avoid crash at launch time, speech server reinit, say word
     patch -p0 < $INSTALL_PACKAGES/yasr/yasr.patch
     patch -p0 < $INSTALL_PACKAGES/yasr/arg.patch
-    # special escape key
+    # special escape key (tengoo)
     patch -p0 < $INSTALL_PACKAGES/yasr/test-tengoo.patch
+    # distinct voices (tengoo)
+    patch -p0 < $INSTALL_PACKAGES/yasr/voice.patch
 
     cd yasr-$YASR_RELEASE
     ./configure --prefix=/usr
