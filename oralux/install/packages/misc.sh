@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # misc.sh
-# $Id: misc.sh,v 1.12 2006/01/01 21:24:09 gcasse Exp $
+# $Id: misc.sh,v 1.13 2006/01/21 14:51:58 gcasse Exp $
 # $Author: gcasse $
 # Description: Miscellaneous packages
-# $Date: 2006/01/01 21:24:09 $ |
-# $Revision: 1.12 $ |
+# $Date: 2006/01/21 14:51:58 $ |
+# $Revision: 1.13 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -30,7 +30,7 @@ aspell-de aspell-en aspell-es aspell-fr aspell-pt-br \
 ecasound elinks erc gobjc lynx \
 manpages manpages-de manpages-es manpages-fr manpages-pt manpages-ru \
 nano ne nethack-console nethack pdftohtml \
-pdmenu ppthtml python tcsh toolame \
+pdmenu ppthtml python qalc tcsh toolame \
 vim vsound workbone wv xlhtml \
 xsltproc xpdf-utils zsh"
 

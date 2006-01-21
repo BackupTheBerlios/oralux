@@ -2,7 +2,7 @@ FreeForm 0
 StatusBar 0
 HexCode 0
 FastGUI 0
-WordWrap 0
+WordWrap 1
 AutoIndent 0
 Insert 1
 VerboseMacros 1
