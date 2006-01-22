@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // menu.c
-// $Id: menu.c,v 1.12 2006/01/01 21:24:09 gcasse Exp $
+// $Id: menu.c,v 1.13 2006/01/22 15:19:45 gcasse Exp $
 // $Author: gcasse $
 // Description: introductory menu. 
-// $Date: 2006/01/01 21:24:09 $ |
-// $Revision: 1.12 $ |
+// $Date: 2006/01/22 15:19:45 $ |
+// $Revision: 1.13 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -359,7 +359,7 @@ void setInternet( struct menuInfo* theSelectedInfo)
 }
 /* > */
 
-/* < setKeyborad, +... */
+/* < setKeyboard */
 
 // TheKeyboards: an array useful to sort the keybord labels in alphabetical order (depends on the current language).
 static enum keyboard TheKeyboards[MaxKeyboard];
@@ -370,6 +370,16 @@ int sortKeyboardMessages( const void* theKeyboard_A, const void* theKeyboard_B)
   //  ENTER("sortKeyboardMessages");
   char* aMessage_A = getText( *(enum keyboard*)theKeyboard_A);
   char* aMessage_B = getText( *(enum keyboard*)theKeyboard_B);
+
+  if (aMessage_A==NULL)
+    {
+      aMessage_A=getTextForThisLanguage(*(enum keyboard*)theKeyboard_A, English);
+    }
+  if (aMessage_B==NULL)
+    {
+      aMessage_B=getTextForThisLanguage(*(enum keyboard*)theKeyboard_B, English);
+    }
+
   return strcmp( aMessage_A, aMessage_B);
 } 
 
@@ -640,7 +650,7 @@ void saveconfig( struct menuInfo* theSelectedInfo)
   buildConfigurationYasr(&(theSelectedInfo->myTextToSpeech));
   
   char* aCommand=TheLine;
-  sprintf(aCommand, "/usr/sbin/saveconfig");
+  sprintf(aCommand, "oralux-dialog.sh 1;/usr/sbin/saveconfig;oralux-dialog.sh 0");
 	    
   runYasr( &(theSelectedInfo->myTextToSpeech), 
 	   theSelectedInfo->myMenuLanguage, 

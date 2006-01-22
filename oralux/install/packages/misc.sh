@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # misc.sh
-# $Id: misc.sh,v 1.13 2006/01/21 14:51:58 gcasse Exp $
+# $Id: misc.sh,v 1.14 2006/01/22 15:19:45 gcasse Exp $
 # $Author: gcasse $
 # Description: Miscellaneous packages
-# $Date: 2006/01/21 14:51:58 $ |
-# $Revision: 1.13 $ |
+# $Date: 2006/01/22 15:19:45 $ |
+# $Revision: 1.14 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -27,10 +27,10 @@ source ../oralux.conf
 
 export LIST="alsa-utils angband-doc angband audacity aumix bsdgames catdoc \
 aspell-de aspell-en aspell-es aspell-fr aspell-pt-br \
-ecasound elinks erc gobjc lynx \
+ecasound elinks erc frotz gobjc lynx \
 manpages manpages-de manpages-es manpages-fr manpages-pt manpages-ru \
 nano ne nethack-console nethack pdftohtml \
-pdmenu ppthtml python qalc tcsh toolame \
+ppthtml python qalc tcsh toolame \
 vim vsound workbone wv xlhtml \
 xsltproc xpdf-utils zsh"
 
@@ -50,6 +50,8 @@ InstallPackage()
     # Create nodes: yes
     # Select device: Cancel
 apt-get install lirc
+cd $BUILD/etc/rc5.d
+mv S19lirc s19lirc
 
   #    apt-get install sawfish
 }
@@ -77,7 +79,7 @@ Copy2Oralux()
     # Answers during the installation
     # Create nodes: yes
     # Select device: Cancel
-    chroot $BUILD apt-get install lirc
+    chroot $BUILD bashh -c "apt-get install lirc; cd /etc/rc5.d; mv S19lirc s19lirc"
 
     # Copyright
     mkdir $BUILD/usr/share/doc/fdimage

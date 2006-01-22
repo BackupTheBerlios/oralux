@@ -10,7 +10,15 @@ preproc:\
 	ru) echo "exec:YASR documentation::ne /usr/share/oralux/doc/Yasr/ru/README.oralux";; \
 	*) echo "exec:YASR documentation (in English)::ne /usr/share/oralux/doc/Yasr/en/README.oralux";; \
 	esac
-	exec:Links, web browser with javascript capabilities::links2 /usr/share/oralux/doc/htm/faq.htm
+
+preproc:\
+	case "$LANGUAGE" in \
+	es) echo "exec:Links, web browser::links /usr/share/oralux/doc/htm/faq-es.htm";; \
+	fr) echo "exec:Links, web browser::links /usr/share/oralux/doc/htm/faq-fr.htm";; \
+	ru) echo "exec:Links, web browser::links /usr/share/oralux/doc/htm/faq-ru.htm";; \
+	*) echo "exec:Links, web browser (in English)::links /usr/share/oralux/doc/htm/faq.htm";; \
+	esac
+
 	exec:N E, the nice editor::ne
 #	exec:Help::ne /usr/share/oralux/doc/mcvox-$LANG.txt
 	exec:m c vox, file browser::mcvox
@@ -30,3 +38,4 @@ preproc:\
 	exec:Drop to a shell::echo "When you're done, type 'exit' to return to the menu.";/bin/sh -login
 	exec:Display the time:display:date
 	exit:Exit
+

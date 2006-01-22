@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // yasr.c
-// $Id: yasr.c,v 1.10 2006/01/01 21:24:09 gcasse Exp $
+// $Id: yasr.c,v 1.11 2006/01/22 15:19:45 gcasse Exp $
 // $Author: gcasse $
 // Description: Yasr configuration file. 
-// $Date: 2006/01/01 21:24:09 $ |
-// $Revision: 1.10 $ |
+// $Date: 2006/01/22 15:19:45 $ |
+// $Revision: 1.11 $ |
 // Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -54,16 +54,16 @@ static void createConf(char* theFilename, enum language theLanguage)
 
   char *aBuffer=(char*)malloc(MAXBUF);
 
-  // Copy the first part of yasr.conf
+  // Copy yasr.conf
   sprintf(aBuffer, "cp %s/yasr.conf1 %s", ORALUX_RUNTIME_YASR, theFilename);
   SHOW(aBuffer);
   system(aBuffer);
 
-  // Second part: dictionary, according to the textToSpeech language
-  sprintf(aBuffer, "cat %s/yasr-%s.conf2 >> %s", 
-	  ORALUX_RUNTIME_YASR, 
-	  getStringLanguage(theLanguage), 
-	  theFilename);
+/*   // Second part: dictionary, according to the textToSpeech language */
+/*   sprintf(aBuffer, "cat %s/yasr-%s.conf2 >> %s",  */
+/* 	  ORALUX_RUNTIME_YASR,  */
+/* 	  getStringLanguage(theLanguage),  */
+/* 	  theFilename); */
 
   SHOW(aBuffer);
   system(aBuffer);

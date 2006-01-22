@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # menu.sh
-# $Id: menu.sh,v 1.8 2005/12/25 21:16:52 gcasse Exp $
+# $Id: menu.sh,v 1.9 2006/01/22 15:19:45 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing the audio menu
-# $Date: 2005/12/25 21:16:52 $ |
-# $Revision: 1.8 $ |
+# $Date: 2006/01/22 15:19:45 $ |
+# $Revision: 1.9 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -31,6 +31,8 @@ InstallPackage()
 {
    cd /usr/bin; 
    ln -s /usr/share/oralux/dialog/dialog.php dialog-oralux
+   install -m 755 /usr/share/oralux/dialog/oralux-dialog.sh /usr/bin
+   apt-get install pdmenu
 }
 
 ####
@@ -54,7 +56,10 @@ Copy2Oralux()
    chroot $BUILD bash -c "cd /usr/bin; rm -f oralux.sh; ln -s /usr/share/oralux/main/oralux.sh ."
 
    # Installing the text based dialog
-   chroot $BUILD bash -c "cd /usr/bin; ln -s /usr/share/oralux/dialog/dialog.php dialog-oralux"
+   chroot $BUILD bash -c "cd /usr/bin; ln -s /usr/share/oralux/dialog/dialog.php dialog-oralux;install -m 755 /usr/share/oralux/dialog/oralux-dialog.sh /usr/bin"
+
+   chroot $BUILD apt-get install pdmenu
+   install -m 444 $INSTALL_PACKAGES/menu/pdmenurc $BUILD/etc
 }
 
 # debianizeBase()

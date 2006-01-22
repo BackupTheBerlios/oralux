@@ -198,7 +198,10 @@ void beepLoudSpeaker();
 void clearStoredSentences();
 
 // Get the text related to the enumerate
+// According to the current language:
 char* getText(enum sentence theSentence);
+// According to the default language:
+char* getTextForThisLanguage(enum sentence theSentence, enum language theLanguage);
 
 // Get the ogg filename related to the enumerate
 char* getOggFilename(enum sentence theSentence);

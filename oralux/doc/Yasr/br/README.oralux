@@ -1,10 +1,13 @@
 YASR ("É um leitor de tela") que ainda está na fase de desenvolvimento.
 
-Atualmente o Yasr possui dois conjuntos de mapas de teclas (keymaps), um para o modo de revisão (ie, revisar a tela) e um para o modo padrão). 
+Atualmente o Yasr possui dois conjuntos de mapas de teclas (keymaps),
+um para o modo de revisão (ie, revisar a tela) e um para o modo
+padrão). 
 Quando o Yasr ffor iniciado, você estará no modo padrão.
 
 Para alterar o modo, simplesmente pressione Ctrl-alt r.
-Isso significa pressionar e segurar as teclas Control e alt (as da esquerda), e pressionar a tecla r.
+Isso significa pressionar e segurar as teclas Control e alt (as da
+esquerda), e pressionar a tecla r.
 
 Segue abaixo uma lista de teclas e suas funções definidas por padrão. 
 Teclas precedidas por [N] podem opcionalmente serem precedidas por um número.
@@ -51,9 +54,11 @@ ctrl-alt-l: Lê a linha.
 ctrl-alt-r: Altera o modo de revisão.
 ctrl-alt-t: Lê da posição do cursor até o início da tela.
 ctrl-alt-w: Lê toda a tela.
-ctrl-alt-x: Ativa a opção mudo do sintetizador. Para reativa-lo pressione ctrl-alt-x novamente).
+ctrl-alt-x: Ativa a opção mudo do sintetizador. Para reativa-lo
+pressione ctrl-alt-x novamente).
 
-alt-enter: Desativa o Yass. Sinlencia o sintetizador e desabilita suas combinações de teclas.
+alt-enter: Desativa o Yass. Sinlencia o sintetizador e desabilita suas
+combinações de teclas.
 	Pressione novamente para reativá-lo.
 	Nota: esta tecla está definida no Menu Opções? como
 	"Teclas-Desabilitadas".

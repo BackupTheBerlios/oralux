@@ -2,11 +2,11 @@
 // raf: utf8
 // ----------------------------------------------------------------------------
 // mailConfig.php
-// $Id: mailConfig.php,v 1.6 2005/04/03 00:36:28 gcasse Exp $
+// $Id: mailConfig.php,v 1.7 2006/01/22 15:19:45 gcasse Exp $
 // $Author: gcasse $
 // Description: Mail settings (php5)
-// $Date: 2005/04/03 00:36:28 $ |
-// $Revision: 1.6 $ |
+// $Date: 2006/01/22 15:19:45 $ |
+// $Revision: 1.7 $ |
 // Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -23,6 +23,10 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // ----------------------------------------------------------------------------
+
+$BASE=dirname(__FILE__);
+require_once("$BASE/../main/helpEmul.php");
+
 
 class mailConfig extends DomDocument
 {
@@ -45,9 +49,11 @@ class mailConfig extends DomDocument
 
   function mailConfig($theUser)
     {
+      ENTER("mailConfig::mailConfig",__LINE__);
       parent::__construct();
-      
-      $this->$_myUser=$theUser;
+
+      SHOW("theUser=$theUser, this=$this");      
+      $this->_myUser=$theUser;
 
       $this->_myFilename=sprintf( $this->_myTemplateFilename, $theUser);
       if (!is_file ( $this->_myFilename))
@@ -56,7 +62,7 @@ class mailConfig extends DomDocument
 	  if ($fd==NULL)
 	    {
 	      $aError=sprintf("Error: can't open file: %s\n", $this->_myFilename);
-	      ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.6 $');
+	      ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.7 $');
 	      return;
 	    }
 	  fwrite ( $fd, $this->_myInitialFile);
@@ -65,7 +71,7 @@ class mailConfig extends DomDocument
       if (!is_readable( $this->_myFilename))
 	{
 	      $aError=sprintf("Error: file unreadable: %s\n", $this->_myFilename);
-	      ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.6 $');
+	      ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.7 $');
 	      return;
 	}
 
@@ -186,19 +192,19 @@ class mailConfig extends DomDocument
       if (unlink($this->_myFilename)==FALSE)
 	{
 	  $aError=sprintf("Error concerning file: %s\n", $this->_myFilename);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.6 $');
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.7 $');
 	  return;
 	}
       if (touch($this->_myFilename)==FALSE)
 	{
 	  $aError=sprintf("Error concerning file: %s\n", $this->_myFilename);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.6 $');
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.7 $');
 	  return;
 	}
       if (chmod ( $this->_myFilename, 0600)==FALSE)
 	{
 	  $aError=sprintf("Error concerning file: %s\n", $this->_myFilename);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.6 $');
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.7 $');
 	  return;
 	}
 

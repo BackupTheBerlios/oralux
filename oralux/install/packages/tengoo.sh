@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # tengoo.sh
-# $Id: tengoo.sh,v 1.1 2005/12/25 23:35:16 gcasse Exp $
+# $Id: tengoo.sh,v 1.2 2006/01/22 15:19:45 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing tengoo
-# $Date: 2005/12/25 23:35:16 $ |
-# $Revision: 1.1 $ |
+# $Date: 2006/01/22 15:19:45 $ |
+# $Revision: 1.2 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -70,6 +70,7 @@ Copy2Oralux()
 
     install -d $BUILD$TENGOO_BUILD
     cp -pR $TENGOO_ORIG/* $BUILD$TENGOO_BUILD
+    rm -rf $BUILD$TENGOO_BUILD/build
 
     chroot $BUILD bash -c 'apt-get install libglib2.0-dev scons;\
     cd $TENGOO_BUILD;\

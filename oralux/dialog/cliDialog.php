@@ -1,11 +1,11 @@
 <?php
 // ----------------------------------------------------------------------------
 // cliDialog.php
-// $Id: cliDialog.php,v 1.7 2005/04/03 00:36:27 gcasse Exp $
+// $Id: cliDialog.php,v 1.8 2006/01/22 15:19:45 gcasse Exp $
 // $Author: gcasse $
 // Description: command line based dialog (menu, yes/no question, dialog box,...)
-// $Date: 2005/04/03 00:36:27 $ |
-// $Revision: 1.7 $ |
+// $Date: 2006/01/22 15:19:45 $ |
+// $Revision: 1.8 $ |
 // Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -85,6 +85,7 @@ abstract class cliArea
   abstract public function getType(); // list, button
 
   // {{{ announceTypeOfArea
+
   public function announceTypeOfArea(  $theAnnounceIsRepeated)
   {
     ENTER("cliArea::announceTypeOfArea",__LINE__);
@@ -101,13 +102,16 @@ abstract class cliArea
 	  }
       }
   }
+
   // }}}
   // {{{ setVerbosity
+
   function setVerbosity( $theVerbosity)
     {
       ENTER("cliArea::setVerbosity",__LINE__);
       $this->myVerbosity=$theVerbosity;
     }
+
   // }}}
   // {{{ sub-item: jumpToFirstItem, jumpToLastItem, gotoNextItem, gotoPreviousItem
 

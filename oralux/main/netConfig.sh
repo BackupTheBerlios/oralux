@@ -3,11 +3,11 @@
 
 # ----------------------------------------------------------------------------
 # netConfig.sh
-# $Id: netConfig.sh,v 1.11 2005/07/10 20:41:20 gcasse Exp $
+# $Id: netConfig.sh,v 1.12 2006/01/22 15:19:45 gcasse Exp $
 # $Author: gcasse $
 # Description: Menu for internet settings
-# $Date: 2005/07/10 20:41:20 $ |
-# $Revision: 1.11 $ |
+# $Date: 2006/01/22 15:19:45 $ |
+# $Revision: 1.12 $ |
 # Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -24,6 +24,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 # ----------------------------------------------------------------------------
+
+#set -vx
 
 export DIALOG=dialog-oralux
 tempfile=`tempfile 2>/dev/null` || tempfile=/tmp/test$$
@@ -120,7 +122,9 @@ case $retval in
     0)
     case $choice in
 	1)
+	oralux-dialog.sh 1
 	pppconfig --dialog
+	oralux-dialog.sh 0
 	echo Textpon
 	echo Textpoff
 	;;
