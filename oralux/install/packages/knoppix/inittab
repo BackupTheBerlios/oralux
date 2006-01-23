@@ -1,5 +1,5 @@
 # /etc/inittab: init(8) configuration.
-# $Id: inittab,v 1.1 2004/09/27 20:30:08 gcasse Exp $
+# $Id: inittab,v 1.2 2006/01/23 22:10:42 gcasse Exp $
 # File from Knoppix modified for Oralux
 # 3 May 2004 (G.Casse): automatically log in as knoppix; no xwindow session (not yet).
 # 
@@ -48,10 +48,10 @@ po::powerokwait:/etc/init.d/powerfail stop
 # Format:
 #  <id>:<runlevels>:<action>:<process>
 # 4 virtual consoles with immortal shells
-1:12345:respawn:/bin/bash -c "su knoppix" >/dev/tty1 2>&1 </dev/tty1
-2:2345:respawn:/bin/bash -c "su knoppix" >/dev/tty2 2>&1 </dev/tty2
-3:2345:respawn:/bin/bash -c "su knoppix" >/dev/tty3 2>&1 </dev/tty3
-4:2345:respawn:/bin/bash -c "su knoppix" >/dev/tty4 2>&1 </dev/tty4
+1:12345:respawn:/bin/bash -c "su - knoppix" >/dev/tty1 2>&1 </dev/tty1
+2:2345:respawn:/bin/bash -c "su - knoppix" >/dev/tty2 2>&1 </dev/tty2
+3:2345:respawn:/bin/bash -c "su - knoppix" >/dev/tty3 2>&1 </dev/tty3
+4:2345:respawn:/bin/bash -c "su - knoppix" >/dev/tty4 2>&1 </dev/tty4
 
 
 # Example how to put a getty on a serial line (for a terminal)

@@ -29,10 +29,10 @@ preproc:\
 
 preproc:\
 	case "$LANGUAGE" in \
-	de) echo "exec:play a game\: adventure::frotz /usr/share/oralux/install/packages/games/de/abent.z5";; \
-	es) echo "exec:play a game\: adventure::frotz /usr/share/oralux/install/packages/games/es/AVENTURA.Z5";; \
-	fr) echo "exec:Jeu \: filaments::frotz /usr/share/oralux/install/packages/games/fr/filaments.z8"; echo "exec:Jeu \: aventure::frotz /usr/share/oralux/install/packages/games/fr/aventure.z5";; \
-	*) echo "exec:play a game\: adventure (in English)::frotz /usr/share/oralux/install/packages/games/adventure/Advent.z5";; \
+	de) echo "exec:play a game\: adventure::/usr/games/frotz /usr/share/oralux/install/packages/games/de/abent.z5";; \
+	es) echo "exec:play a game\: Aventura::/usr/games/frotz /usr/share/oralux/install/packages/games/es/AVENTURA.Z5";; \
+	fr) echo "exec:Jeu \: filaments::/usr/games/frotz /usr/share/oralux/install/packages/games/fr/filaments.z8"; echo "exec:Jeu \: aventure::/usr/games/frotz /usr/share/oralux/install/packages/games/fr/aventure.z5";; \
+	*) echo "exec:play a game\: adventure (in English)::/usr/games/frotz /usr/share/oralux/install/packages/games/adventure/Advent.z5";; \
 	esac
 
 	exec:Drop to a shell::echo "When you're done, type 'exit' to return to the menu.";/bin/sh -login

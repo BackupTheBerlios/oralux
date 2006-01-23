@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // audioFifo.c
-// $Id: audioFifo.c,v 1.2 2005/01/30 21:43:51 gcasse Exp $
+// $Id: audioFifo.c,v 1.3 2006/01/23 22:10:42 gcasse Exp $
 // $Author: gcasse $
 // Description: Playing the supplied OggVorbis files
-// $Date: 2005/01/30 21:43:51 $ |
-// $Revision: 1.2 $ |
+// $Date: 2006/01/23 22:10:42 $ |
+// $Revision: 1.3 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -428,9 +428,12 @@ void audioFifoInit()
   initOgg();
 
   // /dev/sound/dsp or /dev/dsp ?
-  stat(mySoundDevice[0], &aFileInfo);
-  mySoundDeviceIndex=S_ISCHR(aFileInfo.st_mode) ? 0:1;
-  SHOW3("\ndev=%s index=%d",mySoundDevice[0],mySoundDeviceIndex);
+  mySoundDeviceIndex=1;
+  if (stat(mySoundDevice[0], &aFileInfo)==0)
+    {
+      mySoundDeviceIndex=S_ISCHR(aFileInfo.st_mode) ? 0:1;
+      SHOW3("\ndev=%s index=%d",mySoundDevice[0],mySoundDeviceIndex);
+    }
 
   if ((myProcess1=fork()) == 0) 
     {

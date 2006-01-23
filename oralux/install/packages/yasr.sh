@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # yasr.sh
-# $Id: yasr.sh,v 1.8 2006/01/22 15:19:45 gcasse Exp $
+# $Id: yasr.sh,v 1.9 2006/01/23 22:08:36 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing Yasr
-# $Date: 2006/01/22 15:19:45 $ |
-# $Revision: 1.8 $ |
+# $Date: 2006/01/23 22:08:36 $ |
+# $Revision: 1.9 $ |
 # Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -51,7 +51,7 @@ InstallPackage()
     # distinct voices (tengoo)
     patch -p0 < $INSTALL_PACKAGES/yasr/voice.patch
     # any char is speakable (multispeech)
-    patch -p0 < $INSTALL_PACKAGES/yasr/unspeakable.patch
+#    patch -p0 < $INSTALL_PACKAGES/yasr/unspeakable.patch
 
     cd yasr-$YASR_RELEASE
     ./configure --prefix=/usr
@@ -87,6 +87,7 @@ Copy2Oralux()
     patch -p0 < $NEW_INSTALL_PACKAGES/yasr/yasr.patch;\
     patch -p0 < $NEW_INSTALL_PACKAGES/yasr/arg.patch;\
     patch -p0 < $NEW_INSTALL_PACKAGES/yasr/test-tengoo.patch;\
+    patch -p0 < $NEW_INSTALL_PACKAGES/yasr/voice.patch;\
     cd yasr-$YASR_RELEASE;\
     ./configure --prefix=/usr;\
     make;\

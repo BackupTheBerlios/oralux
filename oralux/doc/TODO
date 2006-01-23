@@ -34,6 +34,11 @@ For the next releases, mention also the MBROLA license in the website and in the
 
 download:  
 
+ 
+*emacspeak + su: password required.
+* pcmcia-cs, pcmcia-modules
+
+
 linphonec
 
 * Major bug: a configuration file is removed (even no symlink) in using saveconfig from 0.6 alpha when the file is identical to the config file from the CD (e.g. knoppix and /KNOPPIX/etc/sysconfig/knoppix).
@@ -126,6 +131,8 @@ Message from Edmond > (setq vm-forwarding-subject-format "Message retransmis de 
 
 --------------------------------------
 + Yasr: bsdgames includes a very good "adventure" game wich can be played from the command line.
+
++ Doug: battlestar, text game.
 
 + qalc
 

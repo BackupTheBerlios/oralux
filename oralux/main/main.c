@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // main.c
-// $Id: main.c,v 1.11 2006/01/01 21:24:09 gcasse Exp $
+// $Id: main.c,v 1.12 2006/01/23 22:10:42 gcasse Exp $
 // $Author: gcasse $
 // Description: entry point. 
-// $Date: 2006/01/01 21:24:09 $ |
-// $Revision: 1.11 $ |
+// $Date: 2006/01/23 22:10:42 $ |
+// $Revision: 1.12 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -292,7 +292,7 @@ int main(int argc, char *argv[])
 	  {
 	    initAUI(TheLine, aEnumMenuLanguage, portname);
 
-	    saveconfig( &aSelectedInfo);
+	    //TBD	    saveconfig( &aSelectedInfo);
 
 	    enum ShutdownStatus aStatus=askIfShutdownIsRequired();
 	    stopAUI(1);
