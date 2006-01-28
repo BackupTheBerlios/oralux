@@ -49,11 +49,9 @@ Il convertit le texte en iso8859-1, filtre les commandes en ligne Emacspeak ([:n
 
 /* > */
 
-/* debug */
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
-
 
 /* <defines*/
 
@@ -141,8 +139,6 @@ static int fd_0_1[2];
 static pid_t myProcess1=0;  
 extern char **environ;
 
-#include <sys/time.h>
-#include <time.h>
 static double lastClock=0;
 
 void ciceroInit()
@@ -162,29 +158,29 @@ void ciceroInit()
     }
 }
 
-double getCurrentDelay()
-{
-  double aDelay;
-  struct timeval tv;
-  gettimeofday( &tv, NULL);
-  aDelay=tv.tv_usec/1000000.0;
-  aDelay+=tv.tv_sec;
-  fprintf(LOG,"Clock:%f\n", aDelay);
-  return aDelay;
-}
+/* double getCurrentDelay() */
+/* { */
+/*   double aDelay; */
+/*   struct timeval tv; */
+/*   gettimeofday( &tv, NULL); */
+/*   aDelay=tv.tv_usec/1000000.0; */
+/*   aDelay+=tv.tv_sec; */
+/*   fprintf(LOG,"Clock:%f\n", aDelay); */
+/*   return aDelay; */
+/* } */
 
-int delayAchieved()
-{
-  int aStatus=0;
-  double currentClock=getCurrentDelay();
-  if (lastClock + 3.0 <= currentClock)
-    {
-      aStatus=1;
-      lastClock=currentClock;
-      fprintf(LOG,"delayAchieved: status=%d\n", aStatus);
-    }
-  return aStatus;
-}
+/* int delayAchieved() */
+/* { */
+/*   int aStatus=0; */
+/*   double currentClock=getCurrentDelay(); */
+/*   if (lastClock + 3.0 <= currentClock) */
+/*     { */
+/*       aStatus=1; */
+/*       lastClock=currentClock; */
+/*       fprintf(LOG,"delayAchieved: status=%d\n", aStatus); */
+/*     } */
+/*   return aStatus; */
+/* } */
 
 /* The following code comes from ParleMax, helpful to filter the not yet useful Emacspeak inline commands */
 /*

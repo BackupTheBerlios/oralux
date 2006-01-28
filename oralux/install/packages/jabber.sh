@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # jabber.sh
-# $Id: jabber.sh,v 1.3 2005/12/25 21:02:35 gcasse Exp $
+# $Id: jabber.sh,v 1.4 2006/01/28 23:09:21 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing jabber
-# $Date: 2005/12/25 21:02:35 $ |
-# $Revision: 1.3 $ |
+# $Date: 2006/01/28 23:09:21 $ |
+# $Revision: 1.4 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -27,6 +27,8 @@ source ../oralux.conf
 
 export EMACS_JABBER=emacs-jabber_0.6.1_all.deb
 export DIR=/usr/share/emacs21/site-lisp/emacs-jabber
+export LIST="jabber jabber-aim jabber-irc jabber-jit jabber-jud jabber-msn jabber-muc jabber-yahoo adduser-plugin-notifyjabber"
+
 cd $ARCH
 
 if [ ! -e $MICQ.tgz ]; then 
@@ -42,7 +44,7 @@ fi
 InstallPackage()
 {
     # jabber server
-    apt-get install jabber jabber-aim jabber-irc jabber-jit jabber-jud jabber-msn jabber-muc jabber-yahoo adduser-plugin-notifyjabber
+    apt-get install $LIST
 
     update-rc.d -f jabber remove
 
@@ -58,7 +60,7 @@ InstallPackage()
     cp $ARCH/$MICQ.tgz .
     tar -zxvf $MICQ.tgz 
     cd $MICQ
-    ./configure --enable-ssl=openssl
+    ./configure --enable-ssl=/usr/include/openssl
     make install
 }
 
@@ -67,8 +69,7 @@ InstallPackage()
 Copy2Oralux()
 {
     # jabber server
-    chroot $BUILD apt-get install jabber jabber-aim jabber-irc jabber-jit jabber-jud jabber-msn jabber-muc jabber-yahoo adduser-plugin-notifyjabber
-
+    chroot $BUILD apt-get install $LIST
     chroot $BUILD update-rc.d -f jabber remove
 
     # command line client
@@ -85,7 +86,7 @@ Copy2Oralux()
     cp $ARCH/$MICQ.tgz .
     tar -zxvf $MICQ.tgz 
     chroot $BUILD bash -c "cd /tmp/$MICQ;\
-    ./configure --enable-ssl=openssl;\
+    ./configure --enable-ssl=/usr/include/openssl;\
     make install"
 }
 

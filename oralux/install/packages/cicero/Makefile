@@ -1,12 +1,12 @@
 #tcldtk updated for cicero
 #
-#CFLAGS=-O3 -fpic -pedantic -ansi -Wall -I/usr/include/tcl8.4 -I/usr/include/tclX8.4 -march=i386
-CFLAGS=-g -fpic -pedantic -ansi -Wall -I/usr/include/tcl8.4 -I/usr/include/tclX8.4 -march=i386
+#CFLAGS=-O3 -fpic -pedantic -ansi -Wall -I/usr/include/tcl8.3 -I/usr/include/tclX8.3 -march=i386
+CFLAGS=-g -fpic -pedantic -ansi -Wall -I/usr/include/tcl8.3 -I/usr/include/tclX8.3 -march=i386
 CPPFLAGS=-DSTDC_HEADERS=1 -Dclock_t=long -DRETSIGTYPE=void 
 
 INSTALL=install
 CC=gcc
-LIBS=-ltclx8.4
+LIBS=-ltclx8.3
 SERVER_DIR=/usr/share/emacs/site-lisp/emacspeak/servers/cicero-api
 FILES=tclcicero.c tclcicero.so tclcicero.o Makefile
 

@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # php.sh
-# $Id: php.sh,v 1.10 2006/01/01 21:24:09 gcasse Exp $
+# $Id: php.sh,v 1.11 2006/01/28 23:09:21 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing a customized PHP5 cli (non canonical mode)
-# $Date: 2006/01/01 21:24:09 $ |
-# $Revision: 1.10 $ |
+# $Date: 2006/01/28 23:09:21 $ |
+# $Revision: 1.11 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -27,6 +27,14 @@ source ../oralux.conf
 export OPT_CONF="--prefix=/usr --program-suffix=-oralux --with-libxml-dir --disable-cgi --with-gettext --enable-dio --with-ncurses --with-curl --with-tidy"
 
 export RELEASE="5.0.5"
+export ARCH_PHP="php-${RELEASE}.tar.bz2"
+
+cd $ARCH
+if [ ! -e $ARCH_PHP ]
+    then
+    echo "Downloading $ARCH_PHP"
+    wget http://www.php.net/get/$ARCH_PHP/from/fr.php.net/mirror
+fi
 
 ####
 # Installing the package in the current tree
@@ -38,8 +46,7 @@ InstallPackage()
     apt-get install libtidy-dev
     cd /tmp
     rm -rf /tmp/php-${RELEASE}*
-    wget http://www.php.net/get/php-${RELEASE}.tar.bz2/from/fr.php.net/mirror
-    tar -jxvf php-${RELEASE}.tar.bz2
+    tar -jxvf $ARCH/$ARCH_PHP
     cd php-${RELEASE}
     cp $INSTALL_PACKAGES/php/dio.c ext/dio
     cp $INSTALL_PACKAGES/php/php_dio.h ext/dio
@@ -59,11 +66,10 @@ Copy2Oralux()
 {
     # php5
     cd $BUILD/tmp
-#     rm -rf php-${RELEASE}*
-#     wget http://www.php.net/get/php-${RELEASE}.tar.bz2/from/fr.php.net/mirror
-#     tar -jxvf php-${RELEASE}.tar.bz2
-#     cp $INSTALL_PACKAGES/php/dio.c php-${RELEASE}/ext/dio
-#     cp $INSTALL_PACKAGES/php/php_dio.h php-${RELEASE}/ext/dio
+    rm -rf php-${RELEASE}*
+    tar -jxvf $ARCH/$ARCH_PHP
+    cp $INSTALL_PACKAGES/php/dio.c php-${RELEASE}/ext/dio
+    cp $INSTALL_PACKAGES/php/php_dio.h php-${RELEASE}/ext/dio
 
     chroot $BUILD bash -c "apt-get remove --purge php4-common;\
         apt-get install libxml2-dev;\

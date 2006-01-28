@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # multispeech.sh
-# $Id: multispeech.sh,v 1.12 2006/01/22 15:19:45 gcasse Exp $
+# $Id: multispeech.sh,v 1.13 2006/01/28 23:09:21 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing Multispeech.
-# $Date: 2006/01/22 15:19:45 $ |
-# $Revision: 1.12 $ |
+# $Date: 2006/01/28 23:09:21 $ |
+# $Revision: 1.13 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -27,7 +27,7 @@ set -vx
 source ../oralux.conf
 
 export RULEX_RELEASE=1.0
-export MULTISPEECH_RELEASE=oralux-2006-01-22
+export MULTISPEECH_RELEASE=oralux-2006-01-28
 export ARCH_RULEX=$ARCH/rulex-$RULEX_RELEASE.tar.gz 
 export ARCH_MULTISPEECH_SRC=$ARCH/multispeech-$MULTISPEECH_RELEASE.tar.bz2
 #export ARCH_RU_TTS=$ARCH/ru_tts.bz2
@@ -37,8 +37,8 @@ export BIN="/usr/local/bin"
 export MBROLA="/usr/local/share/mbrola"
 
 
-# cd $ARCH
-# wget http://oralux.org/tmp/multispeech-$MULTISPEECH_RELEASE.tar.bz2
+cd $ARCH
+wget http://oralux.org/tmp/multispeech-$MULTISPEECH_RELEASE.tar.bz2
 # wget ftp://ftp.rakurs.spb.ru/pub/Goga/projects/speech-interface/rulex/rulex-$RULEX_RELEASE.tar.gz
 # wget ftp://ftp.rakurs.spb.ru/pub/Goga/projects/speech-interface/ru_tts/binaries/ru_tts.bz2
 # wget ftp://ftp.rakurs.spb.ru/pub/Goga/projects/speech-interface/current/enlex.tar.bz2

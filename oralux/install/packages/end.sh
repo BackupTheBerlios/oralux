@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # end.sh
-# $Id: end.sh,v 1.7 2005/12/04 22:42:27 gcasse Exp $
+# $Id: end.sh,v 1.8 2006/01/28 23:09:21 gcasse Exp $
 # $Author: gcasse $
 # Description: This script must be the last one to call
-# $Date: 2005/12/04 22:42:27 $ |
-# $Revision: 1.7 $ |
+# $Date: 2006/01/28 23:09:21 $ |
+# $Revision: 1.8 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -86,11 +86,6 @@ Copy2Oralux()
     echo "chmod 700 \$HOME/.emacs.d" >> $BUILD/etc/profile
     echo "fi" >> $BUILD/etc/profile
 
-    echo "if [ ! -f \$HOME/.emacs.d/Russian.el ]; then" >> $BUILD/etc/profile
-    echo "cp /usr/share/oralux/install/packages/multispeech/Russian.el \$HOME/.emacs.d" >> $BUILD/etc/profile
-    echo "chmod 644 \$HOME/.emacs.d/Russian.el" >> $BUILD/etc/profile
-    echo "fi" >> $BUILD/etc/profile
-
     echo "if [ ! -d \$HOME/.links ]; then" >> $BUILD/etc/profile
     echo "mkdir \$HOME/.links" >> $BUILD/etc/profile
     echo "chmod 700 \$HOME/.links" >> $BUILD/etc/profile
@@ -114,8 +109,9 @@ Copy2Oralux()
     echo "alias cp='cp -i'" >> $BUILD/etc/profile
     echo "alias la='ls -la'" >> $BUILD/etc/profile
 
-    echo "This is very KNOPPIX-specific" >> $BUILD/etc/profile
+    echo "#This is very KNOPPIX-specific" >> $BUILD/etc/profile
     echo "alias su='sudo su'"  >> $BUILD/etc/profile
+    echo "#" >> $BUILD/etc/profile
 
     echo "export EDITOR=ne"  >> $BUILD/etc/profile
     echo "export PAGER=w3m"  >> $BUILD/etc/profile

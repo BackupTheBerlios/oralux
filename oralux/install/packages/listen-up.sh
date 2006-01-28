@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # listen-up.sh
-# $Id: listen-up.sh,v 1.3 2005/12/04 22:42:27 gcasse Exp $
+# $Id: listen-up.sh,v 1.4 2006/01/28 23:09:21 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing listen-up
-# $Date: 2005/12/04 22:42:27 $ |
-# $Revision: 1.3 $ |
+# $Date: 2006/01/28 23:09:21 $ |
+# $Revision: 1.4 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -28,6 +28,15 @@ source ../oralux.conf
 # Warning:
 # libxml2 is required and supposed to be already installed (e.g. because of php.sh)
 
+export ARCH_OSALP="osalp-0.7.3.tar.gz"
+
+cd $ARCH
+if [ ! -e $ARCH_OSALP ]
+    then
+    echo "Downloading $ARCH_OSALP"
+    wget http://switch.dl.sourceforge.net/sourceforge/osalp/$ARCH_OSALP 
+fi
+
 ####
 # Installing the package in the current tree
 InstallPackage()
@@ -37,9 +46,8 @@ cd /tmp
 apt-get install libncurses5-dev
 
 # osalp is required
-wget http://switch.dl.sourceforge.net/sourceforge/osalp/osalp-0.7.3.tar.gz 
-tar -zxvf osalp-0.7.3.tar.gz 
-cd osalp-0.7.3
+tar -zxvf $ARCH/$ARCH_OSALP
+cd osalp-*
 ./configure
 make
 make install
@@ -63,9 +71,8 @@ chroot $BUILD apt-get install libncurses5-dev
 cd $BUILD/tmp
 
 # osalp is required
-wget http://switch.dl.sourceforge.net/sourceforge/osalp/osalp-0.7.3.tar.gz 
-tar -zxvf osalp-0.7.3.tar.gz 
-chroot $BUILD bash -c "cd /tmp/osalp-0.7.3;./configure;make;make install"
+tar -zxvf $ARCH/$ARCH_OSALP
+chroot $BUILD bash -c "cd /tmp/osalp-*;./configure;make;make install"
 
 #
 echo "NOTICE: password is please"

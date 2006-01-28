@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # misc.sh
-# $Id: misc.sh,v 1.14 2006/01/22 15:19:45 gcasse Exp $
+# $Id: misc.sh,v 1.15 2006/01/28 23:09:21 gcasse Exp $
 # $Author: gcasse $
 # Description: Miscellaneous packages
-# $Date: 2006/01/22 15:19:45 $ |
-# $Revision: 1.14 $ |
+# $Date: 2006/01/28 23:09:21 $ |
+# $Revision: 1.15 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -50,8 +50,7 @@ InstallPackage()
     # Create nodes: yes
     # Select device: Cancel
 apt-get install lirc
-cd $BUILD/etc/rc5.d
-mv S19lirc s19lirc
+update-rc.d -f exim4 remove
 
   #    apt-get install sawfish
 }
@@ -67,9 +66,11 @@ Copy2Oralux()
 
 # default options: 
 # - Russian keyboard, 
-# - Scroll lock (switch latin/cyrillic), 
+# - Right Alt key (default)
+# - Two Windows keys (default)
 # - font: Terminus slave normal (font name: french translation)
 # - font size: 16
+# - koi8r
 # - The cyrillic mode is not started by default (console-data must be used to set up the console)
     chroot $BUILD apt-get install console-cyrillic
 
@@ -79,7 +80,7 @@ Copy2Oralux()
     # Answers during the installation
     # Create nodes: yes
     # Select device: Cancel
-    chroot $BUILD bashh -c "apt-get install lirc; cd /etc/rc5.d; mv S19lirc s19lirc"
+    chroot $BUILD bash -c "apt-get install lirc; cd /etc/rc5.d; update-rc.d -f lirc remove"
 
     # Copyright
     mkdir $BUILD/usr/share/doc/fdimage

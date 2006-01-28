@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # general.sh
-# $Id: general.sh,v 1.4 2006/01/21 14:51:57 gcasse Exp $
+# $Id: general.sh,v 1.5 2006/01/28 23:09:21 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing general information
-# $Date: 2006/01/21 14:51:57 $ |
-# $Revision: 1.4 $ |
+# $Date: 2006/01/28 23:09:21 $ |
+# $Revision: 1.5 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -45,6 +45,9 @@ Copy2Oralux()
 
    cd $INSTALL_PACKAGES
    echo "export LD_LIBRARY_PATH=/lib:/usr/local/lib:\$LD_LIBRARY_PATH" >> $BUILD/etc/profile
+
+   chroot $BUILD bash -c "wget http://ftp-master.debian.org/ziyi_key_2005.asc -O - | sudo apt-key add -; wget http://ftp-master.debian.org/ziyi_key_2006.asc -O - | sudo apt-key add -"
+
    chroot $BUILD apt-get update
    install -m 644 bashrc aumixrc $BUILD/etc
 

@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # ttpport.sh
-# $Id: ttpport.sh,v 1.2 2005/12/10 22:35:07 gcasse Exp $
+# $Id: ttpport.sh,v 1.3 2006/01/28 23:09:21 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing ttpport, Brazilian portuguese phonetizer
-# $Date: 2005/12/10 22:35:07 $ |
-# $Revision: 1.2 $ |
+# $Date: 2006/01/28 23:09:21 $ |
+# $Revision: 1.3 $ |
 # Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -29,7 +29,7 @@ source ../oralux.conf
 # Installing the package in the current tree
 InstallPackage()
 {
-    cd ttpport
+    cd $INSTALL_PACKAGES/ttpport
 
     BIN="$BUILD/usr/local/bin"
     install -d $BIN

@@ -38,6 +38,8 @@ download:
 *emacspeak + su: password required.
 * pcmcia-cs, pcmcia-modules
 
+* check the oralux version number in configs.tbz, discard old versions.
+
 
 linphonec
 

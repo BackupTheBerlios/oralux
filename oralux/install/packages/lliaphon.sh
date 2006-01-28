@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # lliaphon.sh
-# $Id: lliaphon.sh,v 1.3 2005/12/18 23:36:31 gcasse Exp $
+# $Id: lliaphon.sh,v 1.4 2006/01/28 23:09:21 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing LLiaPhon
-# $Date: 2005/12/18 23:36:31 $ |
-# $Revision: 1.3 $ |
+# $Date: 2006/01/28 23:09:21 $ |
+# $Revision: 1.4 $ |
 # Copyright (C) 2004, 2005 Nath (nath.ml at free.fr)
 #
 # This program is free software; you can redistribute it and/or
@@ -25,7 +25,16 @@
 ####
 source ../oralux.conf
 export REL="0.4"
-export URL="http://download.gna.org/lliaphon/stable/lliaphon-${REL}.tar.gz"
+LLIAPHON="lliaphon-${REL}.tar.gz"
+export URL="http://download.gna.org/lliaphon/stable/${LLIAPHON}"
+
+cd $ARCH
+
+if [ ! -e $LLIAPHON ]
+    then
+    echo "Downloading $LLIAPHON"
+    wget $URL
+fi
 
 ####
 # Installing the package in the current tree
@@ -33,8 +42,7 @@ InstallPackage()
 {
 # Installing LLiaPhon
 cd /tmp
-wget $URL
-tar xvzf lliaphon-${REL}.tar.gz
+tar xvzf $ARCH/$LLIAPHON
 patch -p0 < $INSTALL_PACKAGES/lliaphon/lliaphon-0.4-oralux.patch
 cd /tmp/lliaphon-$REL
 ./configure --enable-lex80k
@@ -56,8 +64,7 @@ Copy2Oralux()
 {
 # Installing LLiaPhon
 cd $BUILD/tmp
-wget $URL
-tar xvzf lliaphon-${REL}.tar.gz
+tar xvzf $ARCH/$LLIAPHON
 patch -p0 < $INSTALL_PACKAGES/lliaphon/lliaphon-0.4-oralux.patch
 chroot $BUILD bash -c "cd /tmp/lliaphon-$REL;./configure --enable-lex80k;make;make install"
 
