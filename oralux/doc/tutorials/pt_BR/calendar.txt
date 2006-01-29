@@ -1,0 +1,122 @@
+Calendário por Sylvie Xhaard;
+Para uso com o Oralux Linux;
+Tradução para o Português por Cássio Santos;
+20/11/2005;
+
+1. O Calendário
+	1.1 Executando O Calendário
+	1.2 Movimentando-se pelo Calendário
+	- Por dias
+	- por semanas
+	- por meses
+	- por ano
+
+	1.3 Alterando o dia de início da semana
+	1.4 Saindo do Calendário
+
+2. O Diário
+	2.1 Comandos para adicionar um registro no Diário
+	2.2 Comandos de como exibir os registros do Diário
+Diário
+3. Notificação de lembretes 
+
+
+1. O Calendário
+
+	1.1 Executando o Calendário
+Digite:
+M- x calendar
+	Ao ser iniciado o Calendário  exibe três meses, com a data atual do sistema focada.
+
+	1.2 Movimentando-se pelo Calendário
+	- Por dias
+	- Seta a esquerda : Vai para o dia anterior.
+	- Seta a direita : Vai para o próximo dia.
+
+Indo a uma data específica
+Digite:
+g d
+Digite o ano desejado e tecle enter. (Por padrão o ano é o atual).
+Digite o mês e tecle enter
+Digite o dia e tecle enter
+	Por semanas
+	- Seta acima : volta uma semana.
+	- Seta abaixo : Avança uma semana.
+
+	Por meses
+	- M-} :Avança um mês.
+	- M-{ : Volta um mês.
+	- M-a : Vai para o início do mês.
+	- M-e : Vai para o fim do mês.
+	Por anos
+	- C-x ] : Avança um ano.
+	- C-x [ : Volta um ano.
+	- M-< : Vai para o início do ano.
+	- M->   : Vai para o fim do ano.
+
+	1.3 Alterando o dia de início da semana
+
+Por padrão, as semanas iniciam-se no domingo.
+ Para configurar o início da semana para segunda-feira, precisamos alterar a variável calendar-week-start-day para 1.
+Como fazer isto?
+Digite:
+
+1) M-x set-variable (Enter) 
+2) calendar-week-start-day (Enter) 
+3) 		1 (enter)
+
+	1.4 Saindo do Calendário
+Digite:
+q
+
+2. O diário
+Por padrão o seu arquivo com os dados do Diário será salvo no seu diretório home.
+
+A janela de calendário é sempre visível e  acessível.
+Digite:
+C-x o (Não confunda O com 0).
+
+Para configurar o estilo do formato de data para o usado no Brasil, onde o dia vem antes do mês, exemplo (20/11/2005),
+ digite o seguinte:
+M-x european-calendar (Quando estiver no Calendário).
+
+Para adicionar horas, as digite no formato am/pm ou no estilo utilizado no Brasil de 24 horas.
+
+	2.1 Comandos para adicionar um registro no Diário
+
+	No Calendário, existem vários comandos para adicionar registros no Diário.
+	Todos os registros de diário iniciam-se pela data.
+
+i d : adiciona um registro de diário na data selecionada.
+	i w : adiciona um registro de diário no dia da semana selecionado.
+	i m : adiciona um registro de diário ao dia do mês selecionado.
+	i y : adiciona um registro de diário ao dia do ano selecionado.
+	i um adiciona um registro de aniversário ao Diário na data selecionada. 
+i b : adiciona um registro do diário no intervalo selecionado. 
+		Para criar um intervalo, posicione-se na data de início, e a marque com a barra de espaço, depois mova-se para a data final e digite i B.
+	i c : adiciona um registro de diário cíclico iniciando em uma determinada data, o Diário lhe perguntará qual será a data de intervalo da notificação.
+
+	2.2 Comandos de como exibir os registros do Diário
+	d : Exibe todos os registros da data selecionada.
+	s : Exibe todo o arquivo do Diário.
+
+3. Notificação de lembretes 
+
+Para ativar uma notificação de compromisso, você deve adicionar esta string no arquivo .emacs no seu diretório home:
+
+;; Calendar
+
+(display-time)
+
+(add-hook 'diary-hook' appt-make-list)
+
+(diary 0)
+
+ Quando você visualizar o diário com o comando d na janela do Calendário ou com o comando M-x do diário, ele mostrará uma lista com todos os registros que tenham uma notificação, e lhe notificará quando elas ocorrerem.
+Por exemplo :
+	12:20 Almoço.
+
+Você será notificado que as 12:20 é o horário de seu almoço. 
+
+Você também pode usar a notificação de compromisso como um alarme, o comando 'M-x app-add' adiciona entradas a lista de compromisso sem afetar seu arquivo de diário.
+ Para excluir registros da lista de compromissos com o comando 'M-x appt-delete'.
