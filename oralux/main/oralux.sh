@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # oralux.sh
-# $Id: oralux.sh,v 1.13 2006/01/28 23:09:21 gcasse Exp $
+# $Id: oralux.sh,v 1.14 2006/01/30 22:49:38 gcasse Exp $
 # $Author: gcasse $
 # Description: This script is called at init time
-# $Date: 2006/01/28 23:09:21 $ |
-# $Revision: 1.13 $ |
+# $Date: 2006/01/30 22:49:38 $ |
+# $Revision: 1.14 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -102,7 +102,7 @@ echo "lancement zsh"
 	else	    
 # TBD
 	    sudo chown knoppix:knoppix /home/knoppix/.yasr.conf
-	    yasr-oralux.sh
+	    oralux-yasr.sh
 
 	    # just for safe
 	    pkill test-tengoo

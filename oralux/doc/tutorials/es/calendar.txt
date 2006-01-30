@@ -18,15 +18,15 @@ Para usar con Oralux Linux
 
 1.2 Movimientos en el calendario
 
-- por d√≠as
+- por dÌas
 
 - por semanas
 
 - por meses
 
-- por a√±os
+- por aÒos
 
-1.3 Modificar el d√≠a de comienzo de la semana
+1.3 Modificar el dÌa de comienzo de la semana
 
 1.4 Salir del calendario
 
@@ -36,7 +36,7 @@ Para usar con Oralux Linux
 
 2.2 Comandos que despliegan entradas del Diario
 
-3. Notificaci√≥n de citas
+3. NotificaciÛn de citas
 
 ------------------------------------------------------------------------------
 
@@ -51,7 +51,7 @@ Para usar con Oralux Linux
 Escriba M-x calendar
 
 El calendario despliega tres meses centrados en el mes actual, con la fecha
-actual se√±alada con una marca.
+actual seÒalada con una marca.
 
 ------------------------------------------------------------------------------
 
@@ -59,25 +59,25 @@ actual se√±alada con una marca.
 
 ------------------------------------------------------------------------------
 
-Por d√≠as
+Por dÌas
 
-- tecla flecha izquierda : mueve la marca un d√≠a hacia atr√°s
+- tecla flecha izquierda : mueve la marca un dÌa hacia atr·s
 
-- tecla flecha derecha : mueve la marca un d√≠a hacia adelante
+- tecla flecha derecha : mueve la marca un dÌa hacia adelante
 
 Ir a una fecha determinada
 
 escriba g d
 
-escriba el a√±o (por defecto es el a√±o actual) y enter
+escriba el aÒo (por defecto es el aÒo actual) y enter
 
 escriba el mes y enter
 
-escriba el d√≠a y enter
+escriba el dÌa y enter
 
 Por semanas
 
-- tecla flecha arriba : mueve la marca una semana hacia atr√°s
+- tecla flecha arriba : mueve la marca una semana hacia atr·s
 
 - tecla flecha abajo : mueve la marca una semana hacia adelante
 
@@ -85,25 +85,25 @@ Por meses
 
 - M-} : mueve marca un mes hacia adelante
 
-- M-{ : mueve marca un mes hacia atr√°s
+- M-{ : mueve marca un mes hacia atr·s
 
 - M-a : mueve marca al comienzo del mes
 
 - M-e : mueve marca al final del mes
 
-Por a√±os
+Por aÒos
 
-- C-x ] : mueve marca un a√±o hacia adelante
+- C-x ] : mueve marca un aÒo hacia adelante
 
-- C-x [ : mueve marca un a√±o hacia atr√°s
+- C-x [ : mueve marca un aÒo hacia atr·s
 
-- M-< : mueve marca al comienzo del a√±o
+- M-< : mueve marca al comienzo del aÒo
 
-- M-> : mueve marca al final del a√±o
+- M-> : mueve marca al final del aÒo
 
 ------------------------------------------------------------------------------
 
-1.3 1 Modificar el d√≠a de comienzo de la semana
+1.3 1 Modificar el dÌa de comienzo de la semana
 
 ------------------------------------------------------------------------------
 
@@ -130,14 +130,14 @@ escriba q
 
 ------------------------------------------------------------------------------
 
-Por defecto tu diario se guardar√° en un archivo de diario (en tu directorio
+Por defecto tu diario se guardar· en un archivo de diario (en tu directorio
 personal)
 
 La ventana de calendario siempre es visible y accesible.
 
 Escriba C-x o (o, no cero) para cambiar entre el calendario y el diario
 
-Si prefieres el estilo europeo de escribir fechas ---- donde los d√≠as vienen
+Si prefieres el estilo europeo de escribir fechas ---- donde los dÌas vienen
 antes que el mes----
 
 escribe M-x european-calendar mientras te encuentras en el calendario.
@@ -158,19 +158,19 @@ Toda entrada del diario comienza con una fecha.
 
 i d : agrega una entrada al diario para la fecha seleccionada
 
-i w : agrega una entrada al diario para el d√≠a seleccionado de la semana
+i w : agrega una entrada al diario para el dÌa seleccionado de la semana
 
-i m : agrega una entrada al diario para el d√≠a seleccionado del mes
+i m : agrega una entrada al diario para el dÌa seleccionado del mes
 
-i y : agrega una entrada al diario para el d√≠a seleccionado del a√±o
+i y : agrega una entrada al diario para el dÌa seleccionado del aÒo
 
 i a : agrega una entrada de aniversario para la fecha seleccionada
 
-i b : agrega un diario de bloque a la regi√≥n actual para insertar una entrada
+i b : agrega un diario de bloque a la regiÛn actual para insertar una entrada
 de bloque, coloque punto y marca (con C-SPC ----SPC= barra espaciadora) en las
 dos fechas que comienzan y terminan, y escriba i b. <- REVISAR
 
-i c : agregar una entrada diaria c√≠clica comenzando en la fecha. El comando
+i c : agregar una entrada diaria cÌclica comenzando en la fecha. El comando
 pregunta por la longitud del intervalo <- REVISAR
 
 ------------------------------------------------------------------------------
@@ -185,11 +185,11 @@ s : despliega el archivo entero del diario
 
 ------------------------------------------------------------------------------
 
-3.Notificaci√≥n de cita
+3.NotificaciÛn de cita
 
 ------------------------------------------------------------------------------
 
-Para habilitar la notificaci√≥n de citas, debes agregar este texto a tu archivo
+Para habilitar la notificaciÛn de citas, debes agregar este texto a tu archivo
 .emacs (en tu directorio personal)
 
 ;; Calendar
@@ -201,24 +201,24 @@ Para habilitar la notificaci√≥n de citas, debes agregar este texto a tu archivo
 (diary 0)
 
 Cuando despliegas el diario (ya sea con el comando d en la ventana de
-calendario o con el comando M-x del diario), √©ste confecciona una lista con
-todas las entradas al diario que tengan una hora reconocible, y te recordar√°
+calendario o con el comando M-x del diario), Èste confecciona una lista con
+todas las entradas al diario que tengan una hora reconocible, y te recordar·
 cada una de ellas justo antes de que ocurran.
 
 Por ejemplo:
 
 9:20 Descanso
 
-Te recordar√° a las 9:20 tu descanso
+Te recordar· a las 9:20 tu descanso
 
-Tambi√©n puedes utilizar la notificaci√≥n de citas como un reloj alarma. El
+TambiÈn puedes utilizar la notificaciÛn de citas como un reloj alarma. El
 comando 'M-x app-add' agrega entradas a la lista de citas sin afectar tu
 archivo de diario. Puedes eliminar entradas de la lista de citas con 'M-x
 appt-delete'.
 
-¬øM√°s tipos de informaci√≥n? <- REVISAR
+øM·s tipos de informaciÛn? <- REVISAR
 
-Page g√©r√©e par PhpWiki, modifi√© pour le site Oralux. PhpWiki est sous licence
+Page gÈrÈe par PhpWiki, modifiÈ pour le site Oralux. PhpWiki est sous licence
 GPL.
 
   * [ En anglais |
@@ -226,13 +226,13 @@ GPL.
   * Accueil |
   * Documents |
   * Traduction |
-  * T√©l√©chargement |
+  * TÈlÈchargement |
   * Contactez nous ]
 
-[ Notre charte d'accessibilit√© ]
+[ Notre charte d'accessibilitÈ ]
 
 Copyright 2005, Association Oralux.org.
 
-La reproduction et la distribution de l'int√©gralit√© de cette page sont
-permises pour tout m√©dia √† condition de conserver cette note.
+La reproduction et la distribution de l'intÈgralitÈ de cette page sont
+permises pour tout mÈdia ‡ condition de conserver cette note.
 

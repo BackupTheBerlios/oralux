@@ -4,7 +4,7 @@ Verwende den Kalender um Deine Termine zu verwalten
 
 Der Kalender und die Terminverwaltung
 
-Von Sylvie Xhaard, Ãœbersetzt ins Deutsche von Peter Piechutzky
+Von Sylvie Xhaard, Übersetzt ins Deutsche von Peter Piechutzky
 
 Zur Verwendung mit Oralux Linux
 
@@ -24,13 +24,13 @@ Zur Verwendung mit Oralux Linux
 
 - Nach Jahren
 
-1.3 Ã„ndern des Anfrangstages einer Woche
+1.3 Ändern des Anfrangstages einer Woche
 
 1.4 Den Kalender beenden
 
 2. Der Terminplaner
 
-2.1 Befehle um Termine hinzuzufÃ¼gen
+2.1 Befehle um Termine hinzuzufügen
 
 2.2 Befehle um Termine anzuzeigen
 
@@ -58,23 +58,23 @@ Der Kalender zeigt eine Dreimonatsansicht, der aktuelle Monat in der Mitte und e
 
 Nach Tagen
 
-- linke Pfeiltaste : bewege punkt einen Tag zurÃ¼ck
+- linke Pfeiltaste : bewege punkt einen Tag zurück
 
-- rechte Pfeiltaste : bewege Punkt einen Tag vorwÃ¤rts
+- rechte Pfeiltaste : bewege Punkt einen Tag vorwärts
 
 Gehe zu einem Datum
 
 schreibe g d
 
-schreibe das Jahr ( als standard ist das aktuelle Jahr vorgegeben) und drÃ¼cke Eingabe
+schreibe das Jahr ( als standard ist das aktuelle Jahr vorgegeben) und drücke Eingabe
 
-schreibe den Monat and drÃ¼cke Eingabe
+schreibe den Monat and drücke Eingabe
 
-Schreibe den Tag und drÃ¼cke Eingabe
+Schreibe den Tag und drücke Eingabe
 
 Nach Wochen
 
-- Pfeiltaste nach oben : bewege Punkt eine Woche zurÃ¼ck
+- Pfeiltaste nach oben : bewege Punkt eine Woche zurück
 
 - Pfeiltaste nach unten : bewege Punkt eine Woche vor
 
@@ -82,7 +82,7 @@ Nach Monaten
 
 - M-} : bewege Punkt einen Monat vor
 
-- M-{ : bewege Punkt einen Monat zurÃ¼ck
+- M-{ : bewege Punkt einen Monat zurück
 
 - M-a : bewege Punkt zum Anfang des Monats
 
@@ -92,7 +92,7 @@ Nach Jahren
 
 - C-x ] : bewege Punkt ein Jahr vor
 
-- C-x [ : bewege Punkt ein Jahr zurÃ¼ck
+- C-x [ : bewege Punkt ein Jahr zurück
 
 - M-< : bewege Punkt zum Anfang des Jahrs
 
@@ -100,7 +100,7 @@ Nach Jahren
 
 ------------------------------------------------------------------------------------------------------------------------------
 
-1.3 1 Ã„ndern des Anfrangstages einer Woche
+1.3 1 Ändern des Anfrangstages einer Woche
 
 ------------------------------------------------------------------------------------------------------------------------------
 
@@ -129,19 +129,19 @@ schreibe q
 
 In der Standardeinstellung wird der Terminplan im Home Verzeichnis gespeichert.
 
-Das Kalender Fenster ist immer sicht- und verfÃ¼gbar.
+Das Kalender Fenster ist immer sicht- und verfügbar.
 
 Schreibe C-x o (o nicht null) zum wechseln zwischen Kalender und Terminplan
 
-Wenn Du den EuropÃ¤ischen Stil das Datum zu schreiben vorziehst ---- bei der die Tage vor dem Monat kommen----
+Wenn Du den Europäischen Stil das Datum zu schreiben vorziehst ---- bei der die Tage vor dem Monat kommen----
 
-schreibe M-x european-calendar wÃ¤hrend im Kalender.
+schreibe M-x european-calendar während im Kalender.
 
-Wenn Du Zeiten hinzufÃ¼gen mÃ¶chtest, scheibe Zeiten in am/pm oder 24 Stunden europÃ¤isch/militÃ¤rischem Stil.
+Wenn Du Zeiten hinzufügen möchtest, scheibe Zeiten in am/pm oder 24 Stunden europäisch/militärischem Stil.
 
 ------------------------------------------------------------------------------------------------------------------------------
 
-2.1 Befehle um Termine hinzuzufÃ¼gen
+2.1 Befehle um Termine hinzuzufügen
 
 ------------------------------------------------------------------------------------------------------------------------------
 
@@ -149,20 +149,20 @@ Wenn Du Dich im Kalender befindest gibt es einige Befehle um Termine einzutragen
 
 Alle Termine beginnen mit einem Datum
 
-i d : FÃ¼ge Termin fÃ¼r das ausgewÃ¤hlte Datum hinzu
+i d : Füge Termin für das ausgewählte Datum hinzu
 
-i w : FÃ¼ge Termin fÃ¼r den ausgewÃ¤hlten Wochentag hinzu
+i w : Füge Termin für den ausgewählten Wochentag hinzu
 
-i m : FÃ¼ge Termin fÃ¼r den ausgewÃ¤hlten Tag des Monats hinzu
+i m : Füge Termin für den ausgewählten Tag des Monats hinzu
 
-i y : FÃ¼ge Termin fÃ¼r den ausgewÃ¤hlten Tag des Jahres hinzu
+i y : Füge Termin für den ausgewählten Tag des Jahres hinzu
 
-i a : FÃ¼ge Wiederkehrenden Termin (Geburtstag) fÃ¼r das ausgewÃ¤hlte Datum hinzu
+i a : Füge Wiederkehrenden Termin (Geburtstag) für das ausgewählte Datum hinzu
 
-i b : fÃ¼ge ein Block Eintrag fÃ¼r den aktuellen Bereich hinzu stelle den Punkt auf das Anfangs- und den Zeiger auf das Enddatum
+i b : füge ein Block Eintrag für den aktuellen Bereich hinzu stelle den Punkt auf das Anfangs- und den Zeiger auf das Enddatum
 (mit C-Leertaste) und tippe i b.
 
-i c : fÃ¼ge ein zyklischen Eintrag beginnend am Starttag fÃ¼r die LÃ¤nge des Intervalls ein.
+i c : füge ein zyklischen Eintrag beginnend am Starttag für die Länge des Intervalls ein.
 
 ------------------------------------------------------------------------------------------------------------------------------
 
@@ -170,7 +170,7 @@ i c : fÃ¼ge ein zyklischen Eintrag beginnend am Starttag fÃ¼r die LÃ¤nge des Int
 
 ------------------------------------------------------------------------------------------------------------------------------
 
-d : Alle Termine fÃ¼r das ausgewÃ¤hlte Datum anzeigen
+d : Alle Termine für das ausgewählte Datum anzeigen
 
 s : Alle Termine im Terminplaner anzeigen
 
@@ -180,8 +180,8 @@ s : Alle Termine im Terminplaner anzeigen
 
 ------------------------------------------------------------------------------------------------------------------------------
 
-Um Benachrichtigungen bei Terminen zu erhalten, musst Du nachfolgenden text zur .emacs Datei (im persÃ¶nlichen Verzeichnis)
-hinzufÃ¼gen
+Um Benachrichtigungen bei Terminen zu erhalten, musst Du nachfolgenden text zur .emacs Datei (im persönlichen Verzeichnis)
+hinzufügen
 
 ;; Calendar
 
@@ -191,8 +191,8 @@ hinzufÃ¼gen
 
 (diary 0)
 
-Wenn Du den Terminplan anzeigen lÃ¤sst (entweder mit dem Befehl d im Kalender Fenster oder mit dem M-x Terminplaner Befehl)
-stellt es eine Terminliste zusammen mit allen gÃ¼ltigen TermineintrÃ¤gen und benachrichtigt Dich unmittelbar vor jedem Termin.
+Wenn Du den Terminplan anzeigen lässt (entweder mit dem Befehl d im Kalender Fenster oder mit dem M-x Terminplaner Befehl)
+stellt es eine Terminliste zusammen mit allen gültigen Termineinträgen und benachrichtigt Dich unmittelbar vor jedem Termin.
 
 Zum Beispiel:
 
@@ -200,8 +200,8 @@ Zum Beispiel:
 
 Um 9:20 wirst Du an die Kaffeepause erinnert.
 
-Du kannst die Benachrichtigungsfunktion auch als Wecker verwenden. Der Befehl 'M-x appt-add' fÃ¼gt EintrÃ¤ge zur
-Benachrichtigungsliste hinzu ohne den Terminplan zu beeinflussen. Mit dem Befehl 'M-x appt-delete' kÃ¶nnen Benachrichtigungen
-gelÃ¶scht werden.
+Du kannst die Benachrichtigungsfunktion auch als Wecker verwenden. Der Befehl 'M-x appt-add' fügt Einträge zur
+Benachrichtigungsliste hinzu ohne den Terminplan zu beeinflussen. Mit dem Befehl 'M-x appt-delete' können Benachrichtigungen
+gelöscht werden.
 
-FÃ¼r weitere Informationen drÃ¼cke ?
+Für weitere Informationen drücke ?

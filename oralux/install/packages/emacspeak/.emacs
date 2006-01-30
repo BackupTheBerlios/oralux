@@ -51,16 +51,7 @@
   
   ;; The default speech rate is lowered
   ;;(dtk-set-rate 135 t)
-  
-  ;; Selecting the default language (temporary name) for EFM
-  (fst-set-language 
-   (cond (
-	  (string-match "^fr" (getenv "LANGUAGE"))
-	  "french")
-	 (t "english")
-	 )
-   )
-)
+  )
 
 
 ;; Useful for Mail too
@@ -139,19 +130,19 @@
 (setq load-path (cons "~/.emacs.d" load-path)) 
 ;;(require 'php-mode)
 
-(cond (
-       (string-match "ru" (getenv "LANGUAGE"))
-       (load-file "~/.emacs.d/Russian.el")
-       (print "Russian environment")
-       )
-      (t 
-       (set-language-environment 'latin-1)
-       (set-terminal-coding-system 'latin-1)
-       (set-keyboard-coding-system 'iso-latin-1)
-       (setq default-buffer-file-coding-system 'iso-latin-1)
-       (print "Latin-1 environment")
-       )
-      )
+;; (cond (
+;;        (string-match "ru" (getenv "LANGUAGE"))
+;;        (load-file "~/.emacs.d/Russian.el")
+;;        (print "Russian environment")
+;;        )
+;;       (t 
+(set-language-environment 'latin-1)
+(set-terminal-coding-system 'latin-1)
+(set-keyboard-coding-system 'iso-latin-1)
+(setq default-buffer-file-coding-system 'iso-latin-1)
+(print "Latin-1 environment")
+;;        )
+;;       )
 
 (custom-set-variables
   ;; custom-set-variables was added by Custom -- don't edit or cut/paste it!

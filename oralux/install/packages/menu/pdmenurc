@@ -4,7 +4,7 @@ preproc:echo menu:main:minimenu
 
 preproc:\
 	case "$LANGUAGE" in \
-	br) echo "exec:YASR documentation::ne /usr/share/oralux/doc/Yasr/br/README.oralux";; \
+	pt_BR) echo "exec:YASR documentation::ne /usr/share/oralux/doc/Yasr/pt_BR/README.oralux";; \
 	es) echo "exec:YASR documentation::ne /usr/share/oralux/doc/Yasr/es/README.oralux";; \
 	fr) echo "exec:YASR documentation::ne /usr/share/oralux/doc/Yasr/fr/README.oralux";; \
 	ru) echo "exec:YASR documentation::ne /usr/share/oralux/doc/Yasr/ru/README.oralux";; \
@@ -32,7 +32,7 @@ preproc:\
 	de) echo "exec:play a game\: adventure::/usr/games/frotz /usr/share/oralux/install/packages/games/de/abent.z5";; \
 	es) echo "exec:play a game\: Aventura::/usr/games/frotz /usr/share/oralux/install/packages/games/es/AVENTURA.Z5";; \
 	fr) echo "exec:Jeu \: filaments::/usr/games/frotz /usr/share/oralux/install/packages/games/fr/filaments.z8"; echo "exec:Jeu \: aventure::/usr/games/frotz /usr/share/oralux/install/packages/games/fr/aventure.z5";; \
-	*) echo "exec:play a game\: adventure (in English)::/usr/games/frotz /usr/share/oralux/install/packages/games/adventure/Advent.z5";; \
+	*) echo "exec:play a game\: adventure (in English)::/usr/games/frotz /usr/share/oralux/install/packages/games/en/Advent.z5";; \
 	esac
 
 	exec:Drop to a shell::echo "When you're done, type 'exit' to return to the menu.";/bin/sh -login

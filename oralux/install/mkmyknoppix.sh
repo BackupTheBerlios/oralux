@@ -162,12 +162,6 @@ rm_tmp() {
 ####
 remove_unused_packages() {
 
-if [ -f $BUILD/etc/resolv.conf ]; then
-    cp -L $BUILD/etc/resolv.conf $BUILD/etc/resolv.conf.sav
-    rm $BUILD/etc/resolv.conf
-fi
-
-cp -L /etc/resolv.conf $BUILD/etc/resolv.conf
 echo "if this script exits, just run it once again and skip this stage" 
 
 chroot $BUILD apt-get update
@@ -195,8 +189,6 @@ chroot $BUILD apt-get update
 
     chroot $BUILD bash -c "COLUMNS=200 dpkg -l | grep ^rc | awk '{print $2} ' | xargs dpkg -P"
     chroot $BUILD bash -c "deborphan | xargs dpkg -P"
-
-    mv $BUILD/etc/resolv.conf.sav $BUILD/etc/resolv.conf
 }
 
 ####
@@ -355,6 +347,9 @@ fi
 chmod +x $INSTALL_PACKAGES/*.sh
 
 set -e
+
+cp -L /etc/resolv.conf $BUILD/etc/resolv.conf
+
 next_step cleartmp "Clear the $NEW_ORALUX directory and temporary files ?"
 next_step knoppixCD2iso "Make a KNOPPIX CD ISO image from the KNOPPIX CDROM?"
 next_step knoppixCDiso2iso "Extract and Make the ISO from the KNOPPIX CD ISO image?"
@@ -373,6 +368,8 @@ next_step create_new_iso "Creating ISO image for new Oralux?"
 next_step cd_info "Scan bus about your CD recorder?"
 next_step cd_erase "Erase CD?"
 next_step cd_burn "Burn CD?"
+
+echo > $BUILD/etc/resolv.conf
 
 echo "You can save disk space by removeing big directories:"
 echo "rm -rf $NEW_ORALUX"

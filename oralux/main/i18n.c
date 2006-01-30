@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // i18n.c
-// $Id: i18n.c,v 1.6 2005/12/05 00:40:56 gcasse Exp $
+// $Id: i18n.c,v 1.7 2006/01/30 22:49:38 gcasse Exp $
 // $Author: gcasse $
 // Description: Internationalization. 
-// $Date: 2005/12/05 00:40:56 $ |
-// $Revision: 1.6 $ |
+// $Date: 2006/01/30 22:49:38 $ |
+// $Revision: 1.7 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -113,7 +113,7 @@ static IDLABEL TheSpokenLanguage[]={
   {English,
    "us"},
   {Brazilian,
-   "br"},
+   "pt_BR"},
   {French,
    "fr"},
   {German,
@@ -326,9 +326,9 @@ void getLanguageVariable( enum language theWishedLanguage,
     {
     case Brazilian:
       *theCharset="iso8859-1";
-      *theCountry="br";
-      *theLang="br";
-      *theLanguage="br";
+      *theCountry="pt_BR";
+      *theLang="pt_BR";
+      *theLanguage="pt_BR";
       break;
 
     case French:

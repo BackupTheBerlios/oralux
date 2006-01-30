@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # misc.sh
-# $Id: misc.sh,v 1.15 2006/01/28 23:09:21 gcasse Exp $
+# $Id: misc.sh,v 1.16 2006/01/30 22:49:38 gcasse Exp $
 # $Author: gcasse $
 # Description: Miscellaneous packages
-# $Date: 2006/01/28 23:09:21 $ |
-# $Revision: 1.15 $ |
+# $Date: 2006/01/30 22:49:38 $ |
+# $Revision: 1.16 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -26,8 +26,8 @@
 source ../oralux.conf
 
 export LIST="alsa-utils angband-doc angband audacity aumix bsdgames catdoc \
-aspell-de aspell-en aspell-es aspell-fr aspell-pt-br \
-ecasound elinks erc frotz gobjc lynx \
+aspell-de aspell-en aspell-es aspell-fr aspell-pt-br aspell-pt \
+dosemu-freedos ecasound elinks erc frotz gobjc lynx \
 manpages manpages-de manpages-es manpages-fr manpages-pt manpages-ru \
 nano ne nethack-console nethack pdftohtml \
 ppthtml python qalc tcsh toolame \
@@ -59,6 +59,9 @@ update-rc.d -f exim4 remove
 # Adding the package to the new Oralux tree
 Copy2Oralux()
 {
+    chroot $BUILD bash -c "apt-get install aspell-pt dosemu-freedos"
+
+
     chroot $BUILD bash -c "apt-get install $LIST"
     chroot $BUILD bash -c "apt-get install cdtool; cd /usr/bin; ln -s ./cdtool cdstart"
 

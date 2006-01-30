@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # end.sh
-# $Id: end.sh,v 1.8 2006/01/28 23:09:21 gcasse Exp $
+# $Id: end.sh,v 1.9 2006/01/30 22:49:38 gcasse Exp $
 # $Author: gcasse $
 # Description: This script must be the last one to call
-# $Date: 2006/01/28 23:09:21 $ |
-# $Revision: 1.8 $ |
+# $Date: 2006/01/30 22:49:38 $ |
+# $Revision: 1.9 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -96,7 +96,8 @@ Copy2Oralux()
     echo "if [ ! -d \$HOME/.ne ]; then" >> $BUILD/etc/profile
     echo "mkdir \$HOME/.ne" >> $BUILD/etc/profile
     echo "chmod 700 \$HOME/.ne" >> $BUILD/etc/profile
-    echo "cp /usr/share/oralux/install/packages/ne/.default\#ap \$HOME/.ne" >> $BUILD/etc/profile
+    # defaultDap instead of default#ap since mkisofs -no-bak removes it.
+    echo "cp /usr/share/oralux/install/packages/ne/.defaultDap \$HOME/.ne/.default\#ap" >> $BUILD/etc/profile
     echo "fi" >> $BUILD/etc/profile
 
     echo "alias ..='cd ..'" >> $BUILD/etc/profile
@@ -137,6 +138,7 @@ Copy2Oralux()
     cd $ORALUX/doc/htm
     tar --dereference --exclude CVS --exclude "*.sav" --exclude "*~" -cf - * | tar -C $NEW_ORALUX/KNOPPIX -xf -
 
+    cp $ORALUX/MBROLA.htm $NEW_ORALUX/KNOPPIX
 }
 
 case $1 in

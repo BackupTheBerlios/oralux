@@ -4,12 +4,12 @@ Meine ersten Schritte in GNU/Emacs.
 
 Von Sylvie Xhaard
 
-FÃ¼r den gebrauch von Oralux Linux
+Für den gebrauch von Oralux Linux
 
-"Es ist nicht offensichtlich, aber nicht unÃ¼berwindlich."
+"Es ist nicht offensichtlich, aber nicht unüberwindlich."
 
 1 Grundbefehle 
-2 Ã–ffnen oder neue Datei erstellen 
+2 Öffnen oder neue Datei erstellen 
 3 Dateien Speichern 
 4 Schreiben in Emacs
 4.1 Im Dokument navigieren 
@@ -19,11 +19,11 @@ FÃ¼r den gebrauch von Oralux Linux
 8 Beenden
 
 Beim Start von Emacspeak wird automatisch ein Hilfepuffer geladen mit Emacs and Emacs Speak. Speichern Sie Ihre
-Benutzereinstellungen und speichern Sie Ihre Dokumente wie in den FAQ beschrieben. Siehe springt zum nÃ¤chsten Absatz.
+Benutzereinstellungen und speichern Sie Ihre Dokumente wie in den FAQ beschrieben. Siehe springt zum nächsten Absatz.
 
-C- x [ blÃ¤ttert eine Seite zurÃ¼ck.
+C- x [ blättert eine Seite zurück.
 
-C- x ] BlÃ¤ttert auf die nÃ¤chste Seite.
+C- x ] Blättert auf die nächste Seite.
 
 Esc < Springt an den Anfang des Puffers.
 
@@ -37,7 +37,7 @@ Esc > Springt ans Ende des Puffers.
 
 You opened and or created several files and you want to go from one to the other. No problem. Type C-x b
 
-By dÃ©fault, if you press the Enter key, you turn to the last open buffer.
+By défault, if you press the Enter key, you turn to the last open buffer.
 
 If you want to open another buffer, type its name, or simply the first letter and press the tabulation key (the name of your
 buffer appears automatically).

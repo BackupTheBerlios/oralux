@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # multispeech.sh
-# $Id: multispeech.sh,v 1.13 2006/01/28 23:09:21 gcasse Exp $
+# $Id: multispeech.sh,v 1.14 2006/01/30 22:49:38 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing Multispeech.
-# $Date: 2006/01/28 23:09:21 $ |
-# $Revision: 1.13 $ |
+# $Date: 2006/01/30 22:49:38 $ |
+# $Revision: 1.14 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -27,7 +27,7 @@ set -vx
 source ../oralux.conf
 
 export RULEX_RELEASE=1.0
-export MULTISPEECH_RELEASE=oralux-2006-01-28
+export MULTISPEECH_RELEASE=oralux-2006-01-29
 export ARCH_RULEX=$ARCH/rulex-$RULEX_RELEASE.tar.gz 
 export ARCH_MULTISPEECH_SRC=$ARCH/multispeech-$MULTISPEECH_RELEASE.tar.bz2
 #export ARCH_RU_TTS=$ARCH/ru_tts.bz2
@@ -101,16 +101,16 @@ InstallPackage()
     install -d $LIB/players
     install -d $LIB/tts
 
-    for i in br de en es fr ru; do
+    for i in pt_BR de en es fr ru; do
 	install -d $LIB/letters/$i
 	install -m 444 $SRC/letters/$i/* $LIB/letters/$i
 	install -m 555 $SRC/scripts/players/$i $LIB/players
 	install -m 555 $SRC/scripts/tts/$i $LIB/tts
     done
     
-    install -m 555 $SRC/binaries/speech_server $LIB
-    install -m 555 $SRC/binaries/freephone $BIN
-    install -m 555 $SRC/binaries/tones $BIN
+    install -m 555 $SRC/src/multilingual/speech_server $LIB
+    install -m 555 $SRC/src/freephone/freephone $BIN
+    install -m 555 $SRC/src/tones/tones $BIN
 
 # Clear temporary files
 #    rm -rf $TMP/multispeech-$MULTISPEECH_RELEASE
@@ -174,16 +174,16 @@ Copy2Oralux()
     install -d $LIB/players
     install -d $LIB/tts
 
-    for i in br de en es fr ru; do
+    for i in pt_BR de en es fr ru; do
 	install -d $LIB/letters/$i
 	install -m 444 $SRC/letters/$i/* $LIB/letters/$i
 	install -m 555 $SRC/scripts/players/$i $LIB/players
 	install -m 555 $SRC/scripts/tts/$i $LIB/tts
     done
 
-    install -m 555 $SRC/binaries/speech_server $LIB
-    install -m 555 $SRC/binaries/freephone $BIN
-    install -m 555 $SRC/binaries/tones $BIN
+    install -m 555 $SRC/src/multilingual/speech_server $LIB
+    install -m 555 $SRC/src/freephone/freephone $BIN
+    install -m 555 $SRC/src/tones/tones $BIN
 
 # Clear temporary files
 #    rm -rf $SRC/multispeech-$MULTISPEECH_RELEASE

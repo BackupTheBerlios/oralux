@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # general.sh
-# $Id: general.sh,v 1.5 2006/01/28 23:09:21 gcasse Exp $
+# $Id: general.sh,v 1.6 2006/01/30 22:49:38 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing general information
-# $Date: 2006/01/28 23:09:21 $ |
-# $Revision: 1.5 $ |
+# $Date: 2006/01/30 22:49:38 $ |
+# $Revision: 1.6 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -40,7 +40,7 @@ Copy2Oralux()
    cd $INSTALL_PACKAGES/knoppix
    install -m 755 knoppix-autoconfig $BUILD/etc/init.d
    install -m 755 saveconfig knoppix-image knoppix-mkimage $BUILD/usr/sbin
-   install -m 644 inittab $BUILD/usr/sbin
+   install -m 644 inittab $BUILD/etc
    install -m 444 minirt.gz $NEW_ORALUX/boot/isolinux 
 
    cd $INSTALL_PACKAGES
