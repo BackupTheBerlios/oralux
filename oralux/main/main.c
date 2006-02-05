@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // main.c
-// $Id: main.c,v 1.12 2006/01/23 22:10:42 gcasse Exp $
+// $Id: main.c,v 1.13 2006/02/05 00:42:15 gcasse Exp $
 // $Author: gcasse $
 // Description: entry point. 
-// $Date: 2006/01/23 22:10:42 $ |
-// $Revision: 1.12 $ |
+// $Date: 2006/02/05 00:42:15 $ |
+// $Revision: 1.13 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -88,7 +88,8 @@ void buildConfiguration(struct menuInfo* theSelectedInfo, int theConfHasBeenUpda
 	     theSelectedInfo->myTextToSpeech, 
 	     theSelectedInfo->myKeyboard,
 	     theSelectedInfo->myKeyboardFeatures,
-	     theSelectedInfo->myDesktop);
+	     theSelectedInfo->myDesktop,
+	     theSelectedInfo->myUserConfIsKnown);
 }
 
 
@@ -188,10 +189,17 @@ int main(int argc, char *argv[])
       aEnumMenuLanguage=getEnumLanguage(aStringMenuLanguage);
     }
 
+  char* aStringUserConfIsKnown=getConf("ORALUXUSERCONF", "/etc/sysconfig/knoppix");
+  int aUserConf=0;
+  if (aStringUserConfIsKnown!=NULL)
+    {
+      aUserConf=getIntBoolean(aStringUserConfIsKnown);
+    }
   // Which is the default keyboard
   char* aStringKeytable=getConf("KEYTABLE", "/etc/sysconfig/knoppix");
   enum keyboard aEnumKeytable=americanKeyboard;
-  if (aStringKeytable!=NULL)
+
+  if (aStringKeytable)
     {
       aEnumKeytable=getEnumKeyboard(aStringKeytable);
     }
@@ -259,6 +267,8 @@ int main(int argc, char *argv[])
   aSelectedInfo.myTextToSpeech.myLanguage=aEnumLanguage;
   aSelectedInfo.myTextToSpeech.myPort=aEnumPort;
   aSelectedInfo.myDesktop=aEnumDesktop;
+
+  aSelectedInfo.myUserConfIsKnown=aUserConf;
 
   // If an external synthesizer is forced, the sound card is not used (useful when the auto detection failed)
 

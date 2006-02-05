@@ -7,6 +7,10 @@ export DTK_PORT=$EMACSPEAKTTSPORT
 unset DTK_TCL
 
 case $EMACSPEAKTTS in
+Cicero )
+  export DTK_PROGRAM=cicero
+  unset DTK_PORT;;
+
 DECtalk )
   export DTK_PROGRAM=dtk-soft
   unset DTK_PORT;;

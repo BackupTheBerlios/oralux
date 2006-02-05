@@ -13,6 +13,6 @@ enum desktopIdentifier
 enum desktopIdentifier getEnumDesktop(char* theDesktop);
 char* desktopGetString( enum desktopIdentifier theValue);
 enum sentence desktopGetSentence( enum desktopIdentifier theValue);
-void setDesktop(enum desktopIdentifier *theDesktop);
+int setDesktop(enum desktopIdentifier *theDesktop);
 
 #endif

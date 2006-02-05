@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // menu.c
-// $Id: menu.c,v 1.13 2006/01/22 15:19:45 gcasse Exp $
+// $Id: menu.c,v 1.14 2006/02/05 00:42:15 gcasse Exp $
 // $Author: gcasse $
 // Description: introductory menu. 
-// $Date: 2006/01/22 15:19:45 $ |
-// $Revision: 1.13 $ |
+// $Date: 2006/02/05 00:42:15 $ |
+// $Revision: 1.14 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -272,7 +272,7 @@ static void setVolume()
 /* > */
 /* < setMenuLanguage */
 
-static enum language setMenuLanguage(enum language theDefaultLanguage)
+static int setMenuLanguage(enum language *theLanguage)
 {
   ENTER("setMenuLanguage");
   static int aMenu[] = {
@@ -283,9 +283,17 @@ static enum language setMenuLanguage(enum language theDefaultLanguage)
     MenuInBrazilian,
     MenuInRussian,
   }; // Index= enum language
-  enum language aLanguage=theDefaultLanguage;
   int aLanguageRequest=1;
   int aLanguageMax=sizeof(aMenu)/sizeof(aMenu[0]);
+  enum language aLanguage=English;
+  int aMenuIsModified=0;
+  
+  if (!theLanguage)
+    {
+      return aMenuIsModified;
+    }
+
+  aLanguage = *theLanguage;
 
   setLanguage( aLanguage);
   say( aMenu[ aLanguage]);
@@ -327,7 +335,11 @@ static enum language setMenuLanguage(enum language theDefaultLanguage)
 	  break;
       }
   }
-  return aLanguage;
+  
+  aMenuIsModified = (aLanguage != *theLanguage);
+  *theLanguage = aLanguage;
+
+  return aMenuIsModified;
 }
 
 /* > */
@@ -363,7 +375,7 @@ void setInternet( struct menuInfo* theSelectedInfo)
 
 // TheKeyboards: an array useful to sort the keybord labels in alphabetical order (depends on the current language).
 static enum keyboard TheKeyboards[MaxKeyboard];
-static enum language TheLanguageForSorting=MenuLanguageMax;
+static enum language TheLanguageForSorting=SynthesisLanguageMax;
 
 int sortKeyboardMessages( const void* theKeyboard_A, const void* theKeyboard_B)
 {
@@ -383,14 +395,36 @@ int sortKeyboardMessages( const void* theKeyboard_A, const void* theKeyboard_B)
   return strcmp( aMessage_A, aMessage_B);
 } 
 
-static enum keyboard setKeyboard(enum keyboard theDefaultKeyboard, enum language theCurrentLanguage)
+static void loadkeys( enum keyboard theKeyboard)
+{
+  char* aKeyTable=NULL;
+  char* aXKeyboard=NULL;
+  getStringKeyboard(theKeyboard, &aKeyTable, &aXKeyboard);
+
+  if (aKeyTable)
+    {
+      sprintf( TheLine, "loadkeys %s", aKeyTable);
+      system( TheLine);
+    }
+}
+
+static int setKeyboard(enum keyboard *theKeyboard, enum language theCurrentLanguage)
 {
   ENTER("setKeyboard");
   int aKeyboardRequest=1;
   int i=0;
+  enum keyboard aKeyboard;
+  int aKeyboardIsChanged=0;
+
+  if (!theKeyboard)
+    {
+      return 0;
+    }
+
+  aKeyboard = *theKeyboard;
 
   say( keyboardIs);
-  say( theDefaultKeyboard);
+  say( aKeyboard);
 
   say( changeKeyboard);
   say( PleasePressKey);
@@ -417,10 +451,10 @@ static enum keyboard setKeyboard(enum keyboard theDefaultKeyboard, enum language
       TheLanguageForSorting = theCurrentLanguage;
     }
 
-  // Looking for the index which matches theDefaultKeyboard
+  // Looking for the index which matches aKeyboard
   for (i=0; i<MaxKeyboard; i++)
     {
-      if (TheKeyboards[i] == theDefaultKeyboard)
+      if (TheKeyboards[i] == aKeyboard)
 	{
 	  break;
 	}
@@ -429,12 +463,11 @@ static enum keyboard setKeyboard(enum keyboard theDefaultKeyboard, enum language
   if (i >= MaxKeyboard)
     {
       SHOW("Keyboard: Unexpected value");
-      return theDefaultKeyboard;
+      return 0;
     }
 
   while( aKeyboardRequest)
   {
-
     say( TheKeyboards[i]); // works because the enum values are the same!
 
     switch(getAnswer())
@@ -453,27 +486,27 @@ static enum keyboard setKeyboard(enum keyboard theDefaultKeyboard, enum language
       }
   }
 
-  char* aKeyTable=NULL;
-  char* aXKeyboard=NULL;
-  getStringKeyboard(TheKeyboards[i], &aKeyTable, &aXKeyboard);
-
-  if (aKeyTable)
-    {
-      sprintf( TheLine, "loadkeys %s", aKeyTable);
-      system( TheLine);
-    }
-  return TheKeyboards[i];
+  aKeyboardIsChanged = (TheKeyboards[i] != *theKeyboard);
+  *theKeyboard = TheKeyboards[i];
+  return aKeyboardIsChanged;
 }
 
 /* > */
 /* < setKeyboardFeatures */
 
-static void setKeyboardFeatures(struct keyboardStruct * theKeyboardFeatures)
+static int setKeyboardFeatures(struct keyboardStruct * theKeyboardFeatures)
 {
   ENTER("setKeyboardFeatures");
   int aKeyboardRequest=1;
   int aStickyKeyStage=1;
+  struct keyboardStruct aOldKeyboardFeatures;
 
+  if (!theKeyboardFeatures)
+    {
+      return 0;
+    }
+
+  memcpy(&aOldKeyboardFeatures, theKeyboardFeatures, sizeof(struct keyboardStruct));
 
   say( changeKeyboardFeatures);
   say( PleasePressKey);
@@ -519,7 +552,6 @@ static void setKeyboardFeatures(struct keyboardStruct * theKeyboardFeatures)
       }
     else
       {
-
 	if (theKeyboardFeatures->myRepeatKeysAreAvailable)
 	  {
 	    say( repeatKey);
@@ -551,6 +583,7 @@ static void setKeyboardFeatures(struct keyboardStruct * theKeyboardFeatures)
 	  }
       }
   }
+  return (0 != memcmp(&aOldKeyboardFeatures, theKeyboardFeatures, sizeof(struct keyboardStruct)));
 }
 
 /* > */
@@ -650,14 +683,14 @@ void saveconfig( struct menuInfo* theSelectedInfo)
   buildConfigurationYasr(&(theSelectedInfo->myTextToSpeech));
   
   char* aCommand=TheLine;
-  sprintf(aCommand, "oralux-dialog.sh 1;/usr/sbin/saveconfig;oralux-dialog.sh 0");
+  //  sprintf(aCommand, "/usr/sbin/saveconfig");
+  sprintf(aCommand, "/usr/sbin/knoppix-mkimage");
 	    
   runYasr( &(theSelectedInfo->myTextToSpeech), 
 	   theSelectedInfo->myMenuLanguage, 
 	   aCommand);
 }
 /* > */
-
 
 /* < menu */
 enum MENU_State {
@@ -678,6 +711,12 @@ void menu(struct menuInfo* theSelectedInfo, int *theConfHasBeenUpdated)
   ENTER("menu");
   enum MENU_State aMenuState=MENU_Volume;
   struct menuInfo aOldInfo;
+  
+  if (!theSelectedInfo || !theConfHasBeenUpdated)
+    {
+      return;
+    }
+
   memcpy( &aOldInfo, theSelectedInfo, sizeof(struct menuInfo));
 
   if (mustSetPreferences())
@@ -706,24 +745,57 @@ void menu(struct menuInfo* theSelectedInfo, int *theConfHasBeenUpdated)
 	  break;
 
 	case MENU_Language:
-	  theSelectedInfo->myMenuLanguage = setMenuLanguage(theSelectedInfo->myMenuLanguage);
+	  if (setMenuLanguage( &theSelectedInfo->myMenuLanguage))
+	    {
+	      theSelectedInfo->myUserConfIsKnown=1;
+	      if (!aOldInfo.myUserConfIsKnown)
+		{ /* The default keyboard must match the selected language */
+		  theSelectedInfo->myKeyboard = getProbableKeyboard(theSelectedInfo->myMenuLanguage);
+		  loadkeys( theSelectedInfo->myKeyboard);
+		}
+
+	      buildI18n( theSelectedInfo->myMenuLanguage, 
+			 theSelectedInfo->myTextToSpeech, 
+			 theSelectedInfo->myKeyboard,
+			 theSelectedInfo->myKeyboardFeatures,
+			 theSelectedInfo->myDesktop,
+			 theSelectedInfo->myUserConfIsKnown);
+	    }
 	  aMenuState = (GNC_UpArrowKey == getLastKeyPressed()) ? MENU_Volume : MENU_Keyboard;
 	  break;
 
 	case MENU_Keyboard:
-	  theSelectedInfo->myKeyboard = setKeyboard(theSelectedInfo->myKeyboard, theSelectedInfo->myMenuLanguage);
-	  // The keyboard is available as soon as it is selected.
-	  buildI18n( theSelectedInfo->myMenuLanguage, 
-		     theSelectedInfo->myTextToSpeech, 
-		     theSelectedInfo->myKeyboard,
-		     theSelectedInfo->myKeyboardFeatures,
-		     theSelectedInfo->myDesktop);
+	  {
+	    if(setKeyboard(&theSelectedInfo->myKeyboard, 
+			   theSelectedInfo->myMenuLanguage))
+	      {
+		theSelectedInfo->myUserConfIsKnown=1;
 
-	  aMenuState = (GNC_UpArrowKey == getLastKeyPressed()) ? MENU_Language : MENU_KeyboardFeatures;	  
+		// The keyboard is available as soon as it is selected.
+		loadkeys( theSelectedInfo->myKeyboard);
+
+		buildI18n( theSelectedInfo->myMenuLanguage, 
+			   theSelectedInfo->myTextToSpeech, 
+			   theSelectedInfo->myKeyboard,
+			   theSelectedInfo->myKeyboardFeatures,
+			   theSelectedInfo->myDesktop,
+			   theSelectedInfo->myUserConfIsKnown);
+	      }
+	    aMenuState = (GNC_UpArrowKey == getLastKeyPressed()) ? MENU_Language : MENU_KeyboardFeatures;	  
+	  }
 	  break;
 
 	case MENU_KeyboardFeatures:
-	  setKeyboardFeatures(& theSelectedInfo->myKeyboardFeatures);
+	  if (setKeyboardFeatures(& theSelectedInfo->myKeyboardFeatures))
+	    {
+	      theSelectedInfo->myUserConfIsKnown=1;
+	      buildI18n( theSelectedInfo->myMenuLanguage, 
+			 theSelectedInfo->myTextToSpeech, 
+			 theSelectedInfo->myKeyboard,
+			 theSelectedInfo->myKeyboardFeatures,
+			 theSelectedInfo->myDesktop,
+			 theSelectedInfo->myUserConfIsKnown);
+	    }
 	  aMenuState = (GNC_UpArrowKey == getLastKeyPressed()) ? MENU_Keyboard : MENU_Braille;	  
 	  break;
 
@@ -739,15 +811,33 @@ void menu(struct menuInfo* theSelectedInfo, int *theConfHasBeenUpdated)
 	  break;
 
 	case MENU_Desktop:
-	  setDesktop( &(theSelectedInfo->myDesktop));
+	  if (setDesktop( &(theSelectedInfo->myDesktop)))
+	    {
+	      theSelectedInfo->myUserConfIsKnown=1;	      
+	      buildI18n( theSelectedInfo->myMenuLanguage, 
+			 theSelectedInfo->myTextToSpeech, 
+			 theSelectedInfo->myKeyboard,
+			 theSelectedInfo->myKeyboardFeatures,
+			 theSelectedInfo->myDesktop,
+			 theSelectedInfo->myUserConfIsKnown);
+	    }
 	  aMenuState = (GNC_UpArrowKey == getLastKeyPressed()) ? MENU_Braille : MENU_TTS;
 	  break;
 
 	case MENU_TTS:
-	  setTextToSpeech( &(theSelectedInfo->myTextToSpeech),
-			   theSelectedInfo->myMenuLanguage,
-			   theSelectedInfo->myDesktop,
-			   1);
+	  if (setTextToSpeech( &(theSelectedInfo->myTextToSpeech),
+			       theSelectedInfo->myMenuLanguage,
+			       theSelectedInfo->myDesktop,
+			       1))
+	    {
+	      theSelectedInfo->myUserConfIsKnown=1;	      
+	      buildI18n( theSelectedInfo->myMenuLanguage, 
+			 theSelectedInfo->myTextToSpeech, 
+			 theSelectedInfo->myKeyboard,
+			 theSelectedInfo->myKeyboardFeatures,
+			 theSelectedInfo->myDesktop,
+			 theSelectedInfo->myUserConfIsKnown);
+	    }
 	  aMenuState = (GNC_UpArrowKey == getLastKeyPressed()) ? MENU_Desktop : MENU_Internet;
 	  break;
 

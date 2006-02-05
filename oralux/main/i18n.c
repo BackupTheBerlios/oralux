@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // i18n.c
-// $Id: i18n.c,v 1.7 2006/01/30 22:49:38 gcasse Exp $
+// $Id: i18n.c,v 1.8 2006/02/05 00:42:15 gcasse Exp $
 // $Author: gcasse $
 // Description: Internationalization. 
-// $Date: 2006/01/30 22:49:38 $ |
-// $Revision: 1.7 $ |
+// $Date: 2006/02/05 00:42:15 $ |
+// $Revision: 1.8 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -128,6 +128,11 @@ static IDLABEL TheSpokenLanguage[]={
 
 void getStringKeyboard(enum keyboard theValue, char** theKeytable, char** theXKeyboard)
 {
+  if (!theKeytable || !theXKeyboard)
+    {
+      return;
+    }
+  
   *theKeytable=TheKeyboard[0].myXKeyboard;
   *theXKeyboard=TheKeyboard[0].myXKeyboard;
 
@@ -145,6 +150,11 @@ void getStringKeyboard(enum keyboard theValue, char** theKeytable, char** theXKe
 enum keyboard getEnumKeyboard(char* theKeytable)
 {
   int aValue=TheKeyboard[0].myID;
+
+  if (!theKeytable)
+    {
+      return americanKeyboard;
+    }
 
   int i=0;
   for (i=0;i<sizeof(TheKeyboard)/sizeof(TheKeyboard[0]);i++)
@@ -175,6 +185,12 @@ enum language getEnumLanguage(char* theValue)
 {
   int aValue=TheSpokenLanguage[0].myID;
   int i=0;
+
+  if (!theValue)
+    {
+      return English;
+    }
+
   for (i=0;i<sizeof(TheSpokenLanguage)/sizeof(TheSpokenLanguage[0]);i++)
     {
       if (strcmp(TheSpokenLanguage[i].myLabel,theValue)==0)
@@ -183,6 +199,21 @@ enum language getEnumLanguage(char* theValue)
 	}
     }
   return aValue;  
+}
+
+char* getStringBoolean(int theValue)
+{
+  return (theValue ? "1":"0");
+}
+
+int getIntBoolean(char* theValue)
+{
+  if (!theValue)
+    {
+      return 0;
+    }
+
+  return (strcmp(theValue,"1")==0);  
 }
 
 static char* getConsoleFont(enum language theLanguage)
@@ -210,6 +241,11 @@ void setConsoleFont(enum language theLanguage)
   static char* aPreviousFont=NULL;
   char* aFont=getConsoleFont(theLanguage);
 
+  if (!aFont)
+    {
+      return;
+    }
+
   if ((aPreviousFont==NULL)
       || (strcmp(aFont, aPreviousFont) != 0))
     {
@@ -231,7 +267,8 @@ void buildI18n( enum language theMenuLanguage,
 		struct textToSpeechStruct theTextToSpeech, 
 		enum keyboard theKeyboard,
 		struct keyboardStruct theKeyboardFeatures,
-		enum desktopIdentifier theDesktop)
+		enum desktopIdentifier theDesktop,
+		int theUserConfIsKnown)
 {
   char* CHARSET="";
   char* COUNTRY="";
@@ -240,6 +277,7 @@ void buildI18n( enum language theMenuLanguage,
   char* LANG="";
   char* LANGUAGE="";
   char* ORALUXTTSLANG="";
+  char* ORALUXUSERCONF="";
   char* ORALUXSTICKYKEYS=(theKeyboardFeatures.myStickyKeysAreAvailable) ? "1":"0";
   char* ORALUXREPEATKEYS=(theKeyboardFeatures.myRepeatKeysAreAvailable) ? "1":"0";
   char* XKEYBOARD="";
@@ -249,6 +287,7 @@ void buildI18n( enum language theMenuLanguage,
   //  char* TZ="";
 
   ORALUXTTSLANG=getStringLanguage(theMenuLanguage);
+  ORALUXUSERCONF=getStringBoolean(theUserConfIsKnown);
   DESKTOP=desktopGetString(theDesktop);
 
   getLanguageVariable( theTextToSpeech.myLanguage,
@@ -272,6 +311,7 @@ void buildI18n( enum language theMenuLanguage,
   fprintf(fd,"LANG=\"%s\"\n",LANG);
   fprintf(fd,"LANGUAGE=\"%s\"\n",LANGUAGE);
   fprintf(fd,"ORALUXTTSLANG=\"%s\"\n",ORALUXTTSLANG);
+  fprintf(fd,"ORALUXUSERCONF=\"%s\"\n",ORALUXUSERCONF);
   fprintf(fd,"XMODIFIERS=\"%s\"\n",XMODIFIERS);
   fprintf(fd,"CONSOLEFONT=\"%s\"\n",CONSOLEFONT);
   fclose(fd);
@@ -304,6 +344,7 @@ void buildI18n( enum language theMenuLanguage,
   fprintf(fd,"DESKTOP=\"%s\"\n",DESKTOP);
   //  fprintf(fd,"TZ=\"%s\"\n",TZ);
   fprintf(fd,"ORALUXTTSLANG=\"%s\"\n",ORALUXTTSLANG);
+  fprintf(fd,"ORALUXUSERCONF=\"%s\"\n",ORALUXUSERCONF);
   fprintf(fd,"ORALUXSTICKYKEYS=\"%s\"\n",ORALUXSTICKYKEYS);
   fprintf(fd,"ORALUXREPEATKEYS=\"%s\"\n",ORALUXREPEATKEYS);
   fprintf(fd,"ORALUXRELEASE=\"%s\"\n",ORALUX_RELEASE);
@@ -372,3 +413,38 @@ void getLanguageVariable( enum language theWishedLanguage,
   SHOW2("LANG=%s\n",*theLang);
   SHOW2("LANGUAGE=%s\n", *theLanguage);
 }
+
+enum keyboard getProbableKeyboard( enum language theLanguage)
+{
+  enum keyboard aKeyboard=americanKeyboard;
+
+  switch(theLanguage)
+    {
+    case Brazilian:
+      aKeyboard = brazilianKeyboard;
+      break;
+
+    case French:
+      aKeyboard = frenchKeyboard;
+      break;
+
+    case German:
+      aKeyboard = germanKeyboard;
+      break;
+
+    case Russian:
+      aKeyboard = russianKeyboard;
+      break;
+
+    case Spanish:
+      aKeyboard = spanishKeyboard;
+      break;
+
+    case English:
+    default:
+      aKeyboard = americanKeyboard;
+      break;
+    }
+  return aKeyboard;
+}
+

@@ -11,6 +11,7 @@ struct menuInfo{
   struct keyboardStruct myKeyboardFeatures;
   struct textToSpeechStruct myTextToSpeech;
   enum desktopIdentifier myDesktop;
+  int myUserConfIsKnown; /* 0 if default conf; 1 otherwise */
 };
 
 // menu

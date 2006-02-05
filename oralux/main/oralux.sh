@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # oralux.sh
-# $Id: oralux.sh,v 1.14 2006/01/30 22:49:38 gcasse Exp $
+# $Id: oralux.sh,v 1.15 2006/02/05 00:42:15 gcasse Exp $
 # $Author: gcasse $
 # Description: This script is called at init time
-# $Date: 2006/01/30 22:49:38 $ |
-# $Revision: 1.14 $ |
+# $Date: 2006/02/05 00:42:15 $ |
+# $Revision: 1.15 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -44,15 +44,16 @@ if [ "$TTY" == "/dev/tty1" -a ! -e "$FILE" ]
     
     while  [ "$state" != "STOP" ]; do
 	
-	# dialog-oralux is only used for the menu.
-	# Once enhanced, it could replace dialog
-	export DIALOG=/usr/bin/dialog-oralux
+# 	# dialog-oralux is only used for the menu.
+# 	# Once enhanced, it could replace dialog
+# 	export DIALOG=/usr/bin/dialog-oralux
+	export DIALOG=/usr/bin/dialog
 
 	cd /usr/share/oralux/main
 	sudo ./oralux $TTY start
 
-	# Restoring the initial dialog
-	export DIALOG=/usr/bin/dialog
+# 	# Restoring the initial dialog
+# 	export DIALOG=/usr/bin/dialog
 
 # Taking in account the (perhaps updated) config
 	source /etc/sysconfig/knoppix
@@ -69,6 +70,7 @@ if [ "$TTY" == "/dev/tty1" -a ! -e "$FILE" ]
 	export ORALUXREPEATKEYS
 	export EMACSPEAKTTS
 	export EMACSPEAKTTSPORT
+	export ORALUXUSERCONF
 
 	loadkeys "$KEYTABLE"
 	if [ $ORALUXSTICKYKEYS == "1" ]

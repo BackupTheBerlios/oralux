@@ -3,6 +3,8 @@
 # (C) Klaus Knopper Feb 2005
 # Dec 2005: Update for Oralux, Gilles Casse <gcasse@oralux.org>
 
+#set -vx
+
 PATH="/bin:/sbin:/usr/bin:/usr/sbin"
 export PATH
 
@@ -169,7 +171,7 @@ NTFS=""
 mount | grep -q "$DIRECTORY.*ntfs"
 [ "$?" = "0" ] && NTFS=true
 
-IMAGE="$(ls -1d $DIRECTORY/[Kk][Nn][Oo][Pp][Pp][Ii][Xx].[Ii][Mm][Gg])"
+IMAGE="$(ls -1d $DIRECTORY/[Kk][Nn][Oo][Pp][Pp][Ii][Xx].[Ii][Mm][Gg] 2>/dev/null )"
 
 # Language-dependent Messages
 case "$LANGUAGE" in
@@ -252,7 +254,7 @@ if [ -z "$NTFS" ]; then
  gauge "$MESSAGE10" &
  IF_DEVICE=/dev/zero
  [ -n "$ENCRYPTION" ] && IF_DEVICE=/dev/urandom
- dd if="$IF_DEVICE" of="$IMAGE" bs=1M count="$AMOUNT" || { killgauge; sleep 2; bailout; }
+ dd if="$IF_DEVICE" of="$IMAGE" bs=1M count="$AMOUNT" 2>/dev/null || { killgauge; sleep 2; bailout; }
  killgauge
 else
  # NTFS, overwrite file with random data of exactly the same size
@@ -332,7 +334,7 @@ rm -f "$TMP"
 # Start progress display and copy data
 gauge "$MESSAGE9" &
 [ -n "$NTFS" ] && dd if=/dev/urandom of="$LOOPDEV" bs=1M count="$SIZEMB" 
-mke2fs -m0 "$LOOPDEV" 2>"$TMP.err" || { killgauge; $DIALOG --cr-wrap --title "$TITLE1" --msgbox "$ERROR `cat $TMP.err`" 10 75; bailout; }
+mke2fs -m0 "$LOOPDEV" 1>/dev/null 2>"$TMP.err" || { killgauge; $DIALOG --cr-wrap --title "$TITLE1" --msgbox "$ERROR `cat $TMP.err`" 10 75; bailout; }
 mkdir -p /tmp/knxhome
 mount -t ext2 "$LOOPDEV" /tmp/knxhome 2>"$TMP.err" && rsync --exclude /ramdisk/var/tmp/ --exclude /ramdisk/etc/mtab --exclude /etc/mtab -Ha /ramdisk/ /tmp/knxhome 2>"$TMP.err" || { umount /tmp/knxhome 2>/dev/null; killgauge; $DIALOG --cr-wrap --title "$TITLE1" --msgbox "$ERROR `cat $TMP.err`" 10 75; bailout; }
 

@@ -38,10 +38,10 @@ struct textToSpeechStruct {
 
 int HasExternalTextToSpeech(struct textToSpeechStruct* theExternalTextToSpeech);
 
-void setTextToSpeech(struct textToSpeechStruct* theTextToSpeech,
-		     enum language thePreferredLanguage,
-		     enum desktopIdentifier theDesktop,
-		     int theUserMustBeAskedFor);
+int setTextToSpeech(struct textToSpeechStruct* theTextToSpeech,
+		    enum language thePreferredLanguage,
+		    enum desktopIdentifier theDesktop,
+		    int theUserMustBeAskedFor);
 
 char* getStringSynthesis(enum textToSpeech theValue);
 enum textToSpeech getEnumSynthesis(char* theValue);

@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // desktop.c
-// $Id: desktop.c,v 1.2 2005/01/30 21:43:51 gcasse Exp $
+// $Id: desktop.c,v 1.3 2006/02/05 00:42:15 gcasse Exp $
 // $Author: gcasse $
 // Description: Serial ports 
-// $Date: 2005/01/30 21:43:51 $ |
-// $Revision: 1.2 $ |
+// $Date: 2006/02/05 00:42:15 $ |
+// $Revision: 1.3 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -89,12 +89,18 @@ enum sentence desktopGetSentence( enum desktopIdentifier theValue)
   return aLabel;
 }
 
-void setDesktop(enum desktopIdentifier *theDesktop)
+int setDesktop(enum desktopIdentifier *theDesktop)
 {
   ENTER("setDesktop");
   int aDesktopRequest=1;
   int i=0;
   int aMaxDesktop = sizeof(myDesktops)/sizeof(myDesktops[0]);
+  enum desktopIdentifier aDesktop = Emacspeak;
+
+  if (!theDesktop)
+    {
+      return 0;
+    }
 
   // Looking for the index which matches theDesktop
   for (i=0; i<aMaxDesktop; i++)
@@ -108,7 +114,7 @@ void setDesktop(enum desktopIdentifier *theDesktop)
   if (i >= aMaxDesktop)
     {
       SHOW("Desktop: Unexpected value");
-      return;
+      return 0;
     }
 
   say( desktopIs);
@@ -146,6 +152,7 @@ void setDesktop(enum desktopIdentifier *theDesktop)
       }
   }
   *theDesktop = getEnumDesktop( myDesktops[i].myIdentifier);
+  return (*theDesktop != aDesktop);
 }
 
 

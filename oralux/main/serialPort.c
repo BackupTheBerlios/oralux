@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // serialPort.c
-// $Id: serialPort.c,v 1.3 2005/03/31 09:16:54 gcasse Exp $
+// $Id: serialPort.c,v 1.4 2006/02/05 00:42:15 gcasse Exp $
 // $Author: gcasse $
 // Description: Serial ports 
-// $Date: 2005/03/31 09:16:54 $ |
-// $Revision: 1.3 $ |
+// $Date: 2006/02/05 00:42:15 $ |
+// $Revision: 1.4 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -55,6 +55,11 @@ void serialPortInit()
   for (i=0; i<MaxSerialPort; i++)
     {
       ttyS[i]=0;
+    }
+  
+  if (!fd)
+    {
+      return;
     }
 
   while(fgets(aBuffer, 1024, fd))

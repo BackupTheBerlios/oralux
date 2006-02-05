@@ -3,11 +3,11 @@
 
 # ----------------------------------------------------------------------------
 # netConfig.sh
-# $Id: netConfig.sh,v 1.12 2006/01/22 15:19:45 gcasse Exp $
+# $Id: netConfig.sh,v 1.13 2006/02/05 00:42:15 gcasse Exp $
 # $Author: gcasse $
 # Description: Menu for internet settings
-# $Date: 2006/01/22 15:19:45 $ |
-# $Revision: 1.12 $ |
+# $Date: 2006/02/05 00:42:15 $ |
+# $Revision: 1.13 $ |
 # Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -27,7 +27,9 @@
 
 #set -vx
 
-export DIALOG=dialog-oralux
+#export DIALOG=dialog-oralux
+export DIALOG=/usr/bin/dialog
+
 tempfile=`tempfile 2>/dev/null` || tempfile=/tmp/test$$
 trap "rm -f $tempfile" 0 1 2 5 15
 
@@ -122,11 +124,11 @@ case $retval in
     0)
     case $choice in
 	1)
-	oralux-dialog.sh 1
+#	oralux-dialog.sh 1
 	pppconfig --dialog
-	oralux-dialog.sh 0
-	echo Textpon
-	echo Textpoff
+#	oralux-dialog.sh 0
+#	echo Textpon
+#	echo Textpoff
 	;;
 	2)
 	adslMenu;;

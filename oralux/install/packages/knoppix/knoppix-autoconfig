@@ -16,6 +16,7 @@
 # - tts cheatcode (external speech synthesizer).
 # - no alsa driver selection (by default the pcitable returns the Alsa driver)
 # - oss cheatcode (stored in conf). no oss cheatcode.
+# - do not take in account the previous 0.6 configs.tbz
 # For more details, see diff with knoppix-autoconfig.sav
 #
 # knoppix-image is not interactive (at the moment)
@@ -1283,7 +1284,11 @@ if [ -z "$FOUND_CONFIG" ]; then
 echo -n "${CRE}${BLUE}Checking ${MAGENTA}${MYCONFDIR}${BLUE} for KNOPPIX configuration files...${NORMAL}"
 if trymount "$MYCONFDEVICE" "$MYCONFMOUNTPOINT"; then
 MYCONFIG="$(ls -1d $MYCONFDIR/[Kk][Nn][Oo][Pp][Pp][Ii][Xx].[Ss][Hh] 2>/dev/null)"
-if [ -n "$MYCONFIG" -a -f "$MYCONFIG" ]; then
+
+# Oralux: do not take in account the previous 0.6 config
+v0_6=$(tar -jOxf $MYCONFDIR/[Cc][Oo][Nn][Ff][Ii][Gg][Ss].[Tt][Bb][Zz] /etc/sysconfig/knoppix 2>/dev/null | grep ORALUXRELEASE | grep "0.6")
+
+if [ -z "$v0_6" -a -n "$MYCONFIG" -a -f "$MYCONFIG" ]; then
 echo ""
 FOUND_CONFIG="yes"
 echo "${GREEN}Found, now executing ${MAGENTA}$MYCONFIG${GREEN}.${NORMAL}"

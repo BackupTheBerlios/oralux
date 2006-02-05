@@ -35,7 +35,8 @@ preproc:\
 	*) echo "exec:play a game\: adventure (in English)::/usr/games/frotz /usr/share/oralux/install/packages/games/en/Advent.z5";; \
 	esac
 
-	exec:Drop to a shell::echo "When you're done, type 'exit' to return to the menu.";/bin/sh -login
+	exec:Drop to a shell::echo "Type 'exit' to return to the menu.";/bin/sh -login
 	exec:Display the time:display:date
+	exec:dosemu, run DOS under Linux::echo "Type 'exitemu' to return to the menu.";sleep 5;dosemu
 	exit:Exit
 

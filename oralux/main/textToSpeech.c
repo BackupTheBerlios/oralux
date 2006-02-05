@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // textToSpeech.c
-// $Id: textToSpeech.c,v 1.7 2006/01/01 21:24:09 gcasse Exp $
+// $Id: textToSpeech.c,v 1.8 2006/02/05 00:42:15 gcasse Exp $
 // $Author: gcasse $
 // Description: Ask about the whished TTS and install it. 
-// $Date: 2006/01/01 21:24:09 $ |
-// $Revision: 1.7 $ |
+// $Date: 2006/02/05 00:42:15 $ |
+// $Revision: 1.8 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -938,14 +938,23 @@ static int install(struct textToSpeechStruct* theTextToSpeech, enum language the
 }
 
 // setTextToSpeech
-void setTextToSpeech(struct textToSpeechStruct* theTextToSpeech,
-		     enum language thePreferredLanguage,
-		     enum desktopIdentifier theDesktop,
-		     int theUserMustBeAskedFor)
+int setTextToSpeech(struct textToSpeechStruct* theTextToSpeech,
+		    enum language thePreferredLanguage,
+		    enum desktopIdentifier theDesktop,
+		    int theUserMustBeAskedFor)
 {
+  struct textToSpeechStruct aTextToSpeech;
+
   ENTER("setTextToSpeech");
   pf=getTTY();
   int aRequest=1;
+
+  if (!theTextToSpeech)
+    {
+      return 0;
+    }
+
+  memcpy(&aTextToSpeech, theTextToSpeech, sizeof(struct textToSpeechStruct));
 
   while(aRequest)
     {
@@ -956,7 +965,7 @@ void setTextToSpeech(struct textToSpeechStruct* theTextToSpeech,
 	  //if (!chooseSynt( theTextToSpeech, thePreferredLanguage, theDesktop))
 	    if (!chooseSynt( theTextToSpeech, theTextToSpeech->myLanguage, theDesktop))
 	    {
-	      return;
+	      return 0;
 	    }
 	}
  
@@ -967,6 +976,8 @@ void setTextToSpeech(struct textToSpeechStruct* theTextToSpeech,
 	  theUserMustBeAskedFor=1;
 	}
     }
+
+  return (0 != memcmp(&aTextToSpeech, theTextToSpeech, sizeof(struct textToSpeechStruct)));
 }
 
 int isExternalSynth( enum textToSpeech theIdentifier)
