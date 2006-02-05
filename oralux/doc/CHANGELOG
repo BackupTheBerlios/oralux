@@ -165,9 +165,12 @@ Jabber server: packages included.
 / The listen-up digital talking book player is included.
 / File conversion: the xpdf-utils (pdftotext) and catdoc (.doc to text) packages have been added 
 + bsdgames
++ dosemu
++ linphonec
 + lirc (+liblircclient0)
 + mew
 + nano
++ Text games: adventure (English, French, German, Spanish), filaments (French).
 + tramp
 + toolame
 

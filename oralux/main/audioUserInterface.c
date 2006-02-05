@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // audiouserinterface.c
-// $Id: audioUserInterface.c,v 1.21 2006/02/05 00:42:14 gcasse Exp $
+// $Id: audioUserInterface.c,v 1.22 2006/02/05 21:03:37 gcasse Exp $
 // $Author: gcasse $
 // Description: Managing and playing the pre-recorded messages.
-// $Date: 2006/02/05 00:42:14 $ |
-// $Revision: 1.21 $ |
+// $Date: 2006/02/05 21:03:37 $ |
+// $Revision: 1.22 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 // September 2003: 
 // * German translations by Guenther Harrasser.
@@ -25,6 +25,8 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // ----------------------------------------------------------------------------
+#include <stdlib.h>
+#include <string.h>
 #include <stdio.h>
 #include <fcntl.h>
 #include "audioUserInterface.h"

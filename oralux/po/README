@@ -1,5 +1,7 @@
 Create the po file, for example for french:
-./new_po.sh
+
+./new_po.sh 
+fr
 
 Edit for example, the fr.new.po file.
 Using the Emacs po mode:
@@ -14,7 +16,7 @@ The TAB key removes the fuzzy flag.
 The DEL key is useful for removing the obsolete entry.
 
 ./install_po.sh
-
+fr
 
 Gettext reference:
-http://www.gnu.org/manual/gettext/html_mono/gettext.html
+http://www.gnu.org/software/gettext/manual/html_mono/gettext.html

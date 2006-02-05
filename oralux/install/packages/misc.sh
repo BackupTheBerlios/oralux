@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # misc.sh
-# $Id: misc.sh,v 1.17 2006/02/05 00:42:14 gcasse Exp $
+# $Id: misc.sh,v 1.18 2006/02/05 21:03:37 gcasse Exp $
 # $Author: gcasse $
 # Description: Miscellaneous packages
-# $Date: 2006/02/05 00:42:14 $ |
-# $Revision: 1.17 $ |
+# $Date: 2006/02/05 21:03:37 $ |
+# $Revision: 1.18 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -68,7 +68,7 @@ InstallPackage()
     install -m 755 command.com $LIB_FREECOM
     
     export LIB_DOSEMU="/usr/lib/dosemu/commands"
-    chroot $BUILD bash -c "cd $LIB_DOSEMU; rm comcom.com; ln -s $LIB_FREECOM/command.com comcom.com"
+    cd $LIB_DOSEMU; rm comcom.com; ln -s $LIB_FREECOM/command.com comcom.com
 
 
     apt-get install cdtool; cd /usr/bin; ln -s ./cdtool cdstart

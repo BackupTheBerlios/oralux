@@ -2,11 +2,11 @@
 // raf: utf8
 // ----------------------------------------------------------------------------
 // mailConfig.php
-// $Id: mailConfig.php,v 1.7 2006/01/22 15:19:45 gcasse Exp $
+// $Id: mailConfig.php,v 1.8 2006/02/05 21:03:37 gcasse Exp $
 // $Author: gcasse $
 // Description: Mail settings (php5)
-// $Date: 2006/01/22 15:19:45 $ |
-// $Revision: 1.7 $ |
+// $Date: 2006/02/05 21:03:37 $ |
+// $Revision: 1.8 $ |
 // Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -62,7 +62,7 @@ class mailConfig extends DomDocument
 	  if ($fd==NULL)
 	    {
 	      $aError=sprintf("Error: can't open file: %s\n", $this->_myFilename);
-	      ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.7 $');
+	      ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.8 $');
 	      return;
 	    }
 	  fwrite ( $fd, $this->_myInitialFile);
@@ -71,7 +71,7 @@ class mailConfig extends DomDocument
       if (!is_readable( $this->_myFilename))
 	{
 	      $aError=sprintf("Error: file unreadable: %s\n", $this->_myFilename);
-	      ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.7 $');
+	      ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.8 $');
 	      return;
 	}
 
@@ -90,7 +90,7 @@ class mailConfig extends DomDocument
 
   function getUser()
     {
-      return $this->$_myUser;
+      return $this->_myUser;
     }
 
   // getValue of one simple node (see mySimpleFields)
@@ -192,19 +192,19 @@ class mailConfig extends DomDocument
       if (unlink($this->_myFilename)==FALSE)
 	{
 	  $aError=sprintf("Error concerning file: %s\n", $this->_myFilename);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.7 $');
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.8 $');
 	  return;
 	}
       if (touch($this->_myFilename)==FALSE)
 	{
 	  $aError=sprintf("Error concerning file: %s\n", $this->_myFilename);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.7 $');
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.8 $');
 	  return;
 	}
       if (chmod ( $this->_myFilename, 0600)==FALSE)
 	{
 	  $aError=sprintf("Error concerning file: %s\n", $this->_myFilename);
-	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.7 $');
+	  ErrorMessage($aError, __LINE__, __FILE__, '$Revision: 1.8 $');
 	  return;
 	}
 

@@ -41,11 +41,7 @@ download:
 * check the oralux version number in configs.tbz, discard old versions.
 
 
-linphonec
-
 * Major bug: a configuration file is removed (even no symlink) in using saveconfig from 0.6 alpha when the file is identical to the config file from the CD (e.g. knoppix and /KNOPPIX/etc/sysconfig/knoppix).
-
-* dosemu dosemu-freedos
 
 - Using C-M-i in the audio menu with one finger
 
