@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // lliaphon-client.c
-// $Id: lliaphon-client.c,v 1.1 2005/12/18 23:36:31 gcasse Exp $
+// $Id: lliaphon-client.c,v 1.2 2006/02/11 22:39:48 gcasse Exp $
 // $Author: gcasse $
 // Description: lliaphon client. 
-// $Date: 2005/12/18 23:36:31 $ |
-// $Revision: 1.1 $ |
+// $Date: 2006/02/11 22:39:48 $ |
+// $Revision: 1.2 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -24,9 +24,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <sys/types.h>
 #include <fcntl.h>
 #include "lliaphond.h"
 
@@ -116,7 +116,8 @@ int main(int argc, char *argv[])
   int fd[2];
   char * array[2];
   char* aHome = getenv("HOME");
-  char* aFifoName = malloc( strlen(myFifoInName) + strlen(myFifoOutName) + strlen( aHome));
+  char* aUser = getenv("USER");
+  char* aFifoName = malloc( strlen(myFifoInName) + strlen(myFifoOutName) + strlen( aHome) + strlen(aUser));
 
   array[0] = myFifoInName; /* i = STDIN_FILENO */
   array[1] = myFifoOutName; /* i = STDOUT_FILENO */
@@ -128,7 +129,7 @@ int main(int argc, char *argv[])
       int flags;
       struct stat aFileInfo;
 
-      sprintf( aFifoName, "%s/%s", aHome, array[i]);
+      sprintf( aFifoName, "%s/%s.%s", aHome, array[i], aUser);
 
       if (stat( aFifoName, &aFileInfo) == -1)
 	{

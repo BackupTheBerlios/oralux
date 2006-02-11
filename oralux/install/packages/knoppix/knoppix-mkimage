@@ -70,11 +70,23 @@ NTFSWARNING2="AVISO (2): NTFS/Windows(TM) puede reaccionar de formas inesperadas
 ¿Aún desea continuar?"
 NTFSWARNING3="AVISO (3): ¿Ha hecho una copia de todos los datos importantes de la partición que desea usar para la imagen de KNOPPIX en un soprte externo? ¿Es usted capaz de, en el peor de los casos, reparar la partición NTFS (o Windows) por su cuenta?"
 ;;
+fr*)
+NTFSTITLE="AVERTISSEMENT NTFS"
+NTFSWARNING1="Le système de fichier Windows(TM) NTFS/XP est seulement partiellement supporté par Linux, du fait de l'insuffisance des spécifications techniques du fabricant. Mais il y a un support pour écraser le contenu de fichiers existants, ce qui est utile pour créer un \"disque virtuel\" sur une partition NTFS.
+
+AVERTISSEMENT : CECI EST ENCORE A UN ÉTAT TRÈS EXPÉRIMENTAL. IL N'Y A AUCUNE GARANTIE QUE CELA FONCTIONNE AVEC VOTRE SYSTÈME. 
+Voulez-vous continuer ?"
+
+NTFSWARNING2="AVERTISSEMENT (2): NTFS/Windows(TM) peut réagir de façon inattendue si Linux n'est pas proprement arrêté après avoir monté un système de fichier NTFS en écriture, ou s'il y a des erreurs d'écritures. Dans ces cas-là, Windows lancera \"SCANDISK\" ou \"CHKDSK\" pour vérifier la cohérence des données de la partition. Habituellement, aucune erreur n'arrive pendant ce contrôle, mais dans de rares cas, des données peuvent être perdues.
+
+Voulez-vous toujours continuer?"
+NTFSWARNING3="AVERTISSEMENT (3): Avez-vous fait une copie de toutes les données importantes de la partition que vous voulez utiliser pour l'image KNOPPIX, sur un média de sauvegarde externe ? Pouvez-vous dans le pire des cas réparer la partition NTFS (Windows) par vous-mêmes ?"
+;;
 *)
 NTFSTITLE="NTFS WARNING"
 NTFSWARNING1="The Windows(TM) NTFS/XP filesystem is only partly supported by Linux, because of insufficient technical specifications by the manufacturer. But there is support for overwriting file contents of existing files, which is useful for creating \"virtual disk drives\" on a NTFS partition.
 
-WARNING: THIS IS YET A VERY EXPERIMENTAL FEATURE. THERE IS NO WARRANTY THAT IT WILl WORK FOR YOUR SYSTEM.
+WARNING: THIS IS YET A VERY EXPERIMENTAL FEATURE. THERE IS NO WARRANTY THAT IT WILL WORK FOR YOUR SYSTEM.
 Do you want to continue?"
 NTFSWARNING2="WARNING (2): NTFS/Windows(TM) can react in unexpected ways if Linux is not cleanly shut down after work when an NTFS filesystem is mounted in write mode, or if there are errors during write operations. In these cases, Windows will start \"SCANDISK\" or \"CHKDSK\" to make sure the partition data is in a consistent state. Usually no errors occur during the check, but in rare cases, data may be lost.
 
@@ -94,7 +106,7 @@ HOMEKB="$(du -sk /ramdisk/. 2>/dev/null | awk '{print $1}')"
 case "$LANGUAGE" in
 de*|at*|ch*)
 TITLE1="Permanentes KNOPPIX Image anlegen"
-MESSAGE1="Dieses Skript richtet ein permanentes Festplatten-Image für den User \"knoppix\" auf Ihrer Festplatte oder einem Wechselmedium wie Memorystick, Compactflash oder ZIP-Medium ein. Hierdurch ist es möglich, Daten und persönliche Konfigurationen über einen Reboot hinaus zu speichern. Per Bootoption, z.B. \"home=/mnt/uba1\" für die erste Partition eines USB-Memorystick, können Sie beim Systemstart das permanente Heimverzeichnis wieder aktivieren. Die Bootoption \"home=scan\" durchsucht automatisch alle Partitionen und erkannten Speichermedien nach einem persistenten KNOPPIX-Heimverzeichnis.
+MESSAGE1="Dieses Skript richtet ein permanentes Festplatten-Image für den User \"knoppix\" auf Ihrer Festplatte oder einem Wechselmedium wie Memorystick, Compactflash oder ZIP-Medium ein. Hierdurch ist es möglich, Daten und persönliche Konfigurationen über einen Reboot hinaus zu speichern.
 
 Möchten Sie das Heimverzeichnis des Benutzers \"knoppix\" und/oder die Systemkonfiguration permanent speichern?"
 MESSAGE2="Bitte wählen Sie die Partition, auf der Sie das Image anlegen möchten."
@@ -102,7 +114,7 @@ MESSAGE3="Hier befindet sich bereits eine KNOPPIX.IMG-Datei mit Daten. Möchten S
 NEIN=Abbruch"
 MESSAGE4="Dies ist eine NTFS-Partition. Da es hierfür vom Hersteller keinen Linux-Support gibt, der das direkte Schreiben auf die Partition ermöglichen würde, müssen Sie zunächst von Windows(TM) aus eine leere Image-Datei einrichten. Ein Programm hierfür finden Sie im Verzeichnis KNOPPIX auf Ihrer CD. WARNUNG: DIES IST EIN NEUES, EXPERIMENTELLES FEATURE. ES GIBT KEINE GARANTIE, DASS ALLES EINWANDFREI FUNKTIONIERT."
 MESSAGE5="Bitte wählen Sie das Dateisystem für das KNOPPIX image. ext3, reiserfs und xfs sind sog. \"journaling\" Dateisysteme und sehr robust gegen Fehler, benötigen aber leider 30MB mehr Platz, der nicht für den eigentlichen Inhalt verwendet werden kann."
-MESSAGE6="Dieses Image ist gerade in Benutzung, daher kann es nicht gelöscht werden! Bitte booten Sie ggf. Knoppix neu, OHNE das Image $IMAGE einzubinden."
+MESSAGE6="Dieses Image ist gerade in Benutzung, daher kann es nicht gelöscht werden! Bitte booten Sie ggf. Oralux neu, OHNE das Image $IMAGE einzubinden."
 MESSAGE11="Diese Partition kann momentan nicht im Schreibmodus eingehängt werden. Das Programm wird beendet."
 SUCCESS="FERTIG!
 
@@ -110,9 +122,33 @@ Die KNOPPIX-Konfiguration wurde erfolgreich gespeichert. Ihre Konfigurationsdate
 ERROR="Leider konnte die KNOPPIX-Konfiguration NICHT gespeichert werden:"
 MESSAGE_NO_PARTS="Keine passende Partition gefunden."
 ;;
+fr*)
+TITLE1="Création d'un compte KNOPPIX persistant"
+MESSAGE1="Ce script crée l'image d'un disque virtuel persistant, pour le compte \"knoppix\", sur votre disque dur ou sur un périphérique externe comme une clé USB, une carte compact flash ou un disque zip. 
+Après le redémarrage, vous pourrez retrouver vos données personnelles et les fichiers de configuration.
+
+Do you want to create a persistent home directory or system config archive for the \"knoppix\" user?"
+
+MESSAGE2="Choisissez s'il vous plait la partition où sera créée l'image :"
+MESSAGE3="Il y a déjà une image Knoppix de présente sur cette partition. Souhaitez-vous la supprimer, la formater ?"
+MESSAGE4="C'est une partition NTFS. Parce qu'il n'y a pas de support du fabriquant pour Linux qui permettrait de directement écrire sur un tel système, vous aurez tout d'abord à créer un fichier image vide à partir de Windows(TM). Vous ourrez trouver un tel programme dans le répertoire KNOPPIX de votre CD. SOYEZ CONSCIENT S'IL VOUS PLAIT QUE CECI EST TRÈS EXPÉRIMENTAL. IL N'Y A AUCUNE GARANTIE DE FONCTIONNEMENT."
+MESSAGE5="Choisissez s'il vous plait le système de fichier pour l'image KNOPPIX. ext3, reiserfs et xfs sont des systèmes de fichiers journalisés, très robustes aux erreurs, mais nécéssitant environ 30 Méga octets de plus d'espace disque pour le jorunal, et qui ne pourront donc pas être utilisés pour le contenu réel."
+MESSAGE6="Cette image est en cours d'utilisation. Si vous souhaitez la supprimer ou la reformater, redémarrez Oralux sans activer l'image $IMAGE."
+MESSAGE11="Cette partition du disque dur ne peut pas être montée en lecture-écriture pour le moment, désolé."
+E1="Personal configuration (desktop, programs)"
+E2="Network settings (LAN, Modem, ISDN, ADSL)"
+E3="Graphics subsystem settings (XF86Config)"
+E4="Other system configuration (printer etc.)"
+E5="All files on the Desktop (${DESKTOPKB}kB)"
+SUCCESS="OK !
+
+L'opération a réussi. Vos fichiers de configuration seront réinstallés dans le ramdisk au prochain démarrage d'Oralux si vous précisez \"knoppix floppyconf\" (disquette), ou \"knoppix myconfig=/mnt/nom_de_répertoire\" à l'invite du boot."
+ERROR="La configuration KNOPPIX n'a pu être sauvegardée :"
+MESSAGE_NO_PARTS="Aucune partition utilisable n'a pu être trouvée."
+;;
 *)
 TITLE1="Create persistent KNOPPIX home directory"
-MESSAGE1="This script creates a persistent virtual harddisk image for the \"knoppix\" account on your harddisk or on a changeable medium like memory sticks, compact flash or zip media. Using this features makes it possible to store personal data and config files permanently over a reboot. The boot option \"home=/dev/uba1\", for the first partition of a USB memory stick as example, activates the persistent home directory at system startup. You can also let KNOPPIX scan all autodetected storage devices using the boot option \"home=scan\".
+MESSAGE1="This script creates a persistent virtual harddisk image for the \"knoppix\" account on your harddisk or on a changeable medium like memory sticks, compact flash or zip media. Using this features makes it possible to store personal data and config files permanently over a reboot.
 
 Do you want to create a persistent home directory or system config archive for the \"knoppix\" user?"
 
@@ -120,7 +156,7 @@ MESSAGE2="Please select a partition for creating the image:"
 MESSAGE3="There is already a Knoppix image present on this partition. Would like to delete/format it?"
 MESSAGE4="This is an NTFS partition. Because there is no vendor support for Linux that would allow writing directly to such a file system, you will first have to create an empty image file from within Windows(TM). You can find a program for this in the KNOPPIX directory on your CD. PLEASE BE AWARE THAT THIS IS A NEW YET A VERY EXPERINEMTAL FEATURE. THERE IS NO GUARANTEE THAT IT WILL WORK."
 MESSAGE5="Please chose the filesystem for the KNOPPIX image. ext3, reiserfs and xfs are journaling file systems and are very robust to errors, but require an additional amount of about 30MB disk space for the journal that cannot be used by actual content."
-MESSAGE6="This image is currently in use. If you want to delete/reformat it, please reboot Knoppix first, without activating the image $IMAGE."
+MESSAGE6="This image is currently in use. If you want to delete/reformat it, please reboot Oralux first, without activating the image $IMAGE."
 MESSAGE11="This harddisk partition cannot be mounted in read-write mode currently, sorry."
 E1="Personal configuration (desktop, programs)"
 E2="Network settings (LAN, Modem, ISDN, ADSL)"
@@ -176,10 +212,13 @@ IMAGE="$(ls -1d $DIRECTORY/[Kk][Nn][Oo][Pp][Pp][Ii][Xx].[Ii][Mm][Gg] 2>/dev/null
 # Language-dependent Messages
 case "$LANGUAGE" in
 de*|at*|ch*)
-MESSAGE6="Dieses Image ist gerade in Benutzung, daher kann es nicht gelöscht werden! Bitte booten Sie ggf. Knoppix neu, OHNE das Image $IMAGE einzubinden."
+MESSAGE6="Dieses Image ist gerade in Benutzung, daher kann es nicht gelöscht werden! Bitte booten Sie ggf. Oralux neu, OHNE das Image $IMAGE einzubinden."
+;;
+fr*)
+MESSAGE6="Cette image est en cours d'utilisation. Si vous souhaitez l'effacer ou la reformater, redémarrez d'abord Oralux, s'il vous plait, sans activer l'image $IMAGE."
 ;;
 *)
-MESSAGE6="This image is currently in use. If you want to delete/reformat it, please reboot Knoppix first, without activating the image $IMAGE."
+MESSAGE6="This image is currently in use. If you want to delete/reformat it, please reboot Oralux first, without activating the image $IMAGE."
 ;;
 esac
 
@@ -212,7 +251,17 @@ MESSAGE9="Formatiere Image-Datei und kopiere Daten..."
 MESSAGE10="Lege Datenbereich für Linux an..."
 SUCCESS="Image-Datei wurde erfolgreich mit dem Linux ext2 Dateisystem formatiert, und Ihre Heimverzeichnis-Daten sowie System-Konfigurationsdateien wurden darauf transferiert.
 
-Sie können jetzt Ihren Computer neu starten, und beim Booten sollte KNOPPIX das Image automatisch finden. Alternativ können Sie beim boot:-Prompt \"knoppix home=$PARTITION\" oder \"knoppix home=scan\" angeben."
+Sie können jetzt Ihren Computer neu starten, und beim Booten sollte Oralux das Image automatisch finden. Alternativ können Sie beim boot:-Prompt \"knoppix home=$PARTITION\" oder \"knoppix home=scan\" angeben."
+;;
+fr*)
+MESSAGE7="Voulez-vous sauvegarder votre répertoire utilisateur crypté en AES256 (Advanced Encryption Standard, voir http://csrc.nist.gov/encryption/aes/)? Si oui, vous devrez indiquer un très long mot de passe à la création du répertoire et au démarrage."
+MESSAGE8="Entrez s'il vous plaît la taille du compte persistent en Méga octets (actuellement utilisé : $HOMEKB kilo octets, disponible :"
+MESSAGE9="Formatting Knoppix-Image and copying data..."
+MESSAGE9="Formattage de l'image Knoppix et copie des données..."
+MESSAGE10="Préparation du système de fichier Linux..."
+SUCCESS="Le formattage de l'image Knoppix avec le système de fichier ext2 a réussi; votre répertoire persistant et les données de configuration y ont été transférés.
+
+Vous pouvez maintenant redémarrer votre ordinateur et Oralux devrait trouver automatiquement cette image. Autrement, tapez \"knoppix home=$PARTITION\" ou \"knoppix home=scan\" à l'invite de démarrage boot: ."
 ;;
 *)
 MESSAGE7="Do you want to save your home directory encrypted with AES256 (Advanced Encryption Standard, see http://csrc.nist.gov/encryption/aes/)? If yes, you will have to specify a very long password at homedir creation and boot time."
@@ -221,7 +270,7 @@ MESSAGE9="Formatting Knoppix-Image and copying data..."
 MESSAGE10="Preparing for Linux filesystem..."
 SUCCESS="The Knoppix-Image has been succeessfully formatted with the Linux ext2 filesystem, and your home directory and system configuration data has been transferred to it.
 
-You may now reboot your computer, and KNOPPIX should find the image automatically. Alternatively, type \"knoppix home=$PARTITION\" or \"knoppix home=scan\" at the KNOPPIX boot: prompt."
+You may now reboot your computer, and Oralux should find the image automatically. Alternatively, type \"knoppix home=$PARTITION\" or \"knoppix home=scan\" at the KNOPPIX boot: prompt."
 ;;
 esac
 
@@ -287,6 +336,11 @@ de*|at*|ch*)
 HEADER="AES256 Verschlüsselungs-Passwort (Minimum 20 Zeichen!)"
 ENTER="Eingabe:"
 AGAIN="Noch einmal, um sicherzugehen:"
+;;
+fr*)
+HEADER="Mot de passe de cryptage AES256 (minimum 20 caractères !)"
+ENTER="Tapez:"
+AGAIN="Encore, juste pour être sûr :"
 ;;
 *)
 HEADER="AES256 encryption password (minimum 20 characters!)"

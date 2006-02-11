@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # menu.sh
-# $Id: menu.sh,v 1.11 2006/02/05 00:42:14 gcasse Exp $
+# $Id: menu.sh,v 1.12 2006/02/11 22:43:41 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing the audio menu
-# $Date: 2006/02/05 00:42:14 $ |
-# $Revision: 1.11 $ |
+# $Date: 2006/02/11 22:43:41 $ |
+# $Revision: 1.12 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -54,7 +54,7 @@ Copy2Oralux()
 
    cd $ORALUX/..
    tar --dereference --exclude factory --exclude arch --exclude CVS --exclude "*~" -cf - oralux | tar -C $BUILD/usr/share -xf -
-   chroot $BUILD bash -c "cd /usr/bin; rm -f oralux.sh; ln -s /usr/share/oralux/main/oralux.sh ."
+   chroot $BUILD bash -c "chown -R root.root /usr/share/oralux; cd /usr/bin; rm -f oralux.sh; ln -s /usr/share/oralux/main/oralux.sh ."
 
    # Installing the text based dialog
    chroot $BUILD bash -c "cd /usr/bin; ln -s /usr/share/oralux/dialog/dialog.php dialog-oralux;install -m 755 /usr/share/oralux/dialog/oralux-dialog.sh /usr/bin;install -m 755 /usr/share/oralux/main/oralux-yasr.sh /usr/bin"

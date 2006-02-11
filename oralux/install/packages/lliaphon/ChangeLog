@@ -1,0 +1,10 @@
+2006-02-11  Gilles Casse  <gcasse@oralux.org>
+
+	* lliaphond.c, lliaphon-client.c, LISEZMOI
+
+	Le nom des fifo devient .lliaphondin.$USER et .lliaphondout.$USER 
+	(toujours sous $HOME). Permet de passer en super utilisateur.
+	
+2005-12-19  Gilles Casse  <gcasse@oralux.org>
+
+	Version initiale

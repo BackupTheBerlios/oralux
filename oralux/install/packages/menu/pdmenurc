@@ -23,6 +23,7 @@ preproc:\
 #	exec:Help::ne /usr/share/oralux/doc/mcvox-$LANG.txt
 	exec:m c vox, file browser::mcvox
 	exec:qalc, calculator::qalc
+	exec:moc, console audio player::mocp
 	exec:linphonec, SIP internet phone::linphonec
 	exec:Micq, I C Q::micq
 	exec:imcom, jabber client::imcom
