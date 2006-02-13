@@ -2,37 +2,61 @@
 
 preproc:echo menu:main:minimenu
 
-preproc:\
-	case "$LANGUAGE" in \
-	pt_BR) echo "exec:YASR documentation::ne /usr/share/oralux/doc/Yasr/pt_BR/README.oralux";; \
-	es) echo "exec:YASR documentation::ne /usr/share/oralux/doc/Yasr/es/README.oralux";; \
-	fr) echo "exec:YASR documentation::ne /usr/share/oralux/doc/Yasr/fr/README.oralux";; \
-	ru) echo "exec:YASR documentation::ne /usr/share/oralux/doc/Yasr/ru/README.oralux";; \
-	*) echo "exec:YASR documentation (in English)::ne /usr/share/oralux/doc/Yasr/en/README.oralux";; \
-	esac
+case "$LANGUAGE" in 
+    pt*) 
+	export YASR_TEXT="YASR documentation"
+	export YASR_DOC="pt_BR/README.oralux"
+	;; 
+    es*) 
+	export YASR_TEXT="YASR documentation"
+	export YASR_DOC="es/README.oralux"
+	;; 
+    fr*) 
+	export YASR_TEXT="YASR documentation"
+	export YASR_DOC="fr/README.oralux"
+	;; 
+    ru*) 
+	export YASR_TEXT="YASR documentation"
+	export YASR_DOC="ru/README.oralux"
+	;; 
+    *) 
+	export YASR_TEXT="YASR documentation (in English)"
+	export YASR_DOC="en/README.oralux"
+	;; 
+esac
+
+
+
+#preproc:\
+#    echo "exec:$YASR_TEXT::ne /usr/share/oralux/doc/Yasr/$YASR_DOC"
+
+exec:$YASR_TEXT::ne /usr/share/oralux/doc/Yasr/$YASR_DOC
 
 preproc:\
 	case "$LANGUAGE" in \
-	es) echo "exec:Links, web browser::links /usr/share/oralux/doc/htm/faq-es.htm";; \
-	fr) echo "exec:Links, web browser::links /usr/share/oralux/doc/htm/faq-fr.htm";; \
-	ru) echo "exec:Links, web browser::links /usr/share/oralux/doc/htm/faq-ru.htm";; \
+	es*) echo "exec:Links, web browser::links /usr/share/oralux/doc/htm/faq-es.htm";; \
+	fr*) echo "exec:Links, web browser::links /usr/share/oralux/doc/htm/faq-fr.htm";; \
+	ru*) echo "exec:Links, web browser::links /usr/share/oralux/doc/htm/faq-ru.htm";; \
 	*) echo "exec:Links, web browser (in English)::links /usr/share/oralux/doc/htm/faq.htm";; \
 	esac
 
 	exec:N E, the nice editor::ne
 #	exec:Help::ne /usr/share/oralux/doc/mcvox-$LANG.txt
+
+
 	exec:m c vox, file browser::mcvox
 	exec:qalc, calculator::qalc
 	exec:moc, console audio player::mocp
+	exec:podracer, podcast receiver with BitTorrent support::podracer
 	exec:linphonec, SIP internet phone::linphonec
 	exec:Micq, I C Q::micq
 	exec:imcom, jabber client::imcom
 
 preproc:\
 	case "$LANGUAGE" in \
-	de) echo "exec:play a game\: adventure::/usr/games/frotz /usr/share/oralux/install/packages/games/de/abent.z5";; \
-	es) echo "exec:play a game\: Aventura::/usr/games/frotz /usr/share/oralux/install/packages/games/es/AVENTURA.Z5";; \
-	fr) echo "exec:Jeu \: filaments::/usr/games/frotz /usr/share/oralux/install/packages/games/fr/filaments.z8"; echo "exec:Jeu \: aventure::/usr/games/frotz /usr/share/oralux/install/packages/games/fr/aventure.z5";; \
+	de*) echo "exec:play a game\: adventure::/usr/games/frotz /usr/share/oralux/install/packages/games/de/abent.z5";; \
+	es*) echo "exec:play a game\: Aventura::/usr/games/frotz /usr/share/oralux/install/packages/games/es/AVENTURA.Z5";; \
+	fr*) echo "exec:Jeu \: filaments::/usr/games/frotz /usr/share/oralux/install/packages/games/fr/filaments.z8"; echo "exec:Jeu \: aventure::/usr/games/frotz /usr/share/oralux/install/packages/games/fr/aventure.z5";; \
 	*) echo "exec:play a game\: adventure (in English)::/usr/games/frotz /usr/share/oralux/install/packages/games/en/Advent.z5";; \
 	esac
 

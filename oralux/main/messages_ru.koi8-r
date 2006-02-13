@@ -667,7 +667,15 @@ struct t_translation TheRussianMessages[]=
    "Если синтезатор речи остановится, нажмите Control Alt i чтобы запустить его снова",
   },
 
-  {"Do you want this menu in Brazilian Portuguese ?",
+  {"Do you want this menu in Brazilian Portuguese?",
+   NULL,
+  },
+
+  {"Do you want a persistent storage?",
+   NULL,
+  },
+
+  {"Your preferences are set up. Do you want to quit this menu?",
    NULL,
   },
 

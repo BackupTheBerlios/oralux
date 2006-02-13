@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // menu.c
-// $Id: menu.c,v 1.14 2006/02/05 00:42:15 gcasse Exp $
+// $Id: menu.c,v 1.15 2006/02/13 20:18:48 gcasse Exp $
 // $Author: gcasse $
 // Description: introductory menu. 
-// $Date: 2006/02/05 00:42:15 $ |
-// $Revision: 1.14 $ |
+// $Date: 2006/02/13 20:18:48 $ |
+// $Revision: 1.15 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -252,17 +252,17 @@ static void setVolume()
     switch(a_char[0])
     {
     case '\n':
-      system("aumix -v +10 -w +10"); 
+      system("su - knoppix 'aumix -v +10 -w +10'"); 
       break;
     case ' ':
-      system("aumix -v -10 -w +10"); 
+      system("su - knoppix 'aumix -v -10 -w +10'"); 
       break;
     default:
-      system("aumix -S");
-      char* anUser=getenv("USER");
-      char* aHome=getenv("HOME");
-      sprintf(TheLine,"chown %s:%s %s/.aumixrc", anUser, anUser, aHome);
-      system(TheLine);
+      system("su - knoppix 'aumix -S'");
+/*       char* anUser=getenv("USER"); */
+/*       char* aHome=getenv("HOME"); */
+/*       sprintf(TheLine,"chown %s:%s %s/.aumixrc", anUser, anUser, aHome); */
+/*       system(TheLine); */
       aVolumeToChoose=0;
       break;
     }
@@ -371,6 +371,41 @@ void setInternet( struct menuInfo* theSelectedInfo)
 }
 /* > */
 
+/* < setPersistentStorage */
+void setPersistentStorage( struct menuInfo* theSelectedInfo)
+{
+  say( sayPersistentStorage);
+  say( PleasePressKey);
+
+  if (getAnswer() != MENU_Yes)
+    {
+      return;
+    }
+
+
+  // This menu requires yasr
+  buildConfigurationYasr(&(theSelectedInfo->myTextToSpeech));
+  
+  // Set the expected LANG
+  char* aLang=getStringLanguage( theSelectedInfo->myTextToSpeech.myLanguage);
+
+  char* aCommand=TheLine;
+  sprintf(aCommand, "%s/main/persistentStorage.sh", 
+	  ORALUX_RUNTIME);
+
+  runYasr( & (theSelectedInfo->myTextToSpeech), 
+	   theSelectedInfo->myMenuLanguage, 
+	   aCommand);
+}
+/* > */
+/* < setPersistentStorage */
+int setQuitExpected()
+{
+  say( sayQuitExpected);
+  say( PleasePressKey);
+  return (getAnswer() == MENU_Yes);
+}
+/* > */
 /* < setKeyboard */
 
 // TheKeyboards: an array useful to sort the keybord labels in alphabetical order (depends on the current language).
@@ -702,6 +737,8 @@ enum MENU_State {
   MENU_Braille,
   MENU_Desktop,
   MENU_Internet,
+  MENU_PersistentStorage,
+  MENU_QuitExpected,
   MENU_End,
 };
 
@@ -741,7 +778,7 @@ void menu(struct menuInfo* theSelectedInfo, int *theConfHasBeenUpdated)
 	{
 	case MENU_Volume:
 	  setVolume();
-	  aMenuState = (GNC_UpArrowKey == getLastKeyPressed()) ? MENU_Internet : MENU_Language;
+	  aMenuState = (GNC_UpArrowKey == getLastKeyPressed()) ? MENU_QuitExpected : MENU_Language;
 	  break;
 
 	case MENU_Language:
@@ -844,7 +881,27 @@ void menu(struct menuInfo* theSelectedInfo, int *theConfHasBeenUpdated)
 	case MENU_Internet:
 	  {
 	    setInternet( theSelectedInfo);
-	    aMenuState = (GNC_UpArrowKey == getLastKeyPressed()) ? MENU_TTS : MENU_End;
+	    aMenuState = (GNC_UpArrowKey == getLastKeyPressed()) ? MENU_TTS : MENU_PersistentStorage;
+	  }
+	  break;
+
+	case MENU_PersistentStorage:
+	  {
+	    setPersistentStorage( theSelectedInfo);
+	    aMenuState = (GNC_UpArrowKey == getLastKeyPressed()) ? MENU_Internet : MENU_QuitExpected;
+	  }
+	  break;
+
+	case MENU_QuitExpected:
+	  {
+	    if (setQuitExpected())
+	      {
+		aMenuState = MENU_End;
+	      }
+	    else
+	      {
+		aMenuState = (GNC_UpArrowKey == getLastKeyPressed()) ? MENU_PersistentStorage : MENU_Volume;
+	      }
 	  }
 	  break;
 

@@ -39,15 +39,18 @@
 ;; emacspeak
 (when (featurep 'emacspeak)
   
-  ;; Auditory icons are used in Multispeech
-  ;; and the punctuation is not said with other speech servers
-  (cond (
-	 (string-match "multispeech" (getenv "DTK_PROGRAM"))
-	 (setq-default emacspeak-use-auditory-icons t))
-	(
-	 t 
-	 (dtk-set-punctuations "none"))
-	)
+  ;; TBD: Auditory icons will be used in Multispeech
+  ;; and the punctuation will not be said with other speech servers
+;;   (cond (
+;; 	 (string-match "multispeech" (getenv "DTK_PROGRAM"))
+;; 	 (setq-default emacspeak-use-auditory-icons t)
+;; 	 )
+;; 	(
+;; 	 t 
+;; 	 (dtk-set-punctuations "none"))
+;; 	)
+  
+  (dtk-set-punctuations "none")
   
   ;; The default speech rate is lowered
   ;;(dtk-set-rate 135 t)

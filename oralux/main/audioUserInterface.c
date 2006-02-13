@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // audiouserinterface.c
-// $Id: audioUserInterface.c,v 1.22 2006/02/05 21:03:37 gcasse Exp $
+// $Id: audioUserInterface.c,v 1.23 2006/02/13 20:18:48 gcasse Exp $
 // $Author: gcasse $
 // Description: Managing and playing the pre-recorded messages.
-// $Date: 2006/02/05 21:03:37 $ |
-// $Revision: 1.22 $ |
+// $Date: 2006/02/13 20:18:48 $ |
+// $Revision: 1.23 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 // September 2003: 
 // * German translations by Guenther Harrasser.
@@ -1181,6 +1181,19 @@ char * TheMessages[][5]={
    "Deseja este menu em Português Brasileiro?",
   },
 
+  {"Do you want a new persistent storage?",
+   "Voulez-vous un nouveau stockage persistant ?",
+   NULL,
+   NULL,
+   NULL,
+  },
+
+  {"Your preferences are set up. Do you want to quit this menu?",
+   "Vos préférences sont mises à jour. Voulez-vous quitter ce menu ?",
+   NULL,
+   NULL,
+   NULL,
+  },
 };
 
 /* > */

@@ -76,7 +76,7 @@ voice=paul
 punctuation=some
 [Emacspeak server]
 rate=175
-punctuation=some
+punctuation=none
 [doubletalk]
 rate=6
 pitch=30

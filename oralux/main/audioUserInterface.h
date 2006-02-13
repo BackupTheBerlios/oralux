@@ -174,6 +174,8 @@ enum sentence {
   yasrIsStarted,
   yasrResetKeys,
   MenuInBrazilian,
+  sayPersistentStorage,
+  sayQuitExpected,
   MaxSentence, // the last enum! Place any new enum before it, please.
 };
 

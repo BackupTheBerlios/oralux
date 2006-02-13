@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # oralux.sh
-# $Id: oralux.sh,v 1.15 2006/02/05 00:42:15 gcasse Exp $
+# $Id: oralux.sh,v 1.16 2006/02/13 20:18:48 gcasse Exp $
 # $Author: gcasse $
 # Description: This script is called at init time
-# $Date: 2006/02/05 00:42:15 $ |
-# $Revision: 1.15 $ |
+# $Date: 2006/02/13 20:18:48 $ |
+# $Revision: 1.16 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -108,7 +108,6 @@ echo "lancement zsh"
 
 	    # just for safe
 	    pkill test-tengoo
-	    reset
 #/usr/bin/screen -c /usr/share/oralux/install/packages/screen/.screenrc.work
 	fi
 	echo -e '\007'	

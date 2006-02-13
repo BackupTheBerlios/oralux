@@ -127,7 +127,7 @@ TITLE1="Création d'un compte KNOPPIX persistant"
 MESSAGE1="Ce script crée l'image d'un disque virtuel persistant, pour le compte \"knoppix\", sur votre disque dur ou sur un périphérique externe comme une clé USB, une carte compact flash ou un disque zip. 
 Après le redémarrage, vous pourrez retrouver vos données personnelles et les fichiers de configuration.
 
-Do you want to create a persistent home directory or system config archive for the \"knoppix\" user?"
+Voulez-vous créez un répertoire persistant ou une archive des fichiers de configuration pour l'utilisateur \"knoppix\" ?"
 
 MESSAGE2="Choisissez s'il vous plait la partition où sera créée l'image :"
 MESSAGE3="Il y a déjà une image Knoppix de présente sur cette partition. Souhaitez-vous la supprimer, la formater ?"

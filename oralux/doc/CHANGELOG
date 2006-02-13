@@ -157,6 +157,8 @@ Thanks to Sergei V. Fleytin
 + Yasr: in standard mode, alt+ctrl+m is no more reserved to read the next line (since ctrl-m is interpreted as enter).
 
 * New softwares
++ podracer
++ moc
 + Instant messaging support. 
 Jabber clients: emacs-jabber and imcom. 
 Jabber server: packages included.

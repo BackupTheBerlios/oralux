@@ -110,6 +110,27 @@ I hope that it will help you better debug the Russian settings.
 
 + emacs : current dir = /home/knoppix
 
+* Lukas:
+- When the language is set to a non-English language, Emacs's messages
+that are still in English should be spoken with the English voice. The
+voice setting should probably be buffer local, so the mini-buffer is
+always in English. 
+- For German, some characters are not translated:
+  Here is what it should be:
+  (: "Klammer auf"
+ ): Klammer zu
+ [: Eckige Klammer auf
+ ]: Eckige Klammer zu
+ {: Geschweifte Klammer auf
+ }: Geschweifte Klammer zu
+ Also, the "@" symbol is spoken strangely, it should probably be "at"
+ in Geramn too.
+
+* Lukas No auditory icons or tones, so e.g. blank lines are not indicated.
+* Lukas Some  minibuffer messages are not always spoken. For example, if I hit C-s,
+it says nothing instead of "i-search:". Same for "Describe key
+briefly:". However "Find file:" is spoken fine for example.
+
 
 * Translations
 

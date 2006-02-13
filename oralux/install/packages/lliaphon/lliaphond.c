@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // lliaphond.c
-// $Id: lliaphond.c,v 1.2 2006/02/11 22:39:48 gcasse Exp $
+// $Id: lliaphond.c,v 1.3 2006/02/13 20:18:48 gcasse Exp $
 // $Author: gcasse $
 // Description: lliaphon daemon. 
-// $Date: 2006/02/11 22:39:48 $ |
-// $Revision: 1.2 $ |
+// $Date: 2006/02/13 20:18:48 $ |
+// $Revision: 1.3 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
       int flags;
       struct stat aFileInfo;
 
-      sprintf( aFifoName, "%s/%s", aHome, array[i]);
+      sprintf( aFifoName, "%s/%s.%s", aHome, array[i], aUser);
 
       if ((stat( aFifoName, &aFileInfo) == -1)
 	  && (mkfifo( aFifoName, 0600) == -1))

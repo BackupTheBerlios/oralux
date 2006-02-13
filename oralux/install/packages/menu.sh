@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # menu.sh
-# $Id: menu.sh,v 1.12 2006/02/11 22:43:41 gcasse Exp $
+# $Id: menu.sh,v 1.13 2006/02/13 20:18:48 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing the audio menu
-# $Date: 2006/02/11 22:43:41 $ |
-# $Revision: 1.12 $ |
+# $Date: 2006/02/13 20:18:48 $ |
+# $Revision: 1.13 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -64,7 +64,7 @@ Copy2Oralux()
    fi
 
    chroot $BUILD apt-get install pdmenu
-   install -m 444 $INSTALL_PACKAGES/menu/pdmenurc $BUILD/etc
+   install -m 755 $INSTALL_PACKAGES/menu/oralux-pdmenu.sh $BUILD/usr/bin
 }
 
 # debianizeBase()
