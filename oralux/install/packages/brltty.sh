@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # brltty.sh
-# $Id: brltty.sh,v 1.6 2005/12/25 21:02:35 gcasse Exp $
+# $Id: brltty.sh,v 1.7 2006/03/05 18:28:57 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing BRLTTY
-# $Date: 2005/12/25 21:02:35 $ |
-# $Revision: 1.6 $ |
+# $Date: 2006/03/05 18:28:57 $ |
+# $Revision: 1.7 $ |
 # Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -24,7 +24,7 @@
 # ----------------------------------------------------------------------------
 ####
 source ../oralux.conf
-cd $ARCH
+cd $ARCHDIR
 wget http://www.mielke.cc/brltty/releases/brltty-3.7.1.tar.gz
 
 ####
@@ -50,7 +50,7 @@ InstallPackage()
 #     apt-get --purge remove brltty
 #     cd tmp
 #     rm -rf brltty*
-#     cp $ARCH/brltty-3.6.1.tar.gz .
+#     cp $ARCHDIR/brltty-3.6.1.tar.gz .
 #     tar -zxvf brltty*
 #     cd brltty*
 #     ./configure

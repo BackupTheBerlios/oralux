@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # multispeech.sh
-# $Id: multispeech.sh,v 1.14 2006/01/30 22:49:38 gcasse Exp $
+# $Id: multispeech.sh,v 1.15 2006/03/05 18:28:58 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing Multispeech.
-# $Date: 2006/01/30 22:49:38 $ |
-# $Revision: 1.14 $ |
+# $Date: 2006/03/05 18:28:58 $ |
+# $Revision: 1.15 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -28,16 +28,16 @@ source ../oralux.conf
 
 export RULEX_RELEASE=1.0
 export MULTISPEECH_RELEASE=oralux-2006-01-29
-export ARCH_RULEX=$ARCH/rulex-$RULEX_RELEASE.tar.gz 
-export ARCH_MULTISPEECH_SRC=$ARCH/multispeech-$MULTISPEECH_RELEASE.tar.bz2
-#export ARCH_RU_TTS=$ARCH/ru_tts.bz2
-export ARCH_LEXICON=$ARCH/enlex.tar.bz2
+export ARCH_RULEX=$ARCHDIR/rulex-$RULEX_RELEASE.tar.gz 
+export ARCH_MULTISPEECH_SRC=$ARCHDIR/multispeech-$MULTISPEECH_RELEASE.tar.bz2
+#export ARCH_RU_TTS=$ARCHDIR/ru_tts.bz2
+export ARCH_LEXICON=$ARCHDIR/enlex.tar.bz2
 #export DOC="/usr/local/share/doc"
 export BIN="/usr/local/bin"
 export MBROLA="/usr/local/share/mbrola"
 
 
-cd $ARCH
+cd $ARCHDIR
 wget http://oralux.org/tmp/multispeech-$MULTISPEECH_RELEASE.tar.bz2
 # wget ftp://ftp.rakurs.spb.ru/pub/Goga/projects/speech-interface/rulex/rulex-$RULEX_RELEASE.tar.gz
 # wget ftp://ftp.rakurs.spb.ru/pub/Goga/projects/speech-interface/ru_tts/binaries/ru_tts.bz2
@@ -68,13 +68,13 @@ InstallPackage()
 
 ### ru_tts
     cd $TMP
-    cp $ARCH/ru_tts.bz2 .
+    cp $ARCHDIR/ru_tts.bz2 .
     bunzip2 ru_tts.bz2
     install -m 555 ru_tts $BIN
 
 ### Lexicon for English synthesis
     cd $TMP
-    cp $ARCH/enlex.tar.bz2 .
+    cp $ARCHDIR/enlex.tar.bz2 .
     tar -jxvf enlex.tar.bz2
     cd enlex
     make
@@ -145,13 +145,13 @@ Copy2Oralux()
 
 ### ru_tts
     cd $TMP
-    cp $ARCH/ru_tts.bz2 .
+    cp $ARCHDIR/ru_tts.bz2 .
     bunzip2 ru_tts.bz2
     install -m 555 ru_tts $BIN
 
 ### Lexicon for English synthesis
     cd $TMP
-    cp $ARCH/enlex.tar.bz2 .
+    cp $ARCHDIR/enlex.tar.bz2 .
     tar -jxvf enlex.tar.bz2
     cd enlex
     make

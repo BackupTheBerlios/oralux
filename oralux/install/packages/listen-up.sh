@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # listen-up.sh
-# $Id: listen-up.sh,v 1.4 2006/01/28 23:09:21 gcasse Exp $
+# $Id: listen-up.sh,v 1.5 2006/03/05 18:28:57 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing listen-up
-# $Date: 2006/01/28 23:09:21 $ |
-# $Revision: 1.4 $ |
+# $Date: 2006/03/05 18:28:57 $ |
+# $Revision: 1.5 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -30,7 +30,7 @@ source ../oralux.conf
 
 export ARCH_OSALP="osalp-0.7.3.tar.gz"
 
-cd $ARCH
+cd $ARCHDIR
 if [ ! -e $ARCH_OSALP ]
     then
     echo "Downloading $ARCH_OSALP"
@@ -46,7 +46,7 @@ cd /tmp
 apt-get install libncurses5-dev
 
 # osalp is required
-tar -zxvf $ARCH/$ARCH_OSALP
+tar -zxvf $ARCHDIR/$ARCH_OSALP
 cd osalp-*
 ./configure
 make
@@ -71,7 +71,7 @@ chroot $BUILD apt-get install libncurses5-dev
 cd $BUILD/tmp
 
 # osalp is required
-tar -zxvf $ARCH/$ARCH_OSALP
+tar -zxvf $ARCHDIR/$ARCH_OSALP
 chroot $BUILD bash -c "cd /tmp/osalp-*;./configure;make;make install"
 
 #

@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // menu.c
-// $Id: menu.c,v 1.15 2006/02/13 20:18:48 gcasse Exp $
+// $Id: menu.c,v 1.16 2006/03/05 18:28:58 gcasse Exp $
 // $Author: gcasse $
 // Description: introductory menu. 
-// $Date: 2006/02/13 20:18:48 $ |
-// $Revision: 1.15 $ |
+// $Date: 2006/03/05 18:28:58 $ |
+// $Revision: 1.16 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -356,7 +356,7 @@ void setInternet( struct menuInfo* theSelectedInfo)
 
 
   // This menu requires yasr
-  buildConfigurationYasr(&(theSelectedInfo->myTextToSpeech));
+  buildConfigurationYasr(&(theSelectedInfo->myTextToSpeech), 1);
   
   // Set the expected LANG
   char* aLang=getStringLanguage( theSelectedInfo->myTextToSpeech.myLanguage);
@@ -384,7 +384,7 @@ void setPersistentStorage( struct menuInfo* theSelectedInfo)
 
 
   // This menu requires yasr
-  buildConfigurationYasr(&(theSelectedInfo->myTextToSpeech));
+  buildConfigurationYasr(&(theSelectedInfo->myTextToSpeech), 1);
   
   // Set the expected LANG
   char* aLang=getStringLanguage( theSelectedInfo->myTextToSpeech.myLanguage);
@@ -715,7 +715,7 @@ void saveconfig( struct menuInfo* theSelectedInfo)
     }
 
   // This menu requires yasr
-  buildConfigurationYasr(&(theSelectedInfo->myTextToSpeech));
+  buildConfigurationYasr(&(theSelectedInfo->myTextToSpeech), 1);
   
   char* aCommand=TheLine;
   //  sprintf(aCommand, "/usr/sbin/saveconfig");

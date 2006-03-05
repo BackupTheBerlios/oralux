@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # tengoo.sh
-# $Id: tengoo.sh,v 1.2 2006/01/22 15:19:45 gcasse Exp $
+# $Id: tengoo.sh,v 1.3 2006/03/05 18:28:58 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing tengoo
-# $Date: 2006/01/22 15:19:45 $ |
-# $Revision: 1.2 $ |
+# $Date: 2006/03/05 18:28:58 $ |
+# $Revision: 1.3 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -26,7 +26,7 @@
 source ../oralux.conf
 
 export LIB_DEST=/usr/lib
-cd $ARCH
+cd $ARCHDIR
 
 ####
 # Installing the package in the current tree

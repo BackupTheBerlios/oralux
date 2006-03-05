@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # doc.sh
-# $Id: doc.sh,v 1.4 2006/01/28 23:09:21 gcasse Exp $
+# $Id: doc.sh,v 1.5 2006/03/05 18:28:57 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing the documentation
-# $Date: 2006/01/28 23:09:21 $ |
-# $Revision: 1.4 $ |
+# $Date: 2006/03/05 18:28:57 $ |
+# $Revision: 1.5 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -54,10 +54,10 @@ rm -rf $URL
 # Emacspeak's tutorials: under /usr/share/oralux/doc/tutorials and are installed - by side effect - when the oralux files are copied.
 
 # French files from Carrefour Blinux
-#cp -R $ARCH/cblx $BUILDDOC
+#cp -R $ARCHDIR/cblx $BUILDDOC
 
 # TUX&GNU@school
-#cp -R $ARCH/tgs $BUILDDOC
+#cp -R $ARCHDIR/tgs $BUILDDOC
 
 #    chroot $BUILD apt-get -t unstable install eflite
 }

@@ -1,12 +1,12 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # emacspeak.sh
-# $Id: emacspeak-ss.sh,v 1.4 2005/12/25 21:02:35 gcasse Exp $
+# $Id: emacspeak-ss.sh,v 1.5 2006/03/05 18:28:57 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing emacspeak. Thanks to the Nath's howto: 
 # emacspeak-dtk-soft-debinst-howto.htm
-# $Date: 2005/12/25 21:02:35 $ |
-# $Revision: 1.4 $ |
+# $Date: 2006/03/05 18:28:57 $ |
+# $Revision: 1.5 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -26,7 +26,7 @@
 ####
 source ../oralux.conf
 EMACSPEAK_SS=emacspeak-ss-1.9.1.tar.gz
-ARCH_EMACSPEAK_SS=$ARCH/$EMACSPEAK_SS
+ARCH_EMACSPEAK_SS=$ARCHDIR/$EMACSPEAK_SS
 LISTE="accent apollo braillenspeak ciber doubletalk pchablado"
 
 ####
@@ -87,7 +87,7 @@ Copy2Oralux()
 
 if [ ! -e $ARCH_EMACSPEAK_SS ]
     then
-    cd $ARCH
+    cd $ARCHDIR
     echo "Downloading $EMACSPEAK_SS"
     wget -nd http://fr.rpmfind.net/linux/blinux/emacspeak/blinux/$EMACSPEAK_SS
 fi

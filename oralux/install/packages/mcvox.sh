@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # mcvox.sh
-# $Id: mcvox.sh,v 1.5 2005/12/25 21:02:35 gcasse Exp $
+# $Id: mcvox.sh,v 1.6 2006/03/05 18:28:57 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing mcvox
-# $Date: 2005/12/25 21:02:35 $ |
-# $Revision: 1.5 $ |
+# $Date: 2006/03/05 18:28:57 $ |
+# $Revision: 1.6 $ |
 # Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -27,8 +27,8 @@ source ../oralux.conf
 export MCVOX_RELEASE=0.5
 export MCVOX=mcvox-$MCVOX_RELEASE.tgz
 
-cd $ARCH
-if [ ! -e $ARCH/$MCVOX ]
+cd $ARCHDIR
+if [ ! -e $ARCHDIR/$MCVOX ]
     then
     echo "Downloading $MCVOX"
     wget http://soft.oralux.org/download/mcvox-$MCVOX_RELEASE.tgz
@@ -41,8 +41,8 @@ InstallPackage()
 #    apt-get remove --purge mc
     cd /tmp
     rm -rf mcvox*
-    cp $ARCH/$MCVOX .
-    tar -zxvf $ARCH/$MCVOX
+    cp $ARCHDIR/$MCVOX .
+    tar -zxvf $ARCHDIR/$MCVOX
     cd mcvox*
     ./configure --prefix=/usr --with-screen=ncurses
     make
@@ -57,7 +57,7 @@ Copy2Oralux()
 {
     cd $BUILD/tmp
     rm -rf mcvox*
-    cp $ARCH/$MCVOX .
+    cp $ARCHDIR/$MCVOX .
 
     chroot $BUILD  bash -c "\
     cd /tmp;\

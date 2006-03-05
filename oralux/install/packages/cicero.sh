@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # cicero.sh
-# $Id: cicero.sh,v 1.3 2006/01/28 23:09:21 gcasse Exp $
+# $Id: cicero.sh,v 1.4 2006/03/05 18:28:57 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing Cicero
-# $Date: 2006/01/28 23:09:21 $ |
-# $Revision: 1.3 $ |
+# $Date: 2006/03/05 18:28:57 $ |
+# $Revision: 1.4 $ |
 # Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -28,7 +28,7 @@ export CICERO_RELEASE=0.6
 export SERVER=/usr/share/emacs/site-lisp/emacspeak/servers
 export ARCH_CICERO=cicero-${CICERO_RELEASE}.tar.gz
 
-cd $ARCH
+cd $ARCHDIR
 
 if [ ! -e $ARCH_CICERO ]
     then
@@ -44,7 +44,7 @@ InstallPackage()
     cd /tmp
     rm -rf cicero*
     rm -rf /usr/local/share/cicero*
-    tar -zxvf $ARCH/$ARCH_CICERO
+    tar -zxvf $ARCHDIR/$ARCH_CICERO
 
     # Patch from Stephane Doyon (compatibility with the Emacspeak server)
     cd cicero-$CICERO_RELEASE
@@ -85,7 +85,7 @@ Copy2Oralux()
     cd $BUILD/tmp
     rm -rf cicero*
     rm -rf $BUILD/usr/local/share/cicero*
-    tar -zxvf $ARCH/$ARCH_CICERO
+    tar -zxvf $ARCHDIR/$ARCH_CICERO
     chroot $BUILD  bash -c "\
     cd /tmp;\
     cd cicero-$CICERO_RELEASE;\

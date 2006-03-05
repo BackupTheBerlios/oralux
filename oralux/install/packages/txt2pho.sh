@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # txt2pho.sh
-# $Id: txt2pho.sh,v 1.3 2006/01/28 23:09:21 gcasse Exp $
+# $Id: txt2pho.sh,v 1.4 2006/03/05 18:28:58 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing txt2pho, Spanish phonetizer
-# $Date: 2006/01/28 23:09:21 $ |
-# $Revision: 1.3 $ |
+# $Date: 2006/03/05 18:28:58 $ |
+# $Revision: 1.4 $ |
 # Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -28,7 +28,7 @@ source ../oralux.conf
 export TXT2PHO="txt2pho.zip"
 export URL="http://www.ikp.uni-bonn.de/dt/forsch/phonetik/hadifix/${TXT2PHO}"
 
-cd $ARCH
+cd $ARCHDIR
 
 if [ ! -e $TXT2PHO ]
     then
@@ -82,7 +82,7 @@ InstallPackage()
     install -d $TMP
 
     cd $TMP
-    unzip $ARCH/$TXT2PHO
+    unzip $ARCHDIR/$TXT2PHO
     cd txt2pho
 
     BIN="$BUILD/usr/local/bin"

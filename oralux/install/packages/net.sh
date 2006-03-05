@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # net.sh
-# $Id: net.sh,v 1.7 2005/12/25 21:02:35 gcasse Exp $
+# $Id: net.sh,v 1.8 2006/03/05 18:28:58 gcasse Exp $
 # $Author: gcasse $
 # Description: ppp configuration tool, adsl drivers,...
-# $Date: 2005/12/25 21:02:35 $ |
-# $Revision: 1.7 $ |
+# $Date: 2006/03/05 18:28:58 $ |
+# $Revision: 1.8 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -25,7 +25,7 @@
 ####
 source ../oralux.conf
 
-cd $ARCH
+cd $ARCHDIR
 
 ####
 # Installing the package in the current tree

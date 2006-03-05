@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // audiouserinterface.c
-// $Id: audioUserInterface.c,v 1.23 2006/02/13 20:18:48 gcasse Exp $
+// $Id: audioUserInterface.c,v 1.24 2006/03/05 18:28:58 gcasse Exp $
 // $Author: gcasse $
 // Description: Managing and playing the pre-recorded messages.
-// $Date: 2006/02/13 20:18:48 $ |
-// $Revision: 1.23 $ |
+// $Date: 2006/03/05 18:28:58 $ |
+// $Revision: 1.24 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 // September 2003: 
 // * German translations by Guenther Harrasser.
@@ -908,11 +908,11 @@ char * TheMessages[][5]={
    "Deseja este menu em Russo?",
   },
 
-  {"zero point seven point 3", // "[:pu all] 0.6 beta", 
-   "zéro point sept point 3",
-   "0 punkt 7 punkt 3",
-   "0 punto 7 punto 3",
-   "zero punto sete punto três",
+  {"zero point seven point 4", // "[:pu all] 0.6 beta", 
+   "zéro point sept point 4",
+   "0 punkt 7 punkt 4",
+   "0 punto 7 punto 4",
+   "zero punto sete punto quatro",
   },
 
   {"Do you want to change the keyboard features?",

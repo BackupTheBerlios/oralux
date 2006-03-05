@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # misc.sh
-# $Id: misc.sh,v 1.19 2006/02/11 22:43:41 gcasse Exp $
+# $Id: misc.sh,v 1.20 2006/03/05 18:28:58 gcasse Exp $
 # $Author: gcasse $
 # Description: Miscellaneous packages
-# $Date: 2006/02/11 22:43:41 $ |
-# $Revision: 1.19 $ |
+# $Date: 2006/03/05 18:28:58 $ |
+# $Revision: 1.20 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -28,7 +28,7 @@ source ../oralux.conf
 export ARCH_DOSEMU_COMMAND=xmsswap.zip
 export DOSEMU_URL="http://freedos.sourceforge.net/freecom/packages/082pl3/$ARCH_DOSEMU_COMMAND"
 
-cd $ARCH
+cd $ARCHDIR
 
 if [ ! -e $ARCH_DOSEMU_COMMAND ]
     then
@@ -39,7 +39,7 @@ fi
 
 export LIST="alsa-utils angband-doc angband audacity aumix bsdgames catdoc \
 aspell-de aspell-en aspell-es aspell-fr aspell-pt-br aspell-pt \
-dosemu-freedos ecasound elinks erc frotz gobjc lynx \
+dosemu-freedos ecasound elinks erc frotz gobjc lynx leave \
 manpages manpages-de manpages-es manpages-fr manpages-pt manpages-ru \
 moc nano ne nethack-console nethack pdftohtml \
 ppthtml podracer python qalc tcsh toolame \
@@ -58,7 +58,7 @@ InstallPackage()
     cd /tmp
     mkdir FreeCom 
     cd FreeCom 
-    unzip $ARCH/$ARCH_DOSEMU_COMMAND
+    unzip $ARCHDIR/$ARCH_DOSEMU_COMMAND
     export DOC_FREECOM="/usr/share/doc/FreeCom"
     install -d $DOC_FREECOM
     install -m 644 *.txt *.html $DOC_FREECOM
@@ -98,7 +98,7 @@ Copy2Oralux()
     cd /tmp
     mkdir FreeCom 
     cd FreeCom 
-    unzip $ARCH/$ARCH_DOSEMU_COMMAND
+    unzip $ARCHDIR/$ARCH_DOSEMU_COMMAND
     export DOC_FREECOM="/usr/share/doc/FreeCom"
     install -d $BUILD$DOC_FREECOM
     install -m 644 *.txt *.html $BUILD$DOC_FREECOM

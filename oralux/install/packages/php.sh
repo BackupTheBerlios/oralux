@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # php.sh
-# $Id: php.sh,v 1.11 2006/01/28 23:09:21 gcasse Exp $
+# $Id: php.sh,v 1.12 2006/03/05 18:28:58 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing a customized PHP5 cli (non canonical mode)
-# $Date: 2006/01/28 23:09:21 $ |
-# $Revision: 1.11 $ |
+# $Date: 2006/03/05 18:28:58 $ |
+# $Revision: 1.12 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -29,7 +29,7 @@ export OPT_CONF="--prefix=/usr --program-suffix=-oralux --with-libxml-dir --disa
 export RELEASE="5.0.5"
 export ARCH_PHP="php-${RELEASE}.tar.bz2"
 
-cd $ARCH
+cd $ARCHDIR
 if [ ! -e $ARCH_PHP ]
     then
     echo "Downloading $ARCH_PHP"
@@ -46,7 +46,7 @@ InstallPackage()
     apt-get install libtidy-dev
     cd /tmp
     rm -rf /tmp/php-${RELEASE}*
-    tar -jxvf $ARCH/$ARCH_PHP
+    tar -jxvf $ARCHDIR/$ARCH_PHP
     cd php-${RELEASE}
     cp $INSTALL_PACKAGES/php/dio.c ext/dio
     cp $INSTALL_PACKAGES/php/php_dio.h ext/dio
@@ -67,7 +67,7 @@ Copy2Oralux()
     # php5
     cd $BUILD/tmp
     rm -rf php-${RELEASE}*
-    tar -jxvf $ARCH/$ARCH_PHP
+    tar -jxvf $ARCHDIR/$ARCH_PHP
     cp $INSTALL_PACKAGES/php/dio.c php-${RELEASE}/ext/dio
     cp $INSTALL_PACKAGES/php/php_dio.h php-${RELEASE}/ext/dio
 

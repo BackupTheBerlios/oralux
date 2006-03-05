@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # yasr.sh
-# $Id: yasr.sh,v 1.9 2006/01/23 22:08:36 gcasse Exp $
+# $Id: yasr.sh,v 1.10 2006/03/05 18:28:58 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing Yasr
-# $Date: 2006/01/23 22:08:36 $ |
-# $Revision: 1.9 $ |
+# $Date: 2006/03/05 18:28:58 $ |
+# $Revision: 1.10 $ |
 # Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -25,7 +25,7 @@
 ####
 source ../oralux.conf
 export YASR_RELEASE=0.6.7
-cd $ARCH
+cd $ARCHDIR
 #wget http://ovh.dl.sourceforge.net/sourceforge/yasr/yasr-$YASR_RELEASE.tar.gz
 
 
@@ -37,7 +37,7 @@ InstallPackage()
     rm -rf /etc/yasr
     cd /tmp
     rm -rf yasr*
-    cp $ARCH/yasr-$YASR_RELEASE.tar.gz .
+    cp $ARCHDIR/yasr-$YASR_RELEASE.tar.gz .
     tar -zxvf yasr-$YASR_RELEASE.tar.gz
 
 #     cd yasr*
@@ -78,7 +78,7 @@ Copy2Oralux()
     rm -rf $BUILD/etc/yasr
     cd $BUILD/tmp
     rm -rf yasr*
-    cp $ARCH/yasr-$YASR_RELEASE.tar.gz .
+    cp $ARCHDIR/yasr-$YASR_RELEASE.tar.gz .
     tar -zxvf yasr-$YASR_RELEASE.tar.gz
 
     chroot $BUILD  bash -c "\

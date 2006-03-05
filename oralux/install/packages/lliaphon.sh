@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # lliaphon.sh
-# $Id: lliaphon.sh,v 1.4 2006/01/28 23:09:21 gcasse Exp $
+# $Id: lliaphon.sh,v 1.5 2006/03/05 18:28:57 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing LLiaPhon
-# $Date: 2006/01/28 23:09:21 $ |
-# $Revision: 1.4 $ |
+# $Date: 2006/03/05 18:28:57 $ |
+# $Revision: 1.5 $ |
 # Copyright (C) 2004, 2005 Nath (nath.ml at free.fr)
 #
 # This program is free software; you can redistribute it and/or
@@ -28,7 +28,7 @@ export REL="0.4"
 LLIAPHON="lliaphon-${REL}.tar.gz"
 export URL="http://download.gna.org/lliaphon/stable/${LLIAPHON}"
 
-cd $ARCH
+cd $ARCHDIR
 
 if [ ! -e $LLIAPHON ]
     then
@@ -42,7 +42,7 @@ InstallPackage()
 {
 # Installing LLiaPhon
 cd /tmp
-tar xvzf $ARCH/$LLIAPHON
+tar xvzf $ARCHDIR/$LLIAPHON
 patch -p0 < $INSTALL_PACKAGES/lliaphon/lliaphon-0.4-oralux.patch
 cd /tmp/lliaphon-$REL
 ./configure --enable-lex80k
@@ -64,7 +64,7 @@ Copy2Oralux()
 {
 # Installing LLiaPhon
 cd $BUILD/tmp
-tar xvzf $ARCH/$LLIAPHON
+tar xvzf $ARCHDIR/$LLIAPHON
 patch -p0 < $INSTALL_PACKAGES/lliaphon/lliaphon-0.4-oralux.patch
 chroot $BUILD bash -c "cd /tmp/lliaphon-$REL;./configure --enable-lex80k;make;make install"
 

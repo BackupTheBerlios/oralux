@@ -1,11 +1,11 @@
 #!/bin/bash
 # ----------------------------------------------------------------------------
 # netConfig.sh
-# $Id: netConfig.sh,v 1.14 2006/02/13 20:18:48 gcasse Exp $
+# $Id: netConfig.sh,v 1.15 2006/03/05 18:28:58 gcasse Exp $
 # $Author: gcasse $
 # Description: Menu for internet settings
-# $Date: 2006/02/13 20:18:48 $ |
-# $Revision: 1.14 $ |
+# $Date: 2006/03/05 18:28:58 $ |
+# $Revision: 1.15 $ |
 # Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -101,7 +101,7 @@ case "$LANGUAGE" in
 	TextEthernet="Ethernet connexion"
 	TextMail="Mail"
 	TextQuit="Quit"
-	Textpon="You will want to type in a shell the pon command, P O N, to start the connection"
+	Textpon="You may want to type in a shell the pon command, P O N, to start the connection"
 	Textpoff="The poff command, P O F F, stops the connection"
 	;;
 esac

@@ -324,7 +324,7 @@ umount $BUILD || true
 fi
 
 # Check that the expected directory are present 
-[ -d $ARCH ] || mkdir $ARCH
+[ -d $ARCHDIR ] || mkdir $ARCHDIR
 [ -d $FACTORY ] || mkdir $FACTORY
 [ -d $MNT_ORALUX ] || mkdir $MNT_ORALUX
 [ -d $BUILD ] || mkdir $BUILD

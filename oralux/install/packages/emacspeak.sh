@@ -1,12 +1,12 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # emacspeak.sh
-# $Id: emacspeak.sh,v 1.9 2005/12/25 21:02:35 gcasse Exp $
+# $Id: emacspeak.sh,v 1.10 2006/03/05 18:28:57 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing emacspeak. Thanks to the Nath's howto: 
 # emacspeak-dtk-soft-debinst-howto.htm
-# $Date: 2005/12/25 21:02:35 $ |
-# $Revision: 1.9 $ |
+# $Date: 2006/03/05 18:28:57 $ |
+# $Revision: 1.10 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -26,13 +26,13 @@
 ####
 source ../oralux.conf
 EMACSPEAK=emacspeak-23.0.tar.bz2
-ARCH_EMACSPEAK=$ARCH/$EMACSPEAK
+ARCH_EMACSPEAK=$ARCHDIR/$EMACSPEAK
 LIB_LIST="debian-el edb emacs-goodies-el emacs-wiki muse-el nxml-mode planner-el texinfo w3-el-e21 w3m-el xsltproc"
 
 # Patch by Igor B. Poretsky (multispeech integration, and more)
 PATCH=emacspeak-23-2005_12_16.patch
 
-cd $ARCH
+cd $ARCHDIR
 
 if [ ! -e $ARCH_EMACSPEAK ]
     then
@@ -40,7 +40,7 @@ if [ ! -e $ARCH_EMACSPEAK ]
 #    wget http://switch.dl.sourceforge.net/sourceforge/emacspeak/$EMACSPEAK
 fi
 
-if [ ! -e $ARCH/$PATCH.bz2 ]
+if [ ! -e $ARCHDIR/$PATCH.bz2 ]
     then
     echo "Downloading $PATCH"
 #    wget ftp://ftp.rakurs.spb.ru/pub/Goga/projects/speech-interface/patches/emacspeak/emacspeak-23.patch
@@ -167,7 +167,7 @@ Copy2Oralux()
 
 if [ ! -e $ARCH_EMACSPEAK ]
     then
-    cd $ARCH
+    cd $ARCHDIR
     echo "Downloading $EMACSPEAK"
     wget -nd http://unc.dl.sourceforge.net/sourceforge/emacspeak/$EMACSPEAK
 fi
