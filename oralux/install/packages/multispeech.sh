@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # multispeech.sh
-# $Id: multispeech.sh,v 1.15 2006/03/05 18:28:58 gcasse Exp $
+# $Id: multispeech.sh,v 1.16 2006/03/19 12:00:33 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing Multispeech.
-# $Date: 2006/03/05 18:28:58 $ |
-# $Revision: 1.15 $ |
+# $Date: 2006/03/19 12:00:33 $ |
+# $Revision: 1.16 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -27,7 +27,7 @@ set -vx
 source ../oralux.conf
 
 export RULEX_RELEASE=1.0
-export MULTISPEECH_RELEASE=oralux-2006-01-29
+export MULTISPEECH_RELEASE=oralux-2006-03-11
 export ARCH_RULEX=$ARCHDIR/rulex-$RULEX_RELEASE.tar.gz 
 export ARCH_MULTISPEECH_SRC=$ARCHDIR/multispeech-$MULTISPEECH_RELEASE.tar.bz2
 #export ARCH_RU_TTS=$ARCHDIR/ru_tts.bz2
@@ -131,7 +131,7 @@ Copy2Oralux()
     export MBROLA="$BUILD/$MBROLA"
     install -d $MBROLA
 
-    export BIN="$BUILD/$BIN"
+    export BIN="$BUILD$BIN"
     install -d $BIN
 
     export TMP=$BUILD/tmp
@@ -181,9 +181,9 @@ Copy2Oralux()
 	install -m 555 $SRC/scripts/tts/$i $LIB/tts
     done
 
-    install -m 555 $SRC/src/multilingual/speech_server $LIB
-    install -m 555 $SRC/src/freephone/freephone $BIN
-    install -m 555 $SRC/src/tones/tones $BIN
+    install -m 755 $SRC/src/multilingual/speech_server $LIB
+    install -m 755 $SRC/src/freephone/freephone $BIN
+    install -m 755 $SRC/src/tones/tones $BIN
 
 # Clear temporary files
 #    rm -rf $SRC/multispeech-$MULTISPEECH_RELEASE

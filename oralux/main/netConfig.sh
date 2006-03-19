@@ -1,11 +1,11 @@
 #!/bin/bash
 # ----------------------------------------------------------------------------
 # netConfig.sh
-# $Id: netConfig.sh,v 1.15 2006/03/05 18:28:58 gcasse Exp $
+# $Id: netConfig.sh,v 1.16 2006/03/19 12:00:33 gcasse Exp $
 # $Author: gcasse $
 # Description: Menu for internet settings
-# $Date: 2006/03/05 18:28:58 $ |
-# $Revision: 1.15 $ |
+# $Date: 2006/03/19 12:00:33 $ |
+# $Revision: 1.16 $ |
 # Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -32,14 +32,20 @@ tempfile=`tempfile 2>/dev/null` || tempfile=/tmp/test$$
 trap "rm -f $tempfile" 0 1 2 5 15
 
 case "$LANGUAGE" in
+    de*|at*|ch*)
+    TextCancelPressed="Abbrechen gedrückt."
+    TextEscPressed="Escape gedrückt."
+    ;;
+
     fr*)
-	TextCancelPressed="Opération annulée."
-	TextEscPressed="Touche échappement appuyée."
-	;;
+    TextCancelPressed="Opération annulée."
+    TextEscPressed="Touche échappement appuyée."
+    ;;
+
     *)
-	TextCancelPressed="Cancel pressed."
-	TextEscPressed="ESC pressed."
-	;;
+    TextCancelPressed="Cancel pressed."
+    TextEscPressed="ESC pressed."
+    ;;
 esac
 
 
@@ -52,13 +58,13 @@ adslMenu()
 	*)
 	    TextWhichUsbADSL="Which is your U S B, A D S L Modem?"
 	    ;;
-    esac
-    
-    $DIALOG --nobutton --menu "$TextWhichUsbADSL" 20 51 4 \
-	"1" "Sagem"\
-	"2" "E C I"\
-	2> $tempfile
-    
+esac
+
+$DIALOG --nobutton --menu "$TextWhichUsbADSL" 20 51 4 \
+    "1" "Sagem"\
+    "2" "E C I"\
+    2> $tempfile
+
 #	"3" "SpeedTouch"\
 
 retval=$?
@@ -67,87 +73,117 @@ choice=`cat $tempfile`
 
 case $retval in
     0)
-	case $choice in
-	    1)
-		./eagleConfig.sh
-		;;
-	    2)
-		eciadsl-config-text
-		;;
-	esac
+    case $choice in
+	1)
+	./eagleConfig.sh
 	;;
+	2)
+	eciadsl-config-text
+	;;
+    esac
+    ;;
     1)
-	echo "$TextCancelPressed"
-	;;
+    echo "$TextCancelPressed"
+    ;;
     255)
-	echo "$TextEscPressed"
-	;;
+    echo "$TextEscPressed"
+    ;;
 esac
 }
 
 case "$LANGUAGE" in
+de*|at*|ch*)
+    TextPing="Ihre Internetverbindung testen."
+    TextPingOk="Ihre Internetverbindung funktioniert."
+    TextPingKo="Keine Antwort von google.com"
+    TextSettingUp="Ihre Internetverbindung einrichten"
+    TextSerialModem="Serielles Modem"
+    TextEthernet="Ethernet connexion Internetverbindung"
+    TextMail="Mail"
+    TextQuit="Beenden"
+    Textpon="Geben Sie in einer Shell den pon Befehl, P O N, ein, um die Verbindung zu starten."
+    Textpoff="Der poff Befehl, P O F F, unterbricht die Verbindung"
+    ;;
     fr*)
-	TextSettingUp="Configuration de la connexion internet"
-	TextSerialModem="Modem série"
-	TextEthernet="Liaison Ethernet"
-	TextMail="Courriel"
-	TextQuit="Quitter"
-	Textpon="Pour démarrer la connection, vous taperez dans un shell la commande pon, qui s'écrit P O N."
-	Textpoff="La commande poff, P O F F, arrête la connexion."
-	;;
+    TextPing="Test de la connexion internet"
+    TextPingOk="La connexion internet fonctionne"
+    TextPingKo="Pas de réponse de google.com"
+    TextSettingUp="Configuration de la connexion internet"
+    TextSerialModem="Modem série"
+    TextEthernet="Liaison Ethernet"
+    TextMail="Courriel"
+    TextQuit="Quitter"
+    Textpon="Pour démarrer la connection, vous taperez dans un shell la commande pon, qui s'écrit P O N."
+    Textpoff="La commande poff, P O F F, arrête la connexion."
+    ;;
     *)
-	TextSettingUp="Setting up the internet connection"
-	TextSerialModem="Serial Modem"
-	TextEthernet="Ethernet connexion"
-	TextMail="Mail"
-	TextQuit="Quit"
-	Textpon="You may want to type in a shell the pon command, P O N, to start the connection"
-	Textpoff="The poff command, P O F F, stops the connection"
-	;;
+    TextPing="Testing your internet connection"
+    TextPingOk="The internet connexion is working"
+    TextPingKo="No answer from google.com"
+    TextSettingUp="Setting up the internet connection"
+    TextSerialModem="Serial Modem"
+    TextEthernet="Ethernet connexion"
+    TextMail="Mail"
+    TextQuit="Quit"
+    Textpon="You may want to type in a shell the pon command, P O N, to start the connection"
+    Textpoff="The poff command, P O F F, stops the connection"
+    ;;
 esac
 
-
-$DIALOG --nobutton --menu "$TextSettingUp" 20 51 4 \
-    "1" "$TextSerialModem" \
-    "2" "$TextEthernet" \
-    "3" "$TextMail" \
-    "4" "$TextQuit" \
-    2> $tempfile
-
+while [ -n "1" ]; do
+    $DIALOG --nobutton --menu "$TextSettingUp" 20 51 4 \
+	"1" "$TextPing" \
+	"2" "$TextSerialModem" \
+	"3" "$TextEthernet" \
+	"4" "$TextMail" \
+	"5" "$TextQuit" \
+	2> $tempfile
+    
 #"IM" => "ICQ"
+    
+    retval=$?
 
-retval=$?
-
-choice=`cat $tempfile`
-
-case $retval in
-    0)
+    choice=`cat $tempfile`
+    
+    case $retval in
+	0)
 	case $choice in
 	    1)
-		pppconfig --dialog
-		echo $Textpon
-		echo $Textpoff
-		;;
+	    echo "ping google.com"
+	    ping -q -c 1 google.com 1>/dev/null 2>&1
+	    if [ "$?" == "0" ]; then
+		echo $TextPingOk
+	    else
+		echo $TextPingKo
+	    fi    
+	    ;;
 	    2)
-		netcardconfig
-		;;
+	    pppconfig --dialog
+	    echo $Textpon
+	    echo $Textpoff
+	    ;;
 	    3)
-		php mailMenu.php
+	    netcardconfig
+	    ;;
+	    4)
+	    php mailMenu.php
 		# TBD
-		chown knoppix.knoppix /home/knoppix/oraluxmail.xml 2>/dev/null
-		dir=/home/knoppix/mail
-		if [ ! -d $dir ]; then
-		    mkdir $dir 2>/dev/null
-		    chmod 700 $dir
-		fi
-		;;
+	    chown knoppix.knoppix /home/knoppix/oraluxmail.xml 2>/dev/null
+	    dir=/home/knoppix/mail
+	    if [ ! -d $dir ]; then
+		install -d -m 700 -o knoppix -g knoppix $dir 2>/dev/null
+	    fi
+	    ;;
+	    5)
+	    exit
+	    ;;
 #	4);;
-    esac
+	esac
 	;;
-    1)
+	1)
 	echo "$TextCancelPressed";;
-    255)
+	255)
 	echo "$TextEscPressed";;
-esac
-
+    esac
+done
 

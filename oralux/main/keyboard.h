@@ -9,7 +9,6 @@ enum keyboard {
   belgianKeyboard,
   brazilianKeyboard,
   britishKeyboard,
-  bulgarianKeyboard,
 /*   chineseKeyboardSimplified,  */
 /*   chineseKeyboardTraditionnal,  */
   czechKeyboard,
@@ -23,12 +22,26 @@ enum keyboard {
 /*   japaneseKeyboard, */
 /*   netherlandKeyboard, */
   polishKeyboard,
-  russianKeyboard,
   slovakKeyboard,
   spanishKeyboard,
   swissKeyboard,
   turkishKeyboard,
   MaxKeyboard,
+
+  FirstCyrillicKeyboard=MaxKeyboard,
+  belarusianKeyboard=FirstCyrillicKeyboard,
+  bulgarian_BDS_Keyboard,
+  bulgarianPhoneticKeyboard,
+  kazakhAltKeyboard,
+  kazakhGostKeyboard,
+  macedonianKeyboard,
+  mongolianKeyboard,
+  russianKeyboard,
+  russianWinkeysKeyboard,
+  serbianKeyboard,
+  ukrainianKeyboard,
+  ukrainianWinkeysKeyboard,
+  MaxCyrillicKeyboard,
 };
 
 struct keyboardStruct {

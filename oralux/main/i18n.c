@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // i18n.c
-// $Id: i18n.c,v 1.8 2006/02/05 00:42:15 gcasse Exp $
+// $Id: i18n.c,v 1.9 2006/03/19 12:00:33 gcasse Exp $
 // $Author: gcasse $
 // Description: Internationalization. 
-// $Date: 2006/02/05 00:42:15 $ |
-// $Revision: 1.8 $ |
+// $Date: 2006/03/19 12:00:33 $ |
+// $Revision: 1.9 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -56,9 +56,6 @@ static T_KEYBOARD TheKeyboard[]={
   {britishKeyboard,
    "uk", // uk_latin1
    "uk"}, 
-  {bulgarianKeyboard,
-   "bg",
-   "bg"},
   {czechKeyboard,
    "cz-lat2",
    "cs"},
@@ -83,9 +80,6 @@ static T_KEYBOARD TheKeyboard[]={
   {polishKeyboard,
    "pl",
    "pl"},
-  {russianKeyboard,
-   "ru4",
-   "ru"},
   {slovakKeyboard,
    "sk-qwerty",
    "sk"},
@@ -98,6 +92,44 @@ static T_KEYBOARD TheKeyboard[]={
   {turkishKeyboard,
    "tr_q-latin5",
    "tr"},
+
+  // for compatibility (cyr is used instead)
+  {belarusianKeyboard,
+   "ru4",
+   "ru"},
+  {bulgarian_BDS_Keyboard,
+   "ru4",
+   "ru"},
+  {bulgarianPhoneticKeyboard,
+   "ru4",
+   "ru"},
+  {kazakhAltKeyboard,
+   "ru4",
+   "ru"},
+  {kazakhGostKeyboard,
+   "ru4",
+   "ru"},
+  {macedonianKeyboard,
+   "ru4",
+   "ru"},
+  {mongolianKeyboard,
+   "ru4",
+   "ru"},
+  {russianKeyboard,
+   "ru4",
+   "ru"},
+  {russianWinkeysKeyboard,
+   "ru4",
+   "ru"},
+  {serbianKeyboard,
+   "ru4",
+   "ru"},
+  {ukrainianKeyboard,
+   "ru4",
+   "ru"},
+  {ukrainianWinkeysKeyboard,
+   "ru4",
+   "ru"},
   };
 
 // Spoken language
@@ -239,19 +271,27 @@ static char* getConsoleFont(enum language theLanguage)
 void setConsoleFont(enum language theLanguage)
 {
   static char* aPreviousFont=NULL;
-  char* aFont=getConsoleFont(theLanguage);
 
-  if (!aFont)
+  if (theLanguage==Russian)
     {
-      return;
+      system("cyr");
     }
-
-  if ((aPreviousFont==NULL)
-      || (strcmp(aFont, aPreviousFont) != 0))
+  else
     {
-      sprintf(TheLine, "consolechars -f %s", aFont);
-      system(TheLine);
-      aPreviousFont=aFont;
+      char* aFont=getConsoleFont(theLanguage);
+      
+      if (!aFont)
+	{
+	  return;
+	}
+      
+      if ((aPreviousFont==NULL)
+	  || (strcmp(aFont, aPreviousFont) != 0))
+	{
+	  sprintf(TheLine, "consolechars -f %s", aFont);
+	  system(TheLine);
+	  aPreviousFont=aFont;
+	}
     }
 }
 

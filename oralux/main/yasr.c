@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // yasr.c
-// $Id: yasr.c,v 1.13 2006/02/13 20:18:48 gcasse Exp $
+// $Id: yasr.c,v 1.14 2006/03/19 12:00:33 gcasse Exp $
 // $Author: gcasse $
 // Description: Yasr configuration file. 
-// $Date: 2006/02/13 20:18:48 $ |
-// $Revision: 1.13 $ |
+// $Date: 2006/03/19 12:00:33 $ |
+// $Revision: 1.14 $ |
 // Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -199,32 +199,20 @@ void runYasr( struct textToSpeechStruct* theTextToSpeech,
 	      enum language theMenuLanguage,
 	      char* theCommand)
 {
-  // Select a software synthesizer possibly compliant with the user preferences.
   enum textToSpeech aYasrSynthesizer=TTS_Multispeech;
   enum language aPossibleLanguage=theMenuLanguage;
+  // synthesizer port parameter
+  char* aParam="|/usr/local/lib/multispeech/speech_server";
 
-  say( yasrIsStarted);
-  say( yasrResetKeys);
+  //  say( yasrIsStarted);
+  //  say( yasrResetKeys);
 
   stopAUI(1);
 
-  switch (theTextToSpeech->myIdentifier)
-    {
-    case TTS_Flite:
-    case TTS_DECtalk:
-    case TTS_Cicero:
-    case TTS_Multispeech:
 #ifdef ORALUXGOLD
-    case TTS_ViaVoice:
+  aYasrSynthesizer=theTextToSpeech->myIdentifier;
+  aParam="|/usr/bin/tcl /usr/share/emacs/site-lisp/emacspeak/servers/outloud";
 #endif
-      aYasrSynthesizer=theTextToSpeech->myIdentifier;
-      aPossibleLanguage=theTextToSpeech->myLanguage;
-      break;
-
-    default:
-      aYasrSynthesizer=TTS_Multispeech;
-      break;
-    }
 
   // the LANG and LANGUAGE variables must match the available voice synthesis.
   // RAF (To be updated when Braille only solution will be available).
@@ -235,32 +223,7 @@ void runYasr( struct textToSpeechStruct* theTextToSpeech,
 		       &aBid, &aBid,
 		       &aLang, &aLanguage);
 
-  // synthesizer port parameter
-  char* aParam=NULL;
-  switch( aYasrSynthesizer)
-    {
-    case TTS_Cicero:
-      aParam="|/usr/bin/tcl /usr/share/emacs/site-lisp/emacspeak/servers/cicero";
-      break;
-    case TTS_DECtalk:
-      aParam="|/usr/bin/tcl /usr/share/emacs/site-lisp/emacspeak/servers/dtk-soft";
-      break;
-#ifdef ORALUXGOLD
-    case TTS_ViaVoice:
-      aParam="|/usr/bin/tcl /usr/share/emacs/site-lisp/emacspeak/servers/outloud";
-      break;
-#endif
-    case TTS_Multispeech:
-      aParam="|/usr/local/lib/multispeech/speech_server";
-      break;
-    case TTS_Flite:
-    default:
-      aParam="|/usr/bin/eflite";
-      break;
-    }
-
-    char* aLine=(char *)malloc(BUFSIZE);
-    //static char aLine[BUFSIZE];
+  char* aLine=(char *)malloc(BUFSIZE);
   snprintf(aLine, BUFSIZE, "export LANG=%s; export LANGUAGE=%s; yasr -s \"emacspeak server\" -p \"%s\" %s",
 	   aLang, aLanguage,
 	   aParam, 
@@ -269,7 +232,6 @@ void runYasr( struct textToSpeechStruct* theTextToSpeech,
   free( aLine);
 
   restartAUI();
-
 }
 
 /* > */

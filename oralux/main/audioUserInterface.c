@@ -1,10 +1,11 @@
+#undef DEBUG
 // ----------------------------------------------------------------------------
 // audiouserinterface.c
-// $Id: audioUserInterface.c,v 1.24 2006/03/05 18:28:58 gcasse Exp $
+// $Id: audioUserInterface.c,v 1.25 2006/03/19 12:00:33 gcasse Exp $
 // $Author: gcasse $
 // Description: Managing and playing the pre-recorded messages.
-// $Date: 2006/03/05 18:28:58 $ |
-// $Revision: 1.24 $ |
+// $Date: 2006/03/19 12:00:33 $ |
+// $Revision: 1.25 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 // September 2003: 
 // * German translations by Guenther Harrasser.
@@ -66,6 +67,7 @@ static int pf=0;
 // The aim here is to improve the pronunciation.
 
 // Keyboards to add, info required; today, they are assigned to the american keyboard.
+/*   arabicSaid, */
 /*   chineseSaidSimplified, */
 /*   chineseSaidTraditionnal, */
 /*   hebrewSaid, */
@@ -87,7 +89,7 @@ char * TheMessages[][5]={
   },
   {"Brazilian Portuguese",
    "Portugais brésilien",
-   NULL,
+   "Portugiesisch (Brazilien)",
    NULL,
    "Português Brasileiro",
   },
@@ -96,12 +98,6 @@ char * TheMessages[][5]={
    "Englische",
    "Inglés",
    "Britânico",
-  },
-  {"Bulgarian",
-   "Bulgare",
-   "Bulgarische",
-   "Búlgaro",
-   "Búlgaro",
   },
 /*   {"Simplified Chinese", */
 /*    "Chinois simplifié", */
@@ -139,7 +135,7 @@ char * TheMessages[][5]={
   },
   {"French Canadian",
    "Français Canadien",
-   NULL,
+   "Französisch (Canada)",
    NULL,
    "Francês Canadense",
   },
@@ -176,12 +172,6 @@ char * TheMessages[][5]={
    "Polaco",
    "Polonês",
   },
-  {"Russian",
-   "Russe",
-   "Russische",
-   "Ruso",
-   "Russo",
-  },
   {"Slovaq",
    "Slovaque",
    "Slovenische",
@@ -206,6 +196,95 @@ char * TheMessages[][5]={
    "Turco",
    "Turco",
   },
+
+  // Cyrillic languages
+
+  {"Belarusian",
+   "Biélorusse",   
+   NULL,
+   NULL,
+   "Bielo-russo",
+  },
+
+  {"Bulgarian B D S",
+   "Bulgare B D S",
+   "Bulgarische B D S",
+   "Búlgaro B D S",
+   "Búlgaro B D S",
+  },
+
+  {"Bulgarian Phonetic",
+   "Bulgare phonétique",
+   "Bulgarisch phonetisch",   
+   NULL,
+   "Fonética Búlgara",
+  },
+
+  {"Kazakh",
+   "Kazakh",   
+   NULL,
+   NULL,
+   "Kazakh",
+  }, 
+
+  {"Kazakh with letter IO",
+   "Kazakh avec lettre IO",   
+   NULL,
+   NULL,
+   "Kazakh com a letra IO",
+  },
+
+  {"Macedonian",
+   "Macédonien",   
+   "Mazedonisch",
+   NULL,
+   "Macedônio",
+  },
+
+  {"Mongolian",
+   "Mongol",   
+   NULL,
+   NULL,
+   NULL,
+  },
+
+  {"Russian",
+   "Russe",
+   "Russische",
+   "Ruso",
+   "Russo",
+  },
+
+  {"Russian Winkeys",
+   "Russe Winkeys",
+   "Russische Winkeys",
+   "Ruso Winkeys",
+   "Russo Winkeys",
+  },
+
+  {"Serbian",
+   "Serbe",   
+   "Serbisch",
+   NULL,
+   NULL,
+  },
+
+  {"Ukrainian",
+   "Ukrainien",   
+   "Ukrainisch",
+   NULL,
+   "Ucraniano",
+  },
+
+  {"Ukrainian Winkeys",
+   "Ukrainien Winkeys",   
+   "Ukrainisch Winkeys",
+   NULL,
+   "Winkeys ucraniano",
+  },
+
+  // Others messages 
+
   {"Delete",
    "Effacement",
    "Löschen",
@@ -225,7 +304,7 @@ char * TheMessages[][5]={
    "Você deseja instalar o Software DECtalk (Inglês, Francês, Alemão e Espanhol)?",
   },
 
-  {"Please press the Return key if you agree, or any other key if you disagree",
+  {"Please press the Enter key if you agree, or any other key if you disagree",
    "Si oui, appuyer sur la touche Entrée, ou, sinon, sur n'importe quelle touche",
    "Bitte Eingabetaste drücken wenn Sie zustimmen, ansonsten jede andere Taste, wenn nicht",
    "Por favor, presione la tecla Enter, si esta de acuerdo, o cualquier otra tecla, si no lo está",
@@ -273,7 +352,7 @@ char * TheMessages[][5]={
    "El directorio dtk no se encuentra",
    "O diretório d t k não foi encontrado",
   },
-  {"Please enter your serial number, and press Return",
+  {"Please enter your serial number, and press Enter",
    "Entrez s'il vous plait votre numéro de série, et appuyer sur Entrée",
    "Bitte Seriennummer eingeben, und die Eingabetaste drücken",
    "Por favor, introduzca su número de serie, y presione la tecla Enter",
@@ -285,7 +364,7 @@ char * TheMessages[][5]={
    "Lo sentimos, su número de serie no es correcto",
    "Desculpe, mas o número de série fornecido é inválido",
   },
-  {"If you want to try again, press Return",
+  {"If you want to try again, press Enter",
    "Si vous souhaitez réessayer, appuyer sur la touche Entrée",
    "Zum Wiederholen Eingabetaste drücken",
    "Si quiere probar de nuevo presione la tecla Enter",
@@ -399,7 +478,7 @@ char * TheMessages[][5]={
    "¿Quiere salga el CD ROM ?",
    "Deseja ejetar o C D ROM?",
   },
-  {"Once the CD is taken, out, press Return",
+  {"Once the CD is taken, out, press Enter",
    "Une fois le CD retiré, appuyer sur Entrée",
    "Wenn die CD ausgeworfen ist, Eingabetaste drücken",
    "Una vez retirado el CD, pulsar enter",
@@ -999,7 +1078,7 @@ char * TheMessages[][5]={
    "O diretório I B M E C I não foi encontrado!",
   },
 
-  {"Please enter your password, and press Return",
+  {"Please enter your password, and press Enter",
    "Entrez s'il vous plait votre mot de passe, et appuyer sur Entrée",
    "Bitte Passwort eingeben, und die Eingabetaste drücken",
    "Por favor, introduzca su contraseña, y presione la tecla Enter",
@@ -1162,37 +1241,38 @@ char * TheMessages[][5]={
 
   {"The audio menu is going to start Yasr",
    "Le menu audio va lancer Yasr",
-   NULL,
+   "Das Audio-Menu wird Yasr starten",
    "El audio menu ejecutará el programa Yasr",
    "O menu Áudio inicia com ois Yasr",
   },
 
   {"If the voice synthesizer stops, please press Control Alt i to start it again",
    "Si la synthèse vocale s'arrête, appuyez s'il vous plait sur Control Alt i pour la relancer",
-   NULL,
+   "Wenn der Sprachsynthesizer plötlich aufhört zu sprechen, dücken Sie
+Control Alt i, um ihn neu zu starten",
    "Si el sintetizador de voz se detiene, por favor pulse CTRL+Alt+I para ejecutarlo de nuevo",
    "Se o sintetizador de voz parar, por favor, pressione Control Alt i para reiniciá-lo",
   },
 
   {"Do you want this menu in Brazilian Portuguese ?",
    "Voulez-vous ce menu en portugais brésilien ?",
-   NULL,
+   "Wollen Sie dieses Menu in Portogiesisch (Brazilien)?",
    NULL,
    "Deseja este menu em Português Brasileiro?",
   },
 
   {"Do you want a new persistent storage?",
    "Voulez-vous un nouveau stockage persistant ?",
+   "Wollen Sie einen neuen permanenten Speicherort?",
    NULL,
-   NULL,
-   NULL,
+   "Você deseja armazenar?",
   },
 
-  {"Your preferences are set up. Do you want to quit this menu?",
-   "Vos préférences sont mises à jour. Voulez-vous quitter ce menu ?",
+  {"Do you want to quit the Preferences menu?",
+   "Voulez-vous quitter le menu de configuration ?",
+   "Wollen Sie das Einstellungsmenu verlassen?",
    NULL,
-   NULL,
-   NULL,
+   "Você deseja sair do menu preferências?",
   },
 };
 

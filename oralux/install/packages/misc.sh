@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # misc.sh
-# $Id: misc.sh,v 1.20 2006/03/05 18:28:58 gcasse Exp $
+# $Id: misc.sh,v 1.21 2006/03/19 12:00:33 gcasse Exp $
 # $Author: gcasse $
 # Description: Miscellaneous packages
-# $Date: 2006/03/05 18:28:58 $ |
-# $Revision: 1.20 $ |
+# $Date: 2006/03/19 12:00:33 $ |
+# $Revision: 1.21 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -112,15 +112,8 @@ Copy2Oralux()
 
 #    chroot $BUILD bash -c "apt-get install -t unstable aspell-ru"
 
-# default options: 
-# - Russian keyboard, 
-# - Right Alt key (default)
-# - Two Windows keys (default)
-# - font: Terminus slave normal (font name: french translation)
-# - font size: 16
-# - koi8r
-# - The cyrillic mode is not started by default (console-data must be used to set up the console)
     chroot $BUILD apt-get install console-cyrillic
+    cp -pR $INSTALL_PACKAGES/multispeech/console-cyrillic $BUILD/etc
 
 #    chroot $BUILD apt-get install sawfish
 

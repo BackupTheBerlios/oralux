@@ -3,68 +3,44 @@ vous lisez ce texte via Emacspeak.
 
 Sommaire.
 
-1. Sauvegarder ses préférences.
-2. Comment sauvegarder ses documents.
-3. Comment parle Oralux.
-4. Débuter.
-5. FAQ Oralux.
-6. Vos impressions.
+1. Premiers raccourcis
+2. Comment parle Oralux.
+3. Débuter.
+4. FAQ Oralux.
+5. Vos impressions.
 
-1. Sauvegarder ses préférences.
+1. Premiers raccourcis
 
-Vous souhaiterez sûrement sauvegarder le volume, le type de clavier, en bref toutes les préférences sélectionnées dans le menu d'introduction. Idem pour les autres fichiers de configuration comme par exemple les paramètres internet.
+* Changer le débit de la voix 
+Pour un très bas débit, appuyer s'il vous plait sur les touches:
+Control+e d 1
+Pour un très bas débit:
+Control+e d 9
 
-Saveconfig permet de sauvegarder ces fichiers sur un disque dur, une disquette, une clé USB,...
+Expérimentez avec différents nombres entre 1 et 9 pour trouver le débit
+qui vous convient le mieux. 
+Remarque : 
+Control+e d 9 signifie :
+maintenez la touche Control appuyée et appuyez sur la touche e. 
+Ensuite, relâchez les deux touches.
+Puis, appuyez sur la touche d, relâchez la, et appuyez sur 9.
 
-Lors des redémarrages suivants, ces paramètres seront automatiquement recherchés. 
-Voici comment procéder sous Emacspeak
+* Ponctuation
+Configurer le mode ponctuation à 'all' (toute la ponctuation est
+prononcée), 'some' (certains caracters de ponctuation sont prononcés),
+ou 'none' (aucune ponctuation). 
 
-Lancez un buffer shell :
-ESCAPE x shell
+* Écho caractère
+Les touches appuyées peuvent être prononcées ou non.
+Tapez s'il voud plait :
+control+e d k
+Cela changera l'état de l'écho caractere. En retapant Control+e d k,
+vous reviendrez à l'état précédant.
 
-C'est à dire : pressez la touche ESCAPE puis la touche x et ensuite tapez shell.
-
-Puis, lancez saveconfig :
-saveconfig
-
-Vous indiquerez alors quels fichiers de configuration, vous
-souhaitez sauvegarder et dans quelle partition.
-
-2. Comment sauvegarder ses documents.
-
-Votre répertoire de travail se trouve par défaut dans la mémoire de
-l'ordinateur (le Ramdisk). Lorsque vous éteindrez l'ordinateur, ces
-données seront perdues.
-
-Si vous souhaitez les sauvegarder, il est possible de créer un compte
-persistant sur par exemple le disque dur, la clé usb, ou le lecteur
-zip.
-
-Il faudra lancer la commande shell mkpersistenthome pour créer un compte persistant.
-Voici comment procéder :
-
-Lancez tout d'abord un shell, en tapant :
-
-ESCAPE x shell
-
-Lancez la commande :
-
-mkpersistenthome
-
-Puis, quittez Emacspeak
-
+* Quitter Emacspeak
 Control+x Control+c
 
-Ce qui signifie : maintenez la touche Control appuyée et appuyez sur la touche x.
-Ensuite, relâchez les deux touches.
-Puis, maintenez la touche Control appuyée et appuyez sur la touche c.
-Ensuite, relâchez les deux touches.
-
-Finalement, redémarrer votre ordinateur:
-
-sudo reboot
-
-3. Comment parle Oralux.
+2. Comment parle Oralux.
 
 En dehors de la synthèse vocale, deux programmes travaillent de concert pour qu'Oralux puisse parler.
 L'un d'entre eux s'appelle Emacs, et l'autre Emacspeak. 
@@ -77,7 +53,7 @@ Cela signifie aussi que vous aurez à apprendre Emacs et Emacspeak.
 Lorsqu'Emacspeak démarre, il lance tout d'abord Emacs puis initialise la synthèse vocale.
 Aussi, vous pouvez juste lancer Emacs pour un travail silencieux ou Emacspeak pour un environnement audio.
 
-4. Débuter.
+3. Débuter.
 
 Les tutoriels "Mes premiers pas dans GNU/Emacs", "Calendrier et agenda" et "SES -Simple Emacs Spreadsheet" de Sylvie Xhaard se trouvent sous le répertoire :
 tutorials/fr
@@ -103,7 +79,7 @@ Control+e.
 Les archives (en anglais) de la liste Emacspeak :
 http://www.cs.vassar.edu/~priestdo/emacspeak/
 
-5. FAQ Oralux.
+4. FAQ Oralux.
 
 la FAQ Oralux est au format HTML.
 Lancez le navigateur web w3m pour lire le fichier :
@@ -112,7 +88,7 @@ ESCAPE x w3m-find-file RETURN
 Et ensuite tapez :
 /cdrom/KNOPPIX/faq-fr.htm 
 
-6. Vos impressions.
+5. Vos impressions.
 Nous vous serions reconnaissants de nous faire partager vos impressions, vos remarques sur Oralux.
 L'adresse email est:
 

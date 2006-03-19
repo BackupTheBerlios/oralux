@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # oralux.sh
-# $Id: oralux.sh,v 1.16 2006/02/13 20:18:48 gcasse Exp $
+# $Id: oralux.sh,v 1.17 2006/03/19 12:00:33 gcasse Exp $
 # $Author: gcasse $
 # Description: This script is called at init time
-# $Date: 2006/02/13 20:18:48 $ |
-# $Revision: 1.16 $ |
+# $Date: 2006/03/19 12:00:33 $ |
+# $Revision: 1.17 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -50,6 +50,7 @@ if [ "$TTY" == "/dev/tty1" -a ! -e "$FILE" ]
 	export DIALOG=/usr/bin/dialog
 
 	cd /usr/share/oralux/main
+#cyr -v
 	sudo ./oralux $TTY start
 
 # 	# Restoring the initial dialog
@@ -60,9 +61,7 @@ if [ "$TTY" == "/dev/tty1" -a ! -e "$FILE" ]
 	export LANG
 	export COUNTRY
 	export LANGUAGE
-	export CHARSET
-	export KEYTABLE
-	export XKEYBOARD
+ 	export XKEYBOARD
 	export DESKTOP
 	export ORALUXTTSLANG
 	export ORALUXRELEASE
@@ -72,7 +71,14 @@ if [ "$TTY" == "/dev/tty1" -a ! -e "$FILE" ]
 	export EMACSPEAKTTSPORT
 	export ORALUXUSERCONF
 
-	loadkeys "$KEYTABLE"
+	if [ "$LANGUAGE" == "ru" ]; then
+	    cyr
+	else
+	    export CHARSET
+	    export KEYTABLE
+	    loadkeys "$KEYTABLE"
+	fi
+
 	if [ $ORALUXSTICKYKEYS == "1" ]
 	    then
 	    dumpkeys | sed -e "$(getStickyString Control)"\
@@ -109,6 +115,10 @@ echo "lancement zsh"
 	    # just for safe
 	    pkill test-tengoo
 #/usr/bin/screen -c /usr/share/oralux/install/packages/screen/.screenrc.work
+
+	    #TBD
+	    pkill sox
+
 	fi
 	echo -e '\007'	
 	cd /usr/share/oralux/main

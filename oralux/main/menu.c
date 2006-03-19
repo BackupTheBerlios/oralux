@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // menu.c
-// $Id: menu.c,v 1.16 2006/03/05 18:28:58 gcasse Exp $
+// $Id: menu.c,v 1.17 2006/03/19 12:00:33 gcasse Exp $
 // $Author: gcasse $
 // Description: introductory menu. 
-// $Date: 2006/03/05 18:28:58 $ |
-// $Revision: 1.16 $ |
+// $Date: 2006/03/19 12:00:33 $ |
+// $Revision: 1.17 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -430,30 +430,83 @@ int sortKeyboardMessages( const void* theKeyboard_A, const void* theKeyboard_B)
   return strcmp( aMessage_A, aMessage_B);
 } 
 
+static const char* TheCyrillicKeyboard[]={
+  "by",
+  "bg_bds",
+  "bg_phon",
+  "kaz_alt",
+  "kaz_gost",
+  "mk",
+  "mn",
+  "ru",
+  "ru_ms",
+  "sr",
+  "ua",
+  "ua_ms",
+};
+
 static void loadkeys( enum keyboard theKeyboard)
 {
-  char* aKeyTable=NULL;
-  char* aXKeyboard=NULL;
-  getStringKeyboard(theKeyboard, &aKeyTable, &aXKeyboard);
-
-  if (aKeyTable)
+  if ((FirstCyrillicKeyboard <= theKeyboard)
+      && (theKeyboard < MaxCyrillicKeyboard))
     {
-      sprintf( TheLine, "loadkeys %s", aKeyTable);
+      int index = theKeyboard - FirstCyrillicKeyboard;
+      sprintf( TheLine, "cyr --save --ttys='/dev/tty[1-6]' %s ctrl_shift_toggle", TheCyrillicKeyboard[ index]);
+      printf("%s\n",TheLine);
       system( TheLine);
+
+      system( "chown knoppix.knoppix /home/knoppix/.cyr_defaults");
+    }
+  else
+    {
+      char* aKeyTable = NULL;
+      char* aXKeyboard = NULL;
+      getStringKeyboard(theKeyboard, &aKeyTable, &aXKeyboard);
+      
+      if (aKeyTable)
+	{
+	  sprintf( TheLine, "loadkeys %s", aKeyTable);
+	  printf("%s\n",TheLine);
+	  system( TheLine);
+	}
     }
 }
 
-static int setKeyboard(enum keyboard *theKeyboard, enum language theCurrentLanguage)
+static int setKeyboard( enum keyboard *theKeyboard, enum language theCurrentLanguage)
 {
   ENTER("setKeyboard");
   int aKeyboardRequest=1;
   int i=0;
   enum keyboard aKeyboard;
   int aKeyboardIsChanged=0;
+  int aMaxKeyboard=0;
 
   if (!theKeyboard)
     {
       return 0;
+    }
+
+  if (theCurrentLanguage == Russian)
+    {
+      aMaxKeyboard = (MaxCyrillicKeyboard - FirstCyrillicKeyboard);
+      // atm, Russian language implies a cyrillic keyboard 
+      if ((*theKeyboard < FirstCyrillicKeyboard) 
+	  || (MaxCyrillicKeyboard >= *theKeyboard)) 
+	{
+	  *theKeyboard = russianKeyboard;
+	  aKeyboardIsChanged=1;
+	}
+    }
+  else
+    {
+      aMaxKeyboard = MaxKeyboard;
+      // atm, if language is not Russian, then no cyrillic keyboard
+      if ((FirstCyrillicKeyboard <= *theKeyboard) 
+	  && (*theKeyboard < MaxCyrillicKeyboard)) 
+	{
+	  *theKeyboard = americanKeyboard;
+	  aKeyboardIsChanged=1;
+	}
     }
 
   aKeyboard = *theKeyboard;
@@ -466,28 +519,41 @@ static int setKeyboard(enum keyboard *theKeyboard, enum language theCurrentLangu
 
   if (getAnswer() != MENU_Yes)
     {
-      aKeyboardRequest=0;
+      return aKeyboardIsChanged;
     }
-  else
-    {
-      say( whichKeyboard);
-    }
+
+  say( whichKeyboard);
+
+  aMaxKeyboard = (theCurrentLanguage == Russian) ?
+    (MaxCyrillicKeyboard - FirstCyrillicKeyboard) : MaxKeyboard;
 
   // The distinct keyboards are sorting in alphabetical order
   if (TheLanguageForSorting != theCurrentLanguage)
     {
-      for (i=0;i<MaxKeyboard;i++)
+      if (theCurrentLanguage == Russian)
 	{
-	  TheKeyboards[i]=i;
+	  for (i=FirstCyrillicKeyboard;i<MaxCyrillicKeyboard;i++)
+	    {
+	      TheKeyboards[ i - FirstCyrillicKeyboard] = i;
+	      SHOW3("i - FirstCyrillicKeyboard=%d, i=%d\n",i - FirstCyrillicKeyboard, i);
+	    }       
 	}
-
-      qsort( TheKeyboards, MaxKeyboard, sizeof(enum keyboard), sortKeyboardMessages);
-
+      else
+	{
+	  for (i=0;i<MaxKeyboard;i++)
+	    {
+	      TheKeyboards[i] = i;
+	    }
+	  aMaxKeyboard = i;
+	  
+	  qsort( TheKeyboards, MaxKeyboard, sizeof(enum keyboard), sortKeyboardMessages);
+	}
+      
       TheLanguageForSorting = theCurrentLanguage;
     }
 
   // Looking for the index which matches aKeyboard
-  for (i=0; i<MaxKeyboard; i++)
+  for (i=0; i<aMaxKeyboard; i++)
     {
       if (TheKeyboards[i] == aKeyboard)
 	{
@@ -495,7 +561,7 @@ static int setKeyboard(enum keyboard *theKeyboard, enum language theCurrentLangu
 	}
     }
 
-  if (i >= MaxKeyboard)
+  if (i >= aMaxKeyboard)
     {
       SHOW("Keyboard: Unexpected value");
       return 0;
@@ -503,6 +569,7 @@ static int setKeyboard(enum keyboard *theKeyboard, enum language theCurrentLangu
 
   while( aKeyboardRequest)
   {
+    SHOW3("say TheKeyboards[%d]=%d\n",i, TheKeyboards[i]);
     say( TheKeyboards[i]); // works because the enum values are the same!
 
     switch(getAnswer())
@@ -512,11 +579,11 @@ static int setKeyboard(enum keyboard *theKeyboard, enum language theCurrentLangu
 	  break;
 
 	case MENU_Previous:
-	  i = (i > 0) ? i-1 : MaxKeyboard-1;
+	  i = (i > 0) ? i-1 : aMaxKeyboard-1;
 	  break;
 
 	default:
-	  i = (i >= MaxKeyboard-1) ? 0 : i+1;
+	  i = (i >= aMaxKeyboard-1) ? 0 : i+1;
 	  break;
       }
   }

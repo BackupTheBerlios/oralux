@@ -146,17 +146,28 @@ French TTS by Nicolas Pitre and Stephane Doyon. Cicero is a responsive and light
 
 ** Russian support
 
++ The Cyrillic support is improved using the console-cyrilic package
+(advised by Sergei).
+++ If Russian is selected in the preferences menu, then the proposed
+keyboards are now Belarusian, Bulgarian, Kazakh, Macedonian,
+Mongolian, Russian, Serbian or Ukrainian.
+
+++ In typing Control+Shift, the Cyrillic keyboard toggles to Qwerty (Thanks to Roman).
+
 Thanks to Sergei V. Fleytin  
 / Russian.el is modified to include support for windows-1251 character set.
 / The .gnus and .vm files have been updated for Russian.
-/ The "ru4" keymap is loaded for Russian keyboard settings (instead of "ru" before).
-
 / package console-cyrillic
 
 
 + Yasr: in standard mode, alt+ctrl+m is no more reserved to read the next line (since ctrl-m is interpreted as enter).
 
 * New softwares
++ Speakup 2.0.
++ New Unionfs module.
++ console-cyrilic
+
+
 + podracer
 + moc
 + Instant messaging support. 

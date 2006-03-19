@@ -88,7 +88,7 @@ http://www.cs.vassar.edu/~priestdo/emacspeak/
 
 The Oralux FAQ is an HTML page.
 To read it, start the w3m web browser to read the file:
-ESCAPE x w3m-find-file RETURN
+ESCAPE x w3m-find-file ENTER
 
 and then type:
 /cdrom/KNOPPIX/faq.htm 

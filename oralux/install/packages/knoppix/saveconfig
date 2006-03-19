@@ -285,6 +285,9 @@ esac
 # [ "$DIALOG" = "dialog" ] && { touch "$TMP.done" ; wait ; rm -f "$TMP.done" ; } || { [ -n "$gpid" ] && kill "$gpid" 2>/dev/null; sleep 1; }
 touch "$TMP.done" ; wait ; rm -f "$TMP.done"
 
-[ "$RC" = "0" ] && $DIALOG --title "$TITLE1" --msgbox "$SUCCESS" 12 65 || $DIALOG --title "$TITLE1" --msgbox "$ERROR `cat $TMP.err`" 10 75
-
+if [ "$RC" = "0" ]; then 
+    $DIALOG --title "$TITLE1" --msgbox "$SUCCESS" 12 65
+else
+    $DIALOG --title "$TITLE1" --msgbox "$ERROR `cat $TMP.err`" 10 75
+fi
 bailout

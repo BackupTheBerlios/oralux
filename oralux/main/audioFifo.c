@@ -1,10 +1,11 @@
+#undef DEBUG
 // ----------------------------------------------------------------------------
 // audioFifo.c
-// $Id: audioFifo.c,v 1.4 2006/02/05 21:03:37 gcasse Exp $
+// $Id: audioFifo.c,v 1.5 2006/03/19 12:00:33 gcasse Exp $
 // $Author: gcasse $
 // Description: Playing the supplied OggVorbis files
-// $Date: 2006/02/05 21:03:37 $ |
-// $Revision: 1.4 $ |
+// $Date: 2006/03/19 12:00:33 $ |
+// $Revision: 1.5 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or

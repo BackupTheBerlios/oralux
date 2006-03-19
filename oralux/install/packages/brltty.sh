@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # brltty.sh
-# $Id: brltty.sh,v 1.7 2006/03/05 18:28:57 gcasse Exp $
+# $Id: brltty.sh,v 1.8 2006/03/19 12:00:33 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing BRLTTY
-# $Date: 2006/03/05 18:28:57 $ |
-# $Revision: 1.7 $ |
+# $Date: 2006/03/19 12:00:33 $ |
+# $Revision: 1.8 $ |
 # Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -24,8 +24,21 @@
 # ----------------------------------------------------------------------------
 ####
 source ../oralux.conf
+URL="http://www.mielke.cc/brltty/releases"
+BRLTTY=brltty-3.7.2
+ARCH_BRLTTY=$ARCHDIR/$BRLTTY.tar.gz
+
 cd $ARCHDIR
-wget http://www.mielke.cc/brltty/releases/brltty-3.7.1.tar.gz
+
+if [ ! -e $ARCH_BRLTTY ]
+    then
+    echo "Downloading $BRLTTY"
+    wget $URL/$BRLTTY.tar.gz
+fi
+
+#http://mielke.cc/brltty/releases/brlapi-devel-0.4.1-1.i386.rpm
+#http://mielke.cc/brltty/releases/brlapi-0.4.1-1.i386.rpm
+
 
 ####
 # Installing the package in the current tree
@@ -37,13 +50,15 @@ InstallPackage()
 
     cd /tmp
     rm -rf /tmp/brl*
-    wget http://www.mielke.cc/brltty/releases/brlapi-0.3.0-1.i386.rpm
-    alien brltty-3.6-1.i386.rpm 
-    dpkg -i brltty*.deb
+    
+    tar -zxvf $ARCH_BRLTTY
 
-    wget http://www.mielke.cc/brltty/releases/brltty-3.6-1.i386.rpm
-    alien brlapi-0.3.0-1.i386.rpm
-    dpkg -i brlapi*.deb
+    cd $BRLTTY
+    ./configure
+    make
+    make install
+
+
 
 # #    apt-get install brltty
 

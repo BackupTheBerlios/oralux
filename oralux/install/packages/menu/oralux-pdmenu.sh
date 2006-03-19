@@ -9,6 +9,7 @@ export YasrDoc="$Doc/Yasr/en/README.oralux"
 export LinksText="Links, web browser"
 export LinksDoc="$Doc/htm/faq.htm"
 export NeText="N E, the nice editor"
+export mcvoxText="m c vox, file browser"
 export qalcText="qalc, calculator"
 export mocText="moc, console audio player"
 export podracerText="podracer, podcast receiver with BitTorrent support"
@@ -23,6 +24,27 @@ export dosemuText1="dosemu, run DOS under Linux"
 export dosemuText2="Type 'exitemu' to return to the menu."
 
 case "$LANGUAGE" in 
+de*|at*|ch*)
+	export exitText="Drücken Sie Escape, um das aktuelle Menu zu verlassen"
+	export YasrText="YASR Dokumentation (Englische)"
+	export YasrDoc="$Doc/Yasr/en/README.oralux"
+	export LinksText="Links, Webbrowser"
+#	export LinksDoc="$Doc/htm/faq.htm"
+	export NeText="N E, der 'Nice Editor'"
+	export mcvoxText="m c vox, Datei-Browser"
+	export qalcText="qalc, Taschenrechner"
+	export mocText="moc, Audio-Player für die Konsole"
+	export podracerText="podracer, Podcast empfänger mit Bittorrent Unterstützung"
+	export linphonecText="linphonec, ein SIP Internet Telefonprogram"
+	export imcomText="imcom, Jabber-Client"
+	export aventureText="Spiel ein Spiel, Abenteuerspiel"
+	export $aventureDoc="$Games/de/abent.z5"
+	export shellText1="Zur Shell"
+	export shellText2="Geben Sie 'exit' ein, um zum Menu zurückzukehren."
+	export dateText="Zeit anzeigen"
+	export dosemuText1="dosemu, DOS unter Linux ausführen"
+	export dosemuText2="Geben sie 'exitemu' ein, um zum Menu zurückzukehren."
+	;;
     pt*) 
 	export YasrText="YASR documentation"
 	export YasrDoc="$Doc/Yasr/pt_BR/README.oralux"
@@ -61,9 +83,6 @@ case "$LANGUAGE" in
 	export LinksText="Links, web browser"
 	export LinksDoc="$Doc/htm/faq-ru.htm"
 	;; 
-    de*)
-	$aventureDoc="$Games/de/abent.z5"
-	;;
 esac
 
 Options="-ur"
@@ -95,7 +114,7 @@ exec:$aventureText::/usr/games/frotz $aventureDoc
 
 preproc:\
 	case "$LANGUAGE" in \
-	fr*) echo "exec:Jeu \: filaments::/usr/games/frotz /usr/share/oralux/install/packages/games/fr/filaments.z8"; \
+	fr*) echo "exec:Jeu \: Filaments::/usr/games/frotz /usr/share/oralux/install/packages/games/fr/filaments.z8"; \
 	esac
 
 exec:$shellText1::echo "$shellText2";/bin/sh -login
