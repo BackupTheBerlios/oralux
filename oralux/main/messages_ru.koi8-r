@@ -9,7 +9,7 @@ struct t_translation TheRussianMessages[]=
   },
 
   {"Brazilian Portuguese",
-   NULL,
+   "Бразильский Португальский",
   },
 
   {"British",
@@ -65,7 +65,7 @@ struct t_translation TheRussianMessages[]=
   },
 
   {"Belarusian",
-   NULL,   
+   "Беларусский",   
   },
 
   {"Bulgarian B D S",
@@ -73,19 +73,19 @@ struct t_translation TheRussianMessages[]=
   },
 
   {"Bulgarian Phonetic",
-   NULL,   
+   "Болгарский фонетический",   
   },
 
   {"Kazakh",
-   NULL,   
+   "Казахский",   
   }, 
 
   {"Kazakh with letter IO",
-   NULL,   
+   "Казахский с буквой Ё",   
   },
 
   {"Macedonian",
-   NULL,   
+   "Македонский",   
   },
 
   {"Mongolian",
@@ -97,19 +97,19 @@ struct t_translation TheRussianMessages[]=
   },
 
   {"Russian Winkeys",
-   NULL,   
+   "Русский, раскладка Windows",   
   },
 
   {"Serbian",
-   NULL,   
+   "Сербский",   
   },
 
   {"Ukrainian",
-   NULL,   
+   "Украинский",   
   },
 
   {"Ukrainian Winkeys",
-   NULL,   
+   "Украинский, раскладка Windows",   
   },
 
   {"Delete",
@@ -708,15 +708,15 @@ struct t_translation TheRussianMessages[]=
   },
 
   {"Do you want this menu in Brazilian Portuguese?",
-   NULL,
+   "Перевести это меню в Бразильский Португальский?",
   },
 
-  {"Do you want a persistent storage?",
-   NULL,
+  {"Do you want a new persistent storage?",
+   "Создать новое Отказоустойчивое Хранилище?",
   },
 
-  {"Do you want to quit this menu?",
-   NULL,
+  {"Do you want to quit the Preferences menu?",
+   "Выйти из меню установок?",
   },
 
 };

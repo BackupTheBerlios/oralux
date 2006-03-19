@@ -3,6 +3,8 @@
 export Doc="/usr/share/oralux/doc"
 export Games="/usr/share/oralux/install/packages/games"
 
+export RussianText="/usr/share/oralux/install/packages/menu/oralux-pdmenu.ru"
+
 export exitText="Press the Escape key to exit the current menu"
 export YasrText="YASR documentation "
 export YasrDoc="$Doc/Yasr/en/README.oralux"
@@ -78,10 +80,7 @@ de*|at*|ch*)
 	export dosemuText2="Tapez 'exitemu' pour revenir au menu."
 	;; 
     ru*) 
-	export YasrText="YASR documentation"
-	export YasrDoc="$Doc/Yasr/ru/README.oralux"
-	export LinksText="Links, web browser"
-	export LinksDoc="$Doc/htm/faq-ru.htm"
+	source $RussianText
 	;; 
 esac
 

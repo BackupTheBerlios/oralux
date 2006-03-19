@@ -1,0 +1,13 @@
+TextCancelPressed="Отмена нажата."
+TextEscPressed="Эскейп нажата."
+
+TextPing="Проверка вашего интернет подключения"
+TextPingOk="Подключение к интернет работает"
+TextPingKo="Нет ответа от google.com"
+TextSettingUp="Установка подключения к интернет"
+TextSerialModem="Последовательный модем"
+TextEthernet="Подключение к локальной сети"
+TextMail="Почта"
+TextQuit="Выход"
+Textpon="Для установки соединения введите в командной строке команду pon, P O N."
+Textpoff="Команда poff, P O F F, разрывает соединение"
