@@ -2,57 +2,42 @@ Hello,
 you are reading this text using Emacspeak.
 
 Contents.
+1. First shortkeys
+2. How Oralux Talks.
+3. Getting  Started.
+4. Oralux FAQ.
+5. Feedback.
 
-1. How to save my preferences ?
-2. How to save my documents ?
-3. How Oralux Talks.
-4. Getting  Started.
-5. Oralux FAQ.
+1. First shortkeys
 
-1. How to save my preferences ?
-You will probably wish to save the volume, the type of keyboard, and
-any other preference set using the introductory menu which you have
-interacted with during boot time.
-Idem for the other files as for example the internet parameters.
+* Speech rate
+For a very slow rate, please type:
+Control+e d 1
+For a very fast rate:
+Control+e d 9
 
-Saveconfig is able to save these files to the hard disk, a floppy disk, a USB key,...
-For the following boots, these parameters will be automatically searched for. 
-Here is the sequence under Emacspeak.
+Experiment with numbers between 1 and 9 to find the speech rate that suits you best.
+Note: Control+e d 9 means: 
+press and hold the CONTROL key and press the e key. 
+Release both keys. 
+Press the d key, release it, then press 9.
 
-Start a shell buffer:
-ESCAPE x shell
-It means: press the ESCAPE key, then the x key and finally type shell. 
+* Punctuation
+Set punctuation mode to all, some or none.
+Please type:
+Control+e d p
+and then type your choice: all, some or none. 
 
-Start the saveconfig script:
-saveconfig
+* Character echo
+Each typed character can be said or not said.
+Please type to toggle state of Emacspeak character echo:
+control+e d k
+Toggle state of  Emacspeak  character echo.
 
-Then, you will supply which and where configuration files will be saved.
-
-2. How to save my documents ?
-The directory where you will easily store your documents is /home/knoppix.
-By default, this directory is in ramdisk. As soon as your computer will be turned off, this directory will be lost!
-In fact, if you want to, this /home/knoppix directory may be placed in your hard disk or a USB key.
-At the following boot, this directory will be automatically searched.
-Here is the sequence under Emacspeak.
-
-Start a shell buffer:
-ESCAPE x shell
-
-Start the mkpersistenthome script:
-mkpersistenthome
-
-You will select where your home directory might be stored.
-Then, quit Emacspeak and boot up your PC.
+* Quit Emacspeak
 Control+x Control+c
-That is, first, hold down the
-Control key and press x, then release both of them.
-Second, hold down the
-Control key and press c.
 
-Finally, reboot your computer:
-sudo reboot
-
-3. How Oralux Talks.
+2. How Oralux Talks.
 
 Besides the synthesizer, two programs work together to make Oralux talk. One is
 called Emacs, and the other, Emacspeak. Emacs is a text file editor with many
@@ -65,7 +50,7 @@ When Emacspeak is run, the first thing it does is to start Emacs. Then item
 starts the speech extensions. So you can run emacs for silent operation or
 Emacspeak for speech use.
 
-4. Getting  Started.
+3. Getting  Started.
 
 The tutorials "My first steps in GNU/Emacs" and "The Calendar and the Diary" by Sylvie Xhaard are under the directory :
 tutorials/en
@@ -84,7 +69,7 @@ Control+e.
 The Emacspeak mailing list archive:
 http://www.cs.vassar.edu/~priestdo/emacspeak/
 
-5. Oralux FAQ.
+4. Oralux FAQ.
 
 The Oralux FAQ is an HTML page.
 To read it, start the w3m web browser to read the file:
@@ -94,7 +79,7 @@ and then type:
 /cdrom/KNOPPIX/faq.htm 
 
 
-6. Feedback.
+5. Feedback.
 We would be grateful if you may supply feedback about your Oralux experience.
 The email is:
 

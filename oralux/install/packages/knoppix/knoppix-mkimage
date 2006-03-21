@@ -82,6 +82,9 @@ NTFSWARNING2="AVERTISSEMENT (2): NTFS/Windows(TM) peut réagir de façon inattendu
 Voulez-vous toujours continuer?"
 NTFSWARNING3="AVERTISSEMENT (3): Avez-vous fait une copie de toutes les données importantes de la partition que vous voulez utiliser pour l'image KNOPPIX, sur un média de sauvegarde externe ? Pouvez-vous dans le pire des cas réparer la partition NTFS (Windows) par vous-mêmes ?"
 ;;
+ru*)
+source /usr/share/oralux/install/packages/knoppix/knoppix-mkimage.ru
+;;
 *)
 NTFSTITLE="NTFS WARNING"
 NTFSWARNING1="The Windows(TM) NTFS/XP filesystem is only partly supported by Linux, because of insufficient technical specifications by the manufacturer. But there is support for overwriting file contents of existing files, which is useful for creating \"virtual disk drives\" on a NTFS partition.
@@ -145,6 +148,9 @@ SUCCESS="OK !
 L'opération a réussi. Vos fichiers de configuration seront réinstallés dans le ramdisk au prochain démarrage d'Oralux si vous précisez \"knoppix floppyconf\" (disquette), ou \"knoppix myconfig=/mnt/nom_de_répertoire\" à l'invite du boot."
 ERROR="La configuration KNOPPIX n'a pu être sauvegardée :"
 MESSAGE_NO_PARTS="Aucune partition utilisable n'a pu être trouvée."
+;;
+ru*)
+source /usr/share/oralux/install/packages/knoppix/knoppix-mkimage.ru
 ;;
 *)
 TITLE1="Create persistent KNOPPIX home directory"
@@ -217,6 +223,9 @@ MESSAGE6="Dieses Image ist gerade in Benutzung, daher kann es nicht gelöscht wer
 fr*)
 MESSAGE6="Cette image est en cours d'utilisation. Si vous souhaitez l'effacer ou la reformater, redémarrez d'abord Oralux, s'il vous plait, sans activer l'image $IMAGE."
 ;;
+ru*)
+source /usr/share/oralux/install/packages/knoppix/knoppix-mkimage.ru
+;;
 *)
 MESSAGE6="This image is currently in use. If you want to delete/reformat it, please reboot Oralux first, without activating the image $IMAGE."
 ;;
@@ -262,6 +271,9 @@ MESSAGE10="Préparation du système de fichier Linux..."
 SUCCESS="Le formattage de l'image Knoppix avec le système de fichier ext2 a réussi; votre répertoire persistant et les données de configuration y ont été transférés.
 
 Vous pouvez maintenant redémarrer votre ordinateur et Oralux devrait trouver automatiquement cette image. Autrement, tapez \"knoppix home=$PARTITION\" ou \"knoppix home=scan\" à l'invite de démarrage boot: ."
+;;
+ru*)
+source /usr/share/oralux/install/packages/knoppix/knoppix-mkimage.ru
 ;;
 *)
 MESSAGE7="Do you want to save your home directory encrypted with AES256 (Advanced Encryption Standard, see http://csrc.nist.gov/encryption/aes/)? If yes, you will have to specify a very long password at homedir creation and boot time."
@@ -341,6 +353,9 @@ fr*)
 HEADER="Mot de passe de cryptage AES256 (minimum 20 caractères !)"
 ENTER="Tapez:"
 AGAIN="Encore, juste pour être sûr :"
+;;
+ru*)
+source /usr/share/oralux/install/packages/knoppix/knoppix-mkimage.ru
 ;;
 *)
 HEADER="AES256 encryption password (minimum 20 characters!)"
