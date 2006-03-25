@@ -1,11 +1,11 @@
 #undef DEBUG
 // ----------------------------------------------------------------------------
 // audiouserinterface.c
-// $Id: audioUserInterface.c,v 1.25 2006/03/19 12:00:33 gcasse Exp $
+// $Id: audioUserInterface.c,v 1.26 2006/03/25 22:11:55 gcasse Exp $
 // $Author: gcasse $
 // Description: Managing and playing the pre-recorded messages.
-// $Date: 2006/03/19 12:00:33 $ |
-// $Revision: 1.25 $ |
+// $Date: 2006/03/25 22:11:55 $ |
+// $Revision: 1.26 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 // September 2003: 
 // * German translations by Guenther Harrasser.
@@ -90,7 +90,7 @@ char * TheMessages[][5]={
   {"Brazilian Portuguese",
    "Portugais brésilien",
    "Portugiesisch (Brazilien)",
-   NULL,
+   "Portugués brasileño",
    "Português Brasileiro",
   },
   {"British",
@@ -136,7 +136,7 @@ char * TheMessages[][5]={
   {"French Canadian",
    "Français Canadien",
    "Französisch (Canada)",
-   NULL,
+   "Francés canadiense",
    "Francês Canadense",
   },
   {"German",
@@ -202,7 +202,7 @@ char * TheMessages[][5]={
   {"Belarusian",
    "Biélorusse",   
    NULL,
-   NULL,
+   "Bielorruso",
    "Bielo-russo",
   },
 
@@ -216,14 +216,14 @@ char * TheMessages[][5]={
   {"Bulgarian Phonetic",
    "Bulgare phonétique",
    "Bulgarisch phonetisch",   
-   NULL,
+   "Búlgaro fonético",
    "Fonética Búlgara",
   },
 
   {"Kazakh",
    "Kazakh",   
-   NULL,
-   NULL,
+   "Kazakh",
+   "Kazakh",
    "Kazakh",
   }, 
 
@@ -237,7 +237,7 @@ char * TheMessages[][5]={
   {"Macedonian",
    "Macédonien",   
    "Mazedonisch",
-   NULL,
+   "Macedonio",
    "Macedônio",
   },
 
@@ -265,14 +265,14 @@ char * TheMessages[][5]={
   {"Serbian",
    "Serbe",   
    "Serbisch",
-   NULL,
-   NULL,
+   "Serbio",
+   "sérvio",
   },
 
   {"Ukrainian",
    "Ukrainien",   
    "Ukrainisch",
-   NULL,
+   "Ucraniano",
    "Ucraniano",
   },
 
@@ -280,7 +280,7 @@ char * TheMessages[][5]={
    "Ukrainien Winkeys",   
    "Ukrainisch Winkeys",
    NULL,
-   "Winkeys ucraniano",
+   "Ucraniano Winkeys",
   },
 
   // Others messages 
@@ -1242,38 +1242,87 @@ char * TheMessages[][5]={
   {"The audio menu is going to start Yasr",
    "Le menu audio va lancer Yasr",
    "Das Audio-Menu wird Yasr starten",
-   "El audio menu ejecutará el programa Yasr",
+   "El menú de sonido va a iniciar yasr.",
    "O menu Áudio inicia com ois Yasr",
   },
 
   {"If the voice synthesizer stops, please press Control Alt i to start it again",
    "Si la synthèse vocale s'arrête, appuyez s'il vous plait sur Control Alt i pour la relancer",
-   "Wenn der Sprachsynthesizer plötlich aufhört zu sprechen, dücken Sie
-Control Alt i, um ihn neu zu starten",
-   "Si el sintetizador de voz se detiene, por favor pulse CTRL+Alt+I para ejecutarlo de nuevo",
+   "Wenn der Sprachsynthesizer plötlich aufhört zu sprechen, dücken Sie Control Alt i, um ihn neu zu starten",
+   "Si el sintetizador de voz se para, pulsa control-alt-i para reiniciarlo, por favor.",
    "Se o sintetizador de voz parar, por favor, pressione Control Alt i para reiniciá-lo",
   },
 
   {"Do you want this menu in Brazilian Portuguese ?",
    "Voulez-vous ce menu en portugais brésilien ?",
    "Wollen Sie dieses Menu in Portogiesisch (Brazilien)?",
-   NULL,
+   "¡Quieres este menú en portugués brasileño?",
    "Deseja este menu em Português Brasileiro?",
   },
 
   {"Do you want a new persistent storage?",
    "Voulez-vous un nouveau stockage persistant ?",
    "Wollen Sie einen neuen permanenten Speicherort?",
-   NULL,
+   "¡Quieres un nuevo almacén persistente?",
    "Você deseja armazenar?",
   },
 
   {"Do you want to quit the Preferences menu?",
    "Voulez-vous quitter le menu de configuration ?",
    "Wollen Sie das Einstellungsmenu verlassen?",
-   NULL,
+   "¡Quieres salir del menú de preferencias?",
    "Você deseja sair do menu preferências?",
   },
+
+  {"Speakup",
+   NULL,
+   NULL,
+   NULL,
+   NULL,
+  },
+
+  {"AccentPC",
+   NULL,
+   NULL,
+   NULL,
+   NULL,
+  },
+
+  {"Audapter",
+   NULL,
+   NULL,
+   NULL,
+   NULL,
+  },
+
+  {"DECtalkExternal",
+   NULL,
+   NULL,
+   NULL,
+   NULL,
+  },
+
+  {"SpeakOut",
+   NULL,
+   NULL,
+   NULL,
+   NULL,
+  },
+
+  {"Transport",
+   NULL,
+   NULL,
+   NULL,
+   NULL,
+  },
+
+  {"KeynoteGoldPC",
+   NULL,
+   NULL,
+   NULL,
+   NULL,
+  },
+
 };
 
 /* > */

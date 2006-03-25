@@ -5,14 +5,14 @@ DTK=$(DESTDIR)/ramdisk/dtk
 #CFLAGS=-g -I $(DTK)/include -DDEBUG -march=i386
 CFLAGS=-g -I $(DTK)/include -march=i386
 CC=gcc
-OBJECTS=main.o constants.o getnchar.o audioUserInterface.o audioFifo.o desktop.o i18n.o menu.o textToSpeech.o braille.o serialPort.o yasr.o
+OBJECTS=main.o constants.o getnchar.o audioUserInterface.o audioFifo.o desktop.o i18n.o menu.o textToSpeech.o braille.o serialPort.o yasr.o speakup.o
 
 OBJECTS_TEST=main.o constants.o getnchar.o audioUserInterface.o audioFifoFoo.o desktop.o i18n.o menu.o textToSpeech.o braille.o serialPort.o
 
 OBJECTS2=getvoice.o audioUserInterface.o audioFifo.o constants.o 
 LIBS2=-L $(DTK)/lib -ltts -ltts_us -ltts_fr -ltts_gr -ltts_sp
 
-OBJECTSOG=constants.o getnchar.o audioUserInterface.o audioFifo.o desktop.o i18n.o menu.o textToSpeech.o braille.o serialPort.o yasr.o
+OBJECTSOG=constants.o getnchar.o audioUserInterface.o audioFifo.o desktop.o i18n.o menu.o textToSpeech.o braille.o serialPort.o yasr.o speakup.o
 
 oralux-target: $(OBJECTS)
 	$(CC) $(OBJECTS) -o oralux
@@ -46,7 +46,8 @@ braille.o: braille.h constants.h
 desktop.o: desktop.h constants.h
 i18n.o: i18n.h constants.h
 constants.o: constants.h
-main.o: audioUserInterface.h constants.h getnchar.h i18n.h menu.h yasr.h
+main.o: audioUserInterface.h constants.h getnchar.h i18n.h menu.h yasr.h speakup.h
 menu.o: audioUserInterface.h menu.h constants.h getnchar.h textToSpeech.h menu.h
 textToSpeech.o: audioUserInterface.h getnchar.h textToSpeech.h constants.h
 yasr.o: yasr.h constants.h textToSpeech.h
+speakup.o: speakup.h constants.h textToSpeech.h menu.h

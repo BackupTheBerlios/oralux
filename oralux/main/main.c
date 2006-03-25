@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // main.c
-// $Id: main.c,v 1.14 2006/02/13 20:18:48 gcasse Exp $
+// $Id: main.c,v 1.15 2006/03/25 22:11:55 gcasse Exp $
 // $Author: gcasse $
 // Description: entry point. 
-// $Date: 2006/02/13 20:18:48 $ |
-// $Revision: 1.14 $ |
+// $Date: 2006/03/25 22:11:55 $ |
+// $Revision: 1.15 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -275,10 +275,12 @@ int main(int argc, char *argv[])
   struct textToSpeechStruct aExternalTextToSpeech;
   int aConfHasBeenUpdated=0;
 
-  int aExternalSynthesizerIsForced=HasExternalTextToSpeech( & (aSelectedInfo.myTextToSpeech));
+  int aExternalSynthesizerIsForced=HasEmacspeakExternalTextToSpeech( & (aSelectedInfo.myTextToSpeech));
 
   if (!aExternalSynthesizerIsForced)
     {
+      disableSpeakup();
+
       switch (aState)
 	{
 	case ORALUX_Start:
@@ -376,6 +378,9 @@ int main(int argc, char *argv[])
       if (aSelectedInfo.myTextToSpeech.myIdentifier==TTS_Flite)
 	{ // This is a workaround which avoids the "Process speaker not running" message in emacspeak
 	  system("eflite -f eflite_test.txt");
+	  sleep(2);
 	}
+
+      enableSpeakup( &aSelectedInfo);
     }
 }

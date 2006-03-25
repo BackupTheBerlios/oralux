@@ -186,6 +186,13 @@ enum sentence {
   MenuInBrazilian,
   sayPersistentStorage,
   sayQuitExpected,
+  saySpeakup,
+  AccentPC,
+  Audapter,
+  DECtalkExternal,
+  SpeakOut,
+  Transport,
+  KeynoteGoldPC,
   MaxSentence, // the last enum! Place any new enum before it, please.
 };
 

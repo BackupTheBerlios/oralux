@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // textToSpeech.c
-// $Id: textToSpeech.c,v 1.8 2006/02/05 00:42:15 gcasse Exp $
+// $Id: textToSpeech.c,v 1.9 2006/03/25 22:11:55 gcasse Exp $
 // $Author: gcasse $
 // Description: Ask about the whished TTS and install it. 
-// $Date: 2006/02/05 00:42:15 $ |
-// $Revision: 1.8 $ |
+// $Date: 2006/03/25 22:11:55 $ |
+// $Revision: 1.9 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -37,30 +37,49 @@
 static char TheLine[BUFSIZE];
 static int pf=0;
 
-/* {{{ External synth */
+/* < data */
 
-struct textToSpeechItem
+struct synthItem
 {
   enum textToSpeech myIdentifier;
-  enum sentence myName;
+  enum sentence mySentence;
+  int myCompliantDesktop;
+  char* myLabel;
+  int mySynthIsExternal;
 };
 
-static struct textToSpeechItem myExternalSynth[]={
-  {TTS_AccentSA, AccentSA},
-  {TTS_BrailleLite, BrailleLiteTTS},
-  {TTS_BrailleNSpeak, BrailleNSpeak},
-  {TTS_Ciber232, Ciber232},
-  {TTS_Ciber232Plus,Ciber232Plus},
-  {TTS_DECtalkExpress,DECtalkExpress},
-  {TTS_DECtalkMultivoice,DECtalkMultivoice},
-  {TTS_DECtalk3,DECtalk3},
-  {TTS_DolphinApollo,DolphinApollo},
-  {TTS_DoubleTalkLT,DoubleTalkLT},
-  {TTS_DoubleTalkPC,DoubleTalkPC},
-  {TTS_LiteTalk,LiteTalk},
-  {TTS_PcHabladoNotebook,PcHabladoNotebook},
-  {TTS_TypeNSpeak,TypeNSpeak},
+typedef struct synthItem synthItem;
+
+
+static synthItem myProposedSynth[]= { 
+  {TTS_ViaVoice, DoYouWantViaVoice, 0, "ViaVoice", 0}, // index=0
+  {TTS_Multispeech, DoYouWantMultispeech, Emacspeak|Speakup|Yasr, "Multispeech", 0},
+  {TTS_Flite, DoYouWantFlite, Emacspeak|Speakup|Yasr, "Flite", 0},
+  {TTS_Cicero, DoYouWantCicero, Emacspeak|Yasr, "Cicero", 0},
+  {TTS_DECtalk, DoYouWantToInstallDECtalk, Emacspeak|Yasr, "DECtalk", 0},
+  //  {TTS_Undefined, selectExternalSynth, 0, NULL}, //last item
+  {TTS_AccentSA, AccentSA, Emacspeak|Speakup, "AccentSA", 1},
+  {TTS_AccentPC, AccentPC, Speakup, "AccentPC", 1},
+  {TTS_Audapter, Audapter, Speakup, "Audapter", 1},
+  {TTS_BrailleLite, BrailleLiteTTS, Emacspeak|Speakup,"BrailleLite", 1},
+  {TTS_BrailleNSpeak, BrailleNSpeak, Emacspeak,"BrailleNSpeak", 1},
+  {TTS_Ciber232, Ciber232, Emacspeak,"Ciber232", 1},
+  {TTS_Ciber232Plus,Ciber232Plus, Emacspeak,"Ciber232Plus", 1},
+  {TTS_DECtalkExpress,DECtalkExpress, Emacspeak|Speakup,"DECtalkExpress", 1},
+  {TTS_DECtalkExternal,DECtalkExternal, Speakup, "DECtalkExternal", 1},
+  {TTS_DECtalkMultivoice,DECtalkMultivoice, Emacspeak,"DECtalkMultivoice", 1},
+  {TTS_DECtalk3,DECtalk3, 0,"DECtalk3", 1},
+  {TTS_DolphinApollo,DolphinApollo, Emacspeak|Speakup,"DolphinApollo", 1},
+  {TTS_DoubleTalkLT,DoubleTalkLT, Emacspeak|Speakup,"DoubleTalkLT", 1},
+  {TTS_DoubleTalkPC,DoubleTalkPC, Emacspeak|Speakup,"DoubleTalkPC", 1},
+  {TTS_KeynoteGoldPC,KeynoteGoldPC, Speakup,"KeynoteGoldPC", 1},
+  {TTS_LiteTalk,LiteTalk, 0,"LiteTalk", 1},
+  {TTS_PcHabladoNotebook,PcHabladoNotebook, Emacspeak,"PcHabladoNotebook", 1},
+  {TTS_SpeakOut,SpeakOut, Speakup, "SpeakOut", 1},
+  {TTS_Transport,Transport, Speakup, "Transport", 1},
+  {TTS_TypeNSpeak,TypeNSpeak, 0,"TypeNSpeak", 1},
 };
+#define MaxProposedSynth (sizeof(myProposedSynth)/sizeof(myProposedSynth[0]))
 
 struct TextToSpeechCheatCode
 {
@@ -68,7 +87,7 @@ struct TextToSpeechCheatCode
   char* myCode;
 };
 
-static struct TextToSpeechCheatCode mySynthesizerCheatCode[]={
+static struct TextToSpeechCheatCode myEmacspeakCheatCode[]={
   {TTS_AccentSA, "accent"},
   {TTS_BrailleLite, "braillenspeak"},
   {TTS_Ciber232, "ciber"},
@@ -80,28 +99,101 @@ static struct TextToSpeechCheatCode mySynthesizerCheatCode[]={
   {TTS_PcHabladoNotebook,"pchablado"},
 };
 
+/* < external synth: menu*/
 
-static void chooseExternalSynth( enum textToSpeech* theIdentifier)
+enum MENU_ExtSynthState {
+  MENU_ExtSynth,
+  MENU_Port,
+  MENU_End,
+};
+
+/* > */
+
+/* > */
+/* < getIndex, getNextIndex, getPreviousIndex */
+
+static int getIndex( enum textToSpeech theIdentifier, enum desktopIdentifier theDesktop, int* theIndex)
+{
+  int aResult=0;
+  for (*theIndex=0; *theIndex<MaxProposedSynth; *theIndex++)
+    {
+      if ((myProposedSynth[*theIndex].myCompliantDesktop & theDesktop)
+	  && (myProposedSynth[*theIndex].myIdentifier == theIdentifier))
+	{
+	  aResult = 1;
+	  break;
+	}
+    }
+
+  if (!aResult)
+    { // fallback
+      for (*theIndex=0; *theIndex<MaxProposedSynth; *theIndex++)
+	{
+	  if (myProposedSynth[*theIndex].myCompliantDesktop & theDesktop)
+	    {
+	      aResult = 1;
+	      break;
+	    }
+	}
+    }
+
+  return aResult;
+}
+
+static int getNextIndex( int* theIndex, enum desktopIdentifier theDesktop, int theSynthMustBeExternal)
+{
+  int aResult=0;
+  int n = MaxProposedSynth;
+  
+  while( n--)
+    {
+      *theIndex = (*theIndex >= MaxProposedSynth-1) ? 0 : ++*theIndex;
+      if ((myProposedSynth[*theIndex].myCompliantDesktop & theDesktop)
+	  && (!theSynthMustBeExternal 
+	      || myProposedSynth[*theIndex].mySynthIsExternal))
+	{
+	  aResult = 1;
+	  break;
+	}
+    }
+
+  return aResult;
+}
+
+static int getPreviousIndex( int* theIndex, enum desktopIdentifier theDesktop, int theSynthMustBeExternal)
+{
+  int aResult=0;
+  int n = MaxProposedSynth;
+
+  while( n--)
+    {
+      *theIndex = (*theIndex > 0) ? --*theIndex : MaxProposedSynth-1;
+      if ((myProposedSynth[*theIndex].myCompliantDesktop & theDesktop)
+	  && (!theSynthMustBeExternal 
+	      || myProposedSynth[*theIndex].mySynthIsExternal))
+	{
+	  aResult = 1;
+	  break;
+	}
+    }
+
+  return aResult;
+}
+/* > */
+/* < chooseExternalSynth */
+
+static void chooseExternalSynth( enum textToSpeech* theIdentifier, enum desktopIdentifier theDesktop, int theCurrentIndex)
 {
   ENTER("chooseExternalSynth");
   int aRequest=0;
   int aChoice=0;
   int aQuestion=1;
-  int aMaxExternalSynth=sizeof(myExternalSynth)/sizeof(myExternalSynth[0]);
   int i=0;
 
-  // Looking for the index in the array
-  for (i=0; i<aMaxExternalSynth; i++)
-    {
-      if (*theIdentifier==myExternalSynth[i].myIdentifier)
-      {
-	aChoice=i;
-	break;
-      }
-    }
+  aChoice=theCurrentIndex;
 
   say(externalSynthIs);
-  say(myExternalSynth[aChoice].myName);
+  say(myProposedSynth[aChoice].mySentence);
   say(changeExternalSynth);
   say(PleasePressKey);
 
@@ -113,7 +205,7 @@ static void chooseExternalSynth( enum textToSpeech* theIdentifier)
 
   while(aRequest)
     {
-      say(myExternalSynth[aChoice].myName);
+      say(myProposedSynth[aChoice].mySentence);
 
       if (aQuestion)
 	{
@@ -128,35 +220,31 @@ static void chooseExternalSynth( enum textToSpeech* theIdentifier)
 	  break;
 	    
 	case MENU_Previous:
-	  aChoice = (aChoice > 0) ? --aChoice : aMaxExternalSynth-1;
+	  aRequest = getPreviousIndex( &aChoice, theDesktop, 1);
 	  break;
 
 	default:
-	  aChoice = (aChoice >= aMaxExternalSynth-1) ? 0 : ++aChoice;
+	  aRequest = getNextIndex( &aChoice, theDesktop, 1);
 	  break;
 	}
     }
 
-  *theIdentifier=myExternalSynth[aChoice].myIdentifier;
+  *theIdentifier=myProposedSynth[aChoice].myIdentifier;
 }
 
-enum MENU_ExtSynthState {
-  MENU_ExtSynth,
-  MENU_Port,
-  MENU_End,
-};
-
-static void setExternalSynth( struct textToSpeechStruct * theTextToSpeech)
+/* > */
+/* < askForExternalSynth */
+static void askForExternalSynth( struct textToSpeechStruct * theTextToSpeech, enum desktopIdentifier theDesktop, int theCurrentIndex)
 {
-  ENTER("setExternalSynth");
-
+  ENTER("askForExternalSynth");
   enum MENU_ExtSynthState aMenuState=MENU_ExtSynth;
+
   while(aMenuState != MENU_End)
     {
       switch(aMenuState)
 	{
 	case MENU_ExtSynth:
-	  chooseExternalSynth( & theTextToSpeech->myIdentifier);
+	  chooseExternalSynth( & theTextToSpeech->myIdentifier, theDesktop, theCurrentIndex);
 	  aMenuState = (GNC_UpArrowKey == getLastKeyPressed()) ? MENU_End : MENU_Port;
 	  break;
 	  
@@ -171,13 +259,13 @@ static void setExternalSynth( struct textToSpeechStruct * theTextToSpeech)
 	}
     }
 }
-
-
+/* > */
+/* < HasEmacspeakExternalTextToSpeech */
 // Read the oralux.conf file to see if an external synth must be used instead of the sound card.
 //
-int HasExternalTextToSpeech(struct textToSpeechStruct* theExternalTextToSpeech)
+int HasEmacspeakExternalTextToSpeech(struct textToSpeechStruct* theExternalTextToSpeech)
 {
-  ENTER("HasExternalTextToSpeech");
+  ENTER("HasEmacspeakExternalTextToSpeech");
   FILE* fd=fopen("/etc/oralux.conf","r");
   int aResult=0;
 
@@ -224,21 +312,20 @@ int HasExternalTextToSpeech(struct textToSpeechStruct* theExternalTextToSpeech)
 
   if (aTextToSpeech)
     {
-      int aMaxCheatCode=sizeof(mySynthesizerCheatCode)/sizeof(mySynthesizerCheatCode[0]);
+      int aMaxCheatCode=sizeof(myEmacspeakCheatCode)/sizeof(myEmacspeakCheatCode[0]);
       int i=0;
 
       // Looking for the index in the array
       for (i=0; i<aMaxCheatCode; i++)
 	{
-	  if (strcmp(aTextToSpeech, mySynthesizerCheatCode[i].myCode)==0)
+	  if (strcmp(aTextToSpeech, myEmacspeakCheatCode[i].myCode)==0)
 	    {
-	      theExternalTextToSpeech->myIdentifier=mySynthesizerCheatCode[i].myIdentifier;
+	      theExternalTextToSpeech->myIdentifier=myEmacspeakCheatCode[i].myIdentifier;
 	      aResult=1;
 	      break;
 	    }
 	}
     }
-
 
   if (aResult)
     {
@@ -250,53 +337,33 @@ int HasExternalTextToSpeech(struct textToSpeechStruct* theExternalTextToSpeech)
   free(aBuffer);
   return aResult;
 }
+/* > */
+/* < setSoftwareSynth */
+static void setViavoice(enum desktopIdentifier theDesktop)
+{
+  int i=0;
 
-/* }}} */
-
-/* {{{ Choose a synth (external or not) */
-
-// chooseSynt
+  if ((theDesktop != Speakup) && getIndex( TTS_ViaVoice, theDesktop, &i))
+    {
+      struct stat buf;
+      int isViaVoicePresent = ((stat("/usr/lib/ibmeci", &buf)==0)
+			       || (stat("/usr/share/oraluxGold", &buf)==0));
+      
+      myProposedSynth[i].myCompliantDesktop = isViaVoicePresent;
+    }
+}
+/* > */
+/* < chooseSynth */
+// chooseSynth
 // Asking to the user which voice synthesis is required
 // Return true if a synth is selected
 // false if  menu must exit
 //
-struct synthItem
-{
-  enum textToSpeech myIdentifier;
-  enum sentence mySentence;
-};
-
-static struct synthItem TheProposedSynth[]= { 
-  {TTS_ViaVoice, DoYouWantViaVoice}, // index=0
-  {TTS_Multispeech, DoYouWantMultispeech},
-  {TTS_Flite, DoYouWantFlite},
-  {TTS_Cicero, DoYouWantCicero},
-  {TTS_DECtalk, DoYouWantToInstallDECtalk},
-  {TTS_Undefined, selectExternalSynth}, //last item
-};
-
-typedef struct synthItem synthItem;
-
-int getIndexInArrayFromIdentifier( synthItem** theArray, int theMaxIndex, enum textToSpeech theIdentifier)
-{
-  int aIndex=0;
-  int i=0;
-  for (i=0; i<theMaxIndex; i++)
-    {
-      if ((*theArray)[i].myIdentifier == theIdentifier)
-	{
-	  aIndex=i;
-	  break;
-	}
-    }
-  return aIndex;
-}
-
-static int chooseSynt( struct textToSpeechStruct* theTextToSpeech,
+static int chooseSynth( struct textToSpeechStruct* theTextToSpeech,
 		       enum language thePreferredLanguage,
 		       enum desktopIdentifier theDesktop)
 {
-  ENTER("chooseSynt");
+  ENTER("chooseSynth");
   int aStatus=1;
   int aRequest=1;
   int aMaxTextToSpeech=0;
@@ -304,56 +371,17 @@ static int chooseSynt( struct textToSpeechStruct* theTextToSpeech,
   int i=0;
   int j=0;
   int isFirstRequest=1;
-  int aMaxSynth=sizeof(TheProposedSynth)/sizeof(TheProposedSynth[0]);
 
-  synthItem** aArrayOfAvailableSynth=(synthItem**)malloc( aMaxSynth * sizeof(synthItem*));
+  setViavoice(theDesktop);
 
-  // ViaVoice is considered present if it was already installed by OG
-  // or if OG is in use
-  // two conditions for security (hard disk install)
-  struct stat buf;
-  int isViaVoicePresent = ((stat("/usr/lib/ibmeci", &buf)==0)
-			   || (stat("/usr/share/oraluxGold", &buf)==0));
-
-  for( i=0; i<aMaxSynth; i++)
+  if (aRequest)
     {
-      if ((TheProposedSynth[i].myIdentifier == TTS_ViaVoice)
-	  && !isViaVoicePresent)
-	{
-	  continue;
-	}
-      else if ((theDesktop != Emacspeak)
-	       && (TheProposedSynth[i].myIdentifier == TTS_Undefined))
-	{
-	  continue;
-	}
-      aArrayOfAvailableSynth[ aMaxTextToSpeech++] = TheProposedSynth+i;
-    }
-
-  switch(theDesktop)
-    {
-    case Emacspeak:
-      {
-	enum textToSpeech aIdentifier=isExternalSynth(theTextToSpeech->myIdentifier) ? TTS_Undefined:theTextToSpeech->myIdentifier;
-
-	aIndex=getIndexInArrayFromIdentifier(aArrayOfAvailableSynth , aMaxTextToSpeech, aIdentifier);
-      }
-      break;
-
-    case Yasr:
-    default:
-      {
-	// hardware synth are not yet available using Yasr
-	enum textToSpeech aIdentifier=isExternalSynth(theTextToSpeech->myIdentifier) ? TTS_Multispeech:theTextToSpeech->myIdentifier;
-
-	aIndex=getIndexInArrayFromIdentifier(aArrayOfAvailableSynth , aMaxTextToSpeech, aIdentifier);
-      }
-      break;
+      aRequest=getIndex( theTextToSpeech->myIdentifier, theDesktop, &aIndex);
     }
 
   while(aRequest)
     {
-      say(aArrayOfAvailableSynth[aIndex]->mySentence);
+      say(myProposedSynth[aIndex].mySentence);
 
       if (isFirstRequest)
 	{
@@ -363,13 +391,13 @@ static int chooseSynt( struct textToSpeechStruct* theTextToSpeech,
       switch(getAnswer())
 	{
 	case MENU_Yes:
-	  if (aArrayOfAvailableSynth[aIndex]->mySentence==selectExternalSynth)
+	  if (myProposedSynth[aIndex].mySynthIsExternal)
 	    {
-	      setExternalSynth( theTextToSpeech);
+	      askForExternalSynth( theTextToSpeech, theDesktop, aIndex);
 	    }
 	  else
 	    {
-	      theTextToSpeech->myIdentifier = aArrayOfAvailableSynth[aIndex]->myIdentifier;
+	      theTextToSpeech->myIdentifier = myProposedSynth[aIndex].myIdentifier;
 	      switch (theTextToSpeech->myIdentifier)
 	 	{
 		case TTS_Multispeech:
@@ -400,7 +428,7 @@ static int chooseSynt( struct textToSpeechStruct* theTextToSpeech,
 	    }
 	  else
 	    {
-	      aIndex = (aIndex > 0) ? --aIndex : aMaxTextToSpeech-1;
+	      aRequest = getPreviousIndex( &aIndex, theDesktop, 0);
 	    }
 	  break;
 	  
@@ -411,13 +439,13 @@ static int chooseSynt( struct textToSpeechStruct* theTextToSpeech,
 	    }
 	  else
 	    {
-	      aIndex = (aIndex >= aMaxTextToSpeech-1) ? 0 : ++aIndex;
+	      aRequest = getNextIndex( &aIndex, theDesktop, 0);
 	    }
 	  break;
 
 	case MENU_No:
 	default:
-	  aIndex = (aIndex >= aMaxTextToSpeech-1) ? 0 : ++aIndex;
+	  aRequest = getNextIndex( &aIndex, theDesktop, 0);
 	  break;
 	}
 
@@ -425,14 +453,10 @@ static int chooseSynt( struct textToSpeechStruct* theTextToSpeech,
       SHOW3("aRequest=%d, aIndex=%d\n",aRequest, aIndex);
     }
 
-  free(aArrayOfAvailableSynth);
-
   return aStatus;
 }
-
-/* }}} */
-
-/* {{{ DECtalk installation */
+/* > */
+/* < DECtalk or Viavoice install */
 
 static int readPHPStatus(enum phpStatus* theStatus, char* theDtkPath, enum language* theTextToSpeechLanguage);
 static int BuildingEmacspeakSharedLibrary();
@@ -706,7 +730,8 @@ static int isFileConsistent(char* theFilename)
 }
 
 
-// installDECtalk
+/* < installDECtalk */
+
 // This function asks for the serial number (with an aural feedback)
 // and then supplies it to the DECtalk installer
 // Finally, if possible the uncompressed files are stored in the dtk directory for the future boot. 
@@ -782,7 +807,7 @@ static int installDECtalk(enum language* theTextToSpeechLanguage)
   return aCorrectSerialNumber;
 }
 
-/* }}} */
+/* > */
 /* < askIfAnotherViavoiceInstall: return 1 if yes, 0 otherwises */
 
 int askIfAnotherViavoiceInstall( int thePreviousInstallWasOk)
@@ -809,8 +834,7 @@ int askIfAnotherViavoiceInstall( int thePreviousInstallWasOk)
 }
 
 /* > */
-
-/* <*/
+/* < installViaVoice */
 
 // install
 // This function asks for the serial number (with an aural feedback)
@@ -888,9 +912,9 @@ static int installViaVoice( int theUserMustBeAskedFor)
 
 /* > */
 
-/* {{{ Installing the required text to speech */
+/* > */
+/* < install */
 
-// install
 // return 1: Ok
 // return 0: No possible installation
 static int install(struct textToSpeechStruct* theTextToSpeech, enum language thePreferredLanguage, int theUserMustBeAskedFor)
@@ -937,7 +961,8 @@ static int install(struct textToSpeechStruct* theTextToSpeech, enum language the
   return aStatus;
 }
 
-// setTextToSpeech
+/* > */
+/* < setTextToSpeech */
 int setTextToSpeech(struct textToSpeechStruct* theTextToSpeech,
 		    enum language thePreferredLanguage,
 		    enum desktopIdentifier theDesktop,
@@ -962,8 +987,8 @@ int setTextToSpeech(struct textToSpeechStruct* theTextToSpeech,
       theTextToSpeech->myLanguage = thePreferredLanguage;
       if (theUserMustBeAskedFor)
 	{
-	  //if (!chooseSynt( theTextToSpeech, thePreferredLanguage, theDesktop))
-	    if (!chooseSynt( theTextToSpeech, theTextToSpeech->myLanguage, theDesktop))
+	  //if (!chooseSynth( theTextToSpeech, thePreferredLanguage, theDesktop))
+	    if (!chooseSynth( theTextToSpeech, theTextToSpeech->myLanguage, theDesktop))
 	    {
 	      return 0;
 	    }
@@ -979,63 +1004,18 @@ int setTextToSpeech(struct textToSpeechStruct* theTextToSpeech,
 
   return (0 != memcmp(&aTextToSpeech, theTextToSpeech, sizeof(struct textToSpeechStruct)));
 }
-
-int isExternalSynth( enum textToSpeech theIdentifier)
-{
-  int aResult=0;
-  int i=0;
-
-  for (i=0; i<sizeof(myExternalSynth)/sizeof(myExternalSynth[0]); i++)
-    {
-      if (myExternalSynth[i].myIdentifier==theIdentifier)
-	{
-	  aResult=1;
-	}
-    }
-  return aResult;
-}
-
-/* }}} */
-
-/* {{{ Converting identifier to string */
-
-typedef struct t_idLabel IDLABEL;
-struct t_Label{
-  enum textToSpeech myID;
-  char* myLabel;
-};
-
-static struct t_Label myLabels[]={
-  {TTS_Flite, "Flite"},
-  {TTS_DECtalk, "DECtalk"},
-  {TTS_Multispeech, "Multispeech"},
-  {TTS_Cicero, "Cicero"},
-  {TTS_ViaVoice, "ViaVoice"},
-  {TTS_AccentSA,"AccentSA"},
-  {TTS_BrailleLite,"BrailleLite"},
-  {TTS_BrailleNSpeak,"BrailleNSpeak"},
-  {TTS_Ciber232,"Ciber232"},
-  {TTS_Ciber232Plus,"Ciber232Plus"},
-  {TTS_DECtalkExpress,"DECtalkExpress"},
-  {TTS_DECtalkMultivoice,"DECtalkMultivoice"},
-  {TTS_DECtalk3,"DECtalk3"},
-  {TTS_DolphinApollo,"DolphinApollo"},
-  {TTS_DoubleTalkLT,"DoubleTalkLT"},
-  {TTS_DoubleTalkPC,"DoubleTalkPC"},
-  {TTS_LiteTalk,"LiteTalk"},
-  {TTS_PcHabladoNotebook,"PcHabladoNotebook"},
-  {TTS_TypeNSpeak,"TypeNSpeak"},
-  };
+/* > */
+/* < getStringSynthesis, getEnumSynthesis */
 
 char* getStringSynthesis(enum textToSpeech theValue)
 {
   char* aValue="Multispeech";
-  int i=0;
-  for (i=0;i<sizeof(myLabels)/sizeof(myLabels[0]);i++)
+  int i;
+  for (i=0; i<MaxProposedSynth; i++)
     {
-      if (myLabels[i].myID==theValue)
+      if (myProposedSynth[i].myIdentifier == theValue)
 	{
-	  aValue=myLabels[i].myLabel;
+	  aValue = myProposedSynth[i].myLabel;
 	  break;
 	}
     }
@@ -1044,18 +1024,17 @@ char* getStringSynthesis(enum textToSpeech theValue)
 
 enum textToSpeech getEnumSynthesis(char* theValue)
 {
-  int aValue=myLabels[0].myID;
-  int i=0;
-  for (i=0;i<sizeof(myLabels)/sizeof(myLabels[0]);i++)
+  int aValue = TTS_Multispeech;
+  int i;
+  for (i=0; i<MaxProposedSynth; i++)
     {
-      if (strcmp(myLabels[i].myLabel,theValue)==0)
+      if (strcmp(myProposedSynth[i].myLabel, theValue)==0)
 	{
-	  aValue=myLabels[i].myID;
+	  aValue=myProposedSynth[i].myIdentifier;
 	  break;
 	}
     }
   return aValue;  
 }
 
-/* }}} */
-
+/* > */

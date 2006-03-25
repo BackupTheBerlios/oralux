@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // desktop.c
-// $Id: desktop.c,v 1.3 2006/02/05 00:42:15 gcasse Exp $
+// $Id: desktop.c,v 1.4 2006/03/25 22:11:55 gcasse Exp $
 // $Author: gcasse $
 // Description: Serial ports 
-// $Date: 2006/02/05 00:42:15 $ |
-// $Revision: 1.3 $ |
+// $Date: 2006/03/25 22:11:55 $ |
+// $Revision: 1.4 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -48,7 +48,10 @@ static struct desktopItem myDesktops[]=
   {
     {"Emacspeak",sayEmacspeak},
     {"Yasr",sayYasr},
+    {"Speakup",saySpeakup},
   };
+
+#define MaxDesktop (sizeof(myDesktops)/sizeof(myDesktops[0]))
 
 enum desktopIdentifier getEnumDesktop(char* theDesktop)
 {
@@ -94,7 +97,6 @@ int setDesktop(enum desktopIdentifier *theDesktop)
   ENTER("setDesktop");
   int aDesktopRequest=1;
   int i=0;
-  int aMaxDesktop = sizeof(myDesktops)/sizeof(myDesktops[0]);
   enum desktopIdentifier aDesktop = Emacspeak;
 
   if (!theDesktop)
@@ -103,7 +105,7 @@ int setDesktop(enum desktopIdentifier *theDesktop)
     }
 
   // Looking for the index which matches theDesktop
-  for (i=0; i<aMaxDesktop; i++)
+  for (i=0; i<MaxDesktop; i++)
     {
       if (getEnumDesktop(myDesktops[i].myIdentifier) == *theDesktop)
 	{
@@ -111,7 +113,7 @@ int setDesktop(enum desktopIdentifier *theDesktop)
 	}
     }
 
-  if (i >= aMaxDesktop)
+  if (i >= MaxDesktop)
     {
       SHOW("Desktop: Unexpected value");
       return 0;
@@ -143,11 +145,11 @@ int setDesktop(enum desktopIdentifier *theDesktop)
 	  break;
 
 	case MENU_Previous:
-	  i = (i > 0) ? i-1 : aMaxDesktop-1;
+	  i = (i > 0) ? i-1 : MaxDesktop-1;
 	  break;
 
 	default:
-	  i = (i >= aMaxDesktop-1) ? 0 : i+1;
+	  i = (i >= MaxDesktop-1) ? 0 : i+1;
 	  break;
       }
   }

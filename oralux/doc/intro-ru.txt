@@ -92,7 +92,7 @@ Faq по Oralux представляет собой html страничку.
 ESCAPE x w3m-find-file enter.
 
 После чего введите:
-/cdrom/KNOPPIX/faq.htm 
+/cdrom/KNOPPIX/faq-ru.htm 
 
 5. Обратная связь
 

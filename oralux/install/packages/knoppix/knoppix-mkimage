@@ -160,7 +160,7 @@ Do you want to create a persistent home directory or system config archive for t
 
 MESSAGE2="Please select a partition for creating the image:"
 MESSAGE3="There is already a Knoppix image present on this partition. Would like to delete/format it?"
-MESSAGE4="This is an NTFS partition. Because there is no vendor support for Linux that would allow writing directly to such a file system, you will first have to create an empty image file from within Windows(TM). You can find a program for this in the KNOPPIX directory on your CD. PLEASE BE AWARE THAT THIS IS A NEW YET A VERY EXPERINEMTAL FEATURE. THERE IS NO GUARANTEE THAT IT WILL WORK."
+MESSAGE4="This is an NTFS partition. Because there is no vendor support for Linux that would allow writing directly to such a file system, you will first have to create an empty image file from within Windows(TM). You can find a program for this in the KNOPPIX directory on your CD. PLEASE BE AWARE THAT THIS IS A NEW YET A VERY EXPERIMENTAL FEATURE. THERE IS NO GUARANTEE THAT IT WILL WORK."
 MESSAGE5="Please chose the filesystem for the KNOPPIX image. ext3, reiserfs and xfs are journaling file systems and are very robust to errors, but require an additional amount of about 30MB disk space for the journal that cannot be used by actual content."
 MESSAGE6="This image is currently in use. If you want to delete/reformat it, please reboot Oralux first, without activating the image $IMAGE."
 MESSAGE11="This harddisk partition cannot be mounted in read-write mode currently, sorry."

@@ -719,4 +719,35 @@ struct t_translation TheRussianMessages[]=
    "Выйти из меню установок?",
   },
 
+  {"Speakup",
+   NULL,
+  },
+
+  {"Speakup",
+   NULL,
+  },
+
+  {"AccentPC",
+   NULL,
+  },
+
+  {"Audapter",
+   NULL,
+  },
+
+  {"DECtalkExternal",
+   NULL,
+  },
+
+  {"SpeakOut",
+   NULL,
+  },
+
+  {"Transport",
+   NULL,
+  },
+
+  {"KeynoteGoldPC",
+   NULL,
+  },
 };

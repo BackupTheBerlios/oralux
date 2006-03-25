@@ -5,9 +5,9 @@
 
 enum desktopIdentifier
   {
-    Emacspeak,
-    Yasr,
-    MaxDesktop,
+    Emacspeak=1,
+    Yasr=2,
+    Speakup=4,
   };
 
 enum desktopIdentifier getEnumDesktop(char* theDesktop);
