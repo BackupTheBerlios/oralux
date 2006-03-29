@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // desktop.c
-// $Id: desktop.c,v 1.4 2006/03/25 22:11:55 gcasse Exp $
+// $Id: desktop.c,v 1.5 2006/03/29 20:47:40 gcasse Exp $
 // $Author: gcasse $
 // Description: Serial ports 
-// $Date: 2006/03/25 22:11:55 $ |
-// $Revision: 1.4 $ |
+// $Date: 2006/03/29 20:47:40 $ |
+// $Revision: 1.5 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -40,15 +40,16 @@
 
 struct desktopItem
 {
-  char* myIdentifier;
+  char* myLabel;
   enum sentence myName;
+  enum desktopIdentifier myIdentifier;
 };
 
 static struct desktopItem myDesktops[]=
   {
-    {"Emacspeak",sayEmacspeak},
-    {"Yasr",sayYasr},
-    {"Speakup",saySpeakup},
+    {"Emacspeak",sayEmacspeak,Emacspeak},
+    {"Yasr",sayYasr,Yasr},
+    {"Speakup",saySpeakup,Speakup},
   };
 
 #define MaxDesktop (sizeof(myDesktops)/sizeof(myDesktops[0]))
@@ -62,9 +63,9 @@ enum desktopIdentifier getEnumDesktop(char* theDesktop)
     {
       for (i=0; i<sizeof(myDesktops)/sizeof(myDesktops[0]); i++)
 	{
-	  if (strcmp( myDesktops[i].myIdentifier, theDesktop)==0)
+	  if (strcmp( myDesktops[i].myLabel, theDesktop)==0)
 	    {
-	      aDesktop=i;
+	      aDesktop=myDesktops[i].myIdentifier;
 	      break;
 	    }
 	}
@@ -74,10 +75,10 @@ enum desktopIdentifier getEnumDesktop(char* theDesktop)
 
 char* desktopGetString( enum desktopIdentifier theValue)
 {
-  char* aLabel=myDesktops[0].myIdentifier;
+  char* aLabel=myDesktops[0].myLabel;
   if (theValue < MaxDesktop)
     {
-      aLabel=myDesktops[theValue].myIdentifier;
+      aLabel=myDesktops[theValue].myLabel;
     }
   return aLabel;
 }
@@ -107,7 +108,7 @@ int setDesktop(enum desktopIdentifier *theDesktop)
   // Looking for the index which matches theDesktop
   for (i=0; i<MaxDesktop; i++)
     {
-      if (getEnumDesktop(myDesktops[i].myIdentifier) == *theDesktop)
+      if (myDesktops[i].myIdentifier == *theDesktop)
 	{
 	  break;
 	}
@@ -153,7 +154,7 @@ int setDesktop(enum desktopIdentifier *theDesktop)
 	  break;
       }
   }
-  *theDesktop = getEnumDesktop( myDesktops[i].myIdentifier);
+  *theDesktop = getEnumDesktop( myDesktops[i].myLabel);
   return (*theDesktop != aDesktop);
 }
 
@@ -169,7 +170,7 @@ int setDesktop(enum desktopIdentifier *theDesktop)
 /* 	{ */
 /* 	  if (strcmp(aAudioUserInterface, myInterfaceCheatCode[i].myCode)==0) */
 /* 	    { */
-/* 	      *theAudioUserInterface=myInterfaceCheatCode[i].myIdentifier; */
+/* 	      *theAudioUserInterface=myInterfaceCheatCode[i].myLabel; */
 /* 	      aResult=1; */
 /* 	      break; */
 /* 	    } */

@@ -1,11 +1,11 @@
 #undef DEBUG
 // ----------------------------------------------------------------------------
 // audiouserinterface.c
-// $Id: audioUserInterface.c,v 1.26 2006/03/25 22:11:55 gcasse Exp $
+// $Id: audioUserInterface.c,v 1.27 2006/03/29 20:47:40 gcasse Exp $
 // $Author: gcasse $
 // Description: Managing and playing the pre-recorded messages.
-// $Date: 2006/03/25 22:11:55 $ |
-// $Revision: 1.26 $ |
+// $Date: 2006/03/29 20:47:40 $ |
+// $Revision: 1.27 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 // September 2003: 
 // * German translations by Guenther Harrasser.
@@ -50,7 +50,7 @@ static char* TheLangDirectory[]={
   "fr", //French
   "de", //German
   "es", //Spanish
-  "br", //Brazilian Portuguese
+  "pt_BR", //Brazilian Portuguese
   "ru", //Russian
 };
 static int TheSoundIsEnable=1;
@@ -503,11 +503,11 @@ char * TheMessages[][5]={
    "Você deseja o Emacspeak com o Festival M Brola (Inglês e Francês)?",
   },
 
-  {"Do you want Flite (English) ?",
-   "Voulez-vous Flite (anglais) ?",
-   "Wollen Sie Flite (Englische)?",
-   "¿Quiere Flite (Inglés)?",
-   "Deseja o Flite (Inglês) ?",
+  {"Flite (English)",
+   "Flite (anglais)",
+   "Flite (Englische)",
+   "Flite (Inglés)",
+   "Flite (Inglês)",
   },
 
   {"Yes",
@@ -887,24 +887,24 @@ char * TheMessages[][5]={
    "Deseja selecionar um sintetizador de voz externo?",
   },
 
-  {"What kind of synthesizer do you have ?",
+  {"What kind of synthesizer do you have?",
    "Quelle type de synthèse avez-vous ?",
    "Was für einen Sprachsynthesizer haben Sie?",
    "¿Qué tipo de sintetizador tienes?",
    "Qual é o seu sintetizador?",
   },
 
-  {"Your external synthesizer is supposed to be",
-   "Votre synthèse externe est supposé de type",
-   "Ihr externer Sprachsynthesizer sollte sein:",
-   "Se supone que tu sintetizador externo es",
+  {"Your **voice** synthesizer is supposed to be:",
+   "Votre synthèse vocale est supposé de type :",
+   "Ihr Sprachsynthesizer sollte sein:",
+   "Se supone que tu sintetizador es:",
    "Seu sintetizador é baseado em:",
   },
 
-  {"Do you want to change the type of external synthesizer ?",
-   "Voulez-vous modifier le type de synthèse externe ?",
-   "Wollen Sie einen anderen externen Sprachsynthesizer auswählen?",
-   "¿Quieres cambiar el tipo de sintetizador externo?",
+  {"Do you want to change the type of synthesizer ?",
+   "Voulez-vous modifier le type de synthèse ?",
+   "Wollen Sie einen anderen Sprachsynthesizer auswählen?",
+   "¿Quieres cambiar el tipo de sintetizador?",
    "Deseja alterar o tipo do sintetizador?",
   },
 
@@ -966,11 +966,11 @@ char * TheMessages[][5]={
    "Deseja desligar o P C?",
   },
 
-  {"Do you want Multispeech (English, Brazilian Portuguese, French, German, Russian, Spanish)?",
-   "Voulez-vous Multispeech (français, allemand, anglais, espagnol, portugais brésilien, russe) ?",
-   "Wollen Sie Multispeech (Deutsche, Brasilianisches Portugiesische, Englische, Französische, Russische, Spanische)?",
-   "¿Quieres MultiSpeech (Español, Alemán, Portugués Brasileño, Francés, Inglés, Ruso) ?",
-   "Deseja usar o Multispeech em (Português Brasileiro, Alemão, Espanhol, Francês, Inglês, Russo)?",
+  {"Multispeech (English, Brazilian Portuguese, French, German, Russian, Spanish)",
+   "Multispeech (français, allemand, anglais, espagnol, portugais brésilien, russe)",
+   "Multispeech (Deutsche, Brasilianisches Portugiesische, Englische, Französische, Russische, Spanische)",
+   "MultiSpeech (Español, Alemán, Portugués Brasileño, Francés, Inglés, Ruso)",
+   "Multispeech (Português Brasileiro, Alemão, Espanhol, Francês, Inglês, Russo)",
   },
 
   {"Do you really want to stop the Braille driver ?",
@@ -987,11 +987,11 @@ char * TheMessages[][5]={
    "Deseja este menu em Russo?",
   },
 
-  {"zero point seven point 4", // "[:pu all] 0.6 beta", 
-   "zéro point sept point 4",
-   "0 punkt 7 punkt 4",
-   "0 punto 7 punto 4",
-   "zero punto sete punto quatro",
+  {"zero point seven point 5", // "[:pu all] 0.6 beta", 
+   "zéro point sept point 5",
+   "0 punkt 7 punkt 5",
+   "0 punto 7 punto 5",
+   "zero punto sete punto cinco", // seis, sete, oito, nove,...
   },
 
   {"Do you want to change the keyboard features?",
@@ -1232,11 +1232,11 @@ char * TheMessages[][5]={
    "Qual tabela de contração você deseja?",
   },
 
-  {"Do you want Cicero T T S (French)?",
-   "Voulez-vous Cicéro T T S (français) ?",
-   "Wollen Sie Cicero T T S (Französische)?",
-   "¿Quieres Cicero T T S (Francés)?",
-   "Você deseja utilizar o T T S Cicero em (Francês)?",
+  {"Cicero T T S (French)?",
+   "Cicéro T T S (français) ?",
+   "Cicero T T S (Französische)?",
+   "Cicero T T S (Francés)?",
+   "Cicero T T S (Francês)?",
   },
 
   {"The audio menu is going to start Yasr",
@@ -1281,7 +1281,7 @@ char * TheMessages[][5]={
    NULL,
   },
 
-  {"AccentPC",
+  {"Accent P C",
    NULL,
    NULL,
    NULL,
@@ -1316,8 +1316,15 @@ char * TheMessages[][5]={
    NULL,
   },
 
-  {"KeynoteGoldPC",
+  {"KeynoteGold P C",
    NULL,
+   NULL,
+   NULL,
+   NULL,
+  },
+
+  {"Do you want to select a software voice synthesizer?",
+   "Voulez-vous sélectionner une synthèse vocale logicielle",
    NULL,
    NULL,
    NULL,

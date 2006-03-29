@@ -1,11 +1,11 @@
 #!/bin/bash
 # ----------------------------------------------------------------------------
 # netConfig.sh
-# $Id: netConfig.sh,v 1.16 2006/03/19 12:00:33 gcasse Exp $
+# $Id: netConfig.sh,v 1.17 2006/03/29 20:47:40 gcasse Exp $
 # $Author: gcasse $
 # Description: Menu for internet settings
-# $Date: 2006/03/19 12:00:33 $ |
-# $Revision: 1.16 $ |
+# $Date: 2006/03/29 20:47:40 $ |
+# $Revision: 1.17 $ |
 # Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -37,10 +37,21 @@ case "$LANGUAGE" in
     TextEscPressed="Escape gedrückt."
     ;;
 
+#TBD    es*)
+#TBD    ;;
+
     fr*)
     TextCancelPressed="Opération annulée."
     TextEscPressed="Touche échappement appuyée."
     ;;
+
+    pt*)
+    TextCancelPressed="Cancelar Pressionado."
+    TextEscPressed="ESC Pressionado."
+    ;;
+
+#TBD GC
+#ru*)
 
     *)
     TextCancelPressed="Cancel pressed."
@@ -104,6 +115,9 @@ de*|at*|ch*)
     Textpon="Geben Sie in einer Shell den pon Befehl, P O N, ein, um die Verbindung zu starten."
     Textpoff="Der poff Befehl, P O F F, unterbricht die Verbindung"
     ;;
+#TBD
+#    es*)
+#    ;;
     fr*)
     TextPing="Test de la connexion internet"
     TextPingOk="La connexion internet fonctionne"
@@ -115,6 +129,18 @@ de*|at*|ch*)
     TextQuit="Quitter"
     Textpon="Pour démarrer la connection, vous taperez dans un shell la commande pon, qui s'écrit P O N."
     Textpoff="La commande poff, P O F F, arrête la connexion."
+    ;;
+    pt*)
+    TextPing="Testando sua conexão com a internet."
+    TextPingOk="A sua conexão com a internet está funcionando."
+    TextPingKo="Nenhuma resposta de google.com"
+    TextSettingUp="Configurando a conexão com a internet."
+    TextSerialModem="Serial Modem"
+    TextEthernet="Conexão através da placa de rede."
+    TextMail="E-Mail"
+    TextQuit="Sair"
+    Textpon="Você pode digitar em um shell o comando pon, P O N, Para iniciar uma conexão."
+    Textpoff="O comando poff, P O F F, finaliza a conexão."
     ;;
     *)
     TextPing="Testing your internet connection"

@@ -1,11 +1,11 @@
 <?PHP
 // ----------------------------------------------------------------------------
 // webpage.php
-// $Id: webpage.php,v 1.2 2005/08/14 23:35:22 gcasse Exp $
+// $Id: webpage.php,v 1.3 2006/03/29 20:45:56 gcasse Exp $
 // $Author: gcasse $
 // Description: the skeleton which eases building any web page of the site
-// $Date: 2005/08/14 23:35:22 $ |
-// $Revision: 1.2 $ |
+// $Date: 2006/03/29 20:45:56 $ |
+// $Revision: 1.3 $ |
 // Copyright (C) 2003 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -31,6 +31,11 @@ ini_set('arg_separator.output', '&amp;');
 
 session_start(); // first line, because it sends the http header
 
+// if ($CHARSET=="ru")
+// {
+//     header("Content-type: text/css; charset=koi8-r");
+// }
+
 require_once("header.php");
 require_once("doctype.php");
 require_once("head.php");
@@ -53,8 +58,7 @@ class webPage
   function webPage($theEntry, $theDate, $theStyles=null, $theLanguage=null)
     {
       $this->_mydocType=new docType();
-
-      switch ($theLangage)
+      switch ($theLanguage)
 	{
 	case "ru":
 	  $aCharset="koi8-r";
@@ -114,10 +118,3 @@ class webPage
 } // class webPage
 
 ?>
-
-
-
-
-
-
-

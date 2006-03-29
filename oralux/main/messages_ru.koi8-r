@@ -256,8 +256,8 @@ struct t_translation TheRussianMessages[]=
    "Вам нужен Emacspeak Festival M Brola?",
   },
 
-  {"Do you want Flite ?",
-   "Вам нужен Flite?",
+  {"Flite (English)",
+   NULL,
   },
 
   {"Yes",
@@ -500,12 +500,12 @@ struct t_translation TheRussianMessages[]=
    "Какой тип синтезатора Вы используете?",
   },
 
-  {"Your external synthesizer is supposed to be",
-   "Предположительно, Ваш внешний синтезатор",
+  {"Your voice synthesizer is supposed to be",
+   NULL,
   },
 
-  {"Do you want to change the type of external synthesizer ?",
-   "Хотите ли Вы изменить тип внешнего синтезатора?",
+  {"Do you want to change the type of synthesizer ?",
+   NULL,
   },
 
   {
@@ -542,8 +542,8 @@ struct t_translation TheRussianMessages[]=
    "Вы хотите выключить компьютер?",
   },
 
-  {"Do you want MultiSpeech (English and Russian) ?",
-   "Вам нужен русско-английский речевой сервер?",
+  {"Multispeech (English, Brazilian Portuguese, French, German, Russian, Spanish)",
+   NULL,
   },
 
   {"Do you really want to stop the Braille driver ?",
@@ -554,8 +554,8 @@ struct t_translation TheRussianMessages[]=
    "Хотите ли Вы это меню по-русски?",
   },
 
-  {"0 point 7 point 4",
-   "0 тоaчка 7 тоaчка 4",
+  {"0 point 7 point 5",
+   "0 тоaчка 7 тоaчка 5",
   },
 
   {"Do you want to change the keyboard features?",
@@ -695,8 +695,8 @@ struct t_translation TheRussianMessages[]=
   "Какую таблицу сокращения вы хотите?",
   },
 
-  {"Do you want Cicero T T S ?",
-   "Хотите ли Вы Cicero T T S?",
+  {"Cicero T T S (French)",
+   NULL,
   },
 
   {"The audio menu is going to start Yasr",
@@ -723,11 +723,7 @@ struct t_translation TheRussianMessages[]=
    NULL,
   },
 
-  {"Speakup",
-   NULL,
-  },
-
-  {"AccentPC",
+  {"Accent P C",
    NULL,
   },
 
@@ -747,7 +743,12 @@ struct t_translation TheRussianMessages[]=
    NULL,
   },
 
-  {"KeynoteGoldPC",
+  {"KeynoteGold P C",
    NULL,
   },
+
+  {"Do you want to select a software voice synthesizer?",
+   NULL,
+  },
+
 };

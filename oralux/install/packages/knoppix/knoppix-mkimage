@@ -82,6 +82,17 @@ NTFSWARNING2="AVERTISSEMENT (2): NTFS/Windows(TM) peut réagir de façon inattendu
 Voulez-vous toujours continuer?"
 NTFSWARNING3="AVERTISSEMENT (3): Avez-vous fait une copie de toutes les données importantes de la partition que vous voulez utiliser pour l'image KNOPPIX, sur un média de sauvegarde externe ? Pouvez-vous dans le pire des cas réparer la partition NTFS (Windows) par vous-mêmes ?"
 ;;
+pt*)
+NTFSTITLE="Atenção: NTFS"
+NTFSWARNING1="O sistema de arquivos NTFS/XP do Windows (TM) é suportado parcialmente pelo Linux, devido especificações técnicas insuficientes por parte do fabricante. Mas existe suporte a gravação de conteúdos em arquivos já existentes, que são utilizados para criar \"Drivers de Discos Virtuais\" em uma partição NTFS.
+
+Atenção: ESTEJA CIENTE QUE ESTA FERRAMENTA É EXPERINEMTAL, NÃO EXISTEM GARANTIAS DE QUE FUNCIONARÁ PLENAMENTE!
+Você realmente deseja continuar?"
+NTFSWARNING2="Atenção (2): O sistema de arquivos NTFS/Windows(TM) pode reagir de forma inesperada se o Linux não for totalmente finalizado após ter montado uma partição NTFS no modo de gravação, ou se houve erros durante as operações de escrita. Nestes casos, o Windows ao iniciar executará o \"Scandisk\" ou \"CHKDSK\" para verificar a consistência dos dados da partição. Raramente são encontrados erros durante esta verificação, mas caso um erro seja encontrado, dados podem ser perdidos.
+
+Você realmente deseja continuar?"
+NTFSWARNING3="Atenção (3): Você fez backup dos dados importantes em uma mídia externa antes de fazer uma imagem do KNOPPIX nesta partição? Se acontecer alguma falha você poderá restaurar a partição NTFS (ou do Windows)?"
+;;
 ru*)
 source /usr/share/oralux/install/packages/knoppix/knoppix-mkimage.ru
 ;;
@@ -148,6 +159,29 @@ SUCCESS="OK !
 L'opération a réussi. Vos fichiers de configuration seront réinstallés dans le ramdisk au prochain démarrage d'Oralux si vous précisez \"knoppix floppyconf\" (disquette), ou \"knoppix myconfig=/mnt/nom_de_répertoire\" à l'invite du boot."
 ERROR="La configuration KNOPPIX n'a pu être sauvegardée :"
 MESSAGE_NO_PARTS="Aucune partition utilisable n'a pu être trouvée."
+;;
+pt*)
+TITLE1="Criar o diretório home do KNOPPIX"
+MESSAGE1="Este script cria uma imagem virtual ou uma conta no seu disco rígido ou em uma outra unidade tais como memory sticks, compact flash ou zips do \"knoppix\". Permitindo que você salve seus dados pessoais e arquivos de configurações.
+
+Você deseja criar um diretório home ou um arquivo de configuração do sistema para o usuário \"knoppix\"?"
+
+MESSAGE2="Por favor selecione uma partição para criar a imagem:"
+MESSAGE3="Já existe uma imagem do Knoppix nesta partição. Você deseja excluir/formatar-la?"
+MESSAGE4="Esta é uma partição NTFS. Nenhum fornecedor oferece suporte a gravação pelo Linux neste sistema de arquivos, você deve primeiro criar um arquivo de imagem vazio através do Windows(TM). Você encontrará um programa para isto no diretório KNOPPIX no cd. POR FAVOR ESTEJA CIENTE QUE ESTA FERRAMENTA É EXPERINEMTAL, NÃO EXISTEM GARANTIAS DE QUE FUNCIONARÁ PLENAMENTE!"
+MESSAGE5="Por favor selecione o sistema de arquivos para a imagem do KNOPPIX. ext3, reiserfs e xfs são sistema de arquivo, conhecidos muito aos erros, porém requer um espaço adicional de 30MB para que o conteúdo atual rode bem."
+MESSAGE6="Esta imagem está em uso. Se você realmente quiser Excluir ou formata-la, Por favor reinicie o Oralux, sem ativar a imagem $IMAGE."
+MESSAGE11="Esta partição não pôde ser montada no Disco rígido no modo de escrita/leitura. Desculpe."
+E1="Personal configuration (desktop, programs)"
+E2="Network settings (LAN, Modem, ISDN, ADSL)"
+E3="Graphics subsystem settings (XF86Config)"
+E4="Other system configuration (printer etc.)"
+E5="All files on the Desktop (${DESKTOPKB}kB)"
+SUCCESS="SUCESSO! 
+
+A criação do disquete de configuração do KNOPPIX foi concluída com sucesso. Seus arquivos de configuração serão reinstalados no ramdisk na próxima inicialização do KNOPPIX, se você definiu \"knoppix floppyconf\" (disquete), ou \"knoppix myconfig=/mnt/nomedodiretorio\" no prompt de inicialização."
+ERROR="Os arquivos de configuração do KNOPPIX não podéram ser salvos:"
+MESSAGE_NO_PARTS="Não foi encontrada nenhuma partição adequada."
 ;;
 ru*)
 source /usr/share/oralux/install/packages/knoppix/knoppix-mkimage.ru
@@ -223,6 +257,9 @@ MESSAGE6="Dieses Image ist gerade in Benutzung, daher kann es nicht gelöscht wer
 fr*)
 MESSAGE6="Cette image est en cours d'utilisation. Si vous souhaitez l'effacer ou la reformater, redémarrez d'abord Oralux, s'il vous plait, sans activer l'image $IMAGE."
 ;;
+pt*)
+MESSAGE6="Esta imagem está em uso. Se você quiser excluir ou formata-la, Por favor reinicie o Oralux, sem ativar esta imagem $IMAGE."
+;;
 ru*)
 source /usr/share/oralux/install/packages/knoppix/knoppix-mkimage.ru
 ;;
@@ -271,6 +308,15 @@ MESSAGE10="Préparation du système de fichier Linux..."
 SUCCESS="Le formattage de l'image Knoppix avec le système de fichier ext2 a réussi; votre répertoire persistant et les données de configuration y ont été transférés.
 
 Vous pouvez maintenant redémarrer votre ordinateur et Oralux devrait trouver automatiquement cette image. Autrement, tapez \"knoppix home=$PARTITION\" ou \"knoppix home=scan\" à l'invite de démarrage boot: ."
+;;
+pt*)
+MESSAGE7="Você deseja salvar seu diretório home com criptografia AES256 (Advanced Encryption Standard, see http://csrc.nist.gov/encryption/aes/)? Se sim, você deverá especificar uma senha muito longa, o que retardará um pouco a criação do homedir e a inicialização?"
+MESSAGE8="Por favor digite o tamanho desejado para seu diretório home em MB (Usados atualmente: $HOMEKB kB, Disponível:"
+MESSAGE9="Formatando Knoppix-Image e copiando dados..."
+MESSAGE10="Preparando sistemas de arquivo para o Linux..."
+SUCCESS="A imagem do Knoppix foi formatada com sucesso com o sistema de arquivo ext2, e seu diretório home com suas configurações foram copiadas.
+
+Você pode reiniciar seu computador agora, pois o Oralux irá procurar a imagem automaticamente. Alternativamente, digite \"knoppix home=$PARTICAO\" ou \"knoppix home=scan\" no prompt de inicialização."
 ;;
 ru*)
 source /usr/share/oralux/install/packages/knoppix/knoppix-mkimage.ru
@@ -353,6 +399,11 @@ fr*)
 HEADER="Mot de passe de cryptage AES256 (minimum 20 caractères !)"
 ENTER="Tapez:"
 AGAIN="Encore, juste pour être sûr :"
+;;
+pt*)
+HEADER="A senha com criptografia AES256 (deve ter no mínimo 20 caracteres!)"
+ENTER=" Digite:"
+AGAIN=" Digite novamente, para confirmar:"
 ;;
 ru*)
 source /usr/share/oralux/install/packages/knoppix/knoppix-mkimage.ru

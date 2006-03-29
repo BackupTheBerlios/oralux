@@ -1,12 +1,12 @@
 <?PHP
 // ----------------------------------------------------------------------------
 // doctype.php
-// $Id: doctype.php,v 1.1 2004/09/28 21:48:43 gcasse Exp $
+// $Id: doctype.php,v 1.2 2006/03/29 20:45:56 gcasse Exp $
 // $Author: gcasse $
 // Description: printing the doctype element
 // 
-// $Date: 2004/09/28 21:48:43 $ |
-// $Revision: 1.1 $ |
+// $Date: 2006/03/29 20:45:56 $ |
+// $Revision: 1.2 $ |
 // Copyright (C) 2003 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -34,4 +34,3 @@ class docType
 
 
 ?>
-

@@ -132,8 +132,8 @@ enum sentence {
   TypeNSpeak,
   selectExternalSynth,
   whichExternalSynth,
-  externalSynthIs,
-  changeExternalSynth,
+  yourVoiceSynthIs,
+  changeTypeOfSynth,
   sayEmacspeak,
   sayYasr,
   desktopIs,
@@ -193,6 +193,7 @@ enum sentence {
   SpeakOut,
   Transport,
   KeynoteGoldPC,
+  selectSoftSynth,
   MaxSentence, // the last enum! Place any new enum before it, please.
 };
 

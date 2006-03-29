@@ -75,6 +75,22 @@ E4="Autre configuration système (imprimante, etc...)"
 E5="Tous les fichiers du bureau (${DESKTOPKB}kB)"
 ERROR="La configuration KNOPPIX n'a pu être sauvegardé :"
 ;;
+#TBD GC
+#ru*)
+pt*)
+TITLE1="Cria um arquivo de configuração do Knoppix"
+#TBD GC
+MESSAGE1="Chose type of configuration files:"
+MESSAGE2="Por favor insira um disquete vazio e formatado em DOS ou ext2."
+MESSAGE3="Salvando o arquivo de configuração..."
+MESSAGE4="Por favor selecione um diretório para salvar os arquivos de configuração:"
+E1="Personal configuration (desktop, programs)"
+E2="Network settings (LAN, Modem, ISDN, ADSL)"
+E3="Graphics subsystem settings (XF86Config)"
+E4="Other system configuration (printer etc.)"
+E5="All files on the Desktop (${DESKTOPKB}kB)"
+ERROR="as configurações do KNOPPIX não podéram ser salvas:"
+;;
 *)
 TITLE1="Create KNOPPIX configuration archive"
 MESSAGE1="Chose type of configuration files:"

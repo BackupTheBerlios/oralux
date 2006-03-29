@@ -31,6 +31,7 @@ de*|at*|ch*)
 	export YasrText="YASR Dokumentation (Englische)"
 	export YasrDoc="$Doc/Yasr/en/README.oralux"
 	export LinksText="Links, Webbrowser"
+# TBD GC
 #	export LinksDoc="$Doc/htm/faq.htm"
 	export NeText="N E, der 'Nice Editor'"
 	export mcvoxText="m c vox, Datei-Browser"
@@ -48,8 +49,28 @@ de*|at*|ch*)
 	export dosemuText2="Geben sie 'exitemu' ein, um zum Menu zurückzukehren."
 	;;
     pt*) 
-	export YasrText="YASR documentation"
+	export YasrText="Documentação do YASR."
 	export YasrDoc="$Doc/Yasr/pt_BR/README.oralux"
+
+	export exitText="Pressione a tecla Escape para sair do menu atual."
+
+	export LinksText="Links, Navegador WEB."
+# TBD GC
+#	export LinksDoc="$Doc/htm/faq.htm"
+	export NeText="N E, Editor nice."
+	export mcvoxText="m c vox, Navegador de Arquivos."
+	export qalcText="qalc, Calculadora."
+	export mocText="moc, Player de áudio em modo Console."
+	export podracerText="podracer, Suporte a recepção de podcast com o BitTorrent."
+	export linphonecText="linphonec, Ligações telefônicas via internet."
+	export imcomText="imcom, Cliente jabber."
+	export aventureText="Executa o Jogo\: Adventure"
+	export aventureDoc="$Games/en/Advent.z5"
+	export shellText1="Leva a um shell."
+	export shellText2="Digite \'exit\' para voltar ao menu."
+	export dateText="Exibe a hora."
+	export dosemuText1="dosemu, Emulador DOS para Linux."
+	export dosemuText2="Digite 'exitemu' para voltar ao menu."
 	;; 
     es*) 
 	export YasrText="YASR documentation"

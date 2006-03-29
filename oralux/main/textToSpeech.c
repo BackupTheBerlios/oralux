@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // textToSpeech.c
-// $Id: textToSpeech.c,v 1.9 2006/03/25 22:11:55 gcasse Exp $
+// $Id: textToSpeech.c,v 1.10 2006/03/29 20:47:40 gcasse Exp $
 // $Author: gcasse $
 // Description: Ask about the whished TTS and install it. 
-// $Date: 2006/03/25 22:11:55 $ |
-// $Revision: 1.9 $ |
+// $Date: 2006/03/29 20:47:40 $ |
+// $Revision: 1.10 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -52,12 +52,11 @@ typedef struct synthItem synthItem;
 
 
 static synthItem myProposedSynth[]= { 
-  {TTS_ViaVoice, DoYouWantViaVoice, 0, "ViaVoice", 0}, // index=0
+  //  {TTS_ViaVoice, DoYouWantViaVoice, Emacspeak|Yasr, "ViaVoice", 0}, // index=0
   {TTS_Multispeech, DoYouWantMultispeech, Emacspeak|Speakup|Yasr, "Multispeech", 0},
   {TTS_Flite, DoYouWantFlite, Emacspeak|Speakup|Yasr, "Flite", 0},
   {TTS_Cicero, DoYouWantCicero, Emacspeak|Yasr, "Cicero", 0},
   {TTS_DECtalk, DoYouWantToInstallDECtalk, Emacspeak|Yasr, "DECtalk", 0},
-  //  {TTS_Undefined, selectExternalSynth, 0, NULL}, //last item
   {TTS_AccentSA, AccentSA, Emacspeak|Speakup, "AccentSA", 1},
   {TTS_AccentPC, AccentPC, Speakup, "AccentPC", 1},
   {TTS_Audapter, Audapter, Speakup, "Audapter", 1},
@@ -107,27 +106,32 @@ enum MENU_ExtSynthState {
   MENU_End,
 };
 
-/* > */
+enum TypeOfSynth {AnySynth, OnlySoftwareSynth, OnlyExternalSynth};
 
 /* > */
+
+
 /* < getIndex, getNextIndex, getPreviousIndex */
 
 static int getIndex( enum textToSpeech theIdentifier, enum desktopIdentifier theDesktop, int* theIndex)
 {
+  ENTER("getIndex");
   int aResult=0;
-  for (*theIndex=0; *theIndex<MaxProposedSynth; *theIndex++)
+  for (*theIndex=0; *theIndex<MaxProposedSynth; ++*theIndex)
     {
-      if ((myProposedSynth[*theIndex].myCompliantDesktop & theDesktop)
-	  && (myProposedSynth[*theIndex].myIdentifier == theIdentifier))
-	{
-	  aResult = 1;
+      if (myProposedSynth[*theIndex].myIdentifier == theIdentifier)
+	{ 
+	  if (myProposedSynth[*theIndex].myCompliantDesktop & theDesktop)
+	    {
+	      aResult = 1;
+	    }
 	  break;
 	}
     }
 
   if (!aResult)
     { // fallback
-      for (*theIndex=0; *theIndex<MaxProposedSynth; *theIndex++)
+      for (*theIndex=0; *theIndex<MaxProposedSynth; ++*theIndex)
 	{
 	  if (myProposedSynth[*theIndex].myCompliantDesktop & theDesktop)
 	    {
@@ -140,126 +144,74 @@ static int getIndex( enum textToSpeech theIdentifier, enum desktopIdentifier the
   return aResult;
 }
 
-static int getNextIndex( int* theIndex, enum desktopIdentifier theDesktop, int theSynthMustBeExternal)
+static int condition( int* theIndex, enum desktopIdentifier theDesktop, enum TypeOfSynth theType)
 {
+  ENTER("condition");
+  int aResult=0;
+  if (myProposedSynth[*theIndex].myCompliantDesktop & theDesktop)
+    {
+      switch(theType)
+	{
+	case AnySynth:
+	  aResult = 1;
+	  break;
+	case OnlySoftwareSynth:
+	  aResult = (0==myProposedSynth[*theIndex].mySynthIsExternal);
+	  break;
+	case OnlyExternalSynth:
+	  aResult = (1==myProposedSynth[*theIndex].mySynthIsExternal);
+	  break;
+	}
+    } 
+  return aResult;
+}
+
+static int getNextIndex( int* theIndex, enum desktopIdentifier theDesktop, enum TypeOfSynth theType)
+{
+  ENTER("getNextIndex");
   int aResult=0;
   int n = MaxProposedSynth;
   
-  while( n--)
+  while( n-- && !aResult)
     {
       *theIndex = (*theIndex >= MaxProposedSynth-1) ? 0 : ++*theIndex;
-      if ((myProposedSynth[*theIndex].myCompliantDesktop & theDesktop)
-	  && (!theSynthMustBeExternal 
-	      || myProposedSynth[*theIndex].mySynthIsExternal))
-	{
-	  aResult = 1;
-	  break;
-	}
+      aResult = condition( theIndex, theDesktop, theType);
     }
 
   return aResult;
 }
 
-static int getPreviousIndex( int* theIndex, enum desktopIdentifier theDesktop, int theSynthMustBeExternal)
+static int getPreviousIndex( int* theIndex, enum desktopIdentifier theDesktop, enum TypeOfSynth theType)
 {
+  ENTER("getPreviousIndex");
   int aResult=0;
   int n = MaxProposedSynth;
 
-  while( n--)
+  while( n-- && !aResult)
     {
       *theIndex = (*theIndex > 0) ? --*theIndex : MaxProposedSynth-1;
-      if ((myProposedSynth[*theIndex].myCompliantDesktop & theDesktop)
-	  && (!theSynthMustBeExternal 
-	      || myProposedSynth[*theIndex].mySynthIsExternal))
-	{
-	  aResult = 1;
-	  break;
-	}
+      aResult = condition( theIndex, theDesktop, theType);
     }
 
   return aResult;
 }
 /* > */
-/* < chooseExternalSynth */
-
-static void chooseExternalSynth( enum textToSpeech* theIdentifier, enum desktopIdentifier theDesktop, int theCurrentIndex)
+int isExternalSynthPossible( enum desktopIdentifier theDesktop)
 {
-  ENTER("chooseExternalSynth");
-  int aRequest=0;
-  int aChoice=0;
-  int aQuestion=1;
-  int i=0;
-
-  aChoice=theCurrentIndex;
-
-  say(externalSynthIs);
-  say(myProposedSynth[aChoice].mySentence);
-  say(changeExternalSynth);
-  say(PleasePressKey);
-
-  if (MENU_Yes == getAnswer())
+  ENTER("isExternalSynthPossible");
+  int aResult = 0;
+  int i;
+  for (i=0; i<MaxProposedSynth; i++)
     {
-      aRequest=1;
-      say(whichExternalSynth);
-    }
-
-  while(aRequest)
-    {
-      say(myProposedSynth[aChoice].mySentence);
-
-      if (aQuestion)
+      if (myProposedSynth[i].mySynthIsExternal 
+	  && (myProposedSynth[i].myCompliantDesktop & theDesktop) )
 	{
-	  say( PleasePressKey);
-	  aQuestion=0;
-	}
-
-      switch(getAnswer())
-	{
-	case MENU_Yes:
-	  aRequest=0;
-	  break;
-	    
-	case MENU_Previous:
-	  aRequest = getPreviousIndex( &aChoice, theDesktop, 1);
-	  break;
-
-	default:
-	  aRequest = getNextIndex( &aChoice, theDesktop, 1);
+	  aResult=1;
 	  break;
 	}
     }
-
-  *theIdentifier=myProposedSynth[aChoice].myIdentifier;
+  return aResult;
 }
-
-/* > */
-/* < askForExternalSynth */
-static void askForExternalSynth( struct textToSpeechStruct * theTextToSpeech, enum desktopIdentifier theDesktop, int theCurrentIndex)
-{
-  ENTER("askForExternalSynth");
-  enum MENU_ExtSynthState aMenuState=MENU_ExtSynth;
-
-  while(aMenuState != MENU_End)
-    {
-      switch(aMenuState)
-	{
-	case MENU_ExtSynth:
-	  chooseExternalSynth( & theTextToSpeech->myIdentifier, theDesktop, theCurrentIndex);
-	  aMenuState = (GNC_UpArrowKey == getLastKeyPressed()) ? MENU_End : MENU_Port;
-	  break;
-	  
-	case MENU_Port:
-	  serialPortChoose( & theTextToSpeech->myPort);
-	  aMenuState = (GNC_UpArrowKey == getLastKeyPressed()) ? MENU_ExtSynth : MENU_End;
-	  break;
-	  
-	default:
-	  aMenuState = MENU_End;
-	  break;
-	}
-    }
-}
-/* > */
 /* < HasEmacspeakExternalTextToSpeech */
 // Read the oralux.conf file to see if an external synth must be used instead of the sound card.
 //
@@ -339,20 +291,48 @@ int HasEmacspeakExternalTextToSpeech(struct textToSpeechStruct* theExternalTextT
 }
 /* > */
 /* < setSoftwareSynth */
-static void setViavoice(enum desktopIdentifier theDesktop)
-{
-  int i=0;
+/* static void setViavoice(enum desktopIdentifier theDesktop) */
+/* { */
+/*   ENTER("setViavoice"); */
+/*   int i=0; */
 
-  if ((theDesktop != Speakup) && getIndex( TTS_ViaVoice, theDesktop, &i))
-    {
-      struct stat buf;
-      int isViaVoicePresent = ((stat("/usr/lib/ibmeci", &buf)==0)
-			       || (stat("/usr/share/oraluxGold", &buf)==0));
+/*   if (getIndex( TTS_ViaVoice, theDesktop, &i)) */
+/*     { */
+/*       struct stat buf; */
+/*       int isViaVoicePresent = ((stat("/usr/lib/ibmeci", &buf)==0) */
+/* 			       || (stat("/usr/share/oraluxGold", &buf)==0)); */
       
-      myProposedSynth[i].myCompliantDesktop = isViaVoicePresent;
-    }
-}
+/*       myProposedSynth[i].myCompliantDesktop = isViaVoicePresent; */
+/*     } */
+/* } */
 /* > */
+
+static enum language getSoftwareSynthLanguage(enum textToSpeech theTextToSpeech, enum language thePreferredLanguage)
+{
+  ENTER("getSoftwareSynthLanguage");
+  enum language aLanguage;
+
+  switch (theTextToSpeech)
+    {
+    case TTS_Multispeech:
+    case TTS_ViaVoice:
+      aLanguage = thePreferredLanguage;
+      break;
+      
+    case TTS_Cicero:
+      aLanguage = French;
+      break;
+
+    default:
+    case TTS_Flite:
+      aLanguage = English;
+      break;
+    }
+
+  return aLanguage;
+}
+
+
 /* < chooseSynth */
 // chooseSynth
 // Asking to the user which voice synthesis is required
@@ -364,92 +344,103 @@ static int chooseSynth( struct textToSpeechStruct* theTextToSpeech,
 		       enum desktopIdentifier theDesktop)
 {
   ENTER("chooseSynth");
-  int aStatus=1;
-  int aRequest=1;
-  int aMaxTextToSpeech=0;
+  int aStatus=0;
+  int aRequest=0;
   int aIndex=0;
-  int i=0;
-  int j=0;
+  enum TypeOfSynth aType = OnlySoftwareSynth;
   int isFirstRequest=1;
 
-  setViavoice(theDesktop);
+  //  setViavoice(theDesktop);
 
-  if (aRequest)
+  //  ??ajout dectalk software
+  if (getIndex( theTextToSpeech->myIdentifier, theDesktop, &aIndex))
     {
-      aRequest=getIndex( theTextToSpeech->myIdentifier, theDesktop, &aIndex);
+      say(yourVoiceSynthIs);
+      say(myProposedSynth[aIndex].mySentence);
+      //      saySynth();
+      say(changeTypeOfSynth);
+      say(PleasePressKey);
+      
+      if (getAnswer() == MENU_Yes)
+	{
+	  aRequest=1;
+	  
+	  if (isExternalSynthPossible(theDesktop))
+	    {
+	      // External or software synth?
+	      int a_loop=1;
+	      enum TypeOfSynth aCurrentType = (myProposedSynth[aIndex].mySynthIsExternal) ? 
+		OnlyExternalSynth : OnlySoftwareSynth;
+	      aType = aCurrentType;
+
+	      while(a_loop)
+		{
+		  if (aType == OnlyExternalSynth)
+		    {
+		      say(selectExternalSynth);
+		    }
+		  else
+		    {
+		      say(selectSoftSynth);
+		    }
+		  
+		  if(getAnswer() == MENU_Yes)
+		    {
+		      a_loop=0;
+		    }
+		  else
+		    {
+		      aType = (aType == OnlySoftwareSynth) ?  OnlyExternalSynth : OnlySoftwareSynth;
+		    }
+		}
+
+	      if (aCurrentType != aType)
+		{
+		  aRequest = getNextIndex( &aIndex, theDesktop, aType);
+		}
+	    }
+	}
     }
 
   while(aRequest)
     {
       say(myProposedSynth[aIndex].mySentence);
-
       if (isFirstRequest)
 	{
 	  say(PleasePressKey);
+	  isFirstRequest = 0;
 	}
 
       switch(getAnswer())
 	{
 	case MENU_Yes:
+	  theTextToSpeech->myIdentifier = myProposedSynth[aIndex].myIdentifier;
 	  if (myProposedSynth[aIndex].mySynthIsExternal)
 	    {
-	      askForExternalSynth( theTextToSpeech, theDesktop, aIndex);
+	      serialPortChoose( & theTextToSpeech->myPort);
 	    }
 	  else
 	    {
-	      theTextToSpeech->myIdentifier = myProposedSynth[aIndex].myIdentifier;
-	      switch (theTextToSpeech->myIdentifier)
-	 	{
-		case TTS_Multispeech:
-		case TTS_ViaVoice:
-		  theTextToSpeech->myLanguage = thePreferredLanguage;
-		  break;
-
-		case TTS_Flite:
-		  theTextToSpeech->myLanguage = English;
-		  break;
-
-		case TTS_Cicero:
-		  theTextToSpeech->myLanguage = French;
-		  break;
-
-		default:
-		  break;
-		}
+	      theTextToSpeech->myLanguage = getSoftwareSynthLanguage(theTextToSpeech->myIdentifier, thePreferredLanguage);
 	    }
 	  aRequest=0;
+	  aStatus=1;
 	  break;
 
 	case MENU_Previous:
-	  if (isFirstRequest)
-	    {
-	      aRequest=0;
-	      aStatus=0; // Exit
-	    }
-	  else
-	    {
-	      aRequest = getPreviousIndex( &aIndex, theDesktop, 0);
-	    }
+	  aRequest = getPreviousIndex( &aIndex, theDesktop, aType);
 	  break;
 	  
 	case MENU_Next:
-	  if (isFirstRequest)
-	    {
-	      aRequest=0;
-	    }
-	  else
-	    {
-	      aRequest = getNextIndex( &aIndex, theDesktop, 0);
-	    }
+	  aRequest = getNextIndex( &aIndex, theDesktop, aType);
 	  break;
 
 	case MENU_No:
 	default:
-	  aRequest = getNextIndex( &aIndex, theDesktop, 0);
+	  aRequest = getNextIndex( &aIndex, theDesktop, aType);
 	  break;
 	}
 
-      isFirstRequest=0;
       SHOW3("aRequest=%d, aIndex=%d\n",aRequest, aIndex);
     }
 
@@ -1038,3 +1029,5 @@ enum textToSpeech getEnumSynthesis(char* theValue)
 }
 
 /* > */
+
+
