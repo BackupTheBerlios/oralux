@@ -1,11 +1,11 @@
 <?PHP
 // ----------------------------------------------------------------------------
 // tools.php
-// $Id: tools.php,v 1.3 2005/08/15 20:29:19 gcasse Exp $
+// $Id: tools.php,v 1.4 2006/04/02 01:07:13 gcasse Exp $
 // $Author: gcasse $
 // Description: A few helpful tools
-// $Date: 2005/08/15 20:29:19 $ |
-// $Revision: 1.3 $ |
+// $Date: 2006/04/02 01:07:13 $ |
+// $Revision: 1.4 $ |
 // Copyright (C) 2003 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -51,7 +51,7 @@ function getLang()
 // because the following code checks that the value belongs to 
 // the expected languages
 
-  $knownlangs = array( "de", "en", "es", "fr", "ru" ); #etc
+  $knownlangs = array( "de", "en", "es", "fr", "pt-br", "ru" ); #etc
   $lang = "en";
   $lastquality = 0.0;
 

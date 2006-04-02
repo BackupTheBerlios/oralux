@@ -1,0 +1,163 @@
+Meus primeiros passos No Emacs 
+por Sylvie Xhaard 
+Traduzido para o Português por Cássio Santos.
+Em 26/11/2005
+Para uso com o Oralux Linux 
+
+1) Digitando comandos básicos.
+2) Abrindo ou criando um arquivo.
+3) Salvando arquivos.
+4) Editando no Emacs.
+4.1) Movimentando-se e lendo o documento.
+5) Movimentando-se pelos buffers abertos.
+6) Usando o editor de diretório.
+7) Usando a linha de comandos.
+7.1) Usando o comando man no Emacs.
+8) Saindo.
+
+Quando o Emacspeak for iniciado, automaticamente é aberto um  console de ajuda de como salvar suas configurações e organizar seus documentos como está descrito no FAQ. Veja http://www.oralux.org/faq.php#savepref
+
+1) Digitando comandos básicos.
+
+Um exemplo de um atalho de teclado é C-x, obtido quando as teclas Ctrl e X são pressionadas simultaneamente.
+
+exemplo 1: o primeiro comando que você encontrará neste documento é C-x, C-f :
+ Pressionar simultaneamente  a tecla Ctrl e x depois pressione simultaneamente Ctrl e f
+
+exemplo 2: você também encontrará comandos do tipo c-x b.
+  Pressione simultaneamente Ctrl e x depois só a tecla b.
+
+No Emacs existe também a Meta Key.  Chamada aqui de M- ela pode ser usada em dois modos.
+
+Pressionando esc e a tecla x simultaniamente, ou Alt-x Isto é, manter pressionada a tecla Alt da esquerda enquanto a tecla x é pressionada
+
+Você opta pelo método que mais te facilite o uso do Emacs. 
+Neste documento é descrito a utilização da tecla Alt em combinação com outra tecla. 
+
+2) Abrindo ou criando um arquivo (Simples e eficazmente).
+
+Para abrir ou criar um novo arquivo usando teclas de atalho. 
+1) Pressione: C-x C-f;
+2) E digite o caminho completo e o nome do arquivo.
+Exemplo:
+ /home/knoppix/test
+Se o arquivo já existe, será aberto. Se ele não existir, será criado.
+
+3) Salvando arquivos.
+
+O comando c-x C-s salva seu arquivo
+O Emacs salva seu trabalho regularmente de forma automatizada.
+
+Sempre que você carrega um arquivo, é criado um novo  console no Emacs. Se você se esquecer de salvar um de seus arquivos abertos, O Emacs quando estiver sendo finalizado, lhe perguntará se deseja salvar as alterações efetuadas.
+
+4) Editando no Emacs.
+
+Quando você digita em um  console do Emacs, novas linhas serão criadas automaticamente. Isto é conhecido como "Rolagem automática". Se você desejar forçar uma quebra de linha, pressione a tecla enter como em qualquer outro editor de texto. 
+
+4.1) Movimentando-se e lendo o documento.
+
+Alt- b:
+ Move o cursor para a palavra anterior e o Emacspeak a lê.
+
+Alt- f:
+Move o cursor para a próxima palavra e o Emacspeak a lê. 
+
+C- a:
+ Move o cursor para o início da linha e o Emacspeak a lê.
+
+Alt- a:
+ move o cursor para o início do parágrafo e o Emacspeak o lê.
+
+C- e:
+Move o cursor para o fim da linha e o Emacspeak a lê.
+
+Alt- e:
+ Move o cursor para o fim do parágrafo e o Emacspeak o lê.
+
+Alt- [:
+Move para o fim do parágrafoum parágrafo.
+
+Alt- ]:
+Move para o início do parágrafo.
+
+C- x [:
+Volta uma página
+
+C- x ]:
+Avança uma página.
+
+Alt- <:
+Move para o início do buffer.
+
+Alt- >:
+Move para o fim do buffer.
+
+5) Movimentando-se pelos buffers abertos.
+
+Você abriu ou criou vários arquivos e agora deseja alternar entre eles, sem problemas!
+
+Digite C -x b e tecle enter, para ir ao último  console aberto. Se você quiser abrir outro buffer, digite o seu nome, ou simplesmente as primeiras letras  do seu nome e pressione a tecla tab, (o nome de seu  console automaticamente aparecerá). 
+Cada  console está associado a um processo, para fechar um  console aberto, o processo deve ser finalizado, para finalizar um processo digite:
+C- x k.
+
+6) Usando o editor de diretório (No modo Dired)
+Digite:
+C -x, e digite o caminho completo do diretório que você deseja explorar, e tecle enter. 
+ Um novo  console será aberto, por padrão  o cursor estará posicionado no primeiro sub-diretório ou arquivo do diretório, no qual você poderá movimentar-se usando as setas acima ou abaixo. Para abrir o item selecionado, basta teclar enter.
+
+Para voltar para o nível superior de um diretório, selecione com a seta acima ou abaixo o item da lista que o Emacspeak lerá como .. (O segundo item da lista) e tecle enter.
+
+O primeiro item da lista que o Emacspeak lerá como . corresponde ao diretório atual.
+
+7) Usando a linha de comandos (shell).
+Para abrir utilizando uma Metta Key, Digite:
+ M- x shell 
+
+O comando para abrir um  console de shell é Alt- x shell.
+Digite:
+Alt x shell 
+
+Alguns comandos úteis:
+
+whoami:
+Informa com qual usuário você está logado.
+
+pwd:
+Informa qual é o diretório atual.
+
+CD:
+Permite alterar o diretório.
+
+exemplos : 
+CD .. Leva ao nível superior de diretórios 
+CD / vai para a raíz do sistema 
+CD leva ao diretório /home/knoppix. 
+CD /mnt/floppy leva ao diretório correspondente ao disquete.
+
+ls:
+ lista arquivos ou diretórios
+
+mkdir:
+ cria um diretório
+
+cp: 
+Faz cópia
+ exemplo:
+cp /home/knoppix/emacs.txt /mnt/floppy (copia o arquivo emacs.txt para um disquete).
+
+7.1) Usando o comando man no Emacs. 
+Atenção! 
+Nunca use o comando man em um  console shell.
+O man suporta o manual. As páginas do man fornecem ajuda em qualquer comando do Linux. 
+Para usar o comando man digite:
+Alt- x man com o comando do qual você deseja ajuda e tecle enter.
+Exemplo:
+Alt -x man cd
+
+8) Saindo.
+Para sair do Emacs digite:
+C-x C-c 
+
+Fim
+
+
