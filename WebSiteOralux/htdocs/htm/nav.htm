@@ -1,7 +1,12 @@
  <div class="nav">
    <ul>
    <li>[ <a href='<?php echo $_SERVER["PHP_SELF"]."?mylang=fr"; ?>'>In
-   French</a> | </li><li> <a href="#main">Go to content</a> | </li>
+   French</a> | </li>
+   <li> <a href='<?php echo $_SERVER["PHP_SELF"]."?mylang=pt-br"; ?>'>In
+   Portuguese</a> ] </li>
+   </ul>
+   <ul>   
+   <li>[ <a href="#main">Go to content</a> | </li>
    <?php 
    foreach($TheTitleTranslation as $label=>$translation)
    {

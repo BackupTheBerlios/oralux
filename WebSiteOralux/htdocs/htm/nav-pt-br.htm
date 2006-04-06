@@ -1,13 +1,17 @@
  <div class="nav">
    <ul>
-   <li>[ <a href='<?php echo $_SERVER["PHP_SELF"]."?mylang=fr"; ?>'>In
-   French</a> | </li><li> <a href="#main">Go to content</a> | </li>
+   <li>[ <a href='<?php echo $_SERVER["PHP_SELF"]."?mylang=fr"; ?>'>Em
+   Franc&ecirc;s</a> | </li>
+   <li> <a href='<?php echo $_SERVER["PHP_SELF"]."?mylang=en"; ?>'>Em Ingl&ecirc;s </a> ] </li>
+   </ul>
+   <ul>   
+   <li>[ <a href="#main">Vai para o &iacute;ndice</a> | </li>
    <?php 
    foreach($TheTitleTranslation as $label=>$translation)
    {
    echo("<li>".$this->printEntry($label,$translation)." | </li>\n");   
    }
    ?>
-   <li><a href="mailto:contact@oralux.org">Contact us</a> ]</li>
+   <li><a href="mailto:contact@oralux.org">Contate-nos</a> ]</li>
    </ul>
  </div> <!-- nav -->
