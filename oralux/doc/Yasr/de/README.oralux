@@ -1,0 +1,71 @@
+YASR ("Yet Another Screen Reader") ist ein
+leichtgewichtiger und portierbarer Screen-Reader, der immer noch weiter
+entwickelt wird.
+
+Momentan hat Yasr zwei Tastaturbelegungen, eine für "review Modus" (um den
+Inhalt des Bidschirms zu untersuchen) und eine für den Standardmodus. 
+Nach dem Start von Yasr sind Sie im Standardmodus.
+
+Um den Modus zu wechseln, drücken Sie Control-Alt-r.
+Das heisst, Sie halten die Control und die Alt Taste (die linken) gedrückt und
+drücken di r-Taste.
+
+Es folgt eine Liste von Tasten und ihren Funktionen, wie sie standardmässig
+definiert sind. Tasten, vor denen [N] steht, kann eine Zahl vorangehen.
+
+-- Review Modus --
+
+Leertaste: Sage die Position des Review Cursors.
+^: Gehe zum Zeilenanfang und lies das erste Wort vor.
+$: Gehe zum Zeilenende und lese das letzte Wort vor.
+[N]b: Lies vorangehendes Zeichen oder ghe n Zeichen nach links.
+[N]c: Lies aktuelles Zeichen oder gehe zum n-ten Zeichen der Zeile und lese es
+   vor.
+[N]d: Lies das nächste Zeichen vor oder gehe n Zeichen vorwärts.
+e: Lies den Text vom Cursor bis zum Bildschirmende vor.
+f: Durchsuche den Bildschirm nach bestimmten Textpassagen.
+<: Suche von der aktuellen Cursorposition aus rückwärts nach dem aktuellen
+   Suchbegriff.
+>: Suche von der aktuellen Cursorposition aus vorwärts nach dem aktuellen
+   Suchbegriff.
+[N]k: Gehe eine Zeile hinauf und lies sie vor (momentan das gleiche wie die
+   Pfeil-nach-open-Taste).
+[N]l: Lies die aktuelle Zeile vor oder springe zur n-ten Zeile und lies diese
+   vor.
+[N]m: Gehe eine Zeile nach unten und lies sie vor (momentan das gleiche wie
+   die Pfeil-nach-oben-Taste).
+n: Umgehe Yasr. Sende den nächsten Tastendruck direkt an die Applikation.
+t: Lies den Text vom Bildschirmanfang bis zur aktuellen Cursorposition vor.
+w: Lies den gesamten Bildschirminhalt vor.
+z: Gehe zum Anfang des vorangehenden Wortes und lese es vor.
+x: Gehe zum Anfang des nächsten Wortes und lese es vor.
+[N] Pfeil-nach-oben: Gehe eine Zeile nach oben und lese sie vor.
+[N] Pfeil-nach-unten: Gehe eine Zeile nach unten und lese sie vor.
+[N] Pfeil-nach-links: Gehe ein Zeichen rückwärts und lese es vor.
+[N] Pfeil-nach-rechts: Gehe zum nächsten Zeichen und lese es vor.
+(: Gehe zum vorangehenden Absatz.
+): Gehe zum nächsten Absatz.
+`: Lese den ASCII-Code des aktuellen Zeichens.
+
+** Standard modus ** (diese Tasten funktionieren auf im Review Modus)
+ctrl-alt-b: Sage das vorangehende Zeichen.
+ctrl-alt-c: Sage das aktuelle Zeichen.
+ctrl-alt-d: Sage das aktuelle Wort.
+ctrl-alt-e: Lese den Text von der aktuellen Cursorposition bis zum Ende des
+  Bildschirms for.
+ctrl-alt-i: Initialisiere den Sprachsynthesizer neu.
+ctrl-alt-k: Lese die vorangehende Zeile vor.
+ctrl-alt-l: Lese die aktuelle Zeile vor.
+ctrl-alt-r: Wechsle zwischen dem Standardmodus und dem Reviewmodus hin un her.
+ctrl-alt-t: Lese vom Bildschirmanfang bis zum Cursor.
+ctrl-alt-w: Lese den gesamten Bildschirminhalt vor.
+ctrl-alt-x: Schaltet die Sprachausgabe aus bis eine weitere Taste gedrückt wird.
+alt-Eingabetaste: Deaktiviere Yasr. Yasr ist ruhig und ignoiriert alle
+  Tastatureingaben wenn deaktiviert.
+	Diese Tastenkombination erneut drücken, um Yasr wieder zu aktivieren.
+	Bitte beachten Sie: Diese Tastenkombination ist in der options? Sektion als " DisableKey" definiert.
+
+Vorschläge, Patches, etc. sind willkommen.
+
+   -Michael P. Gorse <mgorse@users.sourceforge.net>
+
