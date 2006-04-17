@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # brltty.sh
-# $Id: brltty.sh,v 1.8 2006/03/19 12:00:33 gcasse Exp $
+# $Id: brltty.sh,v 1.9 2006/04/17 22:38:19 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing BRLTTY
-# $Date: 2006/03/19 12:00:33 $ |
-# $Revision: 1.8 $ |
+# $Date: 2006/04/17 22:38:19 $ |
+# $Revision: 1.9 $ |
 # Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -24,9 +24,13 @@
 # ----------------------------------------------------------------------------
 ####
 source ../oralux.conf
-URL="http://www.mielke.cc/brltty/releases"
-BRLTTY=brltty-3.7.2
-ARCH_BRLTTY=$ARCHDIR/$BRLTTY.tar.gz
+
+export URL="http://www.mielke.cc/brltty/releases"
+export BRLTTY=brltty-3.7.2
+export BRLAPI_RPM=brlapi-0.4.1-1.i386.rpm
+#export BRLAPI_DEVEL_RPM=brlapi-devel-0.4.1-1.i386.rpm
+export ARCH_BRLTTY=$ARCHDIR/$BRLTTY.tar.gz
+
 
 cd $ARCHDIR
 
@@ -36,63 +40,67 @@ if [ ! -e $ARCH_BRLTTY ]
     wget $URL/$BRLTTY.tar.gz
 fi
 
-#http://mielke.cc/brltty/releases/brlapi-devel-0.4.1-1.i386.rpm
-#http://mielke.cc/brltty/releases/brlapi-0.4.1-1.i386.rpm
+# i=$BRLAPI_DEVEL_RPM
+# if [ ! -e $ARCHDIR/$i ]
+#     then
+#     echo "Downloading $i"
+#     wget $URL/$i
+# fi
+
+i=$BRLAPI_RPM
+if [ ! -e $ARCHDIR/$i ]
+    then
+    echo "Downloading $i"
+    wget $URL/$i
+fi
 
 
 ####
 # Installing the package in the current tree
-InstallPackage()
+ InstallPackage()
 {
-    apt-get remove --purge brltty
-    apt-get remove --purge brlapi
+    apt-get remove --purge brltty libbrlapi libbrlapi1
     rm -rf /etc/brltty
+
+    apt-get install bison
+    touch /usr/include/linux/autoconf.h
 
     cd /tmp
     rm -rf /tmp/brl*
-    
     tar -zxvf $ARCH_BRLTTY
-
     cd $BRLTTY
     ./configure
     make
     make install
 
+#    rm -f /etc/brltty.conf
 
+#    alien $ARCHDIR/$BRLAPI_DEVEL_RPM
+    alien --script -i $ARCHDIR/$BRLAPI_RPM
 
-# #    apt-get install brltty
-
-#     apt-get --purge remove brltty
-#     cd tmp
-#     rm -rf brltty*
-#     cp $ARCHDIR/brltty-3.6.1.tar.gz .
-#     tar -zxvf brltty*
-#     cd brltty*
-#     ./configure
-#     make 
-#     make install
-
-#     rm -f /etc/brltty.conf
-    
-
-    rm -rf /tmp/brl*
 }
 
 ####
 # Adding the package to the new Oralux tree
 Copy2Oralux()
 {
-#    chroot $BUILD apt-get install php4-cgi
-
-    # php5
     cd $BUILD/tmp
-    rm -rf $BUILD/tmp/php-5*
-    wget http://www.php.net/get/php-5.0.0.tar.bz2/from/fr.php.net/mirror
-    tar -jxvf php-5.0.0.tar.bz2
-    cp $INSTALL_PACKAGES/php/dio.c php-5.0.0/ext/dio
+    rm -rf brl*
+    cp $ARCH_BRLTTY .
+    cp $ARCHDIR/$BRLAPI_RPM .
 
-    chroot $BUILD  bash -c "apt-get install libxml2-dev; cd /tmp/php-5.0.0;./configure $OPT_CONF;make;make install;cd /usr/bin; ln -s /usr/local/bin/php php5;cd /etc/alternatives;rm -f php;ln -s /usr/bin/php5 php"
-    rm -rf $BUILD/tmp/php-5*
+    chroot $BUILD  bash -c "apt-get remove --purge brltty libbrlapi libbrlapi1;\
+    rm -rf /etc/brltty;\
+    apt-get install bison;\
+    touch /usr/include/linux/autoconf.h;\
+    cd /tmp;\
+    tar -zxvf $BRLTTY.tar.gz;\
+    cd $BRLTTY;\
+    ./configure;\
+    make;\
+    make install;\
+    cd /tmp;\
+    alien --script -i $BRLAPI_RPM"
 }
 
 case $1 in

@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // braille.c
-// $Id: braille.c,v 1.5 2006/03/19 12:00:33 gcasse Exp $
+// $Id: braille.c,v 1.6 2006/04/17 22:38:19 gcasse Exp $
 // $Author: gcasse $
 // Description: setting for BRLTTY
-// $Date: 2006/03/19 12:00:33 $ |
-// $Revision: 1.5 $ |
+// $Date: 2006/04/17 22:38:19 $ |
+// $Revision: 1.6 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -69,21 +69,25 @@ static struct brailleItem myTables[]=
   {
     {"text.brf.tbl" ,brfSaid},
     {"text.cz.tbl" ,czechSaid},
+    {"text.da-1252.tbl" ,dansk1252Said},
+    {"text.da-lt.tbl" ,danskLTSaid},
     {"text.da.tbl" ,danskSaid},
     {"text.de.tbl" ,germanSaid},
     {"text.es.tbl" ,spanishSaid},
     {"text.fi1.tbl" ,finnishSaid},
     {"text.fi2.tbl" ,finnish2Said},
-    {"text.fr-iso01.tbl" ,frenchSaid},
+    {"text.fr_CA.tbl" ,frenchcanadianSaid},
+    {"text.fr_FR.tbl" ,frenchSaid},
     {"text.fr-cbifs.tbl" ,French_cbifs},
+/* /etc/brltty/text.identity.tbl */
     {"text.it.tbl" ,italianSaid},
     {"text.nabcc.tbl" ,NABCC},
     {"text.no-h.tbl" ,NorwegianGerman},
     {"text.no-p.tbl" ,Norwegian},
     {"text.pl.tbl" ,polishSaid},
     {"text.ru.tbl" ,russianSaid},
-    {"text.se1.tbl" ,Swedish},
-    {"text.se2.tbl" ,Swedish2},
+    {"text.se.tbl" ,Swedish},
+    {"text.se-old.tbl" ,SwedishOld},
     {"text.uk.tbl" ,britishSaid},
     {"text.us.tbl" ,americanSaid},
     {"text.vni.tbl" ,Vietnamese},

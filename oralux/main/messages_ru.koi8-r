@@ -360,8 +360,8 @@ struct t_translation TheRussianMessages[]=
    "Шведский",
   },
 
-  {"Swedish 2",
-   "Шведский 2",
+  {"Swedish Old",
+   "Шведский Old",
   },
 
   {"Vietnamese",
@@ -749,6 +749,14 @@ struct t_translation TheRussianMessages[]=
 
   {"Do you want to select a software voice synthesizer?",
    NULL,
+  },
+
+  {"Danish 1252",
+   "Датский 1252",
+  },
+
+  {"Danish LT",
+   "Датский LT",
   },
 
 };

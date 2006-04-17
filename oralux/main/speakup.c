@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // speakup.c
-// $Id: speakup.c,v 1.2 2006/04/17 09:11:43 gcasse Exp $
+// $Id: speakup.c,v 1.3 2006/04/17 22:38:19 gcasse Exp $
 // $Author: gcasse $
 // Description: Speakup configuration file. 
-// $Date: 2006/04/17 09:11:43 $ |
-// $Revision: 1.2 $ |
+// $Date: 2006/04/17 22:38:19 $ |
+// $Revision: 1.3 $ |
 // Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -150,7 +150,7 @@ void stopSpeakup()
   setSynth("none");
 }
 
-void startSpeakup( enum textToSpeech theTTS)
+void startSpeakup( struct textToSpeechStruct *theTTS)
 {
   ENTER("startSpeakup");
 
@@ -166,19 +166,26 @@ void startSpeakup( enum textToSpeech theTTS)
     }
 
   // set the new synth
-  char* aSynthName = convertSynth( theTTS);
+  char* aSynthName = convertSynth( theTTS->myIdentifier);
   if (aSynthName)
     {
       setSynth( aSynthName);
 
-      switch( theTTS)
+      switch( theTTS->myIdentifier)
 	{
 	case TTS_Flite:
 	  system("speechd-up");
 	  break;
 	  
 	case TTS_Multispeech:
-	  system("multispeech-up-ctl start");
+	  {
+	    const char* format = "export LANGUAGE=%s; multispeech-up-ctl start";
+	    char buf[sizeof(format) + 20 ];
+	    char* lang = getStringLanguage( theTTS->myLanguage);
+
+	    sprintf(buf, format, lang);
+	    system(buf);
+	  }
 	  break;
 	  
 	default:

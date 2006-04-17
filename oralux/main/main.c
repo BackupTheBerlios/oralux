@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // main.c
-// $Id: main.c,v 1.16 2006/04/17 09:11:42 gcasse Exp $
+// $Id: main.c,v 1.17 2006/04/17 22:38:19 gcasse Exp $
 // $Author: gcasse $
 // Description: entry point. 
-// $Date: 2006/04/17 09:11:42 $ |
-// $Revision: 1.16 $ |
+// $Date: 2006/04/17 22:38:19 $ |
+// $Revision: 1.17 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -378,7 +378,7 @@ int main(int argc, char *argv[])
 
       if (aSelectedInfo.myDesktop == Speakup)
 	{
-	  startSpeakup( aSelectedInfo.myTextToSpeech.myIdentifier);
+	  startSpeakup( & aSelectedInfo.myTextToSpeech);
 	}
       else if (aSelectedInfo.myTextToSpeech.myIdentifier==TTS_Flite) 
 	{ // Avoids the "Process speaker not running" message in emacspeak

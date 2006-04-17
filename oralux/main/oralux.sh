@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # oralux.sh
-# $Id: oralux.sh,v 1.19 2006/04/17 09:11:43 gcasse Exp $
+# $Id: oralux.sh,v 1.20 2006/04/17 22:38:19 gcasse Exp $
 # $Author: gcasse $
 # Description: This script is called at init time
-# $Date: 2006/04/17 09:11:43 $ |
-# $Revision: 1.19 $ |
+# $Date: 2006/04/17 22:38:19 $ |
+# $Revision: 1.20 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -31,7 +31,6 @@ getStickyString()
 {
     echo "s/=[ ]*"$1"[ \t]*$/= S"$1"/g"
 }
-
 
 if [ "$TTY" == "/dev/tty1" -a ! -e "$FILE" ]
     then

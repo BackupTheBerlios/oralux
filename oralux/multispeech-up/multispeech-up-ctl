@@ -1,10 +1,10 @@
 #! /bin/sh
 #
-# $Id: multispeech-up-ctl,v 1.1 2006/04/17 09:11:43 gcasse Exp $
+# $Id: multispeech-up-ctl,v 1.2 2006/04/17 22:38:19 gcasse Exp $
 # $Author: gcasse $
 # Description: multispeech daemon start/stop script. 
-# $Date: 2006/04/17 09:11:43 $ |
-# $Revision: 1.1 $ |
+# $Date: 2006/04/17 22:38:19 $ |
+# $Revision: 1.2 $ |
 # Copyright (C) 2006 Gilles Casse (gcasse@oralux.org)
 #
 # License: GPL
@@ -20,13 +20,13 @@ case "$1" in
   stop)
 	killall -KILL  2>/dev/null
 	killall -KILL multispeech-up 2>/dev/null
-	killall -KILL multispeechd 2>/dev/null
+	killall -KILL speech_server 2>/dev/null
 	;;
   *)
 	killall -KILL multispeech-up 2>/dev/null
-	killall -KILL multispeechd 2>/dev/null
+	killall -KILL speech_server 2>/dev/null
 	($MULTISPEECHD 2>/dev/null)&
-	($MULTISPEECH_UP 2>/dev/null)&
+	$MULTISPEECH_UP 2>/dev/null
 	;;
 esac
 

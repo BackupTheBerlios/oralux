@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # speakup.sh
-# $Id: speakup.sh,v 1.1 2006/04/17 09:11:42 gcasse Exp $
+# $Id: speakup.sh,v 1.2 2006/04/17 22:38:19 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing the user space softwares related to Speakup.
-# $Date: 2006/04/17 09:11:42 $ |
-# $Revision: 1.1 $ |
+# $Date: 2006/04/17 22:38:19 $ |
+# $Revision: 1.2 $ |
 # Copyright (C) 2006 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -26,9 +26,7 @@
 #set -vx
 source ../oralux.conf
 
-export MULTISPEECH_UP=multispeech-up-0.1
-export ARCH_MULTISPEECH_UP=$ARCHDIR/$MULTISPEECH_UP.tar.bz2
-
+export M_ORIG=$ORALUX/multispeech-up
 
 ####
 # Installing the package in the current tree
@@ -37,12 +35,10 @@ InstallPackage()
     install -m 755 $INSTALL_PACKAGES/speakup/speakupconf /usr/local/bin
 
 # Installing multispeech-up
-    cd $TMP
-    rm -rf multispeech-up*
-    tar -jxvf $ARCH_MULTISPEECH_UP 
-    cd multispeech-up*
+    cd $M_ORIG
     make
     make install
+    make clean
 }
 
 ####
@@ -52,9 +48,15 @@ Copy2Oralux()
     install -m 755 $INSTALL_PACKAGES/speakup/speakupconf $BUILD/usr/local/bin
 
 # Installing multispeech-up
-    cd $BUILD/tmp
-    tar -jxvf $ARCH_MULTISPEECH_UP
-    chroot $BUILD bash -c 'cd /tmp/$MULTISPEECH_UP;make all;make install'
+    export M_BUILD=/usr/share/oralux/multispeech-up
+
+    install -d $BUILD$M_BUILD
+    cp -pR $M_ORIG/* $BUILD$M_BUILD
+
+    chroot $BUILD bash -c 'cd $M_BUILD;\
+     make;\
+     make install;\
+     make clean'
 }
 
 case $1 in

@@ -101,7 +101,7 @@ enum sentence {
   NorwegianGerman,
   Norwegian,
   Swedish,
-  Swedish2,
+  SwedishOld,
   Vietnamese,
   selectBraille, // 0x50
   whichBraille,
@@ -194,6 +194,8 @@ enum sentence {
   Transport,
   KeynoteGoldPC,
   selectSoftSynth,
+  dansk1252Said,
+  danskLTSaid,
   MaxSentence, // the last enum! Place any new enum before it, please.
 };
 

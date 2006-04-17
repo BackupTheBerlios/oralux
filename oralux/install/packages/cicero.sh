@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # cicero.sh
-# $Id: cicero.sh,v 1.4 2006/03/05 18:28:57 gcasse Exp $
+# $Id: cicero.sh,v 1.5 2006/04/17 22:38:19 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing Cicero
-# $Date: 2006/03/05 18:28:57 $ |
-# $Revision: 1.4 $ |
+# $Date: 2006/04/17 22:38:19 $ |
+# $Revision: 1.5 $ |
 # Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -23,8 +23,9 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 # ----------------------------------------------------------------------------
 ####
+#set -vx
 source ../oralux.conf
-export CICERO_RELEASE=0.6
+export CICERO_RELEASE=0.7
 export SERVER=/usr/share/emacs/site-lisp/emacspeak/servers
 export ARCH_CICERO=cicero-${CICERO_RELEASE}.tar.gz
 
@@ -46,13 +47,13 @@ InstallPackage()
     rm -rf /usr/local/share/cicero*
     tar -zxvf $ARCHDIR/$ARCH_CICERO
 
-    # Patch from Stephane Doyon (compatibility with the Emacspeak server)
-    cd cicero-$CICERO_RELEASE
-    patch < $INSTALL_PACKAGES/cicero/diff-shell-pipe-fix
+#    # Patch from Stephane Doyon (compatibility with the Emacspeak server)
+#    cd cicero-$CICERO_RELEASE
+#    patch < $INSTALL_PACKAGES/cicero/diff-shell-pipe-fix
 
     # customize config 
     cp config.py.sample config.py
-    patch < $INSTALL_PACKAGES/cicero/config.patch
+#    patch < $INSTALL_PACKAGES/cicero/config.patch
 
     # Installation
     cd ..
@@ -71,6 +72,10 @@ InstallPackage()
 
     cd /tmp
     rm -rf cicero*
+
+    # RAF
+    cd /usr/bin
+    ln -s python2.3 python2
 }
 
 ####
@@ -89,20 +94,20 @@ Copy2Oralux()
     chroot $BUILD  bash -c "\
     cd /tmp;\
     cd cicero-$CICERO_RELEASE;\
-    patch < $INSTALL_PACKAGES/cicero/diff-shell-pipe-fix;\
     cp config.py.sample config.py;\
     patch < $INSTALL_PACKAGES/cicero/config.patch;\
     cd ..;\
     mv cicero-$CICERO_RELEASE /usr/local/share/;\
     cd /usr/local/share/;\
     ln -s cicero-$CICERO_RELEASE cicero;\
-    mkdir $SERVER/cicero-api;\
-    cp $INSTALL_PACKAGES/cicero/Makefile $SERVER/cicero-api;\
-    cp $INSTALL_PACKAGES/cicero/tclcicero.c $SERVER/cicero-api;\
-    cp $INSTALL_PACKAGES/cicero/cicero $SERVER;\
+    install -d $SERVER/cicero-api;\
+    cd $INSTALL_PACKAGES/cicero;\
+    install -m 644 Makefile tclcicero.c $SERVER/cicero-api;\
+    install -m 755 cicero $SERVER;\
     echo cicero >> $SERVER/.servers;\
     cd $SERVER/cicero-api;\
-    make"
+    make;\
+    cd /usr/bin;ln -s python2.3 python2"
 }
 
 case $1 in

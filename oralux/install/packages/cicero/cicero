@@ -5,8 +5,8 @@
 # LCD Archive Entry:
 # emacspeak| T. V. Raman |raman@cs.cornell.edu
 # A speech interface to Emacs |
-# $Date: 2005/06/11 22:48:37 $ |
-#  $Revision: 1.1 $ | 
+# $Date: 2006/04/17 22:38:19 $ |
+#  $Revision: 1.2 $ | 
 # Location undetermined
 #
 
@@ -357,14 +357,14 @@ set tts(say_rate) [round \
 notes_initialize
 set tclTTS $env(EMACSPEAK_DIR)/servers/cicero-api
 load $tclTTS/tclcicero.so
-# synth   {[:phoneme arpabet speak on ]
-#     [:pu s ]
-#     [:sa c]
-#     [:np]
-#     Voici imacspik ! 
+# # synth   {[:phoneme arpabet speak on ]
+# #     [:pu s ]
+# #     [:sa c]
+# #     [:np]
+# #     Voici imacspik ! 
+# # }
+# synth   {Voici imacspik ! 
 # }
-synth   {Voici imacspik ! 
-}
 #Start the main command loop:
 commandloop
 

@@ -3,7 +3,7 @@
 
 #include "textToSpeech.h"
 
-void startSpeakup( enum textToSpeech theTTS);
+void startSpeakup( struct textToSpeechStruct *theTTS);
 void stopSpeakup();
 
 #endif

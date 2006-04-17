@@ -66,6 +66,7 @@ add_soft() {
     next_script screen.sh "screen"
 
     next_script cicero.sh "cicero"
+    next_script brltty.sh "brltty"
     next_script convert.sh "convert"
     next_script doc.sh "doc"
 

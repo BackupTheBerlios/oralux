@@ -1,11 +1,11 @@
 #undef DEBUG
 // ----------------------------------------------------------------------------
 // audiouserinterface.c
-// $Id: audioUserInterface.c,v 1.27 2006/03/29 20:47:40 gcasse Exp $
+// $Id: audioUserInterface.c,v 1.28 2006/04/17 22:38:19 gcasse Exp $
 // $Author: gcasse $
 // Description: Managing and playing the pre-recorded messages.
-// $Date: 2006/03/29 20:47:40 $ |
-// $Revision: 1.27 $ |
+// $Date: 2006/04/17 22:38:19 $ |
+// $Revision: 1.28 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 // September 2003: 
 // * German translations by Guenther Harrasser.
@@ -664,11 +664,11 @@ char * TheMessages[][5]={
    "Sueco",
    "Suéco",
   },
-  {"Swedish 2",
-   "Suédois 2",
-   "Schwedische 2",
-   "Sueco 2",
-   "Suéco dois",
+  {"Swedish old",
+   "Suédois old",
+   "Schwedische old",
+   "Sueco old",
+   "Suéco old",
   },
   {"Vietnamese",
    "Vietnamien",
@@ -1328,6 +1328,20 @@ char * TheMessages[][5]={
    NULL,
    NULL,
    NULL,
+  },
+
+  {"Danish 1252",
+   "Danois 1252",
+   "Dänische 1252",
+   "Danés 1252",
+   "Dinamarquês um dois cinco dos", /* issue with figures in pt_BR */
+  },
+
+  {"Danish LT",
+   "Danois LT",
+   "Dänische LT",
+   "Danés LT",
+   "Dinamarquês LT",
   },
 
 };
