@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # oralux.sh
-# $Id: oralux.sh,v 1.18 2006/03/25 22:11:55 gcasse Exp $
+# $Id: oralux.sh,v 1.19 2006/04/17 09:11:43 gcasse Exp $
 # $Author: gcasse $
 # Description: This script is called at init time
-# $Date: 2006/03/25 22:11:55 $ |
-# $Revision: 1.18 $ |
+# $Date: 2006/04/17 09:11:43 $ |
+# $Revision: 1.19 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -105,16 +105,8 @@ if [ "$TTY" == "/dev/tty1" -a ! -e "$FILE" ]
 	    emacspeak
 	elif [ $DESKTOP == "Speakup" ]
 	    then
-	    speakupconf load
-	    synth=$(cat /proc/speakup/synth_name)
-	    if [ "$synth" == "sftsyn" ]; then
-		if [ "$EMACSPEAKTTS" == "Multispeech" ]; then
-		    echo i18n > /proc/speakup/characters
-		    multispeech-up
-		else
-		    speechd-up
-		fi
-	    fi
+#	    speakupconf load
+	    oralux-pdmenu.sh
 	else	    
 # TBD
 	    sudo chown knoppix:knoppix /home/knoppix/.yasr.conf

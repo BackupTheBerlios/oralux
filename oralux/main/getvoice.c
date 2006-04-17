@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // getvoice.c
-// $Id: getvoice.c,v 1.8 2006/01/30 22:49:38 gcasse Exp $
+// $Id: getvoice.c,v 1.9 2006/04/17 09:11:42 gcasse Exp $
 // $Author: gcasse $
 // Description: Used at installation time to build the "voices" used by oralux
-// $Date: 2006/01/30 22:49:38 $ |
-// $Revision: 1.8 $ |
+// $Date: 2006/04/17 09:11:42 $ |
+// $Revision: 1.9 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -112,6 +112,7 @@ static char* TheLanguageId[]={
   "sp",
   "pt_BR",
   "ru",
+  "all",
 };
 
 // To have similar rate, the values seem to be different
@@ -122,6 +123,7 @@ static char* TheDefaultRate[]={
   "160",
   "", // br
   "", // ru
+  "", // all
 };
 
 static char* TheCurrentRate;
@@ -245,6 +247,113 @@ void getvoice(char* theSentence, char* theOggFilename, enum language theLanguage
   system(buf);
 }
 
+static void buildAudioFiles( int theLanguage, int isCharacter, int theUniqueFileToBuild, int theValue)
+{
+  static char buf[BUFSIZE];
+
+  initAUI(ORALUX_RUNTIME_AUDIO, theLanguage, NULL);
+
+  init(TheLanguageId[theLanguage]);
+  int aPunctuationToBeSaid=0;
+
+  if (isCharacter)
+  {
+    // RAF(GC): pronouncing 'Space' for 0x20, + others?
+    char a[2];
+    a[1]=0;
+    char aCharacter;
+    char aCharacterMin=0x20;
+    char aCharacterMax=0x7f;
+    aPunctuationToBeSaid=1;
+
+    if (theUniqueFileToBuild)
+      {
+	aCharacterMin=theValue; 
+	aCharacterMax=theValue+1;
+      }
+
+    for (aCharacter = aCharacterMin; aCharacter < aCharacterMax; ++aCharacter)
+    {
+      if ((aCharacter>=0x41) && (aCharacter<=0x5A))
+      {
+        continue;
+      }
+      a[0]=aCharacter;
+      switch(theLanguage)
+	{
+	case Brazilian:
+	case Russian:
+	    getvoice( a, getOggFilenameChar(aCharacter), theLanguage);
+	  break;
+
+	default:
+	  getdtkvoice(a, getOggFilenameChar(aCharacter), aPunctuationToBeSaid);
+	  break;
+	}
+    }
+  }
+  else
+  {
+    int aNumberOfNotYetTranslatedSentences=0;
+    int aSentenceMin=0;
+    int aSentenceMax=MaxSentence;
+    int i;
+
+    if (theUniqueFileToBuild)
+      {
+	aSentenceMin=theValue; 
+	aSentenceMax=theValue+1;
+      }
+
+    for (i=aSentenceMin; i<aSentenceMax; ++i)
+    {
+        char* aSentence=getText(i);
+	if (aSentence==NULL)
+	  { // Not yet translated, we copy the English version.
+	    char* aEnglishFilename=getOggFilenameForThisLanguage(i, English);
+	    char* aCurrentLanguageFilename=getOggFilename(i);
+	    sprintf(buf, "cp %s %s", aEnglishFilename, aCurrentLanguageFilename);
+	    system(buf);
+	    aNumberOfNotYetTranslatedSentences++;
+	  }
+	else
+	  {
+	    char* aSentence = getText(i);
+	    printf("s%02x %s\n", i, aSentence);
+	    switch(theLanguage)
+	      {
+	      case Brazilian:
+	      case Russian:
+		getvoice(aSentence, getOggFilename(i), theLanguage);
+		break;
+
+	      default:
+		getdtkvoice(aSentence, getOggFilename(i), aPunctuationToBeSaid);
+		break;
+	      }
+/* 		{ */
+/* 		  static char buf[200]; */
+/* 		sprintf(buf,"ogg123 %s\n", getOggFilename(i)); */
+/* 		system(buf); */
+/* 		} */
+	  }
+    }
+    if (aNumberOfNotYetTranslatedSentences)
+      {
+	printf("%d of not yet translated sentences (total: %d)\n", aNumberOfNotYetTranslatedSentences, MaxSentence);
+      }
+    else if (theUniqueFileToBuild)
+      {
+	printf("The sentence has been translated\n");
+      }
+    else
+      {
+	printf("All %d sentences have been translated\n", MaxSentence);
+      }
+  }
+  stopAUI(0);
+}
+
 void usage()
 {
   printf("getvoice: builds the ogg files for the printable characters (c) or the sentences (s)\n");
@@ -260,7 +369,6 @@ void usage()
 
 int main(int argc, char *argv[])
 {
-  static char buf[BUFSIZE];
   enum sentence i;
   int aValue=0;
   int aUniqueFileToBuild=0;
@@ -307,107 +415,16 @@ int main(int argc, char *argv[])
     exit(1);
   }
 
-  getcwd(buf, BUFSIZE);
-  strcat(buf,"/../audio"),
-  initAUI(buf, aLanguage, NULL);
-
-  init(TheLanguageId[aLanguage]);
-  int aPunctuationToBeSaid=0;
-
-  if (isCharacter)
-  {
-    // RAF(GC): pronouncing 'Space' for 0x20, + others?
-    char a[2];
-    a[1]=0;
-    char aCharacter;
-    char aCharacterMin=0x20;
-    char aCharacterMax=0x7f;
-    aPunctuationToBeSaid=1;
-
-    if (aUniqueFileToBuild)
-      {
-	aCharacterMin=aValue; 
-	aCharacterMax=aValue+1;
-      }
-
-    for (aCharacter = aCharacterMin; aCharacter < aCharacterMax; ++aCharacter)
+  if (strcmp( TheLanguageId[aLanguage], "all")==0)
     {
-      if ((aCharacter>=0x41) && (aCharacter<=0x5A))
-      {
-        continue;
-      }
-      a[0]=aCharacter;
-      switch(aLanguage)
+      for (aLanguage=0; aLanguage < aNumberOfLanguages-1; aLanguage++)
 	{
-	case Brazilian:
-	case Russian:
-	    getvoice( a, getOggFilenameChar(aCharacter), aLanguage);
-	  break;
-
-	default:
-	  getdtkvoice(a, getOggFilenameChar(aCharacter), aPunctuationToBeSaid);
-	  break;
+	  buildAudioFiles(aLanguage, isCharacter, aUniqueFileToBuild, aValue);
 	}
     }
-  }
   else
-  {
-    int aNumberOfNotYetTranslatedSentences=0;
-    int aSentenceMin=0;
-    int aSentenceMax=MaxSentence;
-
-    if (aUniqueFileToBuild)
-      {
-	aSentenceMin=aValue; 
-	aSentenceMax=aValue+1;
-      }
-
-    for (i=aSentenceMin; i<aSentenceMax; ++i)
     {
-        char* aSentence=getText(i);
-	if (aSentence==NULL)
-	  { // Not yet translated, we copy the English version.
-	    char* aEnglishFilename=getOggFilenameForThisLanguage(i, English);
-	    char* aCurrentLanguageFilename=getOggFilename(i);
-	    sprintf(buf, "cp %s %s", aEnglishFilename, aCurrentLanguageFilename);
-	    system(buf);
-	    aNumberOfNotYetTranslatedSentences++;
-	  }
-	else
-	  {
-	    char* aSentence = getText(i);
-	    printf("s%02x %s\n", i, aSentence);
-	    switch(aLanguage)
-	      {
-	      case Brazilian:
-	      case Russian:
-		getvoice(aSentence, getOggFilename(i), aLanguage);
-		break;
-
-	      default:
-		getdtkvoice(aSentence, getOggFilename(i), aPunctuationToBeSaid);
-		break;
-	      }
-/* 		{ */
-/* 		  static char buf[200]; */
-/* 		sprintf(buf,"ogg123 %s\n", getOggFilename(i)); */
-/* 		system(buf); */
-/* 		} */
-	  }
+      buildAudioFiles(aLanguage, isCharacter, aUniqueFileToBuild, aValue);
     }
-    if (aNumberOfNotYetTranslatedSentences)
-      {
-	printf("%d of not yet translated sentences (total: %d)\n", aNumberOfNotYetTranslatedSentences, MaxSentence);
-      }
-    else if (aUniqueFileToBuild)
-      {
-	printf("The sentence has been translated\n");
-      }
-    else
-      {
-	printf("All %d sentences have been translated\n", MaxSentence);
-      }
-  }
-  stopAUI(0);
 }
 

@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // speakup.c
-// $Id: speakup.c,v 1.1 2006/03/25 22:11:55 gcasse Exp $
+// $Id: speakup.c,v 1.2 2006/04/17 09:11:43 gcasse Exp $
 // $Author: gcasse $
 // Description: Speakup configuration file. 
-// $Date: 2006/03/25 22:11:55 $ |
-// $Revision: 1.1 $ |
+// $Date: 2006/04/17 09:11:43 $ |
+// $Revision: 1.2 $ |
 // Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -44,6 +44,8 @@ struct TextToSpeechCheatCode
 };
 
 static struct TextToSpeechCheatCode mySpeakupCheatCode[]={
+  {TTS_Flite, "sftsyn"},  
+  {TTS_Multispeech, "sftsyn"},
   {TTS_AccentSA, "acntsa"},
   {TTS_AccentPC, "acntpc"},
   {TTS_Audapter, "audptr"},
@@ -60,7 +62,7 @@ static struct TextToSpeechCheatCode mySpeakupCheatCode[]={
 
 #define MaxCheatcode (sizeof(mySpeakupCheatCode)/sizeof(mySpeakupCheatCode[0]))
 
-static int myVolume=0;
+/* static int myVolume=0; */
 static char* mySynth=NULL;
 #define DEV_SOFTSYNTH "/dev/softsynth"
 #define PROC_SPEAKUP_VOL "/proc/speakup/vol"
@@ -71,7 +73,7 @@ static char* mySynth=NULL;
 static void setVol( int theValue)
 {
   ENTER("setVol");
-  FILE* fd = fopen (PROC_SPEAKUP_VOL, "w");
+  FILE* fd = fopen (PROC_SPEAKUP_VOL, "r+");
   if (fd)
     {
       if (theValue > 9)
@@ -135,12 +137,22 @@ static char* convertSynth( enum textToSpeech theIdentifier)
   return aSynthName;
 }
 
-int initSpeakup(struct textToSpeechStruct* theTextToSpeech)
+
+/* < stopSpeakup, startSpeakup */
+void stopSpeakup()
 {
-  ENTER("initSpeakup");
+  ENTER("stopSpeakup");
+
+/*   myVolume = getVol(); */
+/*   setVol(0); */
 
   system("pkill speechd-up 2>/dev/null;multispeech-up-ctl stop 2>/dev/null");
   setSynth("none");
+}
+
+void startSpeakup( enum textToSpeech theTTS)
+{
+  ENTER("startSpeakup");
 
   struct stat buf;
   if (-1 == lstat(DEV_SOFTSYNTH, &buf))
@@ -148,18 +160,18 @@ int initSpeakup(struct textToSpeechStruct* theTextToSpeech)
       if ((errno != ENOENT)
 	  || (-1 == mknod(DEV_SOFTSYNTH, S_IFCHR|0644, makedev(10,26))))
 	{
-	  perror("initSpeakup");
-	  return 1;
+	  perror("startSpeakup");
+	  return;
 	}
     }
 
   // set the new synth
-  char* aSynthName = convertSynth( theTextToSpeech->myIdentifier);
+  char* aSynthName = convertSynth( theTTS);
   if (aSynthName)
     {
       setSynth( aSynthName);
 
-      switch( theTextToSpeech->myIdentifier)
+      switch( theTTS)
 	{
 	case TTS_Flite:
 	  system("speechd-up");
@@ -174,28 +186,8 @@ int initSpeakup(struct textToSpeechStruct* theTextToSpeech)
 	}
     }
 
-  return 0;
-}
-
-/* < disableSpeakup, enableSpeakup */
-void disableSpeakup()
-{
-  ENTER("disableSpeakup");
-
-  myVolume = getVol();
-  setVol(0);
-}
-
-void enableSpeakup( struct menuInfo* theSelectedInfo)
-{
-  ENTER("enableSpeakup");
-
-  if ((theSelectedInfo->myDesktop == Speakup)
-      && (0 == initSpeakup( &(theSelectedInfo->myTextToSpeech))))
-    {
-      setVol(myVolume);
-      system("su - knoppix 'speakupconf'");
-    }
+  /*       setVol(myVolume); */
+  system("su - knoppix 'speakupconf save'");
 }
 
 /* > */

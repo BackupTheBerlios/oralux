@@ -53,6 +53,9 @@ enum phpStatus {
 // Where the Yasr's configuration files are stored
 #define ORALUX_RUNTIME_YASR "/usr/share/oralux/install/packages/yasr"
 
+// Where the pre-recorded audio files are stored
+#define ORALUX_RUNTIME_AUDIO "/usr/share/oralux/audio"
+
 // Size of internal buffers
 #define BUFSIZE 1024
 

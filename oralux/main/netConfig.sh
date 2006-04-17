@@ -1,11 +1,11 @@
 #!/bin/bash
 # ----------------------------------------------------------------------------
 # netConfig.sh
-# $Id: netConfig.sh,v 1.17 2006/03/29 20:47:40 gcasse Exp $
+# $Id: netConfig.sh,v 1.18 2006/04/17 09:11:43 gcasse Exp $
 # $Author: gcasse $
 # Description: Menu for internet settings
-# $Date: 2006/03/29 20:47:40 $ |
-# $Revision: 1.17 $ |
+# $Date: 2006/04/17 09:11:43 $ |
+# $Revision: 1.18 $ |
 # Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -37,8 +37,10 @@ case "$LANGUAGE" in
     TextEscPressed="Escape gedrückt."
     ;;
 
-#TBD    es*)
-#TBD    ;;
+    es*)
+    TextCancelPressed="Cancelar presionado"
+    TextEscPressed="ESC presionado"
+    ;;
 
     fr*)
     TextCancelPressed="Opération annulée."
@@ -115,9 +117,21 @@ de*|at*|ch*)
     Textpon="Geben Sie in einer Shell den pon Befehl, P O N, ein, um die Verbindung zu starten."
     Textpoff="Der poff Befehl, P O F F, unterbricht die Verbindung"
     ;;
-#TBD
-#    es*)
-#    ;;
+
+    es*)
+    TextPing="Pruebe su conexión a Internet"
+    TextPingOk="La conexión a Internet funciona correctamente"
+    TextPingKo="google.com no responde."
+    TextSettingUp="Configurando la conexión a internet"
+    TextSerialModem="Modem serial"
+    TextEthernet="Conexión Ethernet"
+    TextMail="Correo Electrónico"
+    TextQuit="Salir"
+    Textpon="El comando pon inicia la conexión. Escriba el comando P O N en
+la consola."
+    Textpoff="El comando poff detiene la conexion. P O F F."
+    ;;
+
     fr*)
     TextPing="Test de la connexion internet"
     TextPingOk="La connexion internet fonctionne"

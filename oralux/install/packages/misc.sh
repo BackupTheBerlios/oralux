@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # misc.sh
-# $Id: misc.sh,v 1.21 2006/03/19 12:00:33 gcasse Exp $
+# $Id: misc.sh,v 1.22 2006/04/17 09:11:42 gcasse Exp $
 # $Author: gcasse $
 # Description: Miscellaneous packages
-# $Date: 2006/03/19 12:00:33 $ |
-# $Revision: 1.21 $ |
+# $Date: 2006/04/17 09:11:42 $ |
+# $Revision: 1.22 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -37,11 +37,12 @@ if [ ! -e $ARCH_DOSEMU_COMMAND ]
 fi
 
 
-export LIST="alsa-utils angband-doc angband audacity aumix bsdgames catdoc \
+export LIST="alsa-utils angband-doc angband audacity aumix \
+bmconf bsdgames catdoc \
 aspell-de aspell-en aspell-es aspell-fr aspell-pt-br aspell-pt \
 dosemu-freedos ecasound elinks erc frotz gobjc lynx leave \
 manpages manpages-de manpages-es manpages-fr manpages-pt manpages-ru \
-moc nano ne nethack-console nethack pdftohtml \
+moc nano ne nethack-console nethack sbm pdftohtml \
 ppthtml podracer python qalc tcsh toolame \
 vim vsound workbone wv xlhtml \
 xsltproc xpdf-utils zsh"

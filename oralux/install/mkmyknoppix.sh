@@ -53,6 +53,8 @@ add_soft() {
     next_script ttpport.sh "ttpport"
     next_script txt2pho.sh "txt2pho"
     next_script multispeech.sh "multispeech"
+    next_script freebsoft.sh "freebsoft"
+    next_script speakup.sh "speakup"
 
     next_script links.sh "links"
 
@@ -269,6 +271,45 @@ mkisofs -pad -l -r -J -v -V "Oralux" -no-emul-boot -boot-load-size 4 -boot-info-
 
 }
 
+create_new_iso_only_new_kernel() {
+
+set +e
+
+# if [ ! -f $NEW_ORALUX/boot/isolinux/isolinux.bin ]; then 
+#   echo "I can't find $NEW_ORALUX/boot/isolinux/isolinux.bin."
+#   exit 0
+# fi
+
+# if [ ! -f $NEW_ORALUX/boot/isolinux/boot.cat ]; then 
+#   echo "I can't find $NEW_ORALUX/boot/isolinux/boot.cat."
+#   exit 0
+# fi
+
+# rm -f $oraluxCDiso
+# rm -f $NEW_ORALUX/KNOPPIX/KNOPPIX
+# #mkisofs -L -R -l -V "Oralux ISO9660" -v -allow-multidot $BUILD | create_compressed_fs - 65536 > $NEW_ORALUX/KNOPPIX/KNOPPIX
+
+# # -exclude-list $EXCLUDELIST \
+# #mkisofs -R -U -V "Oralux" \
+# #-R -U -V "Oralux" \
+# mkisofs -R -U -V "Oralux" \
+# -publisher "Oralux.org Association, http://oralux.org" \
+# -hide-rr-moved -cache-inodes -no-bak -pad \
+# $BUILD | nice -5 /usr/bin/create_compressed_fs - 65536 > $NEW_ORALUX/KNOPPIX/KNOPPIX
+
+#Computing the md5sums
+cd $NEW_ORALUX
+
+[ -f KNOPPIX/md5sums ] && rm KNOPPIX/md5sums
+find -type f -not -name md5sums -not -name boot.cat -not -name isolinux.bin -exec md5sum '{}' \; > KNOPPIX/md5sums
+
+cd $NEW_ORALUX
+#mkisofs -l -r -J -V "Oralux" -hide-rr-moved -v -b KNOPPIX/boot.img -c KNOPPIX/boot.cat -o $oraluxCDiso $NEW_ORALUX
+
+mkisofs -pad -l -r -J -v -V "Oralux" -no-emul-boot -boot-load-size 4 -boot-info-table -b boot/isolinux/isolinux.bin -c boot/isolinux/boot.cat -hide-rr-moved -o $oraluxCDiso $NEW_ORALUX
+
+}
+
 ####
 umount_dirs() {
 
@@ -365,6 +406,7 @@ next_step rm_tmp "Remove $BUILD/tmp + apt-get clean"
 
 next_step update_index "Updating modules dependencies and indexes?"
 next_step create_new_iso "Creating ISO image for new Oralux?"
+next_step create_new_iso_only_new_kernel "Creating ISO image for new Oralux (only new kernel)?"
 next_step cd_info "Scan bus about your CD recorder?"
 next_step cd_erase "Erase CD?"
 next_step cd_burn "Burn CD?"

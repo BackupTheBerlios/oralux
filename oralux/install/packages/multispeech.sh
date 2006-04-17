@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # multispeech.sh
-# $Id: multispeech.sh,v 1.16 2006/03/19 12:00:33 gcasse Exp $
+# $Id: multispeech.sh,v 1.17 2006/04/17 09:11:42 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing Multispeech.
-# $Date: 2006/03/19 12:00:33 $ |
-# $Revision: 1.16 $ |
+# $Date: 2006/04/17 09:11:42 $ |
+# $Revision: 1.17 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -23,7 +23,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 # ----------------------------------------------------------------------------
 ####
-set -vx
+#set -vx
 source ../oralux.conf
 
 export RULEX_RELEASE=1.0
@@ -32,6 +32,10 @@ export ARCH_RULEX=$ARCHDIR/rulex-$RULEX_RELEASE.tar.gz
 export ARCH_MULTISPEECH_SRC=$ARCHDIR/multispeech-$MULTISPEECH_RELEASE.tar.bz2
 #export ARCH_RU_TTS=$ARCHDIR/ru_tts.bz2
 export ARCH_LEXICON=$ARCHDIR/enlex.tar.bz2
+
+export MULTISPEECH_UP=multispeech-up-0.2
+export ARCH_MULTISPEECH_UP=$ARCHDIR/$MULTISPEECH_UP.tar.bz2
+
 #export DOC="/usr/local/share/doc"
 export BIN="/usr/local/bin"
 export MBROLA="/usr/local/share/mbrola"
@@ -82,9 +86,9 @@ InstallPackage()
 
 ### Multispeech
     cd $TMP
-    rm -rf multispeech-*
+    rm -rf $MULTISPEECH_UP
     tar -jxvf $ARCH_MULTISPEECH_SRC 
-    cd multispeech-*
+    cd $MULTISPEECH_UP
     export SRC=`pwd`
 
     echo "TODO: make letters_de and letters_fr (de, fr) must be run as current user"
@@ -120,6 +124,14 @@ InstallPackage()
     echo multispeech >> .servers
     rm -f multispeech
     ln -s /usr/local/lib/multispeech/speech_server multispeech
+
+# Installing multispeech-up
+    cd $TMP
+    rm -rf multispeech-up*
+    tar -jxvf $ARCH_MULTISPEECH_UP 
+    cd multispeech-up*
+    make
+    make install
 }
 
 ####
@@ -190,6 +202,12 @@ Copy2Oralux()
 #    rm -rf $SRC/rulex-$RULEX_RELEASE
 
     chroot $BUILD bash -c "cd /usr/share/emacs/site-lisp/emacspeak/servers; echo multispeech >> .servers; rm -f multispeech; ln -s /usr/local/lib/multispeech/speech_server multispeech"
+
+
+# Installing multispeech-up
+    cd $BUILD/tmp
+    tar -jxvf $ARCH_MULTISPEECH_UP
+    chroot $BUILD bash -c 'cd /tmp/$MULTISPEECH_UP;make all;make install'
 }
 
 case $1 in

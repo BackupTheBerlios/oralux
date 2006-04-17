@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // desktop.c
-// $Id: desktop.c,v 1.5 2006/03/29 20:47:40 gcasse Exp $
+// $Id: desktop.c,v 1.6 2006/04/17 09:11:42 gcasse Exp $
 // $Author: gcasse $
 // Description: Serial ports 
-// $Date: 2006/03/29 20:47:40 $ |
-// $Revision: 1.5 $ |
+// $Date: 2006/04/17 09:11:42 $ |
+// $Revision: 1.6 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -26,17 +26,6 @@
 #include "desktop.h"
 #include "audioUserInterface.h"
 #include "menu.h"
-
-/* struct audioUserInterfaceCheatCode */
-/* { */
-/*   enum audioUserInterface myIdentifier; */
-/*   char* myCode; */
-/* }; */
-
-/* static struct audioUserInterfaceCheatCode myInterfaceCheatCode[]={ */
-/*   {Emacspeak, "emacspeak"}, */
-/*   {Yasr, "yasr"}, */
-/* }; */
 
 struct desktopItem
 {
@@ -61,7 +50,7 @@ enum desktopIdentifier getEnumDesktop(char* theDesktop)
 
   if (theDesktop)
     {
-      for (i=0; i<sizeof(myDesktops)/sizeof(myDesktops[0]); i++)
+      for (i=0; i<MaxDesktop; i++)
 	{
 	  if (strcmp( myDesktops[i].myLabel, theDesktop)==0)
 	    {
@@ -76,21 +65,35 @@ enum desktopIdentifier getEnumDesktop(char* theDesktop)
 char* desktopGetString( enum desktopIdentifier theValue)
 {
   char* aLabel=myDesktops[0].myLabel;
-  if (theValue < MaxDesktop)
+  int i;
+
+  for (i=0; i<MaxDesktop; i++)
     {
-      aLabel=myDesktops[theValue].myLabel;
+      if (myDesktops[i].myIdentifier == theValue)
+	{
+	  aLabel=myDesktops[i].myLabel;
+	  break;
+	}
     }
+
   return aLabel;
 }
 
 enum sentence desktopGetSentence( enum desktopIdentifier theValue)
 {
-  enum sentence aLabel=myDesktops[0].myName;
-  if (theValue < MaxDesktop)
+  enum sentence aName=myDesktops[0].myName;
+  int i;
+
+  for (i=0; i<MaxDesktop; i++)
     {
-      aLabel=myDesktops[theValue].myName;
+      if (myDesktops[i].myIdentifier == theValue)
+	{
+	  aName=myDesktops[i].myName;
+	  break;
+	}
     }
-  return aLabel;
+
+  return aName;
 }
 
 int setDesktop(enum desktopIdentifier *theDesktop)
@@ -98,7 +101,9 @@ int setDesktop(enum desktopIdentifier *theDesktop)
   ENTER("setDesktop");
   int aDesktopRequest=1;
   int i=0;
-  enum desktopIdentifier aDesktop = Emacspeak;
+  enum desktopIdentifier aDesktop = *theDesktop;
+
+  SHOW2("theDesktop=%d\n",*theDesktop);
 
   if (!theDesktop)
     {
@@ -155,24 +160,7 @@ int setDesktop(enum desktopIdentifier *theDesktop)
       }
   }
   *theDesktop = getEnumDesktop( myDesktops[i].myLabel);
+  SHOW2("NEW: theDesktop=%d\n",*theDesktop);
   return (*theDesktop != aDesktop);
 }
 
-
-
-/*   if (aResult && aAudioUserInterface) */
-/*     { */
-/*       int aMaxCheatCode=sizeof(myInterfaceCheatCode)/sizeof(myInterfaceCheatCode[0]); */
-/*       int i=0; */
-
-/*       // Looking for the index in the array */
-/*       for (i=0; i<aMaxCheatCode; i++) */
-/* 	{ */
-/* 	  if (strcmp(aAudioUserInterface, myInterfaceCheatCode[i].myCode)==0) */
-/* 	    { */
-/* 	      *theAudioUserInterface=myInterfaceCheatCode[i].myLabel; */
-/* 	      aResult=1; */
-/* 	      break; */
-/* 	    } */
-/* 	} */
-/*     } */

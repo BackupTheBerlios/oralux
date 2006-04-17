@@ -1,0 +1,185 @@
+mcvox in a nutshell
+
+* Contents
+1. Introduction
+1.1 Main panel
+1.2 Menu
+1.3 Configuration
+2. Tour
+2.1 Quiting mcvox 
+2.2 Browsing files
+2.3 Menu Bar
+2.3.1 Command Menu: Find File
+2.3.2 File Menu: Find File
+3. Brief function keys summary
+
+* 1. Introduction
+mcvox is a Midnight Commander derivative which can be rendered via an auditory
+user interface, a braille display or a tiny screen.
+
+Hopefully, mcvox will remain a temporary solution: if the screen
+readers can have more capabilities for rendering a complex 2D textual
+layout, the visually impaired user would directly run applications
+such as Midnight Commander. Otherwise, the dired mode under Emacs,
+already proposes an intuitive file browser. 
+
+** 1.1 Main panel
+
+mcvox proposes only one panel listing the current directory, one
+filename at a time. Arrow keys control navigation (next or previous
+filename), the insert key is used to select files and the Function
+Keys perform operations such as renaming, editing and copying files. 
+
+** 1.2 Menu
+
+The user interacts with mcvox using shortkeys or menu.
+
+The menu bar proposes simple actions, or more elaborated ones relying
+on forms.
+
+The forms are composed of regular fields such as input fields,
+checkboxes and submit buttons. 
+
+** 1.3 Configuration
+
+The mcvox configuration under Oralux is: 
+
++ Defaut editor: 'ne'
++ Pager: w3m
++ Convert PDF, doc or swx (OpenOffice) files to text files
++ play audio files (wav, mp3, ogg)
+
+* 2. Tour
+** 2.1 Quiting mcvox
+
+There are three steps:
+
++ Firstly press F10.
+A label is displayed: 
+"Do you really want to quit the Midnight Commander"
+
++ Then press the bottom arrow key to display the related action:
+Button: yes
+
++ press return to accept it.
+
+** 2.2 Browsing directories and files
+mcvox starts by displaying the list of directories and files in the current
+directory. The top line indicates the current directory path. Below,
+only one line is displayed, this is a filename (or directory name) of
+the current directory. The cursor is upon this line.
+
+At the very beginning, this line indicates the very first directory: 
+/..
+
+That is slash dot dot.
+
+The slash symbol indicates that a directory name is displayed.
+The dot dot symbol indicates the parent directory. For jumping to the
+parent directory, you would have to press the Enter key. 
+
+For displaying the first filename starting by the d letter, just press d.
+For displaying the first filename starting by the di letters, just press d
+and i; the i must be pressed as soon as possible after the d letter.
+
+Press the bottom arrow key to display the next filename, and the up
+arrow key for the previous filename.
+
+Whether a filename is displayed, press return to open it.
+
+To come back to the very first "dot dot" directory in the list, just
+press the Home key. The End key jumps to the last filename.
+
+** 2.3 Shortkeys
+
++ Press F7 for creating a directory. 
+The label displayed is:
+"enter directory name:"
+
+
+** 2.3 Menu Bar
++ Press the F9 key; the menu bar is displayed in the top line; the
+cursor is upon this line. For quitting the menu bar, press the Escape
+key twice; the cursor then come back to the list of directories and
+files.
+
+The menu bar is composed of four menus:
+Left, File, Command, Options.
+
+The left and right arrow jumps horizontally from menu to menu.
+The up and down arrow keys activate a menu and displays its
+actions.
+
+** 2.3.1 Command Menu: Find File
++ For example, press the right arrow key until the Command menu is
+displayed.
+
++ Then press the bottom arrow key: the first action is 
+"find file  escpae ?"
+The action "find file" is bounded to the Escape key + question mark
+character.
+
++ Press return to activate the "Find File" action.
+A label is displayed:
+"Filename:"
+
++ Press the bottom arrow key to display the related field:
+"Input:*"
+This line means:
+"Input:" : this is an input field.
+"*": the input field is already filled with the asterisk meta
+character.
+It means that any filename will be searched for.
+
++ Suppose you only want to look for the filename with the txt extension.
+Then enter in the input field:
+"*.txt"
+
++ Press now the bottom arrow key for jumping to the next field.
+A label is displayed:
+"Content:"
+
++ Press the bottom arrow key to display the related field:
+"Input:"
+
++ Suppose you only want to look for files which include the mcvox
+keyword.
+Enter in the input field:
+mcvox
+
++ Press the bottom arrow key to display the related field:
+The line displayed is
+"Checkbox: case sensitive"
+
+If you want to activate this checkbox, press the Space bar.
+
+Then an asterisk is added at the beginning of the line:
+"*Checkbox: case sensitive"
+
++ Press the bottom arrow key to display the related field:
+"*Button: ok"
+
+This is the OK button. The asterisk means that this button is the
+default choice.
+
++ Press Return and your search starts.
+The files found are listed, you can browse the list using the up and
+down arrow key, and press Enter to open a file or press the Escape key
+twice to quit the list.
+
+** 2.3.2 File Menu: 
+
+
+
+* 3. Brief function keys summary
+F1: Help
+F2: Menu
+F3: View
+F4: Edit
+F5: Copy
+F6: Rename or Move
+F7: Make directory
+F8: Delete
+F9: Menu bar
+F10: Quit
+

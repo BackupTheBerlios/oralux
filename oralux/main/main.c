@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // main.c
-// $Id: main.c,v 1.15 2006/03/25 22:11:55 gcasse Exp $
+// $Id: main.c,v 1.16 2006/04/17 09:11:42 gcasse Exp $
 // $Author: gcasse $
 // Description: entry point. 
-// $Date: 2006/03/25 22:11:55 $ |
-// $Revision: 1.15 $ |
+// $Date: 2006/04/17 09:11:42 $ |
+// $Revision: 1.16 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -31,6 +31,7 @@
 #include "getnchar.h"
 #include "menu.h"
 #include "i18n.h"
+#include "speakup.h"
 
 static char TheLine[BUFSIZE];
 
@@ -149,11 +150,13 @@ char* getConf(char* theParameter, char* theFilename)
 int main(int argc, char *argv[])
 {
   ENTER("main");
+  int aReturnedValue=0;
 
   if (argc!=3)
     {
       fprintf(stderr, "oralux current_tty state\n");
-      exit(1);
+      aReturnedValue=1;
+      goto quit_main;
     }
 
   char *portname = argv[1];
@@ -174,14 +177,12 @@ int main(int argc, char *argv[])
   else
     {
       fprintf(stderr, "Wrong state: %s\n", argv[2]);
-      exit(1);
+      aReturnedValue=1;
+      goto quit_main;
     }
   /*  setTTY(pf); */
 
   // Initializing the auditory interface
-  getcwd(TheLine, BUFSIZE);
-  strcat(TheLine,"/../audio");
-
   char* aStringMenuLanguage=getConf("ORALUXTTSLANG", "/etc/sysconfig/knoppix");
   enum language aEnumMenuLanguage=English;
   if (aStringMenuLanguage!=NULL)
@@ -279,7 +280,7 @@ int main(int argc, char *argv[])
 
   if (!aExternalSynthesizerIsForced)
     {
-      disableSpeakup();
+      stopSpeakup();
 
       switch (aState)
 	{
@@ -287,7 +288,7 @@ int main(int argc, char *argv[])
 
 	  // Default volume
 	  system("su - knoppix 'aumix -L' 1>/dev/null");
-	  initAUI(TheLine, aEnumMenuLanguage, portname);
+	  initAUI(ORALUX_RUNTIME_AUDIO, aEnumMenuLanguage, portname);
 
 	  // Running the introductory menu
       
@@ -302,7 +303,7 @@ int main(int argc, char *argv[])
 	  
 	case ORALUX_Stop:
 	  {
-	    initAUI(TheLine, aEnumMenuLanguage, portname);
+	    initAUI(ORALUX_RUNTIME_AUDIO, aEnumMenuLanguage, portname);
 
 	    //TBD	    saveconfig( &aSelectedInfo);
 
@@ -329,7 +330,8 @@ int main(int argc, char *argv[])
 		SHOW("StatusUndefined");
 		break;
 	      }
-	    return 0;
+	    aReturnedValue=0;
+	    goto quit_main;
 	  }
 	default:
 	  break;
@@ -374,13 +376,17 @@ int main(int argc, char *argv[])
 	}
       stopAUI(1);
 
-      // TBD: desktop shell 
-      if (aSelectedInfo.myTextToSpeech.myIdentifier==TTS_Flite)
-	{ // This is a workaround which avoids the "Process speaker not running" message in emacspeak
+      if (aSelectedInfo.myDesktop == Speakup)
+	{
+	  startSpeakup( aSelectedInfo.myTextToSpeech.myIdentifier);
+	}
+      else if (aSelectedInfo.myTextToSpeech.myIdentifier==TTS_Flite) 
+	{ // Avoids the "Process speaker not running" message in emacspeak
 	  system("eflite -f eflite_test.txt");
 	  sleep(2);
 	}
-
-      enableSpeakup( &aSelectedInfo);
     }
+
+ quit_main:
+  return aReturnedValue;
 }

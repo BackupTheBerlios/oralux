@@ -1,10 +1,10 @@
 #ifndef SPEAKUP
 #define SPEAKUP 1
 
-#include "menu.h"
+#include "textToSpeech.h"
 
-void disableSpeakup();
-void enableSpeakup();
+void startSpeakup( enum textToSpeech theTTS);
+void stopSpeakup();
 
 #endif
 
