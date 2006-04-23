@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // braille.c
-// $Id: braille.c,v 1.6 2006/04/17 22:38:19 gcasse Exp $
+// $Id: braille.c,v 1.7 2006/04/23 23:12:03 gcasse Exp $
 // $Author: gcasse $
 // Description: setting for BRLTTY
-// $Date: 2006/04/17 22:38:19 $ |
-// $Revision: 1.6 $ |
+// $Date: 2006/04/23 23:12:03 $ |
+// $Revision: 1.7 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -43,24 +43,30 @@ struct brailleItem
 // Warning: same order as the brailleIdentifier enumerate
 static struct brailleItem myDrivers[]=
   {
-    {"at", Albatross},
-    {"al", Alva},
-    {"bl", BrailleLite},
-    {"bn", BrailleNote},
-    {"cb", CombiBraille},
-    {"ec", EcoBraille},
-    {"eu", EuroBraille},
+     {"at", Albatross},
+     {"al", Alva},
+     {"bm", Baum},
+     {"bl", BrailleLite},
+     {"bn", BrailleNote},
+     //brlapi?
+     {"cb", CombiBraille},
+     {"ec", EcoBraille},
+     {"eu", EuroBraille},
     {"fs", FreedomScientific},
     {"ht", HandyTech},
+     //?     {"lb", libbraille},
     {"lt", LogText},
     {"mb", MultiBraille},
     {"md", Say_MDV},
     {"mn", MiniBraille},
+    {"mp", Mikropuhe},
     {"pm", Papenmeier},
     {"ts", Say_TSI},
-    {"va", Vario},
+     //tty tt
+     //    {"va", Vario},
     {"vd", VideoBraille},
-    {"vh", VarioHT},
+     //virtual vr
+     //    {"vh", VarioHT},
     {"vo", Voyager},
     {"vs", VisioBraille},
   };

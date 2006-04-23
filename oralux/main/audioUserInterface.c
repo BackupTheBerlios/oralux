@@ -1,11 +1,11 @@
 #undef DEBUG
 // ----------------------------------------------------------------------------
 // audiouserinterface.c
-// $Id: audioUserInterface.c,v 1.28 2006/04/17 22:38:19 gcasse Exp $
+// $Id: audioUserInterface.c,v 1.29 2006/04/23 23:12:03 gcasse Exp $
 // $Author: gcasse $
 // Description: Managing and playing the pre-recorded messages.
-// $Date: 2006/04/17 22:38:19 $ |
-// $Revision: 1.28 $ |
+// $Date: 2006/04/23 23:12:03 $ |
+// $Revision: 1.29 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 // September 2003: 
 // * German translations by Guenther Harrasser.
@@ -602,11 +602,11 @@ char * TheMessages[][5]={
    "Telesensory Systems Inc.",
    "Telesensory Systems Inc.",
   },
-  {"Vario, R B T (emulation 1)",
-   "Vario, R B T (emulation 1)",
-   "Vario, R B T (emulation 1)",
-   "Vario, R B T (emulation 1)",
-   "Vario, R B T (emulation um)",
+  {"Baum",
+   "Baum",
+   "Baum",
+   "Baum",
+   "Baum",
   },
   {"VideoBraille",
    "Vidéo Braille",
@@ -614,11 +614,11 @@ char * TheMessages[][5]={
    "VideoBraille",
    "VideoBraille",
   },
-  {"Vario, R B T (emulation 2)",
-   "Vario, R B T (emulation 2)",
-   "Vario, R B T (emulation 2)",
-   "Vario, R B T (emulation 2)",
-   "Vario, R B T (emulation dois)",
+  {"Mikropuhe",
+   "Mikropuhe",
+   "Mikropuhe",
+   "Mikropuhe",
+   "Mikropuhe",
   },
   {"Voyager",
    "Voyageur",
@@ -894,7 +894,7 @@ char * TheMessages[][5]={
    "Qual é o seu sintetizador?",
   },
 
-  {"Your **voice** synthesizer is supposed to be:",
+  {"Your voice synthesizer is supposed to be:",
    "Votre synthèse vocale est supposé de type :",
    "Ihr Sprachsynthesizer sollte sein:",
    "Se supone que tu sintetizador es:",
@@ -987,11 +987,11 @@ char * TheMessages[][5]={
    "Deseja este menu em Russo?",
   },
 
-  {"zero point seven point 5", // "[:pu all] 0.6 beta", 
-   "zéro point sept point 5",
-   "0 punkt 7 punkt 5",
-   "0 punto 7 punto 5",
-   "zero punto sete punto cinco", // seis, sete, oito, nove,...
+  {"zero point seven point 6",
+   "zéro point sept point 6",
+   "0 punkt 7 punkt 6",
+   "0 punto 7 punto 6",
+   "zero punto sete punto seis", // seis, sete, oito, nove,...
   },
 
   {"Do you want to change the keyboard features?",

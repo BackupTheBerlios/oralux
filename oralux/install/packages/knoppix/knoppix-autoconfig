@@ -580,11 +580,19 @@ cp "/usr/share/zoneinfo/$TZ" /etc/localtime
 
 # Delete obsolete links and files before starting autoconfig
 if ! checkbootparam "nohwsetup"; then
-rm -f /dev/cdrom* /dev/cdwriter* /dev/mouse* /dev/modem* /dev/scanner* \
-      /etc/sysconfig/i18n /etc/sysconfig/keyboard /etc/sysconfig/knoppix \
-      /etc/environment \
-      2>/dev/null
+    rm -f /dev/cdrom* /dev/cdwriter* /dev/mouse* /dev/modem* /dev/scanner* \
+	/etc/environment \
+	2>/dev/null
+
+    if [ -z "$INSTALLED" ]; then
+	rm -f /etc/sysconfig/i18n /etc/sysconfig/keyboard \
+	    /etc/sysconfig/knoppix \
+	    2>/dev/null
+    fi
+
 fi
+
+if [ -z "$INSTALLED" ]; then
 
 # Write KNOPPIX config files for other scripts to parse
 # Standard variables/files
@@ -615,6 +623,7 @@ echo "KDEKEYBOARD=\"$KDEKEYBOARD\""   >> /etc/sysconfig/knoppix
 echo "KDEKEYBOARDS=\"$KDEKEYBOARDS\"" >> /etc/sysconfig/knoppix
 echo "DESKTOP=\"$DESKTOP\""           >> /etc/sysconfig/knoppix
 echo "TZ=\"$TZ\""                     >> /etc/sysconfig/knoppix
+fi
 
 # OpenOffice & others
 echo "LANG=\"$LANG\""                  > /etc/environment

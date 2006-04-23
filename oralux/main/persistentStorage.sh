@@ -1,11 +1,11 @@
 #!/bin/bash
 # ----------------------------------------------------------------------------
 # persistentStorage.sh
-# $Id: persistentStorage.sh,v 1.1 2006/02/13 20:18:48 gcasse Exp $
+# $Id: persistentStorage.sh,v 1.2 2006/04/23 23:12:03 gcasse Exp $
 # $Author: gcasse $
 # Description: Menu for the persistent storages
-# $Date: 2006/02/13 20:18:48 $ |
-# $Revision: 1.1 $ |
+# $Date: 2006/04/23 23:12:03 $ |
+# $Revision: 1.2 $ |
 # Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -47,10 +47,12 @@ case "$LANGUAGE" in
     fr*)
 	TextSaveconfig="Voulez-vous juste sauvegarder quelques fichiers : configuration, etc..."
 	TextImage="Voulez-vous stocker une image de votre système (3 Méga octets de libre, au minimum)."
+	TextQuit="Quitter"
 	;;
     *)
 	TextSaveconfig="Do you want to save only a few files: configuration, etc..."
 	TextImage="Do you want to save an image of your system (at least 3 Mega Bytes free)."
+	TextQuit="Quit"
 	;;
 esac
 

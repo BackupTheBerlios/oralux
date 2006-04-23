@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // getvoice.c
-// $Id: getvoice.c,v 1.9 2006/04/17 09:11:42 gcasse Exp $
+// $Id: getvoice.c,v 1.10 2006/04/23 23:12:03 gcasse Exp $
 // $Author: gcasse $
 // Description: Used at installation time to build the "voices" used by oralux
-// $Date: 2006/04/17 09:11:42 $ |
-// $Revision: 1.9 $ |
+// $Date: 2006/04/23 23:12:03 $ |
+// $Revision: 1.10 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -117,10 +117,10 @@ static char* TheLanguageId[]={
 
 // To have similar rate, the values seem to be different
 static char* TheDefaultRate[]={
-  "130",
-  "160",
-  "160",
-  "160",
+  "200",
+  "200", // "160",
+  "200",
+  "200",
   "", // br
   "", // ru
   "", // all
@@ -419,6 +419,7 @@ int main(int argc, char *argv[])
     {
       for (aLanguage=0; aLanguage < aNumberOfLanguages-1; aLanguage++)
 	{
+	  TheCurrentRate=TheDefaultRate[aLanguage];
 	  buildAudioFiles(aLanguage, isCharacter, aUniqueFileToBuild, aValue);
 	}
     }

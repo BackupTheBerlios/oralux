@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # brltty.sh
-# $Id: brltty.sh,v 1.9 2006/04/17 22:38:19 gcasse Exp $
+# $Id: brltty.sh,v 1.10 2006/04/23 23:14:04 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing BRLTTY
-# $Date: 2006/04/17 22:38:19 $ |
-# $Revision: 1.9 $ |
+# $Date: 2006/04/23 23:14:04 $ |
+# $Revision: 1.10 $ |
 # Copyright (C) 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -88,6 +88,10 @@ Copy2Oralux()
     rm -rf brl*
     cp $ARCH_BRLTTY .
     cp $ARCHDIR/$BRLAPI_RPM .
+
+    cp $INSTALL_PACKAGES/brltty/brltty $BUILD/etc/init.d
+    rm $BUILD/sbin/brltty*
+    rm $BUILD/bin/brltty*
 
     chroot $BUILD  bash -c "apt-get remove --purge brltty libbrlapi libbrlapi1;\
     rm -rf /etc/brltty;\

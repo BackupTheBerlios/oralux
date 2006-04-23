@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # freebsoft.sh
-# $Id: freebsoft.sh,v 1.1 2006/04/17 09:11:42 gcasse Exp $
+# $Id: freebsoft.sh,v 1.2 2006/04/23 23:14:04 gcasse Exp $
 # $Author: gcasse $
 # Description: packages from the Freebsoft project
-# $Date: 2006/04/17 09:11:42 $ |
-# $Revision: 1.1 $ |
+# $Date: 2006/04/23 23:14:04 $ |
+# $Revision: 1.2 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -26,6 +26,7 @@
 source ../oralux.conf
 
 #export LIST="recode libspeechd-dev speech-dispatcher"
+# automake1.8
 export LIST="libspeechd-dev speech-dispatcher"
 export SPEECHD_UP="speechd-up-0.3" 
 export ARCH_SPEECHD_UP=$ARCHDIR/$SPEECHD_UP.tar.gz 
