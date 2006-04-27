@@ -1,72 +1,37 @@
-The requirements:
-=================
+27 April 2006 Initial release, Gilles Casse <gcasse@oralux.org>
 
-You will need these components to compile and run speechd-up: 
- - Speech Dispatcher (http://www.freebsoft.org)
- - Speakup (http://www.linux-speakup.org)
- - texinfo (you can live without it if you use just `make speechd-up', but
-	you won't have the documentation installed)
+* Requirements
 
-If you are building from CVS, you also need these:
- - automake 1.7+, autoconf, pkg-config and libtool
+Firstly, install Multispeech by Igor B. Poretsky.
 
-We recommend also installing these packages:
- - festival (http://www.cstr.ed.ac.uk/projects/festival/)
+See:
+ftp://ftp.rakurs.spb.ru/pub/Goga/projects
 
-Building SpeechD-Up:
-===========================
+* Installing multispeech-up
 
-Please read the file BUGS first so that you are aware of the possible
-issues.
+Proceed like ordinary:
 
-To compile the SpeechD-Up, simply extract the distribution archive and
-change to speechd-<version> directory and run "make all" command as
-follows:
-
- $ tar -xzvf speechd-up-@VERSION.tar.gz
- $ cd speechd-up-@VERSION
-
-Only *if you are building from CVS*, you must run buid.sh
-
- $ ./build.sh
-
-If build.sh fails, please triple-check you really have the tools listed above
-in their specified versions. This is the most common source of problems. Avoid
-them by using the distribution tarball, which doesn't need this step, whenever
-you can.
-
-Proceed like ordinary
-
- $ ./configure
- $ make all
+./configure
+make all
 
 If everything worked ok, you can install all the parts to the default
 path by running (as root):
 
- $ make install
+make install
 
-Making SpeakUp work with SpeechdUp and software synthesis
-=========================================================
+* Making SpeakUp work with multispeech-up and software synthesis
 
-Please see the info documentation you obtained with SpeechD-Up for this
-(info speechd-up) or go to http://www.freebsoft.org/doc/speechd-up .
+run as root for French support:
 
-Testing
-=======
+export LANGUAGE=fr
+multispeech-up-ctl start
 
-Next try to run Speechd-Up as a standalone application
-in the probe mode to see if everything is ok:
+Current known languages:
 
- $ speechd-up --run-single --probe
+de: German
+en (or us) : English
+es: Spanish
+fr : French
+pt_BR : Brazilian Portuguese
+ru : Russian
 
-if you hear a message, then SpeechD-Up itself is working correctly
-and you can try to connect it to Speakup
-
- $ speechd-up --run-single
-
-Later, you can execute it without the --run-single parameter, preferably from a
-/etc/init.d script.
-
-If something doesn't work, please first look into the file BUGS in this diretory
-and then contact us on speechd@lists.freebsoft.org or send a bug report to
-speechd@bugs.freebsoft.org. 
