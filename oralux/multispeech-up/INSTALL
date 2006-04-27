@@ -2,10 +2,14 @@
 
 * Requirements
 
-Firstly, install Multispeech by Igor B. Poretsky.
+** Firstly, install Multispeech by Igor B. Poretsky.
 
 See:
 ftp://ftp.rakurs.spb.ru/pub/Goga/projects
+
+** Install too libspeechd-dev.
+Under Debain:
+apt-get install libspeechd-dev
 
 * Installing multispeech-up
 
