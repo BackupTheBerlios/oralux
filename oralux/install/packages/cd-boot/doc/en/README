@@ -1,0 +1,15 @@
+Notes about using the prepared boot floppy for booting Oralux.
+=======
+
+To boot a computer from the Oralux CD, you must insert the prepared boot
+floppy into floppy drive, the Oralux CD - into CDROM drive and restart
+your computer.
+If you don't hear, that the computer is reading the CD, after a long
+time (more than 30 seconds), since the floppy was read, try to restart
+your computer again.
+
+
+Users, which have more than one CDROM drive, must insert the Oralux CD
+into that drive, which is the first connected on IDE bus. If you don't
+understand what it is all about, try to investigate which drive is
+needed by trying each drive in order.

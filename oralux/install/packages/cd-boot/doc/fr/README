@@ -1,0 +1,15 @@
+Notes concernant la disquette de lancement du CD Oralux.
+=======
+
+Pour démarrer le CD Oralux avec la disquette de boot, introduisez svp
+cette disquette dans le lecteur de disquette, puis le CD Oralux dans
+le lecteur de CD, ensuite redémarrer votre ordinateur.
+
+Une fois que la disquette a été lue, si vous n'entendez pas
+l'ordinateur lire le CD (apres plus de trente secondes), essayez de
+redémarrer votre ordinateur. 
+
+Les utilisateurs ayant plus d'un lecteur de CDROM doivent installer le
+CD Oralux dans celui qui est le premier sur le bus IDE. Si vous n'avez
+pas cette information, Il est toujours possible sinon de deviner quel
+est ce lecteur en essayant de démarrer successivement sur chaque lecteur.
