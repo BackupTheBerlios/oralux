@@ -1,0 +1,1647 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.4  (Linux)">
+	<META NAME="CREATED" CONTENT="20050815;17454700">
+	<META NAME="CHANGED" CONTENT="20050815;18020100">
+	<STYLE>
+	<!--
+		@page { size: 21.59cm 27.94cm; margin: 2cm }
+		P { margin-bottom: 0.21cm }
+		H2 { margin-bottom: 0.21cm; direction: ltr; color: #000000; widows: 0; orphans: 0 }
+		H2.western { font-family: "Nimbus Sans L"; font-size: 20pt; so-language: en-US; font-style: normal }
+		H2.cjk { font-family: "Mincho"; font-size: 20pt; font-style: normal }
+		H2.ctl { font-family: "Tahoma", "Lucidasans"; font-size: 14pt; font-style: italic }
+		P.text-body-indent-western { margin-left: 0.5cm; font-style: italic }
+		P.text-body-indent-cjk { margin-left: 0.5cm; font-style: italic }
+		P.text-body-indent-ctl { margin-left: 0.5cm }
+		H3 { margin-bottom: 0.21cm; direction: ltr; color: #000000; widows: 0; orphans: 0 }
+		H3.western { font-family: "Nimbus Sans L"; font-size: 16pt; so-language: en-US }
+		H3.cjk { font-family: "Mincho"; font-size: 16pt }
+		H3.ctl { font-family: "Tahoma", "Lucidasans" }
+		H4 { margin-bottom: 0.21cm; direction: ltr; color: #000000; widows: 0; orphans: 0 }
+		H4.western { font-family: "Nimbus Sans L"; font-size: 14pt; so-language: en-US; font-style: italic }
+		H4.cjk { font-family: "Mincho"; font-size: 14pt; font-style: italic }
+		H4.ctl { font-family: "Tahoma", "Lucidasans"; font-style: italic }
+	-->
+	</STYLE>
+</HEAD>
+<BODY LANG="en-US" DIR="LTR">
+<H2 CLASS="western" ALIGN=CENTER>HOWTO <BR>Using Oralux in Indonesian
+(Bahasa Indonesia)</H2>
+<P ALIGN=CENTER><BR><BR>
+</P>
+<P ALIGN=CENTER>by</P>
+<P ALIGN=CENTER><BR><BR>
+</P>
+<P ALIGN=CENTER>Rusmanto Maryanto</P>
+<P ALIGN=CENTER>&lt;rus at infolinux.co.id&gt; 
+</P>
+<P ALIGN=CENTER><SPAN LANG="en-US">&lt;rus at nurulfikri.com&gt;</SPAN></P>
+<P ALIGN=CENTER><BR><BR>
+</P>
+<P ALIGN=CENTER>Release 0.6</P>
+<P ALIGN=CENTER><SPAN LANG="en-US">August 2005</SPAN></P>
+<DIV ID="Table of Contents1" DIR="LTR" STYLE="background: transparent">
+	<DIV ID="Table of Contents1_Head" DIR="LTR">
+		<P STYLE="margin-top: 0.42cm; page-break-before: always; page-break-after: avoid">
+		<FONT FACE="Nimbus Sans L"><FONT SIZE=4 STYLE="font-size: 16pt"><B>Table
+		of Contents</B></FONT></FONT></P>
+	</DIV>
+	<P STYLE="margin-left: 0.5cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L"><A HREF="#Bab Satu: Pendahuluan|outline">Bab
+	Satu: Pendahuluan</A></FONT></P>
+	<P STYLE="margin-left: 1cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">1.
+	Apa itu Linux, Free Software, dan Open Source?</FONT></P>
+	<P STYLE="margin-left: 1cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">2.
+	Apa itu Distro Linux dan mana yang cocok buat Anda?</FONT></P>
+	<P STYLE="margin-left: 1cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">3.
+	Apa itu Oralux</FONT></P>
+	<P STYLE="margin-left: 1cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">4.
+	Apa saja program yang tersedia dalam CD Oralux?</FONT></P>
+	<P STYLE="margin-left: 1.5cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">a.
+	Emacspeak</FONT></P>
+	<P STYLE="margin-left: 1.5cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">b.
+	YASR (Yet Another Screen Reader)</FONT></P>
+	<P STYLE="margin-left: 0.5cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L"><A HREF="#Bab Dua: Booting dan Konfigurasi Oralux|outline">Bab
+	Dua: Booting dan Konfigurasi Oralux</A></FONT></P>
+	<P STYLE="margin-left: 1cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">1.
+	Cara mengatur BIOS</FONT></P>
+	<P STYLE="margin-left: 1cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">2.
+	Boot dari CDROM</FONT></P>
+	<P STYLE="margin-left: 1.5cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">a.
+	Masukkan CD Oralux. </FONT>
+	</P>
+	<P STYLE="margin-left: 1.5cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">b.
+	Tunggu antara satu hingga beberapa menit. </FONT>
+	</P>
+	<P STYLE="margin-left: 1.5cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">c.
+	Masuk menu suara</FONT></P>
+	<P STYLE="margin-left: 1.5cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">d.
+	Tidak ada suara</FONT></P>
+	<P STYLE="margin-left: 1.5cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">e.
+	Opsi-opsi booting</FONT></P>
+	<P STYLE="margin-left: 1.5cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">f.
+	Berhasil?</FONT></P>
+	<P STYLE="margin-left: 1cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">3.
+	Boot dari Disket dan Harddisk</FONT></P>
+	<P STYLE="margin-left: 1.5cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">a.
+	Membuat Bootdisk</FONT></P>
+	<P STYLE="margin-left: 1.5cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">b.
+	Copy CD ke harddisk</FONT></P>
+	<P STYLE="margin-left: 1cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">4.
+	Konfigurasi Oralux</FONT></P>
+	<P STYLE="margin-left: 1.5cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">a.
+	Preferensi</FONT></P>
+	<P STYLE="margin-left: 1.5cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">b.
+	Volume Suara</FONT></P>
+	<P STYLE="margin-left: 1.5cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">c.
+	Bahasa Menu</FONT></P>
+	<P STYLE="margin-left: 1.5cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">d.
+	Jenis Keyboard</FONT></P>
+	<P STYLE="margin-left: 1.5cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">e.
+	Display Braille</FONT></P>
+	<P STYLE="margin-left: 1.5cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">f.
+	Desktop Emacspeak atau YASR</FONT></P>
+	<P STYLE="margin-left: 1.5cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">g.
+	Synthesizer</FONT></P>
+	<P STYLE="margin-left: 0.5cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L"><A HREF="#Bab Tiga: Desktop YASR dan Perintah-perintah Linux|outline">Bab
+	Tiga: Desktop YASR dan Perintah-perintah Linux</A></FONT></P>
+	<P STYLE="margin-left: 1cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">1.
+	YASR documentation</FONT></P>
+	<P STYLE="margin-left: 1.5cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">a.
+	Mengaktifkan dan mematikan YASR</FONT></P>
+	<P STYLE="margin-left: 1.5cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">b.
+	Pindah antar mode</FONT></P>
+	<P STYLE="margin-left: 1.5cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">c.
+	Contoh perintah mode review</FONT></P>
+	<P STYLE="margin-left: 1.5cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">d.
+	Contoh perintah mode standar</FONT></P>
+	<P STYLE="margin-left: 1.5cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">e.
+	Keluar dari YASR documentation</FONT></P>
+	<P STYLE="margin-left: 1cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">2.
+	N E, the nice editor</FONT></P>
+	<P STYLE="margin-left: 1.5cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">a.
+	File dan direktori di Linux</FONT></P>
+	<P STYLE="margin-left: 1.5cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">b.
+	Membuat file baru (New Document)</FONT></P>
+	<P STYLE="margin-left: 1.5cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">c.
+	Menyimpan file (Save)</FONT></P>
+	<P STYLE="margin-left: 1.5cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">d.
+	Membuka file (Open)</FONT></P>
+	<P STYLE="margin-left: 1.5cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">e.
+	Menyimpan sebagai file lain (Save as) di direktori lain</FONT></P>
+	<P STYLE="margin-left: 1cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">3.
+	Links, web browser with javascript capabilities</FONT></P>
+	<P STYLE="margin-left: 1.5cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">a.
+	Membaca file htm atau html</FONT></P>
+	<P STYLE="margin-left: 1.5cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">b.
+	Mengakses web dan webmail</FONT></P>
+	<P STYLE="margin-left: 1cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">4.
+	bash, the shell terminal </FONT>
+	</P>
+	<P STYLE="margin-left: 1.5cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">a.
+	Perintah-perintah dasar</FONT></P>
+	<P STYLE="margin-left: 1.5cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">b.
+	Mengenal user di Linux</FONT></P>
+	<P STYLE="margin-left: 1.5cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">c.
+	Bekerja sebagai admin</FONT></P>
+	<P STYLE="margin-left: 1.5cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">d.
+	Menyimpan direktori kerja (/home/knoppix) dan file-file konfigurasi</FONT></P>
+	<P STYLE="margin-left: 1cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">5.
+	Calculator </FONT>
+	</P>
+	<P STYLE="margin-left: 1cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">6.
+	Quit YASR</FONT></P>
+	<P STYLE="margin-left: 0.5cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L"><A HREF="#Bab Empat: Desktop Emacspeak|outline">Bab
+	Empat: Desktop Emacspeak</A></FONT></P>
+	<P STYLE="margin-left: 1cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">1.
+	Editor teks emacs</FONT></P>
+	<P STYLE="margin-left: 1.5cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">a.
+	Kecepatan baca emacspeak</FONT></P>
+	<P STYLE="margin-left: 1.5cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">b.
+	Shortcut dan cursor di emacs</FONT></P>
+	<P STYLE="margin-left: 1.5cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">c.
+	Meyimpan buffer atau file ke harddisk</FONT></P>
+	<P STYLE="margin-left: 1.5cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">d.
+	Berpindah antar buffer atau multi window</FONT></P>
+	<P STYLE="margin-left: 1.5cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">e.
+	Copy, cut, paste, search</FONT></P>
+	<P STYLE="margin-left: 1cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">2.
+	Browser web emacs-w3m</FONT></P>
+	<P STYLE="margin-left: 1cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">3.
+	Email client gnus</FONT></P>
+	<P STYLE="margin-left: 1cm; margin-bottom: 0cm"><FONT FACE="Nimbus Roman No9 L">4.
+	Shell terminal</FONT></P>
+</DIV>
+<H2 CLASS="western"><BR><BR>
+</H2>
+<H2 CLASS="western" STYLE="page-break-before: always"><A NAME="Bab Satu: Pendahuluan|outline"></A>
+Bab Satu: Pendahuluan</H2>
+<H2 CLASS="western"><BR><BR>
+</H2>
+<P CLASS="text-body-indent-western">Tujuan:</P>
+<P CLASS="text-body-indent-western">Setelah mengikuti materi
+pendahuluan ini, Anda diharapkan memahami sistem operasi Linux,
+konsep free software, open source, jenis-jenis distro Linux, dan
+Oralux.</P>
+<P><BR><BR>
+</P>
+<H3 CLASS="western">1. Apa itu Linux, Free Software, dan Open Source?</H3>
+<P><BR><BR>
+</P>
+<P>Linux adalah nama kernel atau inti dari sistem operasi yang dibuat
+pertama kali oleh Linus Torvalds, September 1991. Aplikasi Linux saat
+ini sudah mencakup hampir semua program untuk pekerjaan sehari-hari,
+seperti office, Internet, dan multimedia. Linux sudah sangat terkenal
+sebagai sistem operasi di jaringan, seperti server web dan email di
+Internet.</P>
+<P><BR><BR>
+</P>
+<P>Meskipun pada awalnya Linux hanya sebuah kernel, saat ini nama
+Linux sudah melekat ke dalam sistem operasi yang lengkap. Kalau nama
+Linux disebut, biasanya langsung dikaitkan dengan program komputer
+mulai dari shell atau prompt, editor teks, bahasa pemrograman,
+termasuk di dalamnya desktop atau GUI atau Graphical User Interface
+yang juga disebut X Window. 
+</P>
+<P><BR><BR>
+</P>
+<P>Lisensi Linux adalah free software atau open source software.
+artinya Linux bebas digunakan dan digandakan untuk apa saja, tanpa
+harus membayar lisensi kepada pembuatnya. Nama teknis lisensi ini
+adalah GNU GPL. GNU singkatan dari GNU is Not Unix (www.gnu.org),
+yang dikeluarkan oleh yayasan free software. GPL singkatan dari
+General Public License.</P>
+<P><BR><BR>
+</P>
+<P>Free software juga berarti perangkat lunak atau program yang bebas
+dipelajari, dikembangkan, dan disebarluaskan. Siapa pun dapat
+menyebarluaskan Linux, untuk siapa saja dan untuk keperluan apa saja.
+Free software tidak harus berarti gratis, karena tidak ada larangan
+untuk menjual.</P>
+<P><BR><BR>
+</P>
+<P>Open source punya makna hampir sama dengan free software, yaitu
+kode program tersedia atau terbuka, sehingga siapa pun dapat
+mempelajari, mengubah, dan menyebarluaskan kembali hasil perubahannya
+itu. Jenis lisensi open source ada banyak, tidak hanya GPL, seperti
+yang disebut pada www.opensource.org.</P>
+<P><BR><BR>
+</P>
+<H3 CLASS="western">2. Apa itu Distro Linux dan mana yang cocok buat
+Anda?</H3>
+<P><BR><BR>
+</P>
+<P>Berbeda dengan sistem operasi lain yang hanya dimiliki oleh satu
+atau beberapa orang/perusahaan, Linux bisa dimiliki oleh siapa saja,
+organisasi/perusahaan apa saja, dan negara mana saja. 
+</P>
+<P><BR><BR>
+</P>
+<P>Akibat dari lisensi yang terbuka (free dan open source), Linux
+cepat berkembang karena dibangun oleh banyak pemrogram komputer,
+penerjemah, penguji-coba, pembuat dokumen, dan dukungan lainnya dari
+seluruh dunia. 
+</P>
+<P><BR><BR>
+</P>
+<P>Akibat lain dari lisensi free software, Linux digabung dengan
+progam-program lain yang sebagian besar juga free software menjadi
+sebuah distribusi atau distro Linux. Saat ini ada ratusan jenis
+distro, lihat di www.distrowatch.com, antara lain yang terkenal
+adalah Mandriva atau Mandrake (www.mandrakelinux.com), Novell SUSE
+(www.novell.com), Red Hat atau Fedora (www.redhat.com), BlankOn
+(www.blankonlinux.or.id), Debian (www.debian.org), Knoppix
+(www.knoppix.net), dan Oralux (www.oralux.org).</P>
+<P><BR><BR>
+</P>
+<P>Intinya, semua distro itu hampir sama, yaitu bisa dijalankan
+dengan mode teks, dan bisa ditambahkan program grafis untuk bekerja
+dengan mode grafis atau GUI. Berbeda dengan Windows yang hanya
+berfungsi penuh jika ada GUI. Yang membedakan distro Linux satu
+dengan yang lain adalah cara instalasi dan administrasi. Contohnya,
+Oralux adalah distro Linux yang dapat langsung digunakan tanpa harus
+diinstal. Contoh lain, Debian adalah distro yang menjadi dasar
+pembuatan Oralux. SUSE, Fedora, BlankOn, dan Debian harus diinstal ke
+harddisk sebelum bisa digunakan, dan sulit bagi pemula, terutama tuna
+netra. 
+</P>
+<P><BR><BR>
+</P>
+<P>Karena Linux dapat berjalan cukup dengan mode teks, kebutuhan
+hardware untuk menjalankan Linux sangat fleksibel. Kalau Linux
+berfungsi sebagai server, maka tidak harus menjalankan GUI. Demikian
+pula, Linux untuk mengedit teks, membaca email, mengakses web dalam
+format teks, memutar lagu CD, MP3, dan lain-lain, cukup dengan mode
+teks. 
+</P>
+<P><BR><BR>
+</P>
+<P>Distro Linux yang akan kita pelajari dalam buku ini adalah Oralux.
+Oralux dipilih karena mudah digunakan oleh pemakai komputer yang
+tidak harus tahu cara instalasi. Misalnya, Oralux cocok untuk Anda
+yang tunanetra atau yang tidak memungkinkan untuk menginstal Linux.</P>
+<P><BR><BR>
+</P>
+<P>Saat membaca buku ini, khususnya mulai BAB DUA sampai dengan BAB
+EMPAT, sebaiknya Anda sedang di depan komputer yang menjalankan
+Oralux. 
+</P>
+<P><BR><BR>
+</P>
+<H3 CLASS="western">3. Apa itu Oralux?</H3>
+<P><BR><BR>
+</P>
+<P>Oralux adalah sistem operasi Linux yang dilengkapi beberapa
+program screen reader (pembaca layar), dan program komputer lainnya
+dalam modus teks .</P>
+<P><BR><BR>
+</P>
+<P>Aplikasi Oralux yang utama adalah untuk para tunanetra yang ingin
+menggunakan komputer, belajar sistem operasi Linux, membuat tulisan
+atau mengedit teks dengan Linux, mengakses Internet, belajar jaringan
+komputer, dan lain-lain. 
+</P>
+<P><BR><BR>
+</P>
+<P>Oralux mendukung beberapa bahasa, antara lain Inggris, Jerman,
+Perancis, dan Spanyol. Sayangnya, Oralux belum menyediakan screen
+reader untuk Bahasa Indonesia. 
+</P>
+<P><BR><BR>
+</P>
+<P>Oralux juga mendukung beberapa jenis keyboard, misalnya Jerman,
+Spanyol, Swiss, Italia, dan Turki.</P>
+<P><BR><BR>
+</P>
+<P>Oralux dapat dijalankan langsung dari CDROM tanpa harus diinstall
+ke harddisk. 
+</P>
+<P><BR><BR>
+</P>
+<P>Lisensi Oralux sama dengan lisensi Linux, yaitu free software atau
+lisensi untuk publik yang umum (General Public License disingkat
+GPL). 
+</P>
+<P><BR><BR>
+</P>
+<H3 CLASS="western">4. Apa saja program yang tersedia dalam CD
+Oralux?</H3>
+<P><BR><BR>
+</P>
+<P>Sebagai sistem operasi, Oralux dapat menjadi penghubung antara
+manusia dengan komputer. Agar dapat digunakan oleh tunanetra, Oralux
+menyediakan dua pilihan program atau aplikasi desktop screen reader,
+yaitu Emacspeak dan YASR. 
+</P>
+<P><BR><BR>
+</P>
+<H4 CLASS="western">a. Emacspeak</H4>
+<P><BR><BR>
+</P>
+<P>Emacspeak adalah screen reader berbasis editor teks Emacs.
+Artinya, Emacspeak membacakan apa saja yang ada di layar komputer
+yang sedang menjalankan Emacs dan program pengubah teks ke suara
+(screen to speech). 
+</P>
+<P><BR><BR>
+</P>
+<P>Emacs awalnya hanya editor teks. Saat ini Emacs tidak hanya editor
+teks, karena dapat digabung dengan program lain, misalnya untuk
+mengakses email, web browser, database sederhana, kalkulator, alat
+bantu pemograman komputer, shell atau terminal atau konsol atau
+prompt untuk memberi perintah dengan nama bash (Bourne Again Shell),
+dan lain-lain.</P>
+<P><BR><BR>
+</P>
+<P>Emacs dapat disebut sebagai aplikasi desktop berbasis teks.
+Aplikasi desktop artinya lingkungan di layar yang menjalankan
+beberapa program. Fungsinya mirip desktop berbasis grafis seperti
+Microsoft Windows, Macintosh, Linux plus X Window dan KDE, atau Linux
+plus X Window dan GNOME, dan lain-lain. 
+</P>
+<P><BR><BR>
+</P>
+<H4 CLASS="western">b. YASR (Yet Another Screen Reader)</H4>
+<P><BR><BR>
+</P>
+<P>YASR adalah screen reader portabel yang sedang terus dikembangkan.
+Program yang disertakan dalam YASR di CD Oralux ini adalah editor
+teks N E (Nice Editor), browser web Links, kalkulator, dan shell
+bash. 
+</P>
+<P><BR><BR>
+</P>
+<P>Saat ini, YASR memiliki dua set keymap, atau dua mode, yaitu
+review mode (atau mode mereview) dan standard mode (atau mode
+standar). Saat pertama kali Anda menjalankan YASR ini, Anda berada
+pada mode standar. 
+</P>
+<P><BR><BR>
+</P>
+<H2 CLASS="western" STYLE="page-break-before: always"><A NAME="Bab Dua: Booting dan Konfigurasi Oralux|outline"></A>
+Bab Dua: Booting dan Konfigurasi Oralux</H2>
+<P CLASS="text-body-indent-western"><BR><BR>
+</P>
+<P CLASS="text-body-indent-western">Tujuan:</P>
+<P CLASS="text-body-indent-western">Setelah mengikuti materi bab dua
+ini, Anda diharapkan mampu melakukan booting komputer dengan CD
+Oralux, memilih desktop Emacspeak atau YASR, dan mulai bekerja di
+Linux.</P>
+<P CLASS="text-body-indent-western"><BR><BR>
+</P>
+<P>CD Oralux dapat dijalankan dengan membooting komputer melalui
+drive CD atau DVD ROM. Jika komputer Anda boot langsung ke harddisk,
+atau belum dapat booting dari CD/DVD ROM, aturlah BIOS komputer agar
+urutan booting pertama adalah dari CD/DVD ROM.</P>
+<P><BR><BR>
+</P>
+<H3 CLASS="western">1. Cara mengatur BIOS</H3>
+<P><BR><BR>
+</P>
+<P>Pada saat komputer dinyalakan, tekan tombol Del atau F2, atau
+tombol yang lain sesuai petunjuk pembuat/penjual komputer. Setelah
+masuk ke BIOS, tekan kursor ke kanan-kiri dan atas-bawah untuk
+menemukan menu urutan boot di BIOS ini.</P>
+<P><BR><BR>
+</P>
+<P>Simpan hasil pengubahan itu dengan menekan ESC dan F10, lalu tekan
+Y dan Enter, atau tombol-tombol lain sesuai petunjuk pembuat
+komputer.</P>
+<P><BR><BR>
+</P>
+<P>Jika Anda kesulitan mengubah urutan boot komputer melalui BIOS
+ini, Anda dapat meminta bantuan teknisi atau penjual komputer,
+pembimbing/guru, atau teman di sekitar Anda. 
+</P>
+<P><BR><BR>
+</P>
+<H3 CLASS="western">2. Boot dari CDROM</H3>
+<P><BR><BR>
+</P>
+<H4 CLASS="western">a. Masukkan CD Oralux. 
+</H4>
+<P>Lalu reset komputer dan tekan Enter. Jika Anda tidak menekan
+Enter, Oralux akan menunggu 30 detik. 
+</P>
+<P><BR><BR>
+</P>
+<H4 CLASS="western">b. Tunggu antara satu hingga beberapa menit. 
+</H4>
+<P>Lama proses boot ini tergantung kecepatan komputer, kecepatan
+drive CD, dan mutu CD. 
+</P>
+<P><BR><BR>
+</P>
+<H4 CLASS="western">c. Masuk menu suara.</H4>
+<P>Jika komputer berhasil diboot dengan CD Oralux, maka akan
+terdengar bunyi kokok ayam jantan, lambang Oralux, sebagai tanda
+Oralux telah bekerja dengan kartu suara komputer. 
+</P>
+<P><BR><BR>
+</P>
+<H4 CLASS="western">d. Tidak ada suara.</H4>
+<P>Jika Anda sudah menunggu lebih dari lima menit, suara tidak
+keluar, maka reboot komputer (matikan dan nyalakan kembali) dengan
+menekan Ctrl-Alt-Del atau tombol Reset. Kemudian, beri opsi saat
+boot, sesuai dengan jenis kartu suara. Biasanya kartu suara dapat
+berfungsi dengan driver dari ALSA. Untuk itu ketik &quot;knoppix
+alsa&quot; pada saat komputer diboot dan diam sekitar 30 detik
+menunggu Anda menuliskan opsi itu.</P>
+<P STYLE="margin-bottom: 0cm; font-weight: medium"><FONT FACE="Courier, monospace"><FONT SIZE=2>boot:
+knoppix alsa</FONT></FONT></P>
+<P><BR><BR>
+</P>
+<H4 CLASS="western">e. Opsi-opsi booting.</H4>
+<P>Jika masih belum menghasilkan suara, ulangi beberapa opsi booting.
+Misalnya, jika Anda menggunakan hardware khusus untuk tunanetra,
+seperti display braille, atau perangkat keras synthesizer, Anda perlu
+memberi opsi boot sesuai dengan peralatan yang Anda gunakan tersebut.
+</P>
+<P><BR><BR>
+</P>
+<P>Contoh pemberian opsi untuk display braille dengan bahasa Jerman:</P>
+<P STYLE="margin-bottom: 0cm; font-weight: medium"><FONT FACE="Courier, monospace"><FONT SIZE=2><FONT FACE="Bitstream Vera Sans Mono, monospace">brltty=al,/dev/ttyS0,text.german.tbl</FONT>
+</FONT></FONT>
+</P>
+<P><BR><BR>
+</P>
+<P>Berikut ini daftar nama opsi dan nama produk yang didukung untuk
+mengaktifkan hardware tts atau text to speech pada saat booting
+Oralux:</P>
+<P><FONT FACE="Courier, monospace">accent</FONT>: Accent SA</P>
+<P><FONT FACE="Courier, monospace">braillenspeak</FONT>: Braille
+Lite, Braille 'n Speak, Type 'n Speak</P>
+<P><FONT FACE="Courier, monospace">ciber</FONT>: Ciber 232, Ciber 232
+Plus</P>
+<P><FONT FACE="Courier, monospace">dtk-exp</FONT>: DECtalk Express</P>
+<P><FONT FACE="Courier, monospace">dtk-mv</FONT>: DECtalk Multivoice,
+DECtalk 3</P>
+<P><FONT FACE="Courier, monospace">apollo</FONT>: Dolphin Apollo</P>
+<P><FONT FACE="Courier, monospace">doubletalk</FONT>: DoubleTalk LT,
+LiteTalk</P>
+<P><FONT FACE="Courier, monospace">doubletalkpc</FONT>: DoubleTalk PC</P>
+<P><FONT FACE="Courier, monospace">pchablado</FONT>: PC Hablado
+notebook</P>
+<P><BR><BR>
+</P>
+<P>Penulisan opsi driver tts ini harus diikuti dengan nama port
+serial komputer. Misalnya ttyS0 untuk serial pertama atau COM1, dan
+ttyS1 untuk COM2. Contoh, jika di port serial pertama terpasang
+hardware tts merek Doubletak, maka perintanya saat boot adalah:,,</P>
+<P STYLE="margin-bottom: 0cm; font-weight: medium"><FONT FACE="Courier, monospace"><FONT SIZE=2>knoppix
+tts=doubletalk</FONT></FONT></P>
+<P><BR><BR>
+</P>
+<P>Penjelasan lengkap tentang opsi-opsi untuk booting ini dapat Anda
+baca pada CDROM Oralux dengan nama file oralux-cheatcodes.txt, di
+bawah direktori KNOPPIX. 
+</P>
+<P><BR><BR>
+</P>
+<H4 CLASS="western">f. Berhasil?</H4>
+<P>Jika kokok ayam jantan telah berbunyi, saatnya Anda melakukan
+konfigurasi dan menentukan pilihan program-program screen reader.</P>
+<P><BR><BR>
+</P>
+<P>Jika tetap tidak ada suara, cek sistem suara komputer. Jika kartu
+suara dan speaker atau headphone sudah dipasang dengan benar, tapi
+tetap tidak menghasilkan suara, coba boot dengan CD Oralux yang lain.
+</P>
+<P><BR><BR>
+</P>
+<P>Anda juga dapat mencoba distro Linux lain yang telah mendukung
+screen reader, misalnya distro Freebsoft dari www.freebsoft.org yang
+menggunakan Emacspeak screen reader atau Mandriva dari
+www.mandrakelinux.com yang menggunakan Gnopernicus screen reader.</P>
+<P><BR><BR>
+</P>
+<P>Jika CD Oralux atau Linux lain gagal mengenali hardware komputer
+Anda, tanyakan ke teknisi atau pembimbing Anda. Barangkali ada
+masalah dengan drive CDROM atau CD Oralux. Jika komputer tidak boot
+dari CDROM, Anda atau teknisi dapat membuat bootdisk atau mengopi isi
+CD ke harddisk seperti yang akan dijelaskan dalam bagian berikut.</P>
+<P><BR><BR>
+</P>
+<H3 CLASS="western">3. Boot dari Disket dan Harddisk</H3>
+<P><BR><BR>
+</P>
+<P>Berikut ini petunjuk membuat bootdisk jika komputer tidak memiliki
+drive CDROM atau tidak bisa boot dari CDROM. Langkah-langkah ini
+dapat dijalankan juga di MS Windows atau Linux yang telah ada di
+komputer yang memiliki drive floppy dan drive CDROM. Jika komputer
+tersebut belum memiliki screen reader, tunanetra sebaiknya minta
+bantuan teknis atau pembimbingnya. 
+</P>
+<P><BR><BR>
+</P>
+<H4 CLASS="western">a. Membuat Bootdisk</H4>
+<P>Siapkan disket yang telah diformat dan dipastikan tidak ada
+kerusakan fisik disket. Gunakan Oralux atau Linux lain atau sistem
+operasi Windows untuk mengopi file image bootdisk ke disket. 
+</P>
+<P><BR><BR>
+</P>
+<P>Berikut ini cara membuat bootdisk di Windows atau DOS:</P>
+<UL>
+	<LI><P>Masukkan CD Oralux ke drive CDROM.</P>
+	<LI><P>Mauskkan disket yang sudah diformat dan tidak ada error fisik
+	ke drive floppy.</P>
+	<LI><P>Jalankan prompt di C, lalu masuk ke direktori KNOPPIX di
+	CDROM.</P>
+	<LI><P>Jalankan mkfloppy.bat</P>
+</UL>
+<P><BR><BR>
+</P>
+<P>Jika menggunakan Linux, lebih dahulu login sebagai root atau
+jalankan perintah âsudo suâ di konsol Oralux (Alt-F2 hingga
+Alt-F4).</P>
+<P STYLE="margin-bottom: 0cm; font-weight: medium"><FONT FACE="Courier, monospace"><FONT SIZE=2>$
+sudo su</FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm; font-weight: medium"><FONT FACE="Courier, monospace"><FONT SIZE=2>#
+dd if=/cdrom/KNOPPIX/boot.img of=/dev/fd0 bs=18k</FONT></FONT></P>
+<P><BR><BR>
+</P>
+<P><FONT FACE="Nimbus Roman No9 L">Coba boot komputer dari bootdisk
+dengan lebih dahulu memasukkan CD Oralux ke CDROM. </FONT>
+</P>
+<P><BR><BR>
+</P>
+<H4 CLASS="western">b. Copy CD ke harddisk</H4>
+<P>Jika komputer tidak terpasang secara permanen namun memiliki drive
+floppy dan harddisk, maka Oralux dapat diboot melalui diskboot lalu
+menjalankan file-file CD yang telah dicopy ke harddisk. Caranya: 
+</P>
+<UL>
+	<LI><P>Meminjam sementara drive CDROM komputer lain, atau harddisk
+	komputer tersebut dipindah ke komputer lain yang memiliki drive
+	CDROM.</P>
+	<LI><P>Jalankan Oralux atau Linux yang lain, atau sistem operasi
+	Windows.</P>
+	<LI><P>Buat direktori KNOPPIX di partisi Windows, misalnya
+	C:\KNOPPIX, dan tidak boleh ada direktori sebelum KNOPPIX. Lalu copy
+	file KNOPPIX yang ada di direktori KNOPPIX dalam CD Oralux ke
+	C:\KNOPPIX\</P>
+	<LI><P>Berikut ini contoh langkah-langkah membuat direktori dengan
+	Oralux atau Linux yang lain dengan lebih dahulu login sebagai root:</P>
+</UL>
+<P STYLE="margin-bottom: 0cm; font-weight: medium"><FONT FACE="Courier, monospace"><FONT SIZE=2>#
+mkdir /C</FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm; font-weight: medium"><FONT FACE="Courier, monospace"><FONT SIZE=2>#
+mount /dev/hda1 /C</FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm; font-weight: medium"><FONT FACE="Courier, monospace"><FONT SIZE=2>#
+mkdir /C/KNOPPIX</FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm; font-weight: medium"><FONT FACE="Courier, monospace"><FONT SIZE=2>#
+mount /mnt/cdrom</FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm; font-weight: medium"><FONT FACE="Courier, monospace"><FONT SIZE=2>#
+cp /mnt/cdrom/KNOPPIX/KNOPPIX /C/</FONT></FONT></P>
+<P><BR><BR>
+</P>
+<P>Setelah berhasil menjalankan langkah a dan b, boot komputer dari
+bootdisk, dan berikan opsi âknoppix fromhd=/dev/hda1â untuk
+melakukan booting dari disket lalu membaca file Oralux di harddisk
+primary master, partisi pertama (/dev/hda1). Ganti opsi boot ini
+sesuai dengan letak harddisk dan nomor partisi yang berisi file
+KNOPPIX di bawah direktori KNOPPIX.</P>
+<P STYLE="margin-bottom: 0cm; font-weight: medium"><FONT FACE="Courier, monospace"><FONT SIZE=2>boot:
+knoppix fromhd=/dev/hda1</FONT></FONT></P>
+<P><BR><BR>
+</P>
+<H3 CLASS="western">4. Konfigurasi Oralux</H3>
+<P><BR><BR>
+</P>
+<P>Setelah berhasil booting Oralux, Anda akan ditanya dengan suara
+setiap komputer booting atau setiap Anda keluar dari screen reader
+(Emakspeak atau YASR). Jawaban setuju atau yes adalah menekan Enter.
+Jawaban tidak atau no adalah tombol selain Enter. Kecuali saat
+mengatur suara, tombol spasi digunakan untuk mengecilan volume.</P>
+<P><BR><BR>
+</P>
+<H4 CLASS="western">a. Preferensi 
+</H4>
+<P>Menu suara pertama setelah berhasil booting adalah untuk mengatur
+konfigurasi atau preferensi. Jika Anda baru pertama menggunakan
+Oralux langsung dari CD, pertanyaan pertama adalah mengatur volume
+suara. 
+</P>
+<P><BR><BR>
+</P>
+<P>Jika Anda menggunakan Oralux dari harddisk, atau konfigurasi telah
+terimpan di harddisk, pertanyaan pertama adalah apakah Anda ingin
+mengupdate preferensi atau membuat preferensi baru. Jawab ya dengan
+menekan Enter. Jika Anda jawab no atau menekan tombol selain Enter,
+maka Oralux menggunakan konfigurasi asli atau yang lama.</P>
+<P><BR><BR>
+</P>
+<H4 CLASS="western">b. Volume Suara 
+</H4>
+<P>Pertanyaan ini adalah untuk menentukan preferensi volume suara.
+Tekan Enter untuk menaikkan volume, atau tekan tombol Spasi untuk
+menurunkan volume. Setelah Anda merasa pas dengan volume suara, tekan
+tombol selain Enter dan selain spasi untuk meneruskan ke langkah
+berikutnya.</P>
+<P><BR><BR>
+</P>
+<H4 CLASS="western">c. Bahasa Menu</H4>
+<P>Anda diminta memilih apakah akan menggunakan menu bahasa Inggris
+(English) atau bahasa yang lain. Jika setuju bahasa Inggris, tekan
+Enter. Jika tidak setuju, atau ingin menggunakan bahasa lain, tekan
+tombol selain Enter. 
+</P>
+<P>Nilai default adalah bahasa Inggris. Bahasa lain yang tersedia
+adalah French atau bahasa Perancis, Deutsch atau bahasa Jerman,
+Espanol atau bahasa Spanyol, dan Russian atau bahasa Rusia.</P>
+<P><BR><BR>
+</P>
+<H4 CLASS="western">d. Jenis Keyboard</H4>
+<P>Biasanya Oralux akan mengenali keyboard komputer di Indonesia
+sebagai jenis American atau keyboard susunana tombol menggunakan
+standar Amerika. Lalu Anda ditanya apakah ingin mengubah konfigurasi
+keyboard? Jika keyboard Anda standar American atau Amerika, jawab no
+atau tekan tombol selain Enter untuk masuk langkah berikutnya.</P>
+<P><BR><BR>
+</P>
+<P>Sebaliknya, jika Oralux mengenali keyboard Anda sebagai bukan
+Amerika, padahal keyboard Anda sama dengan umumnya komputer di
+Indonesia, tekan Enter, yang artinya Anda setuju (yes) ingin
+mengganti jenis keyboard. Anda akan ditanya satu per satu jenis
+keyboard yang terdaftar di Oralux. Jawab no terus, hingga Anda
+mendengar American, baru tekan Enter tanda setuju.</P>
+<P><BR><BR>
+</P>
+<P>Jenis keyboard selain Amerika adalah Belgian, British, Bulgarian,
+Czech, Danish, Finnish, French, German, Italian, Polish, Russian,
+Slovaq, Spanish, Swiss, dan Turkish.</P>
+<P><BR><BR>
+</P>
+<H4 CLASS="western">e. Display Braille</H4>
+<P>Jika komputer Anda tidak dilengkapi peralatan braille, pilih no
+atau tekan tombol keyboard selain Enter.</P>
+<P><BR><BR>
+</P>
+<P>Jika Anda memiliki display braille, Anda harus jawab yes atau
+tekan Enter untuk masuk ke pemilihan jenis display braille. Lalu Anda
+harus memilih tipe display braille yang sesuai dengan jenis yang
+terpasang di komputer. 
+</P>
+<P><BR><BR>
+</P>
+<P>Tekan Enter jika mendengar pilihan yang sesuai, dan tombol lain
+jika Anda belum menemukan yang cocok. Lalu Anda akan ditanya port
+serial mana yang digunakan, misalnya serial pertama atau /dev/ttyS0
+atau COM1 di Windows atau yang kedua, /dev/ttyS2.</P>
+<P><BR><BR>
+</P>
+<P>Driver display braille yang telah dikonfigurasi saat booting
+Oralux adalah Alva dan American. Display braille yang lain harus
+disebutkan pada saat boot sebagai opsi.</P>
+<P><BR><BR>
+</P>
+<H4 CLASS="western">f. Desktop Emacspeak atau YASR</H4>
+<P>Untuk pertama kerja setelah booting, Anda akan diberi tawaran
+mengubah desktop Emacspeak. Jawab no jika Anda ingin tetap
+menggunakan desktop Emacspeak, dengan menekan tombol selain Enter.
+Sebaliknya, jawab yes (Enter) jika Anda ingin pindah ke YASR. 
+</P>
+<P><BR><BR>
+</P>
+<P>Untuk latihan, Anda tekan Enter yang artinya ingin mengganti
+dengan desktop YASR yang lebih sederhana dan mudah daripada
+Emacspeak.</P>
+<P><BR><BR>
+</P>
+<P>Setelah itu Anda masih ditanya apakah akan menggunakan Emacspeak. 
+</P>
+<P>Jawab no atau tekan selain Enter.</P>
+<P><BR><BR>
+</P>
+<P>Dan terakhir Anda diberi pilihan YASR, tekan Enter.</P>
+<P><BR><BR>
+</P>
+<H4 CLASS="western">g. Synthesizer</H4>
+<P>Synthesizer adalah software tts atau text to speech untuk komputer
+yang belum terpasang hardware tts. Pilihan pertama adalah Flite yang
+hanya tersedia untuk bahasa Inggris. Jawab yes atau Enter, maka Anda
+akan masuk ke desktop YASR. Welcome to Oralux.</P>
+<P><BR><BR>
+</P>
+<P>Catatan: Jika Anda merasa tidak cocok dengan Flite setelah masuk
+ke screen reader YASR, Anda bisa segera keluar untuk mengulangi
+langkah-langkah di atas dan memilih synthesizer yang lain. Pilihan
+synthesizer di Oralux antara lain sebagai berikut: 
+</P>
+<UL>
+	<LI><P>Flite atau Festival Lite berbasis screen reader Festival,
+	hanya tersedia dalam bahasa Inggris.</P>
+	<LI><P>DECtalk, yaitu program pembaca layar yang tidak free
+	software, dan tersedia untuk beberapa bahasa, yaitu English, French,
+	German, dan Spanish. DECtalk yang tersedia di Windows dapat diinstal
+	ke Oralux.</P>
+	<LI><P>Multispeech, yaitu pembaca layar dengan bahasa Inggris
+	(English) dan Rusia (Russian).</P>
+	<LI><P>Parlemex (hanya untuk bahasa Perancis.</P>
+	<LI><P>Emacspeak Festival M Brola, jika Anda memilih desktop
+	Emacspeak. 
+	</P>
+</UL>
+<P><BR><BR>
+</P>
+<P>Setelah menentukan pilihan, komputer akan bersuara Welcome to
+Oralux. Anda siap bekerja dengan Linux. 
+</P>
+<H2 CLASS="western" STYLE="page-break-before: always"><A NAME="Bab Tiga: Desktop YASR dan Perintah-perintah Linux|outline"></A>
+Bab Tiga: Desktop YASR dan Perintah-perintah Linux</H2>
+<P><BR><BR>
+</P>
+<P CLASS="text-body-indent-western">Tujuan:</P>
+<P CLASS="text-body-indent-western">Setelah mengikuti pembahasan bab
+tiga ini, Anda diharapkan mampu bekerja di Linux dengan desktop YASR,
+membaca dan mengedit file teks dengan editor N E, mengakses web
+dengan browser links, bekerja di shell atau prompt dengan bash, dan
+membuat hitungan matematikan dengan calculator.</P>
+<P><BR><BR>
+</P>
+<P>YASR memiliki enam menu utama. Pertanyaan yang dibacakan adalah
+sebagai berikut: 
+</P>
+<P STYLE="margin-bottom: 0cm; font-weight: medium"><FONT FACE="Courier, monospace"><FONT SIZE=2>Please
+press the Up or Down arrow keys, to select your software.</FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm; font-weight: medium"><FONT FACE="Courier, monospace"><FONT SIZE=2>Then,
+press return to start your software. </FONT></FONT>
+</P>
+<P STYLE="margin-bottom: 0cm; font-weight: medium"><FONT FACE="Courier, monospace"><FONT SIZE=2>YASR
+documentation </FONT></FONT>
+</P>
+<P STYLE="margin-bottom: 0cm; font-weight: medium"><FONT FACE="Courier, monospace"><FONT SIZE=2>N
+E, the nice editor </FONT></FONT>
+</P>
+<P STYLE="margin-bottom: 0cm; font-weight: medium"><FONT FACE="Courier, monospace"><FONT SIZE=2>Links,
+web browser with javascript capabilities </FONT></FONT>
+</P>
+<P STYLE="margin-bottom: 0cm; font-weight: medium"><FONT FACE="Courier, monospace"><FONT SIZE=2>bash,
+the shell terminal </FONT></FONT>
+</P>
+<P STYLE="margin-bottom: 0cm; font-weight: medium"><FONT FACE="Courier, monospace"><FONT SIZE=2>Calculator
+</FONT></FONT>
+</P>
+<P STYLE="margin-bottom: 0cm; font-weight: medium"><FONT FACE="Courier, monospace"><FONT SIZE=2>Quit
+YASR </FONT></FONT>
+</P>
+<P><BR><BR>
+</P>
+<P>Tekan tombol kursor atau panah di keyboard, ke atas dan bawah,
+untuk memilih program yang akan lebih dahulu Anda gunakan. Setelah
+menemukan yang Anda cari, tekan Enter. 
+</P>
+<P><BR><BR>
+</P>
+<H3 CLASS="western">1. YASR documentation</H3>
+<P><BR><BR>
+</P>
+<P>Jika Anda memilih menu ini, Anda akan masuk ke N E yang sedang
+membuka halaman dokumentasi tentang YASR. Dokumen YASR ini
+menjelaskan cara menggunakan YASR</P>
+<P><BR><BR>
+</P>
+<H4 CLASS="western">a. Mengaktifkan dan mematikan YASR</H4>
+<P>Dalam keadaan aktif, YASR dapat mengucapkan apa yang ada di layar,
+sesuai dengan perintah Anda melalui tombol-tombol di keyboard. Jika
+Anda ingin men-disable atau mematikan fungsi screen reader ini, tekan
+tombol Alt-Enter, dua tombol Alt dan Enter secara bersamaan. Tekan
+kembali Alt-Enter untuk mengaktifkan atau enable YASR.</P>
+<P><BR><BR>
+</P>
+<H4 CLASS="western">b. Pindah antar mode.</H4>
+<P>YASR memiliki dua mode, yaitu mode standar dan mode review. Saat
+pertama membuka dokumentasi README.yasr ini, YASR membaca seluruh isi
+layar dengan menggunakan mode standar. Untuk menghentikan pembacaan,
+pindahkan kursor pada keyboard ke atas. 
+</P>
+<P><BR><BR>
+</P>
+<P>Mode standar ini disebut juga mode mengedit, karena Anda dapat
+menulis atau menghapus dengan mudah. Pada mode standar, perpindahan
+kursor keyboard akan membuat kursor di layar ikut berpindah dan
+membaca huruf atau baris yang dilalui kursor. 
+</P>
+<P><BR><BR>
+</P>
+<P>Berikut ini daftar fungsi kursos di keyboard:</P>
+<UL>
+	<LI><P>Tombol kursor ke atas akan membaca teks satu baris di atas
+	posisi kursor sekarang.</P>
+	<LI><P>Tombol kursor ke bawah akan membaca satu baris di bawah. 
+	</P>
+	<LI><P>Tombol kursor ke kanan dan ke kiri untuk membaca satu
+	karakter ke kanan atau ke kiri.</P>
+	<LI><P>Tombol PageDown atau PgDn akan memindahkan kursor ke layar
+	berikutnya dan membaca teks satu layar dari atas hingga bawah.</P>
+	<LI><P>Tombol PageUp atau PgUp akan memindahkan kursor satu layar
+	sebelumnya dan membaca teks satu layar dari atas ke bawah.</P>
+	<LI><P>Tombol Home untuk ke awal dokumen dan tombol End ke akhir
+	dokumen.</P>
+</UL>
+<P><BR><BR>
+</P>
+<P>Untuk pindah ke mode review, tekan Ctrl-Alt-r, tiga tombol secara
+bersamaan. Demikian pula sebaliknya, tekan Ctrl-Alt-r untuk kembali
+ke mode standar. Namun, jika Ctrl-Alt-r tidak berfungsi, berarti YASR
+tidak aktif (disable).</P>
+<P><BR><BR>
+</P>
+<P>YASR memiliki menu pull-down, yang dapat diakses dengan tombol
+Esc. Menu pull-down cukup memudahkan pemula untuk mengelola dokumen,
+seperti membuka file, menyimpan, copy, cut, paste, search, dan
+lain-lain.</P>
+<P><BR><BR>
+</P>
+<H4 CLASS="western">c. Contoh perintah mode review.</H4>
+<P>Berikut ini contoh beberapa perintah membaca teks dan memindahkan
+kursor pada mode review. Pemindahan kursor juga dapat dilakukan
+dengan tombol kursor di keyboard, namun kursor di layar tidak ikut
+berpindah.</P>
+<P STYLE="margin-left: 1.58cm; text-indent: -1.58cm"><B>e</B> :
+(tekan tombol huruf e) artinya membaca mulai dari posisi kursor
+sampai akhir layar. 
+</P>
+<P STYLE="margin-left: 1.58cm; text-indent: -1.58cm"><B>t</B> :
+membaca dari atas hingga posisi kursor.</P>
+<P STYLE="margin-left: 1.58cm; text-indent: -1.58cm"><B>w</B> :
+membaca satu layar satu layar.</P>
+<P STYLE="margin-left: 1.58cm; text-indent: -1.58cm"><B>z</B> :
+pindah ke awal kata sebelunya, dan membaca kata tersebut.</P>
+<P STYLE="margin-left: 1.58cm; text-indent: -1.58cm"><B>x</B> :
+pindah ke awal kata berikutnya, dan membaca kata tersebut.</P>
+<P STYLE="margin-left: 1.58cm; text-indent: -1.58cm"><B>f</B> :
+mencari kata dalam satu layar.</P>
+<P STYLE="margin-left: 1.58cm; text-indent: -1.58cm"><B>[N]l</B> :
+tekan angka diikuti huruf l, artinya membaca baris (line) ke-N
+dihitung dari kursor. N=1 adalah baris di posisi kursor.</P>
+<P STYLE="margin-left: 1.58cm; text-indent: -1.58cm"><B>l</B> :
+menyebutkan posisi kursor terakhir atau yang baru saja dibacakan.
+Penyebutannya adalah nomor kolom dan baris. Misalnya âc one l
+sevenâ untuk menunjukkan kursor berada di kolom atau huruf pertama
+dan baris ketujuh. 
+</P>
+<P><BR><BR>
+</P>
+<H4 CLASS="western">d. Contoh perintah mode standar.</H4>
+<P>Berikut ini contoh perintah pada mode standar yang juga dapat
+digunakan pada mode review. Kursos di layar ikut bergerak pada mode
+standar. Perpindahan kursor juga dapat dilakukan melalui tombol
+kursor di keyboard.</P>
+<P STYLE="margin-left: 1.92cm; text-indent: -1.9cm">Ctrl-Alt-b :
+membacakan karakter sebelumnya</P>
+<P STYLE="margin-left: 1.92cm; text-indent: -1.9cm">Ctrl-Alt-c :
+membacakan karakter</P>
+<P STYLE="margin-left: 1.92cm; text-indent: -1.9cm">Ctrl-Alt-d :
+membacakan kata 
+</P>
+<P STYLE="margin-left: 1.92cm; text-indent: -1.9cm">Ctrl-Alt-e :
+membaca dari posisi hingga ujung bawah layar</P>
+<P STYLE="margin-left: 1.92cm; text-indent: -1.9cm">Ctrl-Alt-k :
+membaca baris sebelumnya</P>
+<P STYLE="margin-left: 1.92cm; text-indent: -1.9cm">Ctrl-Alt-l :
+membaca baris</P>
+<P STYLE="margin-left: 1.92cm; text-indent: -1.9cm">Ctrl-Alt-m :
+membaca baris berikutnya</P>
+<P STYLE="margin-left: 1.92cm; text-indent: -1.9cm">Ctrl-Alt-r :
+pindah ke mode review</P>
+<P STYLE="margin-left: 1.92cm; text-indent: -1.9cm">Ctrl-Alt-t :
+membaca dari paling atas hingga baris pada kursor</P>
+<P STYLE="margin-left: 1.92cm; text-indent: -1.9cm">Ctrl-Alt-w :
+membaca seluruh layar</P>
+<P STYLE="margin-left: 1.92cm; text-indent: -1.9cm">Ctrl-Alt-x :
+tidak bersuara. Menekan ctrl-alt-x yang kedua akan kembali
+mengaktifkan suara.</P>
+<P><BR><BR>
+</P>
+<P>Catatan: Ctrl-Alt biasa dilambangkan dengan [ dan di terminal
+tertentu bisa diakses tanpa Ctrl, atau cukup Alt saja.</P>
+<P><BR><BR>
+</P>
+<H4 CLASS="western">e. Keluar dari YASR documentation.</H4>
+<P>Ada beberapa cara untuk keluar dari editor N E, antara lain
+Ctrl-Alt-q atau Alt-q atau Ctrl-q saja. Bisa juga dengan Esc atau F1
+lalu arahkan kursor ke Quit. 
+</P>
+<P><BR><BR>
+</P>
+<P>Jika Anda melalukan perubahan dan tidak ingin menyimpannya, akan
+ditanya apakah ingin tetap keluar meskipun file telah berubah dan
+belum disimpan. Tekan y, artinya ya, keluar tanpa lebih dahulu
+menyimpan. 
+</P>
+<P><BR><BR>
+</P>
+<H3 CLASS="western">2. N E, the nice editor</H3>
+<P><BR><BR>
+</P>
+<P>Anda telah menggunakan editor teks N E untuk mereview atau membaca
+dokumen YASR. Berikut ini petunjuk untuk membuat file baru, menyimpan
+file, membuka file dari suatu direktori, dan menyimpan menjadi file
+lain atau ke direktori lain. 
+</P>
+<P><BR><BR>
+</P>
+<P>Sebelum mengakses file dan direktori, Anda sebaiknya memahami
+struktur file dan direktori di Linux.</P>
+<P><BR><BR>
+</P>
+<H4 CLASS="western">a. File dan direktori di Linux</H4>
+<P>Linux memiliki direktori paling atas atau paling kiri, dibaca
+slash (garis miring), dinamakan root directory atau direktori akar.
+Itu perbedaan mendasar struktur direktori Linux dengan Windows. Di
+Windows ada folder C: yang mengarah ke direktori paling atas dari
+harddisk. Di Windows juga ada A: untuk masuk ke disket. Tapi, di
+Windows tidak ada direktori di atas C dan A. 
+</P>
+<P><BR><BR>
+</P>
+<P>Di Linux, C biasanya berupa direktori /mnt/win atau yang lain
+sesuai dengan yang membuat distro Linux. /mnt/win disebut mount
+point, yang berhubungan dengan file harddisk dengan partisi
+/dev/hda1. Jadi, C di Windows itu juga sejenis mount point yang
+berhubungan device (/dev) harddisk. 
+</P>
+<P><BR><BR>
+</P>
+<P>Jika /mnt/win diganti dengan /C, artinya /C adalah mount point
+bagi /dev/hda1. Yang membedakan C di Linux dengan C di Windows,
+adalah adanya garis miring / di sebelah kiri C di Linux, dan tidak
+ada garis miring di Windows. Ini juga berarti, garis miring / adalah
+direktori di atas C.</P>
+<P><BR><BR>
+</P>
+<P>Disket dan CDROM biasanya memiliki alamat device di /dev/fd0 dan
+/dev/hdX.</P>
+<P><BR><BR>
+</P>
+<P>Beberapa direktori di bawah / yang penting diketahui adalah /home,
+/boot, /root, /usr, /var, /tmp.</P>
+<P>/home berisi direktori atau folder untuk setiap user yang
+terdaftar di sistem Linux. Misalnya, /home/knoppix adalah direktori
+milik user knoppix dalam distro Linux Oralux.</P>
+<P>/boot berisi file-file kernel untuk booting komputer.</P>
+<P>/root adalah direktori user admin (root's home directory).</P>
+<P>/bin adalah direktori tempat program-program dasar Linux untuk
+semua pengguna, misalnya ls yang artinya melihat isi direktori.</P>
+<P>/sbin adalah direktori tempat program-program dasar untuk
+administrator atau superuser atau root.</P>
+<P>/tmp adalah direktori untuk penyimpanan sementara, misalnya untuk
+file yang akan dihapus setelah bekerja.</P>
+<P>/usr berisi hampir seluruh program Linux tambahan selain yang di
+/bin dan /sbin. Di bawah /usr juga ada sub-direktori /bin dan /sbin.
+Di bawah /usr ini juga terdapat dokumen atau manual tentang semua
+program yang ada dalam CD atau harddisk.</P>
+<P><BR><BR>
+</P>
+<P>Sebagai contoh, dokumen petunjuk penggunaan Oralux, YASR dan
+Emacspeak tersedia di bawah direktori /usr/share/oralux/doc.</P>
+<P><BR><BR>
+</P>
+<P>CATATAN:</P>
+<P>Direktori tempat kerja saat ini disebut Current Directory, ditulis
+./ (dot diikuti slash). Direktori di atasnya atau sebelumnya disebut
+Parent Directory, ditulis ../ (dot dot slash). Direktori paling atas
+disebut Root Directory, ditulis / (slash).</P>
+<P><BR><BR>
+</P>
+<H4 CLASS="western">b. Membuat file baru (New Document).</H4>
+<P>Ketika pertama membuka N E, Linux membacakan lisensi N E dan
+petunjuk singkat cara membuka file. Berikut ini tulisan lengkapnya.</P>
+<P><BR><BR>
+</P>
+<P STYLE="margin-bottom: 0cm; font-weight: medium"><FONT FACE="Courier, monospace"><FONT SIZE=2>ne,
+the nice editor 1.30.</FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm; font-weight: medium"><FONT FACE="Courier, monospace"><FONT SIZE=2>Copyright
+(C) 1993-1998 Sebastiano Vigna</FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm; font-weight: medium"><FONT FACE="Courier, monospace"><FONT SIZE=2>Copyright
+(C) 1999-2004 Todd M. Lewis and Sebastiano Vigna</FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm; font-weight: medium"><FONT FACE="Courier, monospace"><FONT SIZE=2>This
+program is free software; you can redistribute it and/or modify</FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm; font-weight: medium"><FONT FACE="Courier, monospace"><FONT SIZE=2>it
+under the terms of the GNU General Public License as published by</FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm; font-weight: medium"><FONT FACE="Courier, monospace"><FONT SIZE=2>the
+Free Software Foundation; either version 2, or (at your option)</FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm; font-weight: medium"><FONT FACE="Courier, monospace"><FONT SIZE=2>any
+later version.</FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm; font-weight: medium"><FONT FACE="Courier, monospace"><FONT SIZE=2>This
+program is distributed in the hope that it will be useful,</FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm; font-weight: medium"><FONT FACE="Courier, monospace"><FONT SIZE=2>but
+WITHOUT ANY WARRANTY; without even the implied warranty of</FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm; font-weight: medium"><FONT FACE="Courier, monospace"><FONT SIZE=2>MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE. See the</FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm; font-weight: medium"><FONT FACE="Courier, monospace"><FONT SIZE=2>GNU
+General Public License for more details.</FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm; font-weight: medium"><FONT FACE="Courier, monospace"><FONT SIZE=2>Press
+F1, Escape or Escape-Escape to see the menus. The shortcuts</FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm; font-weight: medium"><FONT FACE="Courier, monospace"><FONT SIZE=2>prefixed
+by ^ are activated by the Control key; the shortcuts prefixed</FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm; font-weight: medium"><FONT FACE="Courier, monospace"><FONT SIZE=2>by
+[ are activated by Control+Meta or just Meta, depending on your
+terminal</FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm; font-weight: medium"><FONT FACE="Courier, monospace"><FONT SIZE=2>emulator.
+Alternatively, just press Escape followed by a letter.</FONT></FONT></P>
+<P><BR><BR>
+</P>
+<UL>
+	<LI><P>Sebagai latihan, Anda akan membuat file bernama latihan.txt. 
+	</P>
+	<LI><P>Anda dapat langsung mengetikkan teks di layar. 
+	</P>
+	<LI><P>Sekarang Anda sudah berada di halaman kosong. Mulailah
+	mengetik apa saja. Baca atau review dan edit dengan
+	perintah-perintah YASR pada mode standar dan mode review.</P>
+</UL>
+<P><BR><BR>
+</P>
+<H4 CLASS="western">c. Menyimpan file (Save).</H4>
+<UL>
+	<LI><P>Langkah pertama: tekan Ctrl-S untuk menyimpan. Cara lain,
+	tekan Esc atau F1 untuk mendengarkan menu suara, lalu arahkan kursor
+	ke bagian Save.</P>
+	<LI><P>Langkah kedua: Anda akan diberi pilihan direktori untuk
+	menyimpan dan menuliskan nama file. Untuk berpindah dari direktori
+	satu ke yang lain, ikuti suara untuk memilih direktori dan file yang
+	telah ada, lalu tekan Enter.</P>
+	<LI><P>Cara yang paling cepat setelah langkah pertama, atau untuk
+	menyimpan sebagai file baru, dengan menekan Esc atau F1 kembali,
+	lalu ketikkan nama file, misalnya latihan.txt. Jika direktori tidak
+	ikut ditulis, maka file disimpan dalam direktori tempat bekerja saat
+	ini (Current directory). Saat pertama menggunakan YASR di Oralux,
+	direktori Anda adalah /home/knoppix.</P>
+	<LI><P>Simpan file latihan.txt ke direktori /home/knoppix/. Meskipun
+	bekerja dari CDROM, Anda dapat menyimpan ke direktori /home/knoppix
+	karena direktori itu berada dalam ramdisk atau memory yang berfungsi
+	sebagai direktori kerja.</P>
+</UL>
+<P><BR><BR>
+</P>
+<H4 CLASS="western">d. Membuka file (Open).</H4>
+<UL>
+	<LI><P>Cara pertama dengan menu Esc, lalu arahkan kursor ke Open dan
+	Enter. 
+	</P>
+	<LI><P>Pilih direktori dan file yang terdapat dalam daftar dengan
+	mengeser kursos ke kanan (daftar direktori dan file dalam satu
+	baris) serta ke bawah (dibacakan nama direktori dan file dalam satu
+	baris kedua). Cari hingga Anda menemukan file yang akan dibuka, lalu
+	tekan Enter.</P>
+	<LI><P>Cara kedua adalah tekan Ctrl-O, lalu tekan Esc dan ketikkan
+	nama direktori dan file yang akan dibuka. Anda cukup mengetik nama
+	file jika file berada dalam direktori kerja.</P>
+</UL>
+<UL>
+	<LI><P>Anda dapat membuka direktori /usr/share/oralux/doc dengan
+	menekan tombol Esc, lalu dengarkan atau langsung arahkan tombol
+	kursor ke bawah, tekan Enter pada saat terdengar open. Latihan
+	pertama, buka kembali file README.yasr di bawah direktori
+	/usr/share/oralux/doc/.</P>
+</UL>
+<P><BR><BR>
+</P>
+<H4 CLASS="western">e. Menyimpan sebagai file lain (Save as) di
+direktori lain.</H4>
+<UL>
+	<LI><P>Untuk menyimpan sebagai file lain, tekan Esc, lalu arahkan
+	kursor ke baris Save as, dan tekan Enter.</P>
+	<LI><P>Cara pertama, cari nama direktori /home/knoppix, lalu tekan
+	Esc dan ketikkan nama file baru, misalnya readme.txt. Atau dengan
+	cara kedua, langsung menekan kembali Esc, dan tuliskan nama
+	direktori dan file baru, yaitu ketik /home/knoppix/readme.txt dan
+	tekan Enter.</P>
+</UL>
+<P><BR><BR>
+</P>
+<H3 CLASS="western">3. Links, web browser with javascript
+capabilities</H3>
+<P><BR><BR>
+</P>
+<P>Links adalah browser web berbasis teks yang mendukung javascript
+dan ssl. Browser web berbasis teks yang lain adalah lynx. Untuk
+membaca layar, menggunakan browser web links sangat tepat, karena
+lebih cepat dan ringan untuk komputer, dibandinakan browser berbasis
+grafis seperti Internet Explorer dan Mozilla atau Firefox. 
+</P>
+<P><BR><BR>
+</P>
+<H4 CLASS="western">a. Membaca file htm atau html</H4>
+<P>Sebagai latihan, Anda dapat membaca file htm yang ada di direktori
+/usr/share/oralux/doc/htm/faq.htm. File ini otomatis dibuka saat
+pertama menjalankan links, berisi daftar pertanyaan dan jawaban
+seputar Oralux. 
+</P>
+<P><BR><BR>
+</P>
+<P>Kursor atau panah keyboard ke atas dan bawah berguna untuk pindah
+dari link satu ke link berikutnya. Link ini dapat berupa teks atau
+gambar. Panah kanan dan kiri adalah untuk pindah ke halaman baru yang
+ditunjuk oleh link pada posisi kursor saat itu. 
+</P>
+<P><BR><BR>
+</P>
+<P>Jika Anda tidak memindahkan kursor, screen reader akan membacakan
+semua isi satu layar yang dibuka oleh browser web links. Setiap Anda
+pindahkan kursor, tulisan di layar yang sedang ditunjuk oleh kursor
+akan dibaca diikuti dengan nama file yang yang di-link oleh teks atau
+gambar tersebut. Jika Anda menekan panah atau kursor kanan atau
+menekan enter, maka links akan pindah ke halaman yang ditunjuk. 
+</P>
+<P><BR><BR>
+</P>
+<P>Pindah dari satu halaman atau layar ke layar lain dapat
+menggunakan PgUp dan PgDn. Tombol Home untuk kembali ke layar pertama
+paling atas, dan End untuk pindah ke layar terakhir. Ini seperti
+perintah dasar YASR, jadi bukan pindah halaman yang di-link seperti
+yang dilakukan panah kiri dan kanan.</P>
+<P><BR><BR>
+</P>
+<P>Sama seperti pertama membuka file html, setiap membuka layar atau
+halaman baru, screen reader akan membaca satu layar, kecuali Anda
+hentikan dengan menekan kursor atau panah di keyboard.</P>
+<P><BR><BR>
+</P>
+<H4 CLASS="western">b. Mengakses web dan webmail</H4>
+<P>Jika komputer Anda terhubung ke Internet atau server jaringan
+lokal, Anda dapat mengakses web yang mendukung secara baik akses bagi
+tunanetra, misalnya www.mitranetra.or.id. 
+</P>
+<P><BR><BR>
+</P>
+<P>Links juga dapat digunakan untuk mengakses webmail, misalnya
+gmail.com, mail.yahoo.com, dan mungkin juga webmail milik webhosting
+Anda. Penulis mencoba untuk mengakses webmail.nurulfikri.com dan
+webmail.pii.or.id yang tidak menggunakan ssl (http), dan
+webmail.linuxindo.com dengan ssl (https). 
+</P>
+<P><BR><BR>
+</P>
+<P>Sayangnya, links gagal mengakses webmail.indosat.net.id yang
+menggunakan script kompleks sehingga tidak dapat ditampilkan oleh
+links. Penulis juga gagal menggunakan lynx untuk mengakses webmail
+milik perusahaan Indonesia yang telah dijual ke luar negeri tersebut.
+Untuk mengatasi hal ini, penulis menggunakan program pendownload
+email fetchmail dan server SMTP di Oralux smail. Untuk membaca di
+Linux, Anda dapat menggunakan program pembaca email gnus yang akan
+dibahas pada bab tentang Emacspeak. 
+</P>
+<P><BR><BR>
+</P>
+<H3 CLASS="western">4. bash, the shell terminal 
+</H3>
+<P><BR><BR>
+</P>
+<H4 CLASS="western">a. Perintah-perintah dasar</H4>
+<P>Linux memiliki fleksibiltas tinggi. Jika Anda tidak membutuhkan
+tampilan grafis, Linux tetap dapat digunakan secara penuh. Bagi yang
+tidak kesulitan dalam penglihatan, Linux sering dikritik karena
+memiliki kelebihan ini. Mengapa dikritik? Karena banyak pengguna
+Linux yang sedang bekerja dengan modus teks, tidak perlu grafis.
+Akibatnya, orang lain yang belum pernah menggunakan Linux melihat
+Linux itu tidak menarik. Padahal, di balik perintah-perintah, apalagi
+dengan editor teks, banyak karya dihasilkan dengan Linux tanpa
+grafis. 
+</P>
+<P><BR><BR>
+</P>
+<P>Misalnya, Linux tanpa grafis cukup baik untuk membaca email,
+menulis email, membaca berita di Internet, membuat file teks, membuat
+program berbasis web mulai dari memformat halaman HTML, membuat
+program PHP, Javascript, dan Java serta bahasa pemrograman lainnya.</P>
+<P><BR><BR>
+</P>
+<P>Berikut ini contoh-contoh perintah dan program di Linux yang
+sangat berguna untuk bekerja sehari-hari. 
+</P>
+<UL>
+	<LI><P><B>Perintah-perintah dasar seperti DOS.</B> <BR>Semua
+	perintah DOS atau command di Windows memiliki padanannya di Linux.
+	Sebaliknya, banyak perintah di Linux, misalnya untuk mengonfigurasi
+	server-server, tidak dapat dilakukan dengan Windows.
+	Perintah-perintah seperti DOS itu antara lain: <BR>$ ls artinya
+	melihat isi direktori atau dir<BR>$ mkdir artinya membuat
+	direktori<BR>$ rmdir artinya menghapus direktori yang tidak ada
+	isinya<BR>$ cp artinya copy, rm artinya remove atau delete, mv
+	artinya move atau pindah<BR>$ cd artinya pindah direktori. Jika
+	tanpa opsi atau argument, berarti pindah ke direktori home user yang
+	sedang login.</P>
+	<LI><P><B>Perintah-perintah dan aplikasi khusus.</B> <BR>$ pwd
+	artinya print working directory atau menanyakan nama direktori
+	sekarang.<BR>$ whoami artinya menanyakan siapa yang sekarang sedang
+	bekerja (user apa yang sedang digunakan).<BR>$ mail artinya melihat
+	email yang masuk. Jika ada daftar email, tekan r diikuti nomor email
+	untuk membaca email tersebut, r untuk mereply dan d untuk menghapus.
+	Keluar dari email gunakan q atau x jika tidak jadi menghapus. <BR>$
+	lynx untuk mengakses web, seperti links.<BR>$ joe editor teks yang
+	mirip ne dan emacs.<BR>$ vi juga editor teks yang mirip ne.<BR>$ su
+	untuk berubah menjadi root. <BR>$ ps untuk melihat daftar program
+	yang sedang berjalan, lengkap dengan nomor id. Lebih lengkap lagi
+	menggunakan perintah ps -aux.<BR>$ cat untuk menampilkan isi file
+	tanpa mengedit.<BR>$ less mirip dengan cat, namun bisa melihat per
+	layar atau per baris.</P>
+</UL>
+<P><BR><BR>
+</P>
+<P>Untuk mengetahui arti setiap perintah, tersedia perintah âman
+perintahâ yang akan menampilkan manual perintah. Contoh berikut ini
+untuk menampilkan manual perintah ls.</P>
+<P STYLE="margin-bottom: 0cm; font-weight: medium"><FONT FACE="Courier, monospace"><FONT SIZE=2>$
+man ls</FONT></FONT></P>
+<P><BR><BR>
+</P>
+<H4 CLASS="western">b. Mengenal user di Linux</H4>
+<P>Linux adalah sistem operasi multiuser dan multitasking. Multiuser
+artinya, dalam waktu yang bersamaan, Linux dapat digunakan oleh
+banyak user, baik melalui keyboard dan mouse yang sama atau melalui
+komputer lain dalam jaringan. 
+</P>
+<P><BR><BR>
+</P>
+<P>Multitasking artinya dalam waktu yang sama, Linux dapat
+menjalankan beberapa program. Bahkan Linux dapat menjalankan banyak
+Window, misalnya Anda dapat menjalankan Icewm, XFCE, Blackbox, KDE,
+dan GNOME, seakan-akan menjalankan Windows 95, 98, XP, NT, 2000, dan
+2003, juga Macintosh secara bersamaan.</P>
+<P><BR><BR>
+</P>
+<P>Setiap user memiliki hak yang berbeda, misalnya sesama user biasa
+tidak bisa saling melihat isi direktori dan isi file. Ini salah satu
+yang membuat Linux aman terhadap penyebaran virus.</P>
+<P><BR><BR>
+</P>
+<P>User yang Anda gunakan pertama menjalankan Linux Oralux adalah
+knoppix, tanpa password. Direktori kerja knoppix adalah
+/home/knoppix. 
+</P>
+<P><BR><BR>
+</P>
+<H4 CLASS="western">c. Bekerja sebagai admin</H4>
+<P>Saat bekerja, biasanya pengguna login sebagai user biasa. User
+biasa tidak punya akses penuh terhadap sistem. Agar dapat memiliki
+akses penuh, Anda harus login sebagai root atau superuser. Jika Anda
+telah login sebagai user biasa, Anda dapat berubah menjadi root
+dengan perintah su.</P>
+<P><BR><BR>
+</P>
+<P>Di Linux Oralux, Anda bisa mudah berubah menjadi root tanpa harus
+memasukkan password. Dalam kenyataan kerja yang normal di Linux,
+setiap user dan root harus memiliki password. 
+</P>
+<P><BR><BR>
+</P>
+<P>Untuk keamanan, bekerja biasa harus menggunakan user biasa, bukan
+root, karena root punya kekuasaan tak terbatas. Jika sedikit saja
+melakukan kesalahan, misalnya menghapus file penting, komputer bisa
+bermasalah. Untuk bekerja sebagai root, sebaiknya tetap sebagai user
+biasa, lalu menjalankan perintah untuk root dengan menambahkan kata
+sudo di depan perintah. sudo artinya superuser do atau menjalankan
+perintah root.</P>
+<P><BR><BR>
+</P>
+<P>Berikut ini beberapa perintah penting sebagai admin. Sekali lagi,
+sebagai user knoppix, tambahkan perintah sudo di depan
+perintah-perintah ini. Misalnya, sudo fdisk -l untuk melihat susunana
+partisi harddisk.</P>
+<P>Menambah user baru:</P>
+<P STYLE="margin-bottom: 0cm; font-weight: medium"><FONT FACE="Courier, monospace"><FONT SIZE=2>#
+adduser nama-user</FONT></FONT></P>
+<P><BR><BR>
+</P>
+<P>Menghapus user:</P>
+<P STYLE="margin-bottom: 0cm; font-weight: medium"><FONT FACE="Courier, monospace"><FONT SIZE=2>#
+deluser nama-user</FONT></FONT></P>
+<P><BR><BR>
+</P>
+<P>Mengedit partisi harddisk primary master. 
+</P>
+<P STYLE="margin-bottom: 0cm; font-weight: medium"><FONT FACE="Courier, monospace"><FONT SIZE=2>#
+fdisk /dev/hda</FONT></FONT></P>
+<P><BR><BR>
+</P>
+<P>Mengaitkan harddisk /dev/hda1 ke sistem Linux dengan titik kait di
+/mnt/hda1. Mount juga untuk disket atau CDROM atau file sharing di
+komputer lain.</P>
+<P STYLE="margin-bottom: 0cm; font-weight: medium"><FONT FACE="Courier, monospace"><FONT SIZE=2>#
+mount /dev/hda1 /mnt/hda1</FONT></FONT></P>
+<P><BR><BR>
+</P>
+<H4 CLASS="western">d. Menyimpan direktori kerja (/home/knoppix) dan
+file-file konfigurasi</H4>
+<P>Oralux secara normal bekerja hanya dengan CDROM dan RAM (memory
+yang bersifat sementara). Data atau file-file yang pernah Anda buat
+atau ubah, dan file-file konfigurasi sistem akan hilang jika komputer
+dimatikan atau direstart.</P>
+<P><BR><BR>
+</P>
+<P>Agar file-file konfigurasi sistem dan /home/knoppix tersimpan, di
+komputer harus ada harddisk atau USB-flash-disk. Dua perintah yang
+harus Anda jalankan sebelum mematikan komputer pertama kali adalah
+saveconfig dan mkpersistenthome.</P>
+<P><BR><BR>
+</P>
+<P><B><FONT FACE="Courier, monospace">$ saveconfig</FONT></B><BR>Sebagai
+user biasa, Anda juga dapat menjalankan saveconfig. Sesuai dengan
+petunjuk, Anda akan diminta menentukan di mana letak file. Letak file
+adalah nama partisi harddisk atau partisi usb-flash-disk. Misal di
+komputer ada harddisk berisi Windows, biasanya dikenali Linux sebagai
+/dev/hda1, artinya partisi satu pada harddisk yang terpasang di kabel
+primary master. Usb-flash-disk biasanya dikenali sebagai /dev/sda1
+atau /dev/sda saja.</P>
+<P><BR><BR>
+</P>
+<P STYLE="font-weight: medium">Cara memanggil file konfigurasi ini
+saat boot adalah dengan memberi opsi myconfig=scan atau
+myconfig=/dev/hda1 atau sesuai dengan nama partisi untuk
+menyimpannya. Pilihan myconfig=scan hanya pas jika hanya ada satu
+file home knoppix yang pernah dibuat.<BR><BR><BR>
+</P>
+<P><B><FONT FACE="Courier, monospace">$ mkhomepersistent</FONT></B><BR>Ketika
+bekerja sebagai user biasa (knoppix), file-file hasil kerja tersimpan
+di bawah direktori /home/knoppix. Agar tidak hilang, direktori
+knoppix di bawah direktori /home ini dapat disimpan ke harddisk atau
+usb-flash-disk dengan perintah mkhomepersistent. Penyimpanan ini akan
+menggunakan format Linux, namun cukup berupa file, tidak harus
+memformat seluruh partisi. 
+</P>
+<P><BR><BR>
+</P>
+<P STYLE="font-weight: medium">Perhatian: Anda harus hati-hati
+mengikuti langkah-langkah perintah ini, karena salah satu pilihan
+adalah menghapus partisi harddisk untuk diformat semua menjadi Linux.
+Pilihlah No dengan memindah-mindah kursor di keyboard atau TAB. Bila
+perlu, ulangi pindah-pindah kursor ini agar yakin bahwa Anda tidak
+memilih mempartisi seluruh harddisk, tapi cukup membuat file di
+partisi harddisk tersebut.</P>
+<P><BR><BR>
+</P>
+<P STYLE="font-weight: medium">Pertama, Anda akan ditanya, â<I>Do
+you want to create a persistent home directory for the knoppix user?
+Please press y or n followed by the return key.â</I></P>
+<P STYLE="font-weight: medium">Jawab dengan y, artinya Anda setuju
+memindahkan /home/knoppix ke tempat penyimpanan.</P>
+<P><BR><BR>
+</P>
+<P STYLE="font-weight: medium">Kedua, Linux akan menampilkan daftar
+partisi yang ada di harddisk. Dengarkan satu per satu, dan pilih yang
+Anda yakin cukup ruang untuk menyimpan file-file kerja. Partisi ini
+diberi nomor dan nama direktori, misalnya Partition 1 /dev/hda1. 
+</P>
+<P STYLE="font-weight: medium">Jawab dengan menekan angka satu.</P>
+<P><BR><BR>
+</P>
+<P STYLE="font-weight: medium">Ketiga, inilah langkah yang paling
+gawat, yaitu apakah Anda akan menggunakan seluruh partisi (y) atau
+hanya membuat file pada partisi yang telah dipilih sebelunya (n). 
+</P>
+<P STYLE="font-weight: medium">Kalimat pertanyaannya adalah, â<I>Do
+you want to use the ENTIRE Partition, anda would like to format it
+with the Linux filesystem? NO=Just create an image in the existing
+filesystem. Please press y or n followed by the return key.â</I></P>
+<P STYLE="font-weight: medium">Jawab n atau NO, artinya Anda hanya
+ingin membuat file image untuk /home/knoppix.</P>
+<P><BR><BR>
+</P>
+<P>Cara memanggil saat boot adalah memberi opsi home=scan atau
+home=/dev/hda1 atau sesuai dengan partisi yang telah dipilih sewaktu
+menjalankan mkhomepersistent. Pilihan home=scan hanya pas jika hanya
+ada satu file home knoppix yang pernah dibuat.</P>
+<P><BR><BR>
+</P>
+<H3 CLASS="western">5. Calculator 
+</H3>
+<P><BR><BR>
+</P>
+<P>Anda sudah biasa menggunakan kalkulator? Ya, YASR dan Oralux
+menyediakan program kalkulator. Jika bekerja di desktop biasa, salah
+satu kalukaltor adalah bc. Anda dapat menjumlah, mengurang, membagi,
+mengalikan, dan sebagainya, dengan program kalukaltor ini.</P>
+<P><BR><BR>
+</P>
+<P>Contoh, untuk mendapatkan hasil perkalian dan penjumlahan ini,
+coba ketikkan di keyboard. Apakah hasilnya berturut-turut adalah 357,
+5635, 4669?</P>
+<P STYLE="margin-bottom: 0cm; font-weight: medium"><FONT FACE="Courier, monospace"><FONT SIZE=2>&gt;&gt;&gt;
+23*7+28*7</FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm; font-weight: medium"><FONT FACE="Courier, monospace"><FONT SIZE=2>357</FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm; font-weight: medium"><FONT FACE="Courier, monospace"><FONT SIZE=2>&gt;&gt;&gt;
+23*(7+28)*7</FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm; font-weight: medium"><FONT FACE="Courier, monospace"><FONT SIZE=2>5635</FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm; font-weight: medium"><FONT FACE="Courier, monospace"><FONT SIZE=2>&gt;&gt;&gt;
+23*(7+28*7)</FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm; font-weight: medium"><FONT FACE="Courier, monospace"><FONT SIZE=2>4669</FONT></FONT></P>
+<P STYLE="margin-bottom: 0cm; font-weight: medium"><FONT FACE="Courier, monospace"><FONT SIZE=2>&gt;&gt;&gt;</FONT></FONT></P>
+<P><BR><BR>
+</P>
+<P>Tekan Ctrl-d untuk kembali ke menu YASR.</P>
+<P><BR><BR>
+</P>
+<H3 CLASS="western">6. Quit YASR</H3>
+<P><BR><BR>
+</P>
+<P>Jika Anda keluar dari YASR, Anda akan ditanya tiga langkah
+penting, yaitu mematikan komputer, mereboot, atau kembali bekerja.</P>
+<UL>
+	<LI><P>Apakah Anda ingin mematikan komputer atau shutdown?<BR>Tekan
+	enter jika ya, atau tekan tombol selain enter jika tidak ingin
+	mematikan komputer.</P>
+	<LI><P>Apakah Anda ingin merestart komputer atau reboot?<BR>Tekan
+	enter jika ya, atau tekan tombol selain enter untuk bekerja kembali
+	di Oralux. 
+	</P>
+	<LI><P>Apakah Anda ingin mengubah preferensi?<BR>Tekan enter jika
+	ya, atau tekan tombol selain enter untuk kembali ke desktop
+	sebelumnya. Pertanyaan atau tawaran mengubah preferensi ini akan
+	diulang setiap reboot komputer jika Anda menggunakan /home/knoppix
+	yang ada di harddisk (persistent home). 
+	</P>
+</UL>
+<H2 CLASS="western" STYLE="page-break-before: always"><A NAME="Bab Empat: Desktop Emacspeak|outline"></A>
+Bab Empat: Desktop Emacspeak</H2>
+<H2 CLASS="western"><BR><BR>
+</H2>
+<P CLASS="text-body-indent-western">Tujuan: 
+</P>
+<P CLASS="text-body-indent-western">Setelah menyelesaikan bab empat
+ini, Anda diharapkan mampu bekerja di Linux dengan desktop Emacspeak,
+dengan editor teks emacs, browser web w3m, pembaca email gnus, dan
+bekerja di shell.</P>
+<P CLASS="text-body-indent-western"><BR><BR>
+</P>
+<P>Setelah Anda keluar dari YASR atau pada saat boot Oralux, Anda
+dapat mengatur preferensi untuk masuk ke desktop emacspeak. Halaman
+pertama yang ditampilkan adalah editor teks emacs.</P>
+<P><BR><BR>
+</P>
+<H3 CLASS="western">1. Editor teks emacs</H3>
+<P><BR><BR>
+</P>
+<H4 CLASS="western">a. Kecepatan baca emacspeak</H4>
+<P>Anda dapat mengatur kecepatan screen reader emacspeak dengan cara
+sebagai berikut:</P>
+<P>Ctrl-e d 1</P>
+<P>Artinya menekan dan menahan tombol Ctrl, diikuti tombol e lalu
+dilepas, dan menekan tombol angka 1 (satu, bukan huruf l). Nilai 1
+artinya sangat lambat.</P>
+<P>Ctrl-e d 9</P>
+<P>Nilai 9 artinya sangat cepat.</P>
+<P>Cobalah dengan angka 1 hingga 9 untuk menemukan kecepatan membaca
+yang sesuai dengan kebutuhan Anda.</P>
+<P><BR><BR>
+</P>
+<H4 CLASS="western">b. Shortcut dan cursor di emacs 
+</H4>
+<P>Apa yang ada di layar adalah isi buffer atau file teks yang sedang
+diedit, dan di bagian bawah layar ada tempat untuk memberi perintah. 
+</P>
+<P><BR><BR>
+</P>
+<P>Perintah-perintah atau shortcut emacs diawali Ctrl dan Alt atau
+keduanya. Ctrl kadang disingkat C. Ctrl-x artinya tombol Control
+ditekan dan ditahan, lalu diikuti dengan menekan tombol x dan dilepas
+bersama-sama. Alt bisa digantikan Escape atau Esc, kadang disingkat
+sebagai M (Meta key). Bedanya dengan Alt, Esc tidak ditahan saat
+menekan. Alt-x artinya tombol Alt ditahan dan diikuti tombol x,
+sedangkan Esc-x artinya tombol Esc ditekan dan langsung dilepas, lalu
+diikuti tombol x.</P>
+<P><BR><BR>
+</P>
+<P>Jika tombol setelah Ctrl atau setelah Alt berupa tombol yang
+berpasangan dengan Shift, maka ditekan Ctrl atau Alt dengan Shift
+secara bersamaan. Anda juga dapat menggunakan tombol panah yang ada
+di keyboard untuk memindahkan kursor di layar. Contoh, Alt-&lt;
+artinya tombol Alt dan Shift ditekan dan ditahan, diikuti tombol &lt;.
+Jika tanpa Shift berarti Alt-, (Alt dan koma).</P>
+<P><BR><BR>
+</P>
+<P>Manual atau online tutorial lengkap tentang Emacs dapat dibaca
+dengan mengettikkan perintah Ctrl-h t. Artinya tombol Ctrl dan h
+ditekan bersamaan, lalu dilepas dan tekan t (tutorial).</P>
+<P><BR><BR>
+</P>
+<P>Berikut ini contoh penggunaan tombol panah, Ctrl, dan Alt.</P>
+<UL>
+	<LI><P>Tombol panah kanan dan kiri untuk pindah ke huruf di sebelah
+	kanan atau pindah ke huruf di sebelah kiri.</P>
+	<LI><P>Pindah panah ke atas dan bawah berarti pindah baris. 
+	</P>
+	<LI><P>Tombol PgDn atau PageUp untuk pindah satu halaman atau satu
+	layar ke bawah dan ke atas.</P>
+	<LI><P>Tombol Home untuk pindah ke awal buffer atau awal file.</P>
+	<LI><P>Tombol End untuk pindah ke akhir buffer.</P>
+	<LI><P>Tombol del atau backspace untuk menghapus teks.</P>
+	<LI><P>Ctrl-a untuk pindah ke awal baris.</P>
+	<LI><P>Ctrl-e untuk pindah ke akhir baris.</P>
+	<LI><P>Alt-&lt; untuk pindah ke awal buffer.</P>
+	<LI><P>Alt-&gt; untuk pindah ke akhir buffer.</P>
+</UL>
+<P><BR><BR>
+</P>
+<H4 CLASS="western">c. Meyimpan buffer atau file ke harddisk</H4>
+<UL>
+	<LI><P>Ctrl-x Ctrl-s untuk menyimpan buffer ke file lama.</P>
+	<LI><P>Ctrl-x Ctrl-w untuk menyimpan menjadi file baru.</P>
+	<LI><P>Ctrl-x Ctrl-c untuk keluar dari emacs dan menyimpan buffer
+	yang belum disimpan.</P>
+</UL>
+<P><BR><BR>
+</P>
+<H4 CLASS="western">d. Berpindah antar buffer atau multi window</H4>
+<P>Emacs mendukung multi window, artinya Anda dapat membuka beberapa
+file atau buffer secara bersamaan. Misalnya, Anda membuka dua file
+latihan1.txt dan latihan2.txt dengan perintah berikut ini:</P>
+<P STYLE="margin-bottom: 0cm; font-weight: medium"><FONT FACE="Courier, monospace"><FONT SIZE=2>$
+emacspeak latihan1.txt latihan2.txt</FONT></FONT></P>
+<P><BR><BR>
+</P>
+<UL>
+	<LI><P>Ctrl-x o untuk masuk ke buffer yang sedang muncul di layar.</P>
+	<LI><P>Ctrl-x 0 untuk menyembunyikan atau hide buffer yang sedang
+	diedit.</P>
+	<LI><P>Ctrl-x 1 untuk mempertahankan bekerja pada buffer yang sedang
+	diedit.</P>
+	<LI><P>Ctrl-x Ctrl-b untuk melihat daftar buffer yang sedang diedit,
+	dan Ctrl-x o untuk pindah pilhan buffer, lalu tekan Enter jika ingin
+	masuk ke buffer yang dipilih.</P>
+	<LI><P>Ctrl-x b dan masukkan nama file untuk pindah ke buffer
+	tertentu.</P>
+	<LI><P>Ctrl-x k untuk menampilkan daftar buffer yang akan ditutup.
+	Tekan TAB untuk memilih buffer lain yang akan ditutup, dan tekan
+	Enter pada nama buffer atau file untuk menutup buffer tersebut.</P>
+	<LI><P>Ctrl-x 2 untuk menampilkan dua buffer. Jika file yang dibuka
+	hanya satu, akan muncul buffer kedua yang isinya sama (copy buffer).
+	Ini berguna untuk mengedit sebuah file besar pada beberapa bagian
+	halaman secara bersamaan.</P>
+	<LI><P>Ctrl-x f untuk membuka file baru. Ketik nama file atau tekan
+	TAB untuk memilih daftar file, dan tekan Enter. 
+	</P>
+</UL>
+<P><BR><BR>
+</P>
+<H4 CLASS="western">e. Copy, cut, paste, search</H4>
+<UL>
+	<LI><P>Ctrl-spasi untuk menandai buffer yang akan disalin (copy)
+	atau dipotong (cut). Kemudian Ctrl-x a untuk memindahkan kursor ke
+	awal baris. Dengan demikian, seluruh teks dalam satu baris akan
+	di-copy atau di-cut.</P>
+	<LI><P>Alt-w untuk copy</P>
+	<LI><P>Ctrl-w untuk cut.</P>
+	<LI><P>Ctrl-y untuk paste.</P>
+	<LI><P>Ctrl-y dan Alt-y untuk paste pada area tertentu.</P>
+	<LI><P>Ctrl-s untuk search atau find teks dalam buffer.</P>
+	<LI><P>Alt-% untuk find dan replace, atau mencari dan mengganti
+	dengan teks yang ditanyakan oleh emacs.</P>
+	<LI><P>Ctrl-x u untuk undo atau membatalkan perintah-perintah
+	sebelumnya.</P>
+</UL>
+<P><BR><BR>
+</P>
+<H3 CLASS="western">2. Browser web emacs-w3m</H3>
+<P><BR><BR>
+</P>
+<P>Untuk mulai menjalankan emacs-w3m, ketik Alt-x w3m, artinya tekan
+tombol Alt dan x diikuti menulis w3m. Browser web ini mirip dengan
+links dan lynx. Sayangnya, penulis tidak berhasil menggunakan w3m
+untuk mengakses beberapa webmail. 
+</P>
+<P><BR><BR>
+</P>
+<H3 CLASS="western">3. Email client gnus</H3>
+<P><BR><BR>
+</P>
+<P>Untuk mulai menjalankan pembaca news dan email client, ketik Alt-x
+gnus. Jawab y ketika ditanya apakah akan bekerja secara offline, dan
+apakah continue karena tidak ada nntp. Nntp adalah protokol untuk
+news. Ketik y pula jika ada buffer yang auto-save. 
+</P>
+<P><BR><BR>
+</P>
+<H3 CLASS="western">4. Shell terminal</H3>
+<P><BR><BR>
+</P>
+<P>Untuk mulai bekerja di shell, ketik Alt-x shell. Selanjutnya Anda
+dapat bekerja seperti di terminal biasa. Perbedaan dengan shell biasa
+atau yasr, shell di emacspeak ini tidak dapat memanfaatkan panah di
+keyboard untuk mengakses perintah-perintah yang pernah dijalankan
+sebelumnya. Shell juga bukan standar di Linux, sehingga tidak dapat
+digunakan untuk menjalankan aplikasi seperti links dan lynx. Untuk
+menjalankan shell seperti di Linux biasa, perintahnya Alt-x term.</P>
+<P><BR><BR>
+</P>
+<P>Secara umum, emacspeak dan yasr dapat untuk bekerja di Linux dalam
+mode teks. Kekurangan emacspeak dan yasr adalah tidak dapat
+menjalankan program-program selain yang didukung kedua desktop
+tersebut. 
+</P>
+<P><BR><BR>
+</P>
+</BODY>
+</HTML>

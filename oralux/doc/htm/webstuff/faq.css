@@ -1,32 +1,52 @@
-div#main {
+/* More styles for the homepage */
+div#main, div#answers {
  clear:both;
+/*
  float:left;
  width: 30%;
+*/
+ width: 68%;
  margin:0;
  margin-top:1em;
+/*
  border-right:solid 2px #fdffba;
+*/
 }
 
+/*
 div#answers {
  float: none;
  margin: 0 0 0 32%;
  margin-top:1em;
  text-align:left;
 }
+*/
 
 h2 {
  margin-bottom:0.2em;
 }
 
-
-div#answers h2 {
 /*
- border-bottom:2px dashed #f90;
+div#answers h3 {
+ padding:0.2em;
+ border:solid 1px #f90;
+ border-width:0 0 1px 0;
+}
 */
+
+div#answers h4 {
+ padding-left:0.2em;
+ border:solid 1em #f90;
+/*
+ border-width:0.2em 0 0.2em 0.5em;
+ border-color:#fff #fff #ffc #f90;
+*/
+ border-width:0.2em 0 0.2em 0.5em;
+ border-color:#000 #000 #000 #f90;
 }
 
 div#main h2 {
- border-bottom:2px dotted #f90;
+/* border-bottom:2px dotted #f90;*/
 }
 
 div#main ul, div#main ol {
@@ -39,3 +59,4 @@ div#main li{
  list-style-position:outside;
  margin-bottom:0.5em;
 }
+

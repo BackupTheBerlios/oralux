@@ -5,8 +5,10 @@ html, body {
 
 body {
  margin:0% 2%;
- background-color:#fff;
- color:#000;
+/* background-color:#fff;*/
+ background-color:#000;
+/* color:#000;*/
+ color:#ff0;
  font-size:100%;
  font-family:Arial, Helvetica, sans-serif;
  font-weight:normal;
@@ -18,8 +20,10 @@ em {
 }
 
 .terminal {
+/*
  background-color:#ededed;
  color:black;
+*/
  display:block;
 /*
  width:20em; 
@@ -29,9 +33,17 @@ em {
 }
 
 samp, kbd {
- font-size:120%;
+ font-size:100%;
  font-family:monospace;
  font-weight:bold;
+ padding: 0.1em 0;
+ background-color:#000;
+ color:#fff;
+/*
+ background-color:#ccc;
+ color:inherit;
+ padding: 0.1em 1em;
+*/
 }
 
 div {
@@ -41,23 +53,30 @@ div {
 
 a {
   text-decoration:underline;
+  /* New */
+  color:#fff;
+  background-color:#000;
 }
 
 a.link {
-  color:#0000c8;
+/*  color:#0000c8;*/
+  color:#fff;
   background-color:inherit;
   text-decoration:underline;
 }
 
 a.visited {
-  color:#7000aa;
-  color:red;
+/*  color:#7000aa;*/
+  color:#ffc;
   background-color:inherit;
   text-decoration:underline;
 }
 
-a:hover {
+a:hover, div#header a:hover span#firstspan {
+/*
   background-color:#ff0;
+*/
+  background-color:#fff;
   color:#000;
   border:none;
 }
@@ -104,15 +123,16 @@ div#header span#firstspan img {
 /* Adding the id "secondspan" instead of span+span+span for IE 5.5 */
 
 div#header span#secondspan {
-  padding:0.2em 0 0 0;
+  paddi ng:0.2em 0 0 0;
   margin:0;
+/*
   color:black;
   background-color:white;
+*/
   font-size:0.9em;
   font-style:normal;
   border:1px solid #f90;
   border-width:2px 0 0 0;
-
 }
 
 div#header a {
@@ -132,37 +152,50 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 h3,h4,h5,h6 {
- font-style:normal;
- font-weight:bold;
  font-family:Arial, Helvetica, sans-serif;
- padding:0;
- margin:0;
 }
 
 h2 {
- font-size:1.6em;
+ border-width:0;
+ background-color:#000;
+ color:#fc3;
+ padding:0.2em 0 0 0;
+/* 
  border-width:8px 2px;
- border-style:dotted solid;
- border-color: #fff #faffda;
- background-color:#faffda;
- color:inherit;
+ border-color: #fff;
+ border-color: #000;
+ background-color:#ffc;
  padding:0.2em 0;
+*/
 }
 
 h3 {
  border-width:0 0 1px 0;
- border-style:dashed;
- border-color: #faa;
+ border-style:dotted;
+ border-color:#ff0;
 }
 
 h3,h4,h5,h6 {
- margin-top:1em;
+/* margin-top:1em;*/
+  margin:0.8em 0 0.2em 0;
 }
 
-p, blockquote, dt, ul, ol {
- margin:0.4em 0;
+p, blockquote, ul, ol {
+ margin:0.4em 0 0.5em 0;
  padding:0;
 }
+/*
+p, blockquote, dt, ul, ol {
+ margin:0.4em 0 1.5em 0;
+ padding:0;
+}
+*/
+
+/*
+p {
+ margin-bottom:1.5em;
+}
+*/
 
 ul, ol {
  margin-left:0.5em;
@@ -176,30 +209,6 @@ li, dd {
 dl, div.nav ul {
  margin:0;
  padding:0;
-}
-
-dl.twocols {
- margin:0;
- padding:0.5em 0;
-}
-
-dl.twocols dt {
- clear:both;
- width:6em;
- float:left;
- margin:0;
- padding:0.5em;
- font-style:normal;
- font-weight:bold;
- font-family:Arial, Helvetica, sans-serif;
- border-bottom:dotted red 1px;
- background-color:#faffda;
- color:inherit;
-}
-
-dl.twocols dd {
- margin:0;
- padding:0.5em 0;
 }
 
 div.nav li{
@@ -216,8 +225,10 @@ div#footer {
  line-height: 1em;
  color:inherit;
  width:100%;
- border-top:1em solid #fff;
- background-color:#fff8e0;
+/* border-top:1em solid #fff;*/
+ border-top:1em solid #000;
+/* background-color:#fff8e0; */
+ background-color:inherit;
 }
 
 div#footer p {
@@ -243,13 +254,21 @@ div#sidebar {
  margin: 0 0 0 70%;
  margin-top:1em;
  text-align:left;
- padding:0;
+ padding:0 13px;
+/*
  border-left:solid 2px #fdffba;
+*/
+ border-left:solid 1px #c30;
 }
 
 div#sidebar h2 {
  border-bottom:2px dotted #f90;
 }
 
+fieldset, select, input {
+ background-color:#000;
+ color:#ff0;
+ border:2px solid #f00;
+}
 
 
