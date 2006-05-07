@@ -554,8 +554,8 @@ struct t_translation TheRussianMessages[]=
    "Хотите ли Вы это меню по-русски?",
   },
 
-  {"0 point 7 point 6",
-   "0 тоaчка 7 тоaчка 6",
+  {"0 point 7 alpha",
+   "0 тоaчка 7 alpha",
   },
 
   {"Do you want to change the keyboard features?",

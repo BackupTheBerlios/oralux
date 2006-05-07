@@ -69,6 +69,7 @@ add_soft() {
     next_script brltty.sh "brltty"
     next_script convert.sh "convert"
     next_script doc.sh "doc"
+    next_script cd-boot.sh "cd-boot"
 
 # The following script must be the last one
     next_script end.sh "end"

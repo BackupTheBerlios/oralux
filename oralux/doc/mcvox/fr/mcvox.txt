@@ -1,0 +1,196 @@
+mcvox en quelques mots
+
+* Sommaire
+1. Introduction
+1.1 Panneau principal
+1.2 Menu
+1.3 Configuration
+2. Aperçu
+2.1 Quitter mcvox 
+2.2 Naviguer à travers l'arborescence de fichiers
+2.3 Barre de menu
+2.3.1 Menu Commande : Recherche de fichier
+2.3.2 Menu Fichier
+3. Bref résumé des touches de fonctions
+
+* 1. Introduction
+mcvox est un dérivé de Midnight Commander, prononçable facilement par
+une interface audio ou affichable sur un écran braille ou un petit
+terminal.
+
+Dans le meilleur des cas, mcvox restera une solution temporaire : si
+les capacités des lecteurs d'écran s'accroissent suffisamment pour
+rendre intelligible une présentation complexe de texte en deux
+dimensions, alors les personnes déficients visuels lanceront
+directement les applications telles que Midnight Commander. 
+
+Le mode dired d'Emacs, propose aussi un navigateur de fichier intuitif
+bien rendu par Emacspeak.
+
+** 1.1 Panneau principal
+
+mcvox propose un unique panneau affichant le contenu du répertoire
+courant, ligne après ligne. Les touches de direction (flèches)
+contrôlent la navigation, la touche Insertion sert à sélectionner les
+fichiers, et les touches de fonction permettent de renommer, éditer et
+copier des fichiers.
+
+** 1.2 Menu
+
+L'utilisateur interagit avec mcvox par des raccourcis clavier ou le menu.
+
+La barre de menu propose des actions simples, ou bien des actions plus
+élaborées après saisie d'un formulaire.
+
+Les formulaires sont composés de champs de saisie, de cases à cocher
+et de boutons.
+
+** 1.3 Configuration
+
+La configuration de mcvox sous Oralux est : 
+
++ Éditeur: 'ne'
++ Pager: w3m
++ Convertit les fichiers PDF, doc ou swx (OpenOffice) en fichier texte.
++ Joue les fichiers audio (wav, mp3, ogg).
+
+* 2. Aperçu
+** 2.1 Quitter mcvox
+
+Il y a trois étapes :
+
++ Tout d'abord appuyez sur F10.
+Un libellé s'affiche :
+"Voulez vous réellement quitter Midnight Commander"
+
++ Appuyez alors sur la flèche en bas pour que l'action associée au
+libellé apparaisse:
+Button: oui
+
++ Appuyer sur Entrée pour accepter.
+
+** 2.2 Naviguer à travers l'arborescence de fichiers
+
+mcvox démarre en affichant la liste des répertoires et des fichiers du
+répertoire courant.
+
+La ligne en haut de l'écran indique le chemin du répertoire courant.
+Au dessous, un seule ligne est affichée, il s'agit de l'un des
+répertoires ou de l'un des fichiers du répertoire courant.
+
+Le curseur se trouve sur cette ligne.
+
+Au début, cette ligne indique le tout premier répertoire : 
+/..
+
+C'est à dire slash point point
+
+Le symbole slash indique qu'il s'agit d'un répertoire.
+
+Le symbole point point correspond au répertoire père. Ainsi pour
+passer au répertoire père, vous pourriez appuyer sur la touche Entrée.
+
+Pour afficher le premier fichier commençant par la lettre d, appuyez
+juste sur d.
+
+Appuyez sur la flèche en bas pour afficher le nom de fichier suivant,
+et la flèche en haut pour le fichier précédant.
+
+Appuyez sur Entrée pour ouvrir le fichier dont le nom est affiché.
+
+Pour revenir au tout premier répertoire "point point" de la liste,
+appuyez juste sur la touche Origine (Home). La touche Fin (End) amène
+au dernier fichier.
+
+** 2.3 Barre de menu
++ Appuyez sur la touche F9 : la barre de menu s'affiche dans la ligne
+du haut de l'écran; le curseur se trouve sur cette ligne. Pour quitter
+la barre de menu, appuyez sur la touche échappement deux fois; le
+curseur revient alors à la liste de répertoires et de fichiers.
+
+La barre de menu se compose de quatre menus :
+Gauche, Fichier, Commande, Options.
+
+Les flèches gauche et droite font passer horizontalement de menu en
+menu.
+Les flèches haute et bas activent le menu et affiche ses actions.
+
+** 2.3.1 Menu Commande : Recherche de fichier
++ Appuyez par exemple sur la flèche droite jusqu'à ce que le menu
+commande s'affiche.
+
++ Ensuite appuyez sur la flèche en bas : la première action est 
+"rechercher fichier  escape ?"
+
+L'action "rechercher fichier" correspond au raccourci "touche Escape
++ point d'interrogation"
+
++ Appuyez sur Entrée pour activer l'action "rechercher fichier".
+Un libellé s'affiche :
+"nom du fichier :"
+
++ Appuyez sur la touche flèche en bas pour afficher le champ
+correspondant au libellé :
+"Input:*"
+
+Cette ligne signifie
+"Input:" : il s'agit d'un champ de saisie
+"*": le champ est déjà rempli avec le caractère astérisque.
+
+Cela signifie que la recherche s'effectuera sur n'importe quel nom de
+fichier.
+
++ Supposons que vous ne souhaitiez trouver que les fichiers ayant
+l'extension txt.
+
+Saisissez alors dans le champ de saisie :
+"*.txt"
+
++ Appuyez ensuite sur la flèche en bas :
+"Contenu :"
+
++ Appuyez sur la flèche en bas pour afficher le champ correspondant :
+"Input:"
+
++ Supposons que vous souhaitiez trouver les fichiers contenant le mot mcvox.
+Tapez dans le champ de saisie :
+mcvox
+
++ Appuyez sur la flèche en bas :
+"Checkbox: respect de la casse"
+
+Appuyez sur la barre espace, pour activer cette case à cocher.
+
+Alors un astérisque apparaît en début de ligne :
+"*Checkbox: respect de la casse"
+
++ Appuyez sur la flèche en bas :
+"*Button: valider"
+
+Il s'agit du bouton valider. L'astérisque signifie que ce bouton est
+le choix par défaut.
+
++ Appuyez sur Entrée et votre recherche démarrera.
+
+Les fichiers trouvés seront listés, vous naviguerez à travers cette
+liste grâce aux flèches haut et bas; appuyez sur Entrée pour
+ouvrir le fichier et deux fois sur échappement pour quitter la liste.
+
+** 2.3.2 Menu Fichier: 
+
+Reste à faire
+
+
+* 3. Bref résumé des touches de fonctions
+
+F1: Aide
+F2: Menu
+F3: Vue
+F4: Éditer
+F5: Copier
+F6: Renommer ou déplacer
+F7: Créer un répertoire
+F8: Supprimer
+F9: Barre de menu
+F10: Quitter
+

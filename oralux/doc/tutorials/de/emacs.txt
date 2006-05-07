@@ -1,100 +1,99 @@
-Unterschriften: Gianfranco Giudice <g.giudice@balcab.ch>
+Unterschriften: Gianfranco Giudice, Lukas Loehrer.
 
 Meine ersten Schritte in GNU/Emacs.
 
 Von Sylvie Xhaard
 
-F�r den gebrauch von Oralux Linux
+Für den gebrauch von Oralux Linux
 
-"Es ist nicht offensichtlich, aber nicht un�berwindlich."
+"Es ist nicht offensichtlich, aber nicht unüberwindlich."
 
 1 Grundbefehle 
-2 �ffnen oder neue Datei erstellen 
+2 Öffnen oder neue Datei erstellen 
 3 Dateien Speichern 
 4 Schreiben in Emacs
 4.1 Im Dokument navigieren 
-5 To surf the open buffers
+5 Durch die offenen Puffer navigieren.
 6 Benutzung des Verzeichnis-Editor
 7 Verwendung der Befehlszeile
 8 Beenden
 
-Beim Start von Emacspeak wird automatisch ein Hilfepuffer geladen mit Emacs and Emacs Speak. Speichern Sie Ihre
-Benutzereinstellungen und speichern Sie Ihre Dokumente wie in den FAQ beschrieben. Siehe springt zum n�chsten Absatz.
+Beim Start von Emacspeak wird automatisch ein Hilfepuffer geladen mit Emacs
+and Emacspeak. Speichern Sie Ihre Benutzereinstellungen und speichern Sie
+Ihre Dokumente wie in den FAQ beschrieben. 
 
-C- x [ bl�ttert eine Seite zur�ck.
 
-C- x ] Bl�ttert auf die n�chste Seite.
+
+
+C- x [ blättert eine Seite zurück.
+
+C- x ] Blättert auf die nächste Seite.
 
 Esc < Springt an den Anfang des Puffers.
 
 Esc > Springt ans Ende des Puffers.
 
-------------------------------------------------------------------------------------------------------------------------------
-
 5 Navigieren im offenen Puffer C-x b
 
-------------------------------------------------------------------------------------------------------------------------------
+Sie haben mehrere Dateien geöffnet oder erstellt und wollen von einer
+zur andern wechsel. Kein Problem, drücken Sie C-x b 
+Wenn Sie gleich die Eingabetaste drücken wechseln Sie zur zuletzt bearbeiteten
+Datei. Wenn Sie einen andern Puffer öffnen wollen, geben Sie seinenn
+Namen oder die ersten Buchstaben davon ein und drücken Sie die Tabulatortaste
+(der Rest des Namens wird automatisch ergänzt). Jeder Puffer ist mit
+einen Prozess assoziiert. Um den Puffer zu schliessen, sollte der
+Prozess beendet werden (siehe C-x k (kill-buffer)).
 
-You opened and or created several files and you want to go from one to the other. No problem. Type C-x b
+6 Verwendung des Verzeichnis-Editors dired-mode (C-x d).
 
-By d�fault, if you press the Enter key, you turn to the last open buffer.
+Geben Sie den kompletten Pfad des Verzeichnisses ein, das betrachtet werden
+soll, und drücken Sie die Eingabetaste. Es öffnet sich ein neurer Puffer. Der
+Cursor ist darin anfangs auf dem ersten Zeichen des Namens der ersten Datei im
+Verzeichnis. Sie können durch die Dateien mit den Pfeil-nach oben und
+Pfeil-nach-unten tasten navigieren.
 
-If you want to open another buffer, type its name, or simply the first letter and press the tabulation key (the name of your
-buffer appears automatically).
+Wenn der Cursor auf einer Datei ist, kann diese durch Drücken der
+Eingabetaste geöffnet werden.
 
-Each buffer is associated with a process. To close an open buffer, the process should be killed. C-x k, kill the active
-buffer.
+Wenn der Cursor auf einem Verzeichnis is, kann durch Drücken der
+Eingabetaste ein neuer Puffer geöffnet werden, um dieses Verzeichnis
+zu erforschen.
 
-------------------------------------------------------------------------------------------------------------------------------
+Sie können ins übergeordnete Verzeichnis wechseln,
 
-6 Using the directory editor (Dired mode) C-x d
+indem Sie die Eingabetaste auf dem zweiten Eintrag der Liste (..) drücken.
 
-------------------------------------------------------------------------------------------------------------------------------
+Der Punkt auf der ersten Zeile steht für das aktuelle Verzeichnis.
 
-Type the complete path of the directory to be explored and press enter. A new buffer is opened. By default, the cursor is on
-the first letter of the first file or directory.You can move in the directory with the keys Up and Down.
+7 Verwendung der Befehlszeile (Shell) (M-x shell)
 
-If your cursor is on a file, the Enter key opens the file.
-
-If your cursor is on a directory, the Enter key opens the directory.
-
-You can go up to the higher directory by selecting
-
-.. (the second line of the listing) and press enter.
-
-The dot on the first line stands for the current directory.
-
-------------------------------------------------------------------------------------------------------------------------------
-
-7 Using the command line (shell) M-x shell
-
-------------------------------------------------------------------------------------------------------------------------------
-
-The command for openning a shell buffer is M-x shell ( caution press Escape key then x and type shell)
+Der Befehl zum öffnen der Befehlszeile ist "M-x shell" (Vorsicht,
+drücken Sie: Escape, dann x und geben Sie dann "shell" ein. Drücken
+Sie dann die Eingabetaste). 
 
 Some useful commands:
 
-who am i: tells you the user name you are logged in as
+who am i: Sagt Ihnen Ihren Benutzernamen.
 
-pwd : print working directory
+pwd : Gibt den Namen des aktuellen Arbeitsverzeichnisses aus. 
 
-cd : Change directory
+cd : Change directory cd: Verzeichnis wechseln
+Beispiele: 
+cd.. Wechsle ins übergeordnete Verzeichnis 
+cd / Wechsle ins Wurzelverzeichnis des Systems 
+cd Wechselt in Ihr Home-Verzeichnis (/home/knoppix) 
+cd /mnt/floppy Geht ins Verzeichnis des Diskettenlaufwerks
 
-examples : cd .. go up to the higher directory cd / go to the top of the system cd go to your home directory (/home/knoppix)
-cd /mnt/floppy go to the floppy disc directory
+ls: Listet Dateien oder Verzeichnisse auf
 
-ls : list files or directories
+mkdir: Verzeichnis erstellen
 
-mkdir : create a directory
+cp : Dateien kopieren
 
-cp : copy files
+Beispiel: cp /home/knoppix/emacs.txt /mnt/floppy (Kopiere die Datei
+emacs.txt auf eine Diskette).
 
-example : cp /home/knoppix/emacs.txt /mnt/floppy (copy the file emacs.txt to a floppy disc)
-
-------------------------------------------------------------------------------------------------------------------------------
-
-8 To quit Emacs
-
-------------------------------------------------------------------------------------------------------------------------------
+8 Um Emacs zu beenden
 
 C-x C-c
+

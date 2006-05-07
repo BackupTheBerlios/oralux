@@ -1,10 +1,10 @@
 # ATTENTION
 # This is not the original emacspeak file. Changed for Oralux. 
-#$Id: Makefile,v 1.5 2005/12/20 21:58:56 gcasse Exp $
+#$Id: Makefile,v 1.6 2006/05/07 15:34:33 gcasse Exp $
 #
 LABEL=1.1
 DIST=software-dtk-$(LABEL)
-CFLAGS=-O3 -fpic -pedantic -ansi -Wall -I /usr/include/tcl8.3 -I /ramdisk/dtk/include -march=i386
+CFLAGS=-O3 -fpic -Wall -I /usr/include/tclX8.3 -I /usr/include/tcl8.3 -I /ramdisk/dtk/include -march=i386
 #CFLAGS=-O3 -fpic -pedantic -ansi -Wall -I/usr/include/tcl8.3 -I/usr/include/tclX8.3 -march=i386
 CPPFLAGS=-DSTDC_HEADERS=1 -Dclock_t=long -DRETSIGTYPE=void 
 

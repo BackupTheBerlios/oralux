@@ -15,7 +15,7 @@ Para uso com o Oralux Linux
 7.1) Usando o comando man no Emacs.
 8) Saindo.
 
-Quando o Emacspeak for iniciado, automaticamente é aberto um  console de ajuda de como salvar suas configurações e organizar seus documentos como está descrito no FAQ. Veja http://www.oralux.org/faq.php#savepref
+Quando o Emacspeak for iniciado, automaticamente é aberto um  console de ajuda de como salvar suas configurações e organizar seus documentos como está descrito no FAQ.
 
 1) Digitando comandos básicos.
 
@@ -125,14 +125,14 @@ Informa com qual usuário você está logado.
 pwd:
 Informa qual é o diretório atual.
 
-CD:
+cd:
 Permite alterar o diretório.
 
 exemplos : 
-CD .. Leva ao nível superior de diretórios 
-CD / vai para a raíz do sistema 
-CD leva ao diretório /home/knoppix. 
-CD /mnt/floppy leva ao diretório correspondente ao disquete.
+cd .. Leva ao nível superior de diretórios 
+cd / vai para a raíz do sistema 
+cd leva ao diretório /home/knoppix. 
+cd /mnt/floppy leva ao diretório correspondente ao disquete.
 
 ls:
  lista arquivos ou diretórios

@@ -9,8 +9,8 @@ mcvox in a nutshell
 2.1 Quiting mcvox 
 2.2 Browsing files
 2.3 Menu Bar
-2.3.1 Command Menu: Find File
-2.3.2 File Menu: Find File
+2.3.1 Command Menu: Find file
+2.3.2 File Menu
 3. Brief function keys summary
 
 * 1. Introduction
@@ -19,23 +19,25 @@ user interface, a braille display or a tiny screen.
 
 Hopefully, mcvox will remain a temporary solution: if the screen
 readers can have more capabilities for rendering a complex 2D textual
-layout, the visually impaired user would directly run applications
-such as Midnight Commander. Otherwise, the dired mode under Emacs,
-already proposes an intuitive file browser. 
+layout, the visually impaired user will directly run applications
+such as Midnight Commander. 
+
+The Emacs dired mode, proposes an intuitive file browser too, well
+rendered by Emacspeak. 
 
 ** 1.1 Main panel
 
-mcvox proposes only one panel listing the current directory, one
-filename at a time. Arrow keys control navigation (next or previous
-filename), the insert key is used to select files and the Function
-Keys perform operations such as renaming, editing and copying files. 
+mcvox proposes only one panel, displaying the content of the current
+directory, one filename at a time. Arrow keys control navigation (next
+or previous filename), the insert key is used to select files and the
+Function Keys perform operations such as renaming, editing and copying files. 
 
 ** 1.2 Menu
 
 The user interacts with mcvox using shortkeys or menu.
 
-The menu bar proposes simple actions, or more elaborated ones relying
-on forms.
+The menu bar proposes simple actions, or more elaborated actions after
+the related form is fullfilled.
 
 The forms are composed of regular fields such as input fields,
 checkboxes and submit buttons. 
@@ -72,15 +74,13 @@ the current directory. The cursor is upon this line.
 At the very beginning, this line indicates the very first directory: 
 /..
 
-That is slash dot dot.
+That is slash dot dot
 
 The slash symbol indicates that a directory name is displayed.
 The dot dot symbol indicates the parent directory. For jumping to the
 parent directory, you would have to press the Enter key. 
 
 For displaying the first filename starting by the d letter, just press d.
-For displaying the first filename starting by the di letters, just press d
-and i; the i must be pressed as soon as possible after the d letter.
 
 Press the bottom arrow key to display the next filename, and the up
 arrow key for the previous filename.
@@ -89,13 +89,6 @@ Whether a filename is displayed, press return to open it.
 
 To come back to the very first "dot dot" directory in the list, just
 press the Home key. The End key jumps to the last filename.
-
-** 2.3 Shortkeys
-
-+ Press F7 for creating a directory. 
-The label displayed is:
-"enter directory name:"
-
 
 ** 2.3 Menu Bar
 + Press the F9 key; the menu bar is displayed in the top line; the
@@ -115,7 +108,7 @@ actions.
 displayed.
 
 + Then press the bottom arrow key: the first action is 
-"find file  escpae ?"
+"find file  escape ?"
 The action "find file" is bounded to the Escape key + question mark
 character.
 
@@ -135,8 +128,7 @@ It means that any filename will be searched for.
 Then enter in the input field:
 "*.txt"
 
-+ Press now the bottom arrow key for jumping to the next field.
-A label is displayed:
++ Press now the bottom arrow key:
 "Content:"
 
 + Press the bottom arrow key to display the related field:
@@ -147,8 +139,7 @@ keyword.
 Enter in the input field:
 mcvox
 
-+ Press the bottom arrow key to display the related field:
-The line displayed is
++ Press the bottom arrow key:
 "Checkbox: case sensitive"
 
 If you want to activate this checkbox, press the Space bar.
@@ -156,7 +147,7 @@ If you want to activate this checkbox, press the Space bar.
 Then an asterisk is added at the beginning of the line:
 "*Checkbox: case sensitive"
 
-+ Press the bottom arrow key to display the related field:
++ Press the bottom arrow key:
 "*Button: ok"
 
 This is the OK button. The asterisk means that this button is the
@@ -168,7 +159,7 @@ down arrow key, and press Enter to open a file or press the Escape key
 twice to quit the list.
 
 ** 2.3.2 File Menu: 
-
+TODO
 
 
 * 3. Brief function keys summary

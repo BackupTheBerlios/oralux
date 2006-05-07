@@ -14,7 +14,7 @@ Sommaire.
 * Changer le débit de la voix 
 Pour un très bas débit, appuyer s'il vous plait sur les touches:
 Control+e d 1
-Pour un très bas débit:
+Pour un très haut débit:
 Control+e d 9
 
 Expérimentez avec différents nombres entre 1 et 9 pour trouver le débit
@@ -29,6 +29,10 @@ Puis, appuyez sur la touche d, relâchez la, et appuyez sur 9.
 Configurer le mode ponctuation à 'all' (toute la ponctuation est
 prononcée), 'some' (certains caracters de ponctuation sont prononcés),
 ou 'none' (aucune ponctuation). 
+
+Tapez svp :
+Control+e d p
+et ensuite votre choix : all, some or none. 
 
 * Écho caractère
 Les touches appuyées peuvent être prononcées ou non.

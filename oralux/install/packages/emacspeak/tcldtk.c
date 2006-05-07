@@ -52,6 +52,7 @@
 #include <tclExtend.h>
 #include <stdlib.h>
 #include <string.h>
+#undef VOID
 #include <dtk/ttsapi.h>
 /* > */
 

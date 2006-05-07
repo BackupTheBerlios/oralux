@@ -2,7 +2,7 @@ s###
 
 ###
 Release 0.7 
-Date: xx Month 2005
+Date: 7 May 2006
 
 * Overview
 * Major updates
@@ -12,21 +12,50 @@ Date: xx Month 2005
 * New softwares
 * Credits
 
+* Overview
+Oralux 0.7 alpha proposes three audio environments (Emacspeak, Yasr, Speakup), six languages (Brazilian Portuguese, English, French, German, Russian, Spanish), Braille drivers (Brltty 3.7.2).
+
+Oralux 0.7 alpha is based on Knoppix 4.02 (kernel 2.6.12). 
+
+** Features
+Emacspeak 23.0 by TV Raman plus patches by Igor B. Poretsky (Multispeech speech server, tables linearization under w3m and much more). Some of these patches are now in the Emacspeak repository.
+
+Yasr 0.6.7 by Mike Gorse plus patches (voice synthesizer reinitialization and more).
+Patches now available in the Yasr repository.
+
+Under Oralux, Yasr works with Tengoo, Oralux text transcoder (alpha release).
+
+The Speakup screen reader by Kirk Reiser and Andy Berdan is the new environment proposed in the Oralux CD.
+Patch for Speakup in non English characters is now available in the Speakup repository.
+
+Multispeech-up, based on Speechd-up, connects Speakup to Multispeech.
+
+Multispeech extended to six languages, now available in the Multispeech repository.
+
+Mcvox is our attempt to propose Midnight Commander for voice synthesizer, Braille displays and tiny screens.
+
+New voice Synthesizers:
+Brazilian Portuguese with ttpport by Cassio Santos (Oralux) and al (Alistair
+  D. Conkie, Eduardo Reis, Luis Alves). 
+English: enhanced by Enlex the English phonetizer maintained by Igor B. Poretsky.
+French: Cicero TTS 0.7 by Nicolas Pitre and Stephane Doyon.
+German: txt2pho by Thomas Portele.
+Spanish: software from the IrcHa team
+
+MBROLA: br1 database by Denis R. Costa, de6 database by Dr Marc Schroeder, es1 originally created by Alistair D. Conkie and al, fr4 by Vincent Pagel, and more.
+
+The default audio driver comes from ALSA. The oss cheatcode is also proposed.
 
 * Major updates
-+ Brltty 3.6-1
-+ Emacspeak 23
++ Brltty 3.7-2
++ Emacspeak 23.0
 + Yasr 0.6.7
 
-* Overview
-Oralux 0.7 proposes two audio environments (Emacspeak and Yasr), six languages (Brazilian Portuguese, English, French, German, Russian, Spanish). 
-
-Oralux 0.7 is based on Knoppix 4.02. 
 
 * Doc
-/ the F2/F3 cheatcodes pages are updated
-/ Calendar in Spanish has been updated by Miguel Paolino. 
-/ Calendar in German has been translated by Peter Piechutzky
++ the F2/F3/F4 cheatcodes pages are updated
++ Calendar in Spanish has been updated by Miguel Paolino. 
++ Calendar in German has been translated by Peter Piechutzky
 
 * Bug fixes
 + Clearly say that RETURN must be pressed once the CD is ejected.
@@ -61,13 +90,6 @@ Enlex by Igor B. Poretsky.
 - The French Canadian keyboard has been added.
 - The internet preferences can be configured.
 - Support for ABNT2 Brazilian Portuguese standard keyboard (br-abnt2)
-
-
-
-
-
-** Yasr now calls GNU Screen which starts Midnight Commander (mcvox).
-The previous 0.6 alpha minimenu is now based on pdmenu.
 
 ** mcvox
 mcvox is a Midnight Commander derivative which is better rendered by a voice synthesizer, a Braille or tiny display.
@@ -127,7 +149,7 @@ Left and right cursor keys move by letter.
 Escape left and right move by word.  
 Escape up arrow reads the current line and Escape down arrow reads from the current line to the end of the buffer.
 
-/ Configuration files in the boot floppy: 
++ Configuration files in the boot floppy: 
 The very basic configuration files can now be saved in the boot floppy.
 
 + The user personal information are stored in an XML file. Useful to create or update the configuration files (.emacs, .vm).
@@ -138,11 +160,11 @@ The very basic configuration files can now be saved in the boot floppy.
 ** Multispeech by Igor B. Poretsky
 Multispeech supplies using Emacspeak 21 several voices (voice lock mode).
 
-** Cicero TTS 0.6 (+ patch from Stephane Doyon)
+** Cicero TTS 0.7 (+ patch from Stephane Doyon)
 French TTS by Nicolas Pitre and Stephane Doyon. Cicero is a responsive and lightweight TTS written in Python and using MBROLA.
 
-/ Freespeech English pronunciation dictionary
-/ Enhanced Russian lexicon
++ Freespeech English pronunciation dictionary
++ Enhanced Russian lexicon
 
 ** Russian support
 
@@ -155,9 +177,9 @@ Mongolian, Russian, Serbian or Ukrainian.
 ++ In typing Control+Shift, the Cyrillic keyboard toggles to Qwerty (Thanks to Roman).
 
 Thanks to Sergei V. Fleytin  
-/ Russian.el is modified to include support for windows-1251 character set.
-/ The .gnus and .vm files have been updated for Russian.
-/ package console-cyrillic
++ Russian.el is modified to include support for windows-1251 character set.
++ The .gnus and .vm files have been updated for Russian.
++ package console-cyrillic
 
 
 + Yasr: in standard mode, alt+ctrl+m is no more reserved to read the next line (since ctrl-m is interpreted as enter).
@@ -166,8 +188,6 @@ Thanks to Sergei V. Fleytin
 + Speakup 2.0.
 + New Unionfs module.
 + console-cyrilic
-
-
 + podracer
 + moc
 + Instant messaging support. 
@@ -175,8 +195,8 @@ Jabber clients: emacs-jabber and imcom.
 Jabber server: packages included.
 (Erc still available).
 
-/ The listen-up digital talking book player is included.
-/ File conversion: the xpdf-utils (pdftotext) and catdoc (.doc to text) packages have been added 
++ The listen-up digital talking book player is included.
++ File conversion: the xpdf-utils (pdftotext) and catdoc (.doc to text) packages have been added 
 + bsdgames
 + dosemu
 + linphonec
@@ -186,37 +206,6 @@ Jabber server: packages included.
 + Text games: adventure (English, French, German, Spanish), filaments (French).
 + tramp
 + toolame
-
-* Credits
-
-Special thanks to Igor B. Poretsky.
-
-** Oralux team
-Cassio Santos
-Doug Smith
-Gilles Casse
-Nathalie Vielmas
-Sylvie Xhaard
-
-** Contributors
-Gianfranco Giudice : German translation of the 'Emacs' document.
-Gregory N. Tsygankov : Russian translation of the Yasr document.
-Igor Svarc : rereading of the English messages.
-Ivan Vernichenko: messages translation in Russian.
-Jorge Redondo Justo: FAQ and messages translation in Spanish.
-Laurent Cadet de Fontenay: English rewriting of the home page and the FAQ.
-Miguel Paolino: Spanish translation of the 'Emacs' and 'Calendar' document.
-Nigel Stoppard: English rewriting of the 'Emacs' document.
-Osvaldo La Rosa : FAQ translation in Dutch.
-Peter Piechutzky : German translation of the "Calendar" document.
-Roman Zalessky: messages translation in Russian.
-Rusmanto Maryanto: HOWTO Using Oralux in Indonesian (Bahasa Indonesia),.
-Sergei Studennikov: messages translation in Russian.
-Sergei V. Fleytin: Russian translation of the Oralux introduction, configuration of Emacs in Russian.
-Thomas Crepin: German messages improvements.
-
-
-
 
 
 ###
@@ -237,8 +226,8 @@ He also translated the remaining sentences of the FAQ.
 
 * Bug fixes
 * Spell checker
-/ Emacs uses aspell instead of ispell.
-/ LANGUAGE = 'en' instead of 'us'. 
++ Emacs uses aspell instead of ispell.
++ LANGUAGE = 'en' instead of 'us'. 
 
 - DECtalk 5.0 speech server is much more usable, the dtk-soft changes were forgotten in the previous release. Tim Cross posts to the Emacspeak mailing list have been taken in account. 
 - Entering the serial number for DECtalk: the keyboard must be updated according to the last choice.

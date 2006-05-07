@@ -1,7 +1,7 @@
 0eCheatcodes For Oralux 0.7 (hit F3 for next page)
 
 These options (or combinations) work from the boot prompt:
-* To specify an external synthesizer on the first serial port (ttyS0):
+* Emacspeak and external synthesizer on the first serial port (ttyS0):
 knoppix tts=doubletalk
 or 
 knoppix tts=doubletalk,ttyS0

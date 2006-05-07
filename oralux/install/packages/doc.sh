@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # doc.sh
-# $Id: doc.sh,v 1.5 2006/03/05 18:28:57 gcasse Exp $
+# $Id: doc.sh,v 1.6 2006/05/07 15:34:33 gcasse Exp $
 # $Author: gcasse $
 # Description: Installing the documentation
-# $Date: 2006/03/05 18:28:57 $ |
-# $Revision: 1.5 $ |
+# $Date: 2006/05/07 15:34:33 $ |
+# $Revision: 1.6 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -36,7 +36,7 @@ InstallPackage()
 # Adding the package to the new Oralux tree
 Copy2Oralux()
 {
-#BUILDDOC=$BUILD/usr/share/oralux/doc
+BUILDDOC=$BUILD/usr/share/oralux/doc
 
 # French Emacspeak tutorial from Pierre Lorenzon
 URL=www.pollock-nageoire.net
@@ -46,20 +46,8 @@ rm -rf $URL
 wget -r -k http://$URL/emacspeak/index.html
 mkdir $BUILDDOC/pl
 mv $URL/emacspeak $BUILDDOC/pl
-rm -rf $URL
+#rm -rf $URL
 
-# Emacspeak introduction
-#cp $ORALUX/doc/intro*.txt $BUILDDOC
-
-# Emacspeak's tutorials: under /usr/share/oralux/doc/tutorials and are installed - by side effect - when the oralux files are copied.
-
-# French files from Carrefour Blinux
-#cp -R $ARCHDIR/cblx $BUILDDOC
-
-# TUX&GNU@school
-#cp -R $ARCHDIR/tgs $BUILDDOC
-
-#    chroot $BUILD apt-get -t unstable install eflite
 }
 
 case $1 in

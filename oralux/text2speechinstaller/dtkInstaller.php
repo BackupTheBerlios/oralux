@@ -1,11 +1,11 @@
 <?PHP
 // ----------------------------------------------------------------------------
 // dtkInstaller1.php
-// $Id: dtkInstaller.php,v 1.2 2005/01/30 21:43:51 gcasse Exp $
+// $Id: dtkInstaller.php,v 1.3 2006/05/07 15:36:39 gcasse Exp $
 // $Author: gcasse $
 // Description: placing the DECtalk software in ramdisk 
-// $Date: 2005/01/30 21:43:51 $ |
-// $Revision: 1.2 $ |
+// $Date: 2006/05/07 15:36:39 $ |
+// $Revision: 1.3 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -266,7 +266,10 @@ class DECtalkInstaller1
           CopyFiles( $oldTree, INSTALL_TREE."/lib/DECtalk", $aFile);
 
           // Updating the Makefile (emacspeak) so that the optional library is used
-          $aCommand="replace 'ltts_us' 'ltts_us -l".$this->_myDECtalkLibrary[$anOptionalDirectory]."' -- ".DTK_EMACSPEAK."/Makefile";
+          $aCommand="sed 's+ltts_us+ltts_us -l".$this->_myDECtalkLibrary[$anOptionalDirectory]."+g' ".DTK_EMACSPEAK."/Makefile";
+
+	  //replace 'ltts_us' 'ltts_us -l".$this->_myDECtalkLibrary[$anOptionalDirectory]."' -- ".DTK_EMACSPEAK."/Makefile";
+
           Debug($aCommand);
           system($aCommand);
 
@@ -277,11 +280,14 @@ class DECtalkInstaller1
       {
         // The BASE_DIR variable must be customized
         $oldTree="/usr/local";
-        $aCommand="replace".
-          " 'BASE_DIR=\"$oldTree\"'".
-          " 'BASE_DIR=\"".INSTALL_TREE."\"'".
-          " -- ".
-          RAMDISK."/DECtalk/files.sh";
+
+	$aCommand="sed 's+BASE_DIR=\"$oldTree\"+BASE_DIR=\"".INSTALL_TREE."\"+g' ".RAMDISK."/DECtalk/files.sh";
+
+//         $aCommand="replace".
+//           " 'BASE_DIR=\"$oldTree\"'".
+//           " 'BASE_DIR=\"".INSTALL_TREE."\"'".
+//           " -- ".
+//           RAMDISK."/DECtalk/files.sh";
         Debug($aCommand);
         system($aCommand);
 
@@ -301,11 +307,14 @@ class DECtalkInstaller1
 
         if ($anOptionalPackageIsPresent)
         {
-          $aCommand="replace".
-            " 'BASE_DIR=\"$oldTree\"'".
-            " 'BASE_DIR=\"".INSTALL_TREE."\"'".
-            " -- ".
-            RAMDISK."/".$this->_myTTSIdentifier[$anOptionalPackageIsPresent]."/installer";
+	  $aCommand="sed 's+BASE_DIR=\"$oldTree\"+BASE_DIR=\"".INSTALL_TREE."\"+g' ".RAMDISK."/".$this->_myTTSIdentifier[$anOptionalPackageIsPresent]."/installer";
+
+//           $aCommand="replace".
+//             " 'BASE_DIR=\"$oldTree\"'".
+//             " 'BASE_DIR=\"".INSTALL_TREE."\"'".
+//             " -- ".
+//             RAMDISK."/".$this->_myTTSIdentifier[$anOptionalPackageIsPresent]."/installer";
+
           Debug($aCommand);
           system($aCommand);
           $this->myTextToSpeechLanguage[1]=$this->_myTTSIdentifier[$anOptionalPackageIsPresent];

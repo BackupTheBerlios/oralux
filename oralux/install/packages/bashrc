@@ -11,5 +11,7 @@ then
 else  
  PS1="$ "
 fi
+
+alias su='sudo su'
  
 #export EDITOR=emacsclient

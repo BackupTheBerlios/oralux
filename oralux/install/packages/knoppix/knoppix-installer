@@ -1,12 +1,16 @@
 #!/bin/bash
 #
-# Install knoppix to harddisk
+# Install knoppix and derivates to harddisk
 #
 # GPL
 #
 # Author: Fabian Franz <knoppix-installer@fabian-franz.de>
 #
-# Modified for Knoppix: Joerg Schirottke <master@kanotix.de>
+# Fixes and help by: Joerg Schirottke <master@kanotix.de>
+#
+# Backport and bugfixes for KNOPPIX by Klaus Knopper <knoppix@knopper.net>
+#
+# Based on work by Christian Perle & Klaus Knopper
 #
 # English Spellcheck by [...]
 
@@ -14,7 +18,7 @@
 # Constants
 #
 
-VERSION="0.2-3"
+VERSION="0.3.19.14"
 CONFIG_FILE="$HOME/.knofig"
 LOG="$HOME/.knofig_log"
 
@@ -23,32 +27,49 @@ TARGET_MNT_NAME="hdinstall" # TR1 in old installer
 
 DEFAULT_USER="knoppix"
 DEFAULT_NAME="Knoppix User"
-DEFAULT_DIR="KNOPPIX"
+DEFAULT_DIR="UNIONFS"
+
+# This is not Kano's Kanotix
+if [ -e /etc/kanotix-version ]; then
+	#DISTRO="Kanotix"	# currently not in use
+	INSTALL_KANO="yes"
+	DEFAULT_DIR="KNOPPIX"
+else
+	#DISTRO="Knoppix"	# currently not in use
+	INSTALL_KANO="no"
+	DEFAULT_DIR="UNIONFS"
+fi
+
+[ -f /proc/cmdline ] || mount -t proc proc /proc 2>/dev/null
 
 MEM_SWAP_NEEDED=$((512*1000)) # need some lower so that people that have 512 MB can use this option
 SWAP_MIN=$((128*1024))
-
+if grep -q unionfs /proc/mounts; then
 ROOT_MIN_RAW=$(df -m "/$DEFAULT_DIR" | tail -1 | awk '{print $3}')
-ROOT_MIN_CORR=$[ROOT_MIN_RAW*115/100] # + 15% Filesystem overhead
+else
+ROOT_MIN_RAW=$(df -m "/$DEFAULT_DIR" | tail -1 | awk '{print $3}')
+grep -q squashfs /proc/mounts && ROOT_MIN_RAW=$(($ROOT_MIN_RAW*270/100)) #fix status bar for squashfs
+fi
+ROOT_MIN_CORR=$(($ROOT_MIN_RAW*118/100)) # + 18% Filesystem+home overhead
 ROOT_MIN=$(($ROOT_MIN_CORR*1024))
+
+# Localisation 
+export TEXTDOMAINDIR="/usr/share/locale"
+export TEXTDOMAIN=knoppix-installer
 
 #
 # Include needed Bash-Modules
 #
 
-SEARCHPATH="/usr/share/knoppix-installer:."
-BASH_MODULES="dialog knoppix-utils setuser boot floppy"
+SEARCHPATH="/usr/share/knoppix-installer"
+[ -f ./modules/00-knoppix-utils.bm ] && SEARCHPATH="."
 
-for i in $BASH_MODULES
+# workaround for buggy knoppix-installer-latest-web and self-made installations
+[ "$SEARCHPATH" = "." ] && chown -R root.root .
+
+for i in $(find $SEARCHPATH -name "*.bm")
 do
-  IFS=":"
-  for j in $SEARCHPATH
-  do
-    unset IFS
-    MPATH="$j/modules/$i.bm"
-    [ -r "$MPATH" ] && . "$MPATH"
-  done
-  unset IFS
+  . $i
 done
 
 #
@@ -63,9 +84,6 @@ clean_exit(){
 
 trap clean_exit EXIT
 
-export TEXTDOMAINDIR="/usr/share/locale"
-export TEXTDOMAIN=knoppix-installer
-
 function logit
 {
   TIME=$(date)
@@ -77,7 +95,7 @@ function exit_proc
   unset IFS
   $DIALOG --backtitle "$BT" --title $"Save configuration?" --yesno $"Do you want to save your configuration?" 10 60
   RC=$?
-  [ $RC -eq 0 ] && save_config $CONFIG_FILE # autosave of configuration
+  [ $RC -eq 0 ] && save_config $CONFIG_FILE # save of configuration
   [ $RC -ne 255 ] && exit 0
   RC=0
 }
@@ -86,7 +104,7 @@ function setup_dialog_messages()
 {
   MAX=5 # number of steps
 
-  BT=$"Knoppix Installation"
+  BT=$"Knoppix Installation"" (v$VERSION)"
   DT=$"Installation of Knoppix to harddisk (Step 0/$MAX)"
   INIT_T=$"Initialisation of Knoppix-Installation"
   T1=$INIT_T
@@ -101,185 +119,8 @@ setup_dialog "knoppix-installer" # FIXME! Check for Commandline-Params
 setup_dialog_messages
 
 #
-# Steps that need to be done:
-#   Find alls disks
-#     Check each disk for Linux-Partitions (>2.2 GB)
-#     echo found disks
+# Variables and Config File Management
 #
-
-function fdisk_l
-{
-  LANGUAGE=C LANG=C LC_ALL=C fdisk -l "$@"
-}
-
-function find_swap_partitions
-{
-  NOSWAP=""
-  checkbootparam "noswap" && NOSWAP="yes"   
-  [ -n "$NOSWAP" ] && return 2 # error code 2
-  RC=1
-  while read p m f relax; 
-  do
-    case "$f" in swap)
-      echo $p
-      RC=0
-     ;;  
-    esac
-  done < /etc/fstab
-  return $RC
-}
-
-function find_swap_partitions2
-{
-  NOSWAP=""
-  checkbootparam "noswap" && NOSWAP="yes"   
-  [ -n "$NOSWAP" ] && return 2 # error code 2
-  fdisk_l | sed 's/*//g' | grep "swap" | awk '{ print $1 }'
-  return 1
-}
-
-#
-# First lets find all availabe hds (fdisk -l does it for us)
-#
-# Then we test if partitions with Linux are there and if they are big enough
-#
-# (we need to elimiate the +, to let awk calculate right)
-#
-# Output format is: /dev/<hd> space off
-#
-function find_root_partitions
-{
-  FIND=$1
-  [ -z "$FIND" ] && FIND="nothing"
-  fdisk_l | sed 's/*//g' | grep -v "swap" | sed 's/+//g' | awk '/Linux/ { if ($4>='"$ROOT_MIN"') { print $1 " " $4; if ("'"$FIND"'"==$1) { print " on" } else { print " off"}} }'
-  if [ -f /proc/mdstat ]
-  then
-    PARTS=$(file -s /dev/md* | grep -v "swap" | awk -F: '{ print $1 }' | tr \\n "\|" | sed 's%/dev/%%g; s/|$//g')
-    [ -n "$PARTS" ] && cat /proc/partitions | awk '/'$PARTS'/ { if ($3>='"$ROOT_MIN"') { print "/dev/" $4 " " $3; if ("'"$FIND"'"=="/dev/"$4) { print " on" } else { print " off"}} }'
-  fi
-}
-
-#
-# Output is suitable to dialog
-#
-
-function find_disks
-{
-  cat /proc/partitions | grep "disc" &>/dev/null # check for devfs
-  if [ $? -eq 0 ]; then
-    DISKS=$(cat /proc/partitions | awk '{ if ($4!="name") { print $4 } }' | grep "disc");
-  else
-    DISKS=$(cat /proc/partitions | awk '{ if ($4!="name") { print $4 } }' | egrep -v "[0-9]$");
-  fi
-  
-  for i in $DISKS;
-  do
-    [ -f "/proc/ide/$i/model" ] && MODEL="$(cat /proc/ide/$i/model)" || MODEL=$"model unknown"
-    cat /proc/partitions | awk '{ if ($4=="'$i'") { printf("%s|'"$MODEL"' (%s GB)|off|",$4,($3*1024/1000/1000/1000))}}'
-  done
-}
-
-function update_swap_parts
-{
-    find_swap_partitions | grep -v "knoppix.swp" > $TMPDIR/swap1
-    find_swap_partitions2 > $TMPDIR/swap2
-    SWAP_TO_MK=$(diff $TMPDIR/swap1 $TMPDIR/swap2 | grep ">" | sed 's/> //g' | awk '{ printf("%s Swap off ",$1) }')
-    [ -z "$SWAP_TO_MK" ] && return
-    checklist $"The following swap-partitions are marked as swap, but are not yet formatted. Check those you want to format. Warning, you'll loose all data on the partition." "Choose partitions to format with swap. Warning: You'll loose all data on that partition." $SWAP_TO_MK
-    SWAP_MKLIST="$(sed 's,",,g;s,//, /,g' <$TMP)"
-    for i in $SWAP_MKLIST 
-    do
-      mkswap $i
-    done
-    swapon -a
-}
-
-#
-# Note: if someone has noswap in commandline and not enough ram
-#   he needs to take care to activate the swap partition, he wants himself!
-#
-# Fixme: Need a way to mkswap the swap-partitions
-#
-
-function check_partition_ok
-{
-  [ -n "$IGNORE_CHECK" ] && return 0
-  # Is swap needed ?
-  MEMTOTAL="$(awk '/MemTotal/{print $2}' /proc/meminfo)"
-  if [ "$MEMTOTAL" -lt "$MEM_SWAP_NEEDED" ];
-  then
-    # Are swap parts availabe ?
-    SWAPPARTS=$(find_swap_partitions)
-    RC=$?
-    SWAPPARTS2=$(find_swap_partitions2)
-    [ $RC -eq 1 ] && return 1 # no, we must partition
-    if [ $RC -ne 2 ] 
-    then
-      swapon -a # Activate all swap-partitions in fstab
-      if [ "$SWAPPARTS" != "$SWAPPARTS2" ]
-      then
-        update_swap_parts
-      fi
-    fi
-    #for i in $SWAPPARTS; # better use swapon -a ?
-    #do
-    #  [ $RC -ne 2 ] && swapon $i 2>/dev/null # user has not noswap on cmdline, so activate all swaps
-      #[ $? -eq 0 ] && echo $"Activating of $i failed" && SWAPFAILED="$SWAPFAILED $i swap off"
-    #done
-    #[ -n "$SWAPFAILED" ] && echo radiolist "" $"The following swap-partitions could not be activated. Check those you want to mkswap on" $DISKS
-    SWAPMEMTOTAL="$(awk 'BEGIN{m=0};/partition/{m+=$3};END{print m}' /proc/swaps)"
-    [ "$SWAPMEMTOTAL" -lt "$SWAP_MIN" ] && return 1
-  fi
- # check for availabe root partitions > 2.2 GB
-  [ "$HD_IGNORECHECK" = "yes" ] && ROOT_MIN=0
-  ROOT_PARTS=$(find_root_partitions)
-  [ -z "$ROOT_PARTS" ] && return 1 # no suitable root partitions found
-
-  return 0 
-}
-
-#
-# Partition the hard disk
-#
-
-function action-part-cfdisk
-{
-  T1=$"Partitioning harddisk for Knoppix"
-  DISKS=$(find_disks)
-  IFS='|'
-  radiolist $"Here you must choose one of the available disks \n and partition it for Knoppix." $"Choose one disk" $DISKS
-  RC=$?
-  unset IFS
-  [ $RC -eq 1 ] && return 1
-  PART="$(cat $TMP)"
-  
-  cfdisk /dev/$PART
-}
-
-function action-part
-{
-  if [ $DIALOG = "dialog" ]
-  then
-    action-part-cfdisk
-  else
-    [ -x "/sbin/qtparted" -o -x "/usr/sbin/qtparted" ] && qtparted || action-part-cfdisk
-  fi
-  rebuildfstab -r
-}
-
-function action-part-later
-{
-  action-part
-  check_partition_ok
-}
-
-
-function menu_part
-{
- T1=$"Knoppix Partition-Menu"
-  #do_menu "Hier kann die Festplatte partitioniert\n oder das Programm beendet werden" "Gewünschte Aktion wählen" "echo action-part" "Partitionieren" "Die Festplatte partitionieren" "exit_proc" "Ende" "Das Programm beenden"
-  do_menu $"Here you can partition your hard disk" $"Choose an action" "action-part" $"Partition" $"Partition the hard disk" "exit_proc" $"Quit" $"Quit the program"
-}
 
 function add_var
 {
@@ -314,417 +155,40 @@ function update_status
   logit "$*"
 }
 
-#
-# Ok, give root partitions to choose from
-#
-# Register vars: HD_MODULE, HD_FORMAT, HD_FSTYPE, HD_CHOICE
-#
-
-function module_hd_defaults
-{
-  register_var "HD_FORMAT" $"Determines if the HD should be formatted. (mkfs.*)" "yes|no" "" "yes"
-  register_var "HD_FSTYPE" $"Sets the Filesystem type." "ext3|ext2|reiserfs" "" "ext3"
-  register_var "HD_CHOICE" $"Here the Knoppix-System will be installed" "" "module_hd_check" ""
-  register_var "HD_MAP" $"Here you can give additional mappings. (Experimental) You need to have the partitions formatted yourself and give the correct mappings like: \"/dev/hda4:/boot /dev/hda5:/var /dev/hda6:/tmp\"" "" "" ""
-  register_var "HD_IGNORECHECK" $"If set to yes, the program will NOT check if there is enough space to install knoppix on the selected partition(s). Use at your own risk! Useful for example with HD_MAP if you only have a small root partition." "yes|no" "" "no"
-  
-}
-
-function module_hd_showinfo
-{
-  echo $"Drive-Options:"
-  [ "$HD_FORMAT" = "yes" ] && echo "  " $"The Drive $HD_CHOICE will be formatted with the $HD_FSTYPE filesystem." || echo "  " $"The Drive $HD_CHOICE will be used for the installation."
-
-}
-
-function module_hd_check
-{
-  [ "$HD_IGNORECHECK" = "yes" ] && ROOT_MIN=0
-  ROOT_PARTS=$(find_root_partitions $HD_CHOICE)
-  stringinstring " on" "$ROOT_PARTS" && return 0
-  return 1
-}
-
-function module_hd_progressbar
-{
-  {
-  PROGRESS=$(df -m | awk 'BEGIN{m=0};/'$TARGET_MNT_NAME'/{m+=$3};END{print m}')
-  TOTAL=$[ROOT_MIN_CORR+PROGRESS] # Set starting point
-  p=$1
-  while [ -d /proc/$p ]
-  do
-    PROGRESS=$(df -m | awk 'BEGIN{m=0};/'$TARGET_MNT_NAME'/{m+=$3};END{print m}')
-    PERC=$[PROGRESS*100/TOTAL]
-    [ "$PERC" -lt "100" ] && echo $PERC
-    sleep 10
-  done
-  }
-}
-
-function module_hd_knoppix_copy
-{
-  update_status $"Copying files (statusbar is resetted) ..."
-  (cd /$DEFAULT_DIR ; cp -a * $TARGET_MNT_POINT ; sync) &
-  module_hd_progressbar $!
-  # two beeps
-  echo -ne "\007" >/dev/tty1 ; usleep 500000
-  echo -ne "\007" >/dev/tty1 ; usleep 500000
-}
-
-function module_hd_doaction
-{
-  if [ $HD_FORMAT = "yes" ]
-  then
-    update_status $"Formatting $HD_CHOICE..."
-    umount $HD_CHOICE 2>/dev/null
-    dd if=/dev/zero of=$HD_CHOICE bs=1k count=16
-    case $HD_FSTYPE in
-	  xfs)
-	    mkfs.$HD_FSTYPE -f $HD_CHOICE 2> $TMP 1>&2
-	  ;;
-	  reiserfs)
-	    echo y | mkfs.$HD_FSTYPE $HD_CHOICE 2> $TMP 1>&2
-	  ;;
-	  *)
-	    mkfs.$HD_FSTYPE $HD_CHOICE 2> $TMP 1>&2
-	  ;;
-    esac
-    RC="$?"
-    if [ $RC -ne 0 ]
-    then
-      ERROR_MESSAGES=$(tail -8 $TMP)
-      MODULE_ERROR=$"Formatting of $HD_CHOICE failed. Some messages from mkfs.$HD_FSTYPE: $ERROR_MESSAGES"
-      logit $MODULE_ERROR
-      echo "$MODULE_ERROR" > $TMPDIR/errors
-      return 1
-    fi
-    # Deactivate dir_index-feature of ext2/ext3-partitions
-    case $HD_FSTYPE in *ext*) tune2fs -O ^dir_index $HD_CHOICE;; esac
-  fi
-  update_status $"Mounting $HD_CHOICE r/w..."
-  mkdir -p $TARGET_MNT_POINT
-  mount -t $HD_FSTYPE $HD_CHOICE $TARGET_MNT_POINT
-  if [ $? -ne 0 ]
-  then
-    ERROR_MESSAGES=$(tail -8 $TMP)
-    MODULE_ERROR=$"Mounting of $HD_CHOICE failed. Some messages from mount: $ERROR_MESSAGES"
-    logit $MODULE_ERROR
-    echo "$MODULE_ERROR" > $TMPDIR/errors
-    return 1
-  fi
-  update_status $"Mounting additional partitions r/w..."
-  for i in $HD_MAP
-  do
-    part=$(echo $i | cut -d":" -f1)
-    point=$(echo $i | cut -d":" -f2)
-    mkdir -p $TARGET_MNT_POINT$point
-    mount $part $TARGET_MNT_POINT$point
-  done
-  module_hd_knoppix_copy
-}
-
-function module_hd
-{
-  module_hd_defaults # register some automatic variables
-  
-  ROOT_PARTS=$(find_root_partitions $HD_CHOICE)
-  
-  radiolist $"Here you must choose one of the available partitions\n for use with Knoppix." $"Choose the partition to install Knoppix" $ROOT_PARTS
-  [ $? -eq 1 ] && return 1
-  
-  HD_CHOICE="$(cat $TMP)"
-
-  HD_MODULE="configured"
-  register_vars "HD_MODULE HD_FORMAT HD_FSTYPE HD_CHOICE HD_MAP HD_IGNORECHECK"
-  return 0
-}
-
-#
-# Setup swap partitions - auto
-#
-# register: SWAP_MODULE, SWAP_CHOICES, SWAP_AUTODETECT
-#
-#
-function module_swap_defaults
-{
-  register_var "SWAP_AUTODETECT" $"If set to yes, the swap partitions will be autodetected." "yes|no" "" "yes"
-  register_var "SWAP_CHOICES" $"The swap partitions to be used by the installed knoppix." "" "module_swap_check" ""
-}
-
-function module_swap_showinfo
-{
-  echo $"Swapspace-Options:"
-  if [ -n "$SWAP_CHOICES" ]
-  then
-    [ "$SWAP_AUTODETECT" = "yes" ] && echo "  " $"The autodetected swapdrives $SWAP_CHOICES will be used." || echo "  " $"The choosen swapdrives $SWAP_CHOICES will be used."
-  else
-    echo "  " $"No swap partitions are needed."
-  fi
-}
-
-function module_swap_check
-{
-  SWAPPARTS=$(find_swap_partitions)
-  for i in $SWAP_CHOICES; 
-  do
-    stringinstring "$i" "$SWAPPARTS" || return 1
-  done
-  return 0
-}
-
-function module_swap_doaction
-{
-  update_status $"Adding swap-devices to /etc/fstab ..."
-  #cp /etc/fstab $TARGET_MNT_POINT/etc/fstab
-
-  #if [ "$SWAP_AUTODETECT" = "no" ]
-  #then
-  #  cat /etc/fstab | grep -v "swap" > $TARGET_MNT_POINT/fstab
-  #  for i in $SWAP_CHOICES
-  #  do
-  #    echo "$i none swap defaults 0 0" >> $TARGET_MNT_POINT/fstab
-  #  done
-  #fi
-  #sleep 2
-  echo > $TARGET_MNT_POINT/etc/fstab
-  if [ "$SWAP_AUTODETECT" = "no" ]
-  then
-    for i in $SWAP_CHOICES
-    do
-      echo "$i none swap defaults 0 0" >> $TARGET_MNT_POINT/etc/fstab
-    done
-  fi
-}
-
-function module_swap
-{
-  [ "$1" -lt "0" ] && return 1 # all automatic modules need to use this code
-
-  module_swap_defaults
-  [ "$SWAP_AUTODETECT" = "yes" ] && SWAP_CHOICES=$(find_swap_partitions)
-  SWAP_MODULE="configured"
-  register_vars "SWAP_MODULE SWAP_AUTODETECT SWAP_CHOICES"
-  return 0
-}
-
-#
-# asks the user for the preffered hostname
-# 
-
-function module_host_showinfo
-{
-  echo "  " $"Your hostname is: $HOST_NAME"
-}
-
-
-function module_host
-{
-  [ -z "$HOST_NAME" ] && HOST_NAME=$"box"
-  wizard $"Here you must input your hostname. This is the name of you box." --inputbox $"Input your preferred hostname" 10 70 "$HOST_NAME"
-  [ $? -eq 1 ] && return 1
-  
-  HOST_NAME="$(cat $TMP)"
-  [ -z "$HOST_MODULE" ] && HOST_MODULE="configured"
-  register_vars "HOST_MODULE HOST_NAME"
-  return 0
-}
-
-#
-# asks the user for his name
-#
-
-function module_name_showinfo
-{
-  echo $"Name-Options:"
-  echo "  " $"Your name is: $NAME_NAME"
-}
-
-function module_name
-{
-  wizard $"Here you must input your whole name. It is used to create a default user." --inputbox $"Input your whole name (name surname)" 10 70 "$NAME_NAME"
-  [ $? -eq 1 ] && return 1
-  
-  NAME_NAME="$(cat $TMP)"
-  [ -z "$NAME_MODULE" ] && NAME_MODULE="configured"
-  register_vars "NAME_MODULE NAME_NAME"
-  return 0
-}
-
-#
-# asks the user for a username and proposes: substr($Name,0,1)$Surname
-#
-
-function module_user_showinfo
-{
-  echo "  " $"Your choosen username is: $USER_NAME"
-}
-
-function module_user
-{
-  proposal=$(echo $NAME_NAME | sed 's/Dr.//g; s/von//g' | awk '{ printf("%s%s",substr(tolower($1),0,2),tolower($NF)) }')
-  [ -z "$USER_NAME" ] && USER_NAME=$proposal
-  
-  wizard $"Here you must input your preferred username. Suggested: $proposal" --inputbox $"Input your user name (perhaps you like: $proposal)" 10 70 "$USER_NAME"
-  [ $? -eq 1 ] && return 1
-  
-  USER_NAME="$(cat $TMP)"
-  [ -z "$USER_MODULE" ] && USER_MODULE="configured"
-  register_vars "USER_MODULE USER_NAME"
-  return 0
-}
-
-#
-# asks the user for the user-Password
-#
-# register: USERPASS_MODULE, USERPASS_CRYPT
-
-function module_userpass_showinfo
-{
- true
-}
-
-
-function module_userpass
-{
-  passwordbox $"Here you must choose the password for the user $USER_NAME and input it twice. If you have already chosen one, you can leave the fields blank. But you cannot recover the password once saved, as it is encrypted." 20 70 $"Input your user-password" $"Input your user-password again" $"Passwords do not match or no password was given." "$USERPASS_CRYPT"
-  [ $? -eq 1 ] && return 1
-
-  USERPASS_CRYPT="$(cat $TMP)"
-  [ -z "$USERPASS_MODULE" ] && USERPASS_MODULE="configured"
-  register_vars "USERPASS_MODULE USERPASS_CRYPT"
-  return 0
-}
-
-#
-# asks the user for the root-Password
-#
-# register: ROOTPASS_MODULE, ROOTPASS_CRYPT
-function module_rootpass_showinfo
-{
- true
-}
-
-function module_rootpass
-{
-  passwordbox $"Here you must choose the password for system administration (user root) and input it twice. If you have already chosen one, you can leave the fields blank. But you cannot recover the password once saved, as it is encrypted. Remember that the root-User is the Administrator of the system, so it is a very important password." 20 70 $"Input your administration password" $"Input your administration password again" $"Passwords do not match or no password was given." "$ROOTPASS_CRYPT"
-  [ $? -eq 1 ] && return 1
-
-  ROOTPASS_CRYPT="$(cat $TMP)"
-  [ -z "$ROOTPASS_MODULE" ] && ROOTPASS_MODULE="configured"
-  register_vars "ROOTPASS_MODULE ROOTPASS_CRYPT"
-  return 0
-}
-
-#
-# Setup several services - auto
-#
-
-function module_services_showinfo
-{
-  echo $"Services-Options:"
-  echo "  " $"The following services will be started, after each system bootup: $SERVICES_START"
-}
-
-function module_services_defaults
-{
-  register_var "SERVICES_START" $"Possible services are for now: kdm cupsys smail ssh samba" "" "" "kdm cupsys"
-}
-
-function module_services
-{
-  [ "$1" -lt "0" ] && return 1 # all automatic modules need to use this code
-  module_services_defaults
-  SERVICES_MODULE="configured"
-  register_vars "SERVICES_MODULE SERVICES_START"
-  return 0
-}
-
-#
-# Setup bootloader - auto
-#
-
-function module_boot_defaults
-{
-  register_var "BOOT_LOADER" $"Chooses the Boot-Loader (grub is non-functional at the moment)" "lilo|grub" "" "lilo"
-  register_var "BOOT_DISK" $"If set to 'yes' a boot disk will be created!" "yes|no" "" "yes"
-  register_var "BOOT_WHERE" $"Where the Boot-Loader will be installed" "mbr|partition" "" "mbr"
-}
-function module_boot_showinfo
-{
-  echo $"Bootloader-Options:"
-  [ "$BOOT_DISK" = "yes" ] && echo "  " $"A bootdisk will be created." || echo "  " $"No bootdisk will be created."
-  echo "  " $"The bootloader $BOOT_LOADER will be used and installed in $BOOT_WHERE."
-}
-
-function module_boot
-{
-  #[ "$1" -lt "0" ] && return 1 # all automatic modules need to use this code
-
-  module_boot_defaults
-
-  [ "$BOOT_WHERE" = "mbr" ] && MBR_CB="on" || MBR_CB="off"
-  [ "$BOOT_WHERE" = "partition" ] && PART_CB="on" || PART_CB="off"
-  
-  radiolist $"Here you must choose if you want to install the boot-loader to MBR or to a partition." $"Choose where the boot-loader ($BOOT_LOADER) shall be installed" "mbr" $"Master Boot Record" "$MBR_CB" "partition" $"To Root-Partition" "$PART_CB" 
-  [ $? -eq 1 ] && return 1
-
-  BOOT_WHERE=$(cat $TMP)
-  BOOT_MODULE="configured"
-  register_vars "BOOT_MODULE BOOT_LOADER BOOT_DISK BOOT_WHERE"
-  return 0
-}
-
-function module_system_defaults
-{
-  register_var "SYSTEM_TYPE" $"Determines if the system is a debian-derivate or just a copy from CD (copy from CD is experimental for now)" "debian|knoppix" "" "debian"
-}
-
-function module_system_showinfo
-{
-  echo $"System-Options:"
-  echo "  " $"The installed system will be a $SYSTEM_TYPE type system."
-}
-
-function module_system
-{
-  #[ "$1" -lt "0" ] && return 1 # all automatic modules need to use this code
-
-  module_system_defaults
-  
-  [ "$SYSTEM_TYPE" = "debian" ] && DEB_CB="on" || DEB_CB="off"
-  [ "$SYSTEM_TYPE" = "knoppix" ] && KNOP_CB="on" || KNOP_CB="off"
-  
-  radiolist $"Here you must choose the type of your system. A Knoppix system will work exactly as from CD, but tools like apt-get do work. Debian-Type however is a full featured debian system and works like the 'old instaler'." $"Choose your system type" "debian" $"Debian-like system (old installer way)" "$DEB_CB" "knoppix" $"Knoppix system like from CD" "$KNOP_CB"
-  [ $? -eq 1 ] && return 1
-  
-  SYSTEM_TYPE=$(cat $TMP)
-
-  SYSTEM_MODULE="configured"
-  register_vars "SYSTEM_MODULE SYSTEM_TYPE"
-  return 0
-}
-
 
 #
 # FIXME: This management sucks!
 #
 
+# Beware: The real modules are set by module_system_set_modules
+
 MODULES=(hd swap name user userpass rootpass host services boot system)
 NUM_MODULES=${#MODULES[@]}
-MODULES_AUTO="swap services system"
+MODULES_AUTO="swap services"
 MODULES_NUMAUTO=$(echo $MODULES_AUTO | wc -w | tr -d ' ')
 MODULES_LOAD="hd swap services boot system"
 
 function create_config
 {
-  NUM_REAL_MODULES=$[${#MODULES[@]}-$MODULES_NUMAUTO]
+  T1=$"Choose System Type"
+  
+  # Configure system as the _very_ first
+  # TODO: How to get back there ...
+
+  module_system 0 || return 1
+  if [ "$SYSTEM_MODULE" == "configured" ]
+  then
+  	# Set MODULES / NUM_MODULES for the configured system type.
+  	module_system_set_modules
+  fi
+  
+  NUM_REAL_MODULES=$[$NUM_MODULES-$MODULES_NUMAUTO]
   T1=$"Creating Knoppix Configuration Step (0/$NUM_REAL_MODULES)"
   N=1
   I=0
   DIR=0
   while [ "$I" -lt "$NUM_MODULES" ];
   do
-    #echo "I=$I"
     "module_${MODULES[$I]}" $DIR
     RC=$?
     DIR=0
@@ -821,7 +285,7 @@ function save_config
     set -- "$CONFIG_USER"
   fi
   logit "$T1 $1"
-  echo "REGISTERED=\"$REGISTERED\"" > $1
+  echo "REGISTERED='$REGISTERED'" > $1
   for i in $REGISTERED; 
   do
     [ "${!i}" = "configured" ] && echo "" >> $1
@@ -834,7 +298,7 @@ function save_config
     TEMP=$(eval echo \$$i"_DEFAULT")
     [ -n "$TEMP" ] && echo "#" $"Default value is:" $TEMP >> $1
     
-    echo "$i=\"${!i}\"" >> $1
+    echo "$i='${!i}'" >> $1
   done
 }
 
@@ -842,6 +306,9 @@ function show_install_options
 {
   echo > $TMP
   I=0
+  # System needs an extra sausage (german limerick ;-) )
+  module_system_showinfo >> $TMP
+
   while [ "$I" -lt "$NUM_MODULES" ]
   do
     "module_${MODULES[$I]}_showinfo"
@@ -856,437 +323,32 @@ function show_install_options
   wizard $"Make sure you agree to all parameters, if so proceed with the installation." --defaultno --yesno "$DISP_TEXT" 35 60
 }
 
-function update_fstab
-{
-  update_status $"Updating /etc/fstab..."
-  #cp $TARGET_MNT_POINT/etc/fstab $TMPDIR/
-  # remove uid=, gid= - entries for vfat; instead use that of running process
-  #[ -z "$USER_NAME" ] && USER_NAME="$DEFAULT_USER"
-  #sed 's/,umask=000,uid='$DEFAULT_USER',gid='$DEFAULT_USER'/,umask=000/g; s/$DEFAULT_USER/'$USER_NAME'/g' $TMPDIR/fstab | grep -v "$HD_CHOICE" > $TARGET_MNT_POINT/etc/fstab
-  cp $TARGET_MNT_POINT/etc/fstab $TMPDIR/
-  cat <<EOF >$TARGET_MNT_POINT/etc/fstab
-# /etc/fstab: filesystem table.
-#
-# filesystem  mountpoint  type  options  dump  pass
-EOF
-case $HD_FSTYPE in
-  reiserfs|xfs)
-  echo "$HD_CHOICE  /  $HD_FSTYPE  defaults  0  1" >>$TARGET_MNT_POINT/etc/fstab
-  ;;
-  *)
-  echo "$HD_CHOICE  /  $HD_FSTYPE  defaults,errors=remount-ro  0  1" >>$TARGET_MNT_POINT/etc/fstab
-  ;;
-esac
-# Add other HD-mappings
-for i in $HD_MAP
-do
-  part=$(echo $i | cut -d":" -f1)
-  point=$(echo $i | cut -d":" -f2)
-  echo "$part  $point  auto  defaults,auto  0  2" >>$TARGET_MNT_POINT/etc/fstab
-done
-# Add swap devices
-cat $TMPDIR/fstab >> $TARGET_MNT_POINT/etc/fstab
-
-cat <<EOF >>$TARGET_MNT_POINT/etc/fstab
-proc  /proc  proc  defaults  0  0
-/dev/fd0  /floppy  vfat  defaults,user,noauto,showexec,umask=022  0  0
-EOF
-
-# Add CD-Roms/DVD/...
-
-for i in /dev/cdrom* /dev/dvd /dev/cdaudio
-do
-  [ -L $i ] || continue
-  echo "$i /${i/\/dev\//}  iso9660  defaults,ro,user,noexec,noauto  0  0" >> $TARGET_MNT_POINT/etc/fstab
-  mkdir -p $TARGET_MNT_POINT/${i/\/dev\//}
-  readlink $i | grep -q "$DEFAULT_DIR" || cp -a $i $TARGET_MNT_POINT/dev/
-done
-
-TR=$TARGET_MNT_POINT # compatibility
-
-# copy automounter links
-for i in /mnt/*
-do
-  [ -L $i ] && cp -a $i $TARGET_MNT_POINT/mnt/
-done
-
-# Let Knoppix detect all other partitions
-chroot "$TR" mount /proc
-chroot "$TR" rebuildfstab -r
-chroot "$TR" umount /proc
-
-# --- Added by Joerg Schirottke
-
-# NTFS Partition(en) mit umask=000 Option ausstatten
-
-perl -pi -e 's/(ntfs noauto,users,exec,ro).*/\1,umask=000 0 0/' $TARGET_MNT_POINT/etc/fstab
-
-# Alle Partitionen auf IDE Platten automatisch mounten
-# auskommentiert von Fabian Franz: Sollte in mkdesktophdicons "gefixed" werden
-
-#perl -pi -e 's|^(/dev/hd.*)noauto(.*)|\1auto\2|' $TARGET_MNT_POINT/etc/fstab
-
-# USB Eintrag in die /etc/fstab vornehmen
-
-echo usbdevfs /proc/bus/usb usbdevfs defaults 0 0 >> $TARGET_MNT_POINT/etc/fstab
-
-# ---
-
-cp $TARGET_MNT_POINT/etc/fstab $TMPDIR/
-# remove uid=, gid= - entries for vfat; instead use that of running process
-[ -z "$USER_NAME" ] && USER_NAME="$DEFAULT_USER"
-sed 's/,umask=000,uid='$DEFAULT_USER',gid='$DEFAULT_USER'/,umask=000/g; s/$DEFAULT_USER/'$USER_NAME'/g' $TMPDIR/fstab > $TARGET_MNT_POINT/etc/fstab
-}
-
-# Find changes in (real) files of dir1 ... dir2
-# function taken from saveconfig
-findchanged(){
-if [ -d "$1" ]; then
-for i in `( cd "$1"; find . -type f | sed 's,^\./,,g' | grep -v ' ' )`; do
-cmp -s "$1/$i" "$2/$i" || echo "$1/$i"
-done
-elif [ -e "$1" ]; then
-cmp -s "$1" "$2" || echo "$1"
-fi
-}
-
-
-
-# FIXME: Break into submodules.
 function old_installer
 {
-  
-  TM=$TMPDIR/instdata
-  TR=$TARGET_MNT_POINT
-
-  # extract templates
-  mkdir -p $TM
-  tar xpzf $TEMPL_INSTDATA -C $TM >/dev/null 2>&1
-
-  if [ "$SYSTEM_TYPE" = "knoppix" ]
-  then
-    mkdir -p $TR/home/$DEFAULT_USER
-    chown $DEFAULT_USER.$DEFAULT_USER $TR/home/$DEFAULT_USER
-    return 0
-  fi
-  
-  update_status $"Copying custom configuration ..."
-  
-  # copy changed files in /etc
-  ( cd $TR; findchanged /etc /KNOPPIX/etc | egrep -v "fstab" | tar -T - -cf - | tar xf -)
-
-  update_passwd 
-  
-  update_status $"Converting Knoppix to Debian..."
-  # set keymap - will be done by knoppix-autoconfig-hd
-  #
-  # But we want to provide also a complete debian-system
-  # so lets setup a keymap.sh :-/
-  
-  [ -f /etc/sysconfig/keyboard ] && . /etc/sysconfig/keyboard
-  sed "s/loadkeys \/.*/loadkeys $KEYTABLE/g" /etc/init.d/keymap.sh > $TARGET_MNT_POINT/etc/init.d/keymap.sh
- 
-  #return 0
-
-# --- Added by Joerg Schirottke
-
-# Keymap korrigieren
-
-[ "$KEYTABLE" ] && chroot "$TR" install-keymap "$KEYTABLE"
-
-# ---
-
-# "normalize" runlevel directories
-rm -f $TR/etc/rc[023456S].d/*
-for x in 0 5 6 S
-do
-  cp -a $TM/etc/rc$x.d/* $TR/etc/rc$x.d/
-done
-for x in 2 3 4
-do
-  cp -a $TM/etc/rc5.d/* $TR/etc/rc$x.d/
-done
-
-toremove="smail ssh samba cupsys kdm "
-for i in $SERVICES_START
-do
-  toremove=${toremove/$i /}
-done
-
-for i in $toremove
-do
-  chroot "$TR" update-rc.d -f $i remove &>/dev/null
-done
-
-# start automounter
-chroot "$TR" update-rc.d -f autofs remove
-chroot "$TR" update-rc.d autofs defaults 20
-
-# create device symlinks /dev/cdrom and /dev/mouse # done by hwsetup
-if [ -f /etc/sysconfig/mouse ] ; then
-  x="`grep DEVICE= /etc/sysconfig/mouse`"
-  x=${x#*/dev/}
-  MOUSEDEV=${x%\"*}
-fi
-[ -z "$MOUSEDEV" ] && MOUSEDEV="psaux"
-(cd $TR/dev ; ln -sf $MOUSEDEV mouse ;)
-
-# change prompt and remove "." from PATH (/etc/profile)
-cp -af $TM/etc/profile $TR/etc/profile
-
-# "normalize" /etc/inittab
-cp -af $TM/etc/inittab $TR/etc/inittab
-
-# update /etc/motd
-echo -e $"Welcome to Knoppix" "(Kernel `uname -r`)\n" > $TR/etc/motd
-
-# create /etc/modules from current loaded modules
-cat <<\EOF >$TMP
-# /etc/modules: kernel modules to load at boot time.
-#
-# This file should contain the names of kernel modules that are
-# to be loaded at boot time, one per line.  Comments begin with
-# a `#', and everything on the line after them are ignored.
-EOF
-cat /proc/modules | tac | grep -v '\[.*\]' | grep -v cloop |
-while read mod x
-do
-  if [ $mod = apm ] ; then
-    echo "apm power_off=1" >>$TMP
-  else
-    echo $mod >>$TMP
-  fi
-done
-cp -f $TMP $TR/etc/modules
-
-# change /etc/inputrc to 8-bit clean input
-cp -af $TM/etc/inputrc $TR/etc/inputrc
-
-# create /etc/fstab
-#cat <<EOF >$TR/etc/fstab
-# /etc/fstab: filesystem table.
-#
-# filesystem  mountpoint  type  options  dump  pass
-#EOF
-#case $FSTYPE in
-#  reiserfs|xfs)
-#  echo "$FSCHOICE  /  $FSTYPE  defaults  0  1" >>$TR/etc/fstab
-#  ;;
-#  *)
-#  echo "$FSCHOICE  /  $FSTYPE  defaults,errors=remount-ro  0  1" >>$TR/etc/fstab
-#  ;;
-#esac
-#if [ $SWCHOICE != none ] ; then
-#  echo "$SWCHOICE  none  swap  sw  0  0" >>$TR/etc/fstab
-#fi
-#cat <<EOF >>$TR/etc/fstab
-#proc  /proc  proc  defaults  0  0
-#/dev/fd0  /floppy  vfat  defaults,user,noauto,showexec,umask=022  0  0
-#/dev/cdrom  /cdrom  iso9660  defaults,ro,user,noexec,noauto  0  0
-#EOF
-# add partitions found by Knoppix before installing (commented out)
-#rm -rf $TR/mnt
-#mkdir -p $TR/mnt
-#echo "# partitions found by Knoppix" >>$TR/etc/fstab
-#grep "^/dev/[hs]d.*/mnt/" /etc/fstab |
-#while read dev mnt x
-#do
-#  echo "#"$dev $mnt $x >>$TR/etc/fstab
-#  mkdir $TR/$mnt
-#done
-
-# add DMA activation to bootmisc.sh (commented out if nodma is set)
-x="#"
-checkbootparam dma && x=''
-echo "# enable DMA" >>$TR/etc/init.d/bootmisc.sh
-if [ -f /proc/partitions ] ; then
-  while read x x x p x
-  do
-    case "$p" in
-      hd?)
-        if [ -r "/proc/ide/$p/media" ] ; then
-          echo "$x /sbin/hdparm -qd1 /dev/$p" >>$TR/etc/init.d/bootmisc.sh
-        fi
-        ;;
-      *) ;;
-    esac
-  done < /proc/partitions
-fi
-
-# use Knoppix-generated XF86Config
-cp -af /etc/X11/XF86Config $TR/etc/X11/XF86Config
-cp -af /etc/X11/XF86Config-4 $TR/etc/X11/XF86Config-4
-
-# backup Knoppix specific Xsession file
-mv $TR/etc/X11/Xsession.d/45xsession $TR/root/xsession.knx-hdinstall.backup
-
-# fix display permissions for xdm/kdm (bug in woody?)
-sed -e 's,DisplayManager\*authorize:.*true,DisplayManager*authorize: false,g' /etc/X11/xdm/xdm-config >$TR/etc/X11/xdm/xdm-config
-for x in /etc/kde[23]/kdm/kdmrc
-do
-  sed -e 's,#Authorize=false,Authorize=false,g' $x >$TR/$x
-done
-
-cat <<EOF >$TR/etc/hosts
-127.0.0.1	$HOST_NAME localhost
-
-# The following lines are desirable for IPv6 capable hosts
-# (added automatically by netbase upgrade)
-
-::1     ip6-localhost ip6-loopback
-fe00::0 ip6-localnet
-ff00::0 ip6-mcastprefix
-ff02::1 ip6-allnodes
-ff02::2 ip6-allrouters
-ff02::3 ip6-allhosts
-EOF
-echo "$HOST_NAME" > $TR/etc/hostname
-echo "$HOST_NAME" > $TR/etc/mailname
-
-# set up ethernet (if present) <-- NO!
-# instead copy /etc/-files
-#cp /etc/network/interfaces $TR/etc/network/interfaces
-
-# disable all services in /etc/inetd.conf
-cp -af $TM/etc/inetd.conf $TR/etc/inetd.conf
-
-# remove Knoppix entry from /etc/sudoers
-cp -af $TM/etc/sudoers $TR/etc/sudoers
-
-# remove Knoppix specific menu entries (they won't work without
-# sudoers entry)
-#chroot "$TR" rm -rf /usr/share/applnk/Knoppix /usr/share/gnome/apps/Knoppix
-# update_knoppix_menus
-
-suknoppixmenus $TR/usr/share/applnk/Knoppix kdesu
-suknoppixmenus $TR/usr/share/gnome/apps/Knoppix gksu
-
-# apt-get -q -y --purge remove cupsconfig-knoppix \
-# chroot "$TR" apt-get -q -y --purge remove cupsconfig-knoppix \
-# knoppix-terminalserver mkdosswapfile-knoppix netcardconfig-knoppix \
-# rootshell-knoppix saveconfig-knoppix soundcardconfig-knoppix \
-# sshstart-knoppix startnessus-knoppix wlcardconfig-knoppix \
-# networkconfig-knoppix
-
-# use Knoppix generated /etc/sysconfig/i18n file
-mkdir -p $TR/etc/sysconfig
-cp -af /etc/sysconfig/i18n $TR/etc/sysconfig/
-
-# set OpenOffice language
-mkdir -p $TR/etc/alternatives
-rm -f $TR/etc/alternatives/soffice.*
-cp -af /etc/alternatives/soffice.* $TR/etc/alternatives/
-
-# use less restrictive /etc/hosts.allow
-cp -af $TM/etc/hosts.allow $TR/etc/hosts.allow
-
-# create "real" /tmp with mode 1777
-rm -rf $TR/tmp
-mkdir -p $TR/tmp
-chmod 1777 $TR/tmp
-
-# create /etc/mtab as a regular file
-rm -f $TR/etc/mtab
-touch $TR/etc/mtab
-
-#copy home directory from user knoppix
-
-if [ -d "/home/$DEFAULT_USER/.kde" ]
-then
-  rm -rf $TR/home/$DEFAULT_USER
-  cp -a /home/$DEFAULT_USER $TR/home
-  mv $TR/home/$DEFAULT_USER $TR/home/$USER_NAME
-else
-  cp -a $TR/etc/skel $TR/home
-  mv $TR/home/skel $TR/home/$USER_NAME
-fi
-
-chroot "$TR" chown -R $USER_NAME.$USER_NAME /home/$USER_NAME
-
-chroot "$TR" su $USER_NAME -c mkdesktophdicons
-
-# force kde first time configuration
-if [ -f /etc/skel/.kde/share/config/kpersonalizerrc ] ; then
-  sed -e 's/FirstLogin=false/FirstLogin=true/g' \
-  /etc/skel/.kde/share/config/kpersonalizerrc > $TMP
-  cp -f $TMP $TR/etc/skel/.kde/share/config/kpersonalizerrc
-  cp -f $TMP $TR/home/$USER_NAME/.kde/share/config/kpersonalizerrc
-fi
-
-# --- Added by Joerg Schirottke
-
-# LOKALE ANPASSUNGEN
-
-# Autostart entfernen
-
-rm -f $TR/home/$USER_NAME/.kde/Autostart/showindex.desktop
-
-# Hintergrundbild korrigieren
-
-perl -pi -e 's|/cdrom/KNOPPIX/background.jpg|/usr/local/lib/knoppix.jpg|' $TR/home/$USER_NAME/.kde/share/config/kdesktoprc
-
-# Netscape Verzeichnisse löschen
-
-rm -rf $TR/home/$USER_NAME/.netscape*
-
-# Mozilla Konfigdateien korrigieren
-
-rm -f $TR/home/$USER_NAME/.mozilla/appreg
-rm -f $TR/home/$USER_NAME/.mozilla/pluginreg.dat
-[ -e $TR/home/$USER_NAME/.mozilla/default ] || mv $TR/home/$USER_NAME/.mozilla/knoppix $TR/home/$USER_NAME/.mozilla/default
-
-# Bei unterschiedlichem OLD/NEWHOME muss man die Pfade anpassen, sonst funktionieren die Anwendungen nicht korrekt
-
-OLDHOME="/home/$DEFAULT_USER"
-NEWHOME="/home/$USER_NAME"
-PART="$TR"
-for f in $(find "$PART$NEWHOME" -exec grep -ls "$OLDHOME" {} \;|grep -v $0); do
- echo fixing: $f
- perl -pi -e "s|$OLDHOME|$NEWHOME|g" "$f"
-done
-
-# GLOBALE ANPASSUNGEN
-
-# Display Manager korrekt starten - also nur im Runlevel 5
-
-for DM in kdm xdm gdm; do
- if [ -e "$TR/etc/init.d/$DM" ]; then
-  chroot "$TR" update-rc.d -f $DM remove
-  chroot "$TR" update-rc.d $DM stop 1 0 1 2 3 4 6 .
-  ln -s ../init.d/$DM "$TR/etc/rc5.d/S99$DM"
- fi
-done
-
-# Environment korrekt setzen
-
-if [ -e "$TR/etc/sysconfig/i18n" ]; then
- . "$TR/etc/sysconfig/i18n"
- echo LANG=$LANG >> "$TR/etc/environment"
- if [ "$LANG" == "el_GR" ]; then
-  echo LANGUAGE=$(echo $LANG|perl -pe '($_)=/(..)/') >> "$TR/etc/environment"
-  echo LC_ALL=$LANG >> "$TR/etc/environment"
- fi
-fi
-
-# FCDSL Anpassung
-
-[ -e /etc/rc0.d/K15isdnactivecards ] && chroot "$TR" update-rc.d isdnactivecards defaults 13 15
-
-# ACPI Anpassung
-
-[ -d /proc/acpi -a -x /etc/init.d/acpid ] && chroot "$TR" update-rc.d acpid defaults
-
-# ---
-
-return 0
-
+	if [ "$SYSTEM_TYPE" = "knoppix" ]
+	then
+		system_type_knoppix
+		return 0
+	fi
+	
+	system_type_beginner
+	
+	[ "$SYSTEM_TYPE" = "beginner" ] && return 0
+
+	update_status $"Converting Knoppix to Debian..."
+
+	[ "$INSTALL_KANO" == "yes" ] && cp -af $TEMPLATE_PATH/etc/hotplug/usb/usb-storage $TARGET_MNT_POINT/etc/hotplug/usb/
+
+	system_services
+
+	return 0
 }
 
 function do_install
 {
   echo ""
-  INSTALL_LIST="module_hd_doaction module_swap_doaction update_fstab old_installer add_bootmanager"
-  INSTALL_LIST_NUM=$[5-1]
+  INSTALL_LIST="module_hd_doaction module_swap_doaction update_fstab old_installer add_bootmanager :"
+  INSTALL_LIST_NUM=$[6-1]
   N=0;
   for i in $INSTALL_LIST
   do
@@ -1330,21 +392,26 @@ function start_install
  # FLOPPY DISK!
  #
 
- if [ $BOOT_DISK = "yes" ]
+ if [ "$BOOT_DISK" = "yes" ]
  then
-   $DIALOG --backtitle "$BT" --title $"Creating floppy disk" --yesno $"Please insert now an empty floppy disk into your floppydrive. Warning: All data on it will be lost. If you don't want to create a disk you can choose No." 0 0
+   $DIALOG --backtitle "$BT" --title $"Creating floppy disk" --defaultno --yesno $"Please insert now an empty floppy disk into your floppydrive. Warning: All data on it will be lost. If you don't want to create a disk you can choose No." 0 0
    if [ $? -eq 0 ]
    then
      make_floppy
    fi
  fi
- 
+
+ # /var/tmp workaround
+ chmod 777 $TARGET_MNT_POINT/var/tmp
+
  for i in $HD_MAP
  do
    point=$(echo $i | cut -d":" -f2)
    umount $TARGET_MNT_POINT$point
  done
 		      
+ # Just to be sure :-)
+ #umount $TARGET_MNT_POINT/proc
  umount $TARGET_MNT_POINT
  # Success Message and end installer
  #T1=$"Success!"
@@ -1367,25 +434,6 @@ function menu_main
   "exit_proc" $"Quit" $"Quit the program"
 }
 
-function checktemplates
-{
-  TEMPL_INSTDATA=""
-  SVERSION="0.39"
-  for x in "`dirname $0`/knx-templates-$SVERSION.tgz" \
-    "/usr/local/lib/knx-templates-$SVERSION.tgz"
-  do
-    if [ -z "$TEMPL_INSTDATA" ] ; then
-      tar tzf "$x" >/dev/null 2>&1
-      [ $? = 0 ] && TEMPL_INSTDATA="$x"
-    fi
-  done
-  if [ -z "$TEMPL_INSTDATA" ] ; then
-    msgbox $"Fatal Error: The required file knx-templates-$SVERSION.tgz is missing or corrupted. The script will be terminated." 15 60
-    rm -f $TMP
-    exit 0
-fi
-}
-
 function main()
 {
 logit $"knoppix-installer started"
@@ -1394,29 +442,82 @@ Note that this version is still an very early version \
 and under heavy development.
 The author and knopper.net take no responsibility \
 for data loss or hardware damage. \
-\n\nAuthor: Fabian Franz <knoppix-installer@fabian-franz.de>\n\nbased on the very good work by Christian Perle <perle@itm.tu-clausthal.de>" 20 60
+\n\nAuthor: Fabian Franz <knoppix-installer@fabian-franz.de> \
+\n\nbased on the very good work by Christian Perle <perle@itm.tu-clausthal.de> \
+\nfixes by Joerg Schirottke <master@kanotix.de>" 20 60
 rebuildfstab -r
-checktemplates
 while ! check_partition_ok;
 do
+
+#Also we need a swap partition with at least $[SWAP_MIN/1024] MB, if you don't have 512 MB Memory or more.\
+#
+
   msgbox $"The installer detected that the installation requierements are not fullfilled yet.\
 \n\nPlease make sure that you have an free partition with at least $[ROOT_MIN/(1024*1024)] GB to install knoppix on. \
-Also we need a swap partition with at least $[SWAP_MIN/1024] MB, if you don't have 512 MB Memory or more.\
+Also we need a swap partition with at least $MEM_SWAP_MISSING MB, if you don't have 512 MB Memory or more.\
 \n\nIn the following menu, you can start some tools to partition your harddrive.\
 \nIf you really really know what you are doing start with: IGNORE_CHECK=1 sudo knoppix-installer to avoid the menu." 21 60
   menu_part
 done
 logit $"Partition check succeeded"
 [ -f "$CONFIG_FILE" ] && load_config $CONFIG_FILE # auto load of configuration
-#mount $HD_CHOICE $TARGET_MNT_POINT
-#TR=$TARGET_MNT_POINT
-#add_bootmanager
-#exit 0
+
 while true;
 do
   menu_main
 done
 }
+
+#
+# UNTESTED-Please DO!
+# Added non-interactive mode, FF 29.09.2003
+#
+
+function ni-main
+{
+  logit $"knoppix-installer started"
+  
+  rebuildfstab -r
+  logit $"Partition check succeeded"
+  
+  if [ ! -f "$CONFIG_FILE" ]
+  then
+  	echo $"Config file $CONFIG_FILE could not be found. This is necessary for non-interactive mode."
+  	return
+  fi
+  load_config $CONFIG_FILE # auto load of configuration
+ 
+  touch $TMPDIR/errors
+  T1=$"Starting Knoppix installation"
+  do_install | $DIALOG --backtitle "$BT" --title "$T1" --gauge $"Installing" 10 60
+  RC=$?
+  MODULE_ERROR=$(<$TMPDIR/errors)
+  
+  if [ -n "$MODULE_ERROR" ]
+  then
+    msgbox "Error: $MODULE_ERROR" 10 60
+    return 1
+  fi
+
+  for i in $HD_MAP
+  do
+    point=$(echo $i | cut -d":" -f2)
+    umount $TARGET_MNT_POINT$point
+  done
+		      
+  # Just to be sure :-)
+  #umount $TARGET_MNT_POINT/proc
+  umount $TARGET_MNT_POINT
+  # Success Message and end installer
+  logit $"Knoppix was successfully installed to hd."
+  exit 0
+}
+
+if [ "$1" = "--non-interactive" ]
+then
+  ni-main
+  exit 1 # something did go wrong
+fi
 
 if [ $UID -eq 0 ];
 then

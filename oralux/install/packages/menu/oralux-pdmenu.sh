@@ -14,6 +14,7 @@ export LinksText="Links, web browser"
 export LinksDoc="$Doc/htm/faq.htm"
 export NeText="N E, the nice editor"
 export mcvoxText="m c vox, file browser"
+export mcvoxDocText="m c vox documentation"
 export mcvoxDoc="$Doc/mcvox/en/mcvox.txt"
 export qalcText="qalc, calculator"
 export mocText="moc, console audio player"
@@ -39,6 +40,7 @@ de*|at*|ch*)
 # TBD GC
 #	export LinksDoc="$Doc/htm/faq.htm"
 	export NeText="N E, der 'Nice Editor'"
+	export mcvoxDocText="m c vox documentation (Englische)"
 	export mcvoxText="m c vox, Datei-Browser"
 	export qalcText="qalc, Taschenrechner"
 	export mocText="moc, Audio-Player für die Konsole"
@@ -112,6 +114,8 @@ de*|at*|ch*)
 	export LinksText="Links, navigateur web"
 	export LinksDoc="$Doc/htm/faq-fr.htm"
 	export NeText="N E, éditeur de textes"
+	export mcvoxDocText="Documentation m c vox"
+	export mcvoxDoc="$Doc/mcvox/fr/mcvox.txt"
 	export mcvoxText="m c vox, navigateur de fichiers"
 	export qalcText="qalc, calculatrice"
 	export mocText="moc, lecteur audio pour la console"
@@ -160,6 +164,7 @@ exec:$NeText::ne
 
 #exec:Help::ne $mcvoxDoc
 
+exec:$mcvoxDocText::ne $mcvoxDoc
 exec:$mcvoxText::mcvox
 exec:$qalcText::qalc
 exec:$mocText::mocp

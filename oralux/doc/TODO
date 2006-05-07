@@ -34,8 +34,8 @@ For the next releases, mention also the MBROLA license in the website and in the
 
 download:  
 
+* Sergei: with Speakup reading keys in Russian, the 8th bit seems to be stripped away.
  
-*emacspeak + su: password required.
 * pcmcia-cs, pcmcia-modules
 
 * check the oralux version number in configs.tbz, discard old versions.
@@ -56,15 +56,10 @@ test avec NCURSES_NO_PADDING
 
 + doc d'intro pour Screen + mcvox + yasr
 
-+ check the installer
-
 + remove smail (postfix).
 + see the yes/no answer for other languages than english.
 
-* Emacspeak in Russian
 + Emacspeak + Russian dictionary updates
-
-+ brltty: check the fr table 
 
 Feedback from IBP
 Remaining points:
@@ -76,31 +71,6 @@ Remaining points:
 4) The Russian pronunciation dictionary Rulex is not used outside
    Emacspeak.
 
-
-Feedback from Sergei
---------------------------------------
-
-The actual code that
-causes problem with Russian stuff is under "keyboard" section. This
-part might be either removed if the Russian language is selected or
-put somewhere before loading Russian stuff. There are some tips to
-help you testing whether it is OK or not. 
-
-1. In the startup menu select all Russian settings "including
-   keyboard". 
-2. After Emacspeak is loaded, open a new buffer.
-3. Switch your keyboard to Russian. It is done by pressing the right
-   ctrl key (very inconvenient, another reason for me not to use the
-   default driver).
-4. Try typing some symbols. If evrything is correct, you then should
-   hear the Russian voice echoing what you type. Otherwise you will
-   hear English voice echoing punctuation marks, octal codes etc. 
-5. Switch the keyboard back to English (withh the same right ctrl key)
-   and now try to switch keyboard within Emacs itself by pressing
-   Ctrl+backslash keys. If all settings are correct, you will hear the
-   Russian letters. If not, there will still be English.
-
-I hope that it will help you better debug the Russian settings.
 
 + elinks: update (+ in the menu?).
 + cups
@@ -136,7 +106,6 @@ briefly:". However "Find file:" is spoken fine for example.
 
 
 + New messages without translation.
-+ Knoblind: translations
 + buildi18n: see locale.
 
 Message from Edmond > + minimenu: Tableur
@@ -151,20 +120,6 @@ Message from Edmond > (setq vm-forwarding-subject-format "Message retransmis de 
 + Yasr: bsdgames includes a very good "adventure" game wich can be played from the command line.
 
 + Doug: battlestar, text game.
-
-+ qalc
-
-+ les droits d'acces des fichiers sous /home/knoppix correspondent a root !
-
-+ See misc.sh
-#     for i in "fi it pt pt-common de en es fr pt-br ukr"; do 
-# 	apt-get install aspell-$i
-#     done
-    
-#     for i in "fi zh de es fr it pt ru posix posix-dev dev ja"; do 
-# 	apt-get install manpages-$i
-#     done
-
 
 *** Priority 1.2 
 * Internet
@@ -321,18 +276,6 @@ Barak > 4. the dot emacs file is overwritten by the original dot emacs file
 Barak > after next oralux reboot (I needed to remodify user-mail-address 
 Barak > and user-full name again).
 Barak > 
-+ saveconfig in the menu
-+ At the end of the menu, asks if the preferences must be saved (except for hdinstal...).
-+ Fix: At boot time the saved configuration was not correctly restored if the choices were audio menu in English and Multispeech.
-+ Fix: if the /etc files are not selected in saveconfig, at boot time we can't retreive the main user preferences.
-+ saveconfig: Do not include the absolute path to the home directory 
-Message from Edmond > + dot emacs saved in the persistent home, unfortunately saveconfig was not called again. 
-Message from Edmond > Then the old one .emacs is retreived at the next boot.
-Message from Edmond > 
-Message from Edmond > "Une petite remarque qui m'a coûté bien du temps et que peut-être tu pourras répercuté sur lal liste mieux que moi.
-Message from Edmond > J'avais modifié le fichier .emacs soigneusement comme tu l'as indiqué dans un message mais quelle ne fut pas ma surprise de voir que malgré la modification, rien ne partait. Je te rappelle ma config : démarrage sur le cd, une partition créée avec mkpersistenthome et une disquette sur laquelle je sauvegardais les paramètres. "
-
-+ Compatibility home/config : config saved but not really considered as saved...
 
 
 ------------------------
@@ -365,9 +308,7 @@ main.c must indicate that CTRL-D will be rquired to come back to the menu (ther 
 ------------------------
 + HardDiskInstall: do not ask any more to take the CD
 ------------------------
-+ Oralux-installer: remove in the .sh the copy of the knoppix-install file. Was only useful for 0.6 alpha. 
 + increase APT::Cache-Limit (24Mb?).
-
 + When a new release is available, ask if the .emacs, .vm,... files must be removed.
 + Au rebout il semblerait que brltty se charge
 plusieurs fois, tout du moins au moins deux, je suis obligée pour que
@@ -404,17 +345,7 @@ Message from Edmond > + Add bbdb (see .emacs + .vm)
 + http://www.linux-speakup.org/trplayer.html
 wget ftp://linux-speakup.org/pub/linux/goodies/trplayer/trplayer-1.2.0.tar.gz
 
-
-+ Mails from Doug
----------------------
-gobjc package.  
-Debian Ada packages (-gtk +cryptography support as well
-as many of the libraries including the text one).  
----------------------
 + USB install.
-
-+ codec RealPlayer 9 + 10
-
 
 * Emacs
 
@@ -503,8 +434,6 @@ Archives ML, mailto address, de.tbl instead of text.german.tbl
 
 + upgrade
 
-+ Ukrainian keyboard (ua?)
-
 ------------------------
 * New features
 ------------------------
@@ -514,23 +443,18 @@ Archives ML, mailto address, de.tbl instead of text.german.tbl
 + A programmable speech rate ?
 + speech rate: how to easily store it (.emacs dtk-set-rate + saveconfig).
 
-+ Starts alsa if the default OSS driver fails.
++ Starts oss if the default ALSA driver fails.
 + misc.sh: apt-get install sndconfig
 + Writing the CD to the hard disk
-+ CD optimization (Festival)
 + The menu might propose the possible TTS, according e.g. to the available hardware (memory size,...).
 
 + Keyboard rate
 + TimeZone (i18n.c,+ menu)
-+ Alsa as default choice ?
-+ Adding a beep at boot time (CTRL G)
 
 
 ------------------------
 * Menu
 ------------------------
-+ menu and new brltty usb drivers
-+ Menu: braille, usb port (voyager)
 + gettext and the menu.
 + menu: see which fields are mandatory, and which one must propose a default value
 + XML Conf file: managing an erroneous file
@@ -576,18 +500,6 @@ Notices from Doug
 --------------------------------------
 
 
-------------------------
-* check no regression
-------------------------
-+ Emacspeak 21.0 starts dtk-soft without any issues.
-
-Barak > 1. First time no sound - solved by cheatcode 
-Barak > knoppix alsa
-Barak > Cheatcode not needed after preferences are saved.
-Barak > 
-Barak > / 2. Long wait time caused by Oralux searching for config file on non-existing 
-Barak > floppy - no longer happens after saveconfig to hard-drive.
-Barak > 
 --------------------------------------
 Games:
 Since Yasr have become a part of the Oralux distribution, i would
@@ -595,10 +507,6 @@ suggest to include "bsd-games" package, which contains, among other
 tools a very good "adventure" game wich can be played from the command
 line.
 --------------------------------------
-
-+ Clarify: Parlemax + english menu: gives US locale (FR expected ?). The braill driver depends on the type of keyboard. 
-
-
 
 + Sur les autres consoles les var d'env ne sont pas a jour
 
@@ -611,18 +519,18 @@ line.
 * 0.05 No sound Audigy + P4S8X Mail from Bat:
 "...My motherboard is an Asus P4S8X and my sound card is a creative Labs SB Audigy."
 
-
-* Cicero:
- http://www.cam.org/~nico/cicero/
-
 1.2 Priority 2
+
++ John Sturdy
+ > I think it would be enough for the first line to contain instructions
+ > on how to read the next line, and the second line to contain
+ > instructions on how to read the rest of the page; then only the first
+ > line would need to be spoken automatically.
+
 
 + the font must be selected by the user, eg lat0-08 for 50 lines.
 
-Oralux 0.7: 2.6.x kernel. See boot floppy issue.
-
 + swftools
-+ dialog-oralux once stable will possibly replace dialog 
 + Easying the spell checker use.
 + Automatic summary.
 + Propose free voice synthesizers able to change the voice features. 
@@ -650,17 +558,14 @@ However, I do not know who at the moment, could work on it.
 + Spec TechniBraille for Braille display (after 0.6).
 + Building menu using MBROLA for languages not supported by DECtalk (Dutch,...).
 + If the user types C-z, Alt F2,..., a clear report must inform him. 
-+ (C-e d c) Using Flite or EFM, the capital letters are not preceded by a specific sound (as it is with DECtalk).
-+ C-e d r 180 doesn't work using EFM (but C-e d 1 works).
++ (C-e d c) Using Flite, the capital letters are not preceded by a specific sound (as it is with DECtalk).
 + License of RealPlayer? 
-+ hd installation (non-ncurses-based formatting tool instead of cfdisk).
 + From Nigel: Firewall/iptables. kurumin ? See this thread:
 http://www.knoppix.net/forum/viewtopic.php?p=38868
 
 package: shorewall (Shoreline Firewall), gshield
 Webmin: accessible ?
 
-+ Spanish Translation: mkpersistenthome: MESSAGE_NO_PARTS en espagnol "No suitable partitions could be found. Remember that NTFS-Partitions are not writable with linux."
 + Spanish and German translation: "to accept it" replace "to quit"
   {"Press Enter to increase volume, or Space to decrease volume, or any other key to accept it",
    "Eingabetaste drücken um die Lautstärke zu erhöhen oder Leertaste drücken um die Lautstärke zu verringern oder jede andere Taste zum beenden",
@@ -811,34 +716,14 @@ If you must use a character then I think a + is best.
 1.3 Priority 3
 + Aural style sheets support.
 + Oralux 1.x: clearer messages. E.g. the Emacs question once C-x k is pressed: "Kill buffer" is a question but can be understood as a confirmation. "Which buffer must be killed" would be better.
-+ Check that installed binaries are i386 compliant
 + OCR
 + Test most of the Emacspeak applications
   http://Emacspeak.sourceforge.net/applications.html 
-+ Installing the French TTS whereas DECtalk was already installed.
-+ Loud speaker
 
 1.4 Priority 4
 + A solution to store the user configuration on a NTFS filesystem.
 + Adding the oralux user
 + Automatic Speech recognition
-
-2. SDK
-2.1 Priority 1 (Urgent)
-+ An easy process to customize the Oralux CD
-
-2.2 Priority 2
-+ After a new install on hd, fastly getting the usual environment (internet,...)
-
-3. Website
-3.1 Priority 1 (Urgent)
-+ A visitor can't access the site (emacs 20.7 with w3-4.0-pre46). Not because of the web pages. Due to the server configuration?
-/ Updating the FAQ, with the sent answers.
-+ Adding a link about the hardware knoppix database 
-http://knoppixfr.tuxfamily.org/index.php?page=hardware
-
-3.2 Priority 2
-+ Adding an entry 'Forum'
 
 Appli
 http://gtmess.sourceforge.net/

@@ -1,0 +1,16 @@
+0e* Other cheatcodes (hit F3 for previous page)
+knoppix oss (or oss=emu10k1)        Use OSS sound driver
+knoppix testcd                      Check CD data integrity and md5sums
+knoppix floppyconfig                Run "knoppix.sh" from a floppy
+knoppix myconf=/dev/sda1            Run "knoppix.sh" from a partition
+knoppix myconf=scan (or config=scan) Try to find "knoppix.sh" automatically
+knoppix home=/dev/sda1/knoppix.img  Mount loopback file as /home/knoppix
+knoppix home=scan                   Automatic search for knoppix homedir
+knoppix no{apic,agp,apm,ddc,mce}    Skip parts of HW-detection (1)
+knoppix no{pcmcia,scsi,swap,usb}    Skip parts of HW-detection (2)
+failsafe                            Boot with (almost) no HW-detection
+knoppix dma                         Turn on dma accelleration
+fb1280x1024 fb1024x768 fb800x600    Use framebuffer mode (for notebooks)
+knoppix lang=us|cs|da|de|es|fr...   Set keyboard/language
+knoppix toram                       Load entire CD to ramdisk (1GB)
+expert                              Interactive setup for experts

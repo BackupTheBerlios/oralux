@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // textToSpeech.c
-// $Id: textToSpeech.c,v 1.10 2006/03/29 20:47:40 gcasse Exp $
+// $Id: textToSpeech.c,v 1.11 2006/05/07 15:34:33 gcasse Exp $
 // $Author: gcasse $
 // Description: Ask about the whished TTS and install it. 
-// $Date: 2006/03/29 20:47:40 $ |
-// $Revision: 1.10 $ |
+// $Date: 2006/05/07 15:34:33 $ |
+// $Revision: 1.11 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -614,13 +614,13 @@ static void ManageDECtalkInstallation( enum textToSpeech* theTextToSpeech,
 	}
     }
 
-  // The dtk partition is remount in read only access
-  if (0!=strcmp("/",aDtkPath)) // To avoid any problem with a hard disk installation
-    {
-      sprintf(TheLine, "mount -o remount,ro %s 1>/dev/null", aDtkPath);
-      SHOW(TheLine);
-      system(TheLine);
-    }
+/*   // The dtk partition is remount in read only access */
+/*   if (0!=strcmp("/",aDtkPath)) // To avoid any problem with a hard disk installation */
+/*     { */
+/*       sprintf(TheLine, "mount -o remount,ro %s 1>/dev/null", aDtkPath); */
+/*       SHOW(TheLine); */
+/*       system(TheLine); */
+/*     } */
 
   // Building the emacspeak shared libary
   if ((*theTextToSpeech==TTS_DECtalk) && !BuildingEmacspeakSharedLibrary())

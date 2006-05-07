@@ -17,7 +17,7 @@ Last updated: 29/03/2004
 7.1 Using the man command in Emacs
 8 To quit
 
-When Emacspeak starts, it automatically opens a help buffer on using Emacs and Emacspeak. Save your preferences and store your documents as described in the FAQ. See http://www.oralux.org/faq.php#savepref
+When Emacspeak starts, it automatically opens a help buffer on using Emacs and Emacspeak. Save your preferences and store your documents as described in the FAQ. 
 
 1 The basics of typing commands
 An example of a keyboard short cut is C-x, obtained while pressing simultaneously Ctrl and x.
