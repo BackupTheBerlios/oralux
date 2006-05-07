@@ -1,11 +1,11 @@
 <?PHP
 // ----------------------------------------------------------------------------
 // tools.php
-// $Id: tools.php,v 1.4 2006/04/02 01:07:13 gcasse Exp $
+// $Id: tools.php,v 1.5 2006/05/07 15:28:16 gcasse Exp $
 // $Author: gcasse $
 // Description: A few helpful tools
-// $Date: 2006/04/02 01:07:13 $ |
-// $Revision: 1.4 $ |
+// $Date: 2006/05/07 15:28:16 $ |
+// $Revision: 1.5 $ |
 // Copyright (C) 2003 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -46,7 +46,7 @@ function getLang()
 // http://mail.wikipedia.org/pipermail/wikitech-l/2002-October/001068.html
 //
 // Its aim is to determine the required language from the Accept-Language variable.
-//
+b//
 // We run this code even if the language comes from an url or the session
 // because the following code checks that the value belongs to 
 // the expected languages
