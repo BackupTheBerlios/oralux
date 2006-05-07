@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // textToSpeech.c
-// $Id: textToSpeech.c,v 1.12 2006/05/07 22:41:23 gcasse Exp $
+// $Id: textToSpeech.c,v 1.13 2006/05/07 23:15:58 gcasse Exp $
 // $Author: gcasse $
 // Description: Ask about the whished TTS and install it. 
-// $Date: 2006/05/07 22:41:23 $ |
-// $Revision: 1.12 $ |
+// $Date: 2006/05/07 23:15:58 $ |
+// $Revision: 1.13 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -786,7 +786,8 @@ static int installDECtalk(enum language* theTextToSpeechLanguage)
     if (isFileConsistent(TheLine))
     { // OK
       // Updating the Makefile (emacspeak) so that the optional library is used
-      sprintf(TheLine,"replace -s 'ltts_us' 'ltts_us -l%s' -- %s/Makefile  1>/dev/null", theDECtalkLibrary[ *theTextToSpeechLanguage ], DTK_EMACSPEAK);
+      sprintf(TheLine,"sed 's+ltts_us+ltts_us -l%s+g' %s/Makefile >/tmp/Makefiledtk;mv /tmp/Makefiledtk %s/Makefile ", theDECtalkLibrary[ *theTextToSpeechLanguage ], DTK_EMACSPEAK, DTK_EMACSPEAK);
+
       SHOW(TheLine);
       system(TheLine);
     }
