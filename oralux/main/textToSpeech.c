@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // textToSpeech.c
-// $Id: textToSpeech.c,v 1.11 2006/05/07 15:34:33 gcasse Exp $
+// $Id: textToSpeech.c,v 1.12 2006/05/07 22:41:23 gcasse Exp $
 // $Author: gcasse $
 // Description: Ask about the whished TTS and install it. 
-// $Date: 2006/05/07 15:34:33 $ |
-// $Revision: 1.11 $ |
+// $Date: 2006/05/07 22:41:23 $ |
+// $Revision: 1.12 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -316,6 +316,7 @@ static enum language getSoftwareSynthLanguage(enum textToSpeech theTextToSpeech,
     {
     case TTS_Multispeech:
     case TTS_ViaVoice:
+    case TTS_DECtalk:
       aLanguage = thePreferredLanguage;
       break;
       

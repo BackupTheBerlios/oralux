@@ -1,11 +1,11 @@
 #undef DEBUG
 // ----------------------------------------------------------------------------
 // audiouserinterface.c
-// $Id: audioUserInterface.c,v 1.30 2006/05/07 15:34:33 gcasse Exp $
+// $Id: audioUserInterface.c,v 1.31 2006/05/07 22:41:23 gcasse Exp $
 // $Author: gcasse $
 // Description: Managing and playing the pre-recorded messages.
-// $Date: 2006/05/07 15:34:33 $ |
-// $Revision: 1.30 $ |
+// $Date: 2006/05/07 22:41:23 $ |
+// $Revision: 1.31 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 // September 2003: 
 // * German translations by Guenther Harrasser.
@@ -297,11 +297,11 @@ char * TheMessages[][5]={
    "Bienvenido a Oralux !",
    "Bem-vindo ao Oralux!",
   },
-  {"Do you want to install the DECtalk software (English, French, German, Spanish)?",
-   "Voulez-vous installer le logiciel DECtalk (allemand, anglais, espagnol, français) ?",
-   "Wollen Sie die DECtalk software installieren (Deutsche, Englische, Französische, Spanische)?",
-   "¿Quiere instalar el programa DECtalk (Alemán, Español, Francés, Inglés)",
-   "Você deseja instalar o Software DECtalk (Inglês, Francês, Alemão e Espanhol)?",
+  {"DECtalk software (English, French, German, Spanish)",
+   "logiciel DECtalk (allemand, anglais, espagnol, français)",
+   "DECtalk software (Deutsche, Englische, Französische, Spanische)",
+   "programa DECtalk (Alemán, Español, Francés, Inglés)",
+   "Software DECtalk (Inglês, Francês, Alemão e Espanhol)",
   },
 
   {"Please press the Enter key if you agree, or any other key if you disagree",

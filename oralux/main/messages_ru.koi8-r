@@ -120,8 +120,8 @@ struct t_translation TheRussianMessages[]=
    "Добро пожаловать в Oralux!",
   },
 
-  {"Do you want to install the DECtalk software ?",
-   "Хотите ли Вы установить DECtalk?",
+  {"DECtalk software",
+   NULL,
   },
 
   {"Please press the Return key if you agree, or any other key if you disagree",
