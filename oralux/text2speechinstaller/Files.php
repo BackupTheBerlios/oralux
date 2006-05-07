@@ -1,11 +1,11 @@
 <?PHP
 // ----------------------------------------------------------------------------
 // Files.php
-// $Id: Files.php,v 1.3 2005/03/31 09:16:54 gcasse Exp $
+// $Id: Files.php,v 1.4 2006/05/07 22:42:16 gcasse Exp $
 // $Author: gcasse $
 // Description: A few tools to manage files or directories. 
-// $Date: 2005/03/31 09:16:54 $ |
-// $Revision: 1.3 $ |
+// $Date: 2006/05/07 22:42:16 $ |
+// $Revision: 1.4 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -23,7 +23,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // ----------------------------------------------------------------------------
 
-require_once("../main/Constants.php");
+require_once("/usr/share/oralux/main/Constants.php");
 
 // LookForDirectory
 // This function looks for a directory in any partition of the local hard or scsi disks.
@@ -226,11 +226,14 @@ function CopyFiles( $theSourcePath, $theDestinationPath, $theDirectoryList)
 
   $aCurrentDirectory=getcwd();
   chdir($theDestinationPath);
-  foreach( $theDirectoryList as $aDirectory)
-    {
-      Debug("copied aDirectory=$aDirectory");
-      system("cp -pR $theSourcePath/$aDirectory .");
-    }
+  if (isset($theDirectoryList))
+  {	
+    foreach( $theDirectoryList as $aDirectory)
+      {
+        Debug("copied aDirectory=$aDirectory");
+        system("cp -pR $theSourcePath/$aDirectory .");
+      }
+  }
   chdir($aCurrentDirectory);
 }
 

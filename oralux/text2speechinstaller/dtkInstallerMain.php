@@ -3,11 +3,11 @@
 
 // ----------------------------------------------------------------------------
 // main.php
-// $Id: dtkInstallerMain.php,v 1.3 2006/05/07 15:36:39 gcasse Exp $
+// $Id: dtkInstallerMain.php,v 1.4 2006/05/07 22:42:16 gcasse Exp $
 // $Author: gcasse $
 // Description: Defining the common constants. 
-// $Date: 2006/05/07 15:36:39 $ |
-// $Revision: 1.3 $ |
+// $Date: 2006/05/07 22:42:16 $ |
+// $Revision: 1.4 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -25,8 +25,8 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // ----------------------------------------------------------------------------
 
-require_once("../main/Constants.php");
-require_once("../text2speechinstaller/dtkInstaller.php");
+require_once("/usr/share/oralux/main/Constants.php");
+require_once("/usr/share/oralux/text2speechinstaller/dtkInstaller.php");
 
 function printStatus($theStatus, $theFoundPath, $theLanguage)
 {

@@ -1,11 +1,11 @@
 <?PHP
 // ----------------------------------------------------------------------------
 // dtkInstaller1.php
-// $Id: dtkInstaller.php,v 1.3 2006/05/07 15:36:39 gcasse Exp $
+// $Id: dtkInstaller.php,v 1.4 2006/05/07 22:42:16 gcasse Exp $
 // $Author: gcasse $
 // Description: placing the DECtalk software in ramdisk 
-// $Date: 2006/05/07 15:36:39 $ |
-// $Revision: 1.3 $ |
+// $Date: 2006/05/07 22:42:16 $ |
+// $Revision: 1.4 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -23,8 +23,8 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // ----------------------------------------------------------------------------
 
-require_once("../main/Constants.php");
-require_once("../text2speechinstaller/Files.php");
+require_once("/usr/share/oralux/main/Constants.php");
+require_once("/usr/share/oralux/text2speechinstaller/Files.php");
 
 // Install tree
 // Where most of the DECtalk directories are dynamically copied
@@ -281,7 +281,8 @@ class DECtalkInstaller1
         // The BASE_DIR variable must be customized
         $oldTree="/usr/local";
 
-	$aCommand="sed 's+BASE_DIR=\"$oldTree\"+BASE_DIR=\"".INSTALL_TREE."\"+g' ".RAMDISK."/DECtalk/files.sh";
+	$installer=RAMDISK."/DECtalk/files.sh";
+	$aCommand="sed 's+BASE_DIR=\"$oldTree\"+BASE_DIR=\"".INSTALL_TREE."\"+g' $installer > /tmp/installer;mv /tmp/installer $installer;chmod +x $installer";
 
 //         $aCommand="replace".
 //           " 'BASE_DIR=\"$oldTree\"'".
@@ -307,7 +308,8 @@ class DECtalkInstaller1
 
         if ($anOptionalPackageIsPresent)
         {
-	  $aCommand="sed 's+BASE_DIR=\"$oldTree\"+BASE_DIR=\"".INSTALL_TREE."\"+g' ".RAMDISK."/".$this->_myTTSIdentifier[$anOptionalPackageIsPresent]."/installer";
+	  $installer=RAMDISK."/".$this->_myTTSIdentifier[$anOptionalPackageIsPresent]."/installer";
+	  $aCommand="sed 's+BASE_DIR=\"$oldTree\"+BASE_DIR=\"".INSTALL_TREE."\"+g' $installer > /tmp/installer;mv /tmp/installer $installer;chmod +x $installer";
 
 //           $aCommand="replace".
 //             " 'BASE_DIR=\"$oldTree\"'".
