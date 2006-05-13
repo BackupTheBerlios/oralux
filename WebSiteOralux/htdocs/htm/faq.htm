@@ -1,6 +1,12 @@
  <div id="main">
 
   <h2 id="questions">Questions</h2>
+  <h3>Generalities</h3>
+  <ul>
+    <li><a href="#hdchange">Will the Oralux CD modify my hard disk?</a></li>
+    <li><a href="#minireq">Which are the minimal hardware requirements?</a></li>
+  </ul>
+  
   <h3>Checking the downloaded iso file</h3>
   <ul>
     <li><a href="#check">How can I check that my iso file downloaded correctly?</a></li>
@@ -92,6 +98,22 @@
  <div id="answers">
 
   <h2 id="answers1">Some answers to frequently asked questions:</h2>
+
+  <h3>Generalities</h3>
+  <h4 id="hdchange">Will the Oralux CD modify my hard disk?</h4>
+
+  <p>Oralux can work without hard disk if your PC has sufficient
+  RAM. It is expected to work without modifying your hard disk.</p>
+  <p>However, the CD can automatically use the swap partition already
+  present in the hard disk.</p>
+  <p>And if the user created a persistent storage on her hard disk
+  using the Oralux audio menu, then it will be automatically used by
+  Oralux at next boot.</p>
+
+  <h4 id="minireq">Which are the minimal hardware requirements?</h4>
+
+  <p>The CD works using a Pentium 200 Mhz with 128 MB of RAM.</p>
+  <p>Less RAM is possible too; a swap partition could be needed though.</p>  
 
   <h3>Checking the downloaded iso file <a href="#note">[1]</a></h3>
 
@@ -192,7 +214,7 @@ fix this by booting again and providing <a href="#soundalsa">the relevant cheat 
     </ul>
 
   <h4 id="desktop">Which are the possible desktops?</h4>
-  <p>Release 0.7 proposes three desktops: Emacspeak, an environment based on YASR, and Speakup.</p>
+  <p>Oralux 0.7 alpha offers three desktops: Emacspeak, an environment based on YASR, and Speakup.</p>
   <p>You may want to select the desktop using the audio menu.</p>
 
    <h3>Sound</h3>
@@ -429,7 +451,7 @@ NOT * support the internal Tripletalk!</p>
    <h4 id="halthalt">How do I shutdown my PC?</h4>
     <p>First, quit Emacspeak using C-x C-c</p>
     <p>or quit the YASR or Speakup menu using the Escape key.</p>
-    <p>Then, the audio menu will propose to shutdown the PC</p>
+    <p>Then, the audio menu will offer to shutdown the PC</p>
 
    <h4 id="haltreboot">And about reboot?</h4>
     <p>First, quit Emacspeak using C-x C-c or quit the YASR or Speakup menu.</p>
