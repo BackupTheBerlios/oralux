@@ -1,0 +1,81 @@
+Ola,
+você está lendo este texto usando Emacspeak.
+
+Conteudo
+1. Primeiros Comandos.
+2. Como o Oralux Fala
+3. Iniciando
+4. Perguntas sobre o Oralux.
+5. Retorno.
+
+1. Primeiros Comandos
+
+* Velocidade de fala
+Para uma fala mais devagar, por favor pressione:
+Control+e d 1
+Para mais rapido:
+Control+e d 9
+
+Experimente com números entre 1 e 9 para encontrar uma velocidade melhor para voce.
+Nota: Control+e d 9 significa: 
+pressione e mantenha pressionada a tecla CONTROL and pressione a tecla d. 
+Libere as teclas. 
+Pressione a tecla d, então pressione 9.
+
+* Pontuação
+Seta modo de pontuação para todos, alguns ou nenhum.
+Por favor, tecle:
+Control+e d p
+e então faça sua escolha: all, alguns, nenhum. 
+
+* Falar carácter
+Cada carácter inserido, pode ser falado ou não
+Por favor, pressione o estado do Emacspeak para falar carácter:
+control+e d k
+
+* Fechar Emacspeak
+Control+x Control+c
+
+2. Como o Oralux Fala.
+
+Adicionalmente dois programas trabalham para que o Oralux fale. Um é chamado Emacs, e o outro, Emacspeak. Emacs é um editor de arquivos de texto com muitas extensões que lhe fazem ser uma ferramenta muito poderosa para fazer praticamente tudo no computador. Emacspeak é uma dessas extensões que faz a conversa. Isto significa que para usar este sistema, você irá aprender a usar o Emacs e o EmacsSpeak.
+
+Quando Emacspeak está rodando, a primeira coisa que é iniciada é o Emacs. Então ele inicia as extensões de fala. Você somente consegue rodar o emacs para operações em silêncio ou usar o Emacspeak para fala.
+
+3. Iniciando.
+
+O tutorial "Meus primeiros passos com GNU/Emacs" e "O calendário e o Diário" escrito por Sylivi Xhaard estão no diretório:
+tutorials/en
+
+Um bom lugar para iniciar com o Emacs é o "Emacs Tutorial". 
+Você consegue ele agora pressionando Control+h, t. Isto é, pressione a tecla Control e pressione h, então libere ambos e pressione t.
+
+Se você é novato no Emacspeak, você deve procurar ler as páginas Emacspeak Info
+Control+h, i, m Emacspeak.
+O Emacspeak está rodando agora, você consegue pegar esta FAQ pressionando:
+Control+e, Shift+f.
+
+Uma lista de comandos de teclas está no sistema de ajuda Emacs, use
+Control+h,Control+e
+
+O arquivo da lista de e-mails do Emacspeak pode ajudar também:
+http://www.cs.vassar.edu/~priestdo/emacspeak/
+
+4. Perguntas sobre o Oralux
+
+As perguntas sobre o Oralux estão em uma página HTML.
+Para ler, inicie o navegador web w3m para ler o arquivo:
+ESCAPE x w3m-find-file ENTER
+
+e pressione:
+/cdrom/KNOPPIX/faq.htm 
+
+
+5. Retorno.
+Nós ficaremos muito grato se você enviar um retorno sobre sua experiência com o Oralux.
+O email é:
+
+contact@oralux.org
+
+Esperamos que você aprecie o Oralux.
+
