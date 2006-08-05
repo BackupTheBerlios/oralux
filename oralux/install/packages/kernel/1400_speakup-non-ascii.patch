@@ -1,0 +1,496 @@
+diff -urNpX dontdiff linux-2.6.12/drivers/char/speakup/keyinfo.h linux-2.6.12-new2/drivers/char/speakup/keyinfo.h
+--- linux-2.6.12/drivers/char/speakup/keyinfo.h	2005-10-26 17:49:59.000000000 +0200
++++ linux-2.6.12-new2/drivers/char/speakup/keyinfo.h	2006-04-16 21:24:06.000000000 +0200
+@@ -33,7 +33,7 @@ SAY_CONTROL, SAY_WORD_CTL, NO_INTERRUPT,
+ 	SPELL_DELAY, PUNC_LEVEL, READING_PUNC,
+ 	ATTRIB_BLEEP, BLEEPS,
+  RATE, PITCH, VOL, TONE, PUNCT, VOICE, FREQ, LANG,
+-	CAPS_START, CAPS_STOP,
++	CAPS_START, CAPS_STOP, CHARTAB,
+ 	MAXVARS
+ };
+ 
+diff -urNpX dontdiff linux-2.6.12/drivers/char/speakup/speakup.c linux-2.6.12-new2/drivers/char/speakup/speakup.c
+--- linux-2.6.12/drivers/char/speakup/speakup.c	2006-03-20 17:47:32.000000000 +0100
++++ linux-2.6.12-new2/drivers/char/speakup/speakup.c	2006-04-16 21:29:09.000000000 +0200
+@@ -136,7 +136,7 @@ char *phonetic[] = {
+ 	"x ray", "yankee", "zooloo"
+ };
+ 
+-// array of 256 char pointers (one for each ASCII character description )
++// array of 256 char pointers (one for each character description )
+ // initialized to default_chars and user selectable via /proc/speakup/characters
+ char *characters[256];
+ 
+@@ -203,7 +203,11 @@ char *default_chars[256] = {
+ 	"power", "squared", "black square", "white space" /* 252 */
+ };
+ 
+-u_short spk_chartab[256] = {
++// array of 256 u_short (one for each character)
++// initialized to default_chartab and user selectable via /proc/speakup/chartab
++u_short spk_chartab[256];
++
++u_short default_chartab[256] = {
+  B_CTL, B_CTL, B_CTL, B_CTL, B_CTL, B_CTL, B_CTL, B_CTL, /* 0-7 */
+  B_CTL, B_CTL, A_CTL, B_CTL, B_CTL, B_CTL, B_CTL, B_CTL, /* 8-15 */
+  B_CTL, B_CTL, B_CTL, B_CTL, B_CTL, B_CTL, B_CTL, B_CTL, /*16-23 */
+@@ -374,6 +378,28 @@ sel_pos(int n)
+ 	return inverse_translate(spk_sel_cons, screen_glyph(spk_sel_cons, n));
+ }
+ 
++static inline unsigned char
++get_char(struct vc_data *vc, u16 *pos)
++{
++  unsigned char ch = ' ';
++  if (vc && pos) {
++    u16 w = scr_readw (pos );
++    u16 c = w & 0xff;
++  
++    if (w & vc->vc_hi_font_mask)
++      c |= 0x100;
++
++    ch = inverse_translate (vc, c );
++  }
++  return ch;
++}
++
++static inline unsigned char
++get_attributes(u16 *pos)
++{
++  return (u_char ) (scr_readw (pos ) >> 8 );
++}
++
+ static void
+ speakup_clear_selection(void)
+ {
+@@ -578,6 +604,10 @@ static void
+ speak_char( u_char ch )
+ {
+ 	char *cp = characters[ ch];
++	if (cp == NULL) {
++		pr_info ("speak_char: cp==NULL!\n");
++		return;
++	}
+ 	synth_buffer_add( SPACE );
+ 	if (IS_CHAR(ch, B_CAP ) ) {
+ 		pitch_shift++;
+@@ -599,7 +629,7 @@ say_char (struct vc_data *vc )
+ {
+ 	u_short ch;
+ 	spk_old_attr = spk_attr;
+-	ch = scr_readw ((u_short * ) spk_pos );
++	ch = get_char (vc, (u_short * ) spk_pos );
+ 	spk_attr = ((ch & 0xff00 ) >> 8 );
+ 	if (spk_attr != spk_old_attr ) {
+ 		if (  attrib_bleep&1 ) bleep (spk_y );
+@@ -613,7 +643,7 @@ say_phonetic_char (struct vc_data *vc )
+ {
+ 	u_short ch;
+ 	spk_old_attr = spk_attr;
+-	ch = scr_readw ((u_short * ) spk_pos );
++	ch = get_char (vc, (u_short * ) spk_pos );
+ 	spk_attr = ((ch & 0xff00 ) >> 8 );
+ 		if ( IS_CHAR(ch, B_ALPHA ) ) {
+ 		ch &= 0x1f;
+@@ -666,7 +696,7 @@ get_word (struct vc_data *vc )
+ 	char ch;
+ 	u_short attr_ch;
+ 	spk_old_attr = spk_attr;
+-	ch = (char ) scr_readw ((u_short * ) tmp_pos );
++	ch = (char ) get_char (vc, (u_short * ) tmp_pos );
+ 
+ /* decided to take out the sayword if on a space (mis-information */
+ 	if ( say_word_ctl && ch == SPACE ) {
+@@ -675,25 +705,25 @@ get_word (struct vc_data *vc )
+ 		return 0;
+ 	} else if ((tmpx < vc->vc_cols-2 )
+ 		   && (ch == SPACE || IS_WDLM(ch ))
+-		   && ((char) scr_readw ((u_short * ) tmp_pos+1 ) > SPACE)) {
++		   && ((char) get_char (vc, (u_short * ) tmp_pos+1 ) > SPACE)) {
+ 	  tmp_pos += 2;
+ 	  tmpx++;
+ 	} else
+ 	while (tmpx > 0 ) {
+-	  if (((ch = (char ) scr_readw ((u_short * ) tmp_pos-1 )) == SPACE
++	  if (((ch = (char ) get_char (vc, (u_short * ) tmp_pos-1 )) == SPACE
+ 	       || IS_WDLM(ch ))
+-	      && ((char) scr_readw ((u_short * ) tmp_pos ) > SPACE))
++	      && ((char) get_char (vc, (u_short * ) tmp_pos ) > SPACE))
+ 	    break;
+ 	  tmp_pos -= 2;
+ 	  tmpx--;
+ 	}
+-	attr_ch = scr_readw ((u_short * ) tmp_pos );
++	attr_ch = get_char (vc, (u_short * ) tmp_pos );
+ 	spk_attr = attr_ch >> 8;
+ 	buf[cnt++] = attr_ch&0xff;
+ 	while (tmpx < vc->vc_cols-1 ) {
+ 	  tmp_pos += 2;
+ 	  tmpx++;
+-	  ch = (char ) scr_readw ((u_short * ) tmp_pos );
++	  ch = (char ) get_char (vc, (u_short * ) tmp_pos );
+ 	  if ((ch == SPACE )
+ 	      || (IS_WDLM(buf[cnt-1] ) && ( ch > SPACE )))
+ 	    break;
+@@ -742,7 +772,7 @@ say_prev_word (struct vc_data *vc )
+ 			spk_x = vc->vc_cols-1;
+ 		} else spk_x--;
+ 			spk_pos -= 2;
+-		ch = (char ) scr_readw ((u_short * ) spk_pos );
++		ch = (char ) get_char (vc, (u_short * ) spk_pos );
+ 		if ( ch == SPACE ) state = 0;
+ 		else if (IS_WDLM(ch ) ) state = 1;
+ 		else state = 2;
+@@ -771,7 +801,7 @@ say_next_word (struct vc_data *vc )
+ 		return;
+ 	}
+ 	while ( 1 ) {
+-		ch = (char ) scr_readw ((u_short * ) spk_pos );
++		ch = (char ) get_char (vc, (u_short * ) spk_pos );
+ 		if ( ch == SPACE ) state = 0;
+ 		else if (IS_WDLM(ch ) ) state = 1;
+ 		else state = 2;
+@@ -837,9 +867,9 @@ get_line (struct vc_data *vc )
+ 	u_long tmp = spk_pos - (spk_x * 2 );
+ 	int i = 0;
+ 	spk_old_attr = spk_attr;
+-	spk_attr = (u_char ) (scr_readw ((u_short * ) spk_pos ) >> 8 );
++	spk_attr = get_attributes ((u_short * ) spk_pos );
+ 	for (i = 0; i < vc->vc_cols; i++ ) {
+-		buf[i] = (u_char ) scr_readw ((u_short * ) tmp );
++		buf[i] = (u_char ) get_char (vc, (u_short * ) tmp );
+ 		tmp += 2;
+ 	}
+ 	for (--i; i >= 0; i-- )
+@@ -901,9 +931,9 @@ say_from_to (struct vc_data *vc, u_long 
+ 	int i = 0;
+ 	u_short saved_punc_mask = punc_mask;
+ 	spk_old_attr = spk_attr;
+-	spk_attr = (u_char ) (scr_readw ((u_short * ) from ) >> 8 );
++	spk_attr = get_attributes ((u_short * ) from );
+ 	while (from < to ) {
+-		buf[i++] = (char ) scr_readw ((u_short * ) from );
++		buf[i++] = (char ) get_char (vc, (u_short * ) from );
+ 		from += 2;
+ 		if ( i >= vc->vc_size_row ) break;
+ 	}
+@@ -972,10 +1002,10 @@ get_sentence_buf (struct vc_data *vc, in
+ 	sentmarks[bn][0]=&sentbuf[bn][0];
+ 	i = 0;
+ 	spk_old_attr = spk_attr;
+-	spk_attr = (u_char ) (scr_readw ((u_short * ) start ) >> 8 );
++	spk_attr = get_attributes ((u_short * ) start );
+ 
+ 	while (start < end ) {
+-		sentbuf[bn][i] = (char ) scr_readw ((u_short * ) start );
++		sentbuf[bn][i] = (char ) get_char (vc, (u_short * ) start );
+ 		if (i>0)
+ 		{
+ 			if ((sentbuf[bn][i]==SPACE)&&(sentbuf[bn][i-1]=='.')&&(numsentences[bn]<9))
+@@ -1129,7 +1159,7 @@ say_position (struct vc_data *vc )
+ static void
+ say_char_num (struct vc_data *vc )
+ {
+-	u_short ch = scr_readw ((u_short * ) spk_pos );
++	u_short ch = get_char(vc, (u_short * ) spk_pos);
+ 	ch &= 0x0ff;
+ 	sprintf (buf, "hex %02x, decimal %d", ch, ch );
+ 	synth_write_msg (buf );
+@@ -1372,7 +1402,13 @@ reset_default_chars (void )
+ 				kfree (characters[i] );
+ 		}
+ 	}
+-		memcpy( characters, default_chars, sizeof( default_chars ) );
++	memcpy( characters, default_chars, sizeof( default_chars ) );
++}
++
++static void
++reset_default_chartab (void )
++{
++	memcpy( spk_chartab, default_chartab, sizeof( default_chartab ) );
+ }
+ 
+ static void
+@@ -1390,6 +1426,7 @@ void __init speakup_open (struct vc_data
+ 	num_var *n_var;
+ 
+ 	reset_default_chars();
++	reset_default_chartab();
+ 	memset( speakup_console, 0, sizeof(speakup_console));
+ 	if ( first_console == NULL ) return;
+ 	memset( first_console, 0, spk_size);
+@@ -1436,6 +1473,18 @@ echo 87 w > /proc/speakup/characters
+ echo 119 w > /proc/speakup/characters
+ echo defaults > /proc/speakup/characters
+ echo reset > /proc/speakup/characters
++
++
++cat /proc/speakup/chartab > foo
++less /proc/speakup/chartab
++vi /proc/speakup/chartab
++
++cat foo > /proc/speakup/chartab
++cat > /proc/speakup/chartab
++echo 233 ALPHA > /proc/speakup/chartab
++echo 46 A_PUNC > /proc/speakup/chartab
++echo defaults > /proc/speakup/chartab
++echo reset > /proc/speakup/chartab
+ */
+ 
+ // keymap handlers
+@@ -1599,6 +1648,76 @@ show_char_results (u_long data )
+ 	printk( buf );
+ }
+ 
++// this is the read handler for /proc/speakup/chartab
++static int
++chartab_read_proc (PROC_READ_PROTOTYPE )
++{
++	int i, len = 0;
++	off_t begin = 0;
++	char *cp;
++	for (i = 0; i < 256; i++ ) {	  
++		cp = "0";
++		if (IS_TYPE( i, B_CTL ))
++			cp = "B_CTL";
++		else if (IS_TYPE( i, WDLM ))
++			cp = "WDLM";
++		else if (IS_TYPE( i, A_PUNC ))
++			cp = "A_PUNC";
++		else if (IS_TYPE( i, PUNC ))
++			cp = "PUNC";
++		else if (IS_TYPE( i, NUM ))
++			cp = "NUM";
++		else if (IS_TYPE( i, A_CAP ))
++			cp = "A_CAP";
++		else if (IS_TYPE( i, ALPHA ))
++			cp = "ALPHA";
++		else if (IS_TYPE( i, B_CAPSYM ))
++			cp = "B_CAPSYM";
++		else if (IS_TYPE( i, B_SYM ))
++			cp = "B_SYM";
++
++		len += sprintf (page + len, "%d\t%s\n", i, cp );
++		if (len + begin > off + count )
++			break;
++		if (len + begin < off ) {
++			begin += len;
++			len = 0;
++		}
++	}
++	if (i >= 256 )
++		*eof = 1;
++	if (off >= len + begin )
++		return 0;
++	*start = page + (off - begin );
++	return ((count < begin + len - off ) ? count : begin + len - off );
++}
++
++static int
++chartab_get_value (char* keyword)
++{
++	int value = 0;
++	
++	if (!strcmp(keyword,"ALPHA"))
++		value = ALPHA;
++	else if (!strcmp(keyword,"B_CTL"))
++		value = B_CTL;
++	else if (!strcmp(keyword,"WDLM"))
++		value = WDLM;
++	else if (!strcmp(keyword,"A_PUNC"))
++		value = A_PUNC;
++	else if (!strcmp(keyword,"PUNC"))
++		value = PUNC;
++	else if (!strcmp(keyword,"NUM"))
++		value = NUM;
++	else if (!strcmp(keyword,"A_CAP"))
++		value = A_CAP;
++	else if (!strcmp(keyword,"B_CAPSYM"))
++		value = B_CAPSYM;
++	else if (!strcmp(keyword,"B_SYM"))
++		value = B_SYM;
++	return value;
++}
++
+ /* this is the write handler for /proc/speakup/silent */
+ static int
+ silent_write_proc (PROC_WRITE_PROTOTYPE )
+@@ -1653,7 +1772,7 @@ get_more:
+ 	}
+ 	if (state < 2 ) return count;
+ 	cp = desc;
+-	while ( *cp && *cp <= SPACE ) cp++;
++	while ( *cp && (unsigned char)(*cp) <= SPACE ) cp++;
+ 	if ((!cnt ) || strchr ("dDrR", *cp ) ) {
+ 		reset_default_chars ( );
+ 		pr_info( "character descriptions reset to defaults\n" );
+@@ -1664,7 +1783,7 @@ get_more:
+ 	if (*cp == '#' ) goto get_more;
+ 	num = -1;
+ 	cp = speakup_s2i(cp, &num );
+-	while ( *cp && *cp <= SPACE ) cp++;
++	while ( *cp && (unsigned char)(*cp) <= SPACE ) cp++;
+ 	if (num < 0 || num > 255 ) {	// not in range
+ 		rejects++;
+ 		strings++;
+@@ -1700,6 +1819,79 @@ get_more:
+ 	return count;
+ }
+ 
++// this is the write handler for /proc/speakup/chartab
++static int
++chartab_write_proc (PROC_WRITE_PROTOTYPE )
++{
++#define max_desc_len 72
++	static int cnt = 0, state = 0;
++	static char desc[max_desc_len + 1];
++	static u_long jiff_last = 0;
++	short i = 0, num;
++	char ch, *cp;
++	int value=0;
++	// reset certain vars if enough time has elapsed since last called
++	if (jiffies - jiff_last > 10 ) {
++		cnt = state = strings = rejects = updates = 0;
++	}
++	jiff_last = jiffies;
++get_more:
++	desc[cnt] = '\0';
++	state = 0;
++	for (; i < count && state < 2; i++ ) {
++		get_user (ch, buffer + i );
++		if ( ch == '\n' ) {
++			desc[cnt] = '\0';
++			state = 2;
++		} else if (cnt < max_desc_len )
++			desc[cnt++] = ch;
++	}
++	if (state < 2 ) return count;
++	cp = desc;
++	while ( *cp && (unsigned char)(*cp) <= SPACE ) cp++;
++	if ((!cnt ) || strchr ("dDrR", *cp ) ) {
++		reset_default_chartab ( );
++		pr_info( "character descriptions reset to defaults\n" );
++		cnt = 0;
++		return count;
++	}
++	cnt = 0;
++	if (*cp == '#' ) goto get_more;
++	num = -1;
++	cp = speakup_s2i(cp, &num );
++	while ( *cp && (unsigned char)(*cp) <= SPACE ) cp++;
++	if (num < 0 || num > 255 ) {	// not in range
++		rejects++;
++		strings++;
++		goto get_more;
++	}
++	/*	if (num >= 27 && num <= 31 ) goto get_more; */
++
++	value = chartab_get_value (cp);
++	if (!value) {	// not in range
++		rejects++;
++		strings++;
++		goto get_more;
++	}
++
++	if (value==spk_chartab[num]) {
++		strings++;
++		goto get_more;
++	}
++
++	spk_chartab[num] = value;
++	updates++;
++	strings++;
++	if (i < count ) goto get_more;
++	chars_stop_timer ( );
++	init_timer (&chars_timer );
++	chars_timer.function = show_char_results;
++	chars_timer.expires = jiffies + 5;
++		start_timer (chars_timer );
++	chars_timer_active++;
++	return count;
++}
++
+ static int
+ bits_read_proc (PROC_READ_PROTOTYPE )
+ {
+@@ -1844,6 +2036,7 @@ proc_var spk_proc_vars[] = {
+ 	 { DELIM, bits_read_proc, bits_write_proc, 4 },
+ 	 { REPEATS, bits_read_proc, bits_write_proc, 5 },
+ 	 { EXNUMBER, bits_read_proc, bits_write_proc, 6 },
++	 { CHARTAB, chartab_read_proc, chartab_write_proc, 0 },
+ 	{ -1, 0, 0, 0 }
+ };
+ 
+@@ -1883,7 +2076,7 @@ speakup_date (struct vc_data *vc )
+ 	spk_y = spk_cy = vc->vc_y;
+ 	spk_pos = spk_cp = vc->vc_pos;
+ 	spk_old_attr = spk_attr;
+-	spk_attr = ((scr_readw ((u_short * ) spk_pos ) & 0xff00 ) >> 8 );
++	spk_attr = get_attributes((u_short * ) spk_pos );
+ }
+ 
+ static u_char is_cursor = 0;
+@@ -2151,8 +2344,8 @@ count_highlight_color(struct vc_data *vc
+ 		u16 *end = start + vc->vc_cols*2;
+ 		u16 *ptr;
+ 		for ( ptr=start ; ptr<end ; ptr++){
+-			ch = scr_readw( ptr );
+-			bg = ( ch & 0x7000 ) >> 12;
++			ch = get_attributes( ptr );
++			bg = ( ch & 0x70 ) >> 4;
+ 			speakup_console[vc_num]->ht.bgcount[bg]++;
+ 		}
+ 		start += vc->vc_size_row;
+diff -urNpX dontdiff linux-2.6.12/drivers/char/speakup/speakup_drvcommon.c linux-2.6.12-new2/drivers/char/speakup/speakup_drvcommon.c
+--- linux-2.6.12/drivers/char/speakup/speakup_drvcommon.c	2006-01-27 16:10:58.000000000 +0100
++++ linux-2.6.12-new2/drivers/char/speakup/speakup_drvcommon.c	2006-04-16 21:30:19.000000000 +0200
+@@ -137,6 +137,8 @@ void start_serial_interrupt( int irq )
+ 
+ void stop_serial_interrupt()
+ {
++	if ( synth_port_tts == 0 ) return;
++
+ 	// Turn off interrupts
+ 	outb(0,synth_port_tts+UART_IER);
+ 	// Free IRQ
+@@ -527,7 +529,8 @@ var_header var_headers[] = {
+   { "punct", PUNCT, VAR_NUM, USER_RW, 0, 0, 0 },
+   { "voice", VOICE, VAR_NUM, USER_RW, 0, 0, 0 },
+   { "freq", FREQ, VAR_NUM, USER_RW, 0, 0, 0 },
+-  { "lang", LANG, VAR_NUM, USER_RW, 0, 0, 0 }
++  { "lang", LANG, VAR_NUM, USER_RW, 0, 0, 0 },
++  { "chartab", CHARTAB, VAR_PROC, USER_RW, 0, 0, 0 },
+ };
+ 
+ var_header *var_ptrs[MAXVARS] = { 0, 0, 0 };
+diff -urNpX dontdiff linux-2.6.12/drivers/char/speakup/spk_priv.h linux-2.6.12-new2/drivers/char/speakup/spk_priv.h
+--- linux-2.6.12/drivers/char/speakup/spk_priv.h	2006-01-27 16:10:58.000000000 +0100
++++ linux-2.6.12-new2/drivers/char/speakup/spk_priv.h	2006-04-16 21:31:24.000000000 +0200
+@@ -74,11 +74,12 @@
+ #define B_EXNUM 0x0100
+ #define CH_RPT 0x0200
+ #define B_CTL 0x0400
+-#define A_CTL B_CTL+SYNTH_OK
++#define A_CTL ( B_CTL+SYNTH_OK )
+ #define B_SYM 0x0800
+-#define B_CAPSYM B_CAP|B_SYM
++#define B_CAPSYM ( B_CAP|B_SYM )
+ #define IS_WDLM( x ) ( spk_chartab[( ( u_char )x )]&B_WDLM )
+ #define IS_CHAR( x, type ) ( spk_chartab[( ( u_char )x )]&type )
++#define IS_TYPE( x, type ) ( (spk_chartab[( ( u_char )x )]&type) == type )
+ #define SET_DEFAULT -4
+ #define E_RANGE -3
+ #define E_TOOLONG -2
+diff -urNpX dontdiff linux-2.6.12/drivers/char/vt.c linux-2.6.12-new2/drivers/char/vt.c
+--- linux-2.6.12/drivers/char/vt.c	2006-04-16 20:35:30.000000000 +0200
++++ linux-2.6.12-new2/drivers/char/vt.c	2006-04-16 21:40:51.000000000 +0200
+@@ -2050,7 +2050,7 @@ static int do_con_write(struct tty_struc
+ 			}
+ 			if (vc->vc_decim)
+ 				insert_char(vc, 1);
+-			speakup_con_write(vc, (char *) &tc, 1);
++			speakup_con_write(vc, (char *) &c, 1);
+ 			scr_writew(himask ?
+ 				     ((vc->vc_attr << 8) & ~himask) + ((tc & 0x100) ? himask : 0) + (tc & 0xff) :
+ 				     (vc->vc_attr << 8) + tc,

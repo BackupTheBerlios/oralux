@@ -5,18 +5,18 @@
 #
 # Oralux changes
 # Gilles Casse, 2003-2006
-# - No AES256 at the moment
-# - Oralux conf file
-# - Floppy disk and knoppix.sh
-# - No persistent home if HD install
-# - Configs.tbz: its md5sum is saved in sysconfig/knoppix
-# - BRLTTY init
-# - Audio desktop options: Emacspeak or YASR based. 
-# - No GUI Option at the moment. 
-# - tts cheatcode (external speech synthesizer).
-# - no alsa driver selection (by default the pcitable returns the Alsa driver)
-# - oss cheatcode (stored in conf). no oss cheatcode.
-# - do not take in account the previous 0.6 configs.tbz
+## - No AES256 at the moment
+## - Oralux conf file
+## - Floppy disk and knoppix.sh
+## - No persistent home if HD install
+## - Configs.tbz: its md5sum is saved in sysconfig/knoppix
+## - BRLTTY init
+## - Audio desktop options: Emacspeak or YASR based. 
+## - No GUI Option at the moment. 
+## - tts cheatcode (external speech synthesizer).
+## - no alsa driver selection (by default the pcitable returns the Alsa driver)
+## - oss cheatcode (stored in conf). no oss cheatcode.
+## - do not take in account the previous 0.6 configs.tbz
 # For more details, see diff with knoppix-autoconfig.sav
 #
 # knoppix-image is not interactive (at the moment)
@@ -76,34 +76,6 @@ stringinstring " $1" "$CMDLINE"
 return "$?"
 }
 
-# Reinit USB devices that could not be started from linuxrc
-# Adopted from /etc/hotplug/usb.rc with some changes.
-# Calling /etc/hotplug/usb.rc directly can result in crashes due
-# to quite cautiousless module probing there. -KK
-usbreinit(){
-LISTER=/usr/sbin/usbmodules
-test -x $LISTER || LISTER="$(type -p usbmodules 2>/dev/null)"
-[ -z "$LISTER" -o ! -f /proc/bus/usb/devices ] && return 1
-# make sure the usb agent will run
-ACTION="add" ; PRODUCT="0/0/0" ; DEVFS="/proc/bus/usb" ; DEVICE= ; DEVPATH=
-export ACTION PRODUCT DEVFS DEVICE DEVPATH
-echo -n "sync:["
-if [ -d /sys/bus/usb/devices ]; then
-# Kernel 2.6
- for device in /sys/bus/usb/devices/*; do
-  DEVPATH="${device#/sys/}"
-  echo -n "${DEVPATH##*/}" " "; /etc/hotplug/usb.agent >/dev/null 2>&1
- done
-else
-# Kernel 2.4
- for DEVICE in /proc/bus/usb/*/*; do
-  echo -n ${DEVICE##*/} " "; /etc/hotplug/usb.agent >/dev/null 2>&1
- done
-fi
-echo -n "] "
-return 0
-}
-
 # Try to mount this filesystem read-only, without or with encryption
 # trymount device|file mountpoint
 trymount(){
@@ -118,22 +90,22 @@ RC=""
 [ -f "$1" ] && { mount -t auto -o loop,rw "$1" "$2" 2>/dev/null; RC="$?"; }
 # Mount succeeded?
 [ "$RC" = "0" ] && return 0
-# echo ""
-# echo "${CYAN}Filesystem not autodetected, trying to mount $1 with AES256 encryption${NORMAL}"
-# sleep 2
-# a="y"
-# while [ "$a" != "n" -a "$a" != "N" ]; do
-# # We need to mount crypto-loop files with initial rw support
-#  PW="$(dialog --title "Encrypted Partition?" --stdout --insecure --passwordbox "Please enter decryption password:" 8 40)"
-#  [ "$?" != "0" ] && break
-#  mount -p0 -t auto -o loop,rw,encryption=AES256 "$1" "$2" <<EOT
-# $PW
-# EOT
-#  [ "$?" = "0" ] && { unset PW; return 0; }
-#  unset PW
-#  echo -n "${RED}Mount failed, retry? [Y/n] ${NORMAL}"
-#  read a
-# done
+echo ""
+echo "${CYAN}Filesystem not autodetected, trying to mount $1 with AES256 encryption${NORMAL}"
+sleep 2
+a="y"
+while [ "$a" != "n" -a "$a" != "N" ]; do
+# We need to mount crypto-loop files with initial rw support
+ PW="$(dialog --title "Encrypted Partition?" --stdout --insecure --passwordbox "Please enter decryption password:" 8 40)"
+ [ "$?" != "0" ] && break
+ mount -p0 -t auto -o loop,rw,encryption=AES256 "$1" "$2" <<EOT
+$PW
+EOT
+ [ "$?" = "0" ] && { unset PW; return 0; }
+ unset PW
+ echo -n "${RED}Mount failed, retry? [Y/n] ${NORMAL}"
+ read a
+done
 return 1
 }
 
@@ -141,7 +113,10 @@ return 1
 
 # We need /proc here, so mount it in case we skipped the bootfloppy
 [ -f /proc/version ] || mount -t proc /proc /proc 2>/dev/null
-stringinfile "/dev/pts" /proc/mounts || mount -t devpts /dev/pts /dev/pts 2>/dev/null
+
+# No kernel messages while probing modules
+echo "0" > /proc/sys/kernel/printk
+
 # Kernel 2.6
 [ -d /sys/devices ] || mount -t sysfs /sys /sys 2>/dev/null
 
@@ -149,7 +124,7 @@ stringinfile "/dev/pts" /proc/mounts || mount -t devpts /dev/pts /dev/pts 2>/dev
 # This should work, but doesn't with Kernel 2.4.19-rc1
 # CMDLINE="$(</proc/cmdline)" This should work, but doesn't with Kernel 2.4.19-rc1
 # This works.
-[ -z "$CMDLINE" ] && CMDLINE="$(cat /proc/cmdline)"
+CMDLINE="$(cat /proc/cmdline)"
 
 
 # Check if we are in interactive startup mode
@@ -161,34 +136,15 @@ MYCONF=""
 MYCONFDIR=""
 case "$CMDLINE" in *\ myconf*|*\ custom*|*\ config*) MYCONF="yes"; ;; esac
 # Compatibility
-case "$CMDLINE" in *\ floppyconf*) MYCONF="yes"; MYCONFDIR="/mnt/floppy" ;; esac
+case "$CMDLINE" in *\ floppyconf*) MYCONF="yes"; MYCONFDIR="/media/fd0" ;; esac
 if [ -n "$MYCONF" ]; then
 # Check for given config directory
 [ -n "$MYCONFDIR" ] || MYCONFDIR="$(getbootparam 'myconfig')"
 [ -n "$MYCONFDIR" ] || MYCONFDIR="$(getbootparam 'myconf')"
 [ -n "$MYCONFDIR" ] || MYCONFDIR="$(getbootparam 'custom')"
 [ -n "$MYCONFDIR" ] || MYCONFDIR="$(getbootparam 'config')"
-# Bugfix for myconfig=/mnt/floppy
-case "$MYCONFDIR" in *floppy*|*fd0*) MYCONFDIR="/mnt/floppy" ;; esac
-
-if [ -z "$MYCONFDIR" ]; then
-    case "$CMDLINE" in *\ floppyconf*) MYCONFDIR="/dev/fd0"; ;; esac
-fi
-
-fi
-
-# Check if we want oss
-USE_OSS=""
-if checkbootparam oss >/dev/null 2>&1; then
-USE_OSS="yes"
-OSS_CARD="$(getbootparam 'oss' 2>/dev/null)"
-[ -n "$OSS_CARD" ] || OSS_CARD="autodetect"
-fi
-
-# Check if we have to forget oss (useful if store in the oralux.conf file)
-FORGET_OSS=""
-if checkbootparam nooss >/dev/null 2>&1; then
-FORGET_OSS="yes"
+# Bugfix for myconfig=/media/fd0
+case "$MYCONFDIR" in *floppy*|*fd0*) MYCONFDIR="/media/fd0" ;; esac
 fi
 
 ### localization
@@ -207,7 +163,7 @@ COUNTRY="de"
 LANG="de_DE@euro"
 KEYTABLE="de-latin1-nodeadkeys"
 XKEYBOARD="de"
-KDEKEYBOARD="de"
+KDEKEYBOARD="de(nodeadkeys)"
 CHARSET="iso8859-15"
 # Additional KDE Keyboards
 KDEKEYBOARDS="us,fr"
@@ -223,7 +179,7 @@ XKEYBOARD="be"
 KDEKEYBOARD="be"
 CHARSET="iso8859-15"
 # Additional KDE Keyboards
-KDEKEYBOARDS="us,de,fr"
+KDEKEYBOARDS="us,de(nodeadkeys),fr"
 TZ="Europe/Brussels"
 ;;
 # Bulgarian version
@@ -236,7 +192,7 @@ XKEYBOARD="bg"
 KDEKEYBOARD="bg"
 CHARSET="microsoft-cp1251"
 # Additional KDE Keyboards
-KDEKEYBOARDS="us,de,fr"
+KDEKEYBOARDS="us,de(nodeadkeys),fr"
 TZ="Europe/Sofia"
 ;;
 # Swiss version (basically de with some modifications)
@@ -245,11 +201,11 @@ LANGUAGE="de"
 COUNTRY="ch"
 LANG="de_CH"
 KEYTABLE="sg-latin1"
-XKEYBOARD="de_CH"
-KDEKEYBOARD="de_CH"
+XKEYBOARD="ch"
+KDEKEYBOARD="ch"
 CHARSET="iso8859-15"
 # Additional KDE Keyboards
-KDEKEYBOARDS="de,us,fr"
+KDEKEYBOARDS="de(nodeadkeys),us,fr"
 TZ="Europe/Zurich"
 ;;
 cn)
@@ -261,7 +217,7 @@ XKEYBOARD="us"
 KDEKEYBOARD="us"
 CHARSET="gb2312.1980-0"
 # Additional KDE Keyboards
-KDEKEYBOARDS="us,de,fr"
+KDEKEYBOARDS="us,de(nodeadkeys),fr"
 XMODIFIERS="@im=Chinput"
 TZ="Asia/Shanghai"
 ;;
@@ -275,7 +231,7 @@ XKEYBOARD="cs"
 KDEKEYBOARD="cz"
 CHARSET="iso8859-2"
 # Additional KDE Keyboards
-KDEKEYBOARDS="us,de,fr"
+KDEKEYBOARDS="us,de(nodeadkeys),fr"
 TZ="Europe/Prague"
 CONSOLEFONT="iso02g"
 ;;
@@ -291,7 +247,7 @@ XKEYBOARD="dk"
 KDEKEYBOARD="dk"
 CHARSET="iso8859-15"
 # Additional KDE Keyboards
-KDEKEYBOARDS="dk,de,us,fr"
+KDEKEYBOARDS="dk,de(nodeadkeys),us,fr"
 TZ="Europe/Copenhagen"
 ;;
 es)
@@ -303,7 +259,7 @@ XKEYBOARD="es"
 KDEKEYBOARD="es"
 CHARSET="iso8859-15"
 # Additional KDE Keyboards
-KDEKEYBOARDS="de,us,fr"
+KDEKEYBOARDS="de(nodeadkeys),us,fr"
 TZ="Europe/Madrid"
 ;;
 fi)
@@ -327,8 +283,22 @@ XKEYBOARD="fr"
 KDEKEYBOARD="fr"
 CHARSET="iso8859-15"
 # Additional KDE Keyboards
-KDEKEYBOARDS="de,us"
+KDEKEYBOARDS="de(nodeadkeys),us"
 TZ="Europe/Paris"
+;;
+hu)
+# Hungarian version
+COUNTRY="hu"
+LANG="hu_HU"
+LANGUAGE="hu_HU"
+KEYTABLE="hu"
+XKEYBOARD="hu"
+KDEKEYBOARD="hu"
+CHARSET="iso-8859-2"
+# Additional KDE Keyboards
+KDEKEYBOARDS="us,de(nodeadkeys)"
+TZ="Europe/Budapest"
+CONSOLEFONT="iso02g"
 ;;
 he|il)
 # Hebrew version
@@ -340,7 +310,7 @@ XKEYBOARD="us"
 KDEKEYBOARD="il"
 CHARSET="iso8859-8"
 # Additional KDE Keyboards
-KDEKEYBOARDS="us,fr,de"
+KDEKEYBOARDS="us,fr,de(nodeadkeys)"
 TZ="Asia/Jerusalem"
 ;;
 ie)
@@ -352,7 +322,7 @@ XKEYBOARD="uk"
 KDEKEYBOARD="gb"
 CHARSET="iso8859-15"
 #Additional KDE Keyboards
-KDEKEYBOARDS="us,de,es,fr,it"
+KDEKEYBOARDS="us,de(nodeadkeys),es,fr,it"
 TZ="Europe/Dublin"
 ;;
 it)
@@ -364,7 +334,7 @@ XKEYBOARD="it"
 KDEKEYBOARD="it"
 CHARSET="iso8859-15"
 # Additional KDE Keyboards
-KDEKEYBOARDS="fr,us,de"
+KDEKEYBOARDS="fr,us,de(nodeadkeys)"
 TZ="Europe/Rome"
 ;;
 ja)
@@ -377,7 +347,7 @@ XKEYBOARD="us"
 KDEKEYBOARD="us"
 CHARSET="iso8859-15"
 # Additional KDE Keyboards
-KDEKEYBOARDS="fr,us,de"
+KDEKEYBOARDS="fr,us,de(nodeadkeys)"
 TZ="Asia/Tokyo"
 ;;
 nl)
@@ -389,7 +359,7 @@ XKEYBOARD="us"
 KDEKEYBOARD="en_US"
 CHARSET="iso8859-15"
 # Additional KDE Keyboards
-KDEKEYBOARDS="nl,de,fr"
+KDEKEYBOARDS="nl,de(nodeadkeys),fr"
 TZ="Europe/Amsterdam"
 ;;
 pl)
@@ -401,7 +371,7 @@ XKEYBOARD="pl"
 KDEKEYBOARD="pl"
 CHARSET="iso8859-2"
 # Additional KDE Keyboards
-KDEKEYBOARDS="de,us,fr"
+KDEKEYBOARDS="de(nodeadkeys),us,fr"
 TZ="Europe/Warsaw"
 CONSOLEFONT="iso02g"
 ;;
@@ -415,7 +385,7 @@ KDEKEYBOARD="ru"
 CHARSET="koi8-r"
 CONSOLEFONT="Cyr_a8x16"
 # Additional KDE Keyboards
-KDEKEYBOARDS="de,us,fr"
+KDEKEYBOARDS="de(nodeadkeys),us,fr"
 TZ="Europe/Moscow"
 ;;
 sk)
@@ -427,7 +397,7 @@ XKEYBOARD="sk"
 KDEKEYBOARD="sk"
 CHARSET="iso8859-2"
 # Additional KDE Keyboards
-KDEKEYBOARDS="us,de"
+KDEKEYBOARDS="us,de(nodeadkeys)"
 TZ="Europe/Bratislava"
 CONSOLEFONT="iso02g"
 ;;
@@ -441,7 +411,7 @@ XKEYBOARD="sl"
 KDEKEYBOARD="si"
 CHARSET="iso8859-2"
 # Additional KDE Keyboards
-KDEKEYBOARDS="us,de"
+KDEKEYBOARDS="us,de(nodeadkeys)"
 TZ="Europe/Ljubljana"
 CONSOLEFONT="iso02g"
 ;;
@@ -454,7 +424,7 @@ XKEYBOARD="tr"
 KDEKEYBOARD="tr"
 CHARSET="iso8859-9"
 # Additional KDE Keyboards
-KDEKEYBOARDS="us,de,fr"
+KDEKEYBOARDS="us,de(nodeadkeys),fr"
 TZ="Europe/Istanbul"
 ;;
 tw)
@@ -495,7 +465,7 @@ XKEYBOARD="us"
 KDEKEYBOARD="us"
 CHARSET="iso8859-1"
 # Additional KDE Keyboards
-KDEKEYBOARDS="de,fr"
+KDEKEYBOARDS="de(nodeadkeys),fr"
 TZ="America/New_York"
 ;;
 esac
@@ -517,8 +487,11 @@ fi
 
 # Also read desired desktop, if any
 DESKTOP="$(getbootparam desktop 2>/dev/null)"
-# Allow only supported audio user interface
-case "$DESKTOP" in emacspeak|yasr) ;; *) DESKTOP="yasr"; ;; esac
+
+# Allow only supported windowmanagers
+# Actually, this check is useless because it's done again in 45xsession. -KK
+# case "$DESKTOP" in gnome|enlightenment|kde|larswm|xfce|xfce4|lg3d|ratpoison|blackbox|openbox|windowmaker|wmaker|icewm|fluxbox|twm|nx|rdp|kiosk) ;; *) DESKTOP="kde"; ;; esac
+[ -n "$DESKTOP" ] || DESKTOP="kde" 
 
 # Check if we are running from the Knoppix-CD or HD
 INSTALLED=""
@@ -580,19 +553,11 @@ cp "/usr/share/zoneinfo/$TZ" /etc/localtime
 
 # Delete obsolete links and files before starting autoconfig
 if ! checkbootparam "nohwsetup"; then
-    rm -f /dev/cdrom* /dev/cdwriter* /dev/mouse* /dev/modem* /dev/scanner* \
-	/etc/environment \
-	2>/dev/null
-
-    if [ -z "$INSTALLED" ]; then
-	rm -f /etc/sysconfig/i18n /etc/sysconfig/keyboard \
-	    /etc/sysconfig/knoppix \
-	    2>/dev/null
-    fi
-
+rm -f /dev/cdrom* /dev/cdwriter* /dev/mouse* /dev/modem* /dev/scanner* \
+      /etc/sysconfig/i18n /etc/sysconfig/keyboard /etc/sysconfig/knoppix \
+      /etc/environment \
+      2>/dev/null
 fi
-
-if [ -z "$INSTALLED" ]; then
 
 # Write KNOPPIX config files for other scripts to parse
 # Standard variables/files
@@ -623,15 +588,11 @@ echo "KDEKEYBOARD=\"$KDEKEYBOARD\""   >> /etc/sysconfig/knoppix
 echo "KDEKEYBOARDS=\"$KDEKEYBOARDS\"" >> /etc/sysconfig/knoppix
 echo "DESKTOP=\"$DESKTOP\""           >> /etc/sysconfig/knoppix
 echo "TZ=\"$TZ\""                     >> /etc/sysconfig/knoppix
-fi
 
 # OpenOffice & others
 echo "LANG=\"$LANG\""                  > /etc/environment
 echo "LANGUAGE=\"$LANGUAGE\""         >> /etc/environment
 echo "LC_MESSAGES=\"$LC_MESSAGES\""   >> /etc/environment
-
-# No kernel messages while probing modules
-echo "0" > /proc/sys/kernel/printk
 
 # ide-scsi is no longer needed for any CD-Writer / reader utilities
 # Check for IDE-SCSI capable CD-Rom(s) first
@@ -673,178 +634,211 @@ fi
 
 # Print CPU info
 echo -n "${GREEN}"
-awk -F: '/^processor/{printf " Processor"$2" is "};/^model name/{printf $2};/^vendor_id/{printf vendor};/^cpu MHz/{printf " %dMHz",int($2)};/^cache size/{printf ","$2" Cache"};/^$/{print ""}' /proc/cpuinfo 2>/dev/null
+awk -F: '/^processor/{printf "Processor"$2" is "};/^model name/{printf $2};/^vendor_id/{printf vendor};/^cpu MHz/{printf " %dMHz",int($2)};/^cache size/{printf ","$2" Cache"};/^$/{print ""}' /proc/cpuinfo 2>/dev/null
 echo -n "${NORMAL}"
 
 # KNOPPIX autoconfig
 
 update_progress 20
 
-# HOTPLUG stuff
-# We should always set this, anyways
-echo "/sbin/hotplug-knoppix" > /proc/sys/kernel/hotplug
+# HOTPLUG stuff (obsoleted by udev)
+# echo "/sbin/hotplug-knoppix" > /proc/sys/kernel/hotplug
 
 if [ -d /proc/acpi ]; then
-# ACPI
-if checkbootparam "noacpi" || checkbootparam "acpi=off"; then
-echo " ${BLUE}Skipping ACPI Bios detection as requested on boot commandline.${NORMAL}"
+ # ACPI
+ if checkbootparam "noacpi" || checkbootparam "acpi=off"; then
+  echo " ${BLUE}Skipping ACPI Bios detection as requested on boot commandline.${NORMAL}"
+ else
+  echo -n "${GREEN}ACPI Bios found, activating modules:"
+  found=""
+  for a in /lib/modules/$KERNEL/kernel/drivers/acpi/*; do
+   basename="${a##*/}"
+   basename="${basename%%.*}"
+   case "$basename" in *_acpi)
+    egrep -qi "${basename%%_acpi}" /proc/acpi/dsdt 2>/dev/null || continue ;;
+   esac
+   modprobe $basename >/dev/null 2>&1 && echo -n " ${YELLOW}$basename${GREEN}" && found="yes"
+  done
+  test -z "$found" && echo -n "${BLUE}(none)"
+  echo "${NORMAL}"
+ fi
 else
-echo -n "${GREEN}ACPI Bios found, activating modules:"
-found=""
-for a in /lib/modules/$KERNEL/kernel/drivers/acpi/*; do
-basename="${a##*/}"
-basename="${basename%%.*}"
-case "$basename" in *_acpi)
-egrep -qi "${basename%%_acpi}" /proc/acpi/dsdt 2>/dev/null || continue ;;
-esac
-modprobe $basename >/dev/null 2>&1 && echo -n " ${YELLOW}$basename${GREEN}" && found="yes"
-done
-test -z "$found" && echo -n "${BLUE}(none)"
-echo "${NORMAL}"
-fi
-else
-# APM
-if checkbootparam "noapm"; then
-echo " ${BLUE}Skipping APM Bios detection as requested on boot commandline.${NORMAL}"
-else
-modprobe apm power_off=1 >/dev/null 2>&1 && test -x /etc/init.d/apmd && /etc/init.d/apmd start && echo "${GREEN}APM Bios found, power management functions enabled.${NORMAL}"
-fi
+ # APM
+ if checkbootparam "noapm"; then
+  echo " ${BLUE}Skipping APM Bios detection as requested on boot commandline.${NORMAL}"
+ else
+  modprobe apm power_off=1 >/dev/null 2>&1
+  if stringinfile "apm " /proc/modules && test -x /etc/init.d/apmd; then
+   [ -c /dev/apm_bios ] || mknod -m 660 /dev/apm_bios c 10 134
+   /etc/init.d/apmd start >/dev/null 2>&1 && echo "${GREEN}APM Bios found, power management functions enabled.${NORMAL}"
+  fi
+ fi
 fi
 
 # First: PCMCIA Check/Setup
 # This needs to be done before other modules are being loaded by hwsetup
 
 if checkbootparam "nopcmcia"; then
-echo " ${BLUE}Skipping PCMCIA detection as requested on boot commandline.${NORMAL}"
+ echo " ${BLUE}Skipping PCMCIA detection as requested on boot commandline.${NORMAL}"
 else
-modprobe pcmcia_core >/dev/null 2>&1
+ modprobe pcmcia_core >/dev/null 2>&1
 # Try Cardbus or normal PCMCIA socket drivers
-modprobe yenta_socket >/dev/null 2>&1 || modprobe i82365 >/dev/null 2>&1 || modprobe pd6729 >/dev/null 2>&1 || modprobe tcic >/dev/null 2>&1
-if [ "$?" = "0" ]; then
-modprobe ds >/dev/null 2>&1
-if [ -d /proc/bus/pccard ]; then
-echo "${GREEN}PCMCIA found, starting cardmgr.${NORMAL}"
-cardmgr >/dev/null 2>&1 && sleep 4
-fi
-fi
+ modprobe yenta_socket >/dev/null 2>&1 || modprobe i82365 >/dev/null 2>&1 || modprobe pd6729 >/dev/null 2>&1 || modprobe tcic >/dev/null 2>&1
+ if [ "$?" = "0" ]; then
+  modprobe ds >/dev/null 2>&1
+  if [ -d /sys/class/pcmcia_socket/pcmcia_socket0 ]; then
+   echo "${GREEN}PCMCIA found, starting cardmgr.${NORMAL}"
+   cardmgr >/dev/null 2>&1 && sleep 4
+  fi
+ fi
 fi
 
 # USB enable
 if checkbootparam "nousb"; then
-echo " ${BLUE}Skipping USB detection as requested on boot commandline.${NORMAL}"
+ echo " ${BLUE}Skipping USB detection as requested on boot commandline.${NORMAL}"
 else
-# USB/Mouse Check/Setup
-# This needs to be done before other modules are being loaded by hwsetup
-modprobe usbcore >/dev/null 2>&1
-# We now try to load both USB modules, in case someone has 2 different
-# controllers
-FOUNDUSB=""
-USBREINIT="yes"
-USBMODULES="usb-uhci usb-ohci"
-case "$KERNEL" in 2.6.*) USBMODULES="uhci-hcd ohci-hcd";; esac
-for u in $USBMODULES; do 
-if stringinfile "$u" /proc/modules; then
-FOUNDUSB="yes"
-elif modprobe "$u" >/dev/null 2>&1; then
-FOUNDUSB="yes"
-USBREINIT=""
-fi
-done
-if [ -n "$FOUNDUSB" ]; then
-echo -n "${GREEN}USB found, managed by ${MAGENTA}hotplug${GREEN}"
-# We have to do this here, because /proc/bus/usb does not seem to exist before
-# the lowlevel controller module(s) are loaded.
-case "$KERNEL" in 2.6.*) USBFS="usbfs";; *) USBFS="usbdevfs";; esac
-mount -o devmode=0666 -t $USBFS /proc/bus/usb /proc/bus/usb >/dev/null 2>&1
-if [ -n "$USBREINIT" ]; then
-echo -n ": ${YELLOW}(Re-)scanning USB devices... "; usbreinit
-echo -n "Done."
-else
-echo -n "."
-fi
-echo "${NORMAL}"
-else
-# For an unknown reason, unloading the usbcore module seems to hang sometimes.
-# umount /proc/bus/usb >/dev/null 2>&1
-# rmmod usbcore 2>/dev/null
-true
-fi
-# Load USB mouse module, if not already present. This seems to be done automatically SOMETIMES,
-# but for some boards, it just neve happens and the mouse goes undetected.
-stringinfile "usbhid" /proc/modules || modprobe usbhid >/dev/null 2>&1
+ # USB/Mouse Check/Setup
+ # This needs to be done before other modules are being loaded by hwsetup
+ modprobe usbcore >/dev/null 2>&1
+ # We now try to load both USB modules, in case someone has 2 different
+ # controllers
+ FOUNDUSB=""
+ USB2="usb-ehci"
+ checkbootparam "nousb2" && USB2=""
+ USBMODULES="usb-uhci usb-ohci"
+ case "$KERNEL" in 2.6.*) USBMODULES="uhci-hcd ohci-hcd";; esac
+ for u in $USB2 $USBMODULES; do 
+  if stringinfile "$u" /proc/modules; then
+   FOUNDUSB="yes"
+  elif modprobe "$u" >/dev/null 2>&1; then
+   FOUNDUSB="yes"
+  fi
+ done
+ if [ -n "$FOUNDUSB" ]; then
+  echo -n "${GREEN}USB found, managed by ${MAGENTA}udev${GREEN}"
+  # We have to do this here, because /proc/bus/usb does not seem to exist before
+  # the lowlevel controller module(s) are loaded.
+  case "$KERNEL" in 2.6.*) USBFS="usbfs";; *) USBFS="usbdevfs";; esac
+  mount -o devmode=0666 -t $USBFS /proc/bus/usb /proc/bus/usb >/dev/null 2>&1
+  echo "${NORMAL}"
+ else
+  # For an unknown reason, unloading the usbcore module seems to hang sometimes.
+  # umount /proc/bus/usb >/dev/null 2>&1
+  # rmmod usbcore 2>/dev/null
+  true
+ fi
+ # Load USB mouse module, if not already present. This seems to be done automatically SOMETIMES,
+ # but for some boards, it just never happens and the mouse goes undetected.
+ stringinfile "usbhid" /proc/modules || modprobe usbhid >/dev/null 2>&1
 fi
 
 # Firewire enable
 if checkbootparam "nofirewire"; then
-echo " ${BLUE}Skipping Firewire detection as requested on boot commandline.${NORMAL}"
+ echo " ${BLUE}Skipping Firewire detection as requested on boot commandline.${NORMAL}"
 else
-# We now try to load the firewire module
-modprobe ieee1394 >/dev/null 2>&1
-FOUNDFIREWIRE=""
-FIREWIREREINIT="yes"
-if stringinfile ohci1394 /proc/modules; then
-FOUNDFIREWIRE="yes"
-FIREWIREREINIT="yes"
-elif modprobe ohci1394 >/dev/null 2>&1; then
-FOUNDFIREWIRE="yes"
-FIREWIREREINIT=""
-fi
-if [ -n "$FOUNDFIREWIRE" ]; then
-HOTPLUG="yes"
-echo -n "${GREEN}Firewire found, managed by ${MAGENTA}hotplug${GREEN}"
-if [ -n "$FIREWIREREINIT" -a -x /etc/hotplug.d/ieee1394/rescan-scsi-bus.sh ]; then
-echo -n ": ${YELLOW}(Re-)scanning firewire devices... "
-/etc/hotplug.d/ieee1394/rescan-scsi-bus.sh >/dev/null 2>&1
-echo -n "Done."
-else
-echo -n "."
-fi
-echo "${NORMAL}"
-else
-# For an unknown reason, unloading the ieee1394 module seems to hang sometimes.
-# rmmod ieee1394 2>/dev/null
-true
-fi
+ # We now try to load the firewire module
+ modprobe ieee1394 >/dev/null 2>&1
+ FOUNDFIREWIRE=""
+ if stringinfile ohci1394 /proc/modules; then
+  FOUNDFIREWIRE="yes"
+ else
+  modprobe ohci1394 >/dev/null 2>&1
+  stringinfile "ohci1394" /proc/modules && FOUNDFIREWIRE="yes"
+ fi
+ if [ -n "$FOUNDFIREWIRE" ]; then
+  echo "${GREEN}Firewire found, managed by ${MAGENTA}udev${GREEN}${NORMAL}"
+ else
+  # For an unknown reason, unloading the ieee1394 module seems to hang sometimes.
+  # rmmod ieee1394 2>/dev/null
+  true
+ fi
 fi
 
 update_progress 40
+
+# Activate input driver for char event devices (mice)
+stringinfile "evdev" /proc/modules || modprobe evdev >/dev/null 2>&1
+
+# Use udev for SOME of the "hotpluggable" stuff.
+if checkbootparam "noudev"; then
+ echo "${BLUE}Skipping udev as requested on boot commandline.${NORMAL}"
+else
+ echo -n "${BLUE}Starting ${MAGENTA}udev${GREEN} hot-plug hardware detection... ${NORMAL}"
+ mkdir -p /media
+ RUNLEVEL=S /etc/init.d/udev start >/dev/null 2>&1
+ RC="$?"
+ # udev postconfig
+ # /etc/init.d/udev uses /etc/udev/links.conf to create persistent links,
+ # but I just don't trust a config file with an inline comment that says
+ # "this file doesn't exist"... -KK
+ [ -c /dev/null ] || mknod -m 666 /dev/null c 1 3
+ [ -c /dev/zero ] || mknod -m 666 /dev/zero c 1 5  >/dev/null 2>&1
+ [ -c /dev/console ] || mknod -m 660 /dev/console c 5 1 >/dev/null 2>&1
+ [ -d /dev/input ] || mkdir -p /dev/input >/dev/null 2>&1
+ [ -d /dev/pts ] || mkdir -p /dev/pts >/dev/null 2>&1
+ [ -d /dev/shm ] || mkdir -p /dev/shm >/dev/null 2>&1
+ [ -c /dev/input/mice ] || mknod -m 660 /dev/input/mice c 13 63 >/dev/null 2>&1
+ [ -L /dev/fd ] || ln -sf /proc/self/fd /dev/fd >/dev/null 2>&1
+ [ -L /dev/stdin ] || ln -sf /proc/self/fd/0 /dev/stdin >/dev/null 2>&1
+ [ -L /dev/stdout ] || ln -sf /proc/self/fd/1 /dev/stdout >/dev/null 2>&1
+ [ -L /dev/stderr ] || ln -sf /proc/self/fd/2 /dev/stderr >/dev/null 2>&1
+ [ -c /dev/ppp ] || mknod -m 660 /dev/ppp c 108 0 >/dev/null 2>&1
+ for i in 0 1 2 3 4 5 6 7; do
+  [ -b /dev/loop$i ] || mknod -m 660 /dev/loop$i b 7 $i >/dev/null 2>&1
+ done
+ modprobe capability >/dev/null 2>&1
+ if [ -x /etc/init.d/dbus-1 ]; then
+  /etc/init.d/dbus-1 start >/dev/null 2>&1
+ elif [ -x /etc/init.d/dbus ]; then
+  /etc/init.d/dbus start >/dev/null 2>&1
+ fi
+ [ "$?" = "0" -a "$RC" = "0" ] && echo "${BLUE}Started.${NORMAL}" || echo "${RED}Failed.${NORMAL}"
+fi
+
+# devpts
+stringinfile "/dev/pts" /proc/mounts || mount -t devpts /dev/pts /dev/pts 2>/dev/null
+
 # Second: Search & configure supported hardware
+
+# Load fuse module, we may need it for libntfs-mounts later
+modprobe fuse >/dev/null 2>&1
+
 # Check for options relevant to hwsetup
 NOAUDIO=""; HWSETUP_NOAUDIO=""
 checkbootparam noaudio >/dev/null 2>&1 && NOAUDIO="yes"
 checkbootparam nosound >/dev/null 2>&1 && NOAUDIO="yes"
-[ -n "$NOAUDIO" -o -n "$USE_OSS" ] && HWSETUP_NOAUDIO="-a"
+[ -n "$NOAUDIO" ] && HWSETUP_NOAUDIO="-a"
 NOSCSI=""; HWSETUP_NOSCSI=""
 checkbootparam noscsi  >/dev/null 2>&1 && NOSCSI="yes"
 [ -n "$NOSCSI" ] && HWSETUP_NOSCSI="-s"
 if checkbootparam "nohwsetup"; then
-  echo "${BLUE}Loading hardware profile from ${MAGENTA}/etc/modules${BLUE}.${NORMAL}"
-  /etc/init.d/modutils-knoppix start >/dev/null 2>/dev/null
+ echo "${BLUE}Loading hardware profile from ${MAGENTA}/etc/modules${BLUE}.${NORMAL}"
+ /etc/init.d/modutils start >/dev/null 2>/dev/null
 else
-echo -n "${WHITE}"
-if hwsetup -p $HWSETUP_NOAUDIO $HWSETUP_NOSCSI >/dev/null
-then
-echo -n "${NORMAL}"
-else
-echo " ${RED}Please check.${NORMAL}"
-fi
+ echo -n "${WHITE}"
+ if hwsetup -p $HWSETUP_NOAUDIO $HWSETUP_NOSCSI >/dev/null
+ then
+  echo -n "${NORMAL}"
+ else
+  echo " ${RED}Please check.${NORMAL}"
+ fi
 fi
 
 # Add cdrom drives that have NOT been found by hwsetup (Kernel 2.6 bug?)
 while read drive name cdroms; do
-case "$drive$name" in drivename:) 
-count=0
-for cd in $cdroms; do
-cdnum="$((count++))"
-cddev="$cd"
-[ "$cdnum" = "0" ] && cdnum=""
-cdlink="/dev/cdrom$cdnum"
-[ -e "$cdlink" ] && continue
-ln -sf "$cddev" "$cdlink"
-done
-break
-;;
-esac
+ case "$drive$name" in drivename:) 
+  count=0
+  for cd in $cdroms; do
+   cdnum="$((count++))"
+   cddev="$cd"
+   [ "$cdnum" = "0" ] && cdnum=""
+   cdlink="/dev/cdrom$cdnum"
+   [ -e "$cdlink" ] && continue
+   ln -sf "$cddev" "$cdlink"
+  done
+  break
+ ;;
+ esac
 done <<EOT
 $(cat /proc/sys/dev/cdrom/info 2>/dev/null)
 EOT
@@ -861,17 +855,21 @@ echo "${GREEN}Mouse is ${YELLOW}${MOUSE_FULLNAME}${GREEN} at ${MAGENTA}${MOUSE_D
 fi
 
 # Soundcard
-if [ -n "$SOUND_FULLNAME" -o -n "$SOUND_DRIVER" -o -n "$USE_OSS" ]
-then
-# Setting micro input to zero to avoid subsonic disaster
-# if using oss, this leads to error-messages
-[ -z "$USE_OSS" ] && ( exec aumix -m 0 >/dev/null 2>&1 & )
-SOUNDCARD="$SOUND_DRIVER"
-[ -n "$USE_OSS" ] && SOUNDCARD="OSS(${OSS_CARD})"
-echo -n "${GREEN}Soundcard:"
-[ -n "$SOUND_FULLNAME" ] && echo -n " ${YELLOW}$SOUND_FULLNAME${GREEN}"
-[ -n "$SOUNDCARD" ] && echo -n " driver=${MAGENTA}$SOUNDCARD"
-echo "${NORMAL}"
+if [ -n "$SOUND_FULLNAME" -o -n "$SOUND_DRIVER" ]; then
+ if stringinfile snd_ /proc/modules 2>/dev/null; then
+  # ALSA detected, load the OSS adapters
+  for i in pcm mixer; do
+   stringinfile "snd_${i}_oss" /proc/modules 2>/dev/null || modprobe snd-"$i"-oss >/dev/null 2>&1
+  done
+ fi
+ # Setting micro input to zero to avoid subsonic disaster
+ # PCM and Volume set to 67 are default in most OSS drivers.
+ ( exec aumix -m 0 -w 67 -v 67 >/dev/null 2>&1 & )
+ SOUNDCARD="$SOUND_DRIVER"
+ echo -n "${GREEN}Soundcard:"
+ [ -n "$SOUND_FULLNAME" ] && echo -n " ${YELLOW}$SOUND_FULLNAME${GREEN}"
+ [ -n "$SOUNDCARD" ] && echo -n " driver=${MAGENTA}$SOUNDCARD"
+ echo "${NORMAL}"
 fi
 
 # Read default keyboard from config file.
@@ -886,76 +884,81 @@ BLIND=""
 checkbootparam "blind" && BLIND="yes"
 BRLTTY="$(getbootparam brltty 2>/dev/null)"
 
-CMD=""
 if [ -n "$BLIND" -o -n "$BRLTTY" ]; then
-if [ -x /sbin/brltty ]; then
-# Blind option detected, start brltty now.
-CMD=brltty
-BRLTYPE=""
-BRLDEV=""
-BRLTEXT=""
-if [ -n "$BRLTTY" ]; then
-# Extra options
-BRLTYPE="${BRLTTY%%,*}"
-R="${BRLTTY#*,}"
-if [ -n "$R" -a "$R" != "$BRLTTY" ]; then
-BRLTTY="$R"
-BRLDEV="${BRLTTY%%,*}"
-R="${BRLTTY#*,}"
-if [ -n "$R" -a "$R" != "$BRLTTY" ]; then
-BRLTTY="$R"
-BRLTEXT="${BRLTTY%%,*}"
-R="${BRLTTY#*,}"
-fi
-fi
-fi
-[ -n "$BRLTYPE" ] && CMD="$CMD -b $BRLTYPE"
-[ -n "$BRLDEV" ] && CMD="$CMD -d $BRLDEV"
-[ -n "$BRLTEXT" ] && CMD="$CMD -t $BRLTEXT"
-echo "${BLUE}Starting braille-display manager: ${GREEN}${CMD}${BLUE}.${NORMAL}"
-( exec $CMD & )
-sleep 2
+ if [ -x /sbin/brltty ]; then
+  # Blind option detected, start brltty now.
+  CMD=brltty
+  BRLTYPE=""
+  BRLDEV=""
+  BRLTEXT=""
+  if [ -n "$BRLTTY" ]; then
+   # Extra options
+   BRLTYPE="${BRLTTY%%,*}"
+   R="${BRLTTY#*,}"
+   if [ -n "$R" -a "$R" != "$BRLTTY" ]; then
+    BRLTTY="$R"
+    BRLDEV="${BRLTTY%%,*}"
+    R="${BRLTTY#*,}"
+    if [ -n "$R" -a "$R" != "$BRLTTY" ]; then
+     BRLTTY="$R"
+     BRLTEXT="${BRLTTY%%,*}"
+     R="${BRLTTY#*,}"
+   fi
+  fi
+ fi
+ [ -n "$BRLTYPE" ] && CMD="$CMD -b $BRLTYPE"
+ [ -n "$BRLDEV" ] && CMD="$CMD -d $BRLDEV"
+ [ -n "$BRLTEXT" ] && CMD="$CMD -t $BRLTEXT"
+ echo "${BLUE}Starting braille-display manager: ${GREEN}${CMD}${BLUE}.${NORMAL}"
+ ( exec $CMD & )
+ sleep 2
 fi
 fi
 
-if [ -n "$INTERACTIVE" ]
-then
-# Interactive configuration
-echo "${BLUE}Entering interactive configuration second stage.${NORMAL}"
+if [ -n "$INTERACTIVE" ]; then
+ # Interactive configuration
+ echo "${BLUE}Entering interactive configuration second stage.${NORMAL}"
 
-echo "${GREEN}Your console keyboard defaults to: ${MAGENTA}${KEYTABLE}"
-echo -n "${CYAN}Do you want to (re)configure your console keyboard?${NORMAL} [Y/n] "
-read a
-[ "$a" != "n" ] && /usr/sbin/kbdconfig
-# kbdconfig already loads the keyboard if modified.
+ echo "${GREEN}Your console keyboard defaults to: ${MAGENTA}${KEYTABLE}"
+ echo -n "${CYAN}Do you want to (re)configure your console keyboard?${NORMAL} [Y/n] "
+ read a
+ [ "$a" != "n" ] && /usr/sbin/kbdconfig
+ # kbdconfig already loads the keyboard if modified.
 
-echo -n "${CYAN}Do you want to (re)configure your soundcard?${NORMAL} [Y/n] "
-read a
-[ "$a" != "n" ] && sndconfig && ( exec aumix -m 0 >/dev/null 2>&1 & )
+ echo -n "${CYAN}Do you want to (re)configure your soundcard?${NORMAL} [Y/n] "
+ read a
+ [ "$a" != "n" ] && sndconfig && ( exec aumix -m 0 >/dev/null 2>&1 & )
 
-if [ -n "$MOUSE_FULLNAME" -o -n "$MOUSE_DEVICE" ]
-then
-echo -n "${GREEN}Your mouse has been autodetected as: ${MAGENTA}"
-ls -l /dev/mouse | awk '{print $9 " " $10 " " $11}'
-echo -n "${NORMAL}"
-fi
-echo -n "${CYAN}Do you want to (re)configure your mouse?${NORMAL} [Y/n] "
-read a
-[ -f /etc/sysconfig/mouse ] && . /etc/sysconfig/mouse
-[ "$a" != "n" ] && mouseconfig
+ if [ -n "$MOUSE_FULLNAME" -o -n "$MOUSE_DEVICE" ]; then
+  echo -n "${GREEN}Your mouse has been autodetected as: ${MAGENTA}"
+  ls -l /dev/mouse | awk '{print $9 " " $10 " " $11}'
+  echo -n "${NORMAL}"
+ fi
+
+ echo -n "${CYAN}Do you want to (re)configure your mouse?${NORMAL} [Y/n] "
+ read a
+ [ -f /etc/sysconfig/mouse ] && . /etc/sysconfig/mouse
+ [ "$a" != "n" ] && mouseconfig
 fi
 
 if checkbootparam noagp; then
-echo " ${BLUE}Skipping AGP detection as requested on boot commandline.${NORMAL}"
+ echo " ${BLUE}Skipping AGP detection as requested on boot commandline.${NORMAL}"
 else
-# Probe for AGP. Hope this can fail safely
-stringinfile "AGP" "/proc/pci" 2>/dev/null && { modprobe agpgart || modprobe agpgart agp_try_unsupported=1; } >/dev/null 2>&1 && echo " ${YELLOW}AGP bridge${GREEN} detected."
+ # Probe for AGP. Hope this can fail safely
+ modprobe agpgart >/dev/null 2>&1
+ stringinfile "agpgart" /proc/modules || modprobe agpgart agp_try_unsupported=1 >/dev/null 2>&1
+ stringinfile "agpgart" /proc/modules && echo "${YELLOW}AGP bridge${GREEN} detected."
 fi
 
 update_progress 80
-# KNOPPIX automatic XFree86 Setup
+
+# KNOPPIX automatic Xserver Setup
 if ! checkbootparam "nomkxf86config"; then
-[ -x /usr/sbin/mkxf86config ] && /usr/sbin/mkxf86config
+ [ -x /usr/sbin/mkxf86config ] && /usr/sbin/mkxf86config
+fi
+
+if ! checkbootparam "nomkxorgconfig"; then
+ [ -x /usr/sbin/mkxorgconfig ] && /usr/sbin/mkxorgconfig
 fi
 
 # Read in changes
@@ -963,83 +966,61 @@ fi
 
 if [ -n "$INTERACTIVE" ]
 then
-echo -n "${CYAN}Do you want to (re)configure your graphics (X11) subsystem?${NORMAL} [Y/n] "
-read a
-[ "$a" != "n" ] && xf86cfg -textmode -xf86config /etc/X11/XF86Config-4 >/dev/console 2>&1 </dev/console
-echo "${GREEN}Interactive configuration finished. Everything else should be fine for now.${NORMAL}"
-fi
-
-if [ -n "$USE_OSS" ]
-then
-  [ -n "$SOUND_DRIVER" ] && rmmod -r "$SOUND_DRIVER" >/dev/null 2>&1
-  # Export OSS_CARD variable to init script
-
-  if [ "$OSS_CARD" = "autodetect" ]
-  then
-    id=`lspci |gawk -F ' ' '/Multimedia audio controller/{print $1}'`
-    if [ -n "$id" ]
-    then
-      vdid=`lspci -n | grep $id | awk '{print $3}' | awk -F: '{printf "^0x%s.0x%s",$1,$2}'`
-      if [ -n "$vdid" ]
-      then
-        OSS_CARD=`grep "$vdid" /usr/share/oralux/install/packages/knoppix/pcitable.oss | awk '{gsub("\"","",$3);print $3}' | sort -u`
-      fi
-    fi
-  fi
-
-  if [ -n "$OSS_CARD" ]
-  then
-    modprobe "$OSS_CARD" > /dev/null 2>&1
-  fi
-
-  # Something went wrong ?
-  [ ! -r /etc/modules.conf ] && ln -sf /KNOPPIX/etc/modules.conf /etc/modules.conf
+ echo -n "${CYAN}Do you want to (re)configure your graphics (X11) subsystem?${NORMAL} [Y/n] "
+ read a
+ if [ "$a" != "n" ]; then
+  type -a xf86cfg >/dev/null 2>&1 && xf86cfg -textmode -xf86config /etc/X11/XF86Config-4 >/dev/console 2>&1 </dev/console
+  [ -x /usr/X11R6/bin/xorgcfg ] && /usr/X11R6/bin/xorgcfg -textmode -config /etc/X11/xorg.conf >/dev/console 2>&1 </dev/console
+ fi
+ echo "${GREEN}Interactive configuration finished. Everything else should be fine for now.${NORMAL}"
 fi
 
 RUNLEVEL="$(runlevel)"
-AUTOMOUNTER=""
-[ -x /etc/init.d/autofs ] && [ "$RUNLEVEL" != "N 1" ] && [ "$RUNLEVEL" != "N S" ] && AUTOMOUNTER="yes"
 
-addautomount(){
-# /dev/device  options
-d="${1##*/}"
-if [ -n "$AUTOMOUNTER" ]; then
-[ -d "/mnt/$d" -a ! -L "/mnt/$d" ] && rmdir /mnt/$d
-[ -d "/mnt/auto/$d" ] || mkdir -p "/mnt/auto/$d"
-[ -L "/mnt/$d" ] || ln -s "/mnt/auto/$d" "/mnt/$d"
-anew="$d	-fstype=auto,$2	:$i"
-stringinfile "$anew" "/etc/auto.mnt" || echo "$anew" >> /etc/auto.mnt
-AUTOMOUNTS="$AUTOMOUNTS $d"
-new="$1 /mnt/auto/$d  auto   users,noauto,exec,$2 0 0"
-else
-[ -d /mnt/$d ] && mkdir -p /mnt/$d
-new="$1 /mnt/$d  auto   users,noauto,exec,$2 0 0"
-fi
-stringinfile "$new" "/etc/fstab" || echo "$new" >> /etc/fstab
+addfstab(){
+ # /dev/device  options
+ d="${1##*/}"
+ [ -d /media/$d ] && mkdir -p /media/$d
+ # Compatibility with older versions of Knoppix
+ ln -snf /media/$d /mnt/$d
+ new="/dev/$d /media/$d  auto   users,noauto,exec,$2 0 0"
+ stringinfile "$new" "/etc/fstab" || echo "$new" >> /etc/fstab
 }
 
-AUTOMOUNTS="floppy cdrom"
 # Add new devices to /etc/fstab and /etc/auto.mnt
 for i in /dev/cdrom?*; do
-if [ -L $i ]; then
-addautomount "$i" "ro"
-fi
+ if [ -L "$i" ]; then
+  [ -x /bin/readlink ] && addfstab "$(readlink $i)" "ro" || addfstab "$i" "ro"
+ fi
 done
+
+# IDE-Raid detection
+NOIDERAID=""
+checkbootparam "noideraid" && NOIDERAID="yes"
+if [ -z "$NOIDERAID" ] && modprobe dm-mod >/dev/null 2>&1; then
+ if type -p dmraid >/dev/null 2>&1; then
+  dmraid -ay >/dev/null 2>&1
+ fi
+fi
 
 NOSWAP=""
 checkbootparam "noswap" && NOSWAP="yes"
+NOMOUNT=""
+checkbootparam "nomount" && NOMOUNT="yes"
+checkbootparam "nomounts" && NOMOUNTS="yes"
 
 # Collect partitions from /proc/partitions
 partitions=""
 while read major minor blocks partition relax; do
-partition="${partition##*/}"
-[ -z "$partition" -o ! -e "/dev/$partition" ] && continue
-case "$partition" in
-hd?) ;;                                               # IDE Harddisk, entire disk
-sd?) ;;                                               # SCSI Harddisk, entire disk
-ub?) ;;                                               # USB Harddisk, entire disk
-[hs]d*|ub*) partitions="$partitions /dev/$partition";;    # IDE, USB or SCSI disk partition
-esac
+ partition="${partition##*/}"
+ [ -z "$partition" -o ! -e "/dev/$partition" ] && continue
+ case "$partition" in
+  hd?) ;;                                               # IDE Harddisk, entire disk
+  sd?) ;;                                               # SCSI Harddisk, entire disk
+  ub?) ;;                                               # USB Harddisk, entire disk
+  ub?) ;;                                               # USB Harddisk, entire disk
+  [hs]d*|ub*) partitions="$partitions /dev/$partition";;    # IDE, USB or SCSI disk partition
+ esac
 done <<EOT
 $(awk 'BEGIN{old="__start"}{if($0==old){exit}else{old=$0;if($4&&$4!="name"){print $0}}}' /proc/partitions)
 EOT
@@ -1047,37 +1028,42 @@ EOT
 # Enable DMA for all IDE drives if requested only
 # This is also done by linuxrc now.
 # However, for a harddisk-installed version, we are doing it again here.
-if checkbootparam "dma"; then
-for d in $(cd /proc/ide 2>/dev/null && echo hd[a-z]); do
-if test -d /proc/ide/$d; then
-if egrep -q 'using_dma[ \t]+0' /proc/ide/$d/settings 2>/dev/null; then
-MODEL="$(cat /proc/ide/$d/model 2>/dev/null)"
-test -z "$MODEL" && MODEL="[GENERIC IDE DEVICE]"
-echo "${BLUE}Enabling DMA acceleration for: ${MAGENTA}$d 	${YELLOW}[${MODEL}]${NORMAL}"
-echo "using_dma:1" >/proc/ide/$d/settings
-fi
-fi
-done
+DMA=""
+checkbootparam "dma" && DMA="yes"
+checkbootparam "nodma" && DMA=""
+if [ -n "$DMA" ]; then
+ for d in $(cd /proc/ide 2>/dev/null && echo hd[a-z]); do
+  if test -d /proc/ide/$d; then
+   if egrep -q 'using_dma[ \t]+0' /proc/ide/$d/settings 2>/dev/null; then
+    MODEL="$(cat /proc/ide/$d/model 2>/dev/null)"
+    test -z "$MODEL" && MODEL="[GENERIC IDE DEVICE]"
+    echo "${BLUE}Enabling DMA acceleration for: ${MAGENTA}$d 	${YELLOW}[${MODEL}]${NORMAL}"
+    echo "using_dma:1" >/proc/ide/$d/settings
+   fi
+  fi
+ done
 fi
 
 # Start creating /etc/fstab with HD partitions and USB SCSI devices now
 if checkbootparam "nofstab"; then
-echo " ${BLUE}Skipping /etc/fstab creation as requested on boot commandline.${NORMAL}"
+ echo " ${BLUE}Skipping /etc/fstab creation as requested on boot commandline.${NORMAL}"
 else
-echo -n "${BLUE}Scanning for Harddisk partitions and creating ${YELLOW}/etc/fstab${BLUE}... "
-rebuildfstab -r -u knoppix -g knoppix >/dev/null 2>&1
-if [ -e /var/run/rebuildfstab.pid ]; then
-# Another instance of rebuildfstab, probably from hotplug, is still running, so just wait.
-sleep 8
-fi
-echo "${GREEN}Done.${NORMAL}"
+ echo -n "${BLUE}Scanning for Harddisk partitions and creating ${YELLOW}/etc/fstab${BLUE}... "
+ rebuildfstab -r -u knoppix -g knoppix >/dev/null 2>&1
+ if [ -e /var/run/rebuildfstab.pid ]; then
+  # Another instance of rebuildfstab, probably from udev, is still running, so just wait.
+  sleep 8
+ fi
+ echo "${GREEN}Done.${NORMAL}"
 fi
 
 findfreeloop(){
+ # udev again... We have to load loop to get the device nodes in /dev.
+ modprobe loop >/dev/null 2>&1
  i=0
  for i in 0 1 2 3 4 5 6 7; do
- LOOP="/dev/loop$i"
- losetup "$LOOP" >/dev/null 2>&1 || { echo "$LOOP"; return 0; }
+  LOOP="/dev/loop$i"
+  losetup "$LOOP" >/dev/null 2>&1 || { echo "$LOOP"; return 0; }
  done
  return 1
 }
@@ -1085,9 +1071,7 @@ findfreeloop(){
 # Scan for swap, config, homedir
 KNOPPIX_IMG=""
 KNOPPIX_SWP=""
-if [ -z "$INSTALLED" ]; then
 HOMEDIR="$(getbootparam home)"
-fi
 if [ -n "$partitions" ]; then
  while read p m f relax; do
   case "$p" in *fd0*|*proc*|*sys*|*\#*) continue;; esac
@@ -1114,6 +1098,9 @@ if [ -n "$partitions" ]; then
     ext2|ext3|reiserfs|xfs) MOUNTOPTS="$MOUNTOPTS,noatime" ;;
     *) continue ;;
   esac
+  # Skip mounting+checking for knoppix.img and knoppix.sh in case of "nomount"
+  [ -n "$NOMOUNT" ] && continue
+  # mount & check for knoppix.swp and knoppix.img
   mount -o "$MOUNTOPTS" -t $f $p $m 2>/dev/null || continue
   # Activate swapfile, if exists
   SWAPFILE="$(ls -1d $m/[Kk][Nn][Oo][Pp][Pp][Ii][Xx].[Ss][Ww][Pp] 2>/dev/null)"
@@ -1207,7 +1194,7 @@ echo 'BACKGROUND="'"$BACKGROUND"'"' >> /etc/sysconfig/knoppix
 findfile(){
 FOUND=""
 # search all partitions for a file in the root directory
-for i in /mnt/[sh]d[a-z] /mnt/[sh]d[a-z][1-9] /mnt/[sh]d[a-z][1-9]?*; do
+for i in /media/[sh]d[a-z] /media/[sh]d[a-z][1-9] /media/[sh]d[a-z][1-9]?*; do
 # See if it's already mounted
 [ -f "$i/$1" ] &&  { echo "$i/$1"; return 0; }
 if [ -d "$i" ] && mount -r "$i" 2>/dev/null; then
@@ -1234,90 +1221,54 @@ if [ -n "$MYCONFDIR" ]; then
 case "$MYCONFDIR" in
 *floppy*|*fd0*)
 MYCONFDEVICE="/dev/fd0"
-MYCONFMOUNTPOINT="/mnt/floppy"
+MYCONFMOUNTPOINT="/media/fd0"
 ;;
 /dev/*)
 MYCONFDEVICE="${MYCONFDIR##/dev/}"
 MYCONFDEVICE="/dev/${MYCONFDEVICE%%/*}"
-MYCONFMOUNTPOINT="/mnt/${MYCONFDEVICE##/dev/}"
-MYCONFDIR="/mnt/${MYCONFDIR##/dev/}"
+MYCONFMOUNTPOINT="/media/${MYCONFDEVICE##/dev/}"
+MYCONFDIR="/media/${MYCONFDIR##/dev/}"
 ;;
-/mnt/*)
-MYCONFDEVICE="${MYCONFDIR##/mnt/}"
+/media/*)
+MYCONFDEVICE="${MYCONFDIR##/media/}"
 MYCONFDEVICE="/dev/${MYCONFDEVICE%%/*}"
-MYCONFMOUNTPOINT="/mnt/${MYCONFDEVICE##/dev/}"
+MYCONFMOUNTPOINT="/media/${MYCONFDEVICE##/dev/}"
 ;;
 [Aa][Uu][Tt][Oo]|[Ss][Cc][Aa][Nn]|[Ff][Ii][Nn][Dd])
 MYCONFDIR="$(findfile knoppix.sh)"
 if [ -n "$MYCONFDIR" ]; then
-MYCONFDEVICE="${MYCONFDIR##/mnt/}"
+MYCONFDEVICE="${MYCONFDIR##/media/}"
 MYCONFDEVICE="/dev/${MYCONFDEVICE%%/*}"
-MYCONFMOUNTPOINT="/mnt/${MYCONFDEVICE##/dev/}"
+MYCONFMOUNTPOINT="/media/${MYCONFDEVICE##/dev/}"
 MYCONFDIR="${MYCONFMOUNTPOINT}"
 else
 FOUND_CONFIG="none"
 fi
 ;;
 *)
-echo "${CRE}${RED}Invalid configdir '$MYCONFDIR' specified (must start with /dev/ or /mnt/ or 'scan').${NORMAL}"
+echo "${CRE}${RED}Invalid configdir '$MYCONFDIR' specified (must start with /dev/ or /media/ or 'scan').${NORMAL}"
 echo "${CRE}${RED}Option ignored.${NORMAL}"
 FOUND_CONFIG="invalid"
 ;;
 esac
-# else
-# MYCONFDEVICE="/dev/fd0"
-# MYCONFMOUNTPOINT="/mnt/floppy"
-# MYCONFDIR="/mnt/floppy"
+else
+MYCONFDEVICE="/dev/fd0"
+MYCONFMOUNTPOINT="/media/fd0"
+MYCONFDIR="/media/fd0"
 fi
-
-# If /dev/fd0 is selected, /mnt/floppy is temporarily created 
-if [ "$MYCONFDEVICE" == "/dev/fd0" ] || [ "$MYCONFDIR" == "/mnt/floppy" ]; then
-    mkdir /mnt/floppy 2>/dev/null
-    MYCONFDEVICE="/dev/fd0"
-    MYCONFMOUNTPOINT="/mnt/floppy"
-    MYCONFDIR="/mnt/floppy"
-fi
-
-# Notice: if nothing is found, we do not force floppy search (too long if no floppy drive)
-if [ -z "$MYCONFDIR" -o "$MYCONFDIR" == "/mnt/" ]; then
-    MYCONFDEVICE=""
-    MYCONFMOUNTPOINT=""
-    MYCONFDIR=""
-fi
-echo MYCONFDEVICE=$MYCONFDEVICE
-echo MYCONFMOUNTPOINT=$MYCONFMOUNTPOINT
-echo MYCONFDIR=$MYCONFDIR
-
-
 if [ -z "$FOUND_CONFIG" ]; then
 echo -n "${CRE}${BLUE}Checking ${MAGENTA}${MYCONFDIR}${BLUE} for KNOPPIX configuration files...${NORMAL}"
 if trymount "$MYCONFDEVICE" "$MYCONFMOUNTPOINT"; then
 MYCONFIG="$(ls -1d $MYCONFDIR/[Kk][Nn][Oo][Pp][Pp][Ii][Xx].[Ss][Hh] 2>/dev/null)"
-
-# Oralux: do not take in account the previous 0.6 config
-v0_6=$(tar -jOxf $MYCONFDIR/[Cc][Oo][Nn][Ff][Ii][Gg][Ss].[Tt][Bb][Zz] /etc/sysconfig/knoppix 2>/dev/null | grep ORALUXRELEASE | grep "0.6")
-
-if [ -z "$v0_6" -a -n "$MYCONFIG" -a -f "$MYCONFIG" ]; then
+if [ -n "$MYCONFIG" -a -f "$MYCONFIG" ]; then
 echo ""
 FOUND_CONFIG="yes"
 echo "${GREEN}Found, now executing ${MAGENTA}$MYCONFIG${GREEN}.${NORMAL}"
 echo "6" > /proc/sys/kernel/printk
 . "$MYCONFIG" "$MYCONFDIR" || true
 echo "0" > /proc/sys/kernel/printk
-
-# Storing the md5sum of configs.tbz
-CONFIGMD5=$(md5sum $MYCONFDIR/configs.tbz | awk '{printf $1}' )
-echo "CONFIGMD5=\"$CONFIGMD5\"" >> /etc/sysconfig/knoppix
 fi
-
-echo "umount $MYCONFMOUNTPOINT"
-[ -n $MYCONFDEVICE ] || umount "$MYCONFMOUNTPOINT" 2>/dev/null
-
-# /mnt/floppy must be unmounted to let the upcoming automounter works 
-if [ "$MYCONFDEVICE" == "/dev/fd0" ]; then
-    umount /dev/fd0
-fi
-
+umount "$MYCONFMOUNTPOINT" 2>/dev/null
 fi
 fi
 [ -n "$FOUND_CONFIG" ] || echo " ${BLUE}Not present.${NORMAL}"
@@ -1334,96 +1285,18 @@ echo "6" > /proc/sys/kernel/printk
 echo "0" > /proc/sys/kernel/printk
 fi
 
-# Now, the keyboard configuration file is updated.
-# Loading the keyboard translation tables
-[ -f /etc/sysconfig/knoppix ] && . /etc/sysconfig/knoppix
-[ -n "$KEYTABLE" ] && loadkeys -q $KEYTABLE
-
-# Restore the previous cheatcodes from the oralux.conf file
-removeOraluxConf()
-{
-    KEYWORD=$1
-    if [ -e /etc/oralux.conf ]; then
-	mv /etc/oralux.conf /tmp/oralux.conf
-	grep -ve "^$KEYWORD" /tmp/oralux.conf >> /etc/oralux.conf
-	rm /tmp/oralux.conf
-    fi
-}
-
-addOraluxConf()
-{
-    echo $1 >> /etc/oralux.conf
-}
-
-isInOraluxConf()
-{
-    KEYWORD=$1
-    IS_IN_CONF=`grep -e "^$KEYWORD" /etc/oralux.conf 2>/dev/null`
-}
-
-# Restoring brltty.conf
-
-if [ -z "$CMD" -a -f /etc/brltty.conf ]; then
-    if [ -n "$(cat /etc/brltty.conf | awk '/Oralux/{print $1}')" ]; then
-	CMD=brltty
-	echo " ${BLUE}Starting braille-display manager from config: ${GREEN}${CMD}${BLUE}.${NORMAL}"
-	( exec $CMD & )
-	sleep 2
-    fi
+# Build System: Mount /KNOPPIX.build and execute knoppix.sh from there.
+if [ -d /KNOPPIX.build ]; then
+ if mount -v /KNOPPIX.build 2>/dev/null; then
+  if [ -e /KNOPPIX.build/knoppix.sh ]; then
+   echo "6" > /proc/sys/kernel/printk
+   . /KNOPPIX.build/knoppix.sh /KNOPPIX.build || true
+   echo "0" > /proc/sys/kernel/printk
+  fi
+ fi
 fi
 
-
-# Restoring oss
-
-if [ -n "$USE_OSS" ]; then
-    # the oss keyword (if any) is removed
-    removeOraluxConf oss
-    addOraluxConf oss
-
-elif [ -n "$FORGET_OSS" ]; then
-    removeOraluxConf oss
-
-fi
-
-isInOraluxConf oss
-
-if [ -z "$USE_OSS" -a -n "$IS_IN_CONF" ]; then
-    /etc/init.d/oss-autoconfig
-fi
-
-# Restoring tts
-TTSKEY=tts
-FORGET_TTSKEY=notts
-
-TTS="$(getbootparam $TTSKEY 2>/dev/null)"
-
-if [ -n "$TTS" ]; then
-    # the previous tts line (if any) is removed
-    removeOraluxConf $TTSKEY
-    addOraluxConf "$TTSKEY=$TTS"
-
-elif [ checkbootparam $FORGET_TTSKEY >/dev/null 2>&1 ]; then
-    removeOraluxConf $TTSKEY
-fi
-
-#
-rm -f /tmp/oralux.tmp
-
-if [ -n "$AUTOMOUNTER" ]; then
-# Check for floppy dir, reinstall with automounter
-[ -d /mnt/floppy -a ! -L /mnt/floppy ] && rmdir /mnt/floppy
-[ -d /mnt/auto/floppy ] || mkdir -p /mnt/auto/floppy
-[ -L /mnt/floppy ] || ln -s /mnt/auto/floppy /mnt/floppy
-[ -d /mnt/cdrom -a ! -L /mnt/cdrom ] && rmdir /mnt/cdrom
-[ -d /mnt/auto/cdrom ] || mkdir -p /mnt/auto/cdrom
-[ -L /mnt/cdrom ] || ln -s /mnt/auto/cdrom /mnt/cdrom
-rm -f /etc/fstab.new
-# Replace paths from bootfloppy
-sed 's|/mnt/cdrom|/mnt/auto/cdrom|g;s|/mnt/floppy|/mnt/auto/floppy|g' /etc/fstab > /etc/fstab.new
-mv -f /etc/fstab.new /etc/fstab
-# Start automounter now
-/etc/init.d/autofs start >/dev/null && echo "${GREEN}Automounter started for: ${MAGENTA}${AUTOMOUNTS}${GREEN}.${NORMAL}"
-fi
+checkbootparam "installer" >/dev/null 2>&1 && knoppix-installer
 
 echo "6" > /proc/sys/kernel/printk
 

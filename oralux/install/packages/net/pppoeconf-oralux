@@ -1,0 +1,420 @@
+#!/bin/sh
+# (c) Eduard Bloch <blade@debian.org>
+# LICENSE: GPL
+# Purpose: initial PPPoE configuration on Debian
+# Depends: bash, pppd, pppoe, whiptail, my usepeerdns script
+
+export TEXTDOMAINDIR="/usr/share/locale"
+export TEXTDOMAIN=pppoeconf
+export OPTSFILE="/etc/ppp/peers/dsl-provider"
+export INTFILE="/etc/network/interfaces"
+
+# IMPORTANT: Do not use gdialog unless it has been fixed!
+#DIALOG=whiptail
+DIALOG=dialog
+
+# Set up (X)dialog - added by Fabian Franz <knx-ppp@fabian-franz.de>
+XDIALOG_HIGH_DIALOG_COMPAT=1
+export XDIALOG_HIGH_DIALOG_COMPAT
+if [ -n "$DISPLAY" ] && [ -x /usr/bin/Xdialog ] ; then
+   DIALOG="Xdialog"
+   X11="-X"
+fi
+
+# SUID wrapper for KNOPPIX added by Klaus Knopper <knoppix@knopper.net>
+# mod. by EB
+PATH="/bin:/sbin:/usr/bin:/usr/sbin"
+export PATH
+
+. /usr/bin/gettext.sh
+
+# for non-root, try to reexec with sudo, warn otherwise
+if [ "`id -u`" != "0" ]; then
+   # sudo only 
+  if which sudo >/dev/null && ( sudo -l -S </dev/null >/dev/null 2>&1 ) ; then
+    exec sudo "$0" "$@"  || exit 1
+  elif which su-to-root >/dev/null; then
+    exec su-to-root $X11 -c "$0" "$@"  || exit 1
+  else
+    gettext "Please become root before running pppoeconf!"
+    echo
+    gettext "Press return to continue..."
+    echo
+    read
+    exit 1
+  fi
+fi
+
+# EOF SUID wrapper
+
+modprobe -q pppoe
+# recent ppp packages have a PPPoE discovery helper program
+if test -x /usr/sbin/pppoe-discovery && test -e /proc/net/pppoe ; then
+  kernel_pppoe=1
+  DISCOVERY_PROGRAM=pppoe-discovery
+else
+  DISCOVERY_PROGRAM=pppoe
+fi
+export DISCOVERY_PROGRAM
+
+# create a default peers file if there is none
+if ! test -r $OPTSFILE ; then
+   fresh_optsfile=1
+   cat <<EOM > $OPTSFILE
+# Minimalistic default options file for DSL/PPPoE connections
+
+noipdefault
+defaultroute
+replacedefaultroute
+hide-password
+#lcp-echo-interval 30
+#lcp-echo-failure 4
+noauth
+persist
+#mtu 1492
+usepeerdns
+EOM
+fi
+chmod 0640 $OPTSFILE
+chown root:dip $OPTSFILE
+
+if ! grep -q "dsl-provider" $INTFILE ; then
+   printf '\niface dsl-provider inet ppp\nprovider dsl-provider\n' >> $INTFILE
+fi
+
+if ! grep -q "line maintained by pppoeconf" $INTFILE ; then
+   sed -i -e 's,provider dsl-provider$,     provider dsl-provider\n# please do not modify the following line\n     pre-up /sbin/ifconfig eth0 up # line maintained by pppoeconf\n,' $INTFILE
+fi
+   
+umask 177
+# make a secure directory
+TMP="`mktemp -d -p /etc/ppp`"
+export TMP
+sectempfile="`mktemp -p $TMP`"
+export sectempfile
+trap "rm -rf '$TMP'" 0 HUP INT TRAP TERM
+
+gettext '
+Most providers send the needed login information per mail. Some providers describe it in odd ways, assuming the user to input the data in their "user-friendly" setup programs. But in fact, these applications generate usuall PPP user names and passwords from the entered data. You can find the real names too and input the correct data in the dialog box.
+
+For example, this are methods used some german providers:
+
+Sample username (alias "login" or "login name"): 11111111111
+
+T-Online T-DSL:
+  additional data:
+    sample T-Onlinenummer: 222222222222
+    sample Mitbenutzer: 0001
+
+  complete username: 111111111111222222222222#0001@t-online.de
+
+Telekom Business Online (DSL):
+
+  complete username: t-online-com/111111111111@t-online-com.de
+
+1und1 uses another scheme (using above example):
+
+  complete username: 1und1/11111111111
+
+Cyberfun:
+
+  complete username: sdt/11111111111
+
+Komtel:
+  additional data:
+    downstream speed class: 768
+
+  complete username: 11111111111@FoniNet-768
+
+Net Cologne:
+
+  complete username: 11111111111@netcologne.de
+
+Q-DSL:
+
+  complete username: 11111111111@q-dsl.de
+
+Versatel:
+
+  complete username: 11111111111@VersaNet-1024k
+
+Webnetix:
+
+  complete username: sdt/11111111111
+' > $TMP/namehelp.txt
+
+if test "$*" ; then 
+   list="$*"
+   force_manual=1
+else
+   list=$( LANG=C /sbin/ifconfig -a | grep "Ethernet" | grep -v irlan | cut -f1 -d" " )
+fi
+
+if test "$list" ; then
+   test "$DIALOG" = "whiptail" && escmsg=$(gettext 'Or press ESC to abort here.')
+  number=`echo $list | wc -w| tr -d " "`
+  text=$(eval_ngettext \
+  'I found $number ethernet device:
+$list
+
+Are all your ethernet interfaces listed above?
+(If No, modconf will be started so you can load the card drivers manually).
+
+$escmsg' \
+  'I found $number ethernet devices:
+$list
+
+Are all your ethernet interfaces listed above?
+(If No, modconf will be started so you can load the card drivers manually).
+
+$escmsg' \
+  "$number" )
+  title=$(gettext 'ALL DEVICES FOUND?')
+  $DIALOG --title "$title" --clear --yesno "$text" 15 60
+  case $? in
+    1)
+    # configure and restart
+      modconf
+      $0
+      exit $?
+      ;;
+    255)
+      rm -rf "$TMP"
+      exit 1
+      ;;
+   esac
+   # now, execute an AC lookup on each interface
+   for mmm in '' ' -U ' ; do
+      for iface in $list; do
+         # use the first candidate only, this is done anyways, below
+         if test -z "`grep -l AC $TMP/*.pppoe 2>/dev/null| cut -f1 -d"." | head -n1`" ; then
+            title=$(gettext 'SCANNING DEVICE')
+            text=$(eval_gettext 'Looking for PPPoE Access Concentrator on $iface...')
+            if test -n "$mmm" ; then
+               mmode=$(gettext '(multi-modem mode)')
+            fi
+
+            touch $TMP/pppoe.scan
+            ifconfig $iface up
+            ($DISCOVERY_PROGRAM $mmm -A -I $iface > $TMP/$iface.pppoe ; rm $TMP/pppoe.scan) &
+
+            ( time=0 ; while test -f $TMP/pppoe.scan ; do time=`expr $time + 6`; echo $time; sleep 1; done ) | $DIALOG --title "$title" --gauge "$text $mmode" 10 60 0
+
+true
+         fi
+      done
+   done
+   cd "$TMP"
+   if test "$force_manual" ; then
+      iface=$1
+   else
+      iface=`grep -l AC *.pppoe| cut -f1 -d"." | head -n1`
+   fi
+   ifacenocomma=$(echo $iface | sed -e 's/,/\\,/g')
+
+   if test -z "$iface" ; then
+      title=$(gettext 'NOT CONNECTED')
+      text=$(eval_ngettext \
+      'Sorry, I scanned $number interface, but the Access Concentrator of your provider did not respond. Please check your network and modem cables. Another reason for the scan failure may also be another running pppoe process which controls the modem.' \
+      'Sorry, I scanned $number interfaces, but the Access Concentrator of your provider did not respond. Please check your network and modem cables. Another reason for the scan failure may also be another running pppoe process which controls the modem.' \
+      $number)
+
+      $DIALOG --title "$title" --clear --msgbox "$text" 15 60
+      rm -rf "$TMP"
+      exit 1;
+   fi
+#   title=$(gettext 'DSL CONNECTION FOUND')
+#   text=$(eval_gettext 'I found an Access Concentrator on $iface. Should I setup PPPOE for this connection?')
+#   $DIALOG --title "$title" --clear --yesno "$text" 15 60
+#  # STATUS: interface is $iface, we can continue
+  
+  if ! test "$fresh_optsfile" ; then 
+     title=$(gettext 'OKAY TO MODIFY')
+     text=$(eval_gettext 'If you continue with this program, the configuration file $OPTSFILE will be modified. Please make sure that you have a backup copy before saying Yes.
+
+Continue with configuration?')
+     $DIALOG --title "$title" --clear --yesno "$text" 22 70
+     if test "$?" != "0" ; then
+        rm -rf "$TMP"
+        exit 0
+     fi
+  fi
+
+#   if test "$?" = "0"; then
+      if [ "$kernel_pppoe" ]; then
+         # interface activation code - this sucks here, pppd plugin should do it as needed
+         sed -i -e "s,pre-up /sbin/ifconfig[[:space:]]\+[^[:space:]]\+[[:space:]]\+up.#.line.maintained.by.pppoeconf,pre-up /sbin/ifconfig $ifacenocomma up # line maintained by pppoeconf," $INTFILE
+
+         # change peers config file, sanity check first
+       grep -q "^plugin.*rp-pppoe.so" $OPTSFILE || echo "plugin rp-pppoe.so $iface" >> $OPTSFILE
+       # disable the pppoe tunnel command
+       if grep -q '^pty' $OPTSFILE ; then
+          sed -i -e 's/^pty/#pty/' $OPTSFILE
+       fi
+
+       # set the interface
+       sed -i -e "s,^plugin.\+rp-pppoe.so[[:space:]]\+[^[:space:]]*,plugin rp-pppoe.so $ifacenocomma," $OPTSFILE
+    else
+       # sanity check first, fix the config file
+
+       # install the default line
+       grep -q '^.*pty.*pppoe.*-I' $OPTSFILE || echo 'pty "pppoe -I eth0 -T 80"' >> $OPTSFILE
+       # install alternative lines
+       grep -q '^.*pty.*pppoe.*-m.*1452' $OPTSFILE || echo '#pty "pppoe -I eth0 -T 80 -m 1452"' >> $OPTSFILE
+       grep -q '^.*pty.*pppoe.*-m.*1412' $OPTSFILE || echo '#pty "pppoe -I eth0 -T 80 -m 1412"' >> $OPTSFILE
+       # at least one must work
+       grep -q '^pty' $OPTSFILE || echo 'pty "pppoe -I eth0 -T 80"' >> $OPTSFILE
+
+       # set the interface
+       sed -i -e "s,-I[[:space:]]*[[:alnum:]]*,-I $ifacenocomma," $OPTSFILE
+    fi
+    # fix final newline
+    test -e /etc/ppp/pap-secrets && ( [ $(tail -1 /etc/ppp/pap-secrets | wc -l) -eq 0 ] || echo >> /etc/ppp/pap-secrets )
+    test -e /etc/ppp/chap-secrets && ( [ $(tail -1 /etc/ppp/chap-secrets | wc -l) -eq 0 ] || echo >> /etc/ppp/chap-secrets )
+#  else
+#    rm -rf "$TMP"
+#    exit 1
+#  fi
+
+  # ask about sane options
+  #$DIALOG --title $"POPULAR OPTIONS" --clear --yesno $"Most people using popular dialup providers prefer the options 'noauth' and 'defaultroute' in their configuration and remove the 'nodetach' option. Further, for busy providers the lcp-echo-interval could be increased. Should I check your configuration file and change these settings where neccessary?" 22 70
+  title=$(gettext 'POPULAR OPTIONS')
+  text=$(gettext "Most people using popular dialup providers prefer the options 'noauth' and 'defaultroute' in their configuration and remove the 'nodetach' option. Should I check your configuration file and change these settings where neccessary?")
+  $DIALOG --title "$title" --clear --yesno "$text" 22 70
+  if test "$?" = "0" ; then
+    grep -q '^noauth' $OPTSFILE || echo 'noauth' >> $OPTSFILE
+    grep -q '^defaultroute' $OPTSFILE  || echo 'defaultroute' >> $OPTSFILE
+    sed -i -e "/^nodetach.*/d" $OPTSFILE
+#    sed -i -e "s/^lcp-echo-interval 20$/lcp-echo-interval 60/" $OPTSFILE
+  fi
+  
+  user=`grep ^user $OPTSFILE|cut -f2 -d" " | tr -d '"'`
+  test -z "$user" && user="username"
+  while test "$goahead" != "yes" ; do
+    title=$(gettext 'ENTER USERNAME')
+    text=$(gettext 'Please enter the username which you usually need for the PPP login to your provider in the input box below. If you wish to see the help screen, delete the username and press OK.')
+    $DIALOG --nocancel --title "$title" --clear --inputbox "$text" 15 60 $user 2> "$sectempfile"
+    user=`cat "$sectempfile"`
+    case $? in
+    0)
+    if test -z "$user" ; then
+      $DIALOG --scrolltext --textbox "$TMP/namehelp.txt" 17 75
+    else
+      sed -i -e '/^user .*/d' $OPTSFILE
+      echo  "user \"$user\"" >> $OPTSFILE
+      goahead="yes"
+      export goahead
+    fi
+      ;;
+    *)
+      exit 1
+      rm -rf "$TMP"
+      ;;
+    esac
+  done
+
+  title=$(gettext 'ENTER PASSWORD')
+  text=$(gettext 'Please enter the password which you usually need for the PPP login to your provider in the input box below.
+
+NOTE: you can see the password in plain text while typing.')
+  $DIALOG --nocancel --title "$title" --clear --inputbox "$text" 15 60 2> "$sectempfile"
+  pass=`cat "$sectempfile"`
+  usernoslash=$(echo $user | sed -e 's,/,\\/,')
+  case $? in
+  0)
+    sed -i -e "/^\"*$usernoslash\"* .*/ d" /etc/ppp/pap-secrets
+    echo "\"$user\" * \"$pass\"" >> /etc/ppp/pap-secrets
+    sed -i -e "/^\"*$usernoslash\"* .*/ d" /etc/ppp/chap-secrets
+    echo "\"$user\" * \"$pass\"" >> /etc/ppp/chap-secrets
+    ;;
+  *)
+    rm -rf "$TMP"
+    exit 1
+    ;;
+  esac
+
+  # ask about DNS
+  title=$(gettext 'USE PEER DNS')
+  text=$(gettext 'You need at least one DNS IP address to resolve the normal host names. Normally your provider sends you addresses of useable servers when the connection is established. Would you like to add these addresses automatically to the list of nameservers in your local /etc/resolv.conf file? (recommended)')
+  $DIALOG --title "$title" --clear --yesno "$text" 15 60
+  case $? in
+     0)
+     grep -q "^usepeerdns" $OPTSFILE || echo "usepeerdns" >> $OPTSFILE
+     ;;
+  esac
+  
+  # ask about MSS limitation
+  title=$(gettext 'LIMITED MSS PROBLEM')
+  text=$(gettext "Many providers have routers that do not support TCP packets with a MSS higher than 1460. Usually, outgoing packets have this MSS when they go through one real Ethernet link with the default MTU size (1500). Unfortunately, if you are forwarding packets from other hosts (i.e. doing masquerading) the MSS may be increased depending on the packet size and the route to the client hosts, so your client machines won't be able to connect to some sites. There is a solution: the maximum MSS can be limited by pppoe. You can find more details about this issue in the pppoe documentation.
+
+Should pppoe clamp MSS at 1452 bytes?
+
+If unsure, say yes.
+
+(If you still get problems described above, try setting to 1412 in the dsl-provider file.)")
+  $DIALOG --title "$title" --clear --yesno "$text" 22 70
+  case $? in
+     0)
+     if [ "$kernel_pppoe" ]; then
+        printf '#!/bin/sh\n# Enable MSS clamping (autogenerated by pppoeconf)\n\niptables -o "$PPP_IFACE" --insert FORWARD 1 -p tcp --tcp-flags SYN,RST SYN -m tcpmss --mss 1400:1536 -j TCPMSS --clamp-mss-to-pmtu\n' > /etc/ppp/ip-up.d/0clampmss
+        printf '#!/bin/sh\n# Disable MSS clamping (autogenerated by pppoeconf)\n\niptables -L -n -v --line-numbers | grep "TCPMSS.*$PPP_IFACE.*clamp" | cut -f1 -d " " | xargs -n1 -r iptables -D FORWARD\n' > /etc/ppp/ip-down.d/0clampmss
+        chmod 755 /etc/ppp/ip-up.d/0clampmss /etc/ppp/ip-down.d/0clampmss
+     else
+        # disable the old line
+        sed -i -e 's/^pty/#&/' $OPTSFILE
+        # enable the one with our mss size
+        sed -i -e 's/^#\(pty.*-m 1452.*\)/\1/' $OPTSFILE
+        #rm -f "$sectempfile"
+     fi
+     ;;
+  esac
+
+  if test -z "`mount | grep KNOPPIX`" ; then
+     title=$(gettext 'DONE')
+     text=$(gettext 'Your PPPD is configured now. Would you like to start the connection at boot time?')
+     $DIALOG --title "$title" --clear --yesno "$text" 15 60
+     if test "$?" = "0"; then
+        grep -q "^auto.*dsl-provider" $INTFILE || sed -i -e 's/^iface.*dsl-provider/auto dsl-provider\n&/' $INTFILE
+     else
+        sed -i -e '/^auto.*dsl-provider/d' $INTFILE
+     fi
+  fi
+
+  cd /
+  
+  # end of story
+  rm -rf "$TMP"
+  
+  title=$(gettext 'ESTABLISH A CONNECTION')
+  text=$(gettext 'Now, you can make a DSL connection with "pon dsl-provider" and terminate it with "poff". Would you like to start the connection now?')
+  $DIALOG --title "$title" --clear --yesno "$text" 15 60
+  case $? in
+  0)
+    cd /
+    pon dsl-provider
+    title=$(gettext 'CONNECTION INITIATED')
+    text=$(gettext 'The DSL connection has been triggered. You can use the "plog" command to see the status or "ifconfig ppp0" for general interface info.')
+    $DIALOG --title "$title" --clear --msgbox "$text" 10 60
+    ;;
+  *)
+    exit 0
+    ;;
+  esac
+
+else
+  title=$(gettext 'NO INTERFACE FOUND')
+  text=$(gettext 'Sorry, no working ethernet card could be found. If you do have an interface card which was not autodetected so far, you probably wish to load the driver manually using the modconf utility. Run modconf now?')
+  $DIALOG --title "$title" --clear --yesno "$text" 20 70
+  case $? in
+  0)
+    rm -rf "$TMP"
+    modconf
+    exec $0
+    exit $?
+    ;;
+  *)
+    rm -rf "$TMP"
+    exit 1
+    ;;
+  esac
+fi

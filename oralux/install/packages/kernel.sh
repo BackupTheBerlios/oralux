@@ -1,11 +1,11 @@
 #! /bin/sh
 # ----------------------------------------------------------------------------
 # kernel.sh
-# $Id: kernel.sh,v 1.1 2006/03/05 18:28:57 gcasse Exp $
+# $Id: kernel.sh,v 1.2 2006/08/05 20:28:30 gcasse Exp $
 # $Author: gcasse $
 # Description: Linux kernel patches.
-# $Date: 2006/03/05 18:28:57 $ |
-# $Revision: 1.1 $ |
+# $Date: 2006/08/05 20:28:30 $ |
+# $Revision: 1.2 $ |
 # Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 #
 # This program is free software; you can redistribute it and/or
@@ -28,18 +28,20 @@ unset ARCH
 unset RAMDSIK
 
 # Kernel
-export KERNEL_EXT=2.6.12
+export KERNEL_EXT=2.6.17
 export KERNEL=linux-$KERNEL_EXT
 export KERNEL_TARBALL=$KERNEL.tar.gz
 export KERNEL_URL="http://www.fr.kernel.org/pub/linux/kernel/v2.6/$Tarball"
 
 # Unionfs snapshot
-export UNIONFS=unionfs-20060215-0551
+export UNIONFS=unionfs-1.3
 export UNIONFS_TARBALL=$UNIONFS.tar.gz
+export UNIONFS_URL=ftp://ftp.fsl.cs.sunysb.edu/pub/unionfs/$UNIONFS
 
 # Cloop
-export CLOOP=cloop-2.02
-export CLOOP_TARBALL=cloop_2.02-1.tar.gz
+export CLOOP=cloop-2.04
+export CLOOP_TARBALL=cloop_2.04-1.tar.gz
+export CLOOP_URL=http://debian-knoppix.alioth.debian.org/sources/$CLOOP_TARBALL
 
 
 cd $ARCHDIR
@@ -48,6 +50,18 @@ if [ ! -e $KERNEL_TARBALL ]
     then
     echo "Downloading $Kernel"
     wget $KERNEL_URL
+fi
+
+if [ ! -e $CLOOP_TARBALL ]
+    then
+    echo "Downloading $CLOOP_TARBALL"
+    wget $CLOOP_URL
+fi
+
+if [ ! -e $UNIONFS_TARBALL ]
+    then
+    echo "Downloading $UNIONFS_TARBALL"
+    wget $UNIONFS_URL
 fi
 
 ####
@@ -90,12 +104,14 @@ make;\
     tar -zxvf $UNIONFS_TARBALL -C $BUILD/usr/src/modules
     chroot $BUILD bash -c "\
 apt-get install ctags uuid-dev;\
+mkdir /usr/src/modules 2>/dev/null;\
 cd /usr/src/modules;\
 cd $UNIONFS;\
 echo "EXTRACFLAGS=-DUNIONFS_NDEBUG" >> fistdev.mk; \
 make; \
 make install;\
 "
+    cp $BUILD/lib/modules/$KERNEL_EXT/kernel/fs/unionfs/unionfs.ko /root/oralux/factory/newOralux/KNOPPIX/modules
 
 # Unionfs: fistdev.mk with
 # EXTRACFLAGS=-DUNIONFS_NDEBUG
@@ -109,6 +125,8 @@ cd $CLOOP;\
 make;\
 cp cloop.ko /lib/modules/*/kernel/drivers/block;\
 "
+    cp $BUILD/lib/modules/$KERNEL_EXT/kernel/drivers/block/cloop.ko /root/oralux/factory/newOralux/KNOPPIX/modules
+
     # kernel: build
     chroot $BUILD bash -c "\
 cd /usr/src/linux;\

@@ -33,7 +33,8 @@ fi
 
 cd $dest
 find . | cpio --quiet -o -H newc | gzip -9 > ../minirt.gz
-cd ..
+cp ../minirt.gz /root/oralux/factory/newOralux/boot/isolinux
+
 
 
 
@@ -44,3 +45,10 @@ cd ..
 # chmod +x init                                                  
                                                       
 # vi init                                                        
+
+
+# gzip -dc /boot/initrd.img-xxx > /tmp/initrd.img
+# cd /tmp
+# mkdir initrd
+# cd initrd
+# cpio -i -H newc -F /tmp/initrd.img

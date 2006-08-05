@@ -2,7 +2,7 @@
 # knoppix-image - activate KNOPPIX.IMG (merge with unionfs)
 # (C) Klaus Knopper Feb 2005
 # Jan 2006: Update for Oralux, Gilles Casse <gcasse@oralux.org>
-# option -i: interactive
+# option -b: interactive
 
 PATH="/bin:/sbin:/usr/bin:/usr/sbin"
 export PATH
@@ -61,7 +61,7 @@ else
     IMAGE="$1"
 fi
 
-[ -n "$IMAGE" -a -f "$IMAGE" ] || { $DIALOG --title ERROR --msgbox "Usage: $0 [-q] imagefile" 8 55; bailout; }
+[ -n "$IMAGE" -a -f "$IMAGE" ] || { $DIALOG --title ERROR --msgbox "Usage: $0 imagefile" 8 55; bailout; }
 [ "`id -u`" = "0" ] || { $DIALOG --title ERROR --msgbox "$0 must be run as in admin mode." 8 55; bailout; }
 
 getpassword(){
@@ -139,13 +139,15 @@ fscheckencrypted(){
  return 1
 }
 
-# Try to mount this filesystem read-only, without or with encryption
+# Try to mount this filesystem read-write
 # trymount device|file mountpoint
 trymount(){
  # Check if already mounted
  case "$(cat /proc/mounts)" in *\ $2\ *)
   checkwritable "$2" && return 0
   mount -o remount,rw "$2" && checkwritable "$2" && return 0
+  # Still not possible, now try umount -l and mount over (ntfs-fuse)
+  { umount -l "$2"; mount -rw "$2"; } && checkwritable "$2" && return 0
   return 1;;
  esac
  [ "$(fstype $1)" = "ext2" ] && e2fsck -y "$1"
@@ -229,7 +231,10 @@ if [  $INTERACTIVE == "no" ] || \
     SELECTION="$(<$TMP)"
     rm -f "$TMP"
 # mount base partition rw
-    mount -o remount,rw "$(dirname "$IMAGE")"
+    BASE="$(dirname "$IMAGE")"
+    checkwritable "$BASE" || mount -o remount,rw "$(dirname "$IMAGE")"
+    checkwritable "$BASE" || { umount -l "$BASE"; sleep 2; mount -o rw "$BASE"; }
+    checkwritable "$BASE" || { $DIALOG --title ERROR --msgbox "$ERRORW" 15 75; bailout; }
     trymount "$IMAGE" /KNOPPIX.IMG || { $DIALOG --title ERROR --msgbox "$ERRORW" 15 75; umount /KNOPPIX.IMG 2>/dev/null; bailout; }
 else
     rm -f "$TMP"
@@ -272,12 +277,12 @@ case "$SELECTION" in *system*)
   case "$(cat /proc/mounts)" in
    *\ /UNIONFS\ *) ;; # Already present, do nothing
    *) # Unite
-    ERROR="$(mount -t unionfs -o dirs=/ramdisk=rw:$UNION /UNIONFS /UNIONFS 2>&1)" ; RC="$?" ;;
+    ERROR="$(mount -t unionfs -o dirs=/ramdisk=rw:$UNION,delete=whiteout /UNIONFS /UNIONFS 2>&1)" ; RC="$?" ;;
   esac
   save_mtab
   if [ "$RC" = "0" ]; then
    umount -ln /dev/pts >/dev/null 2>&1
-   ERROR="$(mount -t unionfs -o dirs=/KNOPPIX.IMG=rw:$UNION persistent /UNIONFS 2>&1)"
+   ERROR="$(mount -t unionfs -o dirs=/KNOPPIX.IMG=rw:$UNION,delete=whiteout persistent /UNIONFS 2>&1)"
    RC="$?"
    mount -n -t devpts /dev/pts /dev/pts 2>/dev/null
   fi
@@ -288,12 +293,12 @@ case "$SELECTION" in *system*)
    echo "$MTAB" | grep -q '^persistent'  || MTAB="$MTAB
 $(awk '/^persistent/{print $0;exit 0;}' /etc/mtab)"
    for i in /*; do # Create links for existing ones
-    [ "$i" = "/home" -o "$i" = "/tmp" ] && continue # Don't relink /home or /tmp
+    case "$i" in /dev|/media|/mnt|/home|/tmp) continue;; esac # Don't relink /dev, /home or /tmp
     [ "$i" -ef "/UNIONFS$i" ] && continue
     [ -L "$i" ] && ln -snf "/UNIONFS$i" /
    done
    for i in /UNIONFS/*; do # Create links for new ones on /UNIONFS
-    [ "$i" = "/UNIONFS/home" -o "$i" = "/UNIONFS/tmp" ] && continue # Don't relink /home or /tmp
+    case "$i" in /UNIONFS/dev|/UNIONFS/media|/UNIONFS/mnt|/UNIONFS/home|/UNIONFS/tmp) continue;; esac # Don't relink /dev, /home or /tmp
     [ "$i" -ef "${i##/UNIONFS}" ] && continue
     [ -e "${i##/UNIONFS}" ] || ln -snf "$i" /
    done

@@ -59,7 +59,7 @@ de*|at*|ch*)
 	export YasrText="Documentação do YASR."
 	export YasrDoc="$Doc/Yasr/pt_BR/README.oralux"
 	export SpeakupText="Documentação do Speakup"
-#	export SpeakupDoc="$Doc/Speakup/spkguide.txt"
+	export SpeakupDoc="$Doc/Speakup/pt-br/tutorial-pt-br.txt"
 
 	export exitText="Pressione a tecla Escape para sair do menu atual."
 

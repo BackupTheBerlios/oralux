@@ -34,6 +34,8 @@ For the next releases, mention also the MBROLA license in the website and in the
 
 download:  
 
+* Adding espeak under Speech Dispatcher
+
 * Sergei: with Speakup reading keys in Russian, the 8th bit seems to be stripped away.
  
 * pcmcia-cs, pcmcia-modules
@@ -566,9 +568,9 @@ http://www.knoppix.net/forum/viewtopic.php?p=38868
 package: shorewall (Shoreline Firewall), gshield
 Webmin: accessible ?
 
-+ Spanish and German translation: "to accept it" replace "to quit"
++ Spanish translation: "to accept it" replace "to quit"
   {"Press Enter to increase volume, or Space to decrease volume, or any other key to accept it",
-   "Eingabetaste drücken um die Lautstärke zu erhöhen oder Leertaste drücken um die Lautstärke zu verringern oder jede andere Taste zum beenden",
+...
    "Pulsar enter para subir el volumen, o sobre la barra espaciadora para bajar el volumen, o sobre cualquier teclar para salir",
 
 + Text2Wav features.

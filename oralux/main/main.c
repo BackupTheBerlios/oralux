@@ -1,10 +1,10 @@
 // ----------------------------------------------------------------------------
 // main.c
-// $Id: main.c,v 1.17 2006/04/17 22:38:19 gcasse Exp $
+// $Id: main.c,v 1.18 2006/08/05 20:28:30 gcasse Exp $
 // $Author: gcasse $
 // Description: entry point. 
-// $Date: 2006/04/17 22:38:19 $ |
-// $Revision: 1.17 $ |
+// $Date: 2006/08/05 20:28:30 $ |
+// $Revision: 1.18 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 //
 // This program is free software; you can redistribute it and/or
@@ -152,6 +152,11 @@ int main(int argc, char *argv[])
   ENTER("main");
   int aReturnedValue=0;
 
+  // If the ORALUX_SILENT_START environment variable = 1, 
+  // there will be no cocoralux sing, nor audio menu question
+  char* s = getenv("ORALUX_SILENT_START");
+  int a_verbose_start = (!s || strcmp(s,"1"));
+
   if (argc!=3)
     {
       fprintf(stderr, "oralux current_tty state\n");
@@ -292,13 +297,17 @@ int main(int argc, char *argv[])
 
 	  // Running the introductory menu
       
-	  // Sing Cocoralux, sing !
-	  playOGG("theme/cocoralux2.ogg");
-	  
+	  if (a_verbose_start)
+	    {
+	      // Sing Cocoralux, sing !
+	      playOGG("theme/cocoralux2.ogg");
+	    }
+
 	  // Creating the new emacspeak tree
 	  sprintf(TheLine,"mkdir -p %s", DTK_EMACSPEAK);
 	  SHOW(TheLine);
 	  system(TheLine);
+
 	  break;
 	  
 	case ORALUX_Stop:
@@ -336,7 +345,11 @@ int main(int argc, char *argv[])
 	default:
 	  break;
 	}
-	menu( &aSelectedInfo, &aConfHasBeenUpdated);
+
+      if (a_verbose_start || (aState!=ORALUX_Start))
+	{
+	  menu( &aSelectedInfo, &aConfHasBeenUpdated);
+	}
     }
   else
     {

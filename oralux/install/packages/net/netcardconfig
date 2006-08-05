@@ -1,0 +1,239 @@
+#!/bin/bash
+# netcardconfig - A very light-weight text-based network configuration tool.
+# (C) Klaus Knopper Nov 2002
+
+PATH="/bin:/sbin:/usr/bin:/usr/sbin"
+export PATH
+
+XDIALOG_HIGH_DIALOG_COMPAT=1
+export XDIALOG_HIGH_DIALOG_COMPAT
+
+[ "`id -u`" != "0" ] && exec sudo "$0" "$@"
+
+TMP="/tmp/netconfig.tmp$$"
+
+bailout(){
+rm -f "$TMP"
+exit $1
+}
+
+DIALOG="dialog"
+[ -n "$DISPLAY" ] && [ -x /usr/bin/Xdialog ] && DIALOG="Xdialog"
+
+[ -f /etc/sysconfig/i18n ] && . /etc/sysconfig/i18n
+
+case "$LANGUAGE" in
+de*)
+MESSAGE0="Keine unterstützten Netzwerkkarte(n) gefunden."
+MESSAGE1="Bitte Netzwerkkarte auswählen"
+MESSAGE2="DHCP Broadcast zur Konfiguration benutzen? (Nein=manuell)"
+MESSAGE3="Sende DHCP Broadcast von Netzwerkkarte"
+MESSAGE4="Fehlgeschlagen."
+MESSAGE5="Eingabetaste zum Beenden."
+MESSAGE6="Bitte geben Sie die IP-Adresse ein für "
+MESSAGE7="Bitte geben Sie die Netzwerk-Maske ein für "
+MESSAGE8="Bitte geben Sie die Broadcast-Adresse ein für "
+MESSAGE9="Bitte geben Sie das Default-Gateway ein"
+MESSAGE10="Bitte geben Sie den/die Nameserver ein"
+MESSAGE11="Setze Nameserver in /etc/resolv.conf auf "
+MESSAGE12="Füge Nameserver in /etc/resolv.conf hinzu:"
+;;
+es)
+MESSAGE0="Se han encontrado tarjetas de red no soportadas."
+MESSAGE1="Por favor, seleccione el dispositivo de red"
+MESSAGE2="¿Utilizar broadcast DHCP?"
+MESSAGE3="Enviando broadcast DHCP desde el dispositivo"
+MESSAGE4="Falló."
+MESSAGE5="Pulse enter para salir."
+MESSAGE6="Por favor, inserte la dirección IP para "
+MESSAGE7="Por favor, inserte la máscara de red para "
+MESSAGE8="Por favor, inserte la dirección de Broadcast para "
+MESSAGE9="Por favor, inserte la puerta de enlace por defecto"
+MESSAGE10="Por favor, inserte el(los) servidor(es) de nombres"
+MESSAGE11="Poniendo los servidores de nombres de /etc/resolv.conf a "
+MESSAGE12="Añadiendo servidor de nombres a /etc/resolv.conf:"
+;;
+*)
+MESSAGE0="No supported network cards found."
+MESSAGE1="Please select network device"
+MESSAGE2="Use DHCP broadcast?"
+MESSAGE3="Sending DHCP broadcast from device"
+MESSAGE4="Failed."
+MESSAGE5="Hit return to exit."
+MESSAGE6="Please enter IP Address for "
+MESSAGE7="Please enter Network Mask for "
+MESSAGE8="Please enter Broadcast Address for "
+MESSAGE9="Please enter Default Gateway"
+MESSAGE10="Please enter Nameserver(s)"
+MESSAGE11="Setting Nameserver in /etc/resolv.conf to"
+MESSAGE12="Adding Nameserver to /etc/resolv.conf:"
+;;
+esac
+
+NETDEVICES="$(cat /proc/net/dev | awk -F: '/eth.:|tr.:|wlan.:/{print $1}')"
+
+if [ -z "$NETDEVICES" ]; then
+$DIALOG --msgbox "$MESSAGE0" 15 45
+bailout
+fi
+
+count="$(echo "$NETDEVICES" | wc -w)"
+
+if [ "$count" -gt 1 ]; then
+DEVICELIST=""
+for DEVICE in $NETDEVICES; do DEVICELIST="$DEVICELIST ${DEVICE} Netzwerkkarte_${DEVICE##eth}"; done
+rm -f "$TMP"
+$DIALOG --menu "$MESSAGE1" 18 45 12 $DEVICELIST 2>"$TMP" || bailout
+read DV <"$TMP" ; rm -f "$TMP"
+else
+# Remove additional spaces
+DV="$(echo $NETDEVICES)"
+fi
+
+if $DIALOG --yesno "$MESSAGE2" 8 45
+then
+echo -n "$MESSAGE3 $DV"
+ifconfig $DV up ; pump -i $DV
+rc="$?"
+if [ "$rc" != "0" ]
+then
+echo "$MESSAGE4"
+echo -n "$MESSAGE5 "
+read a
+else
+echo " OK."
+# Debian: Add dhcp broadcast entry
+if [ -w /etc/network/interfaces ]; then
+rm -f "$TMP"
+awk '/iface/{if(/'"$DV"'/){found=1}else{found=0}}
+     {if(!found){print}}
+     END{print "\niface '"$DV"' inet dhcp\n\n"}' \
+     /etc/network/interfaces >"$TMP"
+# Add an "auto" entry
+if egrep -e "^auto[ 	]+.*$DV" /etc/network/interfaces; then
+cat "$TMP" >/etc/network/interfaces
+else
+awk '{if(/^auto/){print $0 " '"$DV"'"}else{print}}' "$TMP" > /etc/network/interfaces
+fi
+rm -f "$TMP"
+fi
+sleep 4
+fi
+exit $rc
+fi
+
+# RedHat
+if [ -f "/etc/sysconfig/network-scripts/ifcfg-$DV" ]
+then
+. "/etc/sysconfig/network-scripts/ifcfg-$DV"
+IP="$IPADDR"
+NM="$NETMASK"
+BC="$BROADCAST"
+fi
+
+# RedHat
+if [ -f "/etc/sysconfig/network" ]
+then
+. "/etc/sysconfig/network"
+DG="$GATEWAY"
+fi
+
+# Debian
+if [ -f /etc/network/interfaces ]; then
+awk '/iface/{if(/'"$DV"'/){found=1}else{found=0}} 
+     /address/{if(found){address=$NF}}
+     /netmask/{if(found){netmask=$NF}}
+     /broadcast/{if(found){broadcast=$NF}}
+     /gateway/{if(found){gateway=$NF}}
+   END{print address" "netmask" "broadcast" "gateway}' /etc/network/interfaces >"$TMP"
+read IP NM BC DG <"$TMP"
+rm -f "$TMP"
+fi
+
+$DIALOG --inputbox "$MESSAGE6 $DV" 10 45 "${IP:-192.168.0.1}" 2>"$TMP" || bailout 1
+read IP <"$TMP" ; rm -f "$TMP"
+$DIALOG --inputbox "$MESSAGE7 $DV" 10 45 "${NM:-255.255.255.0}" 2>"$TMP" || bailout 1
+read NM <"$TMP" ; rm -f "$TMP"
+$DIALOG --inputbox "$MESSAGE8 $DV" 10 45 "${BC:-${IP%.*}.255}" 2>"$TMP" || bailout 1
+read BC <"$TMP" ; rm -f "$TMP"
+$DIALOG --inputbox "$MESSAGE9" 10 45 "${DG:-${IP%.*}.254}" 2>"$TMP"
+read DG <"$TMP" ; rm -f "$TMP"
+if [ -f "/etc/resolv.conf" ]
+then
+NS="$(awk '/^nameserver/{printf "%s ",$2}' /etc/resolv.conf)"
+fi
+$DIALOG --inputbox "$MESSAGE10" 10 45 "${NS:-${IP%.*}.254}" 2>"$TMP"
+read NS <"$TMP" ; rm -f "$TMP"
+
+CMD="ifconfig $DV $IP netmask $NM broadcast $BC up"
+echo "$CMD"
+pump -k -i $DV >/dev/null 2>&1 && sleep 4
+$CMD
+
+# Add entry for Redhat init scripts
+if [ -d /etc/sysconfig/network-scripts ]
+then
+cat >/etc/sysconfig/network-scripts/ifcfg-$DV <<EOF
+DEVICE=$DV
+IPADDR=$IP
+NETMASK=$NM
+NETWORK=${IP%.*}.0
+BROADCAST=$BC
+ONBOOT=yes
+EOF
+chmod 755 /etc/sysconfig/network-scripts/ifcfg-$DV
+fi
+
+if [ -n "$DG" ]
+then
+CMD="route add default gw $DG"
+echo "$CMD"
+$CMD
+# Add entry to /etc/sysconfig/network
+if [ -w /etc/sysconfig/network ]
+then
+grep -v ^GATEWAY /etc/sysconfig/network >"$TMP"
+cat >"$TMP" <<EOF
+GATEWAY=$DG
+GATEWAYDEV=$DV
+EOF
+cat "$TMP" > /etc/sysconfig/network
+rm -f "$TMP"
+fi
+fi
+
+# Debian
+if [ -w /etc/network/interfaces ]; then
+awk '/iface/{if(/'"$DV"'/){found=1}else{found=0}}
+     {if(!found){print}}
+     END{print "\niface '"$DV"' inet static\n\taddress '"$IP"'\n\tnetmask '"$NM"'\n\tnetwork '"${IP%.*}.0"'";if("'"$BC"'"!=""){print "\tbroadcast '"$BC"'"};if("'"$DG"'"!=""){print "\tgateway '"$DG"'"};print "\n"}' \
+     /etc/network/interfaces >"$TMP"
+# Add an "auto" entry
+if egrep -e "^auto[ 	]+.*$DV" /etc/network/interfaces; then
+cat "$TMP" >/etc/network/interfaces
+else
+awk '{if(/^auto/){print $0 " '"$DV"'"}else{print}}' "$TMP" > /etc/network/interfaces
+fi
+fi
+
+if [ -n "$NS" ]
+then
+more=""
+for i in $NS
+do
+if [ -z "$more" ]
+then
+more=yes
+echo "$MESSAGE11 $i"
+echo "nameserver $i" >/etc/resolv.conf
+else
+echo "$MESSAGE12 $i"
+echo "nameserver $i" >>/etc/resolv.conf
+fi
+done
+fi
+
+egrep -q "$DV" /proc/net/wireless 2>/dev/null && wlcardconfig "$DV"
+
+echo "Done."
+sleep 2

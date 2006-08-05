@@ -173,23 +173,23 @@ chroot $BUILD apt-get update
 # list of packages, that can be removed in $BUILD
 # about 1.1 Gbytes will be removed
 
-#     for i in de fr da es it tr ru pl ja nl cs ; do
-# 	kde="$l kde-i18n-$i"
-#     done
-    rmpacks="libqt3c102-mt"
-#    chroot $BUILD apt-get -y --force-yes --purge --ignore-hold remove $rmpacks
-    chroot $BUILD apt-get --purge remove $rmpacks
-    chroot $BUILD  dpkg-divert --rename --remove /usr/bin/kdesktop_lock
-    rmpacks="kdebluetooth kdelock-knoppix openoffice-de-en ttf-openoffice trans-de-en kdoc kdebase-data kdelibs-data libqt3-headers"
-    chroot $BUILD apt-get --purge remove $rmpacks
+# #     for i in de fr da es it tr ru pl ja nl cs ; do
+# # 	kde="$l kde-i18n-$i"
+# #     done
+    rmpacks="libqt3-mt"
+##    chroot $BUILD apt-get -y --force-yes --purge --ignore-hold remove $rmpacks
+#    chroot $BUILD apt-get --purge remove $rmpacks
+#    chroot $BUILD  dpkg-divert --rename --remove /usr/bin/kdesktop_lock
+#    rmpacks="kdebluetooth kdelock-knoppix openoffice-de-en ttf-openoffice trans-de-en kdoc kdebase-data kdelibs-data libqt3-headers"
+ #   chroot $BUILD apt-get --purge remove $rmpacks
     games=`chroot $BUILD dpkg -S games/|grep -v , |egrep -v bsdmainutils | awk '{print $1}'|sort|uniq |sed -e 's/://'`
     chroot $BUILD apt-get --purge remove $games
 
     cd $ORALUX/install
     liste=`cat list_remove.txt|egrep -v "#"`;chroot $BUILD bash -c "dpkg -P `echo $liste`"
-    liste=`cat remove_graphicstmp.txt|egrep -v "#"`;chroot $BUILD bash -c "dpkg -P `echo $liste`"
-    liste=`cat list_top200.txt|egrep -v "#"`;chroot $BUILD bash -c "dpkg -P `echo $liste`"
-    liste=`cat list_remove_2.txt|egrep -v "#"`;chroot $BUILD bash -c "dpkg -P `echo $liste`"
+#    liste=`cat remove_graphicstmp.txt|egrep -v "#"`;chroot $BUILD bash -c "dpkg -P `echo $liste`"
+#    liste=`cat list_top200.txt|egrep -v "#"`;chroot $BUILD bash -c "dpkg -P `echo $liste`"
+#    liste=`cat list_remove_2.txt|egrep -v "#"`;chroot $BUILD bash -c "dpkg -P `echo $liste`"
 
     chroot $BUILD bash -c "COLUMNS=200 dpkg -l | grep ^rc | awk '{print $2} ' | xargs dpkg -P"
     chroot $BUILD bash -c "deborphan | xargs dpkg -P"
@@ -329,7 +329,8 @@ cleartmp() {
 ####
 cd_info() {
 
-    cdrecord dev=ATAPI -scanbus
+    cdrecord dev=$CDDEV -scanbus
+#    cdrecord dev=ATAPI -scanbus
 }
 
 ####
@@ -344,7 +345,8 @@ cd_erase() {
 	echo "Please update the CDBUS variable in oralux.conf!"
 	return
     fi
-    cdrecord blank=fast dev=ATAPI:$CDBUS
+    cdrecord blank=fast dev=$CDDEV
+#    cdrecord blank=fast dev=ATAPI:$CDBUS
 }
 
 ####
@@ -354,7 +356,16 @@ cd_burn() {
 	echo "Please update the CDBUS variable in oralux.conf!"
 	return
     fi
-    cdrecord -v -eject speed=8 -pad dev=ATAPI:$CDBUS $oraluxCDiso
+    cdrecord -v -eject speed=8 -pad dev=$CDDEV $oraluxCDiso
+#    cdrecord -v -eject speed=8 -pad dev=ATAPI:$CDBUS $oraluxCDiso
+}
+
+####
+qemu() {
+
+    qemu -m 128 -cdrom $oraluxCDiso -boot d -user-net
+
+#    cdrecord -v -eject speed=8 -pad dev=ATAPI:$CDBUS $oraluxCDiso
 }
 
 ###
@@ -391,13 +402,12 @@ chmod +x $INSTALL_PACKAGES/*.sh
 
 set -e
 
-cp -L /etc/resolv.conf $BUILD/etc/resolv.conf
-
 next_step cleartmp "Clear the $NEW_ORALUX directory and temporary files ?"
 next_step knoppixCD2iso "Make a KNOPPIX CD ISO image from the KNOPPIX CDROM?"
 next_step knoppixCDiso2iso "Extract and Make the ISO from the KNOPPIX CD ISO image?"
 next_step knoppixiso2dir "Make a directory tree from the uncompressed ISO?"
 next_step rm_extractedKnoppix "Remove $extractedKnoppix?"
+cp -L /etc/resolv.conf $BUILD/etc/resolv.conf
 mkdir -p $BUILD/proc 2>/dev/null
 mount -t proc /proc $BUILD/proc
 next_step remove_unused_packages "Remove unused packages?"
@@ -412,6 +422,7 @@ next_step create_new_iso_only_new_kernel "Creating ISO image for new Oralux (onl
 next_step cd_info "Scan bus about your CD recorder?"
 next_step cd_erase "Erase CD?"
 next_step cd_burn "Burn CD?"
+next_step qemu "QEMU ?"
 
 echo > $BUILD/etc/resolv.conf
 

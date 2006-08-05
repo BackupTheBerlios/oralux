@@ -1,0 +1,239 @@
+first steps in GNU/Emacs.
+By Sylvie Xhaard
+Translated to English by Sylvie Xhaard and Nigel Stoppard
+For use with Oralux Linux
+Last updated: 28/06/2004
+
+"It is not obvious, but not insurmountable".
+
+1 The basics of typing commands.
+1.1 The menu
+2 How to open or create a file.
+3 To save  files.
+4 Typing in Emacs.
+4.1 To move in the document.
+5 To surf the open buffers.
+6 Using the directory editor.
+7 Using the command line.
+7.1 Using the man command in Emacs.
+8 To quit.
+9 Additional information.
+
+
+1 The basics of typing commands
+An example of a keyboard short cut is C-x, obtained while pressing =
+simultaneously Ctrl and x.
+example 1: the first command that you will find in this document is C-x =
+C-f : press simultaneously  Ctrl key and x then press simultaneously =
+Ctrl key and f
+
+example 2: you will also find commands of the type C-x b  press =
+simultaneously Ctrl key and x then the b key just on its own.
+
+In Emacs there is also the Meta key. Referred to as M-
+ this can be used in two ways.
+
+Esc x that is press the Esc key and then press the x key.
+Or Alt-x That is hold down the left Alt key while simultaneously =
+pressing the x key.
+
+It is up to you which method you use.
+In this document holding down  the Alt key, and simultaneously   =
+pressing a key is described.
+
+1.1 The menu
+As well as using the short cut keys that are described in this document =
+there is also a menu bar that can be accessed.  These menus also include =
+the short cut key that can be used while in the menu and the keybord =
+short cut key.  To access this menu press the f10 key.  You will then be =
+placed in a new buffer with instructions on the menus that can be used.  =
+You can press the F key for the file menu, E for Edit, O for Options, B =
+for Buffers, T for Tools and H for Help.  Once in a menu you can =
+navigate it using the up and down arrow keys.  Press return to use that =
+command or C-g to cancel.
+
+
+
+2 How to open or create a file. 
+To open an existing file or a new file use the short cut key.
+C-x C-f
+Then type the complete path of the file to be opened and its name.
+E.G.: /home/knoppix/test
+If the file exists, it will be opened. If it does not exist, it will be =
+created.
+
+3 To save files.
+C-x C-s save your file
+Emacs is helpful, it saves your work regularly.
+
+Each time you open or create a file, this opens a new buffer within =
+Emacs. If you forgot to save one of your opened files, emacs will ask =
+you whether you wish to save the modifications at the time you quit =
+Emacs.
+
+4 Typing in Emacs
+When typing in an Emacs buffer new lines will be created as you type. =
+This is known as word wrapping. If you want to create a new line press =
+the return key.
+if you want to cancel a command when you are half way through typing it =
+then you can use C-g.
+
+4.1 To move in a document.
+Alt-b moves the cursor to the preceding word and emacspeak pronounces it.
+
+Alt-f moves the cursor to the following word and emacspeak pronounces it.
+
+C-a moves the cursor to the beginning of the line and Emacspeak reads =
+the line.=20
+
+
+C-e moves the cursor to the end of the line and Emacspeak reads the =
+line.
+Alt-a moves the cursor to the beginning of the sentence and emacspeak =
+pronounces it.
+
+
+ 
+Alt-e moves the cursor to the end of the sentence and emacspeak =
+pronounces it.
+
+
+
+Alt-[ moves back a paragraph.
+
+Alt-] moves forward a paragraph.
+
+C-x [ moves back a page.
+
+C-x ] moves forward a page.
+
+Alt-< Moves to the beginning of the buffer.
+
+Alt-> Moves to the end of the buffer.
+
+5 To surf the open buffers. 
+To switch between buffers one at a time use 
+C-x o  The o stands for other buffer.
+
+If you opened, and, or, created several files and you want to go from =
+one to the other. No problem. Type 
+C-x b
+By default, if you press the Enter key, you turn to the last open buffer.
+If you want to open another buffer, type its name, or simply the first =
+letter and press the tabulation key (the name of your buffer appears =
+automatically).
+If this is not the buffer you want then press the tabulation key again.
+
+Each buffer is associated with a process.  To close an open buffer, the =
+process  should be killed with, 
+C-x k  
+Emacs Speak will then say kill buffer"?  This is a question, press =
+return to confirm, kills the active buffer.  If you forget the return =
+then the buffer may remain but with no content.
+
+You can open a new buffer with a list of all the current buffers using =
+the command, 
+C-x C-b  
+The name of each buffer is displayed on one line.  You can mark a buffer =
+to delete with the d key.  When you are ready press the x key and all =
+the buffers you have marked will be deleted.
+6 Using the directory editor (Dired mode). 
+C-x d
+Type the complete path of the directory to be explored and press enter. =
+A new buffer is opened. By default, the cursor is on the first letter of =
+the first file or directory.You can move in the directory with the =
+cursor keys Up and Down.
+If your cursor is on a file, the Enter key opens the file.
+If your cursor is on a directory, the Enter key opens the directory.
+
+You can go up to the higher directory by selecting
+
+..
+(the second line of the listing) and press enter.
+
+The dot on the first line stands for the current directory.
+
+The following keys will also work in dired mode.
+d marks a file for deletion.
+
+u unmarks a file.
+
+x will delete the marked files but will ask for conformation first.  =
+Type yes or no as appropriate.  Or press return to confirm.
+
+c copies a file.  You will be asked for a new name when you copy the =
+file.
+
+r rename a file.  You will be asked to rename the file.
+
+Once in dired mode you can get a summary of the key strokes by pressing,
+C-h m  
+Since these info pages are in another buffer you will need to press C-x, =
+o, to move to that buffer.
+
+7 Using the command line (shell).
+ Alt-x shell
+( caution press Alt key and x then type shell)
+
+Some useful commands:
+
+whoami: tells you the user name you are logged in as.  (Thats who am i =
+written as one word)
+
+pwd :	print working directory
+
+cd : Change directory
+examples : 
+cd .. go up to the higher directory
+cd / go to the top of the system
+cd  go to your home directory (/home/knoppix)
+cd /mnt/floppy go to the floppy disc directory
+
+ls : list files or directories
+
+mkdir :	create a directory
+
+cp : copy files
+example : cp /home/knoppix/emacs.txt /mnt/floppy (copy the file =
+emacs.txt to a floppy disc)
+
+7.1 Using the man command in Emacs.
+Man stands for manual. The man pages as they are referred to, can be =
+used to get help on any command in Linux.  To use the man command type,
+Alt-x man
+Then enter the command you wish to view the manual pages of.
+
+8 To quit. 
+C-x C-c
+This will put you at a command prompt with no speech.  Type,
+ sudo halt 
+before turning your computer off.
+If you prefer to shut down with speech then you can go to a shell prompt =
+with Alt-x, and type, 
+shell  
+Then at the prompt type
+sudo halt. 
+The CD will be ejected.  Note if you shut down using this method then =
+you will not be prompted to save any unsaved buffers.
+
+9 Additional information.
+C-h i m 
+Brings up the Emacs FAQ.
+
+C-h t 
+Brings up the emacs online tutorial.
+
+C-h k 
+Brings up documentation of the function for the following key sequence.
+
+As Oralux is improved new emacs packages will be added.  To find out =
+what packages are available press,
+C-h p
+
+This will give you a list of available packages.
+
+Some of the current packages include.
+cdtool, a CD player that works with Emacs.
+ERC, an Internet Relay Chat client (IRC) for Emacs.
+ispell, a spell checker for Emacs.
+

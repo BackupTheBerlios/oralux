@@ -1,0 +1,18 @@
+Disquette de boot pour Oralux installer sur disque dur 
+
+* copier menu.lst en /tmp
+
+* Mettez le a jour : par défault Oralux est supposé être installé en hda5
+Recherchez les lignes a la fin de menu.lst:
+
+title		Oralux 0.7 alpha
+root		(hd0,4)
+
+et changez eventuellement (hd0,4).
+
+* Inserez une disquette (Attention, toutes ses données seront perdues: la disquette sera formattée).
+
+* Lancez:
+./bootHDinstall
+
+* Redémarrez votre PC

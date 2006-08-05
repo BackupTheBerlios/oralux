@@ -1,11 +1,11 @@
 #undef DEBUG
 // ----------------------------------------------------------------------------
 // audiouserinterface.c
-// $Id: audioUserInterface.c,v 1.31 2006/05/07 22:41:23 gcasse Exp $
+// $Id: audioUserInterface.c,v 1.32 2006/08/05 20:28:30 gcasse Exp $
 // $Author: gcasse $
 // Description: Managing and playing the pre-recorded messages.
-// $Date: 2006/05/07 22:41:23 $ |
-// $Revision: 1.31 $ |
+// $Date: 2006/08/05 20:28:30 $ |
+// $Revision: 1.32 $ |
 // Copyright (C) 2003, 2004, 2005 Gilles Casse (gcasse@oralux.org)
 // September 2003: 
 // * German translations by Guenther Harrasser.
@@ -450,7 +450,7 @@ char * TheMessages[][5]={
   },
   {"Press Enter to increase the volume, or Space to decrease the volume, or any other key to accept it",
    "Appuyer sur Entrée pour augmenter le volume, ou sur Espace pour diminuer le volume, ou sur toute autre touche pour l'accepter",
-   "Eingabetaste drücken um die Lautstärke zu erhöhen, oder Leertaste drücken um die Lautstärke zu verringern, oder jede andere Taste zum beenden",
+   "Eingabetaste drücken um die Lautstärke zu erhöhen, oder Leertaste drücken um die Lautstärke zu verringern, oder jede andere Taste um sie anzunehmen",
    "Pulsar enter para subir el volumen, o sobre la barra espaciadora para bajar el volumen, o sobre cualquier teclar para salir",
    "Pressione Enter para aumentar o volume, espaço para diminuir, ou qualquer outra tecla para continuar",
   },

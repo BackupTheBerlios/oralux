@@ -1,0 +1,12 @@
+diff -urNpX dontdiff linux-2.6.12-old/drivers/net/wan/sdladrv.c linux-2.6.12-new/drivers/net/wan/sdladrv.c
+--- linux-2.6.12-old/drivers/net/wan/sdladrv.c	2005-06-17 21:48:29.000000000 +0200
++++ linux-2.6.12-new/drivers/net/wan/sdladrv.c	2006-03-03 23:35:48.000000000 +0100
+@@ -1998,7 +1998,7 @@ static int detect_s514 (sdlahw_t* hw)
+ 		modname, hw->irq);
+ 
+ 	/* map the physical PCI memory to virtual memory */
+-	(void *)hw->dpmbase = ioremap((unsigned long)S514_mem_base_addr,
++	hw->dpmbase = ioremap((unsigned long)S514_mem_base_addr,
+ 		(unsigned long)MAX_SIZEOF_S514_MEMORY);
+     	/* map the physical control register memory to virtual memory */
+ 	hw->vector = (unsigned long)ioremap(

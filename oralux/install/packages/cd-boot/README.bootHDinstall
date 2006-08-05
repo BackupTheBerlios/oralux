@@ -1,0 +1,17 @@
+Boot floppy for Oralux installed on hard disk
+
+* Copy menu.lst to /tmp
+
+* Update it: by default Oralux is supposed to be installed in hda5.
+Search lines at the end of menu.lst:
+title		Oralux 0.7 alpha
+root		(hd0,4)
+
+and change (hd0,4) accordingly.
+ 
+* Insert a floppy (Warning: all its data will be lost: the floppy will be formatted).
+
+* Run:
+./bootHDinstall
+
+* Reboot your PC
