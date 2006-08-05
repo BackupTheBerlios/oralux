@@ -1,0 +1,1927 @@
+Processing e-mail with Oralux: how to set up and use the 3 mail clients 
+By Doug Smith (bdsmith at oralux.org)
+14 July 2006
+
+Contents
+
+* Introduction:
+* A Simple Overview of the Mail Subsystem Under Linux/Unix
+* What is an MTA?
+* What is an MSA? 
+** What is msmtp? 
+** Configuring msmtp
+*** .msmtp configuration file: example
+*** .msmtp configuration file: description
+* What is a mail client?
+* The Mutt Mail Client 
+** .muttrc configuration file: example
+** .muttrc configuration file: description
+** Commonly Used Mutt Commands
+* The PINE Mail Client
+** Getting and Installing PINE
+** Configuring PINE
+*** .pinerc configuration file: example
+*** The menu-driven pine program
+** The setup screen for pine
+** The Configuration screen for Pine
+* The vm Mail Client
+** The configuration of vm
+** Using vm
+** Sending mail with vm
+* Final Thoughts
+
+
+
+* Introduction:
+
+Perhaps one of the most complex subsystems of any computer operating
+system for the average user to understand is the mail subsystem.  That
+is quite ironic, as we all use mail on a daily basis for such
+activities as arranging dates, communicating with friends about the
+affairs of the day, asking the administrator of a supercomputing
+center where we can get the same machinery he has, contacting a
+husband or wife at break time during a long, stressful day at work
+and much, much more.  We use this subsystem almost without thought for
+how it is configured, how it works, and what really goes on behind
+the scenes.  
+
+Of course, we don't need to know all the story.  In fact, much of it
+is beyond the scope of this text.  However, since we are in charge of our
+home computers, and, in some cases, the ones at our own businesses or
+even in other peoples' businesses, it is important to know how the
+mail subsystem works and a little about configuring it.  
+
+
+
+* A Simple Overview of the Mail Subsystem Under Linux/Unix
+
+We are using a distribution of Linux.  This is a Unix-like operating
+system which is growing day by day in popularity.  It is not very
+difficult to imagine Linux becoming the standard for computer use by
+the Blind within a few short years.  It is appearing on more and more
+home computers and computers in workplaces.  For many years, various
+flavors of Unix, including Linux, have driven the servers of the
+internet and other networks.  In fact, in the 70's and 80's, Unix-based
+mainframes with terminals connected to them, so-called host/terminal
+systems were the standard.  There was a system administrator who
+configured everything, set up new users, restarted the system if it
+quit and maintained all the little details of it so that we didn't
+have to.  We just logged in and did our work, that was the short and
+long of it.  
+
+Now, we can have our own Unix system.  Enter Oralux, the most complete
+distribution of Linux with speech output for us to use without sighted
+assistance.  Now, your own Unix system is just a cd away.  It is not,
+granted, the powerful mainframe machines of the academic and research
+environments in which Unix was first used, but it works the same,
+just on a smaller scale.  Now, we are the system administrator, and it
+is entirely our responsibility to keep the machine, its software, and its data
+in order.  
+
+Let's take a simple look at the mail subsystem under Oralux.
+We will begin this simple look from the viewpoint of ourselves.  What
+happens when we write and send a letter?  
+
+First of all, we write the letter using either an editor or the
+composer mode of the mail "client," the program that handles the
+human/computer interaction part of the transaction.  We write the
+letter, asking, for example, for a bundle of source code that we want
+to look at.  Suppose we want to know how a speech synthesizer works.
+You have the code you have just written and I want to look at it.  I
+write you a mail message so that you will know what it is that I want
+to look at.  
+
+The first step is to enter the mail address in the field of the
+client's composer that has the word to in it.  This is where I put
+your address.  Next, we fill in the subject line and write the entire
+body of the letter.  
+
+When we are finished, we need to send it.  This is not the world of
+old-style paper letters, where we had to get up and put the thing
+physically into a mailbox and indicate to a person that we had mail in
+there and wished to have it delivered, but it works the same way.  
+
+We let the client program know that we want to send the message.  This
+procedure differs from client to client, but the results are the
+same.  First of all, the program we use contact either a large Mail
+Transfer Agent (MTA) or a much smaller, and, in most cases,
+simpler-to-set-up, Mail Sending Agent (MSA) program to let it know that
+there is a message to be delivered.  
+
+Once this contact has been established, the mail client, for example,
+mutt, pine, or vm, hands off the message to the other program and it
+deals with it in one of two ways.  Either the machine from which the
+message was sent has a direct connection to the internet, the most
+commonly used mail transport network, and is able to connect directly
+with, for example, your machine, and hand off the message to
+whatever software you use to retrieve messages, or it calls a machine
+running mail server software which does all this for us.  
+
+The system has to know how to get the letter from me to you.
+This is what the to field of the message is for.  Now, the
+machines along the way, the mail servers, know that this message goes
+to a particular person at a particular internet domain name, for
+example: 
+
+rain-man@savantskills.com
+
+When the message arrives at the mail server for the savantskills.com
+domain, it is checked for the first part of the address, the user
+name.  This is, in our example, rain-man.  Now, the server places the
+message in a file on the system which is accessed by you only.  Successful Delivery!  Now, when you log in
+and wish to use your mail client program to see your messages, my
+request to see the source code for the speech synthesizer will be in
+there.  The file into which the server places the message, is called,
+in most cases, a system mailbox or a spool file.  The file into which
+the file's contents are retrieved when you wish to look at the
+messages you have, is known as a mailbox or primary inbox file.  This
+is, for example, the ~/mbox file you have on your hard drive that
+contains all your messages.  That's it in a nutshell, but the
+protocols and how the servers are configured along the way, are beyond
+the scope of this text.  
+
+
+
+* What is an MTA?
+
+Your Oralux disk comes with a large MTA or "Mail Transfer Agent,"
+known as exim4 already installed on it.  This is an example of an MTA
+program.  This program is capable of doing many things with mail,
+including sending, receiving, placing into spool files, and more.
+There is a great deal of documentation available for this program that
+explains how it is to be configured and what files need to be
+manipulated in this process.  In fact, there is much in-depth
+documentation available at Debian's web site about this.  If you wish to really
+know how this program is configured for use on your Oralux system, you
+can start out here: 
+
+http://packages.debian.org/unstable/mail/exim4
+
+On this web page, you will find a number of useful links to still more
+about the exim4 package and how to set it up if yours does not work
+correctly.  However, the in-depth discussion of this documentation is
+beyond our present scope.  
+
+This is just one example of a Mail Transfer Agent program.  There are
+others, including: sendmail, smail, qmail, postfix and others.  Each
+of these works differently, so be sure to read the documentation for
+the program that might be on any other Linux/Unix system you might
+use in the future.  
+
+
+
+* What is an MSA? 
+
+There is still another class of mail handling programs.  These are
+called Mail Sending Agents (MSA's) and they are used only to send
+mail.  They are much smaller and have many fewer facilities than large
+mail programs like those described above.  They are, sometimes, much
+easier to configure and may make more sense to use in certain cases on
+home systems.  The choice of which class of program to use to deliver
+your mail is, of course, entirely, up to you.  However, this document
+focuses mostly on configuring mail clients with one particular MSA:
+msmtp.  
+
+
+
+** What is msmtp? 
+
+msmtp is a small, lightweight, mail sending agent.  In fact, the first
+M in the name of the program comes from the name of the first mail
+client we will discuss, mutt.  This program can be used by any program
+that needs to send mail off the system.  Though it is not covered
+here, it might even be possible to use this program for mail that is
+sent within the system.  
+
+msmtp does not come with the stock Oralux distribution, but, if you
+install Oralux on a hard drive, it is possible to install and
+configure msmtp with no difficulty at all.  
+
+First of all, you will need to know how to get msmtp, and how to
+configure it.  The first of these two procedures is the simpler.  As
+root, do this: 
+
+apt-get install msmtp
+
+Now, the program is in.  It has the default configuration that the
+Debian package maintainer for the program set it up with.  This is
+good enough to work, and work perfectly, but there are a few things
+msmtp needs to know before it will be fully able to serve us.  
+
+
+
+** Configuring msmtp
+
+As is the case under Unix systems, many programs will work correctly
+as they are.  This is called working "right out of the box."  However,
+many of them need to be properly configured.  Though this seems to be
+one of the reasons why many beginning computer users have a little
+more trouble with Unix systems, it really is easier than you might
+think.  Configuring a program means setting it up to work properly if
+it needs some help.  Many complex Unix programs fall into this
+category.  This is what gives the Unix family its remarkable
+flexibility.  It is possible for each user to configure a program to
+work as he needs it to, and the program will read the user's unique
+configuration each time it is run by that user.  Let's look at the
+configuration of msmtp, so that we can get on with sending some mail.  
+
+In most cases, the personal configuration files we have in our home
+directory have names that end with rc.  This is the case here.  This
+suffix for the file name stands for "run commands" or "run control."
+Either way, we have to make ourselves a ~/.msmtprc file so that we can
+put information into it.  
+
+With a text editor, and it does not matter which one you use, do this: 
+
+Create a file called .msmtprc in your home directory.  It is
+absolutely essential that the period precedes the name of the file.
+This is called a dot file or hidden file.  This is the traditional
+Unix way of making configuration files.  After you have this in
+memory, put this data into it and save it.  
+
+*** .msmtp configuration file: example
+
+defaults
+host your.mail.server
+port 25
+connect_timeout off
+protocol smtp
+from your.e-mail.address
+auth off
+keepbcc off
+syslog off
+
+account default
+logfile ~/smtp.errors
+
+*** .msmtp configuration file: description
+
+Now, let's look at the individual lines in this file.  For a much
+better description of all the options that are available when
+configuring MSMTP, see the manual by invoking the man command under
+whatever desktop you use and requesting the man page for msmtp.  All
+the letters in the name of the program are in lowercase.  
+
+The first line of the configuration file contains only the word
+defaults.  This indicates to msmtp that these will be the new default
+settings for this configuration.  
+
+In the next line of the file, we find the word host.  This is followed
+by the name of the mail server we will be using to send our
+messages.  In many cases, with an ordinary internet service provider
+account, we would use the mail server that comes with the service.
+Let's use the example we had earlier to set this up.  
+
+Our domain name was savantskills.com, so we would use most likely,
+either mail.savantskills.com or smtp.savantskills.com as our mail
+server or mail host.  We can also use the numerical
+address of the machine if we know it.  
+
+On the next line of the file, we tell the msmtp program to connect to
+that machine on port number 25.  This is the well-known port for smtp
+transactions, and it is the default for smtp but it is good to set it
+anyway so that we can see it there if trouble should ultimately find
+us.  
+
+Next, we tell the program that it is to wait indefinitely for a
+connection to the smtp server.  Smtp stands for simple mail transport
+protocol.  If the system is down on the other end, msmtp is to keep
+trying until it gets in touch with it.  This might not be a good idea
+if we tend to encounter a significant number of instances of our
+mail server being off line.  
+
+In the next statement, we tell msmtp that we want to use the smtp or
+Simple Mail Transport Protocol.  It handles lmtp as well, but this
+is beyond the scope of this text as most mail is handled by means of
+smtp.  
+
+Next, we specify the from line.  This is the e-mail address which will
+be sent to the smtp server as the originator of the message.  
+
+Now, we set up the authentication in the next line with the auth in
+it.  In the case shown in the example, the authentication is turned
+off.  You can turn it on and set the method as shown in the manual
+page for msmtp.  
+
+In the next statement, we see keepbcc.  This is to tell the program to
+preserve or not to preserve the bcc headers in messages it is
+sending.  In this case, it is off.  See the manual page for more.  
+
+After this, we turn off the syslog procedure for simplicity.  
+
+Next, we have the account name with the word default in it.  This is
+the only account in this example, but we can have as many account
+names in the configuration file as we wish.  See the manual page for
+more.  
+
+In the final line of the file, we see logfile.  We put the name of a
+file there into which error messages will be written if anything
+happens to msmtp as it attempts to send mail.  
+
+There we have it.  msmtp is configured and ready to fly.  However, and
+I repeat this: PLEASE SEE THE MANUAL PAGE FOR COMPLETE DOCUMENTATION
+OF ALL OPTIONS AND FEATURES!!!
+
+
+
+* What is a mail client?
+
+A mail client is the program with which we interact as we compose and
+send a mail message.  Typical examples of such programs include: mutt,
+pine, and vm.  Which of these you use is entirely up to you, and we
+will discuss all three of these in general.  Please consult the
+documentation for whichever program you wish to use for a full
+description of the program, all its configuration variables, and
+commands.  
+
+In this text, we have used a liberal sprinkling of the words client
+and server.  This is a relatively new phenomenon in computer
+applications, but we will look at it a little here.  Client/server
+computing is a computing environment in which two programs do what one
+used to do.  The client, the program with which we interact, requests
+a service.  It does a particular task and calls another application
+when it is done.  The server, on the other hand, performs a service
+for us; for example, our mailer program allows us to compose and edit
+our message, and even address it.  When this is finished, the client,
+the program with which we just interacted, calls a background program
+called a server.  This is something like either exim4, postfix, qmail,
+smail or sendmail.  It can be either on our own machine, or on a
+remote computer we will never know the physical location of.  Wherever
+this program is physically located, it does the job of sending our
+mail along the network.  
+
+
+
+* The Mutt Mail Client 
+
+The mutt mail program is a very powerful, but easy-to-use mail program
+that handles a wide variety of mail functions ranging from multiple
+mailboxes, pop3 servers, imap servers, direct mail retrieval from
+servers with the aid of no other application and more.  
+
+This program must, also, be properly configured before it can be used
+by individuals on the system, but this configuration process is simple
+and straightforward.  For this program, we have two manual pages that
+we must examine in detail before we are able to use the program.
+These are the manual entries for the mutt program itself, and the
+manual for the configuration file.  
+
+There are many options in both the program and in the configuration
+file, so, let's start out by looking at a simple, one-user-one-mailbox
+example.  The manual page for the configuration file, muttrc, tells
+us all about the entire range of options we have.  
+
+** .muttrc configuration file: example
+
+set copy=no
+set delete=yes
+set from="your.email.address"
+set pop_checkinterval=60
+set pop_delete=yes
+set pop_host=your.pop.server.name
+set pop_user=your.user.name.on.the.pop.server
+set pop_pass="Your.pop.account.password"
+set pop_reconnect=yes
+set read_inc=1
+set realname="your name"
+set score=no
+set use_from=yes
+set sendmail="/usr/bin/msmtp"
+set envelope_from=yes
+set spoolfile="~/Mail/inbox"
+
+** .muttrc configuration file: description
+
+Alright, let's take a peek at all the options in our configuration file
+sample.  These are straightforward options that can easily be
+reconfigured as needed on a per-user basis.  
+
+First of all, and this should have been stated earlier, all the lines
+in the file must be entered as shown.  If there are quotes, please
+enter them.  If there is no white space between characters, it needs
+to be that way.  The parser engines in these programs are very
+particular about how they will read data.  Correct entry of all lines
+in a file will avoid the most easily made error in all of computer
+science, the dreaded "syntax error."  
+
+In the first line, we tell the program that we do not want to keep
+copies of the messages we send out.  Sometimes, however, it might be
+important to a user to have copies.  This is a boolean value that can
+easily be set to yes if needed.  
+
+In the second line, we tell mutt that we really want to delete
+messages marked for deletion from the mailbox file into which they
+have been read when gathered from the remote server.  If we set the
+variable to no, we will have these messages still sitting around after
+we quit the program.  The mailbox file will continue to grow.
+However, this is a good setting to use if you often need to recover
+messages after the fact, and cannot get to sleep one night until you
+really have a copy of the message you received from me safely tucked
+away into another file on your system.  This can prevent unnecessary
+data loss.  
+
+Now, the from line.  This is one of the most annoying lines to get
+right under some clients.  In this line, we put our e-mail address.
+This will insure that the from fields of message headers which others
+receive from us are correct.  We will get those replies when they are
+sent.  
+
+The next line applies only if we are using a pop server.  POP stands
+for Post Office Protocol, and it is on the way out.  It is being
+replaced by IMAP which stands for Internet Message Access Protocol.
+However, this line means that the mutt program is to check the pop
+server for mail every 60 seconds in this case.  It can be set to any
+number of seconds between checks of the remote mailbox.  
+
+Now, we have to tell mutt to delete the messages from the pop server.
+If we want to have them remain on there, we can do so by setting this to
+no.  If our pop server has a limited amount of space reserved for our
+messages, we might want to remove the ones that have been successfully
+delivered.  This is one thing that it is necessary to understand about
+pop servers, the deletion, performed by the mutt client, is only done
+after a successful delivery of the messages to your system.  If the
+connection is lost, the messages that have not been delivered should
+be safe.  
+
+Now, we tell the mutt program which pop server to log into to get our
+mail.  Let's use the example we had above.  Let's suppose that our
+domain is 
+
+savantskills.com
+
+Let's suppose that we have a mail server machine which is called 
+
+pop.savantskills.com
+
+Well, we see the simplicity of this one, right?  In the set
+pop_host= statement, we use 
+
+pop.savantskills.com
+
+This will tell mutt that this is the machine with our messages stored
+on it.  
+
+Now, after setting the pop server, we have to get into it.  The first
+piece of information we need to convince the server that we belong
+there is a user name.  This is what goes into the next slot.  
+
+On the next line, we enter our password for the pop server.  This will
+authenticate us to the machine each time mutt checks the remote mailbox
+for us.  
+
+We now need to set the pop_reconnect to yes.  This tells mutt to try
+to re-establish contact with the server after such events as line
+hits, down hosts, router failures and other little networking
+bugaboos that tend to drive us all to the brink every now and then.
+If such an event happens, mutt will attempt to reconnect the pop
+session and finish getting all the messages that might have been left
+un-retrieved after the dropped connection.  
+
+We set read_inc to 1 in this case, just because we can tell how many
+messages we have as they are coming downstream from the server.  It
+can be set to any value or turned off by setting it to nothing at
+all.  Consult the muttrc manual page for more on setting this.  It is
+primarily intended for operations that will take a long time so  we will
+not think we are hung and do something drastic to break a connection
+that is really doing something valuable.  
+
+Next, we want to set up our real name.  In many cases, we can see the
+real name of the person from whom a message has been sent.  If we want
+this, we set the real name on this line to our name.  Each time we
+send a message, mutt will put this name into the from field so that
+others can see that something has come from us.  
+
+We tell mutt to turn off its scoring system.  Please consult the mutt
+manual page for more on the scoring of messages.  Since it is
+something that is not needed in this example, it is turned off.  
+
+Now, we must tell mutt to use what we have put in the from line, which
+was our correct e-mail address.  If we do not use this, the program
+will look at such environment variables as LOGNAME and in the
+/etc/passwd file to determine how the address should be constructed.
+This is not what we want unless we are on a host machine with a
+configuration such as we might find in an environment in which the
+machines are all terminals connected to a central host or on a Local
+Area Network of individual machines.  If this is the case, the from
+will be properly constructed from the available information.  
+
+Ok, let's tell the mutt program which mail program to use to send the
+mail we created.  It can be sendmail or whatever other program we
+happen to have.  In this case, we need to use msmtp.  We must supply
+the full or "absolute" path name to the binary we wish to use.  
+
+Now, our example contains only two more options.  We have the mutt
+program use the from address we supplied as the envelope from address
+header in the message so that it can be seen without a doubt that we
+are the sender of the mail.  
+
+Finally, we need a spool file on our system.  Let's use a simple one.
+We have a directory in our home directory called mail.  In this
+folder, we have a file called inbox.  Let's use it as the spool file
+from which the messages are read after they come off the pop server.
+That's what we do here.  
+
+Now, we have looked at a rather simple example of a mutt configuration
+file.  Just remember to name this ~/.muttrc.  It is one of those
+hidden, dot files and a run command or run control file.  This allows
+mutt to be flexible and useful by all the users who might be on a
+single system.  
+
+Please consult the muttrc manual page for a full range of
+configuration options and for the complete range of settings for these
+options and enjoy mutt.  
+
+
+
+** Commonly Used Mutt Commands
+
+Now that we have a configuration file that works.  We can concentrate
+on the mutt program itself.  As previously stated, this is a very
+powerful program with lots of facilities which will be appreciated by
+e-mail users from the beginner who is just about to mail his first
+letter home from school, to the seasoned professional office worker,
+research scientist or other computer user who has sent literally
+billions of mails before.  Let's look at a few of the most commonly
+used commands.  In the manual page for mutt, you will find much more.  
+
+When we first open the mutt program, we find a series of options
+presented at the top of the screen.  These are the most commonly used
+commands, and the ones that mutt expects a user to select from.
+These are: 
+
+q: quit
+d: del
+u: undel
+s: save
+m: mail
+r: reply
+g: group
+question mark: help
+
+Let's take a look at each of these options, which make up the main
+menu of mutt, one at a time.  
+
+The first one is obvious.  Quit will exit from the
+program.  Press the letter q, that is, lower case q, when you are
+finished with all mail work for this particular session.  If you
+have the delete set in the .muttrc file, as described below, the
+messages you have marked for deletion will be permanently removed from
+the mailbox when the program re-writes it to disk at the end of its
+operation.  
+
+The del or delete command, invoked by lower case d, will mark a
+message we are currently working on for deletion.  This means that, if the delete
+variable is set in the .muttrc file, as described later, the message
+will be permanently removed from the mailbox when it is re-written at
+the end of your mail session.  You will be taken to the next message
+in the mailbox when you press the lower case d to delete a message.  
+
+The lower case u key gives us the opportunity to undelete a message
+we might have deleted accidentally.  This will remove the deletion
+mark from the message and save it from being permanently removed when
+the mailbox is expunged at the end of the session.  When you next use
+mutt, you will find that message, safe and sound, sitting in the
+mailbox right where it was the last time.  
+
+The next command, the lower case s, is the best way to keep messages
+you wish to have for future reference.  This is the save command.
+This gives us the opportunity to save the message on which we use
+it into a permanent file on our hard drive.  This file can be named
+anything you want it to be, just be sure to remember what is in it.  
+
+The next command is the one you will probably most likely use more
+often than any other.  This is the mail compose/send command.  The
+menu option key for this one is the lower case m.  You will be put
+into the to field of a new message when this option is entered.  You will
+hear the synthesizer say the word to and you just enter the address to
+which you want to send the message here.  Suppose, as in the example
+above, you receive my message about wanting to see your speech
+synthesizer code and you wish to tell me that you think I should never
+see the code, and that I should research the whole thing on my own and
+leave yours alone.  You wish to send me a message saying this, so you
+use the lower case m command and put my address into the to field and
+fill in the subject as you wish.  
+
+When you press return at the end of the address in the to field, you
+will hear the word subject.  This is where you put in the subject
+of the letter you are sending.  For example, continuing with our
+speech synthesizer example, you might wish to put this: 
+
+I found out how it works, you can do the same.
+
+You enter this into the subject field then press return again.  
+
+When you have done this, you are ready to begin entering your letter.
+Mutt uses a composer that requires you to save the message body when
+you finish with it.  When you finish writing, press control s to save
+the message.  This works only in the composer and with the message
+you're working on at the time.  When you have finished with the
+message, you must press control q and then you go on to a new menu
+that will be discussed later on.  
+
+Next in this main menu, is the lower case r or reply command.  This
+works just like the name says.  If you just wish to reply to my
+message about the speech synthesizer code, you can.  This fills in the
+necessary fields in the headers of the new message so that you don't
+have to.  Now, all you need to do is write in your text and send the
+letter on its way.  
+
+The lower case g or group command is one with which I am not
+familiar.  This gets into the facilities of the mutt program which I
+have not yet had the need to use.  However, the manual for the mutt
+program will tell you what this option does and how it is to be used.  
+
+Now, we see an example of what the next command, the question mark
+will do.  Mutt has context-sensitive help, which means that it will
+help you out by displaying general text about the menu option or part
+of the program you are having trouble with.  For example, if you want
+to see a little helpful message about the lower case g command, press
+the lower case g, then enter a question mark for help with what you
+are doing.  There is not much info there, but it might just be what
+you need to get things going smoothly again.  
+
+As previously stated, there are two things you need to do to make sure
+that the send functionality of mutt will work.  The first of these is
+to save the message with the control s command, in the composer.
+After this, you just need to hit control q to quit the message and go
+on to the sending menu.  Here are the commands that you can issue to
+mutt in the sending mode.  
+
+y: send
+q: abort
+t: to
+c: cc
+s: subj
+a: attach file
+d: descrip
+question mark: help
+
+These options, just like most of the ones in the first menu, are
+straightforward.  Let's take a look at each of them.  
+
+The lower case y is the command to send a message.  This might be a
+little confusing, but there is a simple way to remember this key.
+Just remember that y stands for yes.  This will help you remember that
+the lower case y key is the command to send the message once you are
+through with it.  
+
+Ok, maybe I have been running a few too many computer applications in
+my lifetime, but the next option might be a little confusing as well.
+This is the lower case q.  This is the option for abort.  Well, abort
+is just the fancy computer science way of saying quit.  If you don't
+want to send me that message, telling me to vaporize myself with a
+phaser, if I think I am going to see that code you have written, and
+you have the message already entered, you might just want to use the q
+key to quit that particular message.  It will never be sent, and you
+will have time to think about it and write the thing in a little more
+professional format, even though you might still think that
+unfortunate phaser accident might be a good idea.  You just don't have
+to say it in those words.  
+
+The t option of the sending menu allows you to modify the to field of
+the message after you have finished composing it.  You can add to or
+take from the list of addresses in the to field, you can totally
+change the address to which you think the mail should go or whatever
+you wish.  
+
+Next is another of the straightforward options of this menu.  It is
+the lower case c option.  This stands for copy, or rather, cc which
+actually stands for carbon copy.  Remember that rattly-sounding paper
+with the waxy texture that you had between copies of multi-part forms?
+Remember the teacher telling you not to touch it because you would get
+it all over your hands, then smudge all over infinity in the
+classroom? This is what this option dates back to.  If you don't
+remember that fun stuff, just remember that the lower case c stands
+for copy.  You can put there, the addresses of any other people you
+think should receive copies of the message, and it will be sent to
+them as well.  
+
+With the lower case s option, you can modify the subject field of the
+message header before you actually send it.  For example, if you have
+a subject of 
+
+job opening for Science Officer On U.S.S Enterprise
+
+in the subject field, and you don't want your supervisor at your
+current employer to know that you are going to apply for this position, you
+might wish to change the subject of the message before the company
+mail server machine ever sees it.  
+
+This is simple.  Just use the lower case s key and you will be put
+back into the subject field to change it.  
+
+The lower case a option allows you to attach a file to your message.
+If the mail client on the other end has MIME-aware software in it, it
+will be able to do several things with this attachment.  You can
+display it with the proper viewer, separate it from the main message
+and save it or do whatever you wish with it.  
+
+WARNING: In order for mutt to fetch mail from the server on demand, we
+need to use the get new mail command.  This is the only upper case
+command we need to deal with.  This is the upper case G and it has
+probably been the source of some Oralux users' problems with the mutt
+program.
+
+
+
+* The PINE Mail Client
+
+PINE or the Program for Internet News and Email, is one of the most
+powerful Unix mail clients around.  It not only handles mail, but nntp
+news as well.  The news aspect will not be covered here, but some of
+the mail handling features will be dealt with as we have in the
+example of mutt above.  
+
+** Getting and Installing PINE
+
+First of all, we have to obtain pine.  We have a number of ways to do
+this.  What I mean, is, that, we have a number of pine packages to
+choose from.  We can choose from the tar archive, the Debian package
+or the rpm package.  
+
+This program is not available from anywhere other than the site of
+the Computing and Networking office at the University of Washington.  
+
+Let's go there and get the program and get it installed on our
+system.  
+
+We need to visit the following URL in order to actually obtain pine:
+
+http://www.washington.edu/pine/
+
+Once there, let's find the package we want and download it.  
+
+What we need to do is this:  Click on the release number, which, in
+this case, is pine 4.64, and we will be directed to a page about
+obtaining pine software.  We will just go to pine for Linux and click
+there.  
+
+What we want for an Oralux system is the Debian package.  The quickest
+way to get the actual link to the file we need to download is to use
+emacspeak with the w3 browser and do this: 
+
+Tab to the link where you hear the reference to i-386.deb and stop
+there.  Enter a upper case k into w3.  This will indicate to the
+browser that you want to copy the direct link to the pine package into the
+kill ring.  With Oralux 0.7 alpha, you will hear no indication that
+the link has been copied in, but it really has.  
+
+Now, get out of w3 by using the lower case q key until you get back to
+where you were before.  You will now need a shell buffer under
+emacspeak to install pine.  
+Do this:  
+
+obtain the pine archive.  This is done from your ordinary,
+nonpriviliged user account by using wget as follows.  
+
+wget and then press: 
+
+control y 
+
+while on the same line.  This will insert the link to the pine archive
+back into the shell command line after wget so that you can just do
+this: 
+
+press return and wait a few seconds while the file is downloaded.  It
+will take longer on a dial-up connection, so be patient.  
+
+When the file has arrived in your home directory, you are ready to
+install pine.  Do this: 
+
+change users to root.  Under emacspeak, this is done with 
+sudo su
+
+Under Yasr, the same command is required: 
+
+sudo su
+
+Under Speakup, when working with Oralux 0.7 alpha, you only need to
+enter this: 
+
+su
+
+Now, if the pine archive is the only file in your home directory with
+a name that starts out with pine, you can install it without having to
+remember its full name.  Do this: 
+
+dpkg -i pine*
+
+The program will be installed and we will be ready to start setting it
+up.  However, if there is another file whose name starts with the word
+pine, you will need to remember the entire name of the
+pine file only if you have more than 1 .deb file in your home
+directory.  If pine is the only .deb file in the directory, you can
+use this: 
+
+dpkg -i *.deb
+
+The program will be installed just as before.  If you have more Debian
+packages in your home directory, the program will try to install all the
+.debs at once.  This might not be what you want.  If you have more
+than one such archive in your home directory, just remember or cut out
+the name of the file from a listing of the directory contents to
+install it.  
+
+Alright already, enough about installing pine.  One of the above methods should
+have worked, and we should be ready to start configuring pine.  Let's
+look at this process.  
+
+When you start pine up for the very first time, it will ask you
+if you wish to send the authors of the package a mail message, letting
+them know that you are a first time pine user.  You can elect to do
+this, but a little warning: 
+
+If your mail system fails, or if pine cannot decide how to send mail
+off the system when this one-time event happens, you will not be asked
+again.  
+
+** Configuring PINE
+
+Here we go again.  Pine is one of those programs that needs a little
+help to properly serve us.  We need another .rc file.  There are two
+ways to get a .pinerc file filled with the proper settings.  We can
+either hand-edit the file that pine creates for us or we can use the
+setup menu to change the settings in the file.  Let's look at both
+methods.  The choice of which method you use is up to you.  
+
+Hand-Editing .pinerc
+
+You might think that hand-editing a configuration file for a major
+Unix program is not for the faint-hearted.  It is not so
+difficult with .pinerc.  When pine generates the file, all the
+features are put in and the options are all very well documented.
+Just look at this example .pinerc file.  It might be long, but it
+illustrates exactly how simple it really is to configure this program
+with no help from the setup menu.  
+
+*** .pinerc configuration file: example
+
+# Pine configuration file
+#
+# This file sets the configuration options used by Pine and PC-Pine. These
+# options are usually set from within Pine or PC-Pine. There may be a
+# system-wide configuration file which sets the defaults for some of the
+# variables. On Unix, run pine -conf to see how system defaults have been set.
+# For variables that accept multiple values, list elements are separated by
+# commas. A line beginning with a space or tab is considered to be a
+# continuation of the previous line. For a variable to be unset its value must
+# be blank. To set a variable to the empty string its value should be "".
+# You can override system defaults by setting a variable to the empty string.
+# Lines beginning with "#" are comments, and ignored by Pine.
+
+# Over-rides your full name from Unix password file. Required for PC-Pine.
+personal-name="Doug Smith"
+
+# Sets domain part of From: and local addresses in outgoing mail.
+user-domain="oralux.org"
+
+# List of SMTP servers for sending mail. If blank: Unix Pine uses sendmail.
+smtp-server="smtp.charter.net"
+
+# NNTP server for posting news. Also sets news-collections for news reading.
+nntp-server=news.charter.net
+
+# Path of (local or remote) INBOX, e.g. ={mail.somewhere.edu}inbox
+# Normal Unix default is the local INBOX (usually /usr/spool/mail/$USER).
+inbox-path={pop.lost-oasis.net/pop3}inbox
+
+# List of folder pairs; the first indicates a folder to archive, and the
+# second indicates the folder read messages in the first should
+# be moved to.
+incoming-archive-folders=
+
+# List of folders, assumed to be in first folder collection,
+# offered for pruning each month.  For example: mumble
+pruned-folders=
+
+# Over-rides default path for sent-mail folder, e.g. =old-mail (using first
+# folder collection dir) or ={host2}sent-mail or ="" (to suppress saving).
+# Default: sent-mail (Unix) or SENTMAIL.MTX (PC) in default folder collection.
+default-fcc=""
+
+# Over-rides default path for saved-msg folder, e.g. =saved-messages (using 1st
+# folder collection dir) or ={host2}saved-mail or ="" (to suppress saving).
+# Default: saved-messages (Unix) or SAVEMAIL.MTX (PC) in default collection.
+default-saved-msg-folder="saved-messages"
+
+# Over-rides default path for postponed messages folder, e.g. =pm (which uses
+# first folder collection dir) or ={host4}pm (using home dir on host4).
+# Default: postponed-msgs (Unix) or POSTPOND.MTX (PC) in default fldr coltn.
+postponed-folder=
+
+# If set, specifies where already-read messages will be moved upon quitting.
+read-message-folder=
+
+# If set, specifies where form letters should be stored.
+form-letter-folder=
+
+# Contains the actual signature contents as opposed to the signature filename.
+# If defined, this overrides the signature-file. Default is undefined.
+literal-signature=
+
+# Over-rides default path for signature file. Default is ~/.signature
+signature-file=
+
+# List of features; see Pine's Setup/options menu for the current set.
+# e.g. feature-list= select-without-confirm, signature-at-bottom
+# Default condition for all of the features is no-.
+feature-list=
+
+# Pine executes these keys upon startup (e.g. to view msg 13: i,j,1,3,CR,v)
+initial-keystroke-list=
+
+# Only show these headers (by default) when composing messages
+default-composer-hdrs=from: [EMAIL PROTECTED]
+
+# Add these customized headers (and possible default values) when composing
+customized-hdrs="from: [EMAIL PROTECTED]"
+
+# When viewing messages, include this list of headers
+viewer-hdrs=
+
+# When viewing messages, number of blank spaces between left display edge and 
+text
+viewer-margin-left=
+
+# When viewing messages, number of blank spaces between right display edge and 
+text
+viewer-margin-right=
+
+# When viewing messages, number of lines of quote displayed before suppressing
+quote-suppression-threshold=
+
+# Determines default folder name for Saves...
+# Choices: default-folder, by-sender, by-from, by-recipient, last-folder-used.
+# Default: "default-folder", i.e. "saved-messages" (Unix) or "SAVEMAIL" (PC).
+saved-msg-name-rule=
+
+# Determines default name for Fcc...
+# Choices: default-fcc, by-recipient, last-fcc-used.
+# Default: "default-fcc" (see also "default-fcc=" variable.)
+fcc-name-rule=
+
+# Sets presentation order of messages in Index. Choices:
+# Subject, From, Arrival, Date, Size, To, Cc, OrderedSubj, Score, and Thread.
+# Order may be reversed by appending /Reverse. Default: "Arrival".
+sort-key=
+
+# Sets presentation order of address book entries. Choices: dont-sort,
+# fullname-with-lists-last, fullname, nickname-with-lists-last, nickname
+# Default: "fullname-with-lists-last".
+addrbook-sort-rule=
+
+# Sets presentation order of folder list entries. Choices: alphabetical,
+# alpha-with-dirs-last, alpha-with-dirs-first.
+# Default: "alpha-with-directories-last".
+folder-sort-rule=
+
+# Sets the default folder and collection offered at the Goto Command's prompt.
+goto-default-rule=
+
+# Sets message which cursor begins on. Choices: first-unseen, first-recent,
+# first-important, first-important-or-unseen, first-important-or-recent,
+# first, last. Default: "first-unseen".
+incoming-startup-rule=
+
+# Allows a default answer for the prune folder questions. Choices: yes-ask,
+# yes-no, no-ask, no-no, ask-ask, ask-no. Default: "ask-ask".
+pruning-rule=
+
+# Controls behavior when reopening an already open folder.
+folder-reopen-rule=
+
+# Style that MESSAGE INDEX is displayed in when threading.
+threading-display-style=
+
+# Style of THREAD INDEX or default MESSAGE INDEX when threading.
+threading-index-style=
+
+# When threading, character used to indicate collapsed messages underneath.
+threading-indicator-character=
+
+# When threading, character used to indicate expanded messages underneath.
+threading-expanded-character=
+
+# When threading, character used to indicate this is the last reply
+# to the parent of this message.
+threading-lastreply-character=
+
+# Reflects capabilities of the display you have. Default: US-ASCII.
+# Typical alternatives include ISO-8859-x, (x is a number between 1 and 9).
+character-set=
+
+# Specifies the program invoked by ^_ in the Composer,
+# or the "enable-alternate-editor-implicitly" feature.
+editor=
+
+# Specifies the program invoked by ^T in the Composer.
+speller="ispell"
+
+# Specifies the column of the screen where the composer should wrap.
+composer-wrap-column=
+
+# Specifies the string to insert when replying to a message.
+reply-indent-string=
+
+# Specifies the introduction to insert when replying to a message.
+reply-leadin=
+
+# Specifies the string to replace quotes with when viewing a message.
+quote-replace-string=
+
+# Specifies the string to use when sending a  message with no to or cc.
+empty-header-message=
+
+# Program to view images (e.g. GIF or TIFF attachments).
+image-viewer=
+
+# If "user-domain" not set, strips hostname in FROM address. (Unix only)
+use-only-domain-name=
+
+# This variable takes a list of programs that message text is piped into
+# after MIME decoding, prior to display.
+display-filters=
+
+# This defines a program that message text is piped into before MIME
+# encoding, prior to sending
+sending-filters=
+
+# A list of alternate addresses the user is known by
+alt-addresses=
+
+# A list of keywords for use in categorizing messages
+keywords=
+
+# Characters which surround keywords in SUBJKEY token.
+# Default is "{" "} "
+keyword-surrounding-chars=
+
+# This is a list of formats for address books.  Each entry in the list is made
+# up of space-delimited tokens telling which fields are displayed and in
+# which order.  See help text
+addressbook-formats=
+
+# This gives a format for displaying the index.  It is made
+# up of space-delimited tokens telling which fields are displayed and in
+# which order.  See help text
+index-format=
+
+# The number of lines of overlap when scrolling through message text
+viewer-overlap=
+
+# Number of lines from top and bottom of screen where single
+# line scrolling occurs.
+scroll-margin=
+
+# The number of seconds to sleep after writing a status message
+status-message-delay=
+
+# The approximate number of seconds between checks for new mail
+mail-check-interval=60
+
+# The approximate number of seconds between checks for new mail in folders
+# other than the current folder and inbox.
+# Default is same as mail-check-interval
+mail-check-interval-noncurrent=
+
+# The minimum number of seconds between checks for new mail in a Mail Drop.
+# This is always effectively at least as large as the mail-check-interval
+maildrop-check-minimum=
+
+# For newsgroups accessed using NNTP, only messages numbered in the range
+# lastmsg-range+1 to lastmsg will be considered
+nntp-range=
+
+# Full path and name of NEWSRC file
+newsrc-path=
+
+# Path and filename of news configuration's active file.
+# The default is typically "/usr/lib/news/active".
+news-active-file-path=
+
+# Directory containing system's news data.
+# The default is typically "/usr/spool/news"
+news-spool-directory=
+
+# Path and filename of the program used to upload text from your terminal
+# emulator's into Pine's composer.
+upload-command=
+
+# Text sent to terminal emulator prior to invoking the program defined by
+# the upload-command variable.
+# Note: _FILE_ will be replaced with the temporary file used in the upload.
+upload-command-prefix=
+
+# Path and filename of the program used to download text via your terminal
+# emulator from Pine's export and save commands.
+download-command=
+
+# Text sent to terminal emulator prior to invoking the program defined by
+# the download-command variable.
+# Note: _FILE_ will be replaced with the temporary file used in the downlaod.
+download-command-prefix=
+
+# Sets the search path for the mailcap configuration file.
+# NOTE: colon delimited under UNIX, semi-colon delimited under DOS/Windows/OS2.
+mailcap-search-path=
+
+# Sets the search path for the mimetypes configuration file.
+# NOTE: colon delimited under UNIX, semi-colon delimited under DOS/Windows/OS2.
+mimetype-search-path=
+
+# List of programs to open Internet URLs (e.g. http or ftp references).
+url-viewers=
+
+# The maximum number of non-stayopen remote connections that pine will use
+max-remote-connections=
+
+# A list of folders that should be left open once opened (INBOX is implicit)
+stay-open-folders=
+
+# Specifies the number of dead letter files to keep when canceling.
+dead-letter-files=
+
+# Sets the filename for the newmail fifo (named pipe). Unix only.
+newmail-fifo-path=
+
+# Sets the width for the NewMail screen.
+newmail-window-width=
+
+# List of incoming msg folders besides INBOX, e.g. ={host2}inbox, {host3}inbox
+# Syntax: optnl-label {optnl-imap-host-name}folder-path
+incoming-folders=
+
+# List of directories where saved-message folders may be. First one is
+# the default for Saves. Example: Main {host1}mail/[], Desktop mail\[]
+# Syntax: optnl-label {optnl-imap-hostname}optnl-directory-path[]
+folder-collections=
+
+# List, only needed if nntp-server not set, or news is on a different host
+# than used for NNTP posting. Examples: News *[] or News *{host3/nntp}[]
+# Syntax: optnl-label *{news-host/protocol}[]
+news-collections=
+
+# List of file or path names for personal addressbook(s).
+# Default: ~/.addressbook (Unix) or \PINE\ADDRBOOK (PC)
+# Syntax: optnl-label path-name
+address-book=
+
+# List of file or path names for global/shared addressbook(s).
+# Default: none
+# Syntax: optnl-label path-name
+global-address-book=
+
+# Set by Pine; controls beginning-of-month sent-mail pruning.
+last-time-prune-questioned=106.6
+
+# Set by Pine; controls display of "new version" message.
+last-version-used=4.64
+
+# This names the path to an alternative program, and any necessary arguments,
+# to be used in posting mail messages.  Example:
+#                    /usr/lib/sendmail -oem -t -oi
+# or,
+#                    /usr/local/bin/sendit.sh
+# The latter a script found in Pine distribution's contrib/util directory.
+# NOTE: The program MUST read the message to be posted on standard input,
+#       AND operate in the style of sendmail's "-t" option.
+sendmail-path="/usr/bin/msmtp -oem -t -oi"
+
+# This names the root of the tree to which the user is restricted when reading
+# and writing folders and files.  For example, on Unix ~/work confines the
+# user to the subtree beginning with their work subdirectory.
+# (Note: this alone is not sufficient for preventing access.  You will also
+# need to restrict shell access and so on, see Pine Technical Notes.)
+# Default: not set (so no restriction)
+operating-dir=
+
+# If no user input for this many hours, Pine will exit if in an idle loop
+# waiting for a new command.  If set to zero (the default), then there will
+# be no timeout.
+user-input-timeout=
+
+# Sets the time in seconds that Pine will attempt to open a network
+# connection.  The default is 30, the minimum is 5, and the maximum is
+# system defined (typically 75).
+tcp-open-timeout=
+
+# Network read warning timeout. The default is 15, the minimum is 5, and the
+# maximum is 1000.
+tcp-read-warning-timeout=
+
+# Network write warning timeout. The default is 0 (unset), the minimum
+# is 5 (if not 0), and the maximum is 1000.
+tcp-write-warning-timeout=
+
+# If this much time has elapsed at the time of a tcp read or write
+# timeout, pine will ask if you want to break the connection.
+# Default is 60 seconds, minimum is 5, maximum is 1000.
+tcp-query-timeout=
+
+# Sets the format of the command used to open a UNIX remote
+# shell connection.  The default is "%s %s -l %s exec /etc/r%sd"
+# NOTE: the 4 (four) "%s" entries MUST exist in the provided command
+# where the first is for the command's path, the second is for the
+# host to connect to, the third is for the user to connect as, and the
+# fourth is for the connection method (typically "imap")
+rsh-command=
+
+# Sets the name of the command used to open a UNIX remote shell connection.
+# The default is typically /usr/ucb/rsh.
+rsh-path=
+
+# Sets the time in seconds that Pine will attempt to open a UNIX remote
+# shell connection.  The default is 15, min is 5, and max is unlimited.
+# Zero disables rsh altogether.
+rsh-open-timeout=
+
+# Sets the format of the command used to open a UNIX secure
+# shell connection.  The default is "%s %s -l %s exec /etc/r%sd"
+# NOTE: the 4 (four) "%s" entries MUST exist in the provided command
+# where the first is for the command's path, the second is for the
+# host to connect to, the third is for the user to connect as, and the
+# fourth is for the connection method (typically "imap")
+ssh-command=
+
+# Sets the name of the command used to open a UNIX secure shell connection.
+# Typically this is /usr/bin/ssh.
+ssh-path=
+
+# Sets the time in seconds that Pine will attempt to open a UNIX secure
+# shell connection.  The default is 15, min is 5, and max is unlimited.
+# Zero disables ssh altogether.
+ssh-open-timeout=
+
+# Sets the version number Pine will use as a threshold for offering
+# its new version message on startup.
+new-version-threshold=
+
+# List of mail drivers to disable.
+disable-these-drivers=
+
+# List of SASL authenticators to disable.
+disable-these-authenticators=
+
+# Set by Pine; contains data for caching remote address books.
+remote-abook-metafile=
+
+# How many extra copies of remote address book should be kept. Default: 3
+remote-abook-history=
+
+# Minimum number of minutes between checks for remote address book changes.
+# 0 means never check except when opening a remote address book.
+# -1 means never check. Default: 5
+remote-abook-validity=
+
+# Your default printer selection
+printer=
+
+# List of special print commands
+personal-print-command=
+
+# Which category default print command is in
+personal-print-category=
+
+# Patterns and their actions are stored here.
+patterns-roles=
+
+# Patterns and their actions are stored here.
+patterns-filters2=
+
+# Patterns and their actions are stored here.
+patterns-scores2=
+
+# Patterns and their actions are stored here.
+patterns-indexcolors=
+
+# Patterns and their actions are stored here.
+patterns-other=
+
+# Controls display of color
+color-style=
+
+# Controls display of color for current index line
+current-indexline-style=
+
+# Controls display of color for the titlebar at top of screen
+titlebar-color-style=
+
+# Choose: black, blue, green, cyan, red, magenta, yellow, or white.
+normal-foreground-color=
+normal-background-color=
+reverse-foreground-color=
+reverse-background-color=
+title-foreground-color=
+title-background-color=
+status-foreground-color=
+status-background-color=
+keylabel-foreground-color=
+keylabel-background-color=
+keyname-foreground-color=
+keyname-background-color=
+selectable-item-foreground-color=
+selectable-item-background-color=
+quote1-foreground-color=
+quote1-background-color=
+quote2-foreground-color=
+quote2-background-color=
+quote3-foreground-color=
+quote3-background-color=
+signature-foreground-color=
+signature-background-color=
+prompt-foreground-color=
+prompt-background-color=
+index-to-me-foreground-color=
+index-to-me-background-color=
+index-important-foreground-color=
+index-important-background-color=
+index-deleted-foreground-color=
+index-deleted-background-color=
+index-answered-foreground-color=
+index-answered-background-color=
+index-new-foreground-color=
+index-new-background-color=
+index-recent-foreground-color=
+index-recent-background-color=
+index-unseen-foreground-color=
+index-unseen-background-color=
+index-arrow-foreground-color=
+index-arrow-background-color=
+
+# When viewing messages, these are the header colors
+viewer-hdr-colors=
+
+# Colors used to display keywords in the index
+keyword-colors=
+
+# LDAP servers for looking up addresses.
+ldap-servers=
+
+*** The menu-driven pine program
+
+As we can see, there is little doubt about most of the options
+available to us in pine.  We can clearly see what most of them are.
+Only a few are rather cryptic.  These may not be of any importance to
+us, or may be of little importance.  We can easily change any of the
+settings at will, keeping with the style of the lines and being
+careful to use values that are reasonable.  
+
+For those of us who do not want to edit the configuration file
+directly, we have the menu-driven pine program itself to help us.
+Let's take a quick look at the main menu of this package and see what
+we have available there.  
+
+When we first open pine, we find ourselves on the main menu screen.
+The authors of this program have done a fine job, indeed, in designing
+this menu.  We see the key we need to press to activate any option
+there, and a little description of each option.  Let's look at these.  
+
+question mark help
+c: compose and send a message
+i: message index
+l: folder list
+a: address book
+s: setup
+q: quit
+
+After the copyright notice, we see even more commands we can explore.
+They are: 
+
+question mark help
+p prevcmd
+r relnotes
+o other cmds
+greater than listfldrs, with this in brackets
+n nextcmd
+k kblock
+
+This is just the main menu screen, we can see that we have a lot of
+commands on there.  Many of these are unfamiliar to me, so we will
+just go over the more familiar ones.  There is documentation on the
+pine web site, which they call the pine information center, which will
+fully document all the features of the program.  
+
+I would say that you should read the manual for pine before using it
+or trying to configure it, but the manual page for this program is
+much less informative than the actual menu screens themselves.  It is
+better if we just consult the documentation and FAQs located at: 
+
+http://www.washington.edu/pine/
+
+and let it go at that if we need more help than is present in the
+program.  
+
+Pine has context-sensitive help, so we should be able to get
+some help with each of the options if we see that we need it.  Let's
+look at the menu options and discuss them one at a time.
+
+The first of these is, probably, the most important to a first-timer
+to this program.  It is the question mark.  This is for help.  We see
+that they tell us that this is help using pine.  It is on the main
+menu, so we can infer that, most likely, this is the general help
+option for the entire program, and they tell us that right on the
+line.  
+
+The next option we find is the c option for composing and sending a
+message.  We also see a little general description right there on the
+line, telling us that this is the option we need if we wish to mail a
+letter to someone.  
+
+The next possibility is the option i.  This is the message index.
+We don't have to worry, if we haven't the foggiest idea what a message
+index is.  It tells us that this is where we can go to view messages
+in a folder.  
+
+Pine has the ability to handle multiple mailboxes for the same user.
+If we have a mailbox named, for example, Star-Trek, and we keep our
+messages related to that subject in that folder, and we have another
+folder called Computerstuff and we keep all our mails about computers
+in there, we can access them both individually.  Of course, we can
+have many more mailboxes than that, but it is just an example of what
+we can have.  This is where the l option comes in.  With this feature
+of pine, we can see the names of our mail folders, and decide which
+one to look at during this session.  We can even come back to the main
+menu screen and switch folders in the middle of a session.  
+
+With pine, we can have an address book.  In fact, we can have more
+than one address book and we can do some rather remarkable things with
+them.  All of this is beyond the scope of this text, but the next menu
+option is the a option for address book.  We see that this is the
+option that lets us update the address book.  
+
+Next comes the s option.  This is the setup feature which allows us to
+edit the .pinerc file without having to do it by hand.  We will look
+at this menu later.  
+
+Next comes the q option.  This allows us to leave the pine program,
+thus, terminating our mail session for the time.  
+
+After this, we see the copyright and trademark notices for the pine
+package.  After this, appears a list of far less familiar commands.
+We will look at them, and speculate as to what they might be, but the
+context-sensitive help and the documentation located on the web site
+will really help us there.  PLEASE, and I repeat: PLEASE CONSULT THIS
+DOCUMENTATION BEFORE DOING SOMETHING THAT CAN CAUSE DATA LOSS AND GET
+YOU INTO BIG, MAJOR, INFINITE AMOUNTS OF TROUBLE!  
+
+At the bottom of the menu screen, we see the less familiar commands
+with which we will, definitely, need the context-sensitive help
+system.  Don't be afraid to use the help system included with any
+software package.  It can keep us out of trouble and make our use of
+the package much easier to learn.  
+
+First among these commands is the question mark option for help
+again.  It is the main help system entry point for the program.  It is
+on the main menu screen and it is the same option as before.  
+
+Next comes the p option followed by prevcmd.  Either this is the way
+to re-execute the last command we issued, or it will go back to the
+previous page.  This begins to get into the dark corners of pine, and
+it is important to throw the light of the help system onto this
+mystery.  
+
+The r option is straightforward.  It will let us read the release
+notes for this version of pine, which just happens to be pine 4.64.  
+
+We can see even more commands with the o option.  It says right there
+that it will let us see other commands.  This program has so many
+features, that it takes many menu screens to display them all.  
+
+Now comes a real mystery.  The greater than sign is used for
+listfldrs.  This must be looked up either in the help system or in the
+documentation at the web site, sorry.  
+
+The n option says that is for nextcmd.  This is an unknown option as
+well unless it is to go to the next page of commands.  Please consult
+the help option on this one, and look at the on-line documentation at
+the web site for pine.  
+
+The k option is for kblock.  Once more, consult the web site and
+pine's own internal help system for this one.  
+
+Well, we got through the main menu screen of the program.  Now, let's
+get back to the subject of configuring pine without having to
+hand-edit the configuration file.  To do this, we need to go to the s
+option of the main menu.  Let's do this and look at the possibilities
+waiting for us there.  
+
+** The setup screen for pine
+
+The first option we find on the setup menu, of all things, is the way
+out.  This is the e option.  If we have finished setting up our
+configuration file or if we find ourselves on the setup screen by
+accident, we can just hit the letter e and get out without changing
+anything.  
+
+Next is the p option for the printer.  Here, we can define a default
+printer and set up any custom printing commands we might need.  
+
+After this comes the n option.  This is for new password.  Here is
+where you change your password that you use for your mail.  
+
+Next comes the c option for config or configure.  Here is where we can
+set the values for many of the settings listed in the .pinerc file
+example above.  
+
+If you wish to define a custom signature, such as the one I use on all
+my mailings, the s option is for you.  This is where you can define
+your signature and have it appended onto the end of everything you
+mail out, if you wish.  
+
+At the bottom of the setup screen, we see some of the previously discussed
+commands repeated along with a few others.  We will look at the
+commands which are listed here, but not at the ones we have just
+looked at.  
+
+The first of the new commands is l.  This is indicated as
+collectionli.  This probably stands for collection list, but, as
+stated earlier, please consult other documentation for the true
+meaning of this option.  
+
+next is the d option for directory.  This, most likely, tells pine
+which directory to operate in.  Please consult other documentation,
+the docs at the site and the help system for more.  
+
+The o option is present again.  It is for other commands here just as
+on the main menu.  Please consult other docs for more.  
+
+The next option that was not on the list with the others is the r
+option for rules.  this option allows us to define what
+pine can do with sorting, threading, and other characteristics of
+messages it receives.  It might even be possible to have the program
+sort those messages into our star-trek and computerstuff folders.
+Check the help system and web based documentation to see for sure.  
+
+The final option on this menu is the k option for color.  They spell
+color with an initial k to help us remember what this option is for.  
+
+Remember, that, as with mutt, all these options are in lower case.  
+
+** The Configuration screen for Pine
+
+Let's hit that c option and see what little treats we might uncover on
+the configuration screen, which allows us to set many of the settings in
+the above file.  
+
+WARNING: Because of the way in which pine displays the setting in the
+file we are working with, it might be that speech will keep repeating
+this, for example, personal name, followed by whatever the setting
+is.  Please experiment with different settings on your screen reader
+to see if it is possible to avoid this.  It might be possible to change a
+setting on Speakup or Yasr to help here.  
+
+This screen is as well-documented as the others.  However, due to the
+speech settings, we keep hearing the value that we are currently
+focused on.  The same kinds of options, for next page, previous page,
+add value, delete value etc are present with their keys being the
+first letters of the first words: for example: a add value
+
+Just be sure that your screen reader software will properly render
+this screen before beginning to work on it or you might just end up in
+a rather confused state because of the constant repeating of a single
+value.  
+
+
+
+* The vm Mail Client
+
+The final mail client program we will investigate in this text is
+the Emacs add-on package called vm or View Mail.  
+
+WARNING: Before you take on the task of configuring this mail program,
+it is best to know that a good deal of programming knowledge will go a
+long way here.  Emacs uses an implementation of the lisp or
+LIStProcessor programming language.  All the configuration of vm is
+done with programming statements which have to be properly formatted,
+including a great deal of use of parentheses which have to be properly
+nested.  
+
+That said, this will be a rather short description of the program.
+There is a complete user's guide for vm available on your Oralux
+system.  You can access it by entering control h followed by the lower
+case i.  This will put you into the Emacs info system where you can
+see documentation for the most commonly used programs on your system.  
+
+In general, vm is easy to use as long as you don't get too involved
+with its configuration.  If you use emacspeak on a regular basis,
+however, this kind of writing programs to run programs should be
+rather simple.  If you do not use emacspeak on a regular basis, it is
+required that you read the user's guide for vm before you even start
+to work with it.  
+
+There are two files into which you can put settings for the
+configuration, however, the one that I recommend that you use is the
+one that should be made just like all the other configuration files on
+your system.  That is, it reflects the name of the program.  It is not
+a file whose name ends in rc, however, it is just called .vm 
+
+You can also put configuration data into your .emacs file, but, since
+vm has over a hundred customizable variables, it does not take long to
+clutter up your user-specific configuration file for emacs itself.
+let's use .vm in order to avoid this clutter.  
+
+** The configuration of vm
+
+First of all, let's connect vm to the proper mail sending program.  In
+this case, we are not using the ordinary sendmail or other MTA package
+on the system.  For simplicity of configuration, we are using our
+friend msmtp.  As we have seen in the configuration files for pine and
+mutt, we have to let the program know this or it will try to use some
+built-in default program, either not find it, or not find it
+configured properly, and fail to send out mail.  We must also tell the
+vm program which mail server to use, and we must have some other
+header information in our configuration.  
+
+I have gone against what I said to do here, and put some of the
+configuration into the .emacs file and some into the .vm file.  This
+is because Emacs is a very large and extensive interrelated collection
+of continually running lisp programs and all the variables associated
+with them.  For this reason, some of the info needs to go into the
+.emacs so that it is set up when emacs and emacspeak start up each
+time.  Some of the data is more specific to vm and, is, therefore, in
+its own configuration file.  Let's look into the .vm file first and
+find out what is specific to vm.  This will resolve one of the
+questions I am sure the reader of this text will have.  
+
+WARNING: This operation involves the changing of some rather complex
+files.  Please make backup copies of both files, .vm and .emacs if you
+have them.  If you only have a .emacs, as the case is on a stock
+Oralux disk, make a disk-based backup copy of it so that nothing will
+be totally lost to you if there is an error in the file after it is
+changed.  
+
+Now, the first thing we need to do is to make sure that our vm knows
+about our msmtp.  Msmtp must be completely configured as in the
+example above and it must be ready to send mail.  First of all, we
+need to change one line in the .emacs file so that the entire emacs
+system knows about our msmtp.  Into the file, and it does not matter
+where, insert this line: 
+
+(setq sendmail-program "/usr/bin/msmtp")
+
+That's the first thing we need to do.  
+
+Now, still in the .emacs file, we need to set our mail address up
+properly for the from fields of the letters we send.  
+
+(setq user-mail-address "your.real.email.address")
+
+Now, when people get a message from you, they will know that this is
+the person who sent the missive.  
+
+Alright, if we want the person receiving the letter we send to see our full
+name or some name by which we are known, we need this line, also in
+the main emacs configuration file.  
+
+(setq user-full-name "Your Name")
+
+This line will put our address in angle brackets, or surround it with
+the less than sign on the left and the greater than sign on the right.  
+
+(setq mail-from-style 'angles)
+
+This is just decorative, but it should be mentioned as it is involved
+with mail.  
+
+This one is critical.  It will be sure that the from name is the one
+on the envelope header of the messages we send so that people's
+replies might be properly directed.  
+
+(setq mail-specify-envelope-from t)
+
+All the rest of the lines in the .emacs file should be left alone.  We
+have entered all the information we need to complete the configuration.  
+
+Now, let's take a look at the actual configuration file for vm.  This
+file is called .vm and it is essential that the period proceed the
+name of the file for it to work right.  
+
+In the example we will use here, the .vm file is very short.  It
+simply sets the spool file for the retrieval of mail from a pop3
+server and sets up the interval of time between mail checks.  
+
+Please consult the on line user's guide for vm for complete
+documentation of all its variables and commands.  Vm has many
+customizable settings, and, to cover them is well beyond the scope of
+this text.  However, let's look at our simple .vm example.  
+
+(setq vm-spool-files'("pop:your.pop.server.name:110:pass:your.user.name.on.the.server:your.pop.account.password"))
+(setq vm-auto-get-new-mail number.of.seconds)
+
+Let's look at the spool file setting line in detail.  It is the more
+technically involved of the two lines.  
+
+The spool file is the file from which the program retrieves mail from
+when we are ready to read it.  Normally, this is the file on the
+system, normally 
+
+/var/mail/knoppix 
+
+in the case of the Oralux system.  The only reason it is different in
+this example is that we had difficulty in getting the system to
+retrieve mail in an earlier configuration.  If you wish to use exim4,
+the mail transport program on the disk, and you have it working
+properly, you are free to set the spool file for vm to 
+
+/var/mail/knoppix
+
+If you have trouble retrieving your mail from the server, you might
+want to have vm do it for you.  This is how it is set up for retrieval
+from a pop3 server.  
+
+The parameters in this list are separated by colons and should be
+properly filled in with the right information to get a successful
+retrieve.  
+
+The first parameter is pop.  We are telling the program to use the
+Post Office Protocol instead of Internet Message Access Protocol.  
+
+Next in the list is the name of the pop server from which we wish to
+retrieve mail.  As in our previous example, it would, most likely be,
+pop.savantskills.com and we should enter this here.  
+
+The next parameter is the port name on the machine to which we are
+connecting.  Port 110 is the well-known port for the retrieval of mail
+from a pop3 server, and this is the port to which we should connect.  
+
+Next is the form of authentication we wish to use.  In this case, it
+is pass.  We wish to send our user name and our password to the server
+each time we log in.  We don't want to do it manually each time, so we
+just put them in parameter fields in this list.  This parameter,
+filled in with the word pass, tells vm to send out the information
+we will provide in the next fields.  
+
+In fact, the parameter right after the authentication method is for
+the user name we use on the pop server.  
+
+Finally, we put in the password we were given by the system
+administrator of the pop server and we are ready to go.  
+
+** Using vm
+
+Using vm is much easier than configuring it.  However, we need to be sure
+that we have our .vm file and the information in the .emacs file
+entered properly, and we are probably ready to send some mail.  Here
+is how we use vm.  
+
+Please RTFM (consult the on line documentation) before using any
+package.  Vm is no exception.  It is a rather powerful package with
+many functions and features.  There is a lot to learn here, and the
+documentation is the best place to learn it.  
+
+Well, here we go.  
+
+Before you send your first message, please be sure the file called
+outbox exists in the directory called mail ( in all lower case
+letters) in your home directory.  This is the file into which all the
+messages we send will be put.  Do this: 
+
+control x control f 
+
+The system will say 
+
+find file: ~/ 
+
+enter mail/outbox
+
+You will hear the message that the file has been created in memory,
+and is in the Emacs fundamental mode.  
+
+Save it with control x control s 
+
+You are ready.  
+
+Now, do this: 
+
+enter alt x 
+
+The system will say 
+
+m dash x 
+
+Now, enter the two lower case letters vm
+
+If any mail comes in, you will be placed in the first message.  You
+will hear who it is from, the date, and the number of lines.  You are
+ready to start reading mail.  
+
+When you wish to read a message, you can simply scroll down through it
+or just enter a 
+
+control e n 
+
+This will read the entire body contents of the message.  
+
+When you are finished, you have two options.  You can use the lower
+case d to mark the message for deletion and move on with the lower
+case n key for the next message, or you can just use the n key and
+leave the message unmarked.  It will be marked as read, and you will
+hear this the next time you read mail and the message is in the
+folder.  
+
+When you are finished reading your mail, you can do this: 
+
+enter alt x again.
+
+You will hear: 
+
+m dash x again and you can: 
+
+enter: 
+
+vm-expunge-folder
+
+and this will remove all the messages you have marked for deletion in
+your mailbox file.  This can keep the file from growing
+to a massive size in a short period of time.  
+
+** Sending mail with vm
+
+There are three ways to compose a message under vm.  The first of
+these is just to write a fresh, new message like this: 
+
+While in vm, do this: 
+
+enter a lower case m which stands for mail.  
+
+You will hear the word 
+
+to
+
+and you know you are ready to start filling in the address or list of
+addresses to which you wish the letter to be sent.  
+
+When you are finished entering the address, you do not press return as
+in the other clients.  This will just insert a blank line into the
+to field and you will still be there.  
+
+You need to do this: 
+
+use the down arrow to move to the next field we will fill in, the
+subject field.  Enter the subject of the letter like this: 
+
+job opening for science officer on U.S.S Enterprise 
+
+Now, just use the down arrow to move through the rest of the fields.
+These are not to be changed.  You will come to a line which says: 
+
+-text follows this line- 
+
+You may write anywhere below this line and you are writing into the
+body of the message without disturbing the header lines above.  
+
+If you are reading mail, receive a message from a single author, and
+wish to reply to it, just use the lower case r for reply.  This will
+fill in all the necessary header fields and put us at the place where
+we need to begin writing our response.  
+
+If the message to which we are responding is from a group of authors
+or a mailing list, we can use the lower case f option for follow-up.
+This is a reply which will include the text of the original mailing
+and allow us to write in what we wish.  
+
+When we are finished with vm, we have a simple way out.  Just use the
+lower case q key to quit.  When you do this, you will be put back
+where you last were in Emacs and you can continue whatever work you
+were doing before.  
+
+When you are ready to send your message, you can do it with 
+
+control c control c 
+
+The message will be on its happy way.  
+
+
+
+* Final Thoughts
+
+This is only a general summary of the three e-mail client programs
+which can be used under Oralux.  This is only a general overview of
+one and only one way to configure the system to send mail outside
+itself with msmtp.  Of course, the choices of programs and
+configurations you use are entirely up to you.  If you get something
+to work that has not been listed in this document, please let me know
+and I will add it in so that others can learn of it as well.  
+
+If you have any questions about this tutorial or any programs or
+configuration files listed in it, don't hesitate to contact me
+directly and I will gladly assist you in setting up your mail
+subsystem.  My address is: 
+
+bdsmith at oralux.org
+
+and you can contact me off list so that the messages we send to each
+other do not clutter up the list with unnecessary traffic.  
+
+It is my sincere hope that this tutorial is detailed enough to be of
+assistance but not too technically complicated.  If you have any
+questions, feel free to contact me off list.  
+
+Thank you.  
+
+
+-- 
+Doug Smith: C.S.F.C.
+Computer Scientist For CHRIST!
+
+Oralux: http://oralux.org
